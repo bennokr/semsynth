@@ -1,5 +1,4 @@
-#!/usr/bin/env python3
-"""Build index index and DCAT catalog for SemSynth reports."""
+"""Build DCAT catalogs for SemSynth reports and datasets."""
 
 from __future__ import annotations
 
@@ -11,10 +10,9 @@ from dataclasses import dataclass, field
 from datetime import datetime, timezone
 from hashlib import sha256
 from pathlib import Path
-from typing import Dict, Iterable, List, Optional, Sequence, Set, Tuple
+from typing import Dict, List, Optional, Sequence, Set, Tuple
 
-from makeprov import rule, InPath, OutPath, JSONLDMixin, main, GLOBAL_CONFIG
-
+from makeprov import GLOBAL_CONFIG, InPath, JSONLDMixin, OutPath, main, rule
 
 LOGGER = logging.getLogger(__name__)
 
@@ -41,6 +39,7 @@ class PathURLMapper:
         if self.base_url:
             return f"{self.base_url.rstrip('/')}/{relative_text}"
         return relative_text
+
 
 DCAT_CONTEXT: Dict[str, object] = {
     "id": "@id",
@@ -200,6 +199,7 @@ def sha256_digest(path: Path) -> str:
             hsh.update(chunk)
     return hsh.hexdigest()
 
+
 def collect_distributions(
     dataset_name: str, dataset_dir: InPath, mapper: PathURLMapper
 ) -> Tuple[List[CatalogDistribution], Set[Path]]:
@@ -302,6 +302,7 @@ def collect_datasets(
 
     return datasets, inputs
 
+
 def write_index(index_path: Path, dataset_dirs: Sequence[Path]) -> None:
     """Rewrite output/index.html with dataset links."""
 
@@ -313,20 +314,23 @@ def write_index(index_path: Path, dataset_dirs: Sequence[Path]) -> None:
     index_path.write_text("\n".join(lines) + "\n", encoding="utf-8")
     LOGGER.info("Updated %s", index_path)
 
+
 @rule()
 def build_catalog(
-    base_dir: InPath = InPath('output'), 
+    base_dir: InPath = InPath("output"),
     base_url: str = "https://w3id.org/semsynth/demo#",
-    out_path: OutPath = OutPath('output/catalog.json'),
-    index_path: OutPath = OutPath('output/index.html')
+    out_path: OutPath = OutPath("output/catalog.json"),
+    index_path: OutPath = OutPath("output/index.html"),
 ):
-    """Construct the DCAT catalog
-    
-    Arguments:
-        base_dir: The base directory that holds all SemSynth reports
-        base_url: The base url for creating IRIs
-        out_path: Write catalog here
+    """Construct the DCAT catalog.
+
+    Args:
+        base_dir: The base directory that holds all SemSynth reports.
+        base_url: Base URL for creating IRIs.
+        out_path: Output path for the catalog JSON-LD.
+        index_path: Output path for the HTML index file.
     """
+
     GLOBAL_CONFIG.prov_dir = out_path.parent
 
     mapper = PathURLMapper(root_dir=base_dir.parent, base_url=base_url)
@@ -353,5 +357,5 @@ def build_catalog(
     out_path.write_text(json.dumps(catalog.to_jsonld(), indent=2))
 
 
-if __name__ == "__main__":
+if __name__ == "__main__":  # pragma: no cover - CLI bridge
     main()

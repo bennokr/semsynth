@@ -1,0 +1,29 @@
+semsynth.datasets
+=================
+
+.. automodule:: semsynth.datasets
+
+   
+   .. rubric:: Functions
+
+   .. autosummary::
+   
+      get_default_openml
+      get_default_uciml
+      list_openml
+      list_uciml
+      load_dataset
+      load_openml_by_name
+      load_uciml_by_id
+      rule
+      specs_from_input
+   
+   .. rubric:: Classes
+
+   .. autosummary::
+   
+      Any
+      DatasetSpec
+      InPath
+      OutPath
+   

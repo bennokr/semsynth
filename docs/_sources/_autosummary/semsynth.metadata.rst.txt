@@ -8,15 +8,51 @@ semsynth.metadata
 
    .. autosummary::
    
-      dataclass
-      field
-      get_uciml_variable_descriptions
+      always_iterable
+      distribution
+      distributions
+      entry_points
+      files
+      import_module
+      metadata
+      method_cache
+      packages_distributions
+      pass_none
+      requires
+      unique_everseen
+      version
    
    .. rubric:: Classes
 
    .. autosummary::
    
-      DCATDataset
-      DCATDistribution
-      JSONLDMixin
+      Deprecated
+      DeprecatedList
+      DeprecatedTuple
+      Distribution
+      DistributionFinder
+      EntryPoint
+      EntryPoints
+      FastPath
+      FileHash
+      FreezableDefaultDict
+      Lookup
+      MetaPathFinder
+      MetadataPathFinder
+      PackageMetadata
+      PackagePath
+      Pair
+      PathDistribution
+      Prepared
+      Sectioned
+      SelectableGroups
+      SimplePath
+      starmap
+      suppress
+   
+   .. rubric:: Exceptions
+
+   .. autosummary::
+   
+      PackageNotFoundError
    

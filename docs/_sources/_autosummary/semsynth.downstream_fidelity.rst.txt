@@ -22,6 +22,7 @@ semsynth.downstream\_fidelity
       Any
       GridSearchCV
       LassoCV
+      LogisticRegression
       LogisticRegressionCV
       PoissonRegressor
       SimpleImputer

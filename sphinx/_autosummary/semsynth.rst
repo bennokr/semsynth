@@ -16,7 +16,9 @@
    :toctree:
    :recursive:
 
+   app
    backends
+   catalog
    cli
    datasets
    downstream_fidelity

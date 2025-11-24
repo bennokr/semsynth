@@ -10,7 +10,7 @@ This document explains how SemSynth's provenance-aware build graph is assembled 
 
 ## Configuration and entry points
 - **Default settings** live in [`prov-config.toml`](../prov-config.toml), which sets the base IRI (`https://w3id.org/semsynth/demo#`) and the provenance output directory. You can pass an alternate file to the `prov_conf` argument on any CLI command to override `base_iri`, `prov_dir`, `force`, or `dry_run` through makeprov's `GLOBAL_CONFIG`.
-- **CLI integration**: `search` and `report` (both in [`semsynth/cli.py`](./cli.py)) are wrapped with `@rule()` decorators. When you invoke `python semsynth_reports_cli.py search ...` or `python semsynth_reports_cli.py report ...`, defopt exposes every makeprov command (e.g., `build`, `graph`) alongside SemSynth's commands so you can run `build <target>` to materialize missing outputs.
+- **CLI integration**: `search` and `report` (both in [`semsynth/cli.py`](./cli.py)) are wrapped with `@rule()` decorators. When you invoke `python -m semsynth search ...` or `python -m semsynth report ...`, defopt exposes every makeprov command (e.g., `build`, `graph`) alongside SemSynth's commands so you can run `build <target>` to materialize missing outputs.
 - **File parameters**: Inputs such as `prov_conf` use `InPath`, while outputs like `output` or `outdir` use `OutPath`. makeprov registers these as graph nodes, so running `build outputs/<dataset>/index.html` will trigger the dependent rules that generate that file.
 
 ## Dataset discovery and acquisition rules
@@ -31,6 +31,6 @@ This document explains how SemSynth's provenance-aware build graph is assembled 
 - When debugging, you can render the DAG with `python semsynth_reports_cli.py graph --conf @prov-config.toml` (exposed via makeprov `COMMANDS`) to visualize how cached downloads, preprocessing artifacts, model outputs, and reports depend on one another.
 
 ## Practical usage patterns
-- **Rebuild a missing artifact**: If a report HTML is missing, run `python semsynth_reports_cli.py build outputs/<dataset>/index.html --conf @prov-config.toml` to regenerate upstream dependencies automatically.
+- **Rebuild a missing artifact**: If a report HTML is missing, run `python -m semsynth build outputs/<dataset>/index.html --conf @prov-config.toml` to regenerate upstream dependencies automatically.
 - **Dry runs and forcing recomputation**: Pass `--conf @prov-config.toml --dry-run` to inspect the DAG without executing, or set `force=true` in the TOML to rerun every rule regardless of existing outputs.
 - **Extending the workflow**: When adding new provider helpers or report writers, wrap them with `@rule()` and annotate file inputs/outputs with `InPath`/`OutPath` to keep provenance complete. Refer to the decorator examples in the [makeprov README](https://github.com/bennokr/makeprov#readme) and ensure new artifacts respect PROV-O semantics for activities and entities.

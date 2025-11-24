@@ -91,8 +91,8 @@
 <ol class="arabic">
 <li><p>Search datasets</p>
 <ul class="simple">
-<li><p>OpenML: <code class="docutils literal notranslate"><span class="pre">python</span> <span class="pre">semsynth_reports_cli.py</span> <span class="pre">search</span> <span class="pre">openml</span> <span class="pre">--name-substr</span> <span class="pre">adult</span></code></p></li>
-<li><p>UCI ML: <code class="docutils literal notranslate"><span class="pre">python</span> <span class="pre">semsynth_reports_cli.py</span> <span class="pre">search</span> <span class="pre">uciml</span> <span class="pre">--area</span> <span class="pre">&quot;Health</span> <span class="pre">and</span> <span class="pre">Medicine&quot;</span> <span class="pre">--name-substr</span> <span class="pre">heart</span></code></p></li>
+<li><p>OpenML: <code class="docutils literal notranslate"><span class="pre">python</span> <span class="pre">-m</span> <span class="pre">semsynth</span> <span class="pre">search</span> <span class="pre">openml</span> <span class="pre">--name-substr</span> <span class="pre">adult</span></code></p></li>
+<li><p>UCI ML: <code class="docutils literal notranslate"><span class="pre">python</span> <span class="pre">-m</span> <span class="pre">semsynth</span> <span class="pre">search</span> <span class="pre">uciml</span> <span class="pre">--area</span> <span class="pre">&quot;Health</span> <span class="pre">and</span> <span class="pre">Medicine&quot;</span> <span class="pre">--name-substr</span> <span class="pre">heart</span></code></p></li>
 </ul>
 <p>The <code class="docutils literal notranslate"><span class="pre">search</span></code> command accepts:</p>
 <ul class="simple">
@@ -105,7 +105,7 @@
 <li><p>Minimal report (metadata only) 🧪</p>
 <ul class="simple">
 <li><p>Leave <code class="docutils literal notranslate"><span class="pre">--configs-yaml</span></code> empty to skip model execution.</p></li>
-<li><p>Example: <code class="docutils literal notranslate"><span class="pre">python</span> <span class="pre">semsynth_reports_cli.py</span> <span class="pre">report</span> <span class="pre">uciml</span> <span class="pre">--datasets</span> <span class="pre">45</span> <span class="pre">-v</span></code></p></li>
+<li><p>Example: <code class="docutils literal notranslate"><span class="pre">python</span> <span class="pre">-m</span> <span class="pre">semsynth</span> <span class="pre">report</span> <span class="pre">uciml</span> <span class="pre">--datasets</span> <span class="pre">45</span> <span class="pre">-v</span></code></p></li>
 <li><p>Optional flags for reports:</p>
 <ul>
 <li><p><code class="docutils literal notranslate"><span class="pre">--datasets</span></code> (one or more dataset identifiers)</p></li>
@@ -129,9 +129,15 @@
 <li><p><code class="docutils literal notranslate"><span class="pre">configs/only_metasyn_config.yaml</span></code> (MetaSyn baseline only)</p></li>
 </ul>
 </li>
-<li><p>Example: <code class="docutils literal notranslate"><span class="pre">python</span> <span class="pre">semsynth_reports_cli.py</span> <span class="pre">report</span> <span class="pre">openml</span> <span class="pre">--datasets</span> <span class="pre">adult</span> <span class="pre">--configs-yaml</span> <span class="pre">configs/advanced_config.yaml</span> <span class="pre">--generate-umap</span> <span class="pre">on</span> <span class="pre">--compute-privacy</span> <span class="pre">on</span> <span class="pre">--compute-downstream</span> <span class="pre">on</span></code></p></li>
+<li><p>Example: <code class="docutils literal notranslate"><span class="pre">python</span> <span class="pre">-m</span> <span class="pre">semsynth</span> <span class="pre">report</span> <span class="pre">openml</span> <span class="pre">--datasets</span> <span class="pre">adult</span> <span class="pre">--configs-yaml</span> <span class="pre">configs/advanced_config.yaml</span> <span class="pre">--generate-umap</span> <span class="pre">on</span> <span class="pre">--compute-privacy</span> <span class="pre">on</span> <span class="pre">--compute-downstream</span> <span class="pre">on</span></code></p></li>
 </ul>
 <p>Report toggles accept <code class="docutils literal notranslate"><span class="pre">auto</span></code> (respect YAML defaults), <code class="docutils literal notranslate"><span class="pre">on</span></code>, or <code class="docutils literal notranslate"><span class="pre">off</span></code>. Use <code class="docutils literal notranslate"><span class="pre">auto</span></code> when your YAML sets global defaults for <code class="docutils literal notranslate"><span class="pre">generate_umap</span></code>, <code class="docutils literal notranslate"><span class="pre">compute_privacy</span></code>, or <code class="docutils literal notranslate"><span class="pre">compute_downstream</span></code>.</p>
+</li>
+<li><p>Catalog + app helpers</p>
+<ul class="simple">
+<li><p>Build a DCAT catalog and HTML index from existing outputs: <code class="docutils literal notranslate"><span class="pre">python</span> <span class="pre">-m</span> <span class="pre">semsynth</span> <span class="pre">catalog</span> <span class="pre">--base-dir</span> <span class="pre">output</span></code></p></li>
+<li><p>Launch a minimal Flask UI for search and report actions: <code class="docutils literal notranslate"><span class="pre">python</span> <span class="pre">-m</span> <span class="pre">semsynth</span> <span class="pre">app</span> <span class="pre">--host</span> <span class="pre">0.0.0.0</span> <span class="pre">--port</span> <span class="pre">5000</span></code></p></li>
+</ul>
 </li>
 </ol>
 </section>
@@ -196,7 +202,7 @@
 <h3>Example: UCI dataset 45 (Heart Disease)<a class="headerlink" href="#example-uci-dataset-45-heart-disease" title="Link to this heading"></a></h3>
 <ol class="arabic">
 <li><p>Fetch the dataset metadata. Any command that touches the UCI provider will populate <code class="docutils literal notranslate"><span class="pre">uciml-cache/&lt;id&gt;.json</span></code>. For example:</p>
-<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>python<span class="w"> </span>semsynth_reports_cli.py<span class="w"> </span>report<span class="w"> </span>uciml<span class="w"> </span>-d<span class="w"> </span><span class="m">45</span><span class="w"> </span>--configs-yaml<span class="w"> </span>configs/empty.yaml<span class="w"> </span>--metasyn<span class="w"> </span><span class="nb">false</span>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>python<span class="w"> </span>-m<span class="w"> </span>semsynth<span class="w"> </span>report<span class="w"> </span>uciml<span class="w"> </span>-d<span class="w"> </span><span class="m">45</span><span class="w"> </span>--configs-yaml<span class="w"> </span>configs/empty.yaml<span class="w"> </span>--metasyn<span class="w"> </span><span class="nb">false</span>
 </pre></div>
 </div>
 <p>This creates <code class="docutils literal notranslate"><span class="pre">uciml-cache/45.json</span></code> alongside the cached CSV/metadata used by the reporting pipeline.</p>

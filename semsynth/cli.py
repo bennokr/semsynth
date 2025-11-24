@@ -6,11 +6,13 @@ import logging
 from pathlib import Path
 from typing import TYPE_CHECKING, Any, List, Optional, Literal, Tuple
 
-import makeprov.core as prov_core
 from makeprov import GLOBAL_CONFIG, OutPath, rule
-from makeprov.prov import write_combined_prov
 
-__all__ = ["search", "report"]
+from .app import run_app
+from .catalog import build_catalog
+
+
+__all__ = ["search", "report", "run_app", "build_catalog"]
 
 if TYPE_CHECKING:  # pragma: no cover - imported for typing only
     from .models import ModelConfigBundle, ModelSpec
@@ -118,7 +120,6 @@ def report(
     outdir_path = Path(outdir)
     ensure_dir(str(outdir_path))
 
-    prov_core.start_prov_buffer()
     dataset_specs: List[DatasetSpec]
     dataset_specs = specs_from_input(provider=provider, datasets=datasets, area=area)
 
@@ -146,41 +147,26 @@ def report(
         if is_explicit:
             setattr(cfg, toggle_fields[key], explicit_value)
 
-    original_prov_path = GLOBAL_CONFIG.prov_path
-    shared_prov_len = len(prov_core.PROV_BUFFER or [])
-
-    try:
-        for dataset_spec in dataset_specs:
-            logging.info("Loading dataset %s", dataset_spec)
-            try:
-                resolved_spec, df, color = load_dataset(dataset_spec)
-                dataset_label = resolved_spec.name or str(resolved_spec.id)
-                dataset_outdir = outdir_path / str(dataset_label).replace("/", "_")
-                GLOBAL_CONFIG.prov_path = dataset_outdir / "prov"
-                process_dataset(
-                    resolved_spec,
-                    df,
-                    color,
-                    str(outdir_path),
-                    model_bundle=bundle,
-                    pipeline_config=cfg,
-                )
-                if prov_core.PROV_BUFFER:
-                    write_combined_prov(
-                        prov_core.PROV_BUFFER,
-                        prov_path=dataset_outdir / "report_prov",
-                        fmt=GLOBAL_CONFIG.out_fmt,
-                        jsonld_with_context=GLOBAL_CONFIG.jsonld_with_context,
-                    )
-                    prov_core.PROV_BUFFER = prov_core.PROV_BUFFER[:shared_prov_len]
-            except Exception as exc:  # pragma: no cover - surfaced to CLI
-                logging.exception(
-                    "Skipped %s:%s due to error", dataset_spec.provider, dataset_spec.name
-                )
-                raise SystemExit(str(exc))
-    finally:
-        prov_core.PROV_BUFFER = []
-        GLOBAL_CONFIG.prov_path = original_prov_path
+    for dataset_spec in dataset_specs:
+        logging.info("Loading dataset %s", dataset_spec)
+        try:
+            resolved_spec, df, color = load_dataset(dataset_spec)
+            dataset_label = resolved_spec.name or str(resolved_spec.id)
+            dataset_outdir = outdir_path / str(dataset_label).replace("/", "_")
+            GLOBAL_CONFIG.prov_path = dataset_outdir / "prov"
+            process_dataset(
+                resolved_spec,
+                df,
+                color,
+                str(outdir_path),
+                model_bundle=bundle,
+                pipeline_config=cfg,
+            )
+        except Exception as exc:  # pragma: no cover - surfaced to CLI
+            logging.exception(
+                "Skipped %s:%s due to error", dataset_spec.provider, dataset_spec.name
+            )
+            raise SystemExit(str(exc))
 
 
 if __name__ == "__main__":

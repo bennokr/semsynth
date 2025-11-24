@@ -67,8 +67,6 @@ all = [
 
 [project.scripts]
 semsynth = "semsynth.cli:main"
-semsynth-reports = "semsynth.cli:main"
-semsynth-reports-index = "semsynth_reports_index:main"
 
 [tool.setuptools]
 packages = ["semsynth"]

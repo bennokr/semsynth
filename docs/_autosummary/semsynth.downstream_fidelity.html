@@ -20,7 +20,7 @@
     <link rel="index" title="Index" href="../genindex.html" />
     <link rel="search" title="Search" href="../search.html" />
     <link rel="next" title="semsynth.jsonld_to_rdfa" href="semsynth.jsonld_to_rdfa.html" />
-    <link rel="prev" title="semsynth.cli" href="semsynth.cli.html" /> 
+    <link rel="prev" title="semsynth.datasets" href="semsynth.datasets.html" /> 
 </head>
 
 <body class="wy-body-for-nav"> 
@@ -52,7 +52,7 @@
 <li class="toctree-l2 current"><a class="reference internal" href="semsynth.html">semsynth</a><ul class="current">
 <li class="toctree-l3"><a class="reference internal" href="semsynth.html#semsynth.get_version"><code class="docutils literal notranslate"><span class="pre">get_version()</span></code></a></li>
 <li class="toctree-l3"><a class="reference internal" href="semsynth.backends.html">semsynth.backends</a></li>
-<li class="toctree-l3"><a class="reference internal" href="semsynth.cli.html">semsynth.cli</a></li>
+<li class="toctree-l3"><a class="reference internal" href="semsynth.datasets.html">semsynth.datasets</a></li>
 <li class="toctree-l3 current"><a class="current reference internal" href="#">semsynth.downstream_fidelity</a><ul>
 <li class="toctree-l4"><a class="reference internal" href="#semsynth.downstream_fidelity.auto_formula"><code class="docutils literal notranslate"><span class="pre">auto_formula()</span></code></a></li>
 <li class="toctree-l4"><a class="reference internal" href="#semsynth.downstream_fidelity.compare_real_vs_synth"><code class="docutils literal notranslate"><span class="pre">compare_real_vs_synth()</span></code></a></li>
@@ -68,7 +68,6 @@
 <li class="toctree-l3"><a class="reference internal" href="semsynth.metrics.html">semsynth.metrics</a></li>
 <li class="toctree-l3"><a class="reference internal" href="semsynth.missingness.html">semsynth.missingness</a></li>
 <li class="toctree-l3"><a class="reference internal" href="semsynth.privacy_metrics.html">semsynth.privacy_metrics</a></li>
-<li class="toctree-l3"><a class="reference internal" href="semsynth.semmap.html">semsynth.semmap</a></li>
 <li class="toctree-l3"><a class="reference internal" href="semsynth.specs.html">semsynth.specs</a></li>
 <li class="toctree-l3"><a class="reference internal" href="semsynth.torch_compat.html">semsynth.torch_compat</a></li>
 <li class="toctree-l3"><a class="reference internal" href="semsynth.umap_utils.html">semsynth.umap_utils</a></li>
@@ -183,16 +182,19 @@
 <tr class="row-odd"><td><p><code class="xref py py-obj docutils literal notranslate"><span class="pre">LassoCV</span></code>(*[, eps, n_alphas, alphas, ...])</p></td>
 <td><p>Lasso linear model with iterative fitting along a regularization path.</p></td>
 </tr>
-<tr class="row-even"><td><p><code class="xref py py-obj docutils literal notranslate"><span class="pre">LogisticRegressionCV</span></code>(*[, Cs, fit_intercept, ...])</p></td>
+<tr class="row-even"><td><p><code class="xref py py-obj docutils literal notranslate"><span class="pre">LogisticRegression</span></code>([penalty, dual, tol, C, ...])</p></td>
+<td><p>Logistic Regression (aka logit, MaxEnt) classifier.</p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="xref py py-obj docutils literal notranslate"><span class="pre">LogisticRegressionCV</span></code>(*[, Cs, fit_intercept, ...])</p></td>
 <td><p>Logistic Regression CV (aka logit, MaxEnt) classifier.</p></td>
 </tr>
-<tr class="row-odd"><td><p><code class="xref py py-obj docutils literal notranslate"><span class="pre">PoissonRegressor</span></code>(*[, alpha, fit_intercept, ...])</p></td>
+<tr class="row-even"><td><p><code class="xref py py-obj docutils literal notranslate"><span class="pre">PoissonRegressor</span></code>(*[, alpha, fit_intercept, ...])</p></td>
 <td><p>Generalized Linear Model with a Poisson distribution.</p></td>
 </tr>
-<tr class="row-even"><td><p><code class="xref py py-obj docutils literal notranslate"><span class="pre">SimpleImputer</span></code>(*[, missing_values, strategy, ...])</p></td>
+<tr class="row-odd"><td><p><code class="xref py py-obj docutils literal notranslate"><span class="pre">SimpleImputer</span></code>(*[, missing_values, strategy, ...])</p></td>
 <td><p>Univariate imputer for completing missing values with simple strategies.</p></td>
 </tr>
-<tr class="row-odd"><td><p><code class="xref py py-obj docutils literal notranslate"><span class="pre">StandardScaler</span></code>(*[, copy, with_mean, with_std])</p></td>
+<tr class="row-even"><td><p><code class="xref py py-obj docutils literal notranslate"><span class="pre">StandardScaler</span></code>(*[, copy, with_mean, with_std])</p></td>
 <td><p>Standardize features by removing the mean and scaling to unit variance.</p></td>
 </tr>
 </tbody>
@@ -233,7 +235,7 @@
            </div>
           </div>
           <footer><div class="rst-footer-buttons" role="navigation" aria-label="Footer">
-        <a href="semsynth.cli.html" class="btn btn-neutral float-left" title="semsynth.cli" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
+        <a href="semsynth.datasets.html" class="btn btn-neutral float-left" title="semsynth.datasets" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
         <a href="semsynth.jsonld_to_rdfa.html" class="btn btn-neutral float-right" title="semsynth.jsonld_to_rdfa" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
     </div>
 
