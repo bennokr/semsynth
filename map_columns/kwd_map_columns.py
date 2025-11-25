@@ -22,7 +22,7 @@ from typing import Any, Dict, List
 import defopt
 import requests
 
-from map_columns.shared import load_columns
+from shared import load_columns
 
 logger = logging.getLogger(__name__)
 
