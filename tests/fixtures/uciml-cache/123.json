@@ -1,0 +1,9 @@
+{
+  "uci_id": 123,
+  "name": "Synthetic Fixture",
+  "variables": [
+    {"name": "feature_a", "description": "Description for feature A"},
+    {"name": "feature_b", "description": "Description for feature B"},
+    {"name": "feature_c", "description": null}
+  ]
+}

@@ -1,6 +1,9 @@
 uciml-cache
+!tests/fixtures/uciml-cache/
+!tests/fixtures/uciml-cache/**
 __pycache__
 downloads-cache
+_autosummary
 *.egg-info/
 .eggs/
 prov/
