@@ -1,0 +1,92 @@
+{
+  "provenance": [
+    {
+      "id": "<stdin>",
+      "type": [
+        "prov:Agent",
+        "prov:SoftwareAgent"
+      ],
+      "label": "<stdin>",
+      "hasVersion": "73fa66e39ee1d3be4bab0b66591797091c93863b"
+    },
+    {
+      "id": "env-20251125T194901",
+      "type": [
+        "prov:Entity",
+        "prov:Collection"
+      ],
+      "label": "Python environment",
+      "title": "makeprov",
+      "hasVersion": "0.4.0",
+      "requires": [
+        {
+          "id": "https://pypi.org/project/parse/",
+          "type": "rdfs:Resource",
+          "label": "parse>=1.20"
+        },
+        {
+          "id": "https://pypi.org/project/defopt/",
+          "type": "rdfs:Resource",
+          "label": "defopt>=6"
+        },
+        {
+          "id": "https://pypi.org/project/pytest/",
+          "type": "rdfs:Resource",
+          "label": "pytest"
+        },
+        {
+          "id": "https://pypi.org/project/rdflib/",
+          "type": "rdfs:Resource",
+          "label": "rdflib>=6.0"
+        },
+        {
+          "id": "https://pypi.org/project/pyshacl/",
+          "type": "rdfs:Resource",
+          "label": "pyshacl>=0.20"
+        },
+        {
+          "id": "https://pypi.org/project/sphinx/",
+          "type": "rdfs:Resource",
+          "label": "sphinx>=7"
+        },
+        {
+          "id": "https://pypi.org/project/myst-parser[linkify]/",
+          "type": "rdfs:Resource",
+          "label": "myst-parser[linkify]"
+        },
+        {
+          "id": "https://pypi.org/project/sphinx-rtd-theme/",
+          "type": "rdfs:Resource",
+          "label": "sphinx-rtd-theme"
+        },
+        {
+          "id": "https://pypi.org/project/sphinx-autodoc-typehints/",
+          "type": "rdfs:Resource",
+          "label": "sphinx-autodoc-typehints"
+        },
+        {
+          "id": "https://pypi.org/project/tomli/",
+          "type": "rdfs:Resource",
+          "label": "tomli"
+        }
+      ]
+    },
+    {
+      "id": "<stdin>#load_dataset-20251125T194901",
+      "type": "prov:Activity",
+      "startedAtTime": "2025-11-25T19:49:01.078707+00:00",
+      "endedAtTime": "2025-11-25T19:49:01.191299+00:00",
+      "wasAssociatedWith": "<stdin>",
+      "used": [
+        "env-20251125T194901"
+      ]
+    },
+    {
+      "id": "graph-load_dataset",
+      "type": "prov:Entity",
+      "wasGeneratedBy": "<stdin>#load_dataset-20251125T194901",
+      "wasAttributedTo": "<stdin>",
+      "generatedAtTime": "2025-11-25T19:49:01.191299+00:00"
+    }
+  ]
+}

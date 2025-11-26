@@ -2,12 +2,15 @@
 
 from __future__ import annotations
 
-from dataclasses import asdict, dataclass
+from dataclasses import asdict, dataclass, is_dataclass
+from collections.abc import Mapping
 import importlib
 import json
 import logging
 from pathlib import Path
 from typing import Any, Dict, Iterable, List, Optional, TYPE_CHECKING, cast
+
+import pandas as pd
 
 from makeprov import OutPath, rule
 
@@ -15,11 +18,11 @@ from .backends.base import BackendModule, ensure_backend_contract
 from .mappings import load_mapping_json, resolve_mapping_json
 from .metadata import get_uciml_variable_descriptions
 from .models import ModelConfigBundle, discover_model_runs, load_model_configs
+from .specs import DatasetSpec
 from .semmap import Metadata
 
 if TYPE_CHECKING:  # pragma: no cover - typing only
-    import pandas as pd
-    from .specs import DatasetSpec
+    from .missingness import DataFrameMissingnessModel
 
 
 _BACKEND_MODULE_PATHS = {
@@ -69,18 +72,6 @@ def _load_backend_module(name: str) -> BackendModule:
     return typed_module
 
 
-def _resolve_flag(
-    default_value: bool,
-    bundle_value: Optional[bool],
-    spec_value: Optional[bool],
-) -> bool:
-    if spec_value is not None:
-        return spec_value
-    if bundle_value is not None:
-        return bundle_value
-    return default_value
-
-
 def _import_utils():  # pragma: no cover - helper for lazy import
     from . import utils as _utils
 
@@ -111,20 +102,88 @@ def _import_downstream_compare():  # pragma: no cover - helper for lazy import
     return compare_real_vs_synth
 
 
-def _build_privacy_metadata(df: "pd.DataFrame", inferred: Dict[str, str]) -> "pd.DataFrame":
+def _build_privacy_metadata(
+    df: "pd.DataFrame",
+    inferred: Dict[str, str],
+    *,
+    metadata: Optional[Any] = None,
+    role_overrides: Optional[Dict[str, str]] = None,
+    target: Optional[str] = None,
+) -> "pd.DataFrame":
     import pandas as pd
 
-    rows = []
-    for column, kind in inferred.items():
-        dtype = "numeric" if kind == "continuous" else "categorical"
-        rows.append({"variable": column, "role": "qi", "type": dtype})
-    return pd.DataFrame(rows)
+    def _normalize_role(raw: Optional[str]) -> str:
+        if not raw:
+            return "qi"
+        role = raw.strip().lower()
+        if role in {"quasiidentifier", "quasi-identifier", "quasi_identifier"}:
+            return "qi"
+        if role in {"sensitive", "sensitive_attribute"}:
+            return "sensitive"
+        if role in {"identifier", "id", "primary_key"}:
+            return "id"
+        if role in {"ignore", "drop", "exclude"}:
+            return "ignore"
+        if role in {"target", "label", "outcome"}:
+            return "target"
+        if role in {"feature", "predictor"}:
+            return "qi"
+        return role
+
+    metadata_df: Optional["pd.DataFrame"] = None
+    meta_obj: Optional[Metadata] = metadata if isinstance(metadata, Metadata) else None
+
+    if meta_obj is None and isinstance(metadata, dict):
+        try:
+            meta_obj = Metadata.from_dcat_dsv(metadata)
+        except Exception:
+            meta_obj = None
+
+    if meta_obj is None:
+        try:
+            meta_obj = df.semmap.dataset_semmap or df.semmap()
+        except Exception:
+            meta_obj = None
+
+    if meta_obj is not None:
+        try:
+            metadata_df = meta_obj.to_privacy_frame(inferred)
+        except Exception:
+            metadata_df = None
+
+    if metadata_df is None:
+        rows = []
+        for column, kind in inferred.items():
+            dtype = "numeric" if kind == "continuous" else "categorical"
+            rows.append({"variable": column, "role": "qi", "type": dtype})
+        metadata_df = pd.DataFrame(rows)
+
+    if role_overrides:
+        for column, raw_role in role_overrides.items():
+            normalized = _normalize_role(raw_role)
+            if column in metadata_df.variable.values:
+                metadata_df.loc[metadata_df.variable == column, "role"] = normalized
+
+    if target:
+        target_mask = metadata_df.variable == target
+        if target_mask.any():
+            metadata_df.loc[target_mask, "role"] = "target"
+        elif target in df.columns:
+            kind = inferred.get(target, "continuous")
+            dtype = "numeric" if kind == "continuous" else "categorical"
+            metadata_df = pd.concat(
+                [metadata_df, pd.DataFrame([{"variable": target, "role": "target", "type": dtype}])]
+            )
+
+    return metadata_df
 
 
 def _build_downstream_meta(
     df: "pd.DataFrame",
     inferred: Dict[str, str],
     target_series: Optional["pd.Series"],
+    *,
+    target: Optional[str] = None,
 ) -> Dict[str, Any]:
     import pandas as pd
 
@@ -132,6 +191,8 @@ def _build_downstream_meta(
     if isinstance(target_series, pd.Series):
         if target_series.attrs.get("prov:hadRole") == "target":
             target_name = target_series.name if target_series.name in df.columns else None
+    if target_name is None and target and target in df.columns:
+        target_name = target
 
     columns_meta: List[Dict[str, Any]] = []
     for column in df.columns:
@@ -183,12 +244,12 @@ class PreprocessingResult:
     disc_cols: List[str]
     cont_cols: List[str]
     inferred_types: Dict[str, str]
-    semmap_export: Optional[Dict[str, Any]]
-    semmap_metadata: Optional[Metadata]
-    color_series: Optional["pd.Series"]
-    umap_png_real: Optional[Path]
-    umap_artifacts: Optional[UmapArtifacts]
-    missingness_model: Optional["DataFrameMissingnessModel"]
+    semmap_export: Optional[Dict[str, Any]] = None
+    semmap_metadata: Optional[Metadata] = None
+    color_series: Optional["pd.Series"] = None
+    umap_png_real: Optional[Path] = None
+    umap_artifacts: Optional[UmapArtifacts] = None
+    missingness_model: Optional["DataFrameMissingnessModel"] = None
 
 
 class DatasetPreprocessor:
@@ -205,13 +266,13 @@ class DatasetPreprocessor:
         self._load_mapping = load_mapping
         self._resolve_mapping = resolve_mapping
 
-    @rule()
+    @rule(phony=True)
     def preprocess(
         self,
         dataset_spec: "DatasetSpec",
         df: "pd.DataFrame",
         color_series: Optional["pd.Series"],
-        outdir: Path,
+        outdir: OutPath,
         cfg: PipelineConfig,
         rng: Any,
         *,
@@ -239,7 +300,6 @@ class DatasetPreprocessor:
 
         self._utils.ensure_dir(str(outdir))
 
-        semmap_export: Optional[Dict[str, Any]] = None
         semmap_metadata: Optional[Metadata] = None
         mapping_path = self._resolve_mapping(dataset_spec)
         if mapping_path is not None:
@@ -248,23 +308,19 @@ class DatasetPreprocessor:
                 curated = self._load_mapping(mapping_path)
                 df.semmap.from_jsonld(curated, convert_pint=True)
                 semmap_metadata = df.semmap.dataset_semmap
-                semmap_export = semmap_metadata.to_jsonld() if semmap_metadata else df.semmap.to_jsonld()
             except Exception:
                 logging.exception("Failed to apply SemMap metadata", exc_info=True)
         elif isinstance(dataset_spec.meta, Metadata):
             semmap_metadata = dataset_spec.meta
             df.semmap.from_jsonld(semmap_metadata.to_jsonld())
-            semmap_export = semmap_metadata.to_jsonld()
         elif isinstance(dataset_spec.meta, dict):
             try:
                 semmap_metadata = Metadata.from_dcat_dsv(dataset_spec.meta)
                 df.semmap.from_jsonld(semmap_metadata.to_jsonld())
-                semmap_export = semmap_metadata.to_jsonld()
             except Exception:
                 logging.exception("Failed to apply dataset_spec metadata", exc_info=True)
         if semmap_metadata is None:
             semmap_metadata = df.semmap()
-            semmap_export = semmap_metadata.to_jsonld()
 
         disc_cols, cont_cols = self._utils.infer_types(df)
         df_processed = self._utils.coerce_discrete_to_category(df, disc_cols)
@@ -287,9 +343,16 @@ class DatasetPreprocessor:
             )
 
         color_series2 = None
+        target_column = dataset_spec.target
         if isinstance(color_series, pd.Series) and color_series.name in df_no_na.columns:
             color_series2 = df_no_na[color_series.name].copy()
             color_series2.attrs.update(color_series.attrs)
+            if target_column and color_series2.attrs.get("prov:hadRole") != "target":
+                color_series2.attrs["prov:hadRole"] = "target"
+                target_column = color_series2.name
+        if color_series2 is None and target_column and target_column in df_no_na.columns:
+            color_series2 = df_no_na[target_column].copy()
+            color_series2.attrs["prov:hadRole"] = "target"
 
         umap_png_real: Optional[Path] = outdir / "umap_real.png"
         umap_artifacts: Optional[UmapArtifacts] = None
@@ -342,7 +405,13 @@ class DatasetPreprocessor:
                     df_processed, random_state=miss_state
                 )
 
+        semmap_export: Optional[Dict[str, Any]] = None
         if semmap_metadata is not None:
+            if target_column and target_column in df_processed.columns:
+                for col in semmap_metadata.datasetSchema.columns:
+                    if col.name == target_column:
+                        col.hadRole = "target"
+                        break
             semmap_metadata.update_completeness_from_missingness(
                 df_processed, missingness_model
             )
@@ -376,14 +445,17 @@ class MetricWriter:
         self._privacy_summarizer = privacy_summarizer
         self._downstream_compare = downstream_compare
 
-    @rule()
+    @rule(phony=True)
     def write_privacy(
         self,
-        run_dir: Path,
+        run_dir: OutPath,
         real_df: "pd.DataFrame",
         inferred: Dict[str, str],
         synth_df: Optional["pd.DataFrame"] = None,
         metadata: Optional[Metadata] = None,
+        *,
+        role_overrides: Optional[Dict[str, str]] = None,
+        target: Optional[str] = None,
     ) -> Dict[str, Any]:
         """Write privacy metrics to disk for a backend run.
 
@@ -404,24 +476,41 @@ class MetricWriter:
         metadata_df = (
             metadata.to_privacy_frame(inferred)
             if isinstance(metadata, Metadata)
-            else _build_privacy_metadata(real_df, inferred)
+            else _build_privacy_metadata(
+                real_df,
+                inferred,
+                metadata=metadata,
+                role_overrides=role_overrides,
+                target=target,
+            )
         )
+        if target and target in metadata_df.variable.values:
+            metadata_df.loc[metadata_df.variable == target, "role"] = "target"
         summary = summarizer(real_df, synth_df, metadata_df)
-        payload = asdict(summary)
+        run_dir_path = Path(run_dir)
+        run_dir_path.mkdir(parents=True, exist_ok=True)
+        if is_dataclass(summary):
+            payload = asdict(summary)
+        elif isinstance(summary, Mapping):
+            payload = dict(summary)
+        else:
+            payload = summary
         (run_dir / "metrics.privacy.json").write_text(
             json.dumps(payload, indent=2), encoding="utf-8"
         )
         return payload
 
-    @rule()
+    @rule(phony=True)
     def write_downstream(
         self,
-        run_dir: Path,
+        run_dir: OutPath,
         real_df: "pd.DataFrame",
         synth_df: "pd.DataFrame",
         inferred: Dict[str, str],
         target_series: Optional["pd.Series"],
         metadata: Optional[Metadata] = None,
+        *,
+        target: Optional[str] = None,
     ) -> Dict[str, Any]:
         """Write downstream metrics comparing synthetic and real data.
 
@@ -457,7 +546,9 @@ class MetricWriter:
 
         meta_jsonld = metadata.to_jsonld() if isinstance(metadata, Metadata) else None
         if meta_jsonld is None:
-            meta_jsonld = _build_downstream_meta(real_df, inferred, target_series)
+            meta_jsonld = _build_downstream_meta(
+                real_df, inferred, target_series, target=target
+            )
         results = comparer(real_df, synth_df, meta_jsonld)
         compare = results.get("compare")
         sign_match_rate = float("nan")
@@ -467,6 +558,7 @@ class MetricWriter:
                 sign_match_rate = float(series.astype(float).mean())
             except Exception:
                 sign_match_rate = float("nan")
+        Path(run_dir).mkdir(parents=True, exist_ok=True)
         payload = {"formula": results.get("formula"), "sign_match_rate": sign_match_rate}
         (run_dir / "metrics.downstream.json").write_text(
             json.dumps(payload, indent=2), encoding="utf-8"
@@ -494,13 +586,13 @@ class BackendExecutor:
         self._load_backend = load_backend
         self._metric_writer = metric_writer
 
-    @rule()
+    @rule(phony=True)
     def run_models(
         self,
         dataset_spec: "DatasetSpec",
         bundle: ModelConfigBundle,
         preprocessed: PreprocessingResult,
-        outdir: Path,
+        outdir: OutPath,
     ) -> None:
         """Execute each model specification and compute metrics if requested.
 
@@ -548,7 +640,6 @@ class BackendExecutor:
             synth_path = run_dir_path / "synthetic.csv"
             synth_df = pd.read_csv(synth_path).convert_dtypes()
 
-            missingness_applied = False
             if preprocessed.missingness_model is not None:
                 try:
                     from . import missingness as missingness_module
@@ -557,7 +648,7 @@ class BackendExecutor:
                         "Missingness wrapping requested but dependencies are unavailable"
                     )
                 else:
-                    synth_df, missingness_applied = (
+                    synth_df, _ = (
                         missingness_module.apply_missingness_to_outputs(
                             run_dir=run_dir_path,
                             synth_df=synth_df,
@@ -569,15 +660,23 @@ class BackendExecutor:
                         )
                     )
 
-            compute_privacy_flag = _resolve_flag(
-                self._cfg.compute_privacy,
-                bundle.compute_privacy,
-                spec.compute_privacy,
+            compute_privacy_flag = (
+                spec.compute_privacy
+                if spec.compute_privacy is not None
+                else (
+                    bundle.compute_privacy
+                    if bundle.compute_privacy is not None
+                    else self._cfg.compute_privacy
+                )
             )
-            compute_downstream_flag = _resolve_flag(
-                self._cfg.compute_downstream,
-                bundle.compute_downstream,
-                spec.compute_downstream,
+            compute_downstream_flag = (
+                spec.compute_downstream
+                if spec.compute_downstream is not None
+                else (
+                    bundle.compute_downstream
+                    if bundle.compute_downstream is not None
+                    else self._cfg.compute_downstream
+                )
             )
 
             if compute_privacy_flag:
@@ -588,6 +687,7 @@ class BackendExecutor:
                         preprocessed.inferred_types,
                         synth_df,
                         preprocessed.semmap_metadata,
+                        target=dataset_spec.target,
                     )
                     logging.info("Wrote privacy metrics for %s", label)
                 except ImportError:
@@ -610,7 +710,8 @@ class BackendExecutor:
                         synth_df,
                         preprocessed.inferred_types,
                         target_series,
-                        preprocessed.semmap_metadata,
+                        metadata=preprocessed.semmap_metadata,
+                        target=dataset_spec.target,
                     )
                     logging.info("Wrote downstream metrics for %s", label)
                 except ImportError:
@@ -629,14 +730,13 @@ class ReportWriter:
         self._reporting = reporting_module
         self._umap_utils = umap_utils
 
-    @rule()
+    @rule(phony=True)
     def generate_synthetic_umaps(
         self,
         model_runs: Iterable[Any],
         dataset_spec: "DatasetSpec",
         preprocessed: PreprocessingResult,
         cfg: PipelineConfig,
-        marker: OutPath = OutPath("output/umaps.marker"),
     ) -> None:
         """Create UMAP visualisations for synthetic datasets if required.
 
@@ -672,22 +772,17 @@ class ReportWriter:
             except Exception:
                 logging.exception("Failed to generate UMAP for %s", run.run_dir)
 
-        marker_path = marker.path if isinstance(marker, OutPath) else None
-        if marker_path is not None:
-            marker_path.parent.mkdir(parents=True, exist_ok=True)
-            marker_path.touch(exist_ok=True)
-
     @staticmethod
     def _read_synthetic_df(run: Any) -> "pd.DataFrame":
         import pandas as pd
 
         return pd.read_csv(run.synthetic_csv).convert_dtypes()
 
-    @rule()
+    @rule(phony=True)
     def write_report(
         self,
         *,
-        outdir: Path,
+        outdir: OutPath,
         dataset_spec: "DatasetSpec",
         preprocessed: PreprocessingResult,
         model_runs: List[Any],
@@ -734,12 +829,12 @@ class ReportWriter:
         )
 
 
-@rule()
+@rule(phony=True)
 def process_dataset(
     dataset_spec: "DatasetSpec",
     df: "pd.DataFrame",
     color_series: Optional["pd.Series"],
-    base_outdir: str,
+    base_outdir: OutPath,
     *,
     model_bundle: Optional[ModelConfigBundle] = None,
     pipeline_config: Optional[PipelineConfig] = None,
@@ -757,10 +852,8 @@ def process_dataset(
     outdir = Path(base_outdir) / dataset_spec.name.replace("/", "_")
     rng = utils.seed_all(cfg.random_state)
 
-    generate_umap_flag = _resolve_flag(
-        cfg.generate_umap,
-        bundle.generate_umap,
-        None,
+    generate_umap_flag = (
+        bundle.generate_umap if bundle.generate_umap is not None else cfg.generate_umap
     )
 
     umap_utils = _import_umap_utils() if generate_umap_flag else None

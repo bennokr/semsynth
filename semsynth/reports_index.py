@@ -13,7 +13,9 @@ from hashlib import sha256
 from pathlib import Path
 from typing import Dict, Iterable, List, Optional, Sequence, Set, Tuple
 
-from makeprov import rule, InPath, OutPath, JSONLDMixin, main, GLOBAL_CONFIG
+from makeprov import rule, InPath, OutPath, main, GLOBAL_CONFIG
+
+from makeprov import RDFMixin
 
 
 LOGGER = logging.getLogger(__name__)
@@ -69,7 +71,7 @@ DCAT_CONTEXT: Dict[str, object] = {
 
 
 @dataclass
-class CatalogDistribution(JSONLDMixin):
+class CatalogDistribution(RDFMixin):
     """DCAT Distribution entry for catalog output."""
 
     __context__ = DCAT_CONTEXT
@@ -87,7 +89,7 @@ class CatalogDistribution(JSONLDMixin):
 
 
 @dataclass
-class CatalogDataset(JSONLDMixin):
+class CatalogDataset(RDFMixin):
     """DCAT Dataset entry representing a SemSynth report."""
 
     __context__ = DCAT_CONTEXT
@@ -106,7 +108,7 @@ class CatalogDataset(JSONLDMixin):
 
 
 @dataclass
-class DataCatalog(JSONLDMixin):
+class DataCatalog(RDFMixin):
     """DCAT Catalog container for SemSynth outputs."""
 
     __context__ = DCAT_CONTEXT

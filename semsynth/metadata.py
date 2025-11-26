@@ -4,7 +4,7 @@ from typing import Dict, List, Optional
 from dataclasses import dataclass, field
 
 
-from makeprov import JSONLDMixin
+from makeprov import RDFMixin
 
 JSONLD_CONTEXT = {
     "@context": {
@@ -29,7 +29,7 @@ JSONLD_CONTEXT = {
 
 
 @dataclass
-class DCATDistribution(JSONLDMixin):
+class DCATDistribution(RDFMixin):
     __context__ = JSONLD_CONTEXT
     title: str
     access_url: Optional[str] = None
@@ -38,7 +38,7 @@ class DCATDistribution(JSONLDMixin):
 
 
 @dataclass
-class DCATDataset(JSONLDMixin):
+class DCATDataset(RDFMixin):
     __context__ = JSONLD_CONTEXT
     identifier: str
     title: str

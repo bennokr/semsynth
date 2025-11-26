@@ -19,8 +19,9 @@ dependencies = [
   "openml",
   "pandas",
   "pint-pandas",
-  "makeprov",
+  "makeprov>=0.4.0",
   "pyarrow",
+  "tabulate",
   "pyyaml",
   "requests",
   "scikit-learn",
@@ -63,7 +64,7 @@ all = [
 [project.scripts]
 semsynth = "semsynth.cli:main"
 semsynth-reports = "semsynth.cli:main"
-semsynth-reports-index = "semsynth_reports_index:main"
+semsynth-reports-index = "semsynth.reports_index:main"
 
 [tool.setuptools]
 packages = ["semsynth"]

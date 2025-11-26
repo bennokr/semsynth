@@ -1,0 +1,100 @@
+{
+  "provenance": [
+    {
+      "id": "pytest",
+      "type": [
+        "prov:Agent",
+        "prov:SoftwareAgent"
+      ],
+      "label": "pytest",
+      "hasVersion": "73fa66e39ee1d3be4bab0b66591797091c93863b"
+    },
+    {
+      "id": "/tmp/pytest-of-root/pytest-2/test_openml_cached_uses_helper0/openml",
+      "type": "prov:Entity",
+      "format": "application/octet-stream",
+      "extent": 4096,
+      "modified": "2025-11-25T19:48:23.692592+00:00",
+      "wasGeneratedBy": "pytest#load_openml_by_name-20251125T194823"
+    },
+    {
+      "id": "env-20251125T194823",
+      "type": [
+        "prov:Entity",
+        "prov:Collection"
+      ],
+      "label": "Python environment",
+      "title": "makeprov",
+      "hasVersion": "0.4.0",
+      "requires": [
+        {
+          "id": "https://pypi.org/project/parse/",
+          "type": "rdfs:Resource",
+          "label": "parse>=1.20"
+        },
+        {
+          "id": "https://pypi.org/project/defopt/",
+          "type": "rdfs:Resource",
+          "label": "defopt>=6"
+        },
+        {
+          "id": "https://pypi.org/project/pytest/",
+          "type": "rdfs:Resource",
+          "label": "pytest"
+        },
+        {
+          "id": "https://pypi.org/project/rdflib/",
+          "type": "rdfs:Resource",
+          "label": "rdflib>=6.0"
+        },
+        {
+          "id": "https://pypi.org/project/pyshacl/",
+          "type": "rdfs:Resource",
+          "label": "pyshacl>=0.20"
+        },
+        {
+          "id": "https://pypi.org/project/sphinx/",
+          "type": "rdfs:Resource",
+          "label": "sphinx>=7"
+        },
+        {
+          "id": "https://pypi.org/project/myst-parser[linkify]/",
+          "type": "rdfs:Resource",
+          "label": "myst-parser[linkify]"
+        },
+        {
+          "id": "https://pypi.org/project/sphinx-rtd-theme/",
+          "type": "rdfs:Resource",
+          "label": "sphinx-rtd-theme"
+        },
+        {
+          "id": "https://pypi.org/project/sphinx-autodoc-typehints/",
+          "type": "rdfs:Resource",
+          "label": "sphinx-autodoc-typehints"
+        },
+        {
+          "id": "https://pypi.org/project/tomli/",
+          "type": "rdfs:Resource",
+          "label": "tomli"
+        }
+      ]
+    },
+    {
+      "id": "pytest#load_openml_by_name-20251125T194823",
+      "type": "prov:Activity",
+      "startedAtTime": "2025-11-25T19:48:23.697757+00:00",
+      "endedAtTime": "2025-11-25T19:48:23.701728+00:00",
+      "wasAssociatedWith": "pytest",
+      "used": [
+        "env-20251125T194823"
+      ]
+    },
+    {
+      "id": "graph-load_openml_by_name",
+      "type": "prov:Entity",
+      "wasGeneratedBy": "pytest#load_openml_by_name-20251125T194823",
+      "wasAttributedTo": "pytest",
+      "generatedAtTime": "2025-11-25T19:48:23.701728+00:00"
+    }
+  ]
+}

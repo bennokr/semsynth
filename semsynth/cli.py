@@ -113,7 +113,7 @@ def report(
     if verbose:
         logging.root.setLevel(logging.INFO)
 
-    outdir_path = Path(outdir.path if isinstance(outdir, OutPath) else outdir)
+    outdir_path = Path(outdir)
     ensure_dir(str(outdir_path))
 
     dataset_specs: List[DatasetSpec]
@@ -162,7 +162,13 @@ def report(
             raise SystemExit(str(exc))
 
 
-if __name__ == "__main__":
-    from makeprov import main
+def main() -> None:
+    """Entrypoint forwarding to :mod:`makeprov` CLI handling."""
 
+    from makeprov import main as _main
+
+    _main()
+
+
+if __name__ == "__main__":  # pragma: no cover - convenience for direct execution
     main()

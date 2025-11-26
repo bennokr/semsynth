@@ -5,7 +5,7 @@ from typing import Any, Iterable, List, Optional, Tuple
 import pathlib
 
 import pandas as pd
-from makeprov import InPath, OutPath, rule
+from makeprov import rule
 
 from .dataproviders.openml import get_default_openml, list_openml, load_openml_by_name
 from .dataproviders.uciml import get_default_uciml, list_uciml, load_uciml_by_id
@@ -29,26 +29,16 @@ for _d in (_OPENML_CACHE_DIR, _UCIML_CACHE_DIR):
         _d.mkdir(parents=True, exist_ok=True)
     except Exception:
         pass
-
-
-def _as_path(path_like: pathlib.Path | InPath | OutPath | str) -> pathlib.Path:
-    """Coerce ``makeprov`` markers or strings into a :class:`~pathlib.Path`."""
-
-    if isinstance(path_like, (InPath, OutPath)):
-        return path_like.path or pathlib.Path(".")
-    return pathlib.Path(path_like)
-
-
-@rule()
+@rule(phony=True)
 def specs_from_input(
     provider: str,
     datasets: Optional[Iterable[str]] = None,
     area: str = "Health and Medicine",
     *,
-    openml_cache_dir: OutPath = OutPath(str(_OPENML_CACHE_DIR)),
-    uciml_cache_dir: OutPath = OutPath(str(_UCIML_CACHE_DIR)),
+    openml_cache_dir: pathlib.Path = _OPENML_CACHE_DIR,
+    uciml_cache_dir: pathlib.Path = _UCIML_CACHE_DIR,
 ) -> List[DatasetSpec]:
-    _ = (_as_path(openml_cache_dir), _as_path(uciml_cache_dir))
+    _ = (pathlib.Path(openml_cache_dir), pathlib.Path(uciml_cache_dir))
     provider = provider.lower()
     if provider not in {"openml", "uciml"}:
         raise ValueError("provider must be 'openml' or 'uciml'")
@@ -72,18 +62,18 @@ def specs_from_input(
             return get_default_uciml(area=area)
 
 
-@rule()
+@rule(phony=True)
 def load_dataset(
     spec: DatasetSpec,
     *,
-    openml_cache_dir: OutPath = OutPath(str(_OPENML_CACHE_DIR)),
-    uciml_cache_dir: OutPath = OutPath(str(_UCIML_CACHE_DIR)),
+    openml_cache_dir: pathlib.Path = _OPENML_CACHE_DIR,
+    uciml_cache_dir: pathlib.Path = _UCIML_CACHE_DIR,
 ) -> Tuple[Any, pd.DataFrame, Optional[pd.Series]]:
     if spec.provider == "openml":
-        return load_openml_by_name(spec.name, _as_path(openml_cache_dir))
+        return load_openml_by_name(spec.name, pathlib.Path(openml_cache_dir))
     elif spec.provider == "uciml":
         if spec.id is None:
             raise ValueError("uciml dataset requires an 'id'")
-        return load_uciml_by_id(spec.id, _as_path(uciml_cache_dir))
+        return load_uciml_by_id(spec.id, pathlib.Path(uciml_cache_dir))
     else:
         raise ValueError(f"Unknown provider: {spec.provider}")

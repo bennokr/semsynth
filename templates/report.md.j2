@@ -10,14 +10,9 @@
 
 {% endif %}
 
-{% if provider_link %}**Source**: [{{ provider_link.text }}]({{ provider_link.url }})
+## Overview
 
-{% endif %}{% if semmap_json_name %}- SemMap JSON-LD: [{{ semmap_json_name }}]({{ semmap_json_name }})
-{% endif %}{% if semmap_html_name %}- SemMap HTML: [{{ semmap_html_name }}]({{ semmap_html_name }})
-{% endif %}- Rows: {{ num_rows }}
-- Columns: {{ num_cols }}
-- Discrete: {{ num_disc }}  |  Continuous: {{ num_cont }}
-{% if missingness_summary %}- Missingness model: enabled{% if missingness_summary.random_state is not none %} (random state {{ missingness_summary.random_state }}){% endif %} — modeled columns {{ missingness_summary.nonzero_count }} of {{ missingness_summary.total_columns }}{% endif %}
+{{ overview_table }}
 
 ## Variables and summary
 

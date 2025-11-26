@@ -15,9 +15,9 @@ from ..specs import DatasetSpec
 from ._helpers import clean_dataset_frame
 
 
-@rule()
+@rule(phony=True)
 def get_default_openml(
-    cache_dir: OutPath = OutPath("downloads-cache/openml/defaults.marker"),
+    cache_dir: OutPath = OutPath("downloads-cache/openml/defaults"),
 ) -> List[DatasetSpec]:
     _ = cache_dir
     return [
@@ -28,7 +28,7 @@ def get_default_openml(
     ]
 
 
-@rule()
+@rule(phony=True)
 def list_openml(
     name_substr: Optional[str] = None, cat_min: int = 1, num_min: int = 1
 ) -> pd.DataFrame:
@@ -68,7 +68,7 @@ def list_openml(
     return sets.rename(columns=rename)
 
 
-@rule()
+@rule(phony=True)
 def load_openml_by_name(
     name: str, cache_dir: pathlib.Path | OutPath
 ) -> Tuple[DatasetSpec, pd.DataFrame, Optional[pd.Series]]:

@@ -116,7 +116,7 @@ links to variable definitions, provenance (<code class="docutils literal notrans
 supporting mappings to external ontologies. Presence of a codebook implies a
 categorical type for privacy metadata.</p></li>
 </ul>
-<p>Every dataclass inherits <code class="docutils literal notranslate"><span class="pre">JSONLDMixin</span></code>, enabling round-trips via
+<p>Every dataclass inherits <code class="docutils literal notranslate"><span class="pre">RDFMixin</span></code>, enabling round-trips via
 <code class="docutils literal notranslate"><span class="pre">to_jsonld()/from_jsonld</span></code> and storage inside parquet files through the
 pandas <code class="docutils literal notranslate"><span class="pre">semmap</span></code> accessor.</p>
 </section>

@@ -5,7 +5,7 @@
       "type": "prov:Activity",
       "startedAtTime": "2025-11-17T15:24:52.970687+00:00",
       "endedAtTime": "2025-11-17T15:24:53.005452+00:00",
-      "wasAssociatedWith": "http://example.org/agent/semsynth_reports_index.py",
+      "wasAssociatedWith": "http://example.org/agent/semsynth/reports_index.py",
       "used": [
         {
           "id": "http://example.org/src/output",
@@ -18,12 +18,12 @@
       ]
     },
     {
-      "id": "http://example.org/agent/semsynth_reports_index.py",
+      "id": "http://example.org/agent/semsynth/reports_index.py",
       "type": [
         "prov:Agent",
         "prov:SoftwareAgent"
       ],
-      "label": "semsynth_reports_index.py",
+      "label": "semsynth/reports_index.py",
       "hasVersion": "59085372c6548672cfd8caa344392ffa1560f7ab",
       "source": "https://github.com/bennokr/generative-metadata.git"
     },

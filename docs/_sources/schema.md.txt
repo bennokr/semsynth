@@ -32,7 +32,7 @@ pipeline, from ingestion to reporting.
   supporting mappings to external ontologies. Presence of a codebook implies a
   categorical type for privacy metadata.
 
-Every dataclass inherits `JSONLDMixin`, enabling round-trips via
+Every dataclass inherits `RDFMixin`, enabling round-trips via
 `to_jsonld()/from_jsonld` and storage inside parquet files through the
 pandas `semmap` accessor.
 

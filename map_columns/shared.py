@@ -28,6 +28,24 @@ class ColumnInfo:
     source: Optional[str] = None
 
 
+@dataclass(frozen=True)
+class DatasetMetadata:
+    """Dataset-level metadata extracted from a DCAT/DSV payload."""
+
+    title: Optional[str]
+    description: Optional[str]
+    table_of_contents: Optional[str]
+
+    def as_dict(self) -> Dict[str, Optional[str]]:
+        """Convert the dataset metadata into a plain mapping."""
+
+        return {
+            "title": self.title,
+            "description": self.description,
+            "table_of_contents": self.table_of_contents,
+        }
+
+
 def _coerce_optional_str(value: Any) -> Optional[str]:
     """Convert ``value`` to a trimmed string when possible."""
     if value is None:
@@ -45,6 +63,10 @@ def _column_to_info(col: Column) -> ColumnInfo:
         summary_stats = col.summaryStatistics.to_jsonld()
         if col.summaryStatistics.statisticalDataType:
             statistical_data_type = col.summaryStatistics.statisticalDataType.value
+        elif isinstance(summary_stats, dict):
+            statistical_data_type = summary_stats.get("dsv:statisticalDataType") or summary_stats.get(
+                "statisticalDataType"
+            )
     return ColumnInfo(
         column_id=_coerce_optional_str(col.identifier) or _coerce_optional_str(col.name),
         name=_coerce_optional_str(col.name),
@@ -58,7 +80,7 @@ def _column_to_info(col: Column) -> ColumnInfo:
     )
 
 
-def load_columns(path: Path) -> Tuple[List[ColumnInfo], Metadata]:
+def load_columns(path: Path) -> Tuple[List[ColumnInfo], DatasetMetadata]:
     """Load dataset metadata and column definitions from JSON.
 
     Args:
@@ -66,11 +88,17 @@ def load_columns(path: Path) -> Tuple[List[ColumnInfo], Metadata]:
 
     Returns:
         A tuple of ``(columns, metadata)`` where ``columns`` is a list
-        of :class:`ColumnInfo` and ``metadata`` is the parsed SemMap object.
+        of :class:`ColumnInfo` and ``metadata`` is a simplified dataset-level
+        summary.
     """
     data = json.loads(path.read_text(encoding="utf-8"))
     metadata = Metadata.from_dcat_dsv(data)
     columns = [_column_to_info(col) for col in metadata.datasetSchema.columns]
 
     logger.info("Loaded %d columns from %s", len(columns), path)
-    return columns, metadata
+    dataset_meta = DatasetMetadata(
+        title=_coerce_optional_str(metadata.title),
+        description=_coerce_optional_str(metadata.description),
+        table_of_contents=_coerce_optional_str(getattr(metadata, "tableOfContents", None)),
+    )
+    return columns, dataset_meta
