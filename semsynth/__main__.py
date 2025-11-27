@@ -6,13 +6,13 @@ import logging
 from pathlib import Path
 from typing import TYPE_CHECKING, Any, List, Optional, Literal, Tuple
 
-from makeprov import GLOBAL_CONFIG, OutPath, rule
+from makeprov import GLOBAL_CONFIG, OutPath, rule, main
 
 from .app import run_app
 from .catalog import build_catalog
 
 
-__all__ = ["search", "report", "run_app", "build_catalog"]
+__all__ = ["search", "report", "run_app", "build_catalog", "main"]
 
 if TYPE_CHECKING:  # pragma: no cover - imported for typing only
     from .models import ModelConfigBundle, ModelSpec
@@ -78,12 +78,12 @@ def _toggle_value(mode: Toggle) -> Tuple[Optional[bool], bool]:
     raise ValueError(f"Unknown toggle mode: {mode}")
 
 
-@rule()
+@rule(phony=True)
 def report(
     provider: str = "openml",
     *,
     datasets: List[str] | None = None,
-    outdir: OutPath = OutPath("outputs"),
+    outdir: OutPath = OutPath("output/"),
     configs_yaml: str = "",
     area: str = "Health and Medicine",
     verbose: bool = False,
@@ -123,12 +123,8 @@ def report(
     dataset_specs: List[DatasetSpec]
     dataset_specs = specs_from_input(provider=provider, datasets=datasets, area=area)
 
-    try:
-        bundle: ModelConfigBundle = load_model_configs(
-            configs_yaml.strip() or None
-        )
-    except Exception as exc:  # pragma: no cover - surfaced to CLI
-        raise SystemExit(str(exc))
+    bundle: ModelConfigBundle 
+    bundle = load_model_configs(configs_yaml.strip() or None)
 
     cfg = PipelineConfig()
     cfg.overwrite_umap = overwrite_umap
@@ -168,8 +164,7 @@ def report(
             )
             raise SystemExit(str(exc))
 
-
 if __name__ == "__main__":
-    from makeprov import main
-
-    main()
+    main(argparse_kwargs = dict(
+        prog='python -m semsynth',
+        description=__doc__), version=True)

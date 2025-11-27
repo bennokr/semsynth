@@ -4,7 +4,7 @@ from typing import Any, Dict, List, Mapping, Optional, Union
 from enum import Enum
 from dataclasses import dataclass
 
-from makeprov import JSONLDMixin
+from makeprov import RDFMixin
 
 import pandas as pd
 import pyarrow as pa
@@ -85,7 +85,7 @@ CONTEXT = {
 
 # --- SKOS mapping mixin -------------------------------------------------------
 @dataclass(kw_only=True)
-class SkosMappings(JSONLDMixin):
+class SkosMappings(RDFMixin):
     exactMatch: Optional[List[str]] = None
     closeMatch: Optional[List[str]] = None
     broadMatch: Optional[List[str]] = None
@@ -101,7 +101,7 @@ class CodeConcept(SkosMappings):
 
 
 @dataclass
-class CodeBook(JSONLDMixin):
+class CodeBook(RDFMixin):
     hasTopConcept: Optional[List[CodeConcept]] = None
     source: Optional[str] = None  # if different from ColumnProperty source
 
@@ -116,7 +116,7 @@ class StatisticalDataType(str, Enum):
 
 
 @dataclass
-class SummaryStatistics(JSONLDMixin):
+class SummaryStatistics(RDFMixin):
     statisticalDataType: Optional[StatisticalDataType] = None
     columnCompleteness: Optional[float] = None
     datasetCompleteness: Optional[float] = None
@@ -135,7 +135,7 @@ class Unit(SkosMappings):
 
 
 @dataclass
-class ColumnProperty(SkosMappings, JSONLDMixin):
+class ColumnProperty(SkosMappings, RDFMixin):
     summaryStatistics: Optional[SummaryStatistics] = None
     unitText: Optional[str] = None  # e.g., "unit:YR" or "year"
     hasUnit: Optional[Unit] = None  # Unit node with possible QUDT IRI skos match
@@ -146,7 +146,7 @@ class ColumnProperty(SkosMappings, JSONLDMixin):
 
 # --- CSVW/DSV column and schema ----------------------------------------------
 @dataclass
-class Column(JSONLDMixin):
+class Column(RDFMixin):
     name: str  # required
     titles: Optional[Union[str, List[str]]] = None
     description: Optional[str] = None
@@ -159,14 +159,14 @@ class Column(JSONLDMixin):
 
 
 @dataclass
-class DatasetSchema(JSONLDMixin):
+class DatasetSchema(RDFMixin):
     __context__ = CONTEXT
     columns: List[Column]  # required
 
 
 # --- Root document / Dataset --------------------------------------------------
 @dataclass
-class Metadata(JSONLDMixin):
+class Metadata(RDFMixin):
     __context__ = CONTEXT
     datasetSchema: DatasetSchema  # required
     summaryStatistics: Optional[SummaryStatistics] = None
@@ -209,14 +209,16 @@ class Metadata(JSONLDMixin):
         ) if isinstance(ds_summary, Mapping) else None
 
         schema = payload.get("dsv:datasetSchema") or payload.get("datasetSchema") or {}
-        columns_json = []
+        columns_json: List[Mapping[str, Any]] = []
         if isinstance(schema, Mapping):
-            columns_json = schema.get("dsv:column") or schema.get("columns") or []
+            raw_columns = schema.get("dsv:column") or schema.get("columns") or []
+            if isinstance(raw_columns, Mapping):
+                columns_json = [raw_columns]
+            elif isinstance(raw_columns, list):
+                columns_json = [c for c in raw_columns if isinstance(c, Mapping)]
 
         columns: List[Column] = []
         for col_json in columns_json:
-            if not isinstance(col_json, Mapping):
-                continue
             summary = col_json.get("dsv:summaryStatistics") or col_json.get("summaryStatistics")
             if isinstance(summary, Mapping):
                 normalized_summary = {}
@@ -228,9 +230,24 @@ class Metadata(JSONLDMixin):
                 column_stats = None
             col_prop_json = col_json.get("dsv:columnProperty") or col_json.get("columnProperty")
             col_prop = ColumnProperty.from_jsonld(col_prop_json) if isinstance(col_prop_json, Mapping) else None
+            unit_text = col_json.get("schema:unitText") or col_json.get("unitText")
+            if unit_text:
+                if col_prop is None:
+                    col_prop = ColumnProperty(unitText=unit_text)
+                elif not col_prop.unitText:
+                    col_prop.unitText = unit_text
+            name = (
+                col_json.get("schema:name")
+                or col_json.get("name")
+                or col_json.get("dcterms:title")
+                or col_json.get("schema:identifier")
+                or col_json.get("identifier")
+            )
+            if not name:
+                continue
             columns.append(
                 Column(
-                    name=col_json.get("schema:name") or col_json.get("name"),
+                    name=name,
                     titles=col_json.get("csvw:titles") or col_json.get("titles") or col_json.get("dcterms:title"),
                     description=col_json.get("dcterms:description"),
                     about=col_json.get("schema:about"),
@@ -300,17 +317,23 @@ class Metadata(JSONLDMixin):
             return role
 
         rows = []
+        
+        def _statistical_dtype(node: Optional[Any]) -> Optional[str]:
+            stat_node = node.summaryStatistics if getattr(node, "summaryStatistics", None) else node
+            raw_type = getattr(stat_node, "statisticalDataType", None)
+            if raw_type:
+                return raw_type.value if hasattr(raw_type, "value") else str(raw_type)
+            if isinstance(stat_node, ColumnProperty) and stat_node.hasCodeBook:
+                return "dsv:NominalDataType"
+            return None
+
         for col in self.datasetSchema.columns:
             role = _normalize_role(col.hadRole)
             dtype = None
             stats_nodes = [col.summaryStatistics, getattr(col, "columnProperty", None)]
             for node in stats_nodes:
-                stat_node = node.summaryStatistics if getattr(node, "summaryStatistics", None) else node
-                if isinstance(stat_node, SummaryStatistics) and stat_node.statisticalDataType:
-                    dtype = stat_node.statisticalDataType.value
-                    break
-                if isinstance(stat_node, ColumnProperty) and stat_node.hasCodeBook:
-                    dtype = "dsv:NominalDataType"
+                dtype = _statistical_dtype(node)
+                if dtype:
                     break
             inferred_kind = inferred.get(col.name, "continuous")
             mapped_dtype = "numeric" if inferred_kind == "continuous" else "categorical"
@@ -498,6 +521,8 @@ class SemMapSeriesAccessor:
         if self.col_semmap is None:
             self.col_semmap = Column(name=str(self._s.name or ""))
         n = len(self._s)
+        if self.col_semmap is None:
+            self.col_semmap = Column(name=str(self._s.name))
         self.col_semmap.summaryStatistics = SummaryStatistics(
             statisticalDataType=self._infer_statistical_data_type(),
             columnCompleteness=float(self._s.notna().mean()) if n else 1.0,

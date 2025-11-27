@@ -4,7 +4,7 @@
     "@type": ["disco:LogicalDataSet", "dsv:Dataset", "dcat:Dataset"],
     "dct:title": "Gallstone-1 (UCI ML Repository, ID 1150)"
   },
-  "tableSchema": {
+  "datasetSchema": {
     "columns": [
       {
         "name": "GallstoneStatus",

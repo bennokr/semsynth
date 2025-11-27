@@ -253,14 +253,14 @@ def _uciml_metadata_to_dcat_dsv(
     return to_dcat_dsv(enriched_metadata)
 
 
-@rule()
+@rule(phony=True)
 def list_uciml(
     area: str = "Health and Medicine",
     name_substr: Optional[str] = None,
     cat_min: int = 1,
     num_min: int = 1,
     *,
-    cachedir: OutPath = OutPath("uciml-cache"),
+    cachedir: pathlib.Path = pathlib.Path("uciml-cache"),
 ) -> pd.DataFrame:
     """Return (id, name, n_instances, n_categorical, n_numeric) for mixed datasets in area.
 
@@ -280,7 +280,7 @@ def list_uciml(
 
     data_url = "https://archive.ics.uci.edu/api/dataset"
     cache_root = pathlib.Path(cachedir)
-    cache_root.mkdir(exist_ok=True)
+    cache_root.mkdir(parents=True, exist_ok=True)
     rows = []
     for i, name in pairs:
         cache = cache_root / f"{i}.json"
@@ -310,15 +310,15 @@ def list_uciml(
     return pd.DataFrame(rows)
 
 
-@rule()
+@rule(phony=True)
 def get_default_uciml(
-    area: str = "Health and Medicine", *, cache_dir: OutPath = OutPath("uciml-cache")
+    area: str = "Health and Medicine", *, cache_dir: pathlib.Path = pathlib.Path("uciml-cache")
 ) -> List[DatasetSpec]:
     df = list_uciml(area=area, cachedir=cache_dir)
     return [DatasetSpec("uciml", name=r.name, id=r.id) for r in df.itertuples()]
 
 
-@rule()
+@rule(phony=True)
 def load_uciml_by_id(
     dataset_id: int, cache_dir: pathlib.Path | OutPath
 ) -> Tuple[DatasetSpec, pd.DataFrame, Optional[pd.Series]]:
@@ -328,8 +328,8 @@ def load_uciml_by_id(
       - {cache_dir}/{id}.csv.gz: cached tabular data
       - {cache_dir}/{id}.meta.json: minimal metadata (name, color column)
     """
-    cache_root = pathlib.Path(cache_dir)
-    cache_base = cache_root or pathlib.Path(".")
+    cache_base = pathlib.Path(cache_dir)
+    cache_base.mkdir(parents=True, exist_ok=True)
     data_path = cache_base / f"{dataset_id}.csv.gz"
     meta_path = cache_base / f"{dataset_id}.meta.json"
 

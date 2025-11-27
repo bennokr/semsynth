@@ -5,7 +5,7 @@
     "title": "Chronic Kidney Disease (UCI id 336)",
     "description": "Clinical records for early detection of CKD (subset of variables ped)."
   },
-  "tableSchema": {
+  "datasetSchema": {
     "columns": [
       {
         "name": "age",

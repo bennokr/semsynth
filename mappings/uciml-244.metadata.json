@@ -1,0 +1,170 @@
+{
+  "@context": {
+    "dcat": "http://www.w3.org/ns/dcat#",
+    "dcterms": "http://purl.org/dc/terms/",
+    "schema": "http://schema.org/",
+    "dsv": "https://w3id.org/dsv-ontology#",
+    "xsd": "http://www.w3.org/2001/XMLSchema#"
+  },
+  "@type": "dcat:Dataset",
+  "dcterms:title": "Fertility",
+  "dcterms:abstract": "100 volunteers provide a semen sample analyzed according to the WHO 2010 criteria. Sperm concentration are related to socio-demographic data, environmental factors, health status, and life habits",
+  "dcterms:created": 2012,
+  "dcterms:modified": "2024-03-15",
+  "dcat:landingPage": "https://archive.ics.uci.edu/dataset/244/fertility",
+  "dcat:theme": "Health and Medicine",
+  "dcterms:identifier": [
+    {
+      "@type": "schema:PropertyValue",
+      "schema:propertyID": "uci",
+      "schema:value": 244
+    },
+    {
+      "@type": "schema:PropertyValue",
+      "schema:propertyID": "DOI",
+      "schema:value": "10.24432/C5Z01Z"
+    }
+  ],
+  "dcat:keyword": [
+    "Age",
+    "Classification",
+    "Regression",
+    "Multivariate"
+  ],
+  "schema:numberOfItems": 100,
+  "dcterms:extent": "9 features",
+  "dcterms:creator": [
+    {
+      "@type": "schema:Person",
+      "schema:name": "David Gil"
+    },
+    {
+      "@type": "schema:Person",
+      "schema:name": "Jose Girela"
+    }
+  ],
+  "dcat:distribution": [
+    {
+      "@type": "dcat:Distribution",
+      "dcat:downloadURL": "https://archive.ics.uci.edu/static/public/244/data.csv",
+      "dcat:mediaType": "text/csv",
+      "dcterms:format": "text/csv"
+    }
+  ],
+  "dsv:datasetSchema": {
+    "@type": "dsv:DatasetSchema",
+    "dsv:column": [
+      {
+        "@type": "dsv:Column",
+        "schema:name": "season",
+        "prov:hadRole": "Feature",
+        "dsv:summaryStatistics": {
+          "@type": "dsv:SummaryStatistics",
+          "dsv:statisticalDataType": "dsv:StatisticalDataType"
+        }
+      },
+      {
+        "@type": "dsv:Column",
+        "schema:name": "age",
+        "prov:hadRole": "Feature",
+        "schema:about": "Age",
+        "dsv:summaryStatistics": {
+          "@type": "dsv:SummaryStatistics",
+          "dsv:statisticalDataType": "dsv:NumericalDataType"
+        }
+      },
+      {
+        "@type": "dsv:Column",
+        "schema:name": "child_diseases",
+        "prov:hadRole": "Feature",
+        "dsv:summaryStatistics": {
+          "@type": "dsv:SummaryStatistics",
+          "dsv:statisticalDataType": "dsv:StatisticalDataType"
+        }
+      },
+      {
+        "@type": "dsv:Column",
+        "schema:name": "accident",
+        "prov:hadRole": "Feature",
+        "dsv:summaryStatistics": {
+          "@type": "dsv:SummaryStatistics",
+          "dsv:statisticalDataType": "dsv:StatisticalDataType"
+        }
+      },
+      {
+        "@type": "dsv:Column",
+        "schema:name": "surgical_intervention",
+        "prov:hadRole": "Feature",
+        "dsv:summaryStatistics": {
+          "@type": "dsv:SummaryStatistics",
+          "dsv:statisticalDataType": "dsv:StatisticalDataType"
+        }
+      },
+      {
+        "@type": "dsv:Column",
+        "schema:name": "high_fevers",
+        "prov:hadRole": "Feature",
+        "dsv:summaryStatistics": {
+          "@type": "dsv:SummaryStatistics",
+          "dsv:statisticalDataType": "dsv:CategoricalDataType"
+        }
+      },
+      {
+        "@type": "dsv:Column",
+        "schema:name": "alcohol",
+        "prov:hadRole": "Feature",
+        "dsv:summaryStatistics": {
+          "@type": "dsv:SummaryStatistics",
+          "dsv:statisticalDataType": "dsv:CategoricalDataType"
+        }
+      },
+      {
+        "@type": "dsv:Column",
+        "schema:name": "smoking",
+        "prov:hadRole": "Feature",
+        "dsv:summaryStatistics": {
+          "@type": "dsv:SummaryStatistics",
+          "dsv:statisticalDataType": "dsv:CategoricalDataType"
+        }
+      },
+      {
+        "@type": "dsv:Column",
+        "schema:name": "hrs_sitting",
+        "prov:hadRole": "Feature",
+        "dsv:summaryStatistics": {
+          "@type": "dsv:SummaryStatistics",
+          "dsv:statisticalDataType": "dsv:NumericalDataType"
+        }
+      },
+      {
+        "@type": "dsv:Column",
+        "schema:name": "diagnosis",
+        "prov:hadRole": "Target",
+        "dsv:summaryStatistics": {
+          "@type": "dsv:SummaryStatistics",
+          "dsv:statisticalDataType": "dsv:StatisticalDataType"
+        }
+      }
+    ]
+  },
+  "dsv:summaryStatistics": {
+    "@type": "dsv:SummaryStatistics",
+    "dsv:numberOfRows": 100,
+    "dsv:numberOfColumns": 9
+  },
+  "schema:citation": {
+    "@type": "schema:ScholarlyArticle",
+    "dcterms:title": "Predicting seminal quality with artificial intelligence methods",
+    "schema:author": [
+      "David Gil",
+      "J. L. Girela",
+      "Joaquin De Juan",
+      "M. Jose Gomez-Torres",
+      "Magnus Johnsson"
+    ],
+    "schema:isPartOf": "Expert systems with applications",
+    "schema:datePublished": 2012,
+    "schema:url": "https://www.semanticscholar.org/paper/Predicting-seminal-quality-with-artificial-methods-Gil-Girela/92759c5ee08b9e6e7b17d1ccd48a7f8c02aba893"
+  },
+  "dcterms:tableOfContents": "Season in which the analysis was performed. \t1) winter, 2) spring, 3) Summer, 4) fall. \t(-1, -0.33, 0.33, 1) \r\n\r\nAge at the time of analysis. \t18-36 \t(0, 1) \r\n\r\nChildish diseases (ie , chicken pox, measles, mumps, polio)\t1) yes, 2) no. \t(0, 1) \r\n\r\nAccident or serious trauma \t1) yes, 2) no. \t(0, 1) \r\n\r\nSurgical intervention \t1) yes, 2) no. \t(0, 1) \r\n\r\nHigh fevers in the last year \t1) less than three months ago, 2) more than three months ago, 3) no. \t(-1, 0, 1) \r\n\r\nFrequency of alcohol consumption \t1) several times a day, 2) every day, 3) several times a week, 4) once a week, 5) hardly ever or never \t(0, 1) \r\n\r\nSmoking habit \t1) never, 2) occasional 3) daily. \t(-1, 0, 1) \r\n\r\nNumber of hours spent sitting per day \tene-16\t(0, 1) \r\n\r\nOutput: Diagnosis\tnormal (N), altered (O)\t\r\n"
+}

@@ -6,15 +6,15 @@ This document explains how SemSynth's provenance-aware build graph is assembled 
 - [makeprov README](https://github.com/bennokr/makeprov#readme) and the published [API documentation](https://pypi.org/project/makeprov/) for decorator semantics, CLI commands, and configuration keys.
 - [makeprov SHACL shapes](https://raw.githubusercontent.com/bennokr/makeprov/refs/heads/main/tests/prov_shapes.ttl) that validate the generated PROV graphs.
 - [PROV-O primer](https://www.w3.org/TR/prov-o/) for the underlying ontology used in emitted `.trig`/`.json` bundles.
-- SemSynth CLI module [`semsynth/cli.py`](./cli.py) where makeprov's `COMMANDS` are exposed alongside SemSynth-specific commands.
+- SemSynth CLI module [`semsynth/__main__.py`](./__main__.py) where makeprov's `COMMANDS` are exposed alongside SemSynth-specific commands.
 
 ## Configuration and entry points
-- **Default settings** live in [`prov-config.toml`](../prov-config.toml), which sets the base IRI (`https://w3id.org/semsynth/demo#`) and the provenance output directory. You can pass an alternate file to the `prov_conf` argument on any CLI command to override `base_iri`, `prov_dir`, `force`, or `dry_run` through makeprov's `GLOBAL_CONFIG`.
-- **CLI integration**: `search` and `report` (both in [`semsynth/cli.py`](./cli.py)) are wrapped with `@rule()` decorators. When you invoke `python -m semsynth search ...` or `python -m semsynth report ...`, defopt exposes every makeprov command (e.g., `build`, `graph`) alongside SemSynth's commands so you can run `build <target>` to materialize missing outputs.
-- **File parameters**: Inputs such as `prov_conf` use `InPath`, while outputs like `output` or `outdir` use `OutPath`. makeprov registers these as graph nodes, so running `build outputs/<dataset>/index.html` will trigger the dependent rules that generate that file.
+- **Default settings** live in [`prov-config.toml`](../prov-config.toml), which sets the base IRI (`https://w3id.org/semsynth/demo#`) and the provenance output directory (now `output/provenance`). You can pass an alternate file to the `prov_conf` argument on any CLI command to override `base_iri`, `prov_dir`, `force`, or `dry_run` through makeprov's `GLOBAL_CONFIG`.
+- **CLI integration**: `search` and `report` (both in [`semsynth/__main__.py`](./__main__.py)) are wrapped with `@rule()` decorators. When you invoke `python -m semsynth search ...` or `python -m semsynth report ...`, defopt exposes every makeprov command (e.g., `build`, `graph`) alongside SemSynth's commands so you can run `build <target>` to materialize missing outputs.
+- **File parameters**: Inputs such as `prov_conf` use `InPath`, while outputs like `output` or `outdir` use `OutPath`. makeprov registers these as graph nodes, so running `build output/<dataset>/index.html` will trigger the dependent rules that generate that file.
 
 ## Dataset discovery and acquisition rules
-- `specs_from_input` and `load_dataset` in [`semsynth/datasets.py`](./datasets.py) are annotated with `@rule(out_params=["openml_cache_dir", "uciml_cache_dir"])` so the cache roots under `downloads-cache/` are explicit outputs. Provider-specific helpers (`load_openml_by_name`, `load_uciml_by_id`, and their search counterparts in `semsynth/dataproviders/openml.py` and `semsynth/dataproviders/uciml.py`) are wrapped too.
+- `specs_from_input` and `load_dataset` in [`semsynth/datasets.py`](./datasets.py) are annotated with `@rule(out_params=["openml_cache_dir", "uciml_cache_dir"])` so the cache roots under `downloads-cache/` are explicit outputs. Provider-specific helpers (`load_openml_by_name`, `load_uciml_by_id`, and their search counterparts in `semsynth/dataproviders/openml.py` and `semsynth/dataproviders/uciml.py`) are wrapped too, ensuring that API queries and downloaded CSVs populate the graph via tracked `OutPath` nodes.
 - Because the cache directories are modeled as outputs, makeprov can decide whether to re-run downloads based on whether the files under `downloads-cache/openml/` or `downloads-cache/uciml/` already exist. This is especially useful when combining `build` with the `--force` toggle from the configuration file.
 
 ## Pipeline orchestration rules
@@ -28,9 +28,9 @@ This document explains how SemSynth's provenance-aware build graph is assembled 
 ## Provenance outputs and validation
 - Running any rule emits provenance metadata into the configured `prov_dir` (defaults in `prov-config.toml`). Each execution records inputs (`InPath`) and outputs (`OutPath`), plus returned Python objects where applicable, serialized into `.trig`/`.json` files aligned with [PROV-O](https://www.w3.org/TR/prov-o/).
 - The SHACL shapes shipped with makeprov ([`makeprov/shacl`](https://github.com/bennokr/makeprov/tree/main/makeprov/shacl)) can be used to validate these graphs. Point a SHACL engine at the generated `.trig`/`.json` bundle to confirm class/property constraints before publishing provenance artifacts.
-- When debugging, you can render the DAG with `python semsynth_reports_cli.py graph --conf @prov-config.toml` (exposed via makeprov `COMMANDS`) to visualize how cached downloads, preprocessing artifacts, model outputs, and reports depend on one another.
+- When debugging, you can render the DAG with `python -m semsynth --to-dot TARGET` to visualize how cached downloads, preprocessing artifacts, model outputs, and reports depend on one another.
 
 ## Practical usage patterns
-- **Rebuild a missing artifact**: If a report HTML is missing, run `python -m semsynth build outputs/<dataset>/index.html --conf @prov-config.toml` to regenerate upstream dependencies automatically.
-- **Dry runs and forcing recomputation**: Pass `--conf @prov-config.toml --dry-run` to inspect the DAG without executing, or set `force=true` in the TOML to rerun every rule regardless of existing outputs.
+- **Rebuild a missing artifact**: If a report HTML is missing, run `python -m semsynth --build output/<dataset>/index.html` to regenerate upstream dependencies automatically.
+- **Dry runs and forcing recomputation**: Pass `--conf @prov-config.toml --dry-run` to inspect the DAG without executing, or set `force=true` in the TOML to rerun every rule regardless of existing outputs. 
 - **Extending the workflow**: When adding new provider helpers or report writers, wrap them with `@rule()` and annotate file inputs/outputs with `InPath`/`OutPath` to keep provenance complete. Refer to the decorator examples in the [makeprov README](https://github.com/bennokr/makeprov#readme) and ensure new artifacts respect PROV-O semantics for activities and entities.

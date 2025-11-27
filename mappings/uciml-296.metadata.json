@@ -5,7 +5,7 @@
     "dct:title": "UCI Diabetes 130-US hospitals (1999–2008)",
     "dct:source": "https://archive.ics.uci.edu/dataset/296/diabetes+130-us+hospitals+for+years+1999-2008"
   },
-  "tableSchema": {
+  "datasetSchema": {
     "columns": [
       {
         "name": "age",

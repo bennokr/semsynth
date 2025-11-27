@@ -9,15 +9,14 @@ import warnings
 from typing import List, Optional, Tuple
 
 import pandas as pd
-from makeprov import OutPath, rule
+from pathlib import Path
 
 from ..specs import DatasetSpec
 from ._helpers import clean_dataset_frame
 
 
-@rule()
 def get_default_openml(
-    cache_dir: OutPath = OutPath("downloads-cache/openml/"),
+    cache_dir: Path = Path("downloads-cache/openml/defaults"),
 ) -> List[DatasetSpec]:
     return [
         DatasetSpec("openml", "adult", target="class"),
@@ -27,12 +26,11 @@ def get_default_openml(
     ]
 
 
-@rule()
 def list_openml(
     name_substr: Optional[str] = None,
     cat_min: int = 1,
     num_min: int = 1,
-    cache_dir: OutPath = OutPath("downloads-cache/openml/"),
+    cache_dir: Path = Path("downloads-cache/openml/"),
 ) -> pd.DataFrame:
     import openml
 
@@ -70,9 +68,8 @@ def list_openml(
     return sets.rename(columns=rename)
 
 
-@rule()
 def load_openml_by_name(
-    name: str, cache_dir: pathlib.Path | OutPath
+    name: str, cache_dir: pathlib.Path | Path
 ) -> Tuple[DatasetSpec, pd.DataFrame, Optional[pd.Series]]:
     """Load an OpenML dataset by name, with local caching of the data payload.
 

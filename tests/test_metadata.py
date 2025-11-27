@@ -10,7 +10,7 @@ from pathlib import Path
 import pandas as pd
 
 dummy_makeprov = types.ModuleType("makeprov")
-dummy_makeprov.JSONLDMixin = object
+dummy_makeprov.RDFMixin = object
 dummy_makeprov.OutPath = lambda path: path
 dummy_makeprov.rule = lambda *_args, **_kwargs: (lambda func: func)
 sys.modules.setdefault("makeprov", dummy_makeprov)

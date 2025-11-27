@@ -10,14 +10,9 @@
 
 {% endif %}
 
-{% if provider_link %}**Source**: [{{ provider_link.text }}]({{ provider_link.url }})
+## Overview
 
-{% endif %}{% if semmap_json_name %}- SemMap JSON-LD: [{{ semmap_json_name }}]({{ semmap_json_name }})
-{% endif %}{% if semmap_html_name %}- SemMap HTML: [{{ semmap_html_name }}]({{ semmap_html_name }})
-{% endif %}- Rows: {{ num_rows }}
-- Columns: {{ num_cols }}
-- Discrete: {{ num_disc }}  |  Continuous: {{ num_cont }}
-{% if missingness_summary %}- Missingness model: enabled{% if missingness_summary.random_state is not none %} (random state {{ missingness_summary.random_state }}){% endif %} — modeled columns {{ missingness_summary.nonzero_count }} of {{ missingness_summary.total_columns }}{% endif %}
+{{ overview_table }}
 
 ## Variables and summary
 
@@ -39,15 +34,18 @@
 
 <table>
 <tr><th>UMAP</th><th>Details</th><th>Structure</th></tr>
-{% if real_umap %}<tr><td><img src='{{ real_umap }}' width='280'/></td><td><h3>Real data</h3></td><td></td></tr>
+{% if real_umap %}<tr><td><img src='{{ real_umap }}' width='280'/></td><td>
+<h3>Real data</h3></td><td></td></tr>
 {% endif %}{% for model in model_rows %}<tr><td>{% if model.umap_rel %}<img src='{{ model.umap_rel }}' width='280'/>{% endif %}</td><td>
 
-### Model: {{ model.name }} ({{ model.backend }})
-
-- Seed: {{ model.seed }}, rows: {{ model.rows }}
-{% if model.params_json %}- Params: `{{ model.params_json }}`
-{% endif %}{% if model.missingness %}- Missingness: {% if model.missingness.wrapped %}wrapped{% else %}{{ model.missingness }}{% endif %}{% if model.missingness.random_state is not none %} (random state {{ model.missingness.random_state }}){% endif %}{% if model.missingness.source %} via {{ model.missingness.source }}{% endif %}{% endif %}{% for link in model.links %}- [{{ link.label }}]({{ link.href }})
+<h3>Model: {{ model.name }} ({{ model.backend }})</h3>
+<ul>
+<li>Seed: {{ model.seed }}, rows: {{ model.rows }}</li>
+{% if model.params_json %}<li> Params: <tt>{{ model.params_json }}</tt></li>{% endif %}
+{% if model.missingness %}<li> Missingness: {% if model.missingness.wrapped %}wrapped{% else %}{{ model.missingness }}{% endif %}{% if model.missingness.random_state is not none %} (random state {{ model.missingness.random_state }}){% endif %}{% if model.missingness.source %} via {{ model.missingness.source }}{% endif %}</li>{% endif %}
+{% for link in model.links %}<li> <a href="{{ link.href }}">{{ link.label }}</a></li>
 {% endfor %}
+</ul>
 
 </td><td>
 {% if model.structure_rel %}<a href='{{ model.structure_rel }}'><img src='{{ model.structure_rel }}' width='280'/></a>{% endif %}

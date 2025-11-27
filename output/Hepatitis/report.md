@@ -1,12 +1,18 @@
 # Data Report — Hepatitis
 
-**Source**: [UCI dataset 46](https://archive.ics.uci.edu/dataset/46)
 
-- SemMap JSON-LD: [dataset.semmap.json](dataset.semmap.json)
-- SemMap HTML: [dataset.semmap.html](dataset.semmap.html)
-- Rows: 80
-- Columns: 20
-- Discrete: 14  |  Continuous: 6
+## Overview
+
+| Metric      | Value                                                                         |
+|:------------|:------------------------------------------------------------------------------|
+| Dataset     | Hepatitis                                                                     |
+| Source      | [UCI dataset 46](https://archive.ics.uci.edu/dataset/46)                      |
+| Rows        | 80                                                                            |
+| Columns     | 20                                                                            |
+| Discrete    | 14                                                                            |
+| Continuous  | 6                                                                             |
+| SemMap      | [SemMap JSON-LD](dataset.semmap.json)<br />[SemMap HTML](dataset.semmap.html) |
+| Missingness | Not modeled                                                                   |
 
 ## Variables and summary
 
@@ -35,62 +41,59 @@
 
 ## Fidelity summary
 
-| model    | backend   |   disc_jsd_mean |   disc_jsd_median |   cont_ks_mean |   cont_w1_mean |
-|:---------|:----------|----------------:|------------------:|---------------:|---------------:|
-| metasyn  | metasyn   |          0.1228 |            0.1106 |         0.2177 |         9.2615 |
-| clg_mi2  | pybnesian |          0.1287 |            0.1415 |         0.2147 |         9.5402 |
-| semi_mi5 | pybnesian |          0.1251 |            0.1495 |         0.2134 |        11.509  |
+| model    | backend   |   disc_jsd_mean |   disc_jsd_median |   cont_ks_mean |   cont_w1_mean |   privacy_overlap |   downstream_sign_match |
+|:---------|:----------|----------------:|------------------:|---------------:|---------------:|------------------:|------------------------:|
+| metasyn  | metasyn   |          0.1351 |            0.1056 |         0.2181 |         9.9006 |                 0 |                  0.2414 |
+| clg_mi2  | pybnesian |          0.1287 |            0.1415 |         0.2147 |         9.5402 |                 0 |                  0.2931 |
+| semi_mi5 | pybnesian |          0.1336 |            0.1378 |         0.2009 |        10.8894 |                 0 |                  0.3103 |
 
 ## Models
 
 <table>
 <tr><th>UMAP</th><th>Details</th><th>Structure</th></tr>
-<tr><td><img src='umap_real.png' width='280'/></td><td><h3>Real data</h3></td><td></td></tr>
-<tr><td>
-<img src='models/metasyn/umap.png' width='280'/></td><td>
+<tr><td></td><td>
 
 <h3>Model: metasyn (metasyn)</h3>
 <ul>
 <li>Seed: 42, rows: 155</li>
-<li><a href="models/metasyn/synthetic.csv">Synthetic CSV</a></li>
-<li><a href="models/metasyn/per_variable_metrics.csv">Per-variable metrics</a></li>
-<li><a href="models/metasyn/metrics.json">Metrics JSON</a></li>
-</ul></td><td>
+<li> <a href="models/metasyn/synthetic.csv">Synthetic CSV</a></li>
+<li> <a href="models/metasyn/per_variable_metrics.csv">Per-variable metrics</a></li>
+<li> <a href="models/metasyn/metrics.json">Metrics JSON</a></li>
+<li> <a href="models/metasyn/metrics.privacy.json">Privacy metrics</a></li>
+<li> <a href="models/metasyn/metrics.downstream.json">Downstream metrics</a></li>
+</ul>
 
+</td><td>
 </td></tr>
 
-
-<tr><td>
-<img src='models/clg_mi2/umap.png' width='280'/></td><td>
+<tr><td></td><td>
 
 <h3>Model: clg_mi2 (pybnesian)</h3>
 <ul>
 <li>Seed: 42, rows: 155</li>
-<li>Params: <code>{"max_indegree": 2, "operators": ["arcs"], "score": "bic", "type": "clg"}</code></li>
-<li><a href="models/clg_mi2/synthetic.csv">Synthetic CSV</a></li>
-<li><a href="models/clg_mi2/per_variable_metrics.csv">Per-variable metrics</a></li>
-<li><a href="models/clg_mi2/metrics.json">Metrics JSON</a></li>
-</ul></td><td>
+<li> Params: <tt>{"max_indegree": 2, "operators": ["arcs"], "score": "bic", "type": "clg"}</tt></li><li> <a href="models/clg_mi2/synthetic.csv">Synthetic CSV</a></li>
+<li> <a href="models/clg_mi2/per_variable_metrics.csv">Per-variable metrics</a></li>
+<li> <a href="models/clg_mi2/metrics.json">Metrics JSON</a></li>
+<li> <a href="models/clg_mi2/metrics.privacy.json">Privacy metrics</a></li>
+<li> <a href="models/clg_mi2/metrics.downstream.json">Downstream metrics</a></li>
+</ul>
 
-<a href='models/clg_mi2/structure.png'><img src='models/clg_mi2/structure.png' width='280'/></a>
-</td></tr>
+</td><td>
+<a href='models/clg_mi2/structure.png'><img src='models/clg_mi2/structure.png' width='280'/></a></td></tr>
 
-
-<tr><td>
-<img src='models/semi_mi5/umap.png' width='280'/></td><td>
+<tr><td></td><td>
 
 <h3>Model: semi_mi5 (pybnesian)</h3>
 <ul>
 <li>Seed: 42, rows: 155</li>
-<li>Params: <code>{"max_indegree": 5, "operators": ["arcs"], "score": "bic", "type": "semiparametric"}</code></li>
-<li><a href="models/semi_mi5/synthetic.csv">Synthetic CSV</a></li>
-<li><a href="models/semi_mi5/per_variable_metrics.csv">Per-variable metrics</a></li>
-<li><a href="models/semi_mi5/metrics.json">Metrics JSON</a></li>
-</ul></td><td>
+<li> Params: <tt>{"max_indegree": 5, "operators": ["arcs"], "score": "bic", "type": "semiparametric"}</tt></li><li> <a href="models/semi_mi5/synthetic.csv">Synthetic CSV</a></li>
+<li> <a href="models/semi_mi5/per_variable_metrics.csv">Per-variable metrics</a></li>
+<li> <a href="models/semi_mi5/metrics.json">Metrics JSON</a></li>
+<li> <a href="models/semi_mi5/metrics.privacy.json">Privacy metrics</a></li>
+<li> <a href="models/semi_mi5/metrics.downstream.json">Downstream metrics</a></li>
+</ul>
 
-<a href='models/semi_mi5/structure.png'><img src='models/semi_mi5/structure.png' width='280'/></a>
-</td></tr>
+</td><td>
+<a href='models/semi_mi5/structure.png'><img src='models/semi_mi5/structure.png' width='280'/></a></td></tr>
 
-
-<table>
-
+</table>

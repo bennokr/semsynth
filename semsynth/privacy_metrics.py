@@ -112,7 +112,7 @@ def summarize_privacy_synthcity(df_real: "pd.DataFrame",
     ) = _load_synthcity_modules()
     # select columns
     assert {'variable','role','type'}.issubset(meta.columns)
-    use_meta = meta[~meta.role.isin(['ignore','id'])].copy()
+    use_meta = meta[~meta.role.isin(['ignore', 'id', 'target'])].copy()
     use_cols = [c for c in use_meta.variable if c in df_real.columns and c in df_synth.columns]
     if not use_cols: raise ValueError("No overlapping usable columns.")
     qi = [c for c in use_meta.loc[use_meta.role=='qi','variable'] if c in use_cols]

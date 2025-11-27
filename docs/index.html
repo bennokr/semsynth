@@ -109,7 +109,7 @@
 <li><p>Optional flags for reports:</p>
 <ul>
 <li><p><code class="docutils literal notranslate"><span class="pre">--datasets</span></code> (one or more dataset identifiers)</p></li>
-<li><p><code class="docutils literal notranslate"><span class="pre">--outdir</span></code> (defaults to <code class="docutils literal notranslate"><span class="pre">outputs/</span></code>)</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">--outdir</span></code> (defaults to <code class="docutils literal notranslate"><span class="pre">output/</span></code>)</p></li>
 <li><p><code class="docutils literal notranslate"><span class="pre">--configs-yaml</span></code> (path to a YAML bundle; omit for metadata-only runs)</p></li>
 <li><p><code class="docutils literal notranslate"><span class="pre">--generate-umap</span></code> / <code class="docutils literal notranslate"><span class="pre">--compute-privacy</span></code> / <code class="docutils literal notranslate"><span class="pre">--compute-downstream</span></code> (each accepts <code class="docutils literal notranslate"><span class="pre">auto</span></code>, <code class="docutils literal notranslate"><span class="pre">on</span></code>, or <code class="docutils literal notranslate"><span class="pre">off</span></code>)</p></li>
 <li><p><code class="docutils literal notranslate"><span class="pre">--overwrite-umap</span></code> (regenerate even if projections exist)</p></li>
@@ -117,7 +117,7 @@
 </ul>
 </li>
 </ul>
-<p>With the command above you receive dataset metadata, a real-data UMAP projection, and HTML/Markdown reports under <code class="docutils literal notranslate"><span class="pre">outputs/&lt;Dataset</span> <span class="pre">Name&gt;/</span></code>.</p>
+<p>With the command above you receive dataset metadata, a real-data UMAP projection, and HTML/Markdown reports under <code class="docutils literal notranslate"><span class="pre">output/&lt;Dataset</span> <span class="pre">Name&gt;/</span></code>.</p>
 </li>
 <li><p>Full report with synthetic models 🤖</p>
 <ul class="simple">
@@ -175,7 +175,7 @@
 <section id="outputs">
 <h2>📦 Outputs<a class="headerlink" href="#outputs" title="Link to this heading"></a></h2>
 <ul class="simple">
-<li><p>Per dataset (e.g., <code class="docutils literal notranslate"><span class="pre">outputs/Heart</span> <span class="pre">Disease/</span></code>):</p>
+<li><p>Per dataset (e.g., <code class="docutils literal notranslate"><span class="pre">output/Heart</span> <span class="pre">Disease/</span></code>):</p>
 <ul>
 <li><p><code class="docutils literal notranslate"><span class="pre">dataset.json</span></code> (<a class="reference external" href="http://schema.org/Dataset">schema.org/Dataset</a> JSON-LD)</p></li>
 <li><p><code class="docutils literal notranslate"><span class="pre">dataset.semmap.json</span></code> (optional, if curated metadata is found)</p></li>
@@ -183,7 +183,7 @@
 <li><p><code class="docutils literal notranslate"><span class="pre">umap_real.png</span></code> and optional <code class="docutils literal notranslate"><span class="pre">umap_metasyn.png</span></code></p></li>
 </ul>
 </li>
-<li><p>Per model (e.g., <code class="docutils literal notranslate"><span class="pre">outputs/Heart</span> <span class="pre">Disease/models/&lt;name&gt;/</span></code>):</p>
+<li><p>Per model (e.g., <code class="docutils literal notranslate"><span class="pre">output/Heart</span> <span class="pre">Disease/models/&lt;name&gt;/</span></code>):</p>
 <ul>
 <li><p><code class="docutils literal notranslate"><span class="pre">synthetic.csv</span></code>, <code class="docutils literal notranslate"><span class="pre">per_variable_metrics.csv</span></code>, <code class="docutils literal notranslate"><span class="pre">metrics.json</span></code>, <code class="docutils literal notranslate"><span class="pre">umap.png</span></code></p></li>
 <li><p>PyBNesian-only extras: <code class="docutils literal notranslate"><span class="pre">bn_&lt;name&gt;.png</span></code>, <code class="docutils literal notranslate"><span class="pre">structure_&lt;name&gt;.graphml</span></code>, <code class="docutils literal notranslate"><span class="pre">model_&lt;name&gt;.pickle</span></code></p></li>

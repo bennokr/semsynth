@@ -36,7 +36,7 @@ def _as_path(path_like: pathlib.Path | InPath | OutPath | str) -> pathlib.Path:
     return pathlib.Path(path_like)
 
 
-@rule()
+@rule(phony=True)
 def specs_from_input(
     provider: str,
     datasets: Optional[Iterable[str]] = None,
@@ -69,12 +69,12 @@ def specs_from_input(
             return get_default_uciml(area=area)
 
 
-@rule()
+@rule(phony=True)
 def load_dataset(
     spec: DatasetSpec,
     *,
-    openml_cache_dir: OutPath = OutPath(str(_OPENML_CACHE_DIR)),
-    uciml_cache_dir: OutPath = OutPath(str(_UCIML_CACHE_DIR)),
+    openml_cache_dir: pathlib.Path = pathlib.Path(str(_OPENML_CACHE_DIR)),
+    uciml_cache_dir: pathlib.Path = pathlib.Path(str(_UCIML_CACHE_DIR)),
 ) -> Tuple[Any, pd.DataFrame, Optional[pd.Series]]:
     if spec.provider == "openml":
         return load_openml_by_name(spec.name, _as_path(openml_cache_dir))

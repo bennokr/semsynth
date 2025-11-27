@@ -20,8 +20,9 @@ dependencies = [
   "openml",
   "pandas",
   "pint-pandas",
-  "makeprov",
+  "makeprov>=0.4.0",
   "pyarrow",
+  "tabulate",
   "pyyaml",
   "requests",
   "scikit-learn",
@@ -51,6 +52,13 @@ umap = [
 ]
 statsmodels = [
   "statsmodels"
+]
+mapping = [
+  "requests",
+  "defopt",
+  "datasette",
+  "sqlite-utils",
+  "sssom"
 ]
 all = [
   "metasyn",

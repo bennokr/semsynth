@@ -10,7 +10,7 @@
     "dct:source": "https://archive.ics.uci.edu/dataset/891/cdc+diabetes+health+indicators",
     "dcat:landingPage": "https://archive.ics.uci.edu/dataset/891/cdc+diabetes+health+indicators"
   },
-  "tableSchema": {
+  "datasetSchema": {
     "columns": [
       {
         "name": "ID",

@@ -113,9 +113,9 @@ def _write_semmap_artifacts(
     return json_name, html_name
 
 
-@rule()
+@rule(phony=True)
 def write_report_md(
-    outdir: str,
+    outdir: OutPath,
     dataset_name: str,
     # metadata_file: str,
     # dataset_jsonld_file: Optional[str],
@@ -179,6 +179,7 @@ def write_report_md(
     dataset_citation = metadata_dict.get("schema:citation") or metadata_dict.get("citation")
 
     num_rows, num_cols = df.shape
+    provider_link = _provider_link(dataset_provider, dataset_provider_id)
     model_rows = _prepare_model_rows(model_runs or [], output_dir)
     variable_table = _build_variable_summary(
         df=df,
@@ -189,18 +190,30 @@ def write_report_md(
     )
     fidelity_table = _build_fidelity_table(model_runs=model_runs)
     missingness_table = _build_missingness_table(missingness_summary)
-
-    env = _jinja_environment()
-    template = env.get_template("report.md.j2")
-    md_text = template.render(
+    overview_table = _build_overview_table(
         dataset_name=dataset_title,
-        provider_link=_provider_link(dataset_provider, dataset_provider_id),
+        provider_link=provider_link,
         semmap_json_name=semmap_json_name,
         semmap_html_name=semmap_html_name,
         num_rows=num_rows,
         num_cols=num_cols,
         num_disc=len(disc_cols),
         num_cont=len(cont_cols),
+        missingness_summary=missingness_summary,
+    )
+
+    env = _jinja_environment()
+    template = env.get_template("report.md.j2")
+    md_text = template.render(
+        dataset_name=dataset_title,
+        provider_link=provider_link,
+        semmap_json_name=semmap_json_name,
+        semmap_html_name=semmap_html_name,
+        num_rows=num_rows,
+        num_cols=num_cols,
+        num_disc=len(disc_cols),
+        num_cont=len(cont_cols),
+        overview_table=overview_table,
         variable_table=variable_table,
         fidelity_table=fidelity_table,
         model_rows=model_rows,
@@ -450,33 +463,72 @@ def _provider_link(
 
 
 def _read_template_text(template_name: str) -> str:
-    """Load template text from disk, returning an empty string on failure."""
+    """Load template text from disk and fail fast when missing."""
 
-    try:
-        return (_TEMPLATES_DIR / template_name).read_text(encoding="utf-8")
-    except Exception:  # pragma: no cover - optional styling
-        logging.debug("Failed to read template %s", template_name, exc_info=True)
-        return ""
+    path = _TEMPLATES_DIR / template_name
+    return path.read_text(encoding="utf-8")
 
 
 def _load_html_template(env: Environment):
-    """Load the HTML template with a fallback inline template."""
+    """Load the HTML template without silent fallbacks."""
 
-    try:
-        return env.get_template("report_template.html")
-    except Exception:  # pragma: no cover - fallback path
-        logging.debug("Falling back to inline HTML template", exc_info=True)
-        return env.from_string(
-            "<!doctype html><html><head><title>{{TITLE}}</title>"
-            "<style>{{CSS}}</style></head><body><main class=\"report-container\">"
-            "{{BODY}}</main></body></html>"
-        )
+    return env.get_template("report_template.html")
 
 
 def _dataframe_to_markdown(df: pd.DataFrame, *, index: bool) -> str:
-    """Convert a dataframe to Markdown with a string fallback."""
+    """Convert a dataframe to Markdown."""
 
-    try:
-        return df.to_markdown(index=index)
-    except Exception:
-        return df.to_string(index=index)
+    return df.to_markdown(index=index)
+
+
+def _build_overview_table(
+    *,
+    dataset_name: str,
+    provider_link: Optional[Dict[str, str]],
+    semmap_json_name: Optional[str],
+    semmap_html_name: Optional[str],
+    num_rows: int,
+    num_cols: int,
+    num_disc: int,
+    num_cont: int,
+    missingness_summary: Optional[Dict[str, Any]],
+) -> str:
+    """Construct a compact overview table for the report header."""
+
+    rows: List[Dict[str, str]] = [
+        {"Metric": "Dataset", "Value": dataset_name},
+        {"Metric": "Rows", "Value": f"{num_rows:,}"},
+        {"Metric": "Columns", "Value": f"{num_cols:,}"},
+        {"Metric": "Discrete", "Value": f"{num_disc:,}"},
+        {"Metric": "Continuous", "Value": f"{num_cont:,}"},
+    ]
+
+    if provider_link:
+        rows.insert(
+            1,
+            {
+                "Metric": "Source",
+                "Value": f"[{provider_link['text']}]({provider_link['url']})",
+            },
+        )
+
+    semmap_links: List[str] = []
+    if semmap_json_name:
+        semmap_links.append(f"[SemMap JSON-LD]({semmap_json_name})")
+    if semmap_html_name:
+        semmap_links.append(f"[SemMap HTML]({semmap_html_name})")
+    if semmap_links:
+        rows.append({"Metric": "SemMap", "Value": "<br />".join(semmap_links)})
+
+    if missingness_summary:
+        modeled = missingness_summary.get("nonzero_count", 0)
+        total = missingness_summary.get("total_columns", num_cols)
+        random_state = missingness_summary.get("random_state")
+        label = f"modeled {modeled} of {total}"
+        if random_state is not None:
+            label = f"{label} (seed {random_state})"
+        rows.append({"Metric": "Missingness", "Value": label})
+    else:
+        rows.append({"Metric": "Missingness", "Value": "Not modeled"})
+
+    return _dataframe_to_markdown(pd.DataFrame(rows), index=False)

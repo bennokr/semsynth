@@ -8,7 +8,7 @@
   /* Report base styles */
 :root { color-scheme: light; }
 body { margin: 0; font-family: "Inter", "Segoe UI", system-ui, -apple-system, BlinkMacSystemFont, "Helvetica Neue", Arial, sans-serif; background: #f4f7fb; color: #1f2937; line-height: 1.65; }
-main.report-container { max-width: 1040px; margin: 0 auto; padding: 3rem 3rem 4rem; background: #ffffff; box-shadow: 0 18px 45px rgba(15, 23, 42, 0.08); border-radius: 18px; }
+main { max-width: 1040px; margin: 0 auto; padding: 3rem 3rem 4rem; background: #ffffff; box-shadow: 0 18px 45px rgba(15, 23, 42, 0.08); border-radius: 18px; }
 h1 { font-size: 2.5rem; margin-top: 0; color: #0f172a; letter-spacing: -0.02em; }
 h2 { margin-top: 2.75rem; padding-bottom: 0.35rem; border-bottom: 1px solid #e2e8f0; color: #1e293b; font-size: 1.6rem; }
 h3 { margin-top: 2.2rem; color: #334155; font-size: 1.25rem; }
@@ -32,14 +32,49 @@ table.per-var-dist thead th { text-align: center; }
 <body>
   <main class="report-container">
       <h1>Data Report — Hepatitis</h1>
-    <p><strong>Source</strong>: <a href="https://archive.ics.uci.edu/dataset/46">UCI dataset 46</a></p>
-    <ul>
-    <li>SemMap JSON-LD: <a href="dataset.semmap.json">dataset.semmap.json</a></li>
-    <li>SemMap HTML: <a href="dataset.semmap.html">dataset.semmap.html</a></li>
-    <li>Rows: 80</li>
-    <li>Columns: 20</li>
-    <li>Discrete: 14  |  Continuous: 6</li>
-    </ul>
+    <h2>Overview</h2>
+    <table>
+    <thead>
+    <tr>
+    <th style="text-align: left;">Metric</th>
+    <th style="text-align: left;">Value</th>
+    </tr>
+    </thead>
+    <tbody>
+    <tr>
+    <td style="text-align: left;">Dataset</td>
+    <td style="text-align: left;">Hepatitis</td>
+    </tr>
+    <tr>
+    <td style="text-align: left;">Source</td>
+    <td style="text-align: left;"><a href="https://archive.ics.uci.edu/dataset/46">UCI dataset 46</a></td>
+    </tr>
+    <tr>
+    <td style="text-align: left;">Rows</td>
+    <td style="text-align: left;">80</td>
+    </tr>
+    <tr>
+    <td style="text-align: left;">Columns</td>
+    <td style="text-align: left;">20</td>
+    </tr>
+    <tr>
+    <td style="text-align: left;">Discrete</td>
+    <td style="text-align: left;">14</td>
+    </tr>
+    <tr>
+    <td style="text-align: left;">Continuous</td>
+    <td style="text-align: left;">6</td>
+    </tr>
+    <tr>
+    <td style="text-align: left;">SemMap</td>
+    <td style="text-align: left;"><a href="dataset.semmap.json">SemMap JSON-LD</a><br /><a href="dataset.semmap.html">SemMap HTML</a></td>
+    </tr>
+    <tr>
+    <td style="text-align: left;">Missingness</td>
+    <td style="text-align: left;">Not modeled</td>
+    </tr>
+    </tbody>
+    </table>
     <h2>Variables and summary</h2>
     <table>
     <thead>
@@ -162,16 +197,20 @@ table.per-var-dist thead th { text-align: center; }
     <th style="text-align: right;">disc_jsd_median</th>
     <th style="text-align: right;">cont_ks_mean</th>
     <th style="text-align: right;">cont_w1_mean</th>
+    <th style="text-align: right;">privacy_overlap</th>
+    <th style="text-align: right;">downstream_sign_match</th>
     </tr>
     </thead>
     <tbody>
     <tr>
     <td style="text-align: left;">metasyn</td>
     <td style="text-align: left;">metasyn</td>
-    <td style="text-align: right;">0.1228</td>
-    <td style="text-align: right;">0.1106</td>
-    <td style="text-align: right;">0.2177</td>
-    <td style="text-align: right;">9.2615</td>
+    <td style="text-align: right;">0.1351</td>
+    <td style="text-align: right;">0.1056</td>
+    <td style="text-align: right;">0.2181</td>
+    <td style="text-align: right;">9.9006</td>
+    <td style="text-align: right;">0</td>
+    <td style="text-align: right;">0.2414</td>
     </tr>
     <tr>
     <td style="text-align: left;">clg_mi2</td>
@@ -180,68 +219,70 @@ table.per-var-dist thead th { text-align: center; }
     <td style="text-align: right;">0.1415</td>
     <td style="text-align: right;">0.2147</td>
     <td style="text-align: right;">9.5402</td>
+    <td style="text-align: right;">0</td>
+    <td style="text-align: right;">0.2931</td>
     </tr>
     <tr>
     <td style="text-align: left;">semi_mi5</td>
     <td style="text-align: left;">pybnesian</td>
-    <td style="text-align: right;">0.1251</td>
-    <td style="text-align: right;">0.1495</td>
-    <td style="text-align: right;">0.2134</td>
-    <td style="text-align: right;">11.509</td>
+    <td style="text-align: right;">0.1336</td>
+    <td style="text-align: right;">0.1378</td>
+    <td style="text-align: right;">0.2009</td>
+    <td style="text-align: right;">10.8894</td>
+    <td style="text-align: right;">0</td>
+    <td style="text-align: right;">0.3103</td>
     </tr>
     </tbody>
     </table>
     <h2>Models</h2>
     <table>
     <tr><th>UMAP</th><th>Details</th><th>Structure</th></tr>
-    <tr><td><img src='umap_real.png' width='280'/></td><td><h3>Real data</h3></td><td></td></tr>
-    <tr><td>
-    <img src='models/metasyn/umap.png' width='280'/></td><td>
+    <tr><td></td><td>
 
     <h3>Model: metasyn (metasyn)</h3>
     <ul>
     <li>Seed: 42, rows: 155</li>
-    <li><a href="models/metasyn/synthetic.csv">Synthetic CSV</a></li>
-    <li><a href="models/metasyn/per_variable_metrics.csv">Per-variable metrics</a></li>
-    <li><a href="models/metasyn/metrics.json">Metrics JSON</a></li>
-    </ul></td><td>
+    <li> <a href="models/metasyn/synthetic.csv">Synthetic CSV</a></li>
+    <li> <a href="models/metasyn/per_variable_metrics.csv">Per-variable metrics</a></li>
+    <li> <a href="models/metasyn/metrics.json">Metrics JSON</a></li>
+    <li> <a href="models/metasyn/metrics.privacy.json">Privacy metrics</a></li>
+    <li> <a href="models/metasyn/metrics.downstream.json">Downstream metrics</a></li>
+    </ul>
 
+    </td><td>
     </td></tr>
 
-
-    <tr><td>
-    <img src='models/clg_mi2/umap.png' width='280'/></td><td>
+    <tr><td></td><td>
 
     <h3>Model: clg_mi2 (pybnesian)</h3>
     <ul>
     <li>Seed: 42, rows: 155</li>
-    <li>Params: <code>{"max_indegree": 2, "operators": ["arcs"], "score": "bic", "type": "clg"}</code></li>
-    <li><a href="models/clg_mi2/synthetic.csv">Synthetic CSV</a></li>
-    <li><a href="models/clg_mi2/per_variable_metrics.csv">Per-variable metrics</a></li>
-    <li><a href="models/clg_mi2/metrics.json">Metrics JSON</a></li>
-    </ul></td><td>
+    <li> Params: <tt>{"max_indegree": 2, "operators": ["arcs"], "score": "bic", "type": "clg"}</tt></li><li> <a href="models/clg_mi2/synthetic.csv">Synthetic CSV</a></li>
+    <li> <a href="models/clg_mi2/per_variable_metrics.csv">Per-variable metrics</a></li>
+    <li> <a href="models/clg_mi2/metrics.json">Metrics JSON</a></li>
+    <li> <a href="models/clg_mi2/metrics.privacy.json">Privacy metrics</a></li>
+    <li> <a href="models/clg_mi2/metrics.downstream.json">Downstream metrics</a></li>
+    </ul>
 
-    <a href='models/clg_mi2/structure.png'><img src='models/clg_mi2/structure.png' width='280'/></a>
-    </td></tr>
+    </td><td>
+    <a href='models/clg_mi2/structure.png'><img src='models/clg_mi2/structure.png' width='280'/></a></td></tr>
 
-
-    <tr><td>
-    <img src='models/semi_mi5/umap.png' width='280'/></td><td>
+    <tr><td></td><td>
 
     <h3>Model: semi_mi5 (pybnesian)</h3>
     <ul>
     <li>Seed: 42, rows: 155</li>
-    <li>Params: <code>{"max_indegree": 5, "operators": ["arcs"], "score": "bic", "type": "semiparametric"}</code></li>
-    <li><a href="models/semi_mi5/synthetic.csv">Synthetic CSV</a></li>
-    <li><a href="models/semi_mi5/per_variable_metrics.csv">Per-variable metrics</a></li>
-    <li><a href="models/semi_mi5/metrics.json">Metrics JSON</a></li>
-    </ul></td><td>
+    <li> Params: <tt>{"max_indegree": 5, "operators": ["arcs"], "score": "bic", "type": "semiparametric"}</tt></li><li> <a href="models/semi_mi5/synthetic.csv">Synthetic CSV</a></li>
+    <li> <a href="models/semi_mi5/per_variable_metrics.csv">Per-variable metrics</a></li>
+    <li> <a href="models/semi_mi5/metrics.json">Metrics JSON</a></li>
+    <li> <a href="models/semi_mi5/metrics.privacy.json">Privacy metrics</a></li>
+    <li> <a href="models/semi_mi5/metrics.downstream.json">Downstream metrics</a></li>
+    </ul>
 
-    <a href='models/semi_mi5/structure.png'><img src='models/semi_mi5/structure.png' width='280'/></a>
-    </td></tr>
+    </td><td>
+    <a href='models/semi_mi5/structure.png'><img src='models/semi_mi5/structure.png' width='280'/></a></td></tr>
 
-
-    <table>
+    </table>
   </main>
 </body>
 </html>

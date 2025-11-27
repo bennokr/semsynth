@@ -1,0 +1,479 @@
+{
+  "provenance": [
+    {
+      "id": "__main__.py#specs_from_input-20251127T151218",
+      "type": "prov:Activity",
+      "startedAtTime": "2025-11-27T15:12:18.184539+00:00",
+      "endedAtTime": "2025-11-27T15:12:18.184576+00:00",
+      "wasAssociatedWith": "__main__.py",
+      "used": [
+        "env-20251127T151218"
+      ]
+    },
+    {
+      "id": "__main__.py#preprocess-20251127T151218",
+      "type": "prov:Activity",
+      "startedAtTime": "2025-11-27T15:12:18.787161+00:00",
+      "endedAtTime": "2025-11-27T15:12:19.127446+00:00",
+      "wasAssociatedWith": "__main__.py",
+      "used": [
+        "env-20251127T151218"
+      ]
+    },
+    {
+      "id": "output/Hepatitis/models/metasyn",
+      "type": "prov:Entity",
+      "format": "application/octet-stream",
+      "extent": 352,
+      "modified": "2025-11-27T15:11:23.937628+00:00",
+      "wasGeneratedBy": "__main__.py#write_manifest-20251127T151224"
+    },
+    {
+      "id": "downloads-cache/uciml",
+      "type": "prov:Entity",
+      "format": "application/octet-stream",
+      "extent": 416,
+      "modified": "2025-10-17T08:56:08.723028+00:00",
+      "wasGeneratedBy": "__main__.py#specs_from_input-20251127T151218"
+    },
+    {
+      "id": "env-20251127T151237",
+      "type": [
+        "prov:Entity",
+        "prov:Collection"
+      ],
+      "label": "Python environment",
+      "title": "makeprov",
+      "hasVersion": "0.4.0",
+      "requires": [
+        {
+          "id": "https://pypi.org/project/parse/",
+          "type": "rdfs:Resource",
+          "label": "parse>=1.20"
+        },
+        {
+          "id": "https://pypi.org/project/defopt/",
+          "type": "rdfs:Resource",
+          "label": "defopt>=6"
+        },
+        {
+          "id": "https://pypi.org/project/pytest/",
+          "type": "rdfs:Resource",
+          "label": "pytest"
+        },
+        {
+          "id": "https://pypi.org/project/rdflib/",
+          "type": "rdfs:Resource",
+          "label": "rdflib>=6.0"
+        },
+        {
+          "id": "https://pypi.org/project/pyshacl/",
+          "type": "rdfs:Resource",
+          "label": "pyshacl>=0.20"
+        },
+        {
+          "id": "https://pypi.org/project/sphinx/",
+          "type": "rdfs:Resource",
+          "label": "sphinx>=7"
+        },
+        {
+          "id": "https://pypi.org/project/myst-parser[linkify]/",
+          "type": "rdfs:Resource",
+          "label": "myst-parser[linkify]"
+        },
+        {
+          "id": "https://pypi.org/project/sphinx-rtd-theme/",
+          "type": "rdfs:Resource",
+          "label": "sphinx-rtd-theme"
+        },
+        {
+          "id": "https://pypi.org/project/sphinx-autodoc-typehints/",
+          "type": "rdfs:Resource",
+          "label": "sphinx-autodoc-typehints"
+        },
+        {
+          "id": "https://pypi.org/project/tomli/",
+          "type": "rdfs:Resource",
+          "label": "tomli"
+        }
+      ]
+    },
+    {
+      "id": "__main__.py#model_run_root-20251127T151222",
+      "type": "prov:Activity",
+      "startedAtTime": "2025-11-27T15:12:22.546908+00:00",
+      "endedAtTime": "2025-11-27T15:12:22.547006+00:00",
+      "wasAssociatedWith": "__main__.py",
+      "used": [
+        "env-20251127T151222"
+      ]
+    },
+    {
+      "id": "__main__.py",
+      "type": [
+        "prov:Agent",
+        "prov:SoftwareAgent"
+      ],
+      "label": "__main__.py",
+      "hasVersion": "011f26f225d74775ba28f0440f49d59fb93b3c4d",
+      "source": "https://github.com/bennokr/generative-metadata.git"
+    },
+    {
+      "id": "__main__.py#write_manifest-20251127T151224",
+      "type": "prov:Activity",
+      "startedAtTime": "2025-11-27T15:12:24.175992+00:00",
+      "endedAtTime": "2025-11-27T15:12:24.176344+00:00",
+      "wasAssociatedWith": "__main__.py",
+      "used": [
+        "env-20251127T151224"
+      ]
+    },
+    {
+      "id": "output/Hepatitis",
+      "type": "prov:Entity",
+      "format": "application/octet-stream",
+      "extent": 160,
+      "modified": "2025-11-27T15:11:53.810782+00:00",
+      "wasGeneratedBy": "__main__.py#model_run_root-20251127T151222"
+    },
+    {
+      "id": "env-20251127T151224",
+      "type": [
+        "prov:Entity",
+        "prov:Collection"
+      ],
+      "label": "Python environment",
+      "title": "makeprov",
+      "hasVersion": "0.4.0",
+      "requires": [
+        {
+          "id": "https://pypi.org/project/parse/",
+          "type": "rdfs:Resource",
+          "label": "parse>=1.20"
+        },
+        {
+          "id": "https://pypi.org/project/defopt/",
+          "type": "rdfs:Resource",
+          "label": "defopt>=6"
+        },
+        {
+          "id": "https://pypi.org/project/pytest/",
+          "type": "rdfs:Resource",
+          "label": "pytest"
+        },
+        {
+          "id": "https://pypi.org/project/rdflib/",
+          "type": "rdfs:Resource",
+          "label": "rdflib>=6.0"
+        },
+        {
+          "id": "https://pypi.org/project/pyshacl/",
+          "type": "rdfs:Resource",
+          "label": "pyshacl>=0.20"
+        },
+        {
+          "id": "https://pypi.org/project/sphinx/",
+          "type": "rdfs:Resource",
+          "label": "sphinx>=7"
+        },
+        {
+          "id": "https://pypi.org/project/myst-parser[linkify]/",
+          "type": "rdfs:Resource",
+          "label": "myst-parser[linkify]"
+        },
+        {
+          "id": "https://pypi.org/project/sphinx-rtd-theme/",
+          "type": "rdfs:Resource",
+          "label": "sphinx-rtd-theme"
+        },
+        {
+          "id": "https://pypi.org/project/sphinx-autodoc-typehints/",
+          "type": "rdfs:Resource",
+          "label": "sphinx-autodoc-typehints"
+        },
+        {
+          "id": "https://pypi.org/project/tomli/",
+          "type": "rdfs:Resource",
+          "label": "tomli"
+        }
+      ]
+    },
+    {
+      "id": "downloads-cache/uciml",
+      "type": "prov:Entity",
+      "format": "application/octet-stream",
+      "extent": 416,
+      "modified": "2025-10-17T08:56:08.723028+00:00",
+      "wasGeneratedBy": "__main__.py#load_uciml_by_id-20251127T151218"
+    },
+    {
+      "id": "__main__.py#write_downstream-20251127T151237",
+      "type": "prov:Activity",
+      "startedAtTime": "2025-11-27T15:12:37.957196+00:00",
+      "endedAtTime": "2025-11-27T15:12:38.088375+00:00",
+      "wasAssociatedWith": "__main__.py",
+      "used": [
+        "env-20251127T151237"
+      ]
+    },
+    {
+      "id": "output/Hepatitis",
+      "type": "prov:Entity",
+      "format": "application/octet-stream",
+      "extent": 160,
+      "modified": "2025-11-27T15:11:53.810782+00:00",
+      "wasGeneratedBy": "__main__.py#preprocess-20251127T151218"
+    },
+    {
+      "id": "env-20251127T151218",
+      "type": [
+        "prov:Entity",
+        "prov:Collection"
+      ],
+      "label": "Python environment",
+      "title": "makeprov",
+      "hasVersion": "0.4.0",
+      "requires": [
+        {
+          "id": "https://pypi.org/project/parse/",
+          "type": "rdfs:Resource",
+          "label": "parse>=1.20"
+        },
+        {
+          "id": "https://pypi.org/project/defopt/",
+          "type": "rdfs:Resource",
+          "label": "defopt>=6"
+        },
+        {
+          "id": "https://pypi.org/project/pytest/",
+          "type": "rdfs:Resource",
+          "label": "pytest"
+        },
+        {
+          "id": "https://pypi.org/project/rdflib/",
+          "type": "rdfs:Resource",
+          "label": "rdflib>=6.0"
+        },
+        {
+          "id": "https://pypi.org/project/pyshacl/",
+          "type": "rdfs:Resource",
+          "label": "pyshacl>=0.20"
+        },
+        {
+          "id": "https://pypi.org/project/sphinx/",
+          "type": "rdfs:Resource",
+          "label": "sphinx>=7"
+        },
+        {
+          "id": "https://pypi.org/project/myst-parser[linkify]/",
+          "type": "rdfs:Resource",
+          "label": "myst-parser[linkify]"
+        },
+        {
+          "id": "https://pypi.org/project/sphinx-rtd-theme/",
+          "type": "rdfs:Resource",
+          "label": "sphinx-rtd-theme"
+        },
+        {
+          "id": "https://pypi.org/project/sphinx-autodoc-typehints/",
+          "type": "rdfs:Resource",
+          "label": "sphinx-autodoc-typehints"
+        },
+        {
+          "id": "https://pypi.org/project/tomli/",
+          "type": "rdfs:Resource",
+          "label": "tomli"
+        }
+      ]
+    },
+    {
+      "id": "output/Hepatitis/models/metasyn",
+      "type": "prov:Entity",
+      "format": "application/octet-stream",
+      "extent": 352,
+      "modified": "2025-11-27T15:11:23.937628+00:00",
+      "wasGeneratedBy": "__main__.py#write_downstream-20251127T151237"
+    },
+    {
+      "id": "env-20251127T151222",
+      "type": [
+        "prov:Entity",
+        "prov:Collection"
+      ],
+      "label": "Python environment",
+      "title": "makeprov",
+      "hasVersion": "0.4.0",
+      "requires": [
+        {
+          "id": "https://pypi.org/project/parse/",
+          "type": "rdfs:Resource",
+          "label": "parse>=1.20"
+        },
+        {
+          "id": "https://pypi.org/project/defopt/",
+          "type": "rdfs:Resource",
+          "label": "defopt>=6"
+        },
+        {
+          "id": "https://pypi.org/project/pytest/",
+          "type": "rdfs:Resource",
+          "label": "pytest"
+        },
+        {
+          "id": "https://pypi.org/project/rdflib/",
+          "type": "rdfs:Resource",
+          "label": "rdflib>=6.0"
+        },
+        {
+          "id": "https://pypi.org/project/pyshacl/",
+          "type": "rdfs:Resource",
+          "label": "pyshacl>=0.20"
+        },
+        {
+          "id": "https://pypi.org/project/sphinx/",
+          "type": "rdfs:Resource",
+          "label": "sphinx>=7"
+        },
+        {
+          "id": "https://pypi.org/project/myst-parser[linkify]/",
+          "type": "rdfs:Resource",
+          "label": "myst-parser[linkify]"
+        },
+        {
+          "id": "https://pypi.org/project/sphinx-rtd-theme/",
+          "type": "rdfs:Resource",
+          "label": "sphinx-rtd-theme"
+        },
+        {
+          "id": "https://pypi.org/project/sphinx-autodoc-typehints/",
+          "type": "rdfs:Resource",
+          "label": "sphinx-autodoc-typehints"
+        },
+        {
+          "id": "https://pypi.org/project/tomli/",
+          "type": "rdfs:Resource",
+          "label": "tomli"
+        }
+      ]
+    },
+    {
+      "id": "__main__.py#load_model_configs-20251127T151218",
+      "type": "prov:Activity",
+      "startedAtTime": "2025-11-27T15:12:18.393494+00:00",
+      "endedAtTime": "2025-11-27T15:12:18.445899+00:00",
+      "wasAssociatedWith": "__main__.py",
+      "used": [
+        "env-20251127T151218"
+      ]
+    },
+    {
+      "id": "__main__.py#load_uciml_by_id-20251127T151218",
+      "type": "prov:Activity",
+      "startedAtTime": "2025-11-27T15:12:18.547913+00:00",
+      "endedAtTime": "2025-11-27T15:12:18.560143+00:00",
+      "wasAssociatedWith": "__main__.py",
+      "used": [
+        "env-20251127T151218"
+      ]
+    },
+    {
+      "id": "output/Hepatitis/models/metasyn",
+      "type": "prov:Entity",
+      "format": "application/octet-stream",
+      "extent": 352,
+      "modified": "2025-11-27T15:11:23.937628+00:00",
+      "wasGeneratedBy": "__main__.py#write_privacy-20251127T151224"
+    },
+    {
+      "id": "downloads-cache/openml",
+      "type": "prov:Entity",
+      "format": "application/octet-stream",
+      "extent": 160,
+      "modified": "2025-11-13T11:37:32.480654+00:00",
+      "wasGeneratedBy": "__main__.py#specs_from_input-20251127T151218"
+    },
+    {
+      "id": "__main__.py#load_dataset-20251127T151218",
+      "type": "prov:Activity",
+      "startedAtTime": "2025-11-27T15:12:18.547804+00:00",
+      "endedAtTime": "2025-11-27T15:12:18.645865+00:00",
+      "wasAssociatedWith": "__main__.py",
+      "used": [
+        "env-20251127T151218"
+      ]
+    },
+    {
+      "id": "__main__.py#write_privacy-20251127T151224",
+      "type": "prov:Activity",
+      "startedAtTime": "2025-11-27T15:12:24.285672+00:00",
+      "endedAtTime": "2025-11-27T15:12:37.442881+00:00",
+      "wasAssociatedWith": "__main__.py",
+      "used": [
+        "env-20251127T151224"
+      ]
+    },
+    {
+      "id": "graph-specs_from_input",
+      "type": "prov:Entity",
+      "wasGeneratedBy": "__main__.py#specs_from_input-20251127T151218",
+      "wasAttributedTo": "__main__.py",
+      "generatedAtTime": "2025-11-27T15:12:18.184576+00:00"
+    },
+    {
+      "id": "graph-load_model_configs",
+      "type": "prov:Entity",
+      "wasGeneratedBy": "__main__.py#load_model_configs-20251127T151218",
+      "wasAttributedTo": "__main__.py",
+      "generatedAtTime": "2025-11-27T15:12:18.445899+00:00"
+    },
+    {
+      "id": "graph-load_uciml_by_id",
+      "type": "prov:Entity",
+      "wasGeneratedBy": "__main__.py#load_uciml_by_id-20251127T151218",
+      "wasAttributedTo": "__main__.py",
+      "generatedAtTime": "2025-11-27T15:12:18.560143+00:00"
+    },
+    {
+      "id": "graph-load_dataset",
+      "type": "prov:Entity",
+      "wasGeneratedBy": "__main__.py#load_dataset-20251127T151218",
+      "wasAttributedTo": "__main__.py",
+      "generatedAtTime": "2025-11-27T15:12:18.645865+00:00"
+    },
+    {
+      "id": "graph-preprocess",
+      "type": "prov:Entity",
+      "wasGeneratedBy": "__main__.py#preprocess-20251127T151218",
+      "wasAttributedTo": "__main__.py",
+      "generatedAtTime": "2025-11-27T15:12:19.127446+00:00"
+    },
+    {
+      "id": "graph-model_run_root",
+      "type": "prov:Entity",
+      "wasGeneratedBy": "__main__.py#model_run_root-20251127T151222",
+      "wasAttributedTo": "__main__.py",
+      "generatedAtTime": "2025-11-27T15:12:22.547006+00:00"
+    },
+    {
+      "id": "graph-write_manifest",
+      "type": "prov:Entity",
+      "wasGeneratedBy": "__main__.py#write_manifest-20251127T151224",
+      "wasAttributedTo": "__main__.py",
+      "generatedAtTime": "2025-11-27T15:12:24.176344+00:00"
+    },
+    {
+      "id": "graph-write_privacy",
+      "type": "prov:Entity",
+      "wasGeneratedBy": "__main__.py#write_privacy-20251127T151224",
+      "wasAttributedTo": "__main__.py",
+      "generatedAtTime": "2025-11-27T15:12:37.442881+00:00"
+    },
+    {
+      "id": "graph-write_downstream",
+      "type": "prov:Entity",
+      "wasGeneratedBy": "__main__.py#write_downstream-20251127T151237",
+      "wasAttributedTo": "__main__.py",
+      "generatedAtTime": "2025-11-27T15:12:38.088375+00:00"
+    }
+  ]
+}

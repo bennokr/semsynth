@@ -2,18 +2,12 @@
 
 from __future__ import annotations
 
-import io
 import logging
-from contextlib import redirect_stdout
 from dataclasses import dataclass
 from pathlib import Path
-from tempfile import NamedTemporaryFile
 from typing import Optional
 
-from flask import Flask, render_template_string, request
-from makeprov import rule, OutPath
-
-from .cli import report, search
+from makeprov import rule, GLOBAL_CONFIG
 
 LOGGER = logging.getLogger(__name__)
 
@@ -45,26 +39,20 @@ def _run_search(
     Returns:
         SearchResult containing the provider and captured TSV output.
     """
-
-    buffer = io.StringIO()
-    with NamedTemporaryFile(delete=False, suffix=".tsv") as tmpfile:
-        tmp_path = Path(tmpfile.name)
-    try:
-        with redirect_stdout(buffer):
-            search(
-                provider,
-                name_substr=name_substr,
-                area=area,
-                cat_min=cat_min,
-                num_min=num_min,
-                output=OutPath(str(tmp_path)),
-            )
-        output_text = buffer.getvalue().strip() or tmp_path.read_text(encoding="utf-8")
-    finally:
-        try:
-            tmp_path.unlink()
-        except OSError:
-            LOGGER.debug("Temporary search output already removed: %s", tmp_path)
+    from .datasets import list_openml, list_uciml  # defer heavy imports
+    provider_key = provider.lower()
+    if provider_key == "openml":
+        df = list_openml(name_substr=name_substr, cat_min=cat_min, num_min=num_min)
+    elif provider_key == "uciml":
+        df = list_uciml(
+            area=area,
+            name_substr=name_substr,
+            cat_min=cat_min,
+            num_min=num_min,
+        )
+    else:
+        raise SystemExit("provider must be 'openml' or 'uciml'")
+    output_text = df.to_csv(sep="\t", index=None)
     return SearchResult(provider=provider, output=output_text)
 
 
@@ -73,6 +61,7 @@ def _run_report(
     datasets: Optional[list[str]] = None,
     configs_yaml: str = "",
     area: str = "Health and Medicine",
+    outdir = Path('outputs'),
 ) -> str:
     """Execute the report command and return a status message.
 
@@ -85,20 +74,39 @@ def _run_report(
     Returns:
         Status text summarizing the invocation.
     """
+    from .datasets import DatasetSpec, load_dataset, specs_from_input
+    from .models import ModelConfigBundle, load_model_configs
+    from .pipeline import PipelineConfig, process_dataset
+    from .utils import ensure_dir
 
-    report(
-        provider,
-        datasets=datasets,
-        configs_yaml=configs_yaml,
-        area=area,
-        outdir=OutPath("outputs"),
-    )
+    outdir_path = Path(outdir)
+    ensure_dir(str(outdir_path))
+    
+    dataset_specs = specs_from_input(provider=provider, datasets=datasets, area=area)
+    bundle = load_model_configs(configs_yaml.strip() or None)
+
+    for dataset_spec in dataset_specs:
+        logging.info("Loading dataset %s", dataset_spec)
+        resolved_spec, df, color = load_dataset(dataset_spec)
+        dataset_label = resolved_spec.name or str(resolved_spec.id)
+        dataset_outdir = outdir_path / str(dataset_label).replace("/", "_")
+        GLOBAL_CONFIG.prov_path = dataset_outdir / "prov"
+        process_dataset(
+            resolved_spec,
+            df,
+            color,
+            str(outdir_path),
+            model_bundle=bundle,
+            pipeline_config=cfg,
+        )
     dataset_label = ", ".join(datasets) if datasets else "default selection"
     return f"Report launched for {provider} datasets: {dataset_label}."
 
 
 def create_app() -> Flask:
     """Create and configure the Flask application."""
+
+    from flask import Flask, render_template_string, request # defer
 
     app = Flask(__name__)
     app.config["JSON_SORT_KEYS"] = False
@@ -182,7 +190,7 @@ def create_app() -> Flask:
     return app
 
 @rule(phony=True)
-def run_app(host: str = "127.0.0.1", port: int = 5000, debug: bool = False) -> None:
+def run_app(*, host: str = "127.0.0.1", port: int = 5000, debug: bool = False) -> None:
     """Create and run the Flask development server.
 
     Args:

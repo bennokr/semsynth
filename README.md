@@ -8,7 +8,19 @@ SemSynth is a compact toolkit to profile tabular datasets, synthesize data with 
 - Optional MetaSyn baseline: enable or disable per report via the config bundle.
 - Provider-aware metadata and UMAP visuals.
 
+## ⚙️ Install
+Clone and run `python -m pip install -e .`
+
+For extra features, run `python -m pip install -e .[EXTRA]` with `EXTRA` in (
+`metasyn`
+`pybnesian`
+`synthcity`
+`umap`
+`statsmodels`
+`mapping`).
+
 ## 🔎 Quick start
+
 1. Search datasets
    - OpenML: `python -m semsynth search openml --name-substr adult`
    - UCI ML: `python -m semsynth search uciml --area "Health and Medicine" --name-substr heart`
@@ -24,13 +36,13 @@ SemSynth is a compact toolkit to profile tabular datasets, synthesize data with 
    - Example: `python -m semsynth report uciml --datasets 45 -v`
    - Optional flags for reports:
      - `--datasets` (one or more dataset identifiers)
-     - `--outdir` (defaults to `outputs/`)
+     - `--outdir` (defaults to `output/`)
      - `--configs-yaml` (path to a YAML bundle; omit for metadata-only runs)
      - `--generate-umap` / `--compute-privacy` / `--compute-downstream` (each accepts `auto`, `on`, or `off`)
      - `--overwrite-umap` (regenerate even if projections exist)
      - `--verbose` (turn on info logging)
 
-   With the command above you receive dataset metadata, a real-data UMAP projection, and HTML/Markdown reports under `outputs/<Dataset Name>/`.
+   With the command above you receive dataset metadata, a real-data UMAP projection, and HTML/Markdown reports under `output/<Dataset Name>/`.
 
 3. Full report with synthetic models 🤖
     - Pick a configuration bundle from `configs/`:
@@ -77,12 +89,12 @@ configs:
 ```
 
 ## 📦 Outputs
-- Per dataset (e.g., `outputs/Heart Disease/`):
+- Per dataset (e.g., `output/Heart Disease/`):
   - `dataset.json` (schema.org/Dataset JSON-LD)
   - `dataset.semmap.json` (optional, if curated metadata is found)
   - `index.html` and `report.md`
   - `umap_real.png` and optional `umap_metasyn.png`
-- Per model (e.g., `outputs/Heart Disease/models/<name>/`):
+- Per model (e.g., `output/Heart Disease/models/<name>/`):
   - `synthetic.csv`, `per_variable_metrics.csv`, `metrics.json`, `umap.png`
   - PyBNesian-only extras: `bn_<name>.png`, `structure_<name>.graphml`, `model_<name>.pickle`
   - `synthetic.semmap.parquet` (when SemMap metadata is available)
@@ -119,5 +131,7 @@ configs:
 - Metadata-only reports require no YAML file; pass `--configs-yaml` to opt into synthetic runs.
 - All models are treated uniformly in the report; UMAPs share the same projection trained on real data.
 
-## 📚 Documentation
+## 📚 Testing, Contributing, Documentation
+- Install dev deps with `python -m pip install -e .[dev]`
+- Run tests with `python -m pytest`
 - Build the Sphinx site with `sphinx-build -b html sphinx docs`.

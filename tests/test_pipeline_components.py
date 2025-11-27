@@ -515,9 +515,19 @@ def test_backend_executor_runs_models(tmp_path):
             real_df: pd.DataFrame,
             inferred: Dict[str, str],
             synth_df: pd.DataFrame,
+            metadata: Any = None,
+            *,
+            target: Optional[str] = None,
         ) -> Dict[str, Any]:
             self.privacy_calls.append(
-                {"run_dir": run_dir, "real_df": real_df, "inferred": inferred, "synth_df": synth_df}
+                {
+                    "run_dir": run_dir,
+                    "real_df": real_df,
+                    "inferred": inferred,
+                    "synth_df": synth_df,
+                    "metadata": metadata,
+                    "target": target,
+                }
             )
             return {"ok": True}
 
@@ -528,6 +538,9 @@ def test_backend_executor_runs_models(tmp_path):
             synth_df: pd.DataFrame,
             inferred: Dict[str, str],
             target_series: Optional[pd.Series],
+            *,
+            metadata: Any = None,
+            target: Optional[str] = None,
         ) -> Dict[str, Any]:
             self.downstream_calls.append(
                 {
@@ -536,6 +549,8 @@ def test_backend_executor_runs_models(tmp_path):
                     "synth_df": synth_df,
                     "inferred": inferred,
                     "target": target_series,
+                    "metadata": metadata,
+                    "target_label": target,
                 }
             )
             return {"ok": True}
@@ -560,6 +575,9 @@ def test_backend_executor_runs_models(tmp_path):
     assert calls["semmap_export"] == {"dummy": True}
     assert metric_writer.privacy_calls
     assert metric_writer.downstream_calls
+    downstream_call = metric_writer.downstream_calls[0]
+    assert downstream_call["target_label"] == spec.target
+    assert downstream_call["target"].attrs.get("prov:hadRole") == "target"
 
 
 def test_report_writer_generates_outputs(tmp_path):
