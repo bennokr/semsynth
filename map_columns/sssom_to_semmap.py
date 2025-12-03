@@ -24,6 +24,19 @@ PREDICATE_TO_FIELD = {
 }
 
 
+def _normalise_object_id(object_id: str) -> str:
+    """Return a fully-qualified URI for supported vocabularies."""
+
+    if ":" not in object_id:
+        return object_id
+    prefix, local_id = object_id.split(":", 1)
+    if prefix.startswith("WD_"):
+        return f"https://www.wikidata.org/entity/{local_id}"
+    if prefix == "wd":
+        return f"https://www.wikidata.org/entity/{local_id}"
+    return object_id
+
+
 def _normalize_subject_id(subject_id: str) -> str:
     """Extract a column identifier from an SSSOM subject id."""
 
@@ -36,8 +49,9 @@ def _load_sssom(tsv_path: Path) -> List[Dict[str, str]]:
     """Load mappings from an SSSOM TSV file."""
 
     with tsv_path.open("r", encoding="utf-8") as f:
-        reader = csv.DictReader(f, delimiter="\t")
-        return [row for row in reader]
+        rows = [line for line in f if not line.lstrip().startswith("#")]
+    reader = csv.DictReader(rows, delimiter="\t")
+    return [row for row in reader]
 
 
 def _ensure_column_property(prop: Optional[ColumnProperty]) -> ColumnProperty:
@@ -66,15 +80,20 @@ def integrate_sssom(
         field = PREDICATE_TO_FIELD.get(predicate)
         if field is None:
             continue
+        obj = _normalise_object_id(obj)
         column.columnProperty = _ensure_column_property(column.columnProperty)
         existing = getattr(column.columnProperty, field)
-        if existing is None:
-            setattr(column.columnProperty, field, [obj])
-        elif isinstance(existing, list):
+        if isinstance(existing, list):
             if obj not in existing:
                 existing.append(obj)
+            continue
+        if existing is None:
+            setattr(column.columnProperty, field, [obj])
         else:
-            setattr(column.columnProperty, field, [existing, obj])
+            values = [existing]
+            if obj not in values:
+                values.append(obj)
+            setattr(column.columnProperty, field, values)
     return metadata
 
 
@@ -99,6 +118,9 @@ def main(
 
     metadata = Metadata.from_dcat_dsv(json.loads(dataset_json.read_text()))
     mappings = _load_sssom(sssom_tsv)
+    for row in mappings:
+        if "object_id" in row and isinstance(row["object_id"], str):
+            row["object_id"] = _normalise_object_id(row["object_id"])
     updated = integrate_sssom(metadata, mappings)
 
     target = output_json or dataset_json

@@ -137,7 +137,7 @@
 <ul>
 <li><p><code class="docutils literal notranslate"><span class="pre">configs/simple_config.yaml</span></code> (MetaSyn + two PyBNesian models)</p></li>
 <li><p><code class="docutils literal notranslate"><span class="pre">configs/advanced_config.yaml</span></code> (MetaSyn, PyBNesian, and SynthCity models)</p></li>
-<li><p><code class="docutils literal notranslate"><span class="pre">configs/maximal_config.yaml</span></code> (enables UMAP, privacy, downstream metrics, and the broadest mix of MetaSyn, PyBNesian, and SynthCity generators)</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">configs/maximal_config.yaml</span></code> (keeps MetaSyn with aggressive options enabled while remaining runnable without GPU or shared-memory support)</p></li>
 <li><p><code class="docutils literal notranslate"><span class="pre">configs/only_metasyn_config.yaml</span></code> (MetaSyn baseline only)</p></li>
 </ul>
 </li>
@@ -158,7 +158,7 @@
 <ul class="simple">
 <li><p><code class="docutils literal notranslate"><span class="pre">configs/simple_config.yaml</span></code> mixes MetaSyn with two PyBNesian baselines.</p></li>
 <li><p><code class="docutils literal notranslate"><span class="pre">configs/advanced_config.yaml</span></code> extends the simple bundle with SynthCity generators.</p></li>
-<li><p><code class="docutils literal notranslate"><span class="pre">configs/maximal_config.yaml</span></code> enables every optional report toggle and includes the widest selection of MetaSyn, PyBNesian, and SynthCity generators.</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">configs/maximal_config.yaml</span></code> toggles every optional report hook (UMAP, privacy, downstream) but ships with a MetaSyn-only bundle so it continues to execute inside restricted environments.</p></li>
 <li><p><code class="docutils literal notranslate"><span class="pre">configs/only_metasyn_config.yaml</span></code> keeps MetaSyn as the single synthetic data baseline.</p></li>
 </ul>
 <p>Example:</p>
@@ -208,7 +208,12 @@
 <h2>🧰 Metadata templates &amp; column mappings<a class="headerlink" href="#metadata-templates-column-mappings" title="Link to this heading"></a></h2>
 <ul class="simple">
 <li><p><code class="docutils literal notranslate"><span class="pre">semsynth/dataproviders/uciml.py</span></code> exposes a CLI that turns the JSON payloads cached under <code class="docutils literal notranslate"><span class="pre">uciml-cache/</span></code> (sometimes referenced as <code class="docutils literal notranslate"><span class="pre">uci-cache/</span></code> in earlier docs) into DCAT + DSV JSON-LD that downstream tools can ingest.</p></li>
-<li><p>Scripts under <code class="docutils literal notranslate"><span class="pre">map_columns/</span></code> take that JSON-LD and suggest or write terminology mappings (see <code class="docutils literal notranslate"><span class="pre">map_columns/README.md</span></code>).</p></li>
+<li><p>Scripts under <code class="docutils literal notranslate"><span class="pre">map_columns/</span></code> take that JSON-LD and suggest or write terminology mappings (see <code class="docutils literal notranslate"><span class="pre">map_columns/README.md</span></code>).</p>
+<ul>
+<li><p><code class="docutils literal notranslate"><span class="pre">map_columns/codes_map_columns.py</span></code> performs fully offline Wikidata matching against <code class="docutils literal notranslate"><span class="pre">map_columns/codes.tsv</span></code>, optionally merging manual overrides into SSSOM output.</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">python</span> <span class="pre">-m</span> <span class="pre">semsynth</span> <span class="pre">create-mapping</span> <span class="pre">uciml</span> <span class="pre">--datasets</span> <span class="pre">145</span></code> automates the end-to-end workflow (JSON-LD export → Wikidata scoring → SSSOM merge) and stores the results under <code class="docutils literal notranslate"><span class="pre">mappings/</span></code>.</p></li>
+</ul>
+</li>
 </ul>
 <section id="example-uci-dataset-45-heart-disease">
 <h3>Example: UCI dataset 45 (Heart Disease)<a class="headerlink" href="#example-uci-dataset-45-heart-disease" title="Link to this heading"></a></h3>
@@ -235,6 +240,12 @@
 </div>
 <p>Swap in <code class="docutils literal notranslate"><span class="pre">map_columns/llm_map_columns.py</span></code> to drive an LLM-backed workflow that writes an <code class="docutils literal notranslate"><span class="pre">*.sssom.tsv</span></code> file (see <code class="docutils literal notranslate"><span class="pre">map_columns/README.md</span></code> for details).</p>
 </li>
+<li><p>Run the integrated helper to write mappings and SemMap metadata in one go:</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>python<span class="w"> </span>-m<span class="w"> </span>semsynth<span class="w"> </span>create-mapping<span class="w"> </span>uciml<span class="w"> </span>--datasets<span class="w"> </span><span class="m">45</span><span class="w"> </span>--codes-tsv<span class="w"> </span>map_columns/codes.tsv<span class="w"> </span>--verbose
+</pre></div>
+</div>
+<p>The resulting files (e.g., <code class="docutils literal notranslate"><span class="pre">mappings/uciml-45.sssom.tsv</span></code>) can be fed back into the reporting pipeline without extra steps.</p>
+</li>
 </ol>
 </section>
 </section>
@@ -243,6 +254,8 @@
 <ul class="simple">
 <li><p>Metadata-only reports require no YAML file; pass <code class="docutils literal notranslate"><span class="pre">--configs-yaml</span></code> to opt into synthetic runs.</p></li>
 <li><p>All models are treated uniformly in the report; UMAPs share the same projection trained on real data.</p></li>
+<li><p>When optional dependencies (e.g., <code class="docutils literal notranslate"><span class="pre">umap-learn</span></code>, PyBNesian, SynthCity) are missing or blocked by runtime sandboxing, SemSynth logs a warning and continues with the available components. The shipped <code class="docutils literal notranslate"><span class="pre">maximal_config</span></code> keeps MetaSyn as the default to guarantee completion under those constraints.</p></li>
+<li><p>If external dataset hosts are unreachable, cached payloads under <code class="docutils literal notranslate"><span class="pre">downloads-cache/</span></code> may contain synthetic stand-ins that mimic the documented schema so pipeline checks can proceed. Keep README notes in sync when such fallbacks are introduced.</p></li>
 </ul>
 </section>
 <section id="testing-contributing-documentation">
@@ -256,7 +269,12 @@
 <p class="caption" role="heading"><span class="caption-text">Contents</span></p>
 <ul class="current">
 <li class="toctree-l1 current"><a class="current reference internal" href="#">Home</a></li>
-<li class="toctree-l1"><a class="reference internal" href="getting-started.html">Getting started</a></li>
+<li class="toctree-l1"><a class="reference internal" href="getting-started.html">Getting started</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="getting-started.html#installation">Installation</a></li>
+<li class="toctree-l2"><a class="reference internal" href="getting-started.html#create-semantic-mappings">Create semantic mappings</a></li>
+<li class="toctree-l2"><a class="reference internal" href="getting-started.html#generate-reports">Generate reports</a></li>
+</ul>
+</li>
 <li class="toctree-l1"><a class="reference internal" href="schema.html">SemMap metadata schema</a><ul>
 <li class="toctree-l2"><a class="reference internal" href="schema.html#core-objects">Core objects</a></li>
 <li class="toctree-l2"><a class="reference internal" href="schema.html#creation-and-ingestion">Creation and ingestion</a></li>

@@ -1,0 +1,299 @@
+{
+  "@context": {
+    "@context": {
+      "csvw": "http://www.w3.org/ns/csvw#",
+      "dsv": "https://w3id.org/dsv-ontology#",
+      "skos": "http://www.w3.org/2004/02/skos/core#",
+      "prov": "http://www.w3.org/ns/prov#",
+      "qudt": "http://qudt.org/schema/qudt/",
+      "unit": "http://qudt.org/vocab/unit/",
+      "quantitykind": "http://qudt.org/vocab/quantitykind/",
+      "sdmx-dimension": "http://purl.org/linked-data/sdmx/2009/dimension#",
+      "schema": "https://schema.org/",
+      "wd": "http://www.wikidata.org/entity/",
+      "dct": "http://purl.org/dc/terms/",
+      "dcat": "http://www.w3.org/ns/dcat#",
+      "title": "dct:title",
+      "description": "dct:description",
+      "abstract": "dct:abstract",
+      "purpose": "dct:purpose",
+      "tableOfContents": "dct:tableOfContents",
+      "landingPage": "dcat:landingPage",
+      "accessRights": "dct:accessRights",
+      "citation": "schema:citation",
+      "identifier": "schema:identifier",
+      "funding": "schema:funding",
+      "populationType": "schema:populationType",
+      "url": "csvw:url",
+      "datasetSchema": "dsv:datasetSchema",
+      "columns": {
+        "@id": "dsv:column",
+        "@container": "@set"
+      },
+      "name": "csvw:name",
+      "titles": "csvw:titles",
+      "about": "schema:about",
+      "hadRole": "prov:hadRole",
+      "defaultValue": "schema:defaultValue",
+      "columnProperty": "dsv:columnProperty",
+      "columnCompleteness": "dsv:columnCompleteness",
+      "summaryStatistics": "dsv:summaryStatistics",
+      "statisticalDataType": {
+        "@id": "dsv:statisticalDataType",
+        "@type": "@id"
+      },
+      "hasCodeBook": {
+        "@id": "dsv:hasCodeBook",
+        "@type": "@id"
+      },
+      "hasVariable": {
+        "@id": "dsv:hasVariable",
+        "@type": "@id"
+      },
+      "datasetCompleteness": "dsv:datasetCompleteness",
+      "numberOfRows": "dsv:numberOfRows",
+      "numberOfColumns": "dsv:numberOfColumns",
+      "missingValueFormat": "dsv:missingValueFormat",
+      "notation": "skos:notation",
+      "prefLabel": "skos:prefLabel",
+      "exactMatch": {
+        "@id": "skos:exactMatch",
+        "@type": "@id",
+        "@container": "@set"
+      },
+      "closeMatch": {
+        "@id": "skos:closeMatch",
+        "@type": "@id",
+        "@container": "@set"
+      },
+      "broadMatch": {
+        "@id": "skos:broadMatch",
+        "@type": "@id",
+        "@container": "@set"
+      },
+      "narrowMatch": {
+        "@id": "skos:narrowMatch",
+        "@type": "@id",
+        "@container": "@set"
+      },
+      "relatedMatch": {
+        "@id": "skos:relatedMatch",
+        "@type": "@id",
+        "@container": "@set"
+      },
+      "hasTopConcept": {
+        "@id": "skos:hasTopConcept",
+        "@type": "@id",
+        "@container": "@set"
+      },
+      "unitText": "schema:unitText",
+      "ucumCode": "qudt:ucumCode",
+      "hasUnit": "qudt:hasUnit",
+      "source": {
+        "@id": "dct:source",
+        "@type": "@id"
+      }
+    }
+  },
+  "datasetSchema": {
+    "columns": [
+      {
+        "name": "age",
+        "about": "Age",
+        "hadRole": "Feature",
+        "summaryStatistics": {
+          "statisticalDataType": "dsv:StatisticalDataType",
+          "columnCompleteness": 1.0,
+          "@type": "dsv:SummaryStatistics"
+        }
+      },
+      {
+        "name": "sex",
+        "about": "Sex",
+        "hadRole": "Feature",
+        "summaryStatistics": {
+          "statisticalDataType": "dsv:StatisticalDataType",
+          "columnCompleteness": 1.0,
+          "@type": "dsv:SummaryStatistics"
+        }
+      },
+      {
+        "name": "chest-pain",
+        "description": "chest pain type",
+        "hadRole": "Feature",
+        "columnProperty": {
+          "closeMatch": [
+            "https://www.wikidata.org/entity/Q180762"
+          ]
+        },
+        "summaryStatistics": {
+          "statisticalDataType": "dsv:CategoricalDataType",
+          "columnCompleteness": 1.0,
+          "@type": "dsv:SummaryStatistics"
+        }
+      },
+      {
+        "name": "rest-bp",
+        "description": "resting blood pressure",
+        "hadRole": "Feature",
+        "columnProperty": {
+          "exactMatch": [
+            "https://www.wikidata.org/entity/Q4994431"
+          ]
+        },
+        "summaryStatistics": {
+          "statisticalDataType": "dsv:StatisticalDataType",
+          "columnCompleteness": 1.0,
+          "@type": "dsv:SummaryStatistics"
+        }
+      },
+      {
+        "name": "serum-chol",
+        "description": "serum cholesterol",
+        "hadRole": "Feature",
+        "columnProperty": {
+          "unitText": "mg/dl",
+          "closeMatch": [
+            "https://www.wikidata.org/entity/Q2723972"
+          ]
+        },
+        "summaryStatistics": {
+          "statisticalDataType": "dsv:StatisticalDataType",
+          "columnCompleteness": 1.0,
+          "@type": "dsv:SummaryStatistics"
+        }
+      },
+      {
+        "name": "fasting-blood-sugar",
+        "description": "fasting blood sugar > 120 mg/dl",
+        "hadRole": "Feature",
+        "columnProperty": {
+          "closeMatch": [
+            "https://www.wikidata.org/entity/Q5572348"
+          ]
+        },
+        "summaryStatistics": {
+          "statisticalDataType": "dsv:StatisticalDataType",
+          "columnCompleteness": 1.0,
+          "@type": "dsv:SummaryStatistics"
+        }
+      },
+      {
+        "name": "electrocardiographic",
+        "description": "resting electrocardiographic results",
+        "hadRole": "Feature",
+        "summaryStatistics": {
+          "statisticalDataType": "dsv:CategoricalDataType",
+          "columnCompleteness": 1.0,
+          "@type": "dsv:SummaryStatistics"
+        }
+      },
+      {
+        "name": "max-heart-rate",
+        "description": "maximum heart rate achieved",
+        "hadRole": "Feature",
+        "summaryStatistics": {
+          "statisticalDataType": "dsv:StatisticalDataType",
+          "columnCompleteness": 1.0,
+          "@type": "dsv:SummaryStatistics"
+        }
+      },
+      {
+        "name": "angina",
+        "description": "exercise induced anigna",
+        "hadRole": "Feature",
+        "columnProperty": {
+          "exactMatch": [
+            "https://www.wikidata.org/entity/Q180762"
+          ]
+        },
+        "summaryStatistics": {
+          "statisticalDataType": "dsv:StatisticalDataType",
+          "columnCompleteness": 1.0,
+          "@type": "dsv:SummaryStatistics"
+        }
+      },
+      {
+        "name": "oldpeak",
+        "description": "oldpeak = ST depression induced by exercise relative to rest",
+        "hadRole": "Feature",
+        "summaryStatistics": {
+          "statisticalDataType": "dsv:StatisticalDataType",
+          "columnCompleteness": 1.0,
+          "@type": "dsv:SummaryStatistics"
+        }
+      },
+      {
+        "name": "slope",
+        "description": "the slope of the peak exercise ST sgment",
+        "hadRole": "Feature",
+        "summaryStatistics": {
+          "statisticalDataType": "dsv:NumericalDataType",
+          "columnCompleteness": 1.0,
+          "@type": "dsv:SummaryStatistics"
+        }
+      },
+      {
+        "name": "major-vessels",
+        "description": "number of major vessels (0-3) colored by fluorosopy",
+        "hadRole": "Feature",
+        "columnProperty": {
+          "relatedMatch": [
+            "https://www.wikidata.org/entity/Q3815025"
+          ]
+        },
+        "summaryStatistics": {
+          "statisticalDataType": "dsv:StatisticalDataType",
+          "columnCompleteness": 1.0,
+          "@type": "dsv:SummaryStatistics"
+        }
+      },
+      {
+        "name": "thal",
+        "description": "thal: 3 = normal; 6 = fixed defect; 7 = reversable defect",
+        "hadRole": "Feature",
+        "summaryStatistics": {
+          "statisticalDataType": "dsv:CategoricalDataType",
+          "columnCompleteness": 1.0,
+          "@type": "dsv:SummaryStatistics"
+        }
+      },
+      {
+        "name": "heart-disease",
+        "hadRole": "target",
+        "columnProperty": {
+          "relatedMatch": [
+            "https://www.wikidata.org/entity/Q8775887"
+          ]
+        },
+        "summaryStatistics": {
+          "statisticalDataType": "dsv:NumericalDataType",
+          "columnCompleteness": 1.0,
+          "@type": "dsv:SummaryStatistics"
+        }
+      }
+    ]
+  },
+  "summaryStatistics": {
+    "datasetCompleteness": 1.0,
+    "numberOfRows": 270,
+    "numberOfColumns": 14
+  },
+  "title": "Statlog (Heart)",
+  "description": "Cost Matrix\r\n\r\n_______\t abse  pres\r\nabsence\t 0\t1\r\npresence  5\t0\r\n\r\nwhere the rows represent the true values and the columns the predicted.\r\n",
+  "abstract": "This dataset is a heart disease database similar to a database already present in the repository (Heart Disease databases) but in a slightly different form",
+  "landingPage": "https://archive.ics.uci.edu/dataset/145/statlog+heart",
+  "tableOfContents": "\r\nAttribute Information:\r\n------------------------\r\n      -- 1. age       \r\n      -- 2. sex       \r\n      -- 3. chest pain type  (4 values)       \r\n      -- 4. resting blood pressure  \r\n      -- 5. serum cholestoral in mg/dl      \r\n      -- 6. fasting blood sugar > 120 mg/dl       \r\n      -- 7. resting electrocardiographic results  (values 0,1,2) \r\n      -- 8. maximum heart rate achieved  \r\n      -- 9. exercise induced angina    \r\n      -- 10. oldpeak = ST depression induced by exercise relative to rest   \r\n      -- 11. the slope of the peak exercise ST segment     \r\n      -- 12. number of major vessels (0-3) colored by flourosopy        \r\n      -- 13.  thal: 3 = normal; 6 = fixed defect; 7 = reversable defect     \r\n\r\nAttributes types\r\n-----------------\r\n\r\nReal: 1,4,5,8,10,12\r\nOrdered:11,\r\nBinary: 2,6,9\r\nNominal:7,3,13\r\n\r\nVariable to be predicted\r\n------------------------\r\nAbsence (1) or presence (2) of heart disease\r\n",
+  "identifier": [
+    {
+      "@type": "schema:PropertyValue",
+      "schema:propertyID": "uci",
+      "schema:value": 145
+    },
+    {
+      "@type": "schema:PropertyValue",
+      "schema:propertyID": "DOI",
+      "schema:value": "10.24432/C57303"
+    }
+  ]
+}

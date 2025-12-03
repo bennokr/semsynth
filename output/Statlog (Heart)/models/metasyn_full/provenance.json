@@ -1,0 +1,85 @@
+{
+  "provenance": [
+    {
+      "id": "env-20251203T2027",
+      "type": [
+        "prov:Entity",
+        "prov:Collection"
+      ],
+      "label": "Python environment",
+      "title": "makeprov",
+      "hasVersion": "0.4.3",
+      "requires": [
+        {
+          "id": "https://pypi.org/project/parse/",
+          "type": "schema:SoftwareSourceCode",
+          "label": "parse>=1.20"
+        }
+      ]
+    },
+    {
+      "id": "env-20251203T2028",
+      "type": [
+        "prov:Entity",
+        "prov:Collection"
+      ],
+      "label": "Python environment",
+      "title": "makeprov",
+      "hasVersion": "0.4.3",
+      "requires": [
+        {
+          "id": "https://pypi.org/project/parse/",
+          "type": "schema:SoftwareSourceCode",
+          "label": "parse>=1.20"
+        }
+      ]
+    },
+    {
+      "id": "blob:__main__.py#write_manifest-20251203T2028",
+      "type": "prov:Activity",
+      "startedAtTime": "2025-12-03T20:28:01.083162+00:00",
+      "endedAtTime": "2025-12-03T20:28:01.083595+00:00",
+      "wasAssociatedWith": "blob:__main__.py",
+      "used": [
+        "env-20251203T2028"
+      ]
+    },
+    {
+      "id": "blob:__main__.py",
+      "type": [
+        "prov:Agent",
+        "prov:SoftwareAgent",
+        "schema:SoftwareSourceCode"
+      ],
+      "label": "__main__.py",
+      "hasVersion": "483ccd6ac836a3457a3f22f3e650e2cd730ae23e",
+      "source": "https://github.com/bennokr/generative-metadata.git"
+    },
+    {
+      "id": "blob:output/Statlog (Heart)",
+      "type": "prov:Entity",
+      "format": "application/octet-stream",
+      "extent": 96,
+      "modified": "2025-12-03T20:27:59.612365+00:00",
+      "wasGeneratedBy": "blob:__main__.py#model_run_root-20251203T2027"
+    },
+    {
+      "id": "blob:output/Statlog (Heart)/models/metasyn_full",
+      "type": "prov:Entity",
+      "format": "application/octet-stream",
+      "extent": 256,
+      "modified": "2025-12-03T20:28:01.083384+00:00",
+      "wasGeneratedBy": "blob:__main__.py#write_manifest-20251203T2028"
+    },
+    {
+      "id": "blob:__main__.py#model_run_root-20251203T2027",
+      "type": "prov:Activity",
+      "startedAtTime": "2025-12-03T20:27:59.612228+00:00",
+      "endedAtTime": "2025-12-03T20:27:59.612454+00:00",
+      "wasAssociatedWith": "blob:__main__.py",
+      "used": [
+        "env-20251203T2027"
+      ]
+    }
+  ]
+}

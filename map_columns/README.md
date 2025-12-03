@@ -36,7 +36,9 @@ llm install llm-tools-datasette
 
 ## Usage
 
-### 1. Build SNOMED and LOINC Codes Table
+### 1. Build Codes Table
+
+#### Option A: Build SNOMED and LOINC Codes Table
 
 This script processes SNOMED CT and LOINC files to create a `codes.tsv` file.
 
@@ -48,14 +50,7 @@ python build_snomed_loinc_codes_table.py \
     --max-snomed 50000
 ```
 
-After running the script, you can insert the data into a SQLite database:
-
-```bash
-sqlite-utils insert terminology.db codes codes.tsv --tsv
-sqlite-utils enable-fts terminology.db codes label synonyms --create-triggers
-```
-
-### 2. Extract Medical Codes from Wikidata
+#### Option B: Extract Medical Codes from Wikidata
 
 This script fetches medical codes from Wikidata and outputs them to `codes.tsv`.
 
@@ -65,7 +60,16 @@ python extract_wikidata_medical_codes_table.py
 
 Run the command above to perform the extraction. After execution, the results will be written to `codes.tsv` in the current directory.
 
-### 3. Map Dataset Columns to Codes using Keyword Search
+#### Loading Codes Table
+
+After running the script, you can insert the data into a SQLite database:
+
+```bash
+sqlite-utils insert terminology.db codes codes.tsv --tsv
+sqlite-utils enable-fts terminology.db codes label synonyms --create-triggers
+```
+
+### 2. Map Dataset Columns to Codes using Keyword Search
 
 This script maps dataset columns to semantic codes from a Datasette database based on their descriptions.
 
@@ -79,7 +83,7 @@ python kwd_map_columns.py dataset.json \
 
 Replace `dataset.json` with the path to your JSON file that contains the dataset schema. The results of the mapping will be printed in the terminal.
 
-### 4. Map Dataset Columns to Codes using LLM
+### 3. Map Dataset Columns to Codes using LLM
 
 This script uses an LLM to intelligently map dataset columns to codes based on their metadata from a Datasette instance.
 
@@ -94,3 +98,32 @@ python llm_map_columns.py \
 ```
 
 Providing a JSON with dataset metadata as `dataset.json` will produce SSSOM-style mappings and save them to `mappings.sssom.tsv`.
+
+### 4. Map Dataset Columns to Codes using a Local TSV
+
+Use this script when you want completely offline mappings driven by a pre-built `codes.tsv` file. It supports optional manual overrides for edge cases and writes the result in SSSOM format.
+
+```bash
+python -m map_columns.codes_map_columns \
+    dataset.semmap.json \
+    --codes-tsv map_columns/codes.tsv \
+    --manual-overrides map_columns/manual/uciml-145.json \
+    --output-tsv mappings/uciml-145.sssom.tsv \
+    --verbose
+```
+
+Manual override files are JSON dictionaries keyed by column name. Each entry references an existing CURIE from `codes.tsv` so that mappings remain auditable.
+
+#### Integrated CLI helper
+
+SemSynth exposes a convenience wrapper that connects the exporter, TSV matcher,
+and SemMap merger:
+
+```bash
+python -m semsynth create-mapping uciml --datasets 145 \
+    --codes-tsv map_columns/codes.tsv \
+    --manual-overrides-dir map_columns/manual
+```
+
+Both the SSSOM output and the merged SemMap JSON-LD will be written to
+`mappings/`, ready for use by the reporting pipeline.

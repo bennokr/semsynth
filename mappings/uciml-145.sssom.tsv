@@ -1,0 +1,13 @@
+# curie_map: semmap=https://w3id.org/semsynth/variable/
+# curie_map: skos=http://www.w3.org/2004/02/skos/core#
+# curie_map: semapv=http://purl.org/semapv/vocab/
+# mapping_set_title: Statlog (Heart)
+# generated_by: map_columns.codes_map_columns
+subject_id	subject_label	predicate_id	object_id	object_label	mapping_justification	confidence	comment
+semmap:chest-pain	chest-pain	skos:closeMatch	WD_SYMPTOM:Q180762	angina pectoris	semapv:ManualMappingCuration	0.850	Chest pain categories in the dataset align with angina presentations.
+semmap:rest-bp	rest-bp	skos:exactMatch	WD_TEST:Q4994431	blood pressure measurement	semapv:ManualMappingCuration	0.900	Resting blood pressure measured with sphygmomanometer in mmHg.
+semmap:serum-chol	serum-chol	skos:closeMatch	WD_TEST:Q2723972	lipid profile	semapv:ManualMappingCuration	0.750	Serum cholesterol captured as part of a lipid panel.
+semmap:fasting-blood-sugar	fasting-blood-sugar	skos:closeMatch	WD_TEST:Q5572348	glucose test	semapv:ManualMappingCuration	0.800	Binary indicator for fasting blood glucose exceeding 120 mg/dL.
+semmap:angina	angina	skos:exactMatch	WD_SYMPTOM:Q180762	angina pectoris	semapv:ManualMappingCuration	0.850	Exercise-induced angina indicator mapped to the parent symptom.
+semmap:major-vessels	major-vessels	skos:relatedMatch	WD_TEST:Q3815025	angiocardiography	semapv:ManualMappingCuration	0.600	Count of coronary vessels visualised via fluoroscopic angiography.
+semmap:heart-disease	heart-disease	skos:relatedMatch	WD_DISEASE:Q8775887	hypertensive heart disease	semapv:ManualMappingCuration	0.500	Heart disease outcome approximated with the closely related Wikidata concept.

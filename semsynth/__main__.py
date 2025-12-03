@@ -2,9 +2,11 @@
 
 from __future__ import annotations
 
+import json
 import logging
+import re
 from pathlib import Path
-from typing import TYPE_CHECKING, Any, List, Optional
+from typing import TYPE_CHECKING, Any, List, Optional, Sequence
 
 from makeprov import GLOBAL_CONFIG, OutPath, main, rule
 
@@ -12,7 +14,7 @@ from .app import run_app
 from .catalog import build_catalog
 
 
-__all__ = ["search", "report", "run_app", "build_catalog", "main"]
+__all__ = ["search", "report", "create_mapping", "run_app", "build_catalog", "main"]
 
 if TYPE_CHECKING:  # pragma: no cover - imported for typing only
     from .models import ModelConfigBundle, ModelSpec
@@ -137,6 +139,129 @@ def report(
                 "Skipped %s:%s due to error", dataset_spec.provider, dataset_spec.name
             )
             raise SystemExit(str(exc))
+
+
+@rule(merge=True, phony=True)
+def create_mapping(
+    provider: str,
+    *,
+    datasets: Optional[List[str]] = None,
+    codes_tsv: str = "map_columns/codes.tsv",
+    manual_overrides_dir: Optional[str] = "map_columns/manual",
+    systems: Sequence[str] = ("WD_TEST", "WD_PROCEDURE", "WD_SYMPTOM", "WD_DISEASE", "WD_SIGN"),
+    min_score: float = 0.45,
+    top_k: int = 2,
+    outdir: OutPath = OutPath("mappings/"),
+    indent: int = 2,
+    version_tag: str = "",
+    verbose: bool = False,
+) -> None:
+    """Create SemMap-aware SSSOM mappings for one or more datasets.
+
+    Args:
+        provider: Dataset provider key (``\"uciml\"`` or ``\"openml\"``).
+        datasets: Optional list of dataset identifiers; falls back to default
+            provider catalog when omitted.
+        codes_tsv: Path to the terminology TSV produced by
+            :mod:`map_columns.extract_wikidata_medical_codes_table`.
+        manual_overrides_dir: Directory holding optional ``*.json`` overrides.
+        systems: Terminology systems to consider during matching.
+        min_score: Minimum similarity score applied to automatic matches.
+        top_k: Maximum number of automatic matches per column.
+        outdir: Output directory for SSSOM and merged SemMap metadata.
+        indent: JSON indentation for saved SemMap metadata.
+        version_tag: Optional version string recorded in the SSSOM header.
+        verbose: Switch logging level to ``INFO`` when ``True``.
+    """
+
+    from .datasets import load_dataset, specs_from_input
+    from .semmap import Metadata
+    from .utils import ensure_dir
+    from map_columns.codes_map_columns import (
+        generate_matches,
+        load_codes,
+        load_manual_overrides,
+        write_sssom,
+    )
+    from map_columns.shared import parse_columns
+    from map_columns.sssom_to_semmap import integrate_sssom
+
+    if verbose:
+        logging.root.setLevel(logging.INFO)
+
+    specs = specs_from_input(provider=provider, datasets=datasets)
+    codes = load_codes(Path(codes_tsv), allowed_systems=systems)
+    overrides_dir = Path(manual_overrides_dir) if manual_overrides_dir else None
+
+    outdir_path = Path(outdir)
+    ensure_dir(str(outdir_path))
+
+    def _slug(text: str) -> str:
+        return re.sub(r"[^a-z0-9]+", "-", text.lower()).strip("-")
+
+    for spec in specs:
+        payload = load_dataset(spec)
+        dataset_label = payload.spec.name or str(payload.spec.id)
+        slug_parts = [spec.provider]
+        if spec.id is not None:
+            slug_parts.append(str(spec.id))
+        elif dataset_label:
+            slug_parts.append(_slug(dataset_label))
+        slug = "-".join(slug_parts)
+
+        metadata_payload = payload.metadata or payload.spec.meta
+        if isinstance(metadata_payload, Metadata):
+            metadata_payload = metadata_payload.to_jsonld()
+        if not isinstance(metadata_payload, dict):
+            raise RuntimeError(f"No metadata found for dataset {slug}")
+
+        columns, dataset_meta = parse_columns(metadata_payload)
+
+        manual_overrides_path: Optional[Path] = None
+        if overrides_dir:
+            candidate_names = [
+                f"{slug}.json",
+                f"{spec.provider}-{spec.id}.json" if spec.id is not None else "",
+            ]
+            for name in candidate_names:
+                if not name:
+                    continue
+                candidate = overrides_dir / name
+                if candidate.exists():
+                    manual_overrides_path = candidate
+                    break
+        overrides = load_manual_overrides(manual_overrides_path)
+
+        matches = generate_matches(
+            columns,
+            codes,
+            min_score=min_score,
+            top_k=top_k,
+            manual_overrides=overrides,
+        )
+
+        sssom_path = outdir_path / f"{slug}.sssom.tsv"
+        write_sssom(
+            matches,
+            sssom_path,
+            dataset_meta=dataset_meta,
+            version_tag=version_tag,
+        )
+
+        metadata = Metadata.from_dcat_dsv(metadata_payload)
+        mapping_rows = [match.to_sssom_row() for match in matches]
+        updated = integrate_sssom(metadata, mapping_rows)
+        metadata_path = outdir_path / f"{slug}.metadata.json"
+        metadata_path.write_text(
+            json.dumps(updated.to_jsonld(), indent=indent, ensure_ascii=False),
+            encoding="utf-8",
+        )
+
+        logging.info(
+            "Wrote mappings for %s -> %s",
+            slug,
+            sssom_path,
+        )
 
 if __name__ == "__main__":
     main(argparse_kwargs = dict(

@@ -1,14 +1,15 @@
 #!/usr/bin/env python3
 """
-Build a small open medical terminology proxy from Wikidata.
+Build an open medical terminology proxy from Wikidata.
 
-Output: codes.tsv with columns
-    system  code  label  synonyms
+Output: `codes.tsv` with columns::
 
-- system: one of WD_DISEASE, WD_SYMPTOM, WD_PROCEDURE, WD_TEST
-- code:   the Wikidata QID (e.g. Q12136)
-- label:  English label
-- synonyms: here just the label again (you can extend later)
+    system    code    label    synonyms
+
+- ``system``: one of WD_DISEASE, WD_SYMPTOM, WD_PROCEDURE, WD_TEST, WD_SIGN
+- ``code``: the Wikidata QID (e.g. ``Q12136``)
+- ``label``: English preferred label
+- ``synonyms``: semicolon-joined set of English alt labels and descriptions
 
 Run:
 
@@ -40,23 +41,41 @@ PREFIX wdt:  <http://www.wikidata.org/prop/direct/>
 PREFIX rdfs: <http://www.w3.org/2000/01/rdf-schema#>
 PREFIX skos: <http://www.w3.org/2004/02/skos/core#>
 PREFIX wikibase: <http://wikiba.se/ontology#>
+PREFIX schema: <http://schema.org/>
 SELECT
   ("%(system)s" AS ?system)
   ?qid
   ?labelEn
+  (SAMPLE(?descEn) AS ?descriptionEn)
+  (GROUP_CONCAT(DISTINCT ?altEn; separator="; ") AS ?altLabels)
 WHERE {
-  # Any item that is an instance or subclass (recursively) of those roots
-  ?item wdt:P31/wdt:P279* %(root)s ;
-        wikibase:sitelinks ?links .
+  {
+    ?item wdt:P31/wdt:P279* %(root)s .
+  }
+  UNION
+  {
+    ?item wdt:P279/wdt:P279* %(root)s .
+  }
+  ?item wikibase:sitelinks ?links .
   FILTER(?links > 0)
 
   # English label for display
   ?item rdfs:label ?labelEn .
   FILTER (LANG(?labelEn) = "en")
 
+  OPTIONAL {
+    ?item schema:description ?descEn .
+    FILTER (LANG(?descEn) = "en")
+  }
+  OPTIONAL {
+    ?item skos:altLabel ?altEn .
+    FILTER (LANG(?altEn) = "en")
+  }
+
   # Turn the Q-ID into a simple numeric/slug code if desired
   BIND(STRAFTER(STR(?item), "entity/") AS ?qid)
 }
+GROUP BY ?system ?qid ?labelEn
 """
 
 # Systems and their root classes
@@ -65,6 +84,7 @@ ROOTS: List[Tuple[str, str]] = [
     ("WD_SYMPTOM", "wd:Q169872"),  # symptom
     ("WD_PROCEDURE", "wd:Q796194"),  # medical procedure
     ("WD_TEST", "wd:Q2671652"),    # medical test
+    ("WD_SIGN", "wd:Q1441305"),    # clinical sign
 ]
 
 
@@ -101,9 +121,18 @@ def fetch_system(system: str, root: str, limit: int) -> Dict[Tuple[str, str], Di
                 "code": qid,
                 "label": label,
                 "synonyms": set(),
+                "description": b.get("descriptionEn", {}).get("value", "").strip(),
             }
-        # Here we just use the label as a synonym as well
+        # Collect preferred label, alt labels, and description as synonyms
         rows[key]["synonyms"].add(label)
+        alt_labels = b.get("altLabels", {}).get("value", "")
+        if alt_labels:
+            for alt in alt_labels.split("; "):
+                alt = alt.strip()
+                if alt:
+                    rows[key]["synonyms"].add(alt)
+        if rows[key]["description"]:
+            rows[key]["synonyms"].add(rows[key]["description"])
 
     return rows
 
@@ -113,7 +142,8 @@ def write_codes_tsv(rows: Dict[Tuple[str, str], Dict], out_path: Path) -> None:
     with out_path.open("w", encoding="utf-8", newline="") as f:
         writer = csv.writer(f, delimiter="\t")
         writer.writerow(["system", "code", "label", "synonyms"])
-        for row in rows.values():
+        for key in sorted(rows):
+            row = rows[key]
             synonyms_str = "; ".join(sorted(row["synonyms"]))
             writer.writerow([row["system"], row["code"], row["label"], synonyms_str])
 

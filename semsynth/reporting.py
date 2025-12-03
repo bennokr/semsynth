@@ -23,6 +23,7 @@ import json
 import logging
 import os
 import textwrap
+from numbers import Integral, Real
 
 from jinja2 import Environment, FileSystemLoader, select_autoescape
 from markupsafe import Markup
@@ -171,6 +172,7 @@ def write_report_md(
             metadata_dict = dataset_metadata.to_jsonld() or {}
         elif isinstance(dataset_metadata, dict):
             metadata_dict = dataset_metadata
+    codebook_labels = _extract_codebook_labels(metadata_dict)
 
     dataset_description = metadata_dict.get("dcterms:description") or metadata_dict.get("description")
     dataset_purpose = metadata_dict.get("dcterms:purpose") or metadata_dict.get("purpose")
@@ -187,6 +189,7 @@ def write_report_md(
         declared_types=declared_types,
         inferred_types=inferred_types,
         variable_descriptions=variable_descriptions,
+        codebook_labels=codebook_labels,
     )
     fidelity_table = _build_fidelity_table(model_runs=model_runs)
     missingness_table = _build_missingness_table(missingness_summary)
@@ -243,7 +246,13 @@ def write_report_md(
     logging.info("Converted to HTML: %s", html_path)
 
 
-def _format_dist(col: pd.Series, cont_cols: List[str], *, top_n: int = 10) -> str:
+def _format_dist(
+    col: pd.Series,
+    cont_cols: List[str],
+    *,
+    codebook: Optional[Dict[str, str]] = None,
+    top_n: int = 10,
+) -> str:
     """Return a concise distribution summary for a column."""
 
     s = col.dropna()
@@ -267,42 +276,34 @@ def _format_dist(col: pd.Series, cont_cols: List[str], *, top_n: int = 10) -> st
         except Exception:
             return ""
     # Discrete
+    if s.empty:
+        return ""
     try:
-        vc = s.astype(str).value_counts(dropna=True)
+        vc = s.value_counts(dropna=True)
         total = float(vc.sum()) if vc.sum() else 1.0
     except Exception:
         return ""
-    if len(vc) == 2:
-        labels = list(vc.index)
-
-        def is_true_label(v: str) -> bool:
-            t = str(v).strip().lower()
-            return t in {"true", "1", "yes", "y", "t"}
-
-        pos_label = None
-        for lab in labels:
-            if is_true_label(lab):
-                pos_label = lab
-                break
-        if pos_label is None:
-            try:
-                nums = [float(x) for x in labels]
-                pos_label = labels[int(nums.index(max(nums)))]
-            except Exception:
-                pos_label = labels[0]
-        n_true = int(vc.get(pos_label, 0))
+    entries: List[tuple[str, str, int]] = []
+    for value, cnt in vc.items():
+        key = _normalise_scalar(value)
+        display = _format_codebook_value(key, codebook)
+        entries.append((key, display, int(cnt)))
+    if len(entries) == 2:
+        keys = [key for key, _, _ in entries]
+        pos_key = _select_positive_key(keys)
+        counts = {key: cnt for key, _, cnt in entries}
+        n_true = counts.get(pos_key, 0)
         pct = 100.0 * (n_true / total)
-        return f"{n_true} ({pct:.2f}%)"
+        display = _format_codebook_value(pos_key, codebook)
+        return f"{display}: {n_true} ({pct:.2f}%)"
     parts = []
-    shown = 0
-    for lab, cnt in vc.items():
+    for idx, (_, display, cnt) in enumerate(entries):
         pct = 100.0 * (cnt / total)
-        if shown < top_n:
-            parts.append(f"{lab}: {int(cnt)} ({pct:.2f}%)")
-        shown += 1
-    if shown > top_n:
-        parts.append(f"… (+{shown - top_n} more)")
-    return "\n".join(parts)
+        if idx < top_n:
+            parts.append(f"{display}: {cnt} ({pct:.2f}%)")
+    if len(entries) > top_n:
+        parts.append(f"… (+{len(entries) - top_n} more)")
+    return "<br />".join(parts)
 
 
 def _build_variable_summary(
@@ -312,12 +313,20 @@ def _build_variable_summary(
     declared_types: Optional[dict],
     inferred_types: Optional[dict],
     variable_descriptions: Optional[dict],
+    codebook_labels: Optional[Dict[str, Dict[str, str]]],
 ) -> str:
     """Create the Markdown table summarising variables."""
 
     cont_list = list(dict.fromkeys(cont_cols))
     var_rows = [
-        {"variable": column, "dist": _format_dist(df[column], cont_list)}
+        {
+            "variable": column,
+            "dist": _format_dist(
+                df[column],
+                cont_list,
+                codebook=(codebook_labels or {}).get(column),
+            ),
+        }
         for column in df.columns
     ]
     baseline = pd.DataFrame(var_rows).fillna("")
@@ -479,6 +488,115 @@ def _dataframe_to_markdown(df: pd.DataFrame, *, index: bool) -> str:
     """Convert a dataframe to Markdown."""
 
     return df.to_markdown(index=index)
+
+
+def _normalise_scalar(value: Any) -> str:
+    """Convert scalar values into canonical string keys for lookups."""
+
+    if isinstance(value, Integral):
+        return str(int(value))
+    if isinstance(value, Real) and not isinstance(value, bool):
+        value_f = float(value)
+        if value_f.is_integer():
+            return str(int(value_f))
+        text = f"{value_f}"
+        stripped = text.rstrip("0").rstrip(".")
+        return stripped or text
+    text = str(value)
+    if text.endswith(".0"):
+        text = text.rstrip("0").rstrip(".")
+    return text.strip()
+
+
+def _format_codebook_value(value_key: str, codebook: Optional[Dict[str, str]]) -> str:
+    """Return a user-friendly value label leveraging codebook metadata."""
+
+    if not value_key:
+        return "(missing)"
+    if codebook:
+        label = codebook.get(value_key)
+        if label:
+            return f"{label} [{value_key}]"
+    return value_key
+
+
+def _select_positive_key(keys: Sequence[str]) -> str:
+    """Pick a representative positive key for binary distributions."""
+
+    for key in keys:
+        if key.strip().lower() in {"true", "1", "yes", "y", "t"}:
+            return key
+    numeric_candidates: List[tuple[float, str]] = []
+    for key in keys:
+        try:
+            numeric_candidates.append((float(key), key))
+        except Exception:
+            continue
+    if numeric_candidates:
+        return max(numeric_candidates)[1]
+    return keys[0] if keys else ""
+
+
+def _iter_columns(metadata: Optional[Dict[str, Any]]) -> List[Dict[str, Any]]:
+    """Yield column dictionaries from a SemMap-style metadata payload."""
+
+    if not isinstance(metadata, dict):
+        return []
+    schema = (
+        metadata.get("datasetSchema")
+        or metadata.get("dsv:datasetSchema")
+        or {}
+    )
+    columns = (
+        schema.get("columns")
+        or schema.get("dsv:column")
+        or []
+    )
+    if isinstance(columns, list):
+        return columns
+    if columns:
+        return [columns]
+    return []
+
+
+def _extract_codebook_labels(metadata: Dict[str, Any]) -> Dict[str, Dict[str, str]]:
+    """Return per-column mappings from raw codes to human-readable labels."""
+
+    codebooks: Dict[str, Dict[str, str]] = {}
+    for column in _iter_columns(metadata):
+        name = column.get("name") or column.get("schema:name")
+        if not isinstance(name, str) or not name:
+            continue
+        column_prop = column.get("columnProperty") or column.get("dsv:columnProperty")
+        if not isinstance(column_prop, dict):
+            continue
+        codebook = column_prop.get("hasCodeBook") or column_prop.get("dsv:hasCodeBook")
+        if not isinstance(codebook, dict):
+            continue
+        concepts = codebook.get("hasTopConcept") or codebook.get("dsv:hasTopConcept")
+        if not concepts:
+            continue
+        if not isinstance(concepts, list):
+            concepts = [concepts]
+        mapping: Dict[str, str] = {}
+        for concept in concepts:
+            if not isinstance(concept, dict):
+                continue
+            notation = concept.get("notation")
+            label = (
+                concept.get("prefLabel")
+                or concept.get("label")
+                or concept.get("titles")
+            )
+            if notation is None or label is None:
+                continue
+            key = _normalise_scalar(notation)
+            if not key:
+                continue
+            mapping[key] = str(label).strip()
+        if mapping:
+            codebooks[name] = mapping
+    return codebooks
 
 
 def _build_overview_table(

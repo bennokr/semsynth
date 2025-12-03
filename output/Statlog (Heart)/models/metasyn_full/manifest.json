@@ -1,0 +1,11 @@
+{
+  "backend": "metasyn",
+  "name": "metasyn_full",
+  "provider": "uciml",
+  "dataset_name": "Statlog (Heart)",
+  "provider_id": 145,
+  "params": {},
+  "seed": 42,
+  "rows": 270,
+  "test_size": 0.2
+}

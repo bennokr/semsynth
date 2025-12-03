@@ -77,4 +77,4 @@ all = [
 semsynth = "semsynth.cli:main"
 
 [tool.setuptools]
-packages = ["semsynth"]
+packages = ["semsynth", "map_columns"]

@@ -45,7 +45,12 @@
               <p class="caption" role="heading"><span class="caption-text">Contents</span></p>
 <ul class="current">
 <li class="toctree-l1"><a class="reference internal" href="index.html">Home</a></li>
-<li class="toctree-l1 current"><a class="current reference internal" href="#">Getting started</a></li>
+<li class="toctree-l1 current"><a class="current reference internal" href="#">Getting started</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="#installation">Installation</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#create-semantic-mappings">Create semantic mappings</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#generate-reports">Generate reports</a></li>
+</ul>
+</li>
 <li class="toctree-l1"><a class="reference internal" href="schema.html">SemMap metadata schema</a></li>
 <li class="toctree-l1"><a class="reference internal" href="provenance.html">Provenance workflow guide</a></li>
 <li class="toctree-l1"><a class="reference internal" href="api.html">API reference</a></li>
@@ -77,7 +82,56 @@
              
   <section id="getting-started">
 <h1>Getting started<a class="headerlink" href="#getting-started" title="Link to this heading"></a></h1>
-<p>install, etc</p>
+<p>This guide summarises the minimum commands required to fetch a dataset,
+generate semantic mappings, and produce a SemSynth report driven by those
+mappings.</p>
+<section id="installation">
+<h2>Installation<a class="headerlink" href="#installation" title="Link to this heading"></a></h2>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>python<span class="w"> </span>-m<span class="w"> </span>pip<span class="w"> </span>install<span class="w"> </span>-e<span class="w"> </span>.
+</pre></div>
+</div>
+<p>Optional extras (UMAP, PyBNesian, SynthCity, etc.) can be layered on top by
+supplying the relevant extras group, for example:</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>python<span class="w"> </span>-m<span class="w"> </span>pip<span class="w"> </span>install<span class="w"> </span>-e<span class="w"> </span>.<span class="o">[</span>umap,pybnesian,synthcity<span class="o">]</span>
+</pre></div>
+</div>
+</section>
+<section id="create-semantic-mappings">
+<h2>Create semantic mappings<a class="headerlink" href="#create-semantic-mappings" title="Link to this heading"></a></h2>
+<p>SemSynth now ships with a dedicated command that orchestrates the full
+mapping workflow – metadata parsing, Wikidata lookup, SSSOM emission, and
+SemMap enrichment:</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>python<span class="w"> </span>-m<span class="w"> </span>semsynth<span class="w"> </span>create-mapping<span class="w"> </span>uciml<span class="w"> </span>--datasets<span class="w"> </span><span class="m">145</span><span class="w"> </span><span class="se">\</span>
+<span class="w">    </span>--codes-tsv<span class="w"> </span>map_columns/codes.tsv<span class="w"> </span><span class="se">\</span>
+<span class="w">    </span>--manual-overrides-dir<span class="w"> </span>map_columns/manual<span class="w"> </span><span class="se">\</span>
+<span class="w">    </span>--verbose
+</pre></div>
+</div>
+<p>The command writes <code class="docutils literal notranslate"><span class="pre">*.sssom.tsv</span></code> and <code class="docutils literal notranslate"><span class="pre">*.metadata.json</span></code> artefacts under
+<code class="docutils literal notranslate"><span class="pre">mappings/</span></code>. Manual overrides are optional JSON files where each key is a
+column identifier pointing to a list of SSSOM-style dictionaries.</p>
+<p>To rebuild the Wikidata terminology table offline, run:</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>python<span class="w"> </span>map_columns/extract_wikidata_medical_codes_table.py
+</pre></div>
+</div>
+<p>This produces an updated <code class="docutils literal notranslate"><span class="pre">map_columns/codes.tsv</span></code> enriched with descriptions
+and alternate labels.</p>
+</section>
+<section id="generate-reports">
+<h2>Generate reports<a class="headerlink" href="#generate-reports" title="Link to this heading"></a></h2>
+<p>With mappings in place, execute the reporting pipeline. The default
+<code class="docutils literal notranslate"><span class="pre">configs/maximal_config.yaml</span></code> keeps MetaSyn as the primary backend to ensure
+runs complete even without GPU or shared-memory support:</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>python<span class="w"> </span>-m<span class="w"> </span>semsynth<span class="w"> </span>report<span class="w"> </span>uciml<span class="w"> </span>--datasets<span class="w"> </span><span class="m">145</span><span class="w"> </span><span class="se">\</span>
+<span class="w">    </span>--configs-yaml<span class="w"> </span>configs/maximal_config.yaml<span class="w"> </span><span class="se">\</span>
+<span class="w">    </span>--verbose
+</pre></div>
+</div>
+<p>SemSynth merges the curated mappings during preprocessing. Discrete versus
+continuous inference now honours the statistical data type hints stored in
+the SemMap metadata, so integer-coded categoricals remain categorical in the
+downstream analysis.</p>
+</section>
 </section>
 
 

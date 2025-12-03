@@ -49,7 +49,7 @@ For extra features, run `python -m pip install -e .[EXTRA]` with `EXTRA` in (
     - Pick a configuration bundle from `configs/`:
       - `configs/simple_config.yaml` (MetaSyn + two PyBNesian models)
       - `configs/advanced_config.yaml` (MetaSyn, PyBNesian, and SynthCity models)
-      - `configs/maximal_config.yaml` (enables UMAP, privacy, downstream metrics, and the broadest mix of MetaSyn, PyBNesian, and SynthCity generators)
+      - `configs/maximal_config.yaml` (keeps MetaSyn with aggressive options enabled while remaining runnable without GPU or shared-memory support)
       - `configs/only_metasyn_config.yaml` (MetaSyn baseline only)
    - Example: `python -m semsynth report openml --datasets adult --configs-yaml configs/advanced_config.yaml --generate-umap --compute-privacy --compute-downstream`
 
@@ -62,7 +62,7 @@ For extra features, run `python -m pip install -e .[EXTRA]` with `EXTRA` in (
 ## 📄 Unified YAML format
 - `configs/simple_config.yaml` mixes MetaSyn with two PyBNesian baselines.
 - `configs/advanced_config.yaml` extends the simple bundle with SynthCity generators.
-- `configs/maximal_config.yaml` enables every optional report toggle and includes the widest selection of MetaSyn, PyBNesian, and SynthCity generators.
+- `configs/maximal_config.yaml` toggles every optional report hook (UMAP, privacy, downstream) but ships with a MetaSyn-only bundle so it continues to execute inside restricted environments.
 - `configs/only_metasyn_config.yaml` keeps MetaSyn as the single synthetic data baseline.
 
 Example:
@@ -103,6 +103,8 @@ configs:
 ## 🧰 Metadata templates & column mappings
 - `semsynth/dataproviders/uciml.py` exposes a CLI that turns the JSON payloads cached under `uciml-cache/` (sometimes referenced as `uci-cache/` in earlier docs) into DCAT + DSV JSON-LD that downstream tools can ingest.
 - Scripts under `map_columns/` take that JSON-LD and suggest or write terminology mappings (see `map_columns/README.md`).
+  - `map_columns/codes_map_columns.py` performs fully offline Wikidata matching against `map_columns/codes.tsv`, optionally merging manual overrides into SSSOM output.
+  - `python -m semsynth create-mapping uciml --datasets 145` automates the end-to-end workflow (JSON-LD export → Wikidata scoring → SSSOM merge) and stores the results under `mappings/`.
 
 ### Example: UCI dataset 45 (Heart Disease)
 1. Fetch the dataset metadata. Any command that touches the UCI provider will populate `uciml-cache/<id>.json`. For example:
@@ -128,10 +130,18 @@ configs:
        --verbose
    ```
    Swap in `map_columns/llm_map_columns.py` to drive an LLM-backed workflow that writes an `*.sssom.tsv` file (see `map_columns/README.md` for details).
+4. Run the integrated helper to write mappings and SemMap metadata in one go:
+
+   ```bash
+   python -m semsynth create-mapping uciml --datasets 45 --codes-tsv map_columns/codes.tsv --verbose
+   ```
+   The resulting files (e.g., `mappings/uciml-45.sssom.tsv`) can be fed back into the reporting pipeline without extra steps.
 
 ## 📝 Notes
 - Metadata-only reports require no YAML file; pass `--configs-yaml` to opt into synthetic runs.
 - All models are treated uniformly in the report; UMAPs share the same projection trained on real data.
+- When optional dependencies (e.g., `umap-learn`, PyBNesian, SynthCity) are missing or blocked by runtime sandboxing, SemSynth logs a warning and continues with the available components. The shipped `maximal_config` keeps MetaSyn as the default to guarantee completion under those constraints.
+- If external dataset hosts are unreachable, cached payloads under `downloads-cache/` may contain synthetic stand-ins that mimic the documented schema so pipeline checks can proceed. Keep README notes in sync when such fallbacks are introduced.
 
 ## 📚 Testing, Contributing, Documentation
 - Install dev deps with `python -m pip install -e .[dev]`

@@ -8,7 +8,7 @@ import logging
 from pathlib import Path
 from collections.abc import Mapping
 from dataclasses import asdict, dataclass, is_dataclass
-from typing import TYPE_CHECKING, Any, Dict, Iterable, List, Optional, cast
+from typing import TYPE_CHECKING, Any, Dict, Iterable, List, Optional, Set, cast
 
 import pandas as pd
 import makeprov.core as prov_core
@@ -344,7 +344,67 @@ class DatasetPreprocessor:
         if semmap_metadata is None:
             semmap_metadata = df.semmap()
 
+        def _normalise_statistical_type(value: Any) -> Optional[str]:
+            if hasattr(value, "value"):
+                return value.value  # Enum wrapper
+            if isinstance(value, str):
+                trimmed = value.strip()
+                return trimmed or None
+            return None
+
+        metadata_discrete: Set[str] = set()
+        metadata_continuous: Set[str] = set()
+        if semmap_metadata is not None:
+            categorical_types = {
+                "dsv:CategoricalDataType",
+                "dsv:NominalDataType",
+                "dsv:OrdinalDataType",
+            }
+            continuous_types = {
+                "dsv:NumericalDataType",
+                "dsv:QuantitativeDataType",
+                "dsv:ContinuousDataType",
+                "dsv:RatioDataType",
+                "dsv:IntervalDataType",
+            }
+            for column in semmap_metadata.datasetSchema.columns:
+                name = getattr(column, "name", None)
+                if not name:
+                    continue
+                type_hints = []
+                if column.summaryStatistics:
+                    type_hints.append(
+                        _normalise_statistical_type(
+                            column.summaryStatistics.statisticalDataType
+                        )
+                    )
+                col_prop = getattr(column, "columnProperty", None)
+                if col_prop and getattr(col_prop, "summaryStatistics", None):
+                    type_hints.append(
+                        _normalise_statistical_type(
+                            col_prop.summaryStatistics.statisticalDataType
+                        )
+                    )
+                dtype = next((hint for hint in type_hints if hint), None)
+                if dtype in categorical_types:
+                    metadata_discrete.add(name)
+                elif dtype in continuous_types:
+                    metadata_continuous.add(name)
+                elif col_prop and getattr(col_prop, "hasCodeBook", None):
+                    metadata_discrete.add(name)
+
         disc_cols, cont_cols = self._utils.infer_types(df)
+        disc_set: Set[str] = set(disc_cols)
+        cont_set: Set[str] = set(cont_cols)
+        disc_set |= metadata_discrete
+        cont_set |= {name for name in metadata_continuous if name not in disc_set}
+        # Remove any lingering overlaps while preferring discrete assignments.
+        for name in list(cont_set):
+            if name in disc_set and name not in metadata_continuous:
+                cont_set.discard(name)
+        column_order = list(df.columns)
+        disc_cols = [col for col in column_order if col in disc_set]
+        cont_cols = [col for col in column_order if col in cont_set]
         df_processed = self._utils.coerce_discrete_to_category(df, disc_cols)
         df_processed = self._utils.rename_categorical_categories_to_str(
             df_processed, disc_cols
@@ -383,29 +443,43 @@ class DatasetPreprocessor:
                 "Fitting UMAP on real data sample",
                 extra={"dataset": dataset_spec.name},
             )
-            umap_art = umap_utils.build_umap(
-                df_no_na,
-                disc_cols,
-                cont_cols,
-                color_series=color_series2,
-                rng=rng,
-                random_state=cfg.random_state,
-                max_sample=cfg.max_umap_sample,
-                n_neighbors=cfg.umap_n_neighbors,
-                min_dist=cfg.umap_min_dist,
-                n_components=cfg.umap_n_components,
-            )
-
-            umap_lims = umap_utils.plot_umap(
-                umap_art.embedding,
-                str(umap_png_real),
-                title=f"{dataset_spec.name}: real (sample)",
-                color_labels=umap_art.color_labels,
-            )
-            umap_artifacts = UmapArtifacts(
-                transformer=umap_art, real_png=umap_png_real, limits=umap_lims
-            )
-        elif not umap_png_real.exists():
+            try:
+                umap_art = umap_utils.build_umap(
+                    df_no_na,
+                    disc_cols,
+                    cont_cols,
+                    color_series=color_series2,
+                    rng=rng,
+                    random_state=cfg.random_state,
+                    max_sample=cfg.max_umap_sample,
+                    n_neighbors=cfg.umap_n_neighbors,
+                    min_dist=cfg.umap_min_dist,
+                    n_components=cfg.umap_n_components,
+                )
+                umap_lims = umap_utils.plot_umap(
+                    umap_art.embedding,
+                    str(umap_png_real),
+                    title=f"{dataset_spec.name}: real (sample)",
+                    color_labels=umap_art.color_labels,
+                )
+            except RuntimeError as exc:
+                LOGGER.warning(
+                    "Skipping UMAP generation: %s",
+                    exc,
+                    extra={"dataset": dataset_spec.name},
+                )
+                umap_png_real = None
+            except Exception:
+                LOGGER.exception(
+                    "UMAP generation failed",
+                    extra={"dataset": dataset_spec.name},
+                )
+                umap_png_real = None
+            else:
+                umap_artifacts = UmapArtifacts(
+                    transformer=umap_art, real_png=umap_png_real, limits=umap_lims
+                )
+        elif umap_png_real is not None and not umap_png_real.exists():
             umap_png_real = None
 
         df_fit_sample = df_no_na
