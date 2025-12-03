@@ -20,6 +20,14 @@ def _slugify(value: str) -> str:
     return value.strip("-")
 
 
+def normalize_jsonld_payload(payload: Dict[str, Any]) -> Dict[str, Any]:
+    """Ensure mappings carry the canonical JSON-LD context."""
+
+    if "@context" not in payload or not payload["@context"]:
+        payload["@context"] = JSONLD_CONTEXT_URL
+    return payload
+
+
 def resolve_mapping_json(dataset_spec: DatasetSpec) -> Optional[Path]:
     """Return the curated JSON-LD mapping path for the dataset if it exists."""
     mappings_dir = _mappings_dir()
@@ -67,4 +75,4 @@ def load_mapping_json(path: Path) -> Dict[str, Any]:
     if not isinstance(data, dict):
         raise ValueError("Mapping JSON must be an object")
 
-    return data
+    return normalize_jsonld_payload(data)

@@ -2,3 +2,4 @@ base_iri = "https://w3id.org/semsynth/demo#"
 prov_dir = "output/provenance"
 force = false
 dry_run = false
+merge = true

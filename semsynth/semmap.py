@@ -11,6 +11,8 @@ import pyarrow as pa
 import pyarrow.parquet as pq
 from pint_pandas import PintType
 
+from .utils import normalize_variable_descriptors
+
 CONTEXT = {
     "@context": {
         "csvw": "http://www.w3.org/ns/csvw#",
@@ -217,6 +219,11 @@ class Metadata(RDFMixin):
             elif isinstance(raw_columns, list):
                 columns_json = [c for c in raw_columns if isinstance(c, Mapping)]
 
+        descriptor_lookup = {
+            descriptor.name: descriptor
+            for descriptor in normalize_variable_descriptors(columns_json)
+        }
+
         columns: List[Column] = []
         for col_json in columns_json:
             summary = col_json.get("dsv:summaryStatistics") or col_json.get("summaryStatistics")
@@ -230,7 +237,17 @@ class Metadata(RDFMixin):
                 column_stats = None
             col_prop_json = col_json.get("dsv:columnProperty") or col_json.get("columnProperty")
             col_prop = ColumnProperty.from_jsonld(col_prop_json) if isinstance(col_prop_json, Mapping) else None
-            unit_text = col_json.get("schema:unitText") or col_json.get("unitText")
+            descriptor = descriptor_lookup.get(
+                str(
+                    col_json.get("schema:name")
+                    or col_json.get("name")
+                    or col_json.get("column")
+                    or ""
+                )
+            )
+            unit_text = (
+                descriptor.unit if descriptor and descriptor.unit else None
+            ) or col_json.get("schema:unitText") or col_json.get("unitText")
             if unit_text:
                 if col_prop is None:
                     col_prop = ColumnProperty(unitText=unit_text)
@@ -245,13 +262,16 @@ class Metadata(RDFMixin):
             )
             if not name:
                 continue
+            descriptor = descriptor_lookup.get(str(name))
+            description = descriptor.description if descriptor and descriptor.description else col_json.get("dcterms:description")
+            role = descriptor.role if descriptor and descriptor.role else col_json.get("prov:hadRole")
             columns.append(
                 Column(
                     name=name,
                     titles=col_json.get("csvw:titles") or col_json.get("titles") or col_json.get("dcterms:title"),
-                    description=col_json.get("dcterms:description"),
+                    description=description,
                     about=col_json.get("schema:about"),
-                    hadRole=col_json.get("prov:hadRole"),
+                    hadRole=role,
                     identifier=col_json.get("schema:identifier"),
                     defaultValue=col_json.get("schema:defaultValue"),
                     columnProperty=col_prop,

@@ -4,9 +4,9 @@ from __future__ import annotations
 
 import logging
 from pathlib import Path
-from typing import TYPE_CHECKING, Any, List, Optional, Literal, Tuple
+from typing import TYPE_CHECKING, Any, List, Optional
 
-from makeprov import GLOBAL_CONFIG, OutPath, rule, main
+from makeprov import GLOBAL_CONFIG, OutPath, main, rule
 
 from .app import run_app
 from .catalog import build_catalog
@@ -20,7 +20,7 @@ if TYPE_CHECKING:  # pragma: no cover - imported for typing only
 
 
 
-@rule()
+@rule(merge=True)
 def search(
     provider: str,
     *,
@@ -64,21 +64,7 @@ def search(
         handle.write(output_text)
 
 
-Toggle = Literal["auto", "on", "off"]
-
-
-def _toggle_value(mode: Toggle) -> Tuple[Optional[bool], bool]:
-    value = mode.lower()
-    if value == "auto":
-        return None, False
-    if value == "on":
-        return True, True
-    if value == "off":
-        return False, True
-    raise ValueError(f"Unknown toggle mode: {mode}")
-
-
-@rule(phony=True)
+@rule(merge=True, phony=True)
 def report(
     provider: str = "openml",
     *,
@@ -87,10 +73,10 @@ def report(
     configs_yaml: str = "",
     area: str = "Health and Medicine",
     verbose: bool = False,
-    generate_umap: Toggle = "auto",
+    generate_umap: bool = False,
     overwrite_umap: bool = False,
-    compute_privacy: Toggle = "auto",
-    compute_downstream: Toggle = "auto",
+    compute_privacy: bool = False,
+    compute_downstream: bool = False,
 ) -> None:
     """Run the report pipeline on a collection of datasets.
 
@@ -102,12 +88,10 @@ def report(
         configs_yaml: Path to a YAML file defining synthetic data model configurations.
         area: Default topic area for UCI datasets.
         verbose: Whether to enable informational logging during execution.
-        generate_umap: Control UMAP generation (``"auto"``, ``"on"``, or ``"off"``).
+        generate_umap: Whether to generate UMAP projections for datasets.
         overwrite_umap: Whether to regenerate synthetic UMAP plots when files exist.
-        compute_privacy: Control privacy metrics computation (``"auto"``, ``"on"``,
-            or ``"off"``).
-        compute_downstream: Control downstream fidelity metrics computation
-            (``"auto"``, ``"on"``, or ``"off"``).
+        compute_privacy: Whether to compute privacy metrics for each model run.
+        compute_downstream: Whether to compute downstream fidelity metrics.
     """
     from .datasets import DatasetSpec, load_dataset, specs_from_input
     from .models import ModelConfigBundle, load_model_configs
@@ -127,33 +111,23 @@ def report(
     bundle = load_model_configs(configs_yaml.strip() or None)
 
     cfg = PipelineConfig()
+    cfg.generate_umap = generate_umap
+    cfg.compute_privacy = compute_privacy
+    cfg.compute_downstream = compute_downstream
     cfg.overwrite_umap = overwrite_umap
-    toggles = {
-        "generate_umap": generate_umap,
-        "compute_privacy": compute_privacy,
-        "compute_downstream": compute_downstream,
-    }
-    toggle_fields = {
-        "generate_umap": "override_generate_umap",
-        "compute_privacy": "override_compute_privacy",
-        "compute_downstream": "override_compute_downstream",
-    }
-    for key, mode in toggles.items():
-        explicit_value, is_explicit = _toggle_value(mode)
-        if is_explicit:
-            setattr(cfg, toggle_fields[key], explicit_value)
 
     for dataset_spec in dataset_specs:
         logging.info("Loading dataset %s", dataset_spec)
         try:
-            resolved_spec, df, color = load_dataset(dataset_spec)
+            payload = load_dataset(dataset_spec)
+            resolved_spec = payload.spec
             dataset_label = resolved_spec.name or str(resolved_spec.id)
             dataset_outdir = outdir_path / str(dataset_label).replace("/", "_")
-            GLOBAL_CONFIG.prov_path = dataset_outdir / "prov"
+            GLOBAL_CONFIG.prov_dir = str(dataset_outdir / "prov")
             process_dataset(
                 resolved_spec,
-                df,
-                color,
+                payload.frame,
+                payload.color,
                 str(outdir_path),
                 model_bundle=bundle,
                 pipeline_config=cfg,

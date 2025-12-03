@@ -19,6 +19,8 @@ import json
 from pathlib import Path
 from typing import Any, Dict, List, Optional, Tuple, Union
 
+from semsynth.mappings import normalize_jsonld_payload
+
 Value = Union[str, int, float, bool, dict, list, None]
 SCHEMA_ORG = "https://schema.org/"
 
@@ -317,12 +319,25 @@ def main() -> None:
     ap.add_argument("--title", default="JSON-LD to RDFa", help="HTML <title>")
     args = ap.parse_args()
 
-    data = json.loads(Path(args.input).read_text(encoding="utf-8"))
-    context = None
-    if isinstance(data, dict):
+    data_raw = json.loads(Path(args.input).read_text(encoding="utf-8"))
+    context: Any = None
+    if isinstance(data_raw, dict):
+        data = normalize_jsonld_payload(data_raw)
         context = data.get("@context")
-    elif isinstance(data, list) and data and isinstance(data[0], dict):
-        context = data[0].get("@context")
+    elif isinstance(data_raw, list):
+        normalized_items: List[Any] = []
+        for item in data_raw:
+            if isinstance(item, dict):
+                normalized_items.append(normalize_jsonld_payload(item))
+            else:
+                normalized_items.append(item)
+        data = normalized_items
+        for item in normalized_items:
+            if isinstance(item, dict) and item.get("@context"):
+                context = item["@context"]
+                break
+    else:
+        data = data_raw
     if context is None:
         context = SCHEMA_ORG
 

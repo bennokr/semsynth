@@ -1,18 +1,19 @@
 from __future__ import annotations
 
-from typing import Any, Iterable, List, Optional, Tuple
+from typing import Iterable, List, Optional
 
 import pathlib
 
-import pandas as pd
 from makeprov import InPath, OutPath, rule
 
+from .dataproviders._helpers import DatasetPayload
 from .dataproviders.openml import get_default_openml, list_openml, load_openml_by_name
 from .dataproviders.uciml import get_default_uciml, list_uciml, load_uciml_by_id
 from .specs import DatasetSpec
 
 __all__ = [
     "DatasetSpec",
+    "DatasetPayload",
     "specs_from_input",
     "load_dataset",
     "list_openml",
@@ -36,7 +37,7 @@ def _as_path(path_like: pathlib.Path | InPath | OutPath | str) -> pathlib.Path:
     return pathlib.Path(path_like)
 
 
-@rule(phony=True)
+@rule(merge=True, phony=True)
 def specs_from_input(
     provider: str,
     datasets: Optional[Iterable[str]] = None,
@@ -69,14 +70,16 @@ def specs_from_input(
             return get_default_uciml(area=area)
 
 
-@rule(phony=True)
+@rule(merge=True, phony=True)
 def load_dataset(
     spec: DatasetSpec,
     *,
     openml_cache_dir: pathlib.Path = pathlib.Path(str(_OPENML_CACHE_DIR)),
     uciml_cache_dir: pathlib.Path = pathlib.Path(str(_UCIML_CACHE_DIR)),
-) -> Tuple[Any, pd.DataFrame, Optional[pd.Series]]:
+) -> DatasetPayload:
     if spec.provider == "openml":
+        if not spec.name:
+            raise ValueError("OpenML dataset requires a name.")
         return load_openml_by_name(spec.name, _as_path(openml_cache_dir))
     elif spec.provider == "uciml":
         if spec.id is None:

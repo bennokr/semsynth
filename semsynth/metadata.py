@@ -4,10 +4,12 @@ from dataclasses import dataclass, field
 import json
 import logging
 from pathlib import Path
-from typing import Any, Dict, List, Optional
+from typing import Any, Dict, List, Optional, Mapping
 
 
 from makeprov import RDFMixin
+
+from .utils import normalize_variable_descriptors
 
 JSONLD_CONTEXT = {
     "@context": {
@@ -130,18 +132,11 @@ def get_uciml_variable_descriptions(dataset_id: int) -> Dict[str, str]:
             )
             variables = []
 
-    desc_map: Dict[str, str] = {}
-    for var in variables:
-        name: Optional[str] = None
-        description: Optional[str] = None
-        if isinstance(var, dict):
-            name = var.get("name") or var.get("column")
-            description = var.get("description")
-        else:
-            name = getattr(var, "name", None) or getattr(var, "column", None)
-            description = getattr(var, "description", None)
-
-        if name and description:
-            desc_map[str(name)] = str(description)
-
-    return desc_map
+    descriptors = normalize_variable_descriptors(
+        var if isinstance(var, Mapping) else vars(var) for var in variables
+    )
+    return {
+        descriptor.name: descriptor.description or ""
+        for descriptor in descriptors
+        if descriptor.description
+    }

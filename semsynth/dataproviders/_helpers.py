@@ -2,9 +2,62 @@
 
 from __future__ import annotations
 
-from typing import Iterable, Mapping, Optional, Tuple
+import json
+from dataclasses import dataclass
+from pathlib import Path
+from typing import Any, Dict, Iterable, Mapping, Optional, Tuple
 
 import pandas as pd
+
+from ..specs import DatasetSpec
+
+
+@dataclass(slots=True)
+class CachePaths:
+    """Canonical cache locations for a dataset payload."""
+
+    data: Path
+    meta: Path
+
+    def ensure(self) -> None:
+        """Ensure parent directories exist before writing artifacts."""
+
+        self.data.parent.mkdir(parents=True, exist_ok=True)
+        self.meta.parent.mkdir(parents=True, exist_ok=True)
+
+
+@dataclass(slots=True)
+class DatasetPayload:
+    """Bundled dataset artefacts returned by provider loaders."""
+
+    spec: DatasetSpec
+    frame: pd.DataFrame
+    color: Optional[pd.Series] = None
+    metadata: Optional[Mapping[str, Any]] = None
+
+
+def load_cached_payload(paths: CachePaths) -> Optional[Tuple[pd.DataFrame, Dict[str, Any]]]:
+    """Return cached dataframe and metadata when both files exist."""
+
+    if not paths.data.exists():
+        return None
+    frame = pd.read_csv(paths.data).convert_dtypes()
+    meta: Dict[str, Any] = {}
+    if paths.meta.exists():
+        try:
+            meta_text = paths.meta.read_text(encoding="utf-8")
+            meta = json.loads(meta_text) if meta_text else {}
+        except json.JSONDecodeError:
+            meta = {}
+    return frame, meta
+
+
+def store_cached_payload(paths: CachePaths, frame: pd.DataFrame, meta: Mapping[str, Any]) -> None:
+    """Persist dataframe and metadata to cache paths."""
+
+    paths.ensure()
+    frame.to_csv(paths.data, index=False, compression="infer")
+    paths.meta.write_text(json.dumps(meta, indent=2), encoding="utf-8")
 
 
 def clean_dataset_frame(
@@ -20,18 +73,6 @@ def clean_dataset_frame(
     identify the target column. When a target column is found, the returned
     series is annotated with ``prov:hadRole = "target"`` for downstream
     consumers.
-
-    Args:
-        df: The dataframe to clean.
-        target: Optional pre-selected target column name.
-        metadata: Optional metadata mapping that may contain SemMap-style
-            ``prov:hadRole`` annotations.
-
-    Returns:
-        A tuple ``(clean_df, detected_target, color_series)`` where ``clean_df``
-        has identifier columns removed, ``detected_target`` is the name of the
-        selected target column (if any), and ``color_series`` is the corresponding
-        series from ``clean_df`` with ``prov:hadRole`` metadata when available.
     """
 
     clean_df = df.copy()
@@ -101,5 +142,10 @@ def clean_dataset_frame(
     return clean_df, detected_target, color_series
 
 
-__all__ = ["clean_dataset_frame"]
-
+__all__ = [
+    "CachePaths",
+    "DatasetPayload",
+    "clean_dataset_frame",
+    "load_cached_payload",
+    "store_cached_payload",
+]

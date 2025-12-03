@@ -14,6 +14,8 @@ from typing import Dict, List, Optional, Sequence, Set, Tuple
 
 from makeprov import GLOBAL_CONFIG, InPath, RDFMixin, OutPath, main, rule
 
+from .mappings import normalize_jsonld_payload
+
 LOGGER = logging.getLogger(__name__)
 
 
@@ -354,7 +356,8 @@ def build_catalog(
         datasets=datasets,
     )
     write_index(index_path, dataset_dirs)
-    out_path.write_text(json.dumps(catalog.to_jsonld(), indent=2))
+    catalog_payload = normalize_jsonld_payload(catalog.to_jsonld())
+    out_path.write_text(json.dumps(catalog_payload, indent=2))
 
 
 if __name__ == "__main__":  # pragma: no cover - CLI bridge

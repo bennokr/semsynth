@@ -6,13 +6,19 @@ import json
 import logging
 import pathlib
 import warnings
-from typing import List, Optional, Tuple
+from typing import Dict, List, Optional
 
 import pandas as pd
 from pathlib import Path
 
 from ..specs import DatasetSpec
-from ._helpers import clean_dataset_frame
+from ._helpers import (
+    CachePaths,
+    DatasetPayload,
+    clean_dataset_frame,
+    load_cached_payload,
+    store_cached_payload,
+)
 
 
 def get_default_openml(
@@ -68,43 +74,58 @@ def list_openml(
     return sets.rename(columns=rename)
 
 
-def load_openml_by_name(
-    name: str, cache_dir: pathlib.Path | Path
-) -> Tuple[DatasetSpec, pd.DataFrame, Optional[pd.Series]]:
+def _openml_cache_paths(cache_root: Path, dataset_id: int) -> CachePaths:
+    return CachePaths(
+        data=cache_root / f"{dataset_id}.csv.gz",
+        meta=cache_root / f"{dataset_id}.meta.json",
+    )
+
+
+def load_openml_by_name(name: str, cache_dir: pathlib.Path | Path) -> DatasetPayload:
     """Load an OpenML dataset by name, with local caching of the data payload.
 
     Caching layout:
-      - downloads-cache/openml/by_name/{name}.json: minimal metadata with DID and color column
-      - downloads-cache/openml/{did}.csv.gz: cached tabular data
-
-    On cache hit, returns a minimal metadata dict instead of the OpenML object.
+      - downloads-cache/openml/by_name/{name}.json: pointer to dataset ID and metadata.
+      - downloads-cache/openml/{did}.csv.gz: cached tabular data.
     """
 
-    cache_root = pathlib.Path(cache_dir)
-    by_name_dir = cache_root / "by_name"
-    by_name_dir.mkdir(parents=True, exist_ok=True)
+    cache_root = Path(cache_dir)
+    alias_dir = cache_root / "by_name"
+    alias_dir.mkdir(parents=True, exist_ok=True)
 
     spec = DatasetSpec(provider="openml", name=name)
+    alias_path = alias_dir / f"{name}.json"
+    dataset_id: Optional[int] = None
+    alias_info: Dict[str, object] = {}
+    if alias_path.exists():
+        alias_info = json.loads(alias_path.read_text(encoding="utf-8")) or {}
+        dataset_id_raw = alias_info.get("did") or alias_info.get("dataset_id") or alias_info.get("id")
+        if dataset_id_raw is not None:
+            dataset_id = int(dataset_id_raw)
 
-    # 1) Try cache-by-name first (offline-friendly)
-    by_name_meta = by_name_dir / f"{name}.json"
-    if by_name_meta.exists():
-        try:
-            info = json.loads(by_name_meta.read_text())
-            spec.id = int(info.get("did") or info.get("dataset_id") or info.get("id"))
-            data_path = by_name_dir / f"{spec.id}.csv.gz"
-            if data_path.exists():
-                df_all = pd.read_csv(data_path).convert_dtypes()
-                spec.target = info.get("target")
-                df_all, detected_target, color_series = clean_dataset_frame(
-                    df_all, target=spec.target, metadata=info
-                )
-                spec.target = spec.target or detected_target
-                spec.name = str(info.get("name") or name)
-                spec.meta = info
-                return spec, df_all, color_series
-        except Exception:
-            pass
+    if dataset_id is not None:
+        cache_paths = _openml_cache_paths(cache_root, dataset_id)
+        cached = load_cached_payload(cache_paths)
+        if cached:
+            df_cached, meta_cached = cached
+            spec.id = dataset_id
+            target_hint = alias_info.get("target") or meta_cached.get("target")
+            if isinstance(target_hint, str) and target_hint:
+                spec.target = target_hint
+            else:
+                spec.target = None
+            df_clean, detected_target, color_series = clean_dataset_frame(
+                df_cached, target=spec.target, metadata=meta_cached
+            )
+            spec.target = spec.target or detected_target
+            spec.name = str(meta_cached.get("name") or name)
+            spec.meta = meta_cached
+            return DatasetPayload(
+                spec=spec,
+                frame=df_clean,
+                color=color_series,
+                metadata=meta_cached,
+            )
 
     # 2) Fallback to OpenML API and cache results
     import openml
@@ -117,28 +138,40 @@ def load_openml_by_name(
     df = df[df["name"] == name]
     if df.empty:
         raise ValueError(f"No active OpenML dataset named {name!r}.")
-    spec.id = int(df.sort_values("version", ascending=False).iloc[0]["did"])
-    spec.meta = openml.datasets.get_dataset(spec.id)
-    Xy, _, _, _ = spec.meta.get_data(dataset_format="dataframe")
+    latest = df.sort_values("version", ascending=False).iloc[0]
+    dataset_id = int(latest["did"])
+    dataset = openml.datasets.get_dataset(dataset_id)
+    spec.id = dataset_id
+    spec.name = dataset.name or name
+
+    Xy, _, _, _ = dataset.get_data(dataset_format="dataframe")
     df_all = Xy.copy()
-    df_all, detected_target, color_series = clean_dataset_frame(df_all)
+    df_clean, detected_target, color_series = clean_dataset_frame(df_all)
     if detected_target:
         spec.target = detected_target
 
-    # Persist cache
-    try:
-        data_path = cache_root / f"{spec.id}.csv.gz"
-        df_all.to_csv(data_path, index=False, compression="infer")
-        by_name_meta.write_text(
-            json.dumps(
-                {
-                    "name": name,
-                    "id": spec.id,
-                    "target": spec.target,
-                }
-            )
-        )
-    except Exception:
-        pass
+    metadata_payload: Dict[str, object] = {
+        "id": dataset_id,
+        "name": spec.name,
+        "version": dataset.version,
+        "target": spec.target,
+        "url": dataset.url,
+        "collection_date": getattr(dataset, "collection_date", None),
+    }
+    spec.meta = metadata_payload
 
-    return spec, df_all, color_series
+    cache_paths = _openml_cache_paths(cache_root, dataset_id)
+    store_cached_payload(cache_paths, df_clean, metadata_payload)
+    alias_payload = {
+        "id": dataset_id,
+        "name": spec.name,
+        "target": spec.target,
+    }
+    alias_path.write_text(json.dumps(alias_payload, indent=2), encoding="utf-8")
+
+    return DatasetPayload(
+        spec=spec,
+        frame=df_clean,
+        color=color_series,
+        metadata=metadata_payload,
+    )

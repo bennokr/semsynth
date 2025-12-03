@@ -84,17 +84,19 @@ def _run_report(
     
     dataset_specs = specs_from_input(provider=provider, datasets=datasets, area=area)
     bundle = load_model_configs(configs_yaml.strip() or None)
+    cfg = PipelineConfig()
 
     for dataset_spec in dataset_specs:
         logging.info("Loading dataset %s", dataset_spec)
-        resolved_spec, df, color = load_dataset(dataset_spec)
+        payload = load_dataset(dataset_spec)
+        resolved_spec = payload.spec
         dataset_label = resolved_spec.name or str(resolved_spec.id)
         dataset_outdir = outdir_path / str(dataset_label).replace("/", "_")
-        GLOBAL_CONFIG.prov_path = dataset_outdir / "prov"
+        GLOBAL_CONFIG.prov_dir = str(dataset_outdir / "prov")
         process_dataset(
             resolved_spec,
-            df,
-            color,
+            payload.frame,
+            payload.color,
             str(outdir_path),
             model_bundle=bundle,
             pipeline_config=cfg,
@@ -202,4 +204,3 @@ def run_app(*, host: str = "127.0.0.1", port: int = 5000, debug: bool = False) -
     logging.basicConfig(level=logging.INFO)
     LOGGER.info("Starting SemSynth app on %s:%s (debug=%s)", host, port, debug)
     create_app().run(host=host, port=port, debug=debug)
-

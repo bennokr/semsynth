@@ -5,7 +5,7 @@ from __future__ import annotations
 import numpy as np
 import pandas as pd
 
-from semsynth.backends.missingness import DataFrameMissingnessModel
+from semsynth.missingness import DataFrameMissingnessModel
 
 
 def test_missingness_model_matches_marginal_rate() -> None:

@@ -1,8 +1,9 @@
 from __future__ import annotations
 
-import os
 import math
-from typing import List, Optional, Tuple
+import os
+from dataclasses import dataclass
+from typing import Dict, Iterable, List, Mapping, Optional, Tuple
 
 import numpy as np
 import pandas as pd
@@ -343,3 +344,59 @@ def dataframe_to_markdown_table(df: pd.DataFrame, float_fmt: str = "{:.4f}") -> 
     for _, r in df.iterrows():
         lines.append("| " + " | ".join(fmt(r[c]) for c in cols) + " |")
     return "\n".join(lines)
+@dataclass(slots=True)
+class VariableDescriptor:
+    """Normalized representation of a dataset variable."""
+
+    name: str
+    description: Optional[str] = None
+    role: Optional[str] = None
+    unit: Optional[str] = None
+
+    def as_dict(self) -> Dict[str, Optional[str]]:
+        """Return a serializable mapping of descriptor attributes."""
+
+        return {
+            "name": self.name,
+            "description": self.description,
+            "role": self.role,
+            "unit": self.unit,
+        }
+
+
+def normalize_variable_descriptors(
+    variables: Iterable[Mapping[str, object]],
+) -> List[VariableDescriptor]:
+    """Normalize heterogeneous metadata mappings into variable descriptors.
+
+    Args:
+        variables: Iterable of dictionaries originating from provider metadata.
+
+    Returns:
+        List of :class:`VariableDescriptor` instances with harmonized fields.
+    """
+
+    descriptors: List[VariableDescriptor] = []
+    for entry in variables:
+        if not isinstance(entry, Mapping):
+            continue
+        raw_name = (
+            entry.get("schema:name")
+            or entry.get("name")
+            or entry.get("column")
+            or entry.get("column_name")
+        )
+        if not raw_name:
+            continue
+        description = entry.get("dcterms:description") or entry.get("description")
+        role = entry.get("prov:hadRole") or entry.get("role")
+        unit = entry.get("schema:unitText") or entry.get("unitText") or entry.get("unit")
+        descriptors.append(
+            VariableDescriptor(
+                name=str(raw_name),
+                description=str(description) if isinstance(description, str) else None,
+                role=str(role) if isinstance(role, str) else None,
+                unit=str(unit) if isinstance(unit, str) else None,
+            )
+        )
+    return descriptors

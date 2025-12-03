@@ -7,14 +7,20 @@ from datetime import datetime
 import json
 import logging
 import pathlib
-from typing import Any, List, Mapping, Optional, Tuple
+from typing import Any, Dict, List, Mapping, Optional
 
 import pandas as pd
 import requests
 from makeprov import OutPath, rule
 
 from ..specs import DatasetSpec
-from ._helpers import clean_dataset_frame
+from ._helpers import (
+    CachePaths,
+    DatasetPayload,
+    clean_dataset_frame,
+    load_cached_payload,
+    store_cached_payload,
+)
 
 
 EMPTY = (None, "", [], {},)
@@ -318,78 +324,52 @@ def get_default_uciml(
     return [DatasetSpec("uciml", name=r.name, id=r.id) for r in df.itertuples()]
 
 
+def _uciml_cache_paths(cache_dir: pathlib.Path | OutPath, dataset_id: int) -> CachePaths:
+    cache_base = pathlib.Path(cache_dir)
+    return CachePaths(
+        data=cache_base / f"{dataset_id}.csv.gz",
+        meta=cache_base / f"{dataset_id}.meta.json",
+    )
+
+
 @rule(phony=True)
-def load_uciml_by_id(
-    dataset_id: int, cache_dir: pathlib.Path | OutPath
-) -> Tuple[DatasetSpec, pd.DataFrame, Optional[pd.Series]]:
+def load_uciml_by_id(dataset_id: int, cache_dir: pathlib.Path | OutPath) -> DatasetPayload:
     """Load a UCI ML dataset by ID, with local caching of the data payload.
 
     Caching layout:
       - {cache_dir}/{id}.csv.gz: cached tabular data
       - {cache_dir}/{id}.meta.json: minimal metadata (name, color column)
     """
-    cache_base = pathlib.Path(cache_dir)
-    cache_base.mkdir(parents=True, exist_ok=True)
-    data_path = cache_base / f"{dataset_id}.csv.gz"
-    meta_path = cache_base / f"{dataset_id}.meta.json"
+    cache_paths = _uciml_cache_paths(cache_dir, dataset_id)
+    cache_paths.ensure()
 
+    cached = load_cached_payload(cache_paths)
     spec = DatasetSpec(provider="uciml", id=dataset_id)
+    if cached:
+        df_cached, meta_cached = cached
+        target_hint = meta_cached.get("target")
+        if isinstance(target_hint, str) and target_hint:
+            spec.target = target_hint
+        df_clean, detected_target, color_series = clean_dataset_frame(
+            df_cached, target=spec.target, metadata=meta_cached
+        )
+        spec.target = spec.target or detected_target
+        spec.name = str(meta_cached.get("name") or f"UCI_{dataset_id}")
+        spec.meta = meta_cached.get("dcat_dsv") or meta_cached
+        return DatasetPayload(
+            spec=spec,
+            frame=df_clean,
+            color=color_series,
+            metadata=spec.meta,
+        )
 
-    if data_path.exists():
-        try:
-            df_all = pd.read_csv(data_path).convert_dtypes()
-            meta_dict = {}
-            try:
-                meta_dict = (
-                    json.loads(meta_path.read_text()) if meta_path.exists() else {}
-                )
-            except Exception:
-                meta_dict = {}
-            spec.target = meta_dict.get("target")
-            df_all, detected_target, color_series = clean_dataset_frame(
-                df_all, target=spec.target, metadata=meta_dict
-            )
-            spec.target = spec.target or detected_target
-
-            spec.name = meta_dict.get("name") or f"UCI_{dataset_id}"
-            spec.meta = meta_dict.get("dcat_dsv") or meta_dict
-            if not spec.meta:
-                spec.meta = {
-                    "dcat:landingPage": f"https://archive.ics.uci.edu/dataset/{int(dataset_id)}"
-                }
-            return spec, df_all, color_series
-        except Exception:
-            # Fall back to online path
-            pass
-
-    # Online fetch via ucimlrepo and then cache
-    import ssl
     from ucimlrepo import fetch_ucirepo
 
-    try:
-        d = fetch_ucirepo(id=dataset_id)
-    except ConnectionError as exc:  # pragma: no cover - network dependent
-        logging.warning(
-            "Retrying uciml fetch with unverified SSL context due to %s", exc
-        )
-        default_https_context = ssl._create_default_https_context
-        default_context_factory = ssl.create_default_context
+    logging.info("Downloading UCI ML dataset %s", dataset_id)
+    dataset = fetch_ucirepo(id=dataset_id)
 
-        def insecure_context(*args, **kwargs):
-            context = default_context_factory(*args, **kwargs)
-            context.check_hostname = False
-            context.verify_mode = ssl.CERT_NONE
-            return context
-
-        try:
-            ssl._create_default_https_context = ssl._create_unverified_context
-            ssl.create_default_context = insecure_context
-            d = fetch_ucirepo(id=dataset_id)
-        finally:
-            ssl._create_default_https_context = default_https_context
-            ssl.create_default_context = default_context_factory
-    X = d.data.features
-    y = d.data.targets
+    X = dataset.data.features
+    y = dataset.data.targets
     if y is None:
         df_all = X.copy()
         color_series = None
@@ -400,32 +380,32 @@ def load_uciml_by_id(
         )
         color_series = df_all[spec.target] if spec.target in df_all.columns else None
 
-    df_all, detected_target, color_series = clean_dataset_frame(
+    df_clean, detected_target, color_series = clean_dataset_frame(
         df_all, target=spec.target
     )
     if detected_target:
         spec.target = detected_target
 
-    raw_metadata: Mapping[str, Any] = dict(d.metadata)
+    raw_metadata: Mapping[str, Any] = dict(dataset.metadata)
     raw_metadata.setdefault("uci_id", dataset_id)
-    dcat_dsv_meta = _uciml_metadata_to_dcat_dsv(raw_metadata, d.variables, dataset_id)
+    dcat_dsv_meta = _uciml_metadata_to_dcat_dsv(raw_metadata, dataset.variables, dataset_id)
     spec.meta = dcat_dsv_meta
-    spec.name = getattr(d.metadata, "name", f"UCI_{dataset_id}")
+    spec.name = getattr(dataset.metadata, "name", f"UCI_{dataset_id}")
 
-    # Persist cache
-    try:
-        df_all.to_csv(data_path, index=False, compression="infer")
-        meta_info = {
-            "id": spec.id,
-            "name": spec.name,
-            "target": spec.target,
-            "dcat_dsv": dcat_dsv_meta,
-        }
-        meta_path.write_text(json.dumps(meta_info))
-    except Exception:
-        pass
+    meta_payload: Dict[str, Any] = {
+        "id": dataset_id,
+        "name": spec.name,
+        "target": spec.target,
+        "dcat_dsv": dcat_dsv_meta,
+    }
+    store_cached_payload(cache_paths, df_clean, meta_payload)
 
-    return spec, df_all, color_series
+    return DatasetPayload(
+        spec=spec,
+        frame=df_clean,
+        color=color_series,
+        metadata=dcat_dsv_meta,
+    )
 
 
 if __name__ == "__main__":

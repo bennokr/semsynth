@@ -20,7 +20,7 @@ dependencies = [
   "openml",
   "pandas",
   "pint-pandas",
-  "makeprov>=0.4.0",
+  "makeprov==0.4.2",
   "pyarrow",
   "tabulate",
   "pyyaml",

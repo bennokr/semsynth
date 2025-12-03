@@ -1,4 +1,4 @@
-"""Tests covering pipeline flag behaviors and lazy imports."""
+"""Tests covering pipeline flag behaviours and dependency loading."""
 
 from __future__ import annotations
 
@@ -79,9 +79,11 @@ def test_process_dataset_skips_umap_when_disabled(
 
     pipeline_module = importlib.reload(pipeline_module)
 
-    monkeypatch.setattr(pipeline_module, "_import_umap_utils", fake_import_umap_utils)
-    monkeypatch.setattr(pipeline_module, "_import_utils", lambda: dummy_utils)
-    monkeypatch.setattr(pipeline_module, "_import_reporting", lambda: dummy_reporting)
+    monkeypatch.setattr(pipeline_module, "_load_umap_utils_module", fake_import_umap_utils)
+    monkeypatch.setattr(pipeline_module, "_load_utils_module", lambda: dummy_utils)
+    monkeypatch.setattr(pipeline_module, "_load_reporting_module", lambda: dummy_reporting)
+    monkeypatch.setattr(pipeline_module, "_load_privacy_summarizer", lambda: lambda *_args, **_kwargs: {})
+    monkeypatch.setattr(pipeline_module, "_load_downstream_compare", lambda: lambda *_args, **_kwargs: {})
     monkeypatch.setattr(pipeline_module, "resolve_mapping_json", lambda *_: None)
     monkeypatch.setattr(pipeline_module, "get_uciml_variable_descriptions", lambda *_: {})
     monkeypatch.setattr(pipeline_module, "discover_model_runs", lambda *_: [])
@@ -133,15 +135,17 @@ def test_existing_umap_is_respected(
 
     monkeypatch.setattr(
         pipeline_module,
-        "_import_umap_utils",
+        "_load_umap_utils_module",
         lambda: SimpleNamespace(
             build_umap=fake_build_umap,
             plot_umap=fake_plot_umap,
             transform_with_umap=fake_transform_with_umap,
         ),
     )
-    monkeypatch.setattr(pipeline_module, "_import_utils", lambda: dummy_utils)
-    monkeypatch.setattr(pipeline_module, "_import_reporting", lambda: dummy_reporting)
+    monkeypatch.setattr(pipeline_module, "_load_utils_module", lambda: dummy_utils)
+    monkeypatch.setattr(pipeline_module, "_load_reporting_module", lambda: dummy_reporting)
+    monkeypatch.setattr(pipeline_module, "_load_privacy_summarizer", lambda: lambda *_args, **_kwargs: {})
+    monkeypatch.setattr(pipeline_module, "_load_downstream_compare", lambda: lambda *_args, **_kwargs: {})
     monkeypatch.setattr(pipeline_module, "resolve_mapping_json", lambda *_: None)
     monkeypatch.setattr(pipeline_module, "get_uciml_variable_descriptions", lambda *_: {})
     monkeypatch.setattr("semsynth.utils.coerce_discrete_to_category", lambda df, cols: df)

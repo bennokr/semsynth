@@ -2,13 +2,13 @@
 
 from __future__ import annotations
 
-from dataclasses import asdict, dataclass, is_dataclass
-from collections.abc import Mapping
 import importlib
 import json
 import logging
 from pathlib import Path
-from typing import Any, Dict, Iterable, List, Optional, TYPE_CHECKING, cast
+from collections.abc import Mapping
+from dataclasses import asdict, dataclass, is_dataclass
+from typing import TYPE_CHECKING, Any, Dict, Iterable, List, Optional, cast
 
 import pandas as pd
 import makeprov.core as prov_core
@@ -19,8 +19,11 @@ from .backends.base import BackendModule, ensure_backend_contract
 from .mappings import load_mapping_json, resolve_mapping_json
 from .metadata import get_uciml_variable_descriptions
 from .models import ModelConfigBundle, discover_model_runs, load_model_configs
+from .runtime import DEPENDENCIES
 from .specs import DatasetSpec
 from .semmap import Metadata
+
+LOGGER = logging.getLogger(__name__)
 
 if TYPE_CHECKING:  # pragma: no cover - typing only
     from .missingness import DataFrameMissingnessModel
@@ -50,9 +53,6 @@ class PipelineConfig:
     generate_umap: bool = False
     compute_privacy: bool = False
     compute_downstream: bool = False
-    override_generate_umap: Optional[bool] = None
-    override_compute_privacy: Optional[bool] = None
-    override_compute_downstream: Optional[bool] = None
     overwrite_umap: bool = False
     enable_missingness_wrapping: bool = False
     missingness_random_state: Optional[int] = None
@@ -76,46 +76,41 @@ def _load_backend_module(name: str) -> BackendModule:
     return typed_module
 
 
-def _resolve_flag(
-    default_value: bool,
-    bundle_value: Optional[bool],
-    spec_value: Optional[bool],
-) -> bool:
-    if spec_value is not None:
-        return spec_value
-    if bundle_value is not None:
-        return bundle_value
-    return default_value
+def _load_utils_module():
+    return DEPENDENCIES.require_module(
+        "semsynth.utils",
+        hint="Install SemSynth with base dependencies.",
+    )
 
 
-def _import_utils():  # pragma: no cover - helper for lazy import
-    from . import utils as _utils
-
-    return _utils
-
-
-def _import_umap_utils():  # pragma: no cover - helper for lazy import
-    from . import umap_utils as _umap
-
-    return _umap
+def _load_umap_utils_module():
+    return DEPENDENCIES.require_module(
+        "semsynth.umap_utils",
+        hint="Install UMAP extras via `pip install semsynth[umap]`.",
+    )
 
 
-def _import_reporting():  # pragma: no cover - helper for lazy import
-    from . import reporting as _reporting
-
-    return _reporting
-
-
-def _import_privacy_summarizer():  # pragma: no cover - helper for lazy import
-    from .privacy_metrics import summarize_privacy_synthcity
-
-    return summarize_privacy_synthcity
+def _load_reporting_module():
+    return DEPENDENCIES.require_module(
+        "semsynth.reporting",
+        hint="SemSynth reporting module missing. Reinstall package.",
+    )
 
 
-def _import_downstream_compare():  # pragma: no cover - helper for lazy import
-    from .downstream_fidelity import compare_real_vs_synth
+def _load_privacy_summarizer():
+    return DEPENDENCIES.require_attr(
+        "semsynth.privacy_metrics",
+        "summarize_privacy_synthcity",
+        hint="Install SemSynth with `synthcity` extras: `pip install semsynth[synthcity]`.",
+    )
 
-    return compare_real_vs_synth
+
+def _load_downstream_compare():
+    return DEPENDENCIES.require_attr(
+        "semsynth.downstream_fidelity",
+        "compare_real_vs_synth",
+        hint="Install downstream fidelity extras: `pip install semsynth[statsmodels]`.",
+    )
 
 
 def _build_privacy_metadata(
@@ -319,13 +314,20 @@ class DatasetPreprocessor:
         semmap_metadata: Optional[Metadata] = None
         mapping_path = self._resolve_mapping(dataset_spec)
         if mapping_path is not None:
-            logging.info("Applying curated SemMap metadata from %s", mapping_path)
+            LOGGER.info(
+                "Applying curated SemMap metadata",
+                extra={"dataset": dataset_spec.name, "mapping_path": str(mapping_path)},
+            )
             try:
                 curated = self._load_mapping(mapping_path)
                 df.semmap.from_jsonld(curated, convert_pint=True)
                 semmap_metadata = df.semmap.dataset_semmap
             except Exception:
-                logging.exception("Failed to apply SemMap metadata", exc_info=True)
+                LOGGER.exception(
+                    "Failed to apply SemMap metadata",
+                    exc_info=True,
+                    extra={"dataset": dataset_spec.name},
+                )
         elif isinstance(dataset_spec.meta, Metadata):
             semmap_metadata = dataset_spec.meta
             df.semmap.from_jsonld(semmap_metadata.to_jsonld())
@@ -334,7 +336,11 @@ class DatasetPreprocessor:
                 semmap_metadata = Metadata.from_dcat_dsv(dataset_spec.meta)
                 df.semmap.from_jsonld(semmap_metadata.to_jsonld())
             except Exception:
-                logging.exception("Failed to apply dataset_spec metadata", exc_info=True)
+                LOGGER.exception(
+                    "Failed to apply dataset_spec metadata",
+                    exc_info=True,
+                    extra={"dataset": dataset_spec.name},
+                )
         if semmap_metadata is None:
             semmap_metadata = df.semmap()
 
@@ -373,7 +379,10 @@ class DatasetPreprocessor:
         umap_png_real: Optional[Path] = outdir / "umap_real.png"
         umap_artifacts: Optional[UmapArtifacts] = None
         if generate_umap and umap_utils is not None:
-            logging.info("Fitting UMAP on real data sample")
+            LOGGER.info(
+                "Fitting UMAP on real data sample",
+                extra={"dataset": dataset_spec.name},
+            )
             umap_art = umap_utils.build_umap(
                 df_no_na,
                 disc_cols,
@@ -413,8 +422,9 @@ class DatasetPreprocessor:
             try:
                 from . import missingness as missingness_module
             except ImportError:
-                logging.warning(
-                    "Missingness wrapping requested but dependencies are unavailable"
+                LOGGER.warning(
+                    "Missingness wrapping requested but dependencies are unavailable",
+                    extra={"dataset": dataset_spec.name},
                 )
             else:
                 missingness_model = missingness_module.fit_missingness_model(
@@ -485,7 +495,7 @@ class MetricWriter:
             Dict[str, Any]: Serialized payload written to disk.
         """
 
-        summarizer = self._privacy_summarizer or _import_privacy_summarizer()
+        summarizer = self._privacy_summarizer or _load_privacy_summarizer()
 
         if synth_df is None:
             synth_df = self._read_synthetic_df(run_dir)
@@ -541,14 +551,15 @@ class MetricWriter:
             Dict[str, Any]: Serialized payload written to disk.
         """
 
-        comparer = self._downstream_compare or _import_downstream_compare()
+        comparer = self._downstream_compare or _load_downstream_compare()
 
         unique_targets: Optional[int] = None
         if target_series is not None:
             unique_targets = int(target_series.dropna().nunique())
         if unique_targets is not None and unique_targets > 2:
-            logging.info(
-                "Skipping downstream metrics for %s due to multiclass target", run_dir.name
+            LOGGER.info(
+                "Skipping downstream metrics: multiclass target",
+                extra={"run_dir": str(run_dir), "unique_targets": unique_targets},
             )
             payload = {
                 "formula": None,
@@ -626,9 +637,9 @@ class BackendExecutor:
 
         shared_prov: List[Any] = []
         if prov_core.PROV_BUFFER is not None:
-            logging.info(
-                "PROV buffer entries available before model runs: %d",
-                len(prov_core.PROV_BUFFER),
+            LOGGER.info(
+                "PROV buffer entries available before model runs",
+                extra={"entry_count": len(prov_core.PROV_BUFFER)},
             )
             shared_prov = list(prov_core.PROV_BUFFER)
 
@@ -642,22 +653,29 @@ class BackendExecutor:
             if model_prov_start is not None:
                 new_entries = list(prov_core.PROV_BUFFER[model_prov_start:])
             model_entries = list(shared_prov) + new_entries
-            logging.info(
-                "Aggregating provenance for %s: shared=%d new=%d",
-                label,
-                len(shared_prov),
-                len(new_entries),
+            LOGGER.info(
+                "Aggregating model provenance",
+                extra={
+                    "label": label,
+                    "shared_entries": len(shared_prov),
+                    "new_entries": len(new_entries),
+                },
             )
             if not model_entries:
-                logging.info("Skipping provenance write for %s (no entries)", label)
+                LOGGER.info(
+                    "Skipping provenance write (no entries)",
+                    extra={"label": label},
+                )
                 return
 
             prov_path = run_dir_path / "provenance"
-            logging.info(
-                "Writing combined JSON-LD provenance for %s to %s (%d entries)",
-                label,
-                prov_path.with_suffix(".json"),
-                len(model_entries),
+            LOGGER.info(
+                "Writing combined provenance bundle",
+                extra={
+                    "label": label,
+                    "prov_path": str(prov_path.with_suffix(".json")),
+                    "entry_count": len(model_entries),
+                },
             )
             merged = Prov.merge(model_entries)
             merged.write(
@@ -674,7 +692,10 @@ class BackendExecutor:
             try:
                 backend_module = self._load_backend(backend_name)
             except Exception:
-                logging.exception("Failed to load backend %s", backend_name)
+                LOGGER.exception(
+                    "Failed to load backend module",
+                    extra={"backend": backend_name},
+                )
                 _write_model_provenance(label, run_dir_path, None)
                 continue
 
@@ -698,7 +719,10 @@ class BackendExecutor:
                     semmap_export=preprocessed.semmap_export,
                 )
             except Exception:
-                logging.exception("%s run failed for %s", backend_name, label)
+                LOGGER.exception(
+                    "Backend run failed",
+                    extra={"backend": backend_name, "label": label},
+                )
                 _write_model_provenance(label, run_dir_path, model_prov_start)
                 continue
 
@@ -711,8 +735,9 @@ class BackendExecutor:
                 try:
                     from . import missingness as missingness_module
                 except ImportError:
-                    logging.warning(
-                        "Missingness wrapping requested but dependencies are unavailable"
+                    LOGGER.warning(
+                        "Missingness wrapping requested but dependencies are unavailable",
+                        extra={"label": label},
                     )
                 else:
                     synth_df, missingness_applied = (
@@ -727,26 +752,37 @@ class BackendExecutor:
                         )
                     )
 
-            compute_privacy_default = (
-                self._cfg.override_compute_privacy
-                if self._cfg.override_compute_privacy is not None
-                else self._cfg.compute_privacy
-            )
-            compute_privacy_flag = _resolve_flag(
-                compute_privacy_default,
-                bundle.compute_privacy,
-                spec.compute_privacy,
-            )
-            compute_downstream_default = (
-                self._cfg.override_compute_downstream
-                if self._cfg.override_compute_downstream is not None
-                else self._cfg.compute_downstream
-            )
-            compute_downstream_flag = _resolve_flag(
-                compute_downstream_default,
-                bundle.compute_downstream,
-                spec.compute_downstream,
-            )
+            compute_privacy_flag = self._cfg.compute_privacy
+            if (
+                bundle.compute_privacy is not None
+                and bundle.compute_privacy != compute_privacy_flag
+            ):
+                LOGGER.info(
+                    "Ignoring bundle privacy flag in favour of pipeline configuration",
+                    extra={
+                        "label": label,
+                        "bundle_value": bundle.compute_privacy,
+                        "pipeline_value": compute_privacy_flag,
+                    },
+                )
+            if spec.compute_privacy is not None:
+                compute_privacy_flag = spec.compute_privacy
+
+            compute_downstream_flag = self._cfg.compute_downstream
+            if (
+                bundle.compute_downstream is not None
+                and bundle.compute_downstream != compute_downstream_flag
+            ):
+                LOGGER.info(
+                    "Ignoring bundle downstream flag in favour of pipeline configuration",
+                    extra={
+                        "label": label,
+                        "bundle_value": bundle.compute_downstream,
+                        "pipeline_value": compute_downstream_flag,
+                    },
+                )
+            if spec.compute_downstream is not None:
+                compute_downstream_flag = spec.compute_downstream
 
             if compute_privacy_flag:
                 try:
@@ -758,13 +794,20 @@ class BackendExecutor:
                         preprocessed.semmap_metadata,
                         target=dataset_spec.target,
                     )
-                    logging.info("Wrote privacy metrics for %s", label)
+                    LOGGER.info(
+                        "Wrote privacy metrics",
+                        extra={"label": label},
+                    )
                 except ImportError:
-                    logging.warning(
-                        "synthcity not installed; skipping privacy metrics for %s", label
+                    LOGGER.warning(
+                        "synthcity not installed; skipping privacy metrics",
+                        extra={"label": label},
                     )
                 except Exception:
-                    logging.exception("Failed to compute privacy metrics for %s", label)
+                    LOGGER.exception(
+                        "Failed to compute privacy metrics",
+                        extra={"label": label},
+                    )
 
             target_series = preprocessed.color_series
             has_target_series = (
@@ -782,14 +825,20 @@ class BackendExecutor:
                         metadata=preprocessed.semmap_metadata,
                         target=dataset_spec.target,
                     )
-                    logging.info("Wrote downstream metrics for %s", label)
+                    LOGGER.info(
+                        "Wrote downstream metrics",
+                        extra={"label": label},
+                    )
                 except ImportError:
-                    logging.warning(
-                        "statsmodels/sklearn not installed; skipping downstream metrics for %s",
-                        label,
+                    LOGGER.warning(
+                        "statsmodels/sklearn not installed; skipping downstream metrics",
+                        extra={"label": label},
                     )
                 except Exception:
-                    logging.exception("Failed to compute downstream metrics for %s", label)
+                    LOGGER.exception(
+                        "Failed to compute downstream metrics",
+                        extra={"label": label},
+                    )
 
             _write_model_provenance(label, run_dir_path, model_prov_start)
 
@@ -841,7 +890,10 @@ class ReportWriter:
                     lims=preprocessed.umap_artifacts.limits,
                 )
             except Exception:
-                logging.exception("Failed to generate UMAP for %s", run.run_dir)
+                LOGGER.exception(
+                    "Failed to generate synthetic UMAP",
+                    extra={"run_dir": str(run.run_dir)},
+                )
 
     @staticmethod
     def _read_synthetic_df(run: Any) -> "pd.DataFrame":
@@ -913,8 +965,8 @@ def process_dataset(
 
     from . import semmap  # noqa: F401  # register pandas accessor
 
-    utils = _import_utils()
-    reporting = _import_reporting()
+    utils = _load_utils_module()
+    reporting = _load_reporting_module()
 
     bundle = model_bundle or load_model_configs(None)
     cfg = pipeline_config or PipelineConfig()
@@ -934,7 +986,7 @@ def process_dataset(
         None,
     )
 
-    umap_utils = _import_umap_utils() if generate_umap_flag else None
+    umap_utils = _load_umap_utils_module() if generate_umap_flag else None
 
     preprocessor = DatasetPreprocessor(
         utils_module=utils,
@@ -954,16 +1006,8 @@ def process_dataset(
     if preprocessed.semmap_metadata is not None:
         dataset_spec.meta = preprocessed.semmap_metadata
 
-    privacy_summarizer = None
-    downstream_compare = None
-    try:
-        privacy_summarizer = _import_privacy_summarizer()
-    except ImportError:
-        privacy_summarizer = None
-    try:
-        downstream_compare = _import_downstream_compare()
-    except ImportError:
-        downstream_compare = None
+    privacy_summarizer = _load_privacy_summarizer()
+    downstream_compare = _load_downstream_compare()
 
     metric_writer = MetricWriter(
         privacy_summarizer=privacy_summarizer,
@@ -988,7 +1032,10 @@ def process_dataset(
     try:
         model_runs = discover_model_runs(outdir)
     except Exception:
-        logging.exception("Failed to discover model runs for %s", dataset_spec.name)
+        LOGGER.exception(
+            "Failed to discover model runs",
+            extra={"dataset": dataset_spec.name},
+        )
         model_runs = []
 
     reporter = ReportWriter(reporting, umap_utils)
