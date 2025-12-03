@@ -51,7 +51,9 @@
 <li class="toctree-l1 current"><a class="reference internal" href="../api.html">API reference</a><ul class="current">
 <li class="toctree-l2 current"><a class="reference internal" href="semsynth.html">semsynth</a><ul class="current">
 <li class="toctree-l3"><a class="reference internal" href="semsynth.html#semsynth.get_version"><code class="docutils literal notranslate"><span class="pre">get_version()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="semsynth.app.html">semsynth.app</a></li>
 <li class="toctree-l3"><a class="reference internal" href="semsynth.backends.html">semsynth.backends</a></li>
+<li class="toctree-l3"><a class="reference internal" href="semsynth.catalog.html">semsynth.catalog</a></li>
 <li class="toctree-l3"><a class="reference internal" href="semsynth.datasets.html">semsynth.datasets</a></li>
 <li class="toctree-l3"><a class="reference internal" href="semsynth.downstream_fidelity.html">semsynth.downstream_fidelity</a></li>
 <li class="toctree-l3 current"><a class="current reference internal" href="#">semsynth.jsonld_to_rdfa</a><ul>
@@ -75,7 +77,12 @@
 <li class="toctree-l3"><a class="reference internal" href="semsynth.metadata.html">semsynth.metadata</a></li>
 <li class="toctree-l3"><a class="reference internal" href="semsynth.metrics.html">semsynth.metrics</a></li>
 <li class="toctree-l3"><a class="reference internal" href="semsynth.missingness.html">semsynth.missingness</a></li>
+<li class="toctree-l3"><a class="reference internal" href="semsynth.models.html">semsynth.models</a></li>
+<li class="toctree-l3"><a class="reference internal" href="semsynth.pipeline.html">semsynth.pipeline</a></li>
 <li class="toctree-l3"><a class="reference internal" href="semsynth.privacy_metrics.html">semsynth.privacy_metrics</a></li>
+<li class="toctree-l3"><a class="reference internal" href="semsynth.reporting.html">semsynth.reporting</a></li>
+<li class="toctree-l3"><a class="reference internal" href="semsynth.runtime.html">semsynth.runtime</a></li>
+<li class="toctree-l3"><a class="reference internal" href="semsynth.semmap.html">semsynth.semmap</a></li>
 <li class="toctree-l3"><a class="reference internal" href="semsynth.specs.html">semsynth.specs</a></li>
 <li class="toctree-l3"><a class="reference internal" href="semsynth.torch_compat.html">semsynth.torch_compat</a></li>
 <li class="toctree-l3"><a class="reference internal" href="semsynth.umap_utils.html">semsynth.umap_utils</a></li>
@@ -138,34 +145,37 @@ Generate static HTML with RDFa from nested compact JSON-LD.</p>
 <tr class="row-even"><td><p><a class="reference internal" href="#semsynth.jsonld_to_rdfa.main" title="semsynth.jsonld_to_rdfa.main"><code class="xref py py-obj docutils literal notranslate"><span class="pre">main</span></code></a>()</p></td>
 <td><p></p></td>
 </tr>
-<tr class="row-odd"><td><p><a class="reference internal" href="#semsynth.jsonld_to_rdfa.render_cell" title="semsynth.jsonld_to_rdfa.render_cell"><code class="xref py py-obj docutils literal notranslate"><span class="pre">render_cell</span></code></a>(prop, value, vocab, prefixes, depth)</p></td>
+<tr class="row-odd"><td><p><code class="xref py py-obj docutils literal notranslate"><span class="pre">normalize_jsonld_payload</span></code>(payload)</p></td>
+<td><p>Ensure mappings carry the canonical JSON-LD context.</p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="#semsynth.jsonld_to_rdfa.render_cell" title="semsynth.jsonld_to_rdfa.render_cell"><code class="xref py py-obj docutils literal notranslate"><span class="pre">render_cell</span></code></a>(prop, value, vocab, prefixes, depth)</p></td>
 <td><p>Cell-friendly rendering (no leading label).</p></td>
 </tr>
-<tr class="row-even"><td><p><a class="reference internal" href="#semsynth.jsonld_to_rdfa.render_iri" title="semsynth.jsonld_to_rdfa.render_iri"><code class="xref py py-obj docutils literal notranslate"><span class="pre">render_iri</span></code></a>(prop, iri)</p></td>
+<tr class="row-odd"><td><p><a class="reference internal" href="#semsynth.jsonld_to_rdfa.render_iri" title="semsynth.jsonld_to_rdfa.render_iri"><code class="xref py py-obj docutils literal notranslate"><span class="pre">render_iri</span></code></a>(prop, iri)</p></td>
 <td><p></p></td>
 </tr>
-<tr class="row-odd"><td><p><a class="reference internal" href="#semsynth.jsonld_to_rdfa.render_literal" title="semsynth.jsonld_to_rdfa.render_literal"><code class="xref py py-obj docutils literal notranslate"><span class="pre">render_literal</span></code></a>(prop, value)</p></td>
+<tr class="row-even"><td><p><a class="reference internal" href="#semsynth.jsonld_to_rdfa.render_literal" title="semsynth.jsonld_to_rdfa.render_literal"><code class="xref py py-obj docutils literal notranslate"><span class="pre">render_literal</span></code></a>(prop, value)</p></td>
 <td><p></p></td>
 </tr>
-<tr class="row-even"><td><p><a class="reference internal" href="#semsynth.jsonld_to_rdfa.render_object" title="semsynth.jsonld_to_rdfa.render_object"><code class="xref py py-obj docutils literal notranslate"><span class="pre">render_object</span></code></a>(obj, vocab, prefixes, depth)</p></td>
+<tr class="row-odd"><td><p><a class="reference internal" href="#semsynth.jsonld_to_rdfa.render_object" title="semsynth.jsonld_to_rdfa.render_object"><code class="xref py py-obj docutils literal notranslate"><span class="pre">render_object</span></code></a>(obj, vocab, prefixes, depth)</p></td>
 <td><p></p></td>
 </tr>
-<tr class="row-odd"><td><p><a class="reference internal" href="#semsynth.jsonld_to_rdfa.render_property" title="semsynth.jsonld_to_rdfa.render_property"><code class="xref py py-obj docutils literal notranslate"><span class="pre">render_property</span></code></a>(prop, value, vocab, ...)</p></td>
+<tr class="row-even"><td><p><a class="reference internal" href="#semsynth.jsonld_to_rdfa.render_property" title="semsynth.jsonld_to_rdfa.render_property"><code class="xref py py-obj docutils literal notranslate"><span class="pre">render_property</span></code></a>(prop, value, vocab, ...)</p></td>
 <td><p>Render a property value in RDFa.</p></td>
 </tr>
-<tr class="row-even"><td><p><a class="reference internal" href="#semsynth.jsonld_to_rdfa.render_rdfa" title="semsynth.jsonld_to_rdfa.render_rdfa"><code class="xref py py-obj docutils literal notranslate"><span class="pre">render_rdfa</span></code></a>(root, context, title)</p></td>
+<tr class="row-odd"><td><p><a class="reference internal" href="#semsynth.jsonld_to_rdfa.render_rdfa" title="semsynth.jsonld_to_rdfa.render_rdfa"><code class="xref py py-obj docutils literal notranslate"><span class="pre">render_rdfa</span></code></a>(root, context, title)</p></td>
 <td><p></p></td>
 </tr>
-<tr class="row-odd"><td><p><a class="reference internal" href="#semsynth.jsonld_to_rdfa.repeating_headers" title="semsynth.jsonld_to_rdfa.repeating_headers"><code class="xref py py-obj docutils literal notranslate"><span class="pre">repeating_headers</span></code></a>(lst)</p></td>
+<tr class="row-even"><td><p><a class="reference internal" href="#semsynth.jsonld_to_rdfa.repeating_headers" title="semsynth.jsonld_to_rdfa.repeating_headers"><code class="xref py py-obj docutils literal notranslate"><span class="pre">repeating_headers</span></code></a>(lst)</p></td>
 <td><p>Return a stable list of shared keys for a list of dicts (ignoring &#64;-keys).</p></td>
 </tr>
-<tr class="row-even"><td><p><a class="reference internal" href="#semsynth.jsonld_to_rdfa.tag" title="semsynth.jsonld_to_rdfa.tag"><code class="xref py py-obj docutils literal notranslate"><span class="pre">tag</span></code></a>(name[, attrs, content, self_close])</p></td>
+<tr class="row-odd"><td><p><a class="reference internal" href="#semsynth.jsonld_to_rdfa.tag" title="semsynth.jsonld_to_rdfa.tag"><code class="xref py py-obj docutils literal notranslate"><span class="pre">tag</span></code></a>(name[, attrs, content, self_close])</p></td>
 <td><p>Minimal HTML tag builder.</p></td>
 </tr>
-<tr class="row-odd"><td><p><a class="reference internal" href="#semsynth.jsonld_to_rdfa.to_list" title="semsynth.jsonld_to_rdfa.to_list"><code class="xref py py-obj docutils literal notranslate"><span class="pre">to_list</span></code></a>(x)</p></td>
+<tr class="row-even"><td><p><a class="reference internal" href="#semsynth.jsonld_to_rdfa.to_list" title="semsynth.jsonld_to_rdfa.to_list"><code class="xref py py-obj docutils literal notranslate"><span class="pre">to_list</span></code></a>(x)</p></td>
 <td><p></p></td>
 </tr>
-<tr class="row-even"><td><p><a class="reference internal" href="#semsynth.jsonld_to_rdfa.types_to_iris" title="semsynth.jsonld_to_rdfa.types_to_iris"><code class="xref py py-obj docutils literal notranslate"><span class="pre">types_to_iris</span></code></a>(types, vocab)</p></td>
+<tr class="row-odd"><td><p><a class="reference internal" href="#semsynth.jsonld_to_rdfa.types_to_iris" title="semsynth.jsonld_to_rdfa.types_to_iris"><code class="xref py py-obj docutils literal notranslate"><span class="pre">types_to_iris</span></code></a>(types, vocab)</p></td>
 <td><p></p></td>
 </tr>
 </tbody>

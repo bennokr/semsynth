@@ -51,29 +51,27 @@
 <li class="toctree-l1 current"><a class="reference internal" href="../api.html">API reference</a><ul class="current">
 <li class="toctree-l2 current"><a class="reference internal" href="semsynth.html">semsynth</a><ul class="current">
 <li class="toctree-l3"><a class="reference internal" href="semsynth.html#semsynth.get_version"><code class="docutils literal notranslate"><span class="pre">get_version()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="semsynth.app.html">semsynth.app</a></li>
 <li class="toctree-l3"><a class="reference internal" href="semsynth.backends.html">semsynth.backends</a></li>
+<li class="toctree-l3"><a class="reference internal" href="semsynth.catalog.html">semsynth.catalog</a></li>
 <li class="toctree-l3"><a class="reference internal" href="semsynth.datasets.html">semsynth.datasets</a></li>
 <li class="toctree-l3"><a class="reference internal" href="semsynth.downstream_fidelity.html">semsynth.downstream_fidelity</a></li>
 <li class="toctree-l3"><a class="reference internal" href="semsynth.jsonld_to_rdfa.html">semsynth.jsonld_to_rdfa</a></li>
 <li class="toctree-l3"><a class="reference internal" href="semsynth.mappings.html">semsynth.mappings</a></li>
 <li class="toctree-l3 current"><a class="current reference internal" href="#">semsynth.metadata</a><ul>
-<li class="toctree-l4"><a class="reference internal" href="#semsynth.metadata.Distribution"><code class="docutils literal notranslate"><span class="pre">Distribution</span></code></a></li>
-<li class="toctree-l4"><a class="reference internal" href="#semsynth.metadata.DistributionFinder"><code class="docutils literal notranslate"><span class="pre">DistributionFinder</span></code></a></li>
-<li class="toctree-l4"><a class="reference internal" href="#semsynth.metadata.PackageMetadata"><code class="docutils literal notranslate"><span class="pre">PackageMetadata</span></code></a></li>
-<li class="toctree-l4"><a class="reference internal" href="#semsynth.metadata.PackageNotFoundError"><code class="docutils literal notranslate"><span class="pre">PackageNotFoundError</span></code></a></li>
-<li class="toctree-l4"><a class="reference internal" href="#semsynth.metadata.distribution"><code class="docutils literal notranslate"><span class="pre">distribution()</span></code></a></li>
-<li class="toctree-l4"><a class="reference internal" href="#semsynth.metadata.distributions"><code class="docutils literal notranslate"><span class="pre">distributions()</span></code></a></li>
-<li class="toctree-l4"><a class="reference internal" href="#semsynth.metadata.entry_points"><code class="docutils literal notranslate"><span class="pre">entry_points()</span></code></a></li>
-<li class="toctree-l4"><a class="reference internal" href="#semsynth.metadata.files"><code class="docutils literal notranslate"><span class="pre">files()</span></code></a></li>
-<li class="toctree-l4"><a class="reference internal" href="#semsynth.metadata.metadata"><code class="docutils literal notranslate"><span class="pre">metadata()</span></code></a></li>
-<li class="toctree-l4"><a class="reference internal" href="#semsynth.metadata.packages_distributions"><code class="docutils literal notranslate"><span class="pre">packages_distributions()</span></code></a></li>
-<li class="toctree-l4"><a class="reference internal" href="#semsynth.metadata.requires"><code class="docutils literal notranslate"><span class="pre">requires()</span></code></a></li>
-<li class="toctree-l4"><a class="reference internal" href="#semsynth.metadata.version"><code class="docutils literal notranslate"><span class="pre">version()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#semsynth.metadata.DCATDataset"><code class="docutils literal notranslate"><span class="pre">DCATDataset</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#semsynth.metadata.DCATDistribution"><code class="docutils literal notranslate"><span class="pre">DCATDistribution</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#semsynth.metadata.get_uciml_variable_descriptions"><code class="docutils literal notranslate"><span class="pre">get_uciml_variable_descriptions()</span></code></a></li>
 </ul>
 </li>
 <li class="toctree-l3"><a class="reference internal" href="semsynth.metrics.html">semsynth.metrics</a></li>
 <li class="toctree-l3"><a class="reference internal" href="semsynth.missingness.html">semsynth.missingness</a></li>
+<li class="toctree-l3"><a class="reference internal" href="semsynth.models.html">semsynth.models</a></li>
+<li class="toctree-l3"><a class="reference internal" href="semsynth.pipeline.html">semsynth.pipeline</a></li>
 <li class="toctree-l3"><a class="reference internal" href="semsynth.privacy_metrics.html">semsynth.privacy_metrics</a></li>
+<li class="toctree-l3"><a class="reference internal" href="semsynth.reporting.html">semsynth.reporting</a></li>
+<li class="toctree-l3"><a class="reference internal" href="semsynth.runtime.html">semsynth.runtime</a></li>
+<li class="toctree-l3"><a class="reference internal" href="semsynth.semmap.html">semsynth.semmap</a></li>
 <li class="toctree-l3"><a class="reference internal" href="semsynth.specs.html">semsynth.specs</a></li>
 <li class="toctree-l3"><a class="reference internal" href="semsynth.torch_compat.html">semsynth.torch_compat</a></li>
 <li class="toctree-l3"><a class="reference internal" href="semsynth.umap_utils.html">semsynth.umap_utils</a></li>
@@ -115,440 +113,133 @@
 <p class="rubric">Functions</p>
 <table class="autosummary longtable docutils align-default">
 <tbody>
-<tr class="row-odd"><td><p><code class="xref py py-obj docutils literal notranslate"><span class="pre">always_iterable</span></code>(obj[, base_type])</p></td>
-<td><p>If <em>obj</em> is iterable, return an iterator over its items.</p></td>
+<tr class="row-odd"><td><p><code class="xref py py-obj docutils literal notranslate"><span class="pre">dataclass</span></code>([cls, init, repr, eq, order, ...])</p></td>
+<td><p>Add dunder methods based on the fields defined in the class.</p></td>
 </tr>
-<tr class="row-even"><td><p><a class="reference internal" href="#semsynth.metadata.distribution" title="semsynth.metadata.distribution"><code class="xref py py-obj docutils literal notranslate"><span class="pre">distribution</span></code></a>(distribution_name)</p></td>
-<td><p>Get the <code class="docutils literal notranslate"><span class="pre">Distribution</span></code> instance for the named package.</p></td>
+<tr class="row-even"><td><p><code class="xref py py-obj docutils literal notranslate"><span class="pre">field</span></code>(*[, default, default_factory, init, ...])</p></td>
+<td><p>Return an object to identify dataclass fields.</p></td>
 </tr>
-<tr class="row-odd"><td><p><a class="reference internal" href="#semsynth.metadata.distributions" title="semsynth.metadata.distributions"><code class="xref py py-obj docutils literal notranslate"><span class="pre">distributions</span></code></a>(**kwargs)</p></td>
-<td><p>Get all <code class="docutils literal notranslate"><span class="pre">Distribution</span></code> instances in the current environment.</p></td>
+<tr class="row-odd"><td><p><a class="reference internal" href="#semsynth.metadata.get_uciml_variable_descriptions" title="semsynth.metadata.get_uciml_variable_descriptions"><code class="xref py py-obj docutils literal notranslate"><span class="pre">get_uciml_variable_descriptions</span></code></a>(dataset_id)</p></td>
+<td><p>Best-effort retrieval of UCI ML variable descriptions.</p></td>
 </tr>
-<tr class="row-even"><td><p><a class="reference internal" href="#semsynth.metadata.entry_points" title="semsynth.metadata.entry_points"><code class="xref py py-obj docutils literal notranslate"><span class="pre">entry_points</span></code></a>(**params)</p></td>
-<td><p>Return EntryPoint objects for all installed packages.</p></td>
-</tr>
-<tr class="row-odd"><td><p><a class="reference internal" href="#semsynth.metadata.files" title="semsynth.metadata.files"><code class="xref py py-obj docutils literal notranslate"><span class="pre">files</span></code></a>(distribution_name)</p></td>
-<td><p>Return a list of files for the named package.</p></td>
-</tr>
-<tr class="row-even"><td><p><code class="xref py py-obj docutils literal notranslate"><span class="pre">import_module</span></code>(name[, package])</p></td>
-<td><p>Import a module.</p></td>
-</tr>
-<tr class="row-odd"><td><p><a class="reference internal" href="#semsynth.metadata.metadata" title="semsynth.metadata.metadata"><code class="xref py py-obj docutils literal notranslate"><span class="pre">metadata</span></code></a>(distribution_name)</p></td>
-<td><p>Get the metadata for the named package.</p></td>
-</tr>
-<tr class="row-even"><td><p><code class="xref py py-obj docutils literal notranslate"><span class="pre">method_cache</span></code>(method[, cache_wrapper])</p></td>
-<td><p>Wrap lru_cache to support storing the cache data in the object instances.</p></td>
-</tr>
-<tr class="row-odd"><td><p><a class="reference internal" href="#semsynth.metadata.packages_distributions" title="semsynth.metadata.packages_distributions"><code class="xref py py-obj docutils literal notranslate"><span class="pre">packages_distributions</span></code></a>()</p></td>
-<td><p>Return a mapping of top-level packages to their distributions.</p></td>
-</tr>
-<tr class="row-even"><td><p><code class="xref py py-obj docutils literal notranslate"><span class="pre">pass_none</span></code>(func)</p></td>
-<td><p>Wrap func so it's not called if its first param is None</p></td>
-</tr>
-<tr class="row-odd"><td><p><a class="reference internal" href="#semsynth.metadata.requires" title="semsynth.metadata.requires"><code class="xref py py-obj docutils literal notranslate"><span class="pre">requires</span></code></a>(distribution_name)</p></td>
-<td><p>Return a list of requirements for the named package.</p></td>
-</tr>
-<tr class="row-even"><td><p><code class="xref py py-obj docutils literal notranslate"><span class="pre">unique_everseen</span></code>(iterable[, key])</p></td>
-<td><p>List unique elements, preserving order.</p></td>
-</tr>
-<tr class="row-odd"><td><p><a class="reference internal" href="#semsynth.metadata.version" title="semsynth.metadata.version"><code class="xref py py-obj docutils literal notranslate"><span class="pre">version</span></code></a>(distribution_name)</p></td>
-<td><p>Get the version string for the named package.</p></td>
+<tr class="row-even"><td><p><code class="xref py py-obj docutils literal notranslate"><span class="pre">normalize_variable_descriptors</span></code>(variables)</p></td>
+<td><p>Normalize heterogeneous metadata mappings into variable descriptors.</p></td>
 </tr>
 </tbody>
 </table>
 <p class="rubric">Classes</p>
 <table class="autosummary longtable docutils align-default">
 <tbody>
-<tr class="row-odd"><td><p><code class="xref py py-obj docutils literal notranslate"><span class="pre">Deprecated</span></code>()</p></td>
-<td><p>Compatibility add-in for mapping to indicate that mapping behavior is deprecated.</p></td>
+<tr class="row-odd"><td><p><code class="xref py py-obj docutils literal notranslate"><span class="pre">Any</span></code>(*args, **kwargs)</p></td>
+<td><p>Special type indicating an unconstrained type.</p></td>
 </tr>
-<tr class="row-even"><td><p><code class="xref py py-obj docutils literal notranslate"><span class="pre">DeprecatedList</span></code>([iterable])</p></td>
-<td><p>Allow an otherwise immutable object to implement mutability for compatibility.</p></td>
-</tr>
-<tr class="row-odd"><td><p><code class="xref py py-obj docutils literal notranslate"><span class="pre">DeprecatedTuple</span></code>()</p></td>
-<td><p>Provide subscript item access for backward compatibility.</p></td>
-</tr>
-<tr class="row-even"><td><p><a class="reference internal" href="#semsynth.metadata.Distribution" title="semsynth.metadata.Distribution"><code class="xref py py-obj docutils literal notranslate"><span class="pre">Distribution</span></code></a>()</p></td>
-<td><p>A Python distribution package.</p></td>
-</tr>
-<tr class="row-odd"><td><p><a class="reference internal" href="#semsynth.metadata.DistributionFinder" title="semsynth.metadata.DistributionFinder"><code class="xref py py-obj docutils literal notranslate"><span class="pre">DistributionFinder</span></code></a>()</p></td>
-<td><p>A MetaPathFinder capable of discovering installed distributions.</p></td>
-</tr>
-<tr class="row-even"><td><p><code class="xref py py-obj docutils literal notranslate"><span class="pre">EntryPoint</span></code>(name, value, group)</p></td>
-<td><p>An entry point as defined by Python packaging conventions.</p></td>
-</tr>
-<tr class="row-odd"><td><p><code class="xref py py-obj docutils literal notranslate"><span class="pre">EntryPoints</span></code>([iterable])</p></td>
-<td><p>An immutable collection of selectable EntryPoint objects.</p></td>
-</tr>
-<tr class="row-even"><td><p><code class="xref py py-obj docutils literal notranslate"><span class="pre">FastPath</span></code>(root)</p></td>
-<td><p>Micro-optimized class for searching a path for children.</p></td>
-</tr>
-<tr class="row-odd"><td><p><code class="xref py py-obj docutils literal notranslate"><span class="pre">FileHash</span></code>(spec)</p></td>
+<tr class="row-even"><td><p><a class="reference internal" href="#semsynth.metadata.DCATDataset" title="semsynth.metadata.DCATDataset"><code class="xref py py-obj docutils literal notranslate"><span class="pre">DCATDataset</span></code></a>(identifier, title, description, ...)</p></td>
 <td><p></p></td>
 </tr>
-<tr class="row-even"><td><p><code class="xref py py-obj docutils literal notranslate"><span class="pre">FreezableDefaultDict</span></code></p></td>
-<td><p>Often it is desirable to prevent the mutation of a default dict after its initial construction, such as to prevent mutation during iteration.</p></td>
-</tr>
-<tr class="row-odd"><td><p><code class="xref py py-obj docutils literal notranslate"><span class="pre">Lookup</span></code>(path)</p></td>
+<tr class="row-odd"><td><p><a class="reference internal" href="#semsynth.metadata.DCATDistribution" title="semsynth.metadata.DCATDistribution"><code class="xref py py-obj docutils literal notranslate"><span class="pre">DCATDistribution</span></code></a>(title[, access_url, ...])</p></td>
 <td><p></p></td>
 </tr>
-<tr class="row-even"><td><p><code class="xref py py-obj docutils literal notranslate"><span class="pre">MetaPathFinder</span></code>()</p></td>
-<td><p>Abstract base class for import finders on sys.meta_path.</p></td>
+<tr class="row-even"><td><p><code class="xref py py-obj docutils literal notranslate"><span class="pre">Path</span></code>(*args, **kwargs)</p></td>
+<td><p>PurePath subclass that can make system calls.</p></td>
 </tr>
-<tr class="row-odd"><td><p><code class="xref py py-obj docutils literal notranslate"><span class="pre">MetadataPathFinder</span></code>()</p></td>
-<td><p></p></td>
-</tr>
-<tr class="row-even"><td><p><a class="reference internal" href="#semsynth.metadata.PackageMetadata" title="semsynth.metadata.PackageMetadata"><code class="xref py py-obj docutils literal notranslate"><span class="pre">PackageMetadata</span></code></a>(*args, **kwargs)</p></td>
-<td><p></p></td>
-</tr>
-<tr class="row-odd"><td><p><code class="xref py py-obj docutils literal notranslate"><span class="pre">PackagePath</span></code>(*args)</p></td>
-<td><p>A reference to a path in a package</p></td>
-</tr>
-<tr class="row-even"><td><p><code class="xref py py-obj docutils literal notranslate"><span class="pre">Pair</span></code>(name, value)</p></td>
-<td><p></p></td>
-</tr>
-<tr class="row-odd"><td><p><code class="xref py py-obj docutils literal notranslate"><span class="pre">PathDistribution</span></code>(path)</p></td>
-<td><p></p></td>
-</tr>
-<tr class="row-even"><td><p><code class="xref py py-obj docutils literal notranslate"><span class="pre">Prepared</span></code>(name)</p></td>
-<td><p>A prepared search for metadata on a possibly-named package.</p></td>
-</tr>
-<tr class="row-odd"><td><p><code class="xref py py-obj docutils literal notranslate"><span class="pre">Sectioned</span></code>()</p></td>
-<td><p>A simple entry point config parser for performance</p></td>
-</tr>
-<tr class="row-even"><td><p><code class="xref py py-obj docutils literal notranslate"><span class="pre">SelectableGroups</span></code></p></td>
-<td><p>A backward- and forward-compatible result from entry_points that fully implements the dict interface.</p></td>
-</tr>
-<tr class="row-odd"><td><p><code class="xref py py-obj docutils literal notranslate"><span class="pre">SimplePath</span></code>(*args, **kwargs)</p></td>
-<td><p>A minimal subset of pathlib.Path required by PathDistribution.</p></td>
-</tr>
-<tr class="row-even"><td><p><code class="xref py py-obj docutils literal notranslate"><span class="pre">starmap</span></code>(function, iterable, /)</p></td>
-<td><p>Return an iterator whose values are returned from the function evaluated with an argument tuple taken from the given sequence.</p></td>
-</tr>
-<tr class="row-odd"><td><p><code class="xref py py-obj docutils literal notranslate"><span class="pre">suppress</span></code>(*exceptions)</p></td>
-<td><p>Context manager to suppress specified exceptions</p></td>
-</tr>
-</tbody>
-</table>
-<p class="rubric">Exceptions</p>
-<table class="autosummary longtable docutils align-default">
-<tbody>
-<tr class="row-odd"><td><p><a class="reference internal" href="#semsynth.metadata.PackageNotFoundError" title="semsynth.metadata.PackageNotFoundError"><code class="xref py py-obj docutils literal notranslate"><span class="pre">PackageNotFoundError</span></code></a></p></td>
-<td><p>The package was not found.</p></td>
+<tr class="row-odd"><td><p><code class="xref py py-obj docutils literal notranslate"><span class="pre">RDFMixin</span></code>()</p></td>
+<td><p>Provide JSON-LD serialization helpers for dataclasses.</p></td>
 </tr>
 </tbody>
 </table>
 <dl class="py class">
-<dt class="sig sig-object py" id="semsynth.metadata.Distribution">
-<em class="property"><span class="k"><span class="pre">class</span></span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">semsynth.metadata.</span></span><span class="sig-name descname"><span class="pre">Distribution</span></span><a class="headerlink" href="#semsynth.metadata.Distribution" title="Link to this definition"></a></dt>
-<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></p>
-<p>A Python distribution package.</p>
-<dl class="py method">
-<dt class="sig sig-object py" id="semsynth.metadata.Distribution.at">
-<em class="property"><span class="k"><span class="pre">static</span></span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">at</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">path</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#semsynth.metadata.Distribution.at" title="Link to this definition"></a></dt>
-<dd><p>Return a Distribution for the indicated metadata path</p>
-<dl class="field-list simple">
-<dt class="field-odd">Parameters<span class="colon">:</span></dt>
-<dd class="field-odd"><p><strong>path</strong> – a string or path-like object</p>
-</dd>
-<dt class="field-even">Returns<span class="colon">:</span></dt>
-<dd class="field-even"><p>a concrete Distribution instance for the path</p>
-</dd>
-</dl>
-</dd></dl>
-
-<dl class="py method">
-<dt class="sig sig-object py" id="semsynth.metadata.Distribution.discover">
-<em class="property"><span class="k"><span class="pre">classmethod</span></span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">discover</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#semsynth.metadata.Distribution.discover" title="Link to this definition"></a></dt>
-<dd><p>Return an iterable of Distribution objects for all packages.</p>
-<p>Pass a <code class="docutils literal notranslate"><span class="pre">context</span></code> or pass keyword arguments for constructing
-a context.</p>
-<dl class="field-list simple">
-<dt class="field-odd">Context<span class="colon">:</span></dt>
-<dd class="field-odd"><p>A <code class="docutils literal notranslate"><span class="pre">DistributionFinder.Context</span></code> object.</p>
-</dd>
-<dt class="field-even">Returns<span class="colon">:</span></dt>
-<dd class="field-even"><p>Iterable of Distribution objects for all packages.</p>
-</dd>
-</dl>
-</dd></dl>
-
-<dl class="py property">
-<dt class="sig sig-object py" id="semsynth.metadata.Distribution.entry_points">
-<em class="property"><span class="k"><span class="pre">property</span></span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">entry_points</span></span><a class="headerlink" href="#semsynth.metadata.Distribution.entry_points" title="Link to this definition"></a></dt>
+<dt class="sig sig-object py" id="semsynth.metadata.DCATDataset">
+<em class="property"><span class="k"><span class="pre">class</span></span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">semsynth.metadata.</span></span><span class="sig-name descname"><span class="pre">DCATDataset</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">identifier:</span> <span class="pre">'str'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">title:</span> <span class="pre">'str'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">description:</span> <span class="pre">'str'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">publisher:</span> <span class="pre">'Optional[str]'</span> <span class="pre">=</span> <span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">keywords:</span> <span class="pre">'List[str]'</span> <span class="pre">=</span> <span class="pre">&lt;factory&gt;</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">issued:</span> <span class="pre">'Optional[str]'</span> <span class="pre">=</span> <span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">modified:</span> <span class="pre">'Optional[str]'</span> <span class="pre">=</span> <span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">language:</span> <span class="pre">'Optional[str]'</span> <span class="pre">=</span> <span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">distributions:</span> <span class="pre">'List[DCATDistribution]'</span> <span class="pre">=</span> <span class="pre">&lt;factory&gt;</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#semsynth.metadata.DCATDataset" title="Link to this definition"></a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">RDFMixin</span></code></p>
+<dl class="py attribute">
+<dt class="sig sig-object py" id="semsynth.metadata.DCATDataset.description">
+<span class="sig-name descname"><span class="pre">description</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">str</span></em><a class="headerlink" href="#semsynth.metadata.DCATDataset.description" title="Link to this definition"></a></dt>
 <dd></dd></dl>
 
-<dl class="py property">
-<dt class="sig sig-object py" id="semsynth.metadata.Distribution.files">
-<em class="property"><span class="k"><span class="pre">property</span></span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">files</span></span><a class="headerlink" href="#semsynth.metadata.Distribution.files" title="Link to this definition"></a></dt>
-<dd><p>Files in this distribution.</p>
-<dl class="field-list simple">
-<dt class="field-odd">Returns<span class="colon">:</span></dt>
-<dd class="field-odd"><p>List of PackagePath for this distribution or None</p>
-</dd>
-</dl>
-<p>Result is <cite>None</cite> if the metadata file that enumerates files
-(i.e. RECORD for dist-info or SOURCES.txt for egg-info) is
-missing.
-Result may be empty if the metadata exists but is empty.</p>
-</dd></dl>
-
-<dl class="py method">
-<dt class="sig sig-object py" id="semsynth.metadata.Distribution.from_name">
-<em class="property"><span class="k"><span class="pre">classmethod</span></span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">from_name</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">name</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#semsynth.metadata.Distribution.from_name" title="Link to this definition"></a></dt>
-<dd><p>Return the Distribution for the given package name.</p>
-<dl class="field-list simple">
-<dt class="field-odd">Parameters<span class="colon">:</span></dt>
-<dd class="field-odd"><p><strong>name</strong> – The name of the distribution package to search for.</p>
-</dd>
-<dt class="field-even">Returns<span class="colon">:</span></dt>
-<dd class="field-even"><p>The Distribution instance (or subclass thereof) for the named
-package, if found.</p>
-</dd>
-<dt class="field-odd">Raises<span class="colon">:</span></dt>
-<dd class="field-odd"><ul class="simple">
-<li><p><a class="reference internal" href="#semsynth.metadata.PackageNotFoundError" title="semsynth.metadata.PackageNotFoundError"><strong>PackageNotFoundError</strong></a> – When the named package’s distribution
-metadata cannot be found.</p></li>
-<li><p><strong>ValueError</strong> – When an invalid value is supplied for name.</p></li>
-</ul>
-</dd>
-</dl>
-</dd></dl>
-
-<dl class="py method">
-<dt class="sig sig-object py" id="semsynth.metadata.Distribution.locate_file">
-<em class="property"><span class="k"><span class="pre">abstractmethod</span></span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">locate_file</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">path</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#semsynth.metadata.Distribution.locate_file" title="Link to this definition"></a></dt>
-<dd><p>Given a path to a file in this distribution, return a path
-to it.</p>
-</dd></dl>
-
-<dl class="py property">
-<dt class="sig sig-object py" id="semsynth.metadata.Distribution.metadata">
-<em class="property"><span class="k"><span class="pre">property</span></span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">metadata</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><a class="reference internal" href="#semsynth.metadata.PackageMetadata" title="importlib.metadata._meta.PackageMetadata"><span class="pre">PackageMetadata</span></a></em><a class="headerlink" href="#semsynth.metadata.Distribution.metadata" title="Link to this definition"></a></dt>
-<dd><p>Return the parsed metadata for this Distribution.</p>
-<p>The returned object will have keys that name the various bits of
-metadata.  See PEP 566 for details.</p>
-</dd></dl>
-
-<dl class="py property">
-<dt class="sig sig-object py" id="semsynth.metadata.Distribution.name">
-<em class="property"><span class="k"><span class="pre">property</span></span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">name</span></span><a class="headerlink" href="#semsynth.metadata.Distribution.name" title="Link to this definition"></a></dt>
-<dd><p>Return the ‘Name’ metadata for the distribution package.</p>
-</dd></dl>
-
-<dl class="py method">
-<dt class="sig sig-object py" id="semsynth.metadata.Distribution.read_text">
-<em class="property"><span class="k"><span class="pre">abstractmethod</span></span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">read_text</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">filename</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#semsynth.metadata.Distribution.read_text" title="Link to this definition"></a></dt>
-<dd><p>Attempt to load metadata file given by the name.</p>
-<dl class="field-list simple">
-<dt class="field-odd">Parameters<span class="colon">:</span></dt>
-<dd class="field-odd"><p><strong>filename</strong> – The name of the file in the distribution info.</p>
-</dd>
-<dt class="field-even">Returns<span class="colon">:</span></dt>
-<dd class="field-even"><p>The text if found, otherwise None.</p>
-</dd>
-</dl>
-</dd></dl>
-
-<dl class="py property">
-<dt class="sig sig-object py" id="semsynth.metadata.Distribution.requires">
-<em class="property"><span class="k"><span class="pre">property</span></span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">requires</span></span><a class="headerlink" href="#semsynth.metadata.Distribution.requires" title="Link to this definition"></a></dt>
-<dd><p>Generated requirements specified for this Distribution</p>
-</dd></dl>
-
-<dl class="py property">
-<dt class="sig sig-object py" id="semsynth.metadata.Distribution.version">
-<em class="property"><span class="k"><span class="pre">property</span></span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">version</span></span><a class="headerlink" href="#semsynth.metadata.Distribution.version" title="Link to this definition"></a></dt>
-<dd><p>Return the ‘Version’ metadata for the distribution package.</p>
-</dd></dl>
-
-</dd></dl>
-
-<dl class="py class">
-<dt class="sig sig-object py" id="semsynth.metadata.DistributionFinder">
-<em class="property"><span class="k"><span class="pre">class</span></span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">semsynth.metadata.</span></span><span class="sig-name descname"><span class="pre">DistributionFinder</span></span><a class="headerlink" href="#semsynth.metadata.DistributionFinder" title="Link to this definition"></a></dt>
-<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">MetaPathFinder</span></code></p>
-<p>A MetaPathFinder capable of discovering installed distributions.</p>
-<dl class="py class">
-<dt class="sig sig-object py" id="semsynth.metadata.DistributionFinder.Context">
-<em class="property"><span class="k"><span class="pre">class</span></span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">Context</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#semsynth.metadata.DistributionFinder.Context" title="Link to this definition"></a></dt>
-<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></p>
-<p>Keyword arguments presented by the caller to
-<code class="docutils literal notranslate"><span class="pre">distributions()</span></code> or <code class="docutils literal notranslate"><span class="pre">Distribution.discover()</span></code>
-to narrow the scope of a search for distributions
-in all DistributionFinders.</p>
-<p>Each DistributionFinder may expect any parameters
-and should attempt to honor the canonical
-parameters defined below when appropriate.</p>
 <dl class="py attribute">
-<dt class="sig sig-object py" id="semsynth.metadata.DistributionFinder.Context.name">
-<span class="sig-name descname"><span class="pre">name</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">None</span></em><a class="headerlink" href="#semsynth.metadata.DistributionFinder.Context.name" title="Link to this definition"></a></dt>
-<dd><p>Specific name for which a distribution finder should match.
-A name of <code class="docutils literal notranslate"><span class="pre">None</span></code> matches all distributions.</p>
-</dd></dl>
+<dt class="sig sig-object py" id="semsynth.metadata.DCATDataset.distributions">
+<span class="sig-name descname"><span class="pre">distributions</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">List</span><span class="p"><span class="pre">[</span></span><a class="reference internal" href="#semsynth.metadata.DCATDistribution" title="semsynth.metadata.DCATDistribution"><span class="pre">DCATDistribution</span></a><span class="p"><span class="pre">]</span></span></em><a class="headerlink" href="#semsynth.metadata.DCATDataset.distributions" title="Link to this definition"></a></dt>
+<dd></dd></dl>
 
-<dl class="py property">
-<dt class="sig sig-object py" id="semsynth.metadata.DistributionFinder.Context.path">
-<em class="property"><span class="k"><span class="pre">property</span></span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">path</span></span><a class="headerlink" href="#semsynth.metadata.DistributionFinder.Context.path" title="Link to this definition"></a></dt>
-<dd><p>The sequence of directory path that a distribution finder
-should search.</p>
-<p>Typically refers to Python installed package paths such as
-“site-packages” directories and defaults to <code class="docutils literal notranslate"><span class="pre">sys.path</span></code>.</p>
-</dd></dl>
+<dl class="py attribute">
+<dt class="sig sig-object py" id="semsynth.metadata.DCATDataset.identifier">
+<span class="sig-name descname"><span class="pre">identifier</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">str</span></em><a class="headerlink" href="#semsynth.metadata.DCATDataset.identifier" title="Link to this definition"></a></dt>
+<dd></dd></dl>
 
-</dd></dl>
+<dl class="py attribute">
+<dt class="sig sig-object py" id="semsynth.metadata.DCATDataset.issued">
+<span class="sig-name descname"><span class="pre">issued</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">str</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">None</span></em><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">None</span></em><a class="headerlink" href="#semsynth.metadata.DCATDataset.issued" title="Link to this definition"></a></dt>
+<dd></dd></dl>
 
-<dl class="py method">
-<dt class="sig sig-object py" id="semsynth.metadata.DistributionFinder.find_distributions">
-<em class="property"><span class="k"><span class="pre">abstractmethod</span></span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">find_distributions</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">context=&lt;importlib.metadata.DistributionFinder.Context</span> <span class="pre">object&gt;</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#semsynth.metadata.DistributionFinder.find_distributions" title="Link to this definition"></a></dt>
-<dd><p>Find distributions.</p>
-<p>Return an iterable of all Distribution instances capable of
-loading the metadata for packages matching the <code class="docutils literal notranslate"><span class="pre">context</span></code>,
-a DistributionFinder.Context instance.</p>
-</dd></dl>
+<dl class="py attribute">
+<dt class="sig sig-object py" id="semsynth.metadata.DCATDataset.keywords">
+<span class="sig-name descname"><span class="pre">keywords</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">List</span><span class="p"><span class="pre">[</span></span><span class="pre">str</span><span class="p"><span class="pre">]</span></span></em><a class="headerlink" href="#semsynth.metadata.DCATDataset.keywords" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="semsynth.metadata.DCATDataset.language">
+<span class="sig-name descname"><span class="pre">language</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">str</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">None</span></em><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">None</span></em><a class="headerlink" href="#semsynth.metadata.DCATDataset.language" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="semsynth.metadata.DCATDataset.modified">
+<span class="sig-name descname"><span class="pre">modified</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">str</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">None</span></em><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">None</span></em><a class="headerlink" href="#semsynth.metadata.DCATDataset.modified" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="semsynth.metadata.DCATDataset.publisher">
+<span class="sig-name descname"><span class="pre">publisher</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">str</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">None</span></em><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">None</span></em><a class="headerlink" href="#semsynth.metadata.DCATDataset.publisher" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="semsynth.metadata.DCATDataset.title">
+<span class="sig-name descname"><span class="pre">title</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">str</span></em><a class="headerlink" href="#semsynth.metadata.DCATDataset.title" title="Link to this definition"></a></dt>
+<dd></dd></dl>
 
 </dd></dl>
 
 <dl class="py class">
-<dt class="sig sig-object py" id="semsynth.metadata.PackageMetadata">
-<em class="property"><span class="k"><span class="pre">class</span></span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">semsynth.metadata.</span></span><span class="sig-name descname"><span class="pre">PackageMetadata</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="o"><span class="pre">*</span></span><span class="n"><span class="pre">args</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#semsynth.metadata.PackageMetadata" title="Link to this definition"></a></dt>
-<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">Protocol</span></code></p>
-<dl class="py method">
-<dt class="sig sig-object py" id="semsynth.metadata.PackageMetadata.get_all">
-<span class="sig-name descname"><span class="pre">get_all</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">name</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">failobj</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">_T</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">Ellipsis</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">List</span><span class="p"><span class="pre">[</span></span><span class="pre">Any</span><span class="p"><span class="pre">]</span></span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">_T</span></span></span><a class="headerlink" href="#semsynth.metadata.PackageMetadata.get_all" title="Link to this definition"></a></dt>
-<dd><p>Return all values associated with a possibly multi-valued key.</p>
-</dd></dl>
+<dt class="sig sig-object py" id="semsynth.metadata.DCATDistribution">
+<em class="property"><span class="k"><span class="pre">class</span></span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">semsynth.metadata.</span></span><span class="sig-name descname"><span class="pre">DCATDistribution</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">title</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="s"><span class="pre">'str'</span></span></span></em>, <em class="sig-param"><span class="n"><span class="pre">access_url</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="s"><span class="pre">'Optional[str]'</span></span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">download_url</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="s"><span class="pre">'Optional[str]'</span></span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">media_type</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="s"><span class="pre">'Optional[str]'</span></span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#semsynth.metadata.DCATDistribution" title="Link to this definition"></a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">RDFMixin</span></code></p>
+<dl class="py attribute">
+<dt class="sig sig-object py" id="semsynth.metadata.DCATDistribution.access_url">
+<span class="sig-name descname"><span class="pre">access_url</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">str</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">None</span></em><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">None</span></em><a class="headerlink" href="#semsynth.metadata.DCATDistribution.access_url" title="Link to this definition"></a></dt>
+<dd></dd></dl>
 
-<dl class="py property">
-<dt class="sig sig-object py" id="semsynth.metadata.PackageMetadata.json">
-<em class="property"><span class="k"><span class="pre">property</span></span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">json</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">Dict</span><span class="p"><span class="pre">[</span></span><span class="pre">str</span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">str</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">List</span><span class="p"><span class="pre">[</span></span><span class="pre">str</span><span class="p"><span class="pre">]</span></span><span class="p"><span class="pre">]</span></span></em><a class="headerlink" href="#semsynth.metadata.PackageMetadata.json" title="Link to this definition"></a></dt>
-<dd><p>A JSON-compatible form of the metadata.</p>
-</dd></dl>
+<dl class="py attribute">
+<dt class="sig sig-object py" id="semsynth.metadata.DCATDistribution.download_url">
+<span class="sig-name descname"><span class="pre">download_url</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">str</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">None</span></em><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">None</span></em><a class="headerlink" href="#semsynth.metadata.DCATDistribution.download_url" title="Link to this definition"></a></dt>
+<dd></dd></dl>
 
-</dd></dl>
+<dl class="py attribute">
+<dt class="sig sig-object py" id="semsynth.metadata.DCATDistribution.media_type">
+<span class="sig-name descname"><span class="pre">media_type</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">str</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">None</span></em><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">None</span></em><a class="headerlink" href="#semsynth.metadata.DCATDistribution.media_type" title="Link to this definition"></a></dt>
+<dd></dd></dl>
 
-<dl class="py exception">
-<dt class="sig sig-object py" id="semsynth.metadata.PackageNotFoundError">
-<em class="property"><span class="k"><span class="pre">exception</span></span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">semsynth.metadata.</span></span><span class="sig-name descname"><span class="pre">PackageNotFoundError</span></span><a class="headerlink" href="#semsynth.metadata.PackageNotFoundError" title="Link to this definition"></a></dt>
-<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">ModuleNotFoundError</span></code></p>
-<p>The package was not found.</p>
-<dl class="py property">
-<dt class="sig sig-object py" id="semsynth.metadata.PackageNotFoundError.name">
-<em class="property"><span class="k"><span class="pre">property</span></span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">name</span></span><a class="headerlink" href="#semsynth.metadata.PackageNotFoundError.name" title="Link to this definition"></a></dt>
-<dd><p>module name</p>
-</dd></dl>
+<dl class="py attribute">
+<dt class="sig sig-object py" id="semsynth.metadata.DCATDistribution.title">
+<span class="sig-name descname"><span class="pre">title</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">str</span></em><a class="headerlink" href="#semsynth.metadata.DCATDistribution.title" title="Link to this definition"></a></dt>
+<dd></dd></dl>
 
 </dd></dl>
 
 <dl class="py function">
-<dt class="sig sig-object py" id="semsynth.metadata.distribution">
-<span class="sig-prename descclassname"><span class="pre">semsynth.metadata.</span></span><span class="sig-name descname"><span class="pre">distribution</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">distribution_name</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#semsynth.metadata.distribution" title="Link to this definition"></a></dt>
-<dd><p>Get the <code class="docutils literal notranslate"><span class="pre">Distribution</span></code> instance for the named package.</p>
+<dt class="sig sig-object py" id="semsynth.metadata.get_uciml_variable_descriptions">
+<span class="sig-prename descclassname"><span class="pre">semsynth.metadata.</span></span><span class="sig-name descname"><span class="pre">get_uciml_variable_descriptions</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">dataset_id</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">int</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">Dict</span><span class="p"><span class="pre">[</span></span><span class="pre">str</span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">str</span><span class="p"><span class="pre">]</span></span></span></span><a class="headerlink" href="#semsynth.metadata.get_uciml_variable_descriptions" title="Link to this definition"></a></dt>
+<dd><p>Best-effort retrieval of UCI ML variable descriptions.</p>
+<p>The lookup first checks for a cached UCI ML payload under
+<code class="docutils literal notranslate"><span class="pre">uciml-cache/{dataset_id}.json</span></code>. If no cached metadata is found or the
+payload does not contain variable descriptions, it falls back to the
+<code class="docutils literal notranslate"><span class="pre">ucimlrepo</span></code> metadata API.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
-<dd class="field-odd"><p><strong>distribution_name</strong> – The name of the distribution package as a string.</p>
+<dd class="field-odd"><p><strong>dataset_id</strong> – UCI ML dataset identifier used for cache lookup and API
+fallback.</p>
 </dd>
 <dt class="field-even">Returns<span class="colon">:</span></dt>
-<dd class="field-even"><p>A <code class="docutils literal notranslate"><span class="pre">Distribution</span></code> instance (or subclass thereof).</p>
-</dd>
-</dl>
-</dd></dl>
-
-<dl class="py function">
-<dt class="sig sig-object py" id="semsynth.metadata.distributions">
-<span class="sig-prename descclassname"><span class="pre">semsynth.metadata.</span></span><span class="sig-name descname"><span class="pre">distributions</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#semsynth.metadata.distributions" title="Link to this definition"></a></dt>
-<dd><p>Get all <code class="docutils literal notranslate"><span class="pre">Distribution</span></code> instances in the current environment.</p>
-<dl class="field-list simple">
-<dt class="field-odd">Returns<span class="colon">:</span></dt>
-<dd class="field-odd"><p>An iterable of <code class="docutils literal notranslate"><span class="pre">Distribution</span></code> instances.</p>
-</dd>
-</dl>
-</dd></dl>
-
-<dl class="py function">
-<dt class="sig sig-object py" id="semsynth.metadata.entry_points">
-<span class="sig-prename descclassname"><span class="pre">semsynth.metadata.</span></span><span class="sig-name descname"><span class="pre">entry_points</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">params</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">EntryPoints</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">SelectableGroups</span></span></span><a class="headerlink" href="#semsynth.metadata.entry_points" title="Link to this definition"></a></dt>
-<dd><p>Return EntryPoint objects for all installed packages.</p>
-<p>Pass selection parameters (group or name) to filter the
-result to entry points matching those properties (see
-EntryPoints.select()).</p>
-<p>For compatibility, returns <code class="docutils literal notranslate"><span class="pre">SelectableGroups</span></code> object unless
-selection parameters are supplied. In the future, this function
-will return <code class="docutils literal notranslate"><span class="pre">EntryPoints</span></code> instead of <code class="docutils literal notranslate"><span class="pre">SelectableGroups</span></code>
-even when no selection parameters are supplied.</p>
-<p>For maximum future compatibility, pass selection parameters
-or invoke <code class="docutils literal notranslate"><span class="pre">.select</span></code> with parameters on the result.</p>
-<dl class="field-list simple">
-<dt class="field-odd">Returns<span class="colon">:</span></dt>
-<dd class="field-odd"><p>EntryPoints or SelectableGroups for all installed packages.</p>
-</dd>
-</dl>
-</dd></dl>
-
-<dl class="py function">
-<dt class="sig sig-object py" id="semsynth.metadata.files">
-<span class="sig-prename descclassname"><span class="pre">semsynth.metadata.</span></span><span class="sig-name descname"><span class="pre">files</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">distribution_name</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#semsynth.metadata.files" title="Link to this definition"></a></dt>
-<dd><p>Return a list of files for the named package.</p>
-<dl class="field-list simple">
-<dt class="field-odd">Parameters<span class="colon">:</span></dt>
-<dd class="field-odd"><p><strong>distribution_name</strong> – The name of the distribution package to query.</p>
-</dd>
-<dt class="field-even">Returns<span class="colon">:</span></dt>
-<dd class="field-even"><p>List of files composing the distribution.</p>
-</dd>
-</dl>
-</dd></dl>
-
-<dl class="py function">
-<dt class="sig sig-object py" id="semsynth.metadata.metadata">
-<span class="sig-prename descclassname"><span class="pre">semsynth.metadata.</span></span><span class="sig-name descname"><span class="pre">metadata</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">distribution_name</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><a class="reference internal" href="#semsynth.metadata.PackageMetadata" title="importlib.metadata._meta.PackageMetadata"><span class="pre">PackageMetadata</span></a></span></span><a class="headerlink" href="#semsynth.metadata.metadata" title="Link to this definition"></a></dt>
-<dd><p>Get the metadata for the named package.</p>
-<dl class="field-list simple">
-<dt class="field-odd">Parameters<span class="colon">:</span></dt>
-<dd class="field-odd"><p><strong>distribution_name</strong> – The name of the distribution package to query.</p>
-</dd>
-<dt class="field-even">Returns<span class="colon">:</span></dt>
-<dd class="field-even"><p>A PackageMetadata containing the parsed metadata.</p>
-</dd>
-</dl>
-</dd></dl>
-
-<dl class="py function">
-<dt class="sig sig-object py" id="semsynth.metadata.packages_distributions">
-<span class="sig-prename descclassname"><span class="pre">semsynth.metadata.</span></span><span class="sig-name descname"><span class="pre">packages_distributions</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">Mapping</span><span class="p"><span class="pre">[</span></span><span class="pre">str</span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">List</span><span class="p"><span class="pre">[</span></span><span class="pre">str</span><span class="p"><span class="pre">]</span></span><span class="p"><span class="pre">]</span></span></span></span><a class="headerlink" href="#semsynth.metadata.packages_distributions" title="Link to this definition"></a></dt>
-<dd><p>Return a mapping of top-level packages to their
-distributions.</p>
-<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="kn">import</span><span class="w"> </span><span class="nn">collections.abc</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="n">pkgs</span> <span class="o">=</span> <span class="n">packages_distributions</span><span class="p">()</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="nb">all</span><span class="p">(</span><span class="nb">isinstance</span><span class="p">(</span><span class="n">dist</span><span class="p">,</span> <span class="n">collections</span><span class="o">.</span><span class="n">abc</span><span class="o">.</span><span class="n">Sequence</span><span class="p">)</span> <span class="k">for</span> <span class="n">dist</span> <span class="ow">in</span> <span class="n">pkgs</span><span class="o">.</span><span class="n">values</span><span class="p">())</span>
-<span class="go">True</span>
-</pre></div>
-</div>
-</dd></dl>
-
-<dl class="py function">
-<dt class="sig sig-object py" id="semsynth.metadata.requires">
-<span class="sig-prename descclassname"><span class="pre">semsynth.metadata.</span></span><span class="sig-name descname"><span class="pre">requires</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">distribution_name</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#semsynth.metadata.requires" title="Link to this definition"></a></dt>
-<dd><p>Return a list of requirements for the named package.</p>
-<dl class="field-list simple">
-<dt class="field-odd">Returns<span class="colon">:</span></dt>
-<dd class="field-odd"><p>An iterator of requirements, suitable for
-packaging.requirement.Requirement.</p>
-</dd>
-</dl>
-</dd></dl>
-
-<dl class="py function">
-<dt class="sig sig-object py" id="semsynth.metadata.version">
-<span class="sig-prename descclassname"><span class="pre">semsynth.metadata.</span></span><span class="sig-name descname"><span class="pre">version</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">distribution_name</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#semsynth.metadata.version" title="Link to this definition"></a></dt>
-<dd><p>Get the version string for the named package.</p>
-<dl class="field-list simple">
-<dt class="field-odd">Parameters<span class="colon">:</span></dt>
-<dd class="field-odd"><p><strong>distribution_name</strong> – The name of the distribution package to query.</p>
-</dd>
-<dt class="field-even">Returns<span class="colon">:</span></dt>
-<dd class="field-even"><p>The version string for the package as defined in the package’s
-“Version” metadata key.</p>
+<dd class="field-even"><p>Mapping of column name to free-text description. Missing or empty
+descriptions are filtered out.</p>
 </dd>
 </dl>
 </dd></dl>

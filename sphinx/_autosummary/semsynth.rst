@@ -19,7 +19,6 @@
    app
    backends
    catalog
-   cli
    datasets
    downstream_fidelity
    jsonld_to_rdfa
@@ -31,6 +30,8 @@
    pipeline
    privacy_metrics
    reporting
+   reports_index
+   runtime
    semmap
    specs
    torch_compat

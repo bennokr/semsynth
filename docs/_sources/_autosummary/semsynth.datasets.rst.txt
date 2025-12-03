@@ -22,7 +22,7 @@ semsynth.datasets
 
    .. autosummary::
    
-      Any
+      DatasetPayload
       DatasetSpec
       InPath
       OutPath

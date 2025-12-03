@@ -12,6 +12,7 @@ semsynth.jsonld\_to\_rdfa
       extract_vocab_and_prefixes
       is_iri
       main
+      normalize_jsonld_payload
       render_cell
       render_iri
       render_literal

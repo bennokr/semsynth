@@ -9,6 +9,7 @@ semsynth.semmap
    .. autosummary::
    
       dataclass
+      normalize_variable_descriptors
    
    .. rubric:: Classes
 
@@ -21,9 +22,9 @@ semsynth.semmap
       ColumnProperty
       DatasetSchema
       Enum
-      JSONLDMixin
       Metadata
       PintType
+      RDFMixin
       SemMapFrameAccessor
       SemMapSeriesAccessor
       SkosMappings

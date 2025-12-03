@@ -38,7 +38,8 @@ For extra features, run `python -m pip install -e .[EXTRA]` with `EXTRA` in (
      - `--datasets` (one or more dataset identifiers)
      - `--outdir` (defaults to `output/`)
      - `--configs-yaml` (path to a YAML bundle; omit for metadata-only runs)
-     - `--generate-umap` / `--compute-privacy` / `--compute-downstream` (each accepts `auto`, `on`, or `off`)
+     - `--generate-umap` (flag; include to emit real/synthetic UMAP projections when the `umap` extra is installed)
+     - `--compute-privacy` / `--compute-downstream` (flags that enable privacy and downstream metrics)
      - `--overwrite-umap` (regenerate even if projections exist)
      - `--verbose` (turn on info logging)
 
@@ -50,9 +51,9 @@ For extra features, run `python -m pip install -e .[EXTRA]` with `EXTRA` in (
       - `configs/advanced_config.yaml` (MetaSyn, PyBNesian, and SynthCity models)
       - `configs/maximal_config.yaml` (enables UMAP, privacy, downstream metrics, and the broadest mix of MetaSyn, PyBNesian, and SynthCity generators)
       - `configs/only_metasyn_config.yaml` (MetaSyn baseline only)
-   - Example: `python -m semsynth report openml --datasets adult --configs-yaml configs/advanced_config.yaml --generate-umap on --compute-privacy on --compute-downstream on`
+   - Example: `python -m semsynth report openml --datasets adult --configs-yaml configs/advanced_config.yaml --generate-umap --compute-privacy --compute-downstream`
 
-   Report toggles accept `auto` (respect YAML defaults), `on`, or `off`. Use `auto` when your YAML sets global defaults for `generate_umap`, `compute_privacy`, or `compute_downstream`.
+   Report toggles are now simple booleans: include `--generate-umap`, `--compute-privacy`, or `--compute-downstream` to switch them on for a run (their absence leaves them disabled). Global defaults defined in a YAML bundle still apply when you omit the flags.
 
 4. Catalog + app helpers
    - Build a DCAT catalog and HTML index from existing outputs: `python -m semsynth catalog --base-dir output`
@@ -105,10 +106,11 @@ configs:
 
 ### Example: UCI dataset 45 (Heart Disease)
 1. Fetch the dataset metadata. Any command that touches the UCI provider will populate `uciml-cache/<id>.json`. For example:
-   
+
    ```bash
-   python -m semsynth report uciml -d 45 --configs-yaml configs/empty.yaml --metasyn false
+   python -m semsynth report uciml --datasets 45 --configs-yaml configs/only_metasyn_config.yaml
    ```
+
    This creates `uciml-cache/45.json` alongside the cached CSV/metadata used by the reporting pipeline.
 2. Convert the cached metadata into DCAT + DSV JSON-LD:
 

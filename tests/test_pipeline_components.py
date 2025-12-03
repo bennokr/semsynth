@@ -292,7 +292,7 @@ def test_openml_cached_uses_helper(monkeypatch: pytest.MonkeyPatch, tmp_path: Pa
             "class": ["a", "b"],
         }
     )
-    df.to_csv(by_name_dir / f"{dataset_id}.csv.gz", index=False, compression="infer")
+    df.to_csv(cache_dir / f"{dataset_id}.csv.gz", index=False, compression="infer")
 
     called: Dict[str, Any] = {}
 
@@ -318,14 +318,15 @@ def test_openml_cached_uses_helper(monkeypatch: pytest.MonkeyPatch, tmp_path: Pa
         "semsynth.dataproviders.openml.clean_dataset_frame", fake_helper
     )
 
-    spec, df_loaded, color_series = load_openml_by_name(dataset_name, cache_dir)
+    payload = load_openml_by_name(dataset_name, cache_dir)
 
     assert called["called"] is True
     assert called["target"] is None
     assert isinstance(called["metadata"], dict)
-    assert "id" not in df_loaded.columns
-    assert id(color_series) == called["series_id"]
-    assert spec.target == "class"
+    assert "id" not in payload.frame.columns
+    assert payload.color is not None
+    assert id(payload.color) == called["series_id"]
+    assert payload.spec.target == "class"
 
 
 def test_uciml_cached_uses_helper(monkeypatch: pytest.MonkeyPatch, tmp_path: Path):
@@ -366,14 +367,15 @@ def test_uciml_cached_uses_helper(monkeypatch: pytest.MonkeyPatch, tmp_path: Pat
         "semsynth.dataproviders.uciml.clean_dataset_frame", fake_helper
     )
 
-    spec, df_loaded, color_series = load_uciml_by_id(dataset_id, cache_dir)
+    payload = load_uciml_by_id(dataset_id, cache_dir)
 
     assert called["called"] is True
     assert called["target"] is None
     assert isinstance(called["metadata"], dict)
-    assert "index" not in df_loaded.columns
-    assert id(color_series) == called["series_id"]
-    assert spec.target == "target"
+    assert "index" not in payload.frame.columns
+    assert payload.color is not None
+    assert id(payload.color) == called["series_id"]
+    assert payload.spec.target == "target"
 
 
 def test_uciml_cached_semmap_metadata(tmp_path: Path):
@@ -431,7 +433,7 @@ def test_uciml_cached_semmap_metadata(tmp_path: Path):
         )
     )
 
-    spec, df_loaded, color_series = load_uciml_by_id(dataset_id, cache_dir)
+    payload = load_uciml_by_id(dataset_id, cache_dir)
 
     utils_stub = _StubUtils()
     preprocessor = DatasetPreprocessor(
@@ -443,9 +445,9 @@ def test_uciml_cached_semmap_metadata(tmp_path: Path):
     rng = utils_stub.seed_all(cfg.random_state)
 
     preprocessed = preprocessor.preprocess(
-        spec,
-        df_loaded,
-        color_series,
+        payload.spec,
+        payload.frame,
+        payload.color,
         tmp_path / "out",
         cfg,
         rng,

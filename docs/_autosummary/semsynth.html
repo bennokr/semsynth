@@ -19,7 +19,7 @@
     <script src="../_static/js/theme.js"></script>
     <link rel="index" title="Index" href="../genindex.html" />
     <link rel="search" title="Search" href="../search.html" />
-    <link rel="next" title="semsynth.backends" href="semsynth.backends.html" />
+    <link rel="next" title="semsynth.app" href="semsynth.app.html" />
     <link rel="prev" title="API reference" href="../api.html" /> 
 </head>
 
@@ -51,7 +51,9 @@
 <li class="toctree-l1 current"><a class="reference internal" href="../api.html">API reference</a><ul class="current">
 <li class="toctree-l2 current"><a class="current reference internal" href="#">semsynth</a><ul>
 <li class="toctree-l3"><a class="reference internal" href="#semsynth.get_version"><code class="docutils literal notranslate"><span class="pre">get_version()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="semsynth.app.html">semsynth.app</a></li>
 <li class="toctree-l3"><a class="reference internal" href="semsynth.backends.html">semsynth.backends</a></li>
+<li class="toctree-l3"><a class="reference internal" href="semsynth.catalog.html">semsynth.catalog</a></li>
 <li class="toctree-l3"><a class="reference internal" href="semsynth.datasets.html">semsynth.datasets</a></li>
 <li class="toctree-l3"><a class="reference internal" href="semsynth.downstream_fidelity.html">semsynth.downstream_fidelity</a></li>
 <li class="toctree-l3"><a class="reference internal" href="semsynth.jsonld_to_rdfa.html">semsynth.jsonld_to_rdfa</a></li>
@@ -59,7 +61,12 @@
 <li class="toctree-l3"><a class="reference internal" href="semsynth.metadata.html">semsynth.metadata</a></li>
 <li class="toctree-l3"><a class="reference internal" href="semsynth.metrics.html">semsynth.metrics</a></li>
 <li class="toctree-l3"><a class="reference internal" href="semsynth.missingness.html">semsynth.missingness</a></li>
+<li class="toctree-l3"><a class="reference internal" href="semsynth.models.html">semsynth.models</a></li>
+<li class="toctree-l3"><a class="reference internal" href="semsynth.pipeline.html">semsynth.pipeline</a></li>
 <li class="toctree-l3"><a class="reference internal" href="semsynth.privacy_metrics.html">semsynth.privacy_metrics</a></li>
+<li class="toctree-l3"><a class="reference internal" href="semsynth.reporting.html">semsynth.reporting</a></li>
+<li class="toctree-l3"><a class="reference internal" href="semsynth.runtime.html">semsynth.runtime</a></li>
+<li class="toctree-l3"><a class="reference internal" href="semsynth.semmap.html">semsynth.semmap</a></li>
 <li class="toctree-l3"><a class="reference internal" href="semsynth.specs.html">semsynth.specs</a></li>
 <li class="toctree-l3"><a class="reference internal" href="semsynth.torch_compat.html">semsynth.torch_compat</a></li>
 <li class="toctree-l3"><a class="reference internal" href="semsynth.umap_utils.html">semsynth.umap_utils</a></li>
@@ -121,8 +128,14 @@
 <p class="rubric">Modules</p>
 <table class="autosummary longtable docutils align-default">
 <tbody>
-<tr class="row-odd"><td><p><a class="reference internal" href="semsynth.backends.html#module-semsynth.backends" title="semsynth.backends"><code class="xref py py-obj docutils literal notranslate"><span class="pre">backends</span></code></a></p></td>
+<tr class="row-odd"><td><p><a class="reference internal" href="semsynth.app.html#module-semsynth.app" title="semsynth.app"><code class="xref py py-obj docutils literal notranslate"><span class="pre">app</span></code></a></p></td>
+<td><p>Minimal Flask application exposing SemSynth search and report actions.</p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="semsynth.backends.html#module-semsynth.backends" title="semsynth.backends"><code class="xref py py-obj docutils literal notranslate"><span class="pre">backends</span></code></a></p></td>
 <td><p>Backend implementations and shared interfaces.</p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="semsynth.catalog.html#module-semsynth.catalog" title="semsynth.catalog"><code class="xref py py-obj docutils literal notranslate"><span class="pre">catalog</span></code></a></p></td>
+<td><p>Build DCAT catalogs for SemSynth reports and datasets.</p></td>
 </tr>
 <tr class="row-even"><td><p><a class="reference internal" href="semsynth.datasets.html#module-semsynth.datasets" title="semsynth.datasets"><code class="xref py py-obj docutils literal notranslate"><span class="pre">datasets</span></code></a></p></td>
 <td><p></p></td>
@@ -145,19 +158,34 @@
 <tr class="row-even"><td><p><a class="reference internal" href="semsynth.missingness.html#module-semsynth.missingness" title="semsynth.missingness"><code class="xref py py-obj docutils literal notranslate"><span class="pre">missingness</span></code></a></p></td>
 <td><p>Missingness modeling utilities for backend generators.</p></td>
 </tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="semsynth.models.html#module-semsynth.models" title="semsynth.models"><code class="xref py py-obj docutils literal notranslate"><span class="pre">models</span></code></a></p></td>
+<td><p>Model configuration loading and run discovery utilities.</p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="semsynth.pipeline.html#module-semsynth.pipeline" title="semsynth.pipeline"><code class="xref py py-obj docutils literal notranslate"><span class="pre">pipeline</span></code></a></p></td>
+<td><p>Pipeline orchestration for dataset processing and reporting.</p></td>
+</tr>
 <tr class="row-odd"><td><p><a class="reference internal" href="semsynth.privacy_metrics.html#module-semsynth.privacy_metrics" title="semsynth.privacy_metrics"><code class="xref py py-obj docutils literal notranslate"><span class="pre">privacy_metrics</span></code></a></p></td>
 <td><p></p></td>
 </tr>
-<tr class="row-even"><td><p><a class="reference internal" href="semsynth.specs.html#module-semsynth.specs" title="semsynth.specs"><code class="xref py py-obj docutils literal notranslate"><span class="pre">specs</span></code></a></p></td>
+<tr class="row-even"><td><p><a class="reference internal" href="semsynth.reporting.html#module-semsynth.reporting" title="semsynth.reporting"><code class="xref py py-obj docutils literal notranslate"><span class="pre">reporting</span></code></a></p></td>
+<td><p>Utilities for rendering dataset reports.</p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="semsynth.runtime.html#module-semsynth.runtime" title="semsynth.runtime"><code class="xref py py-obj docutils literal notranslate"><span class="pre">runtime</span></code></a></p></td>
+<td><p>Runtime helpers for resolving SemSynth dependencies.</p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="semsynth.semmap.html#module-semsynth.semmap" title="semsynth.semmap"><code class="xref py py-obj docutils literal notranslate"><span class="pre">semmap</span></code></a></p></td>
+<td><p></p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="semsynth.specs.html#module-semsynth.specs" title="semsynth.specs"><code class="xref py py-obj docutils literal notranslate"><span class="pre">specs</span></code></a></p></td>
 <td><p>Shared data structures for SemSynth dataset handling.</p></td>
 </tr>
-<tr class="row-odd"><td><p><a class="reference internal" href="semsynth.torch_compat.html#module-semsynth.torch_compat" title="semsynth.torch_compat"><code class="xref py py-obj docutils literal notranslate"><span class="pre">torch_compat</span></code></a></p></td>
+<tr class="row-even"><td><p><a class="reference internal" href="semsynth.torch_compat.html#module-semsynth.torch_compat" title="semsynth.torch_compat"><code class="xref py py-obj docutils literal notranslate"><span class="pre">torch_compat</span></code></a></p></td>
 <td><p>Compatibility helpers for optional PyTorch features.</p></td>
 </tr>
-<tr class="row-even"><td><p><a class="reference internal" href="semsynth.umap_utils.html#module-semsynth.umap_utils" title="semsynth.umap_utils"><code class="xref py py-obj docutils literal notranslate"><span class="pre">umap_utils</span></code></a></p></td>
+<tr class="row-odd"><td><p><a class="reference internal" href="semsynth.umap_utils.html#module-semsynth.umap_utils" title="semsynth.umap_utils"><code class="xref py py-obj docutils literal notranslate"><span class="pre">umap_utils</span></code></a></p></td>
 <td><p>Utilities for building and rendering UMAP embeddings lazily.</p></td>
 </tr>
-<tr class="row-odd"><td><p><a class="reference internal" href="semsynth.utils.html#module-semsynth.utils" title="semsynth.utils"><code class="xref py py-obj docutils literal notranslate"><span class="pre">utils</span></code></a></p></td>
+<tr class="row-even"><td><p><a class="reference internal" href="semsynth.utils.html#module-semsynth.utils" title="semsynth.utils"><code class="xref py py-obj docutils literal notranslate"><span class="pre">utils</span></code></a></p></td>
 <td><p></p></td>
 </tr>
 </tbody>
@@ -169,7 +197,7 @@
           </div>
           <footer><div class="rst-footer-buttons" role="navigation" aria-label="Footer">
         <a href="../api.html" class="btn btn-neutral float-left" title="API reference" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
-        <a href="semsynth.backends.html" class="btn btn-neutral float-right" title="semsynth.backends" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+        <a href="semsynth.app.html" class="btn btn-neutral float-right" title="semsynth.app" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
     </div>
 
   <hr/>

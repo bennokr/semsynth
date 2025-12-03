@@ -635,23 +635,31 @@ class BackendExecutor:
         outdir_path = Path(outdir)
         bundle_specs = bundle.specs if bundle.specs else []
 
+        def _current_buffer() -> Optional[List[Any]]:
+            buffer = getattr(prov_core, "PROV_BUFFER", None)
+            if buffer is None and hasattr(prov_core, "_current_prov_buffer"):
+                buffer = prov_core._current_prov_buffer()
+            return buffer
+
         shared_prov: List[Any] = []
-        if prov_core.PROV_BUFFER is not None:
+        prov_buffer = _current_buffer()
+        if prov_buffer:
             LOGGER.info(
                 "PROV buffer entries available before model runs",
-                extra={"entry_count": len(prov_core.PROV_BUFFER)},
+                extra={"entry_count": len(prov_buffer)},
             )
-            shared_prov = list(prov_core.PROV_BUFFER)
+            shared_prov = list(prov_buffer)
 
         def _write_model_provenance(
             label: str, run_dir_path: Path, model_prov_start: Optional[int]
         ) -> None:
-            if prov_core.PROV_BUFFER is None:
+            prov_buffer = _current_buffer()
+            if prov_buffer is None:
                 return
 
             new_entries: List[Any] = []
             if model_prov_start is not None:
-                new_entries = list(prov_core.PROV_BUFFER[model_prov_start:])
+                new_entries = list(prov_buffer[model_prov_start:])
             model_entries = list(shared_prov) + new_entries
             LOGGER.info(
                 "Aggregating model provenance",
@@ -700,8 +708,9 @@ class BackendExecutor:
                 continue
 
             model_prov_start: Optional[int] = None
-            if prov_core.PROV_BUFFER is not None:
-                model_prov_start = len(prov_core.PROV_BUFFER)
+            prov_buffer = _current_buffer()
+            if prov_buffer is not None:
+                model_prov_start = len(prov_buffer)
 
             rows = spec.rows if spec.rows is not None else self._cfg.synthetic_sample
             try:
@@ -975,16 +984,9 @@ def process_dataset(
     outdir = base_path / dataset_spec.name.replace("/", "_")
     rng = utils.seed_all(cfg.random_state)
 
-    generate_umap_default = (
-        cfg.override_generate_umap
-        if cfg.override_generate_umap is not None
-        else cfg.generate_umap
-    )
-    generate_umap_flag = _resolve_flag(
-        generate_umap_default,
-        bundle.generate_umap,
-        None,
-    )
+    generate_umap_flag = cfg.generate_umap
+    if bundle.generate_umap is not None:
+        generate_umap_flag = bundle.generate_umap
 
     umap_utils = _load_umap_utils_module() if generate_umap_flag else None
 

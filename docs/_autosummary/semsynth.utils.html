@@ -50,7 +50,9 @@
 <li class="toctree-l1 current"><a class="reference internal" href="../api.html">API reference</a><ul class="current">
 <li class="toctree-l2 current"><a class="reference internal" href="semsynth.html">semsynth</a><ul class="current">
 <li class="toctree-l3"><a class="reference internal" href="semsynth.html#semsynth.get_version"><code class="docutils literal notranslate"><span class="pre">get_version()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="semsynth.app.html">semsynth.app</a></li>
 <li class="toctree-l3"><a class="reference internal" href="semsynth.backends.html">semsynth.backends</a></li>
+<li class="toctree-l3"><a class="reference internal" href="semsynth.catalog.html">semsynth.catalog</a></li>
 <li class="toctree-l3"><a class="reference internal" href="semsynth.datasets.html">semsynth.datasets</a></li>
 <li class="toctree-l3"><a class="reference internal" href="semsynth.downstream_fidelity.html">semsynth.downstream_fidelity</a></li>
 <li class="toctree-l3"><a class="reference internal" href="semsynth.jsonld_to_rdfa.html">semsynth.jsonld_to_rdfa</a></li>
@@ -58,11 +60,17 @@
 <li class="toctree-l3"><a class="reference internal" href="semsynth.metadata.html">semsynth.metadata</a></li>
 <li class="toctree-l3"><a class="reference internal" href="semsynth.metrics.html">semsynth.metrics</a></li>
 <li class="toctree-l3"><a class="reference internal" href="semsynth.missingness.html">semsynth.missingness</a></li>
+<li class="toctree-l3"><a class="reference internal" href="semsynth.models.html">semsynth.models</a></li>
+<li class="toctree-l3"><a class="reference internal" href="semsynth.pipeline.html">semsynth.pipeline</a></li>
 <li class="toctree-l3"><a class="reference internal" href="semsynth.privacy_metrics.html">semsynth.privacy_metrics</a></li>
+<li class="toctree-l3"><a class="reference internal" href="semsynth.reporting.html">semsynth.reporting</a></li>
+<li class="toctree-l3"><a class="reference internal" href="semsynth.runtime.html">semsynth.runtime</a></li>
+<li class="toctree-l3"><a class="reference internal" href="semsynth.semmap.html">semsynth.semmap</a></li>
 <li class="toctree-l3"><a class="reference internal" href="semsynth.specs.html">semsynth.specs</a></li>
 <li class="toctree-l3"><a class="reference internal" href="semsynth.torch_compat.html">semsynth.torch_compat</a></li>
 <li class="toctree-l3"><a class="reference internal" href="semsynth.umap_utils.html">semsynth.umap_utils</a></li>
 <li class="toctree-l3 current"><a class="current reference internal" href="#">semsynth.utils</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="#semsynth.utils.VariableDescriptor"><code class="docutils literal notranslate"><span class="pre">VariableDescriptor</span></code></a></li>
 <li class="toctree-l4"><a class="reference internal" href="#semsynth.utils.coerce_continuous_to_float"><code class="docutils literal notranslate"><span class="pre">coerce_continuous_to_float()</span></code></a></li>
 <li class="toctree-l4"><a class="reference internal" href="#semsynth.utils.coerce_discrete_to_category"><code class="docutils literal notranslate"><span class="pre">coerce_discrete_to_category()</span></code></a></li>
 <li class="toctree-l4"><a class="reference internal" href="#semsynth.utils.dataframe_to_markdown_table"><code class="docutils literal notranslate"><span class="pre">dataframe_to_markdown_table()</span></code></a></li>
@@ -70,6 +78,7 @@
 <li class="toctree-l4"><a class="reference internal" href="#semsynth.utils.infer_types"><code class="docutils literal notranslate"><span class="pre">infer_types()</span></code></a></li>
 <li class="toctree-l4"><a class="reference internal" href="#semsynth.utils.is_discrete_series"><code class="docutils literal notranslate"><span class="pre">is_discrete_series()</span></code></a></li>
 <li class="toctree-l4"><a class="reference internal" href="#semsynth.utils.is_numeric_series"><code class="docutils literal notranslate"><span class="pre">is_numeric_series()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#semsynth.utils.normalize_variable_descriptors"><code class="docutils literal notranslate"><span class="pre">normalize_variable_descriptors()</span></code></a></li>
 <li class="toctree-l4"><a class="reference internal" href="#semsynth.utils.rename_categorical_categories_to_str"><code class="docutils literal notranslate"><span class="pre">rename_categorical_categories_to_str()</span></code></a></li>
 <li class="toctree-l4"><a class="reference internal" href="#semsynth.utils.seed_all"><code class="docutils literal notranslate"><span class="pre">seed_all()</span></code></a></li>
 <li class="toctree-l4"><a class="reference internal" href="#semsynth.utils.summarize_dataframe"><code class="docutils literal notranslate"><span class="pre">summarize_dataframe()</span></code></a></li>
@@ -118,20 +127,26 @@
 <tr class="row-even"><td><p><a class="reference internal" href="#semsynth.utils.coerce_discrete_to_category" title="semsynth.utils.coerce_discrete_to_category"><code class="xref py py-obj docutils literal notranslate"><span class="pre">coerce_discrete_to_category</span></code></a>(df, discrete_cols)</p></td>
 <td><p>Convert selected columns to the categorical dtype.</p></td>
 </tr>
-<tr class="row-odd"><td><p><a class="reference internal" href="#semsynth.utils.dataframe_to_markdown_table" title="semsynth.utils.dataframe_to_markdown_table"><code class="xref py py-obj docutils literal notranslate"><span class="pre">dataframe_to_markdown_table</span></code></a>(df[, float_fmt])</p></td>
+<tr class="row-odd"><td><p><code class="xref py py-obj docutils literal notranslate"><span class="pre">dataclass</span></code>([cls, init, repr, eq, order, ...])</p></td>
+<td><p>Add dunder methods based on the fields defined in the class.</p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="#semsynth.utils.dataframe_to_markdown_table" title="semsynth.utils.dataframe_to_markdown_table"><code class="xref py py-obj docutils literal notranslate"><span class="pre">dataframe_to_markdown_table</span></code></a>(df[, float_fmt])</p></td>
 <td><p>Render a dataframe as a GitHub-flavoured markdown table.</p></td>
 </tr>
-<tr class="row-even"><td><p><a class="reference internal" href="#semsynth.utils.ensure_dir" title="semsynth.utils.ensure_dir"><code class="xref py py-obj docutils literal notranslate"><span class="pre">ensure_dir</span></code></a>(path)</p></td>
+<tr class="row-odd"><td><p><a class="reference internal" href="#semsynth.utils.ensure_dir" title="semsynth.utils.ensure_dir"><code class="xref py py-obj docutils literal notranslate"><span class="pre">ensure_dir</span></code></a>(path)</p></td>
 <td><p>Create the directory at <code class="docutils literal notranslate"><span class="pre">path</span></code> if it is missing.</p></td>
 </tr>
-<tr class="row-odd"><td><p><a class="reference internal" href="#semsynth.utils.infer_types" title="semsynth.utils.infer_types"><code class="xref py py-obj docutils literal notranslate"><span class="pre">infer_types</span></code></a>(df[, cardinality_threshold])</p></td>
+<tr class="row-even"><td><p><a class="reference internal" href="#semsynth.utils.infer_types" title="semsynth.utils.infer_types"><code class="xref py py-obj docutils literal notranslate"><span class="pre">infer_types</span></code></a>(df[, cardinality_threshold])</p></td>
 <td><p>Split dataframe columns into discrete and continuous lists.</p></td>
 </tr>
-<tr class="row-even"><td><p><a class="reference internal" href="#semsynth.utils.is_discrete_series" title="semsynth.utils.is_discrete_series"><code class="xref py py-obj docutils literal notranslate"><span class="pre">is_discrete_series</span></code></a>(s[, cardinality_threshold])</p></td>
+<tr class="row-odd"><td><p><a class="reference internal" href="#semsynth.utils.is_discrete_series" title="semsynth.utils.is_discrete_series"><code class="xref py py-obj docutils literal notranslate"><span class="pre">is_discrete_series</span></code></a>(s[, cardinality_threshold])</p></td>
 <td><p>Return <code class="docutils literal notranslate"><span class="pre">True</span></code> if <code class="docutils literal notranslate"><span class="pre">s</span></code> should be treated as discrete.</p></td>
 </tr>
-<tr class="row-odd"><td><p><a class="reference internal" href="#semsynth.utils.is_numeric_series" title="semsynth.utils.is_numeric_series"><code class="xref py py-obj docutils literal notranslate"><span class="pre">is_numeric_series</span></code></a>(s)</p></td>
+<tr class="row-even"><td><p><a class="reference internal" href="#semsynth.utils.is_numeric_series" title="semsynth.utils.is_numeric_series"><code class="xref py py-obj docutils literal notranslate"><span class="pre">is_numeric_series</span></code></a>(s)</p></td>
 <td><p>Return <code class="docutils literal notranslate"><span class="pre">True</span></code> when <code class="docutils literal notranslate"><span class="pre">s</span></code> represents a numeric series.</p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="#semsynth.utils.normalize_variable_descriptors" title="semsynth.utils.normalize_variable_descriptors"><code class="xref py py-obj docutils literal notranslate"><span class="pre">normalize_variable_descriptors</span></code></a>(variables)</p></td>
+<td><p>Normalize heterogeneous metadata mappings into variable descriptors.</p></td>
 </tr>
 <tr class="row-even"><td><p><a class="reference internal" href="#semsynth.utils.rename_categorical_categories_to_str" title="semsynth.utils.rename_categorical_categories_to_str"><code class="xref py py-obj docutils literal notranslate"><span class="pre">rename_categorical_categories_to_str</span></code></a>(df, ...)</p></td>
 <td><p>Ensure categorical levels are strings to keep outputs JSON-friendly.</p></td>
@@ -150,8 +165,44 @@
 <tr class="row-odd"><td><p><code class="xref py py-obj docutils literal notranslate"><span class="pre">PintType</span></code>([units, subdtype])</p></td>
 <td><p>A Pint duck-typed class, suitable for holding a quantity (with unit specified) dtype.</p></td>
 </tr>
+<tr class="row-even"><td><p><a class="reference internal" href="#semsynth.utils.VariableDescriptor" title="semsynth.utils.VariableDescriptor"><code class="xref py py-obj docutils literal notranslate"><span class="pre">VariableDescriptor</span></code></a>(name[, description, ...])</p></td>
+<td><p>Normalized representation of a dataset variable.</p></td>
+</tr>
 </tbody>
 </table>
+<dl class="py class">
+<dt class="sig sig-object py" id="semsynth.utils.VariableDescriptor">
+<em class="property"><span class="k"><span class="pre">class</span></span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">semsynth.utils.</span></span><span class="sig-name descname"><span class="pre">VariableDescriptor</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">name</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">description</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">None</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">role</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">None</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">unit</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">None</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#semsynth.utils.VariableDescriptor" title="Link to this definition"></a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></p>
+<p>Normalized representation of a dataset variable.</p>
+<dl class="py method">
+<dt class="sig sig-object py" id="semsynth.utils.VariableDescriptor.as_dict">
+<span class="sig-name descname"><span class="pre">as_dict</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">Dict</span><span class="p"><span class="pre">[</span></span><span class="pre">str</span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">str</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">None</span><span class="p"><span class="pre">]</span></span></span></span><a class="headerlink" href="#semsynth.utils.VariableDescriptor.as_dict" title="Link to this definition"></a></dt>
+<dd><p>Return a serializable mapping of descriptor attributes.</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="semsynth.utils.VariableDescriptor.description">
+<span class="sig-name descname"><span class="pre">description</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">str</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">None</span></em><a class="headerlink" href="#semsynth.utils.VariableDescriptor.description" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="semsynth.utils.VariableDescriptor.name">
+<span class="sig-name descname"><span class="pre">name</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">str</span></em><a class="headerlink" href="#semsynth.utils.VariableDescriptor.name" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="semsynth.utils.VariableDescriptor.role">
+<span class="sig-name descname"><span class="pre">role</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">str</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">None</span></em><a class="headerlink" href="#semsynth.utils.VariableDescriptor.role" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="semsynth.utils.VariableDescriptor.unit">
+<span class="sig-name descname"><span class="pre">unit</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">str</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">None</span></em><a class="headerlink" href="#semsynth.utils.VariableDescriptor.unit" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
 <dl class="py function">
 <dt class="sig sig-object py" id="semsynth.utils.coerce_continuous_to_float">
 <span class="sig-prename descclassname"><span class="pre">semsynth.utils.</span></span><span class="sig-name descname"><span class="pre">coerce_continuous_to_float</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">df</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">DataFrame</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">continuous_cols</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">List</span><span class="p"><span class="pre">[</span></span><span class="pre">str</span><span class="p"><span class="pre">]</span></span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">DataFrame</span></span></span><a class="headerlink" href="#semsynth.utils.coerce_continuous_to_float" title="Link to this definition"></a></dt>
@@ -294,6 +345,20 @@
 <span class="go">True</span>
 </pre></div>
 </div>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="semsynth.utils.normalize_variable_descriptors">
+<span class="sig-prename descclassname"><span class="pre">semsynth.utils.</span></span><span class="sig-name descname"><span class="pre">normalize_variable_descriptors</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">variables</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Iterable</span><span class="p"><span class="pre">[</span></span><span class="pre">Mapping</span><span class="p"><span class="pre">[</span></span><span class="pre">str</span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">object</span><span class="p"><span class="pre">]</span></span><span class="p"><span class="pre">]</span></span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">List</span><span class="p"><span class="pre">[</span></span><a class="reference internal" href="#semsynth.utils.VariableDescriptor" title="semsynth.utils.VariableDescriptor"><span class="pre">VariableDescriptor</span></a><span class="p"><span class="pre">]</span></span></span></span><a class="headerlink" href="#semsynth.utils.normalize_variable_descriptors" title="Link to this definition"></a></dt>
+<dd><p>Normalize heterogeneous metadata mappings into variable descriptors.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>variables</strong> – Iterable of dictionaries originating from provider metadata.</p>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>List of <a class="reference internal" href="#semsynth.utils.VariableDescriptor" title="semsynth.utils.VariableDescriptor"><code class="xref py py-class docutils literal notranslate"><span class="pre">VariableDescriptor</span></code></a> instances with harmonized fields.</p>
+</dd>
+</dl>
 </dd></dl>
 
 <dl class="py function">

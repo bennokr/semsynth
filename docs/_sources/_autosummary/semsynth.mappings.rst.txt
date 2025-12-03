@@ -9,6 +9,7 @@ semsynth.mappings
    .. autosummary::
    
       load_mapping_json
+      normalize_jsonld_payload
       resolve_mapping_json
    
    .. rubric:: Classes

@@ -19,6 +19,5 @@ semsynth.backends
 
    base
    metasyn
-   missingness
    pybnesian
    synthcity

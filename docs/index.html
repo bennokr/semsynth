@@ -86,6 +86,17 @@
 <li><p>Provider-aware metadata and UMAP visuals.</p></li>
 </ul>
 </section>
+<section id="install">
+<h2>⚙️ Install<a class="headerlink" href="#install" title="Link to this heading"></a></h2>
+<p>Clone and run <code class="docutils literal notranslate"><span class="pre">python</span> <span class="pre">-m</span> <span class="pre">pip</span> <span class="pre">install</span> <span class="pre">-e</span> <span class="pre">.</span></code></p>
+<p>For extra features, run <code class="docutils literal notranslate"><span class="pre">python</span> <span class="pre">-m</span> <span class="pre">pip</span> <span class="pre">install</span> <span class="pre">-e</span> <span class="pre">.[EXTRA]</span></code> with <code class="docutils literal notranslate"><span class="pre">EXTRA</span></code> in (
+<code class="docutils literal notranslate"><span class="pre">metasyn</span></code>
+<code class="docutils literal notranslate"><span class="pre">pybnesian</span></code>
+<code class="docutils literal notranslate"><span class="pre">synthcity</span></code>
+<code class="docutils literal notranslate"><span class="pre">umap</span></code>
+<code class="docutils literal notranslate"><span class="pre">statsmodels</span></code>
+<code class="docutils literal notranslate"><span class="pre">mapping</span></code>).</p>
+</section>
 <section id="quick-start">
 <h2>🔎 Quick start<a class="headerlink" href="#quick-start" title="Link to this heading"></a></h2>
 <ol class="arabic">
@@ -111,7 +122,8 @@
 <li><p><code class="docutils literal notranslate"><span class="pre">--datasets</span></code> (one or more dataset identifiers)</p></li>
 <li><p><code class="docutils literal notranslate"><span class="pre">--outdir</span></code> (defaults to <code class="docutils literal notranslate"><span class="pre">output/</span></code>)</p></li>
 <li><p><code class="docutils literal notranslate"><span class="pre">--configs-yaml</span></code> (path to a YAML bundle; omit for metadata-only runs)</p></li>
-<li><p><code class="docutils literal notranslate"><span class="pre">--generate-umap</span></code> / <code class="docutils literal notranslate"><span class="pre">--compute-privacy</span></code> / <code class="docutils literal notranslate"><span class="pre">--compute-downstream</span></code> (each accepts <code class="docutils literal notranslate"><span class="pre">auto</span></code>, <code class="docutils literal notranslate"><span class="pre">on</span></code>, or <code class="docutils literal notranslate"><span class="pre">off</span></code>)</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">--generate-umap</span></code> (flag; include to emit real/synthetic UMAP projections when the <code class="docutils literal notranslate"><span class="pre">umap</span></code> extra is installed)</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">--compute-privacy</span></code> / <code class="docutils literal notranslate"><span class="pre">--compute-downstream</span></code> (flags that enable privacy and downstream metrics)</p></li>
 <li><p><code class="docutils literal notranslate"><span class="pre">--overwrite-umap</span></code> (regenerate even if projections exist)</p></li>
 <li><p><code class="docutils literal notranslate"><span class="pre">--verbose</span></code> (turn on info logging)</p></li>
 </ul>
@@ -129,9 +141,9 @@
 <li><p><code class="docutils literal notranslate"><span class="pre">configs/only_metasyn_config.yaml</span></code> (MetaSyn baseline only)</p></li>
 </ul>
 </li>
-<li><p>Example: <code class="docutils literal notranslate"><span class="pre">python</span> <span class="pre">-m</span> <span class="pre">semsynth</span> <span class="pre">report</span> <span class="pre">openml</span> <span class="pre">--datasets</span> <span class="pre">adult</span> <span class="pre">--configs-yaml</span> <span class="pre">configs/advanced_config.yaml</span> <span class="pre">--generate-umap</span> <span class="pre">on</span> <span class="pre">--compute-privacy</span> <span class="pre">on</span> <span class="pre">--compute-downstream</span> <span class="pre">on</span></code></p></li>
+<li><p>Example: <code class="docutils literal notranslate"><span class="pre">python</span> <span class="pre">-m</span> <span class="pre">semsynth</span> <span class="pre">report</span> <span class="pre">openml</span> <span class="pre">--datasets</span> <span class="pre">adult</span> <span class="pre">--configs-yaml</span> <span class="pre">configs/advanced_config.yaml</span> <span class="pre">--generate-umap</span> <span class="pre">--compute-privacy</span> <span class="pre">--compute-downstream</span></code></p></li>
 </ul>
-<p>Report toggles accept <code class="docutils literal notranslate"><span class="pre">auto</span></code> (respect YAML defaults), <code class="docutils literal notranslate"><span class="pre">on</span></code>, or <code class="docutils literal notranslate"><span class="pre">off</span></code>. Use <code class="docutils literal notranslate"><span class="pre">auto</span></code> when your YAML sets global defaults for <code class="docutils literal notranslate"><span class="pre">generate_umap</span></code>, <code class="docutils literal notranslate"><span class="pre">compute_privacy</span></code>, or <code class="docutils literal notranslate"><span class="pre">compute_downstream</span></code>.</p>
+<p>Report toggles are now simple booleans: include <code class="docutils literal notranslate"><span class="pre">--generate-umap</span></code>, <code class="docutils literal notranslate"><span class="pre">--compute-privacy</span></code>, or <code class="docutils literal notranslate"><span class="pre">--compute-downstream</span></code> to switch them on for a run (their absence leaves them disabled). Global defaults defined in a YAML bundle still apply when you omit the flags.</p>
 </li>
 <li><p>Catalog + app helpers</p>
 <ul class="simple">
@@ -202,7 +214,7 @@
 <h3>Example: UCI dataset 45 (Heart Disease)<a class="headerlink" href="#example-uci-dataset-45-heart-disease" title="Link to this heading"></a></h3>
 <ol class="arabic">
 <li><p>Fetch the dataset metadata. Any command that touches the UCI provider will populate <code class="docutils literal notranslate"><span class="pre">uciml-cache/&lt;id&gt;.json</span></code>. For example:</p>
-<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>python<span class="w"> </span>-m<span class="w"> </span>semsynth<span class="w"> </span>report<span class="w"> </span>uciml<span class="w"> </span>-d<span class="w"> </span><span class="m">45</span><span class="w"> </span>--configs-yaml<span class="w"> </span>configs/empty.yaml<span class="w"> </span>--metasyn<span class="w"> </span><span class="nb">false</span>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>python<span class="w"> </span>-m<span class="w"> </span>semsynth<span class="w"> </span>report<span class="w"> </span>uciml<span class="w"> </span>--datasets<span class="w"> </span><span class="m">45</span><span class="w"> </span>--configs-yaml<span class="w"> </span>configs/only_metasyn_config.yaml
 </pre></div>
 </div>
 <p>This creates <code class="docutils literal notranslate"><span class="pre">uciml-cache/45.json</span></code> alongside the cached CSV/metadata used by the reporting pipeline.</p>
@@ -233,9 +245,11 @@
 <li><p>All models are treated uniformly in the report; UMAPs share the same projection trained on real data.</p></li>
 </ul>
 </section>
-<section id="documentation">
-<h2>📚 Documentation<a class="headerlink" href="#documentation" title="Link to this heading"></a></h2>
+<section id="testing-contributing-documentation">
+<h2>📚 Testing, Contributing, Documentation<a class="headerlink" href="#testing-contributing-documentation" title="Link to this heading"></a></h2>
 <ul class="simple">
+<li><p>Install dev deps with <code class="docutils literal notranslate"><span class="pre">python</span> <span class="pre">-m</span> <span class="pre">pip</span> <span class="pre">install</span> <span class="pre">-e</span> <span class="pre">.[dev]</span></code></p></li>
+<li><p>Run tests with <code class="docutils literal notranslate"><span class="pre">python</span> <span class="pre">-m</span> <span class="pre">pytest</span></code></p></li>
 <li><p>Build the Sphinx site with <code class="docutils literal notranslate"><span class="pre">sphinx-build</span> <span class="pre">-b</span> <span class="pre">html</span> <span class="pre">sphinx</span> <span class="pre">docs</span></code>.</p></li>
 </ul>
 <div class="toctree-wrapper compound">
