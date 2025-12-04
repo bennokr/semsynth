@@ -148,7 +148,7 @@ def create_mapping(
     datasets: Optional[List[str]] = None,
     codes_tsv: str = "map_columns/codes.tsv",
     manual_overrides_dir: Optional[str] = "map_columns/manual",
-    systems: Sequence[str] = ("WD_TEST", "WD_PROCEDURE", "WD_SYMPTOM", "WD_DISEASE", "WD_SIGN"),
+    systems: Sequence[str] = ("WD",),
     min_score: float = 0.45,
     top_k: int = 2,
     outdir: OutPath = OutPath("mappings/"),
@@ -163,7 +163,7 @@ def create_mapping(
         datasets: Optional list of dataset identifiers; falls back to default
             provider catalog when omitted.
         codes_tsv: Path to the terminology TSV produced by
-            :mod:`map_columns.extract_wikidata_medical_codes_table`.
+            :mod:`map_columns.build_wikidata_medical_codes_table`.
         manual_overrides_dir: Directory holding optional ``*.json`` overrides.
         systems: Terminology systems to consider during matching.
         min_score: Minimum similarity score applied to automatic matches.

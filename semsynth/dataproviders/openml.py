@@ -71,7 +71,9 @@ def list_openml(
         "NumberOfSymbolicFeatures": "n_categorical",
         "NumberOfNumericFeatures": "n_numeric",
     }
-    return sets.rename(columns=rename)
+    sets = sets.rename(columns=rename)
+    sets["min_cat_num"] = sets[["n_categorical", "n_numeric"]].min(axis=1)
+    return sets.sort_values("min_cat_num", ascending=False).reset_index(drop=True)
 
 
 def _openml_cache_paths(cache_root: Path, dataset_id: int) -> CachePaths:

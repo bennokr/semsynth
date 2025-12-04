@@ -9,6 +9,7 @@
 Home <self>
 getting-started
 schema
+map_columns
 provenance
 api
 ```

@@ -1,0 +1,255 @@
+
+
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" data-content_root="./">
+<head>
+  <meta charset="utf-8" /><meta name="viewport" content="width=device-width, initial-scale=1" />
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Column Terminology Mapping &mdash; semsynth  documentation</title>
+      <link rel="stylesheet" type="text/css" href="_static/pygments.css?v=b86133f3" />
+      <link rel="stylesheet" type="text/css" href="_static/css/theme.css?v=e59714d7" />
+
+  
+      <script src="_static/jquery.js?v=5d32c60e"></script>
+      <script src="_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
+      <script src="_static/documentation_options.js?v=5929fcd5"></script>
+      <script src="_static/doctools.js?v=9bcbadda"></script>
+      <script src="_static/sphinx_highlight.js?v=dc90522c"></script>
+    <script src="_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="genindex.html" />
+    <link rel="search" title="Search" href="search.html" />
+    <link rel="next" title="Provenance workflow guide" href="provenance.html" />
+    <link rel="prev" title="SemMap metadata schema" href="schema.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+
+          
+          
+          <a href="index.html" class="icon icon-home">
+            semsynth
+          </a>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <p class="caption" role="heading"><span class="caption-text">Contents</span></p>
+<ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="index.html">Home</a></li>
+<li class="toctree-l1"><a class="reference internal" href="getting-started.html">Getting started</a></li>
+<li class="toctree-l1"><a class="reference internal" href="schema.html">SemMap metadata schema</a></li>
+<li class="toctree-l1 current"><a class="current reference internal" href="#">Column Terminology Mapping</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="#table-of-contents">Table of Contents</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#scripts-overview">Scripts Overview</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#prerequisites">Prerequisites</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#usage">Usage</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#build-codes-table">1. Build Codes Table</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="#option-a-build-snomed-and-loinc-codes-table">Option A: Build SNOMED and LOINC Codes Table</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#option-b-extract-medical-codes-from-wikidata">Option B: Extract Medical Codes from Wikidata</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#loading-codes-table">Loading Codes Table</a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="#map-dataset-columns-to-codes-using-keyword-search">2. Map Dataset Columns to Codes using Keyword Search</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#map-dataset-columns-to-codes-using-llm">3. Map Dataset Columns to Codes using LLM</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#map-dataset-columns-to-codes-using-a-local-tsv">4. Map Dataset Columns to Codes using a Local TSV</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="#integrated-cli-helper">Integrated CLI helper</a></li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="provenance.html">Provenance workflow guide</a></li>
+<li class="toctree-l1"><a class="reference internal" href="api.html">API reference</a></li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="index.html">semsynth</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="index.html" class="icon icon-home" aria-label="Home"></a></li>
+      <li class="breadcrumb-item active">Column Terminology Mapping</li>
+      <li class="wy-breadcrumbs-aside">
+            <a href="_sources/map_columns.md.txt" rel="nofollow"> View page source</a>
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <section id="column-terminology-mapping">
+<h1>Column Terminology Mapping<a class="headerlink" href="#column-terminology-mapping" title="Link to this heading"></a></h1>
+<p>The <code class="docutils literal notranslate"><span class="pre">map_columns/</span></code> directory contains several Python scripts designed to build a small medical terminology index and perform mappings between dataset variables and relevant medical codes. You can use both closed (license based) SNOMED CT / LOINC and open data from Wikidata. The mapping can be done with a keyword index or an LLM that wraps this index and re-ranks.</p>
+<section id="table-of-contents">
+<h2>Table of Contents<a class="headerlink" href="#table-of-contents" title="Link to this heading"></a></h2>
+<ul class="simple">
+<li><p><a class="reference internal" href="#scripts-overview"><span class="xref myst">Scripts Overview</span></a></p></li>
+<li><p><a class="reference internal" href="#prerequisites"><span class="xref myst">Prerequisites</span></a></p></li>
+<li><p><a class="reference internal" href="#usage"><span class="xref myst">Usage</span></a></p>
+<ul>
+<li><p><a class="reference internal" href="#1-build-snomed-and-loinc-codes-table"><span class="xref myst">1. Build SNOMED and LOINC Codes Table</span></a></p></li>
+<li><p><a class="reference internal" href="#2-extract-medical-codes-from-wikidata"><span class="xref myst">2. Extract Medical Codes from Wikidata</span></a></p></li>
+<li><p><a class="reference internal" href="#3-map-dataset-columns-to-codes-using-keyword-search"><span class="xref myst">3. Map Dataset Columns to Codes using Keyword Search</span></a></p></li>
+<li><p><a class="reference internal" href="#4-map-dataset-columns-to-codes-using-llm"><span class="xref myst">4. Map Dataset Columns to Codes using LLM</span></a></p></li>
+</ul>
+</li>
+</ul>
+</section>
+<section id="scripts-overview">
+<h2>Scripts Overview<a class="headerlink" href="#scripts-overview" title="Link to this heading"></a></h2>
+<ol class="arabic simple">
+<li><p><code class="docutils literal notranslate"><span class="pre">build_snomed_loinc_codes_table.py</span></code> - Builds a TSV containing codes from SNOMED CT and LOINC.</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">build_wikidata_medical_codes_table.py</span></code> - Extracts medical terminology from Wikidata and outputs a TSV.</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">kwd_map_columns.py</span></code> - Maps dataset columns to codes using a keyword search index over a Datasette-backed terminology index.</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">llm_map_columns.py</span></code> - Utilizes an LLM to map dataset columns to codes from a Datasette-backed terminology index.</p></li>
+</ol>
+</section>
+<section id="prerequisites">
+<h2>Prerequisites<a class="headerlink" href="#prerequisites" title="Link to this heading"></a></h2>
+<p>You can install the necessary libraries using pip:</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>pip<span class="w"> </span>install<span class="w"> </span>requests<span class="w"> </span>defopt<span class="w"> </span>datasette<span class="w"> </span>sqlite-utils<span class="w"> </span>sssom
+</pre></div>
+</div>
+<p>To use the LLM script, run:</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>pip<span class="w"> </span>install<span class="w"> </span>llm
+llm<span class="w"> </span>install<span class="w"> </span>llm-tools-datasette
+</pre></div>
+</div>
+</section>
+<section id="usage">
+<h2>Usage<a class="headerlink" href="#usage" title="Link to this heading"></a></h2>
+<section id="build-codes-table">
+<h3>1. Build Codes Table<a class="headerlink" href="#build-codes-table" title="Link to this heading"></a></h3>
+<section id="option-a-build-snomed-and-loinc-codes-table">
+<h4>Option A: Build SNOMED and LOINC Codes Table<a class="headerlink" href="#option-a-build-snomed-and-loinc-codes-table" title="Link to this heading"></a></h4>
+<p>This script processes SNOMED CT and LOINC files to create a <code class="docutils literal notranslate"><span class="pre">codes.tsv</span></code> file.</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>python<span class="w"> </span>build_snomed_loinc_codes_table.py<span class="w"> </span><span class="se">\</span>
+<span class="w">    </span>--snomed-description<span class="w"> </span>/path/to/Snapshot/Terminology/sct2_Description_Snapshot-en_INT_*.txt<span class="w"> </span><span class="se">\</span>
+<span class="w">    </span>--loinc<span class="w"> </span>/path/to/Loinc.csv<span class="w"> </span><span class="se">\</span>
+<span class="w">    </span>--out<span class="w"> </span>codes.tsv<span class="w"> </span><span class="se">\</span>
+<span class="w">    </span>--max-snomed<span class="w"> </span><span class="m">50000</span>
+</pre></div>
+</div>
+</section>
+<section id="option-b-extract-medical-codes-from-wikidata">
+<h4>Option B: Extract Medical Codes from Wikidata<a class="headerlink" href="#option-b-extract-medical-codes-from-wikidata" title="Link to this heading"></a></h4>
+<p>This script fetches medical codes from Wikidata and outputs them to <code class="docutils literal notranslate"><span class="pre">codes.tsv</span></code>.</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>python<span class="w"> </span>build_wikidata_medical_codes_table.py
+</pre></div>
+</div>
+<p>Run the command above to perform the extraction. After execution, the results will be written to <code class="docutils literal notranslate"><span class="pre">codes.tsv</span></code> in the current directory.</p>
+</section>
+<section id="loading-codes-table">
+<h4>Loading Codes Table<a class="headerlink" href="#loading-codes-table" title="Link to this heading"></a></h4>
+<p>After running the script, you can insert the data into a SQLite database:</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>sqlite-utils<span class="w"> </span>insert<span class="w"> </span>terminology.db<span class="w"> </span>codes<span class="w"> </span>codes.tsv<span class="w"> </span>--tsv
+sqlite-utils<span class="w"> </span>enable-fts<span class="w"> </span>terminology.db<span class="w"> </span>codes<span class="w"> </span>label<span class="w"> </span>synonyms<span class="w"> </span>--create-triggers
+</pre></div>
+</div>
+</section>
+</section>
+<section id="map-dataset-columns-to-codes-using-keyword-search">
+<h3>2. Map Dataset Columns to Codes using Keyword Search<a class="headerlink" href="#map-dataset-columns-to-codes-using-keyword-search" title="Link to this heading"></a></h3>
+<p>This script maps dataset columns to semantic codes from a Datasette database based on their descriptions.</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>python<span class="w"> </span>kwd_map_columns.py<span class="w"> </span>dataset.json<span class="w"> </span><span class="se">\</span>
+<span class="w">    </span>--datasette-db-url<span class="w"> </span>http://127.0.0.1:8001/terminology<span class="w"> </span><span class="se">\</span>
+<span class="w">    </span>--table<span class="w"> </span>codes<span class="w"> </span><span class="se">\</span>
+<span class="w">    </span>--limit<span class="w"> </span><span class="m">5</span><span class="w"> </span><span class="se">\</span>
+<span class="w">    </span>--verbose
+</pre></div>
+</div>
+<p>Replace <code class="docutils literal notranslate"><span class="pre">dataset.json</span></code> with the path to your JSON file that contains the dataset schema. The results of the mapping will be printed in the terminal.</p>
+</section>
+<section id="map-dataset-columns-to-codes-using-llm">
+<h3>3. Map Dataset Columns to Codes using LLM<a class="headerlink" href="#map-dataset-columns-to-codes-using-llm" title="Link to this heading"></a></h3>
+<p>This script uses an LLM to intelligently map dataset columns to codes based on their metadata from a Datasette instance.</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>python<span class="w"> </span>llm_map_columns.py<span class="w"> </span><span class="se">\</span>
+<span class="w">    </span>dataset.json<span class="w"> </span><span class="se">\</span>
+<span class="w">    </span>--datasette-url<span class="w"> </span>http://127.0.0.1:8001/terminology<span class="w"> </span><span class="se">\</span>
+<span class="w">    </span>--model<span class="w"> </span>gpt-4.1-mini<span class="w"> </span><span class="se">\</span>
+<span class="w">    </span>--output<span class="w"> </span>mappings.sssom.tsv<span class="w"> </span><span class="se">\</span>
+<span class="w">    </span>--extra-prompt<span class="w"> </span><span class="s2">&quot;Prefer WD_DISEASE and WD_TEST over SNOMED for this project.&quot;</span><span class="w"> </span><span class="se">\</span>
+<span class="w">    </span>--verbose
+</pre></div>
+</div>
+<p>Providing a JSON with dataset metadata as <code class="docutils literal notranslate"><span class="pre">dataset.json</span></code> will produce SSSOM-style mappings and save them to <code class="docutils literal notranslate"><span class="pre">mappings.sssom.tsv</span></code>.</p>
+</section>
+<section id="map-dataset-columns-to-codes-using-a-local-tsv">
+<h3>4. Map Dataset Columns to Codes using a Local TSV<a class="headerlink" href="#map-dataset-columns-to-codes-using-a-local-tsv" title="Link to this heading"></a></h3>
+<p>Use this script when you want completely offline mappings driven by a pre-built <code class="docutils literal notranslate"><span class="pre">codes.tsv</span></code> file. It supports optional manual overrides for edge cases and writes the result in SSSOM format.</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>python<span class="w"> </span>-m<span class="w"> </span>map_columns.codes_map_columns<span class="w"> </span><span class="se">\</span>
+<span class="w">    </span>dataset.semmap.json<span class="w"> </span><span class="se">\</span>
+<span class="w">    </span>--codes-tsv<span class="w"> </span>map_columns/codes.tsv<span class="w"> </span><span class="se">\</span>
+<span class="w">    </span>--manual-overrides<span class="w"> </span>map_columns/manual/uciml-145.json<span class="w"> </span><span class="se">\</span>
+<span class="w">    </span>--output-tsv<span class="w"> </span>mappings/uciml-145.sssom.tsv<span class="w"> </span><span class="se">\</span>
+<span class="w">    </span>--verbose
+</pre></div>
+</div>
+<p>Manual override files are JSON dictionaries keyed by column name. Each entry references an existing CURIE from <code class="docutils literal notranslate"><span class="pre">codes.tsv</span></code> so that mappings remain auditable.</p>
+<section id="integrated-cli-helper">
+<h4>Integrated CLI helper<a class="headerlink" href="#integrated-cli-helper" title="Link to this heading"></a></h4>
+<p>SemSynth exposes a convenience wrapper that connects the exporter, TSV matcher,
+and SemMap merger:</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>python<span class="w"> </span>-m<span class="w"> </span>semsynth<span class="w"> </span>create-mapping<span class="w"> </span>uciml<span class="w"> </span>--datasets<span class="w"> </span><span class="m">145</span><span class="w"> </span><span class="se">\</span>
+<span class="w">    </span>--codes-tsv<span class="w"> </span>map_columns/codes.tsv<span class="w"> </span><span class="se">\</span>
+<span class="w">    </span>--manual-overrides-dir<span class="w"> </span>map_columns/manual
+</pre></div>
+</div>
+<p>Both the SSSOM output and the merged SemMap JSON-LD will be written to
+<code class="docutils literal notranslate"><span class="pre">mappings/</span></code>, ready for use by the reporting pipeline.</p>
+</section>
+</section>
+</section>
+</section>
+
+
+           </div>
+          </div>
+          <footer><div class="rst-footer-buttons" role="navigation" aria-label="Footer">
+        <a href="schema.html" class="btn btn-neutral float-left" title="SemMap metadata schema" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
+        <a href="provenance.html" class="btn btn-neutral float-right" title="Provenance workflow guide" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+    </div>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright .</p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>

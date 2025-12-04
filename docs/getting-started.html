@@ -52,6 +52,7 @@
 </ul>
 </li>
 <li class="toctree-l1"><a class="reference internal" href="schema.html">SemMap metadata schema</a></li>
+<li class="toctree-l1"><a class="reference internal" href="map_columns.html">Column Terminology Mapping</a></li>
 <li class="toctree-l1"><a class="reference internal" href="provenance.html">Provenance workflow guide</a></li>
 <li class="toctree-l1"><a class="reference internal" href="api.html">API reference</a></li>
 </ul>
@@ -111,7 +112,7 @@ SemMap enrichment:</p>
 <code class="docutils literal notranslate"><span class="pre">mappings/</span></code>. Manual overrides are optional JSON files where each key is a
 column identifier pointing to a list of SSSOM-style dictionaries.</p>
 <p>To rebuild the Wikidata terminology table offline, run:</p>
-<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>python<span class="w"> </span>map_columns/extract_wikidata_medical_codes_table.py
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>python<span class="w"> </span>map_columns/build_wikidata_medical_codes_table.py
 </pre></div>
 </div>
 <p>This produces an updated <code class="docutils literal notranslate"><span class="pre">map_columns/codes.tsv</span></code> enriched with descriptions

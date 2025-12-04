@@ -30,9 +30,7 @@ def _normalise_object_id(object_id: str) -> str:
     if ":" not in object_id:
         return object_id
     prefix, local_id = object_id.split(":", 1)
-    if prefix.startswith("WD_"):
-        return f"https://www.wikidata.org/entity/{local_id}"
-    if prefix == "wd":
+    if prefix.lower().startswith("wd"):
         return f"https://www.wikidata.org/entity/{local_id}"
     return object_id
 

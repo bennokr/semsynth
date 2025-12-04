@@ -37,7 +37,7 @@ column identifier pointing to a list of SSSOM-style dictionaries.
 To rebuild the Wikidata terminology table offline, run:
 
 ```bash
-python map_columns/extract_wikidata_medical_codes_table.py
+python map_columns/build_wikidata_medical_codes_table.py
 ```
 
 This produces an updated `map_columns/codes.tsv` enriched with descriptions

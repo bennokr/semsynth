@@ -6,7 +6,7 @@ Use an LLM to map dataset columns to codes from a Datasette-backed terminology i
 - Input: DCAT style JSON/JSON-LD with dsv:datasetSchema.dsv:column[], and optionally:
     dcterms:title, dcterms:description, dcterms:tableOfContents
 - Terminology: any vocabularies exposed via a Datasette `codes` table
-  (e.g. SNOMED, LOINC, Wikidata proxy: WD_DISEASE, WD_TEST, ...)
+  (e.g. SNOMED, LOINC, Wikidata proxy)
 
 Example:
 
@@ -15,7 +15,7 @@ Example:
     --datasette-url http://127.0.0.1:8001/terminology \
     --model gpt-4.1-mini \
     --output mappings.sssom.tsv \
-    --extra-prompt "Prefer WD_DISEASE and WD_TEST over SNOMED for this project." \
+    --extra-prompt "Prefer LOINC over SNOMED for this project." \
     --verbose
 """
 
@@ -67,7 +67,7 @@ Additional dataset documentation (may include full codebook and value definition
 The `codes` table has columns:
 
 - system: short identifier for the vocabulary (for example "SNOMED", "LOINC",
-          "WD_DISEASE", "WD_TEST", "ICD10", etc.)
+          "WD", "ICD10", etc.)
 - code: the code/id string within that vocabulary
 - label: preferred label
 - synonyms: optional synonyms / alternate labels
@@ -129,8 +129,8 @@ Variable:
 Tasks:
 
 1. Decide if this variable should be mapped to codes in any of the vocabularies
-   present in the `system` column (for example SNOMED, LOINC, WD_DISEASE,
-   WD_TEST, ICD10, or others), or not mapped at all (e.g. identifiers, free
+   present in the `system` column (for example SNOMED, LOINC, WD,
+   ICD10, or others), or not mapped at all (e.g. identifiers, free
    text, etc.).
 
 2. When mapping, you MUST:
@@ -140,7 +140,7 @@ Tasks:
 
        SELECT system, code, label, synonyms
        FROM codes
-       WHERE system IN ('WD_DISEASE', 'SNOMED')
+       WHERE system IN ('WD', 'SNOMED')
          AND label MATCH 'exercise induced angina'
        LIMIT 10;
 

@@ -2,7 +2,7 @@
 """Map dataset columns to terminology codes sourced from a TSV file.
 
 This helper keeps the workflow offline by searching ``codes.tsv`` (as produced
-by :mod:`map_columns.extract_wikidata_medical_codes_table`) and emitting
+by :mod:`map_columns.build_wikidata_medical_codes_table`) and emitting
 SSSOM-style mappings for each dataset column. When automated matching does not
 yield sufficiently precise results, a JSON file with manual overrides can be
 provided to force specific mappings while still validating that the requested
@@ -36,6 +36,12 @@ STOP_WORDS: Set[str] = {
     "the",
     "a",
     "an",
+    "of",
+    "and",
+    "in",
+    "or",
+    "for",
+    "presence",
     "type",
     "number",
     "value",
@@ -118,7 +124,12 @@ class MatchResult:
     def subject_label(self) -> str:
         """Human-friendly label for the dataset column."""
 
-        return self.column.name or self.column.column_id or "unknown column"
+        return (
+            self.column.description
+            or self.column.name
+            or self.column.column_id
+            or "unknown column"
+        )
 
     @property
     def object_id(self) -> str:
@@ -171,11 +182,15 @@ def load_codes(
 
     allowed = {system.strip() for system in allowed_systems or [] if system.strip()}
     store: Dict[str, CodeEntry] = {}
+    skipped_systems = set()
     with codes_tsv.open("r", encoding="utf-8") as handle:
         reader = csv.DictReader(handle, delimiter="\t")
         for row in reader:
             system = row.get("system") or ""
             if allowed and system not in allowed:
+                if system not in skipped_systems:
+                    LOGGER.info("Skipped system %s (not in %s)", system, allowed)
+                    skipped_systems.add(system)
                 continue
             entry = CodeEntry(
                 system=system,
@@ -194,8 +209,8 @@ def load_codes(
     return store
 
 
-def _score_column_against_code(column: ColumnInfo, code: CodeEntry) -> float:
-    """Compute a similarity score between a dataset column and a code entry."""
+def _column_text_and_tokens(column: ColumnInfo) -> Tuple[str, Set[str]]:
+    """Return a column's descriptive text alongside normalized tokens."""
 
     pieces: Iterable[str] = filter(
         None,
@@ -209,16 +224,29 @@ def _score_column_against_code(column: ColumnInfo, code: CodeEntry) -> float:
     )
     combined = " ".join(pieces)
     if not combined:
-        return 0.0
+        return "", set()
+    tokens = _tokenize(combined)
+    if column.name:
+        tokens |= _tokenize(column.name)
+    return combined, tokens
 
-    column_tokens = _tokenize(combined)
-    if column.name and column.name not in column_tokens:
-        column_tokens |= _tokenize(column.name)
 
-    overlap = len(column_tokens & code._tokens)
+def _score_column_against_code(
+    column: ColumnInfo,
+    code: CodeEntry,
+    *,
+    combined_text: str,
+    column_tokens: Set[str],
+) -> Tuple[float, Set[str]]:
+    """Compute similarity between column metadata and a code entry."""
+
+    if not combined_text or not column_tokens:
+        return 0.0, set()
+
+    overlap_terms = column_tokens & code._tokens
     union = len(column_tokens | code._tokens) or 1
-    jaccard = overlap / union
-    ratio = _sequence_ratio(combined, code.label)
+    jaccard = len(overlap_terms) / union
+    ratio = _sequence_ratio(combined_text, code.label)
     # Weighted average emphasising token overlap while retaining robustness to
     # minor spelling variations in the original metadata.
     score = (0.7 * jaccard) + (0.3 * ratio)
@@ -230,7 +258,16 @@ def _score_column_against_code(column: ColumnInfo, code: CodeEntry) -> float:
         ratio,
         score,
     )
-    return score
+    return score, overlap_terms
+
+
+def _format_overlap_comment(overlap_terms: Set[str]) -> str:
+    """Construct an SSSOM comment string from overlapping tokens."""
+
+    if not overlap_terms:
+        return "Lexical overlap terms: (none)"
+    quoted = ", ".join(f'"{term}"' for term in sorted(overlap_terms))
+    return f"Lexical overlap terms: {quoted}"
 
 
 def rank_codes_for_column(
@@ -242,14 +279,34 @@ def rank_codes_for_column(
 ) -> List[MatchResult]:
     """Return the best ``top_k`` codes for ``column`` above ``min_score``."""
 
+    combined_text, column_tokens = _column_text_and_tokens(column)
+    if not combined_text or not column_tokens:
+        LOGGER.info(
+            "Skipping column %s due to missing descriptive text",
+            column.name or column.column_id,
+        )
+        return []
+
     scored: List[Tuple[float, CodeEntry]] = []
+    comments: Dict[str, str] = {}
     for code in codes:
-        score = _score_column_against_code(column, code)
+        score, overlap_terms = _score_column_against_code(
+            column,
+            code,
+            combined_text=combined_text,
+            column_tokens=column_tokens,
+        )
         if score >= min_score:
             scored.append((score, code))
+            comments[code.curie] = _format_overlap_comment(overlap_terms)
     scored.sort(key=lambda item: item[0], reverse=True)
     results = [
-        MatchResult(column=column, code=code, score=score)
+        MatchResult(
+            column=column,
+            code=code,
+            score=score,
+            comment=comments.get(code.curie, ""),
+        )
         for score, code in scored[:top_k]
     ]
     LOGGER.info(
@@ -436,7 +493,7 @@ def main(
     *,
     codes_tsv: Path,
     output_tsv: Path,
-    systems: Sequence[str] = ("WD_TEST", "WD_PROCEDURE", "WD_SYMPTOM", "WD_DISEASE"),
+    systems: Sequence[str] = None,
     min_score: float = 0.45,
     top_k: int = 2,
     manual_overrides: Optional[Path] = None,

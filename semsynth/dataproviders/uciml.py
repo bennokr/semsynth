@@ -313,7 +313,11 @@ def list_uciml(
             if (row["n_categorical"] >= cat_min) and (row["n_numeric"] >= num_min):
                 rows.append(row)
 
-    return pd.DataFrame(rows)
+    df = pd.DataFrame(rows)
+    if df.empty:
+        return df
+    df["min_cat_num"] = df[["n_categorical", "n_numeric"]].min(axis=1)
+    return df.sort_values("min_cat_num", ascending=False).reset_index(drop=True)
 
 
 @rule(phony=True)

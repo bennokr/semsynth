@@ -1,6 +1,6 @@
-# Terminology Index and Mapping Scripts
+# Column Terminology Mapping
 
-This repository contains several Python scripts designed to build a small medical terminology index and perform mappings between dataset variables and relevant medical codes. You can use both closed (license based) SNOMED CT / LOINC and open data from Wikidata. The mapping can be done with a keyword index or an LLM that wraps this index and re-ranks.
+The `map_columns/` directory contains several Python scripts designed to build a small medical terminology index and perform mappings between dataset variables and relevant medical codes. You can use both closed (license based) SNOMED CT / LOINC and open data from Wikidata. The mapping can be done with a keyword index or an LLM that wraps this index and re-ranks.
 
 ## Table of Contents
 
@@ -15,7 +15,7 @@ This repository contains several Python scripts designed to build a small medica
 ## Scripts Overview
 
 1. `build_snomed_loinc_codes_table.py` - Builds a TSV containing codes from SNOMED CT and LOINC.
-2. `extract_wikidata_medical_codes_table.py` - Extracts medical terminology from Wikidata and outputs a TSV.
+2. `build_wikidata_medical_codes_table.py` - Extracts medical terminology from Wikidata and outputs a TSV.
 3. `kwd_map_columns.py` - Maps dataset columns to codes using a keyword search index over a Datasette-backed terminology index.
 4. `llm_map_columns.py` - Utilizes an LLM to map dataset columns to codes from a Datasette-backed terminology index.
 
@@ -55,7 +55,7 @@ python build_snomed_loinc_codes_table.py \
 This script fetches medical codes from Wikidata and outputs them to `codes.tsv`.
 
 ```bash
-python extract_wikidata_medical_codes_table.py
+python build_wikidata_medical_codes_table.py
 ```
 
 Run the command above to perform the extraction. After execution, the results will be written to `codes.tsv` in the current directory.
@@ -93,7 +93,7 @@ python llm_map_columns.py \
     --datasette-url http://127.0.0.1:8001/terminology \
     --model gpt-4.1-mini \
     --output mappings.sssom.tsv \
-    --extra-prompt "Prefer WD_DISEASE and WD_TEST over SNOMED for this project." \
+    --extra-prompt "Prefer LOINC over SNOMED for this project." \
     --verbose
 ```
 
