@@ -4,6 +4,7 @@ uciml-cache
 __pycache__
 downloads-cache
 _autosummary
+docs/.doctrees/
 *.egg-info/
 .eggs/
 prov/

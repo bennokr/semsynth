@@ -6,7 +6,7 @@
   <meta charset="utf-8" /><meta name="viewport" content="width=device-width, initial-scale=1" />
 
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Column Terminology Mapping &mdash; semsynth  documentation</title>
+  <title>Column terminology mapping &mdash; semsynth  documentation</title>
       <link rel="stylesheet" type="text/css" href="_static/pygments.css?v=b86133f3" />
       <link rel="stylesheet" type="text/css" href="_static/css/theme.css?v=e59714d7" />
 
@@ -47,28 +47,34 @@
 <li class="toctree-l1"><a class="reference internal" href="index.html">Home</a></li>
 <li class="toctree-l1"><a class="reference internal" href="getting-started.html">Getting started</a></li>
 <li class="toctree-l1"><a class="reference internal" href="schema.html">SemMap metadata schema</a></li>
-<li class="toctree-l1 current"><a class="current reference internal" href="#">Column Terminology Mapping</a><ul>
+<li class="toctree-l1 current"><a class="current reference internal" href="#">Column terminology mapping</a><ul>
 <li class="toctree-l2"><a class="reference internal" href="#table-of-contents">Table of Contents</a></li>
 <li class="toctree-l2"><a class="reference internal" href="#scripts-overview">Scripts Overview</a></li>
 <li class="toctree-l2"><a class="reference internal" href="#prerequisites">Prerequisites</a></li>
 <li class="toctree-l2"><a class="reference internal" href="#usage">Usage</a><ul>
-<li class="toctree-l3"><a class="reference internal" href="#build-codes-table">1. Build Codes Table</a><ul>
-<li class="toctree-l4"><a class="reference internal" href="#option-a-build-snomed-and-loinc-codes-table">Option A: Build SNOMED and LOINC Codes Table</a></li>
-<li class="toctree-l4"><a class="reference internal" href="#option-b-extract-medical-codes-from-wikidata">Option B: Extract Medical Codes from Wikidata</a></li>
-<li class="toctree-l4"><a class="reference internal" href="#loading-codes-table">Loading Codes Table</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#build-terminology-tables">1. Build Terminology Tables</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="#option-a-snomed-loinc">Option A: SNOMED + LOINC</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#option-b-wikidata-snapshot">Option B: Wikidata snapshot</a></li>
 </ul>
 </li>
-<li class="toctree-l3"><a class="reference internal" href="#map-dataset-columns-to-codes-using-keyword-search">2. Map Dataset Columns to Codes using Keyword Search</a></li>
-<li class="toctree-l3"><a class="reference internal" href="#map-dataset-columns-to-codes-using-llm">3. Map Dataset Columns to Codes using LLM</a></li>
-<li class="toctree-l3"><a class="reference internal" href="#map-dataset-columns-to-codes-using-a-local-tsv">4. Map Dataset Columns to Codes using a Local TSV</a><ul>
-<li class="toctree-l4"><a class="reference internal" href="#integrated-cli-helper">Integrated CLI helper</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#mapping-approaches">2. Mapping Approaches</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="#offline-tsv-lexical">2.1 Offline TSV (lexical)</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#datasette-keyword-search">2.2 Datasette keyword search</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#embedding-re-ranking">2.3 Embedding re-ranking</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#llm-assisted-mapping">2.4 LLM-assisted mapping</a></li>
 </ul>
 </li>
+<li class="toctree-l3"><a class="reference internal" href="#evaluate-sssom-outputs">3. Evaluate SSSOM outputs</a></li>
 </ul>
 </li>
+<li class="toctree-l2"><a class="reference internal" href="#semsynth-cli-integration">SemSynth CLI integration</a></li>
 </ul>
 </li>
 <li class="toctree-l1"><a class="reference internal" href="provenance.html">Provenance workflow guide</a></li>
+<li class="toctree-l1"><a class="reference internal" href="backends.html">Backends overview</a></li>
+<li class="toctree-l1"><a class="reference internal" href="missingness.html">Missingness handling</a></li>
+<li class="toctree-l1"><a class="reference internal" href="privacy-metrics.html">Privacy metrics</a></li>
+<li class="toctree-l1"><a class="reference internal" href="downstream-fidelity.html">Downstream fidelity</a></li>
 <li class="toctree-l1"><a class="reference internal" href="api.html">API reference</a></li>
 </ul>
 
@@ -86,7 +92,7 @@
           <div role="navigation" aria-label="Page navigation">
   <ul class="wy-breadcrumbs">
       <li><a href="index.html" class="icon icon-home" aria-label="Home"></a></li>
-      <li class="breadcrumb-item active">Column Terminology Mapping</li>
+      <li class="breadcrumb-item active">Column terminology mapping</li>
       <li class="wy-breadcrumbs-aside">
             <a href="_sources/map_columns.md.txt" rel="nofollow"> View page source</a>
       </li>
@@ -97,8 +103,11 @@
            <div itemprop="articleBody">
              
   <section id="column-terminology-mapping">
-<h1>Column Terminology Mapping<a class="headerlink" href="#column-terminology-mapping" title="Link to this heading"></a></h1>
-<p>The <code class="docutils literal notranslate"><span class="pre">map_columns/</span></code> directory contains several Python scripts designed to build a small medical terminology index and perform mappings between dataset variables and relevant medical codes. You can use both closed (license based) SNOMED CT / LOINC and open data from Wikidata. The mapping can be done with a keyword index or an LLM that wraps this index and re-ranks.</p>
+<h1>Column terminology mapping<a class="headerlink" href="#column-terminology-mapping" title="Link to this heading"></a></h1>
+<p>The <code class="docutils literal notranslate"><span class="pre">map_columns/</span></code> directory contains utilities for building terminology
+resources, mapping dataset columns to codes, and evaluating the resulting SSSOM
+artifacts. The tooling supports offline TSV lookups, Datasette-backed keyword
+search, embedding re-ranking, and LLM-assisted coding.</p>
 <section id="table-of-contents">
 <h2>Table of Contents<a class="headerlink" href="#table-of-contents" title="Link to this heading"></a></h2>
 <ul class="simple">
@@ -106,42 +115,60 @@
 <li><p><a class="reference internal" href="#prerequisites"><span class="xref myst">Prerequisites</span></a></p></li>
 <li><p><a class="reference internal" href="#usage"><span class="xref myst">Usage</span></a></p>
 <ul>
-<li><p><a class="reference internal" href="#1-build-snomed-and-loinc-codes-table"><span class="xref myst">1. Build SNOMED and LOINC Codes Table</span></a></p></li>
-<li><p><a class="reference internal" href="#2-extract-medical-codes-from-wikidata"><span class="xref myst">2. Extract Medical Codes from Wikidata</span></a></p></li>
-<li><p><a class="reference internal" href="#3-map-dataset-columns-to-codes-using-keyword-search"><span class="xref myst">3. Map Dataset Columns to Codes using Keyword Search</span></a></p></li>
-<li><p><a class="reference internal" href="#4-map-dataset-columns-to-codes-using-llm"><span class="xref myst">4. Map Dataset Columns to Codes using LLM</span></a></p></li>
+<li><p><a class="reference internal" href="#1-build-terminology-tables"><span class="xref myst">1. Build Terminology Tables</span></a></p></li>
+<li><p><a class="reference internal" href="#2-mapping-approaches"><span class="xref myst">2. Mapping Approaches</span></a></p>
+<ul>
+<li><p><a class="reference internal" href="#21-offline-tsv-lexical"><span class="xref myst">2.1 Offline TSV (lexical)</span></a></p></li>
+<li><p><a class="reference internal" href="#22-datasette-keyword-search"><span class="xref myst">2.2 Datasette keyword search</span></a></p></li>
+<li><p><a class="reference internal" href="#23-embedding-re-ranking"><span class="xref myst">2.3 Embedding re-ranking</span></a></p></li>
+<li><p><a class="reference internal" href="#24-llm-assisted-mapping"><span class="xref myst">2.4 LLM-assisted mapping</span></a></p></li>
 </ul>
 </li>
+<li><p><a class="reference internal" href="#3-evaluate-sssom-outputs"><span class="xref myst">3. Evaluate SSSOM outputs</span></a></p></li>
+</ul>
+</li>
+<li><p><a class="reference internal" href="#semsynth-cli-integration"><span class="xref myst">SemSynth CLI integration</span></a></p></li>
 </ul>
 </section>
 <section id="scripts-overview">
 <h2>Scripts Overview<a class="headerlink" href="#scripts-overview" title="Link to this heading"></a></h2>
 <ol class="arabic simple">
-<li><p><code class="docutils literal notranslate"><span class="pre">build_snomed_loinc_codes_table.py</span></code> - Builds a TSV containing codes from SNOMED CT and LOINC.</p></li>
-<li><p><code class="docutils literal notranslate"><span class="pre">build_wikidata_medical_codes_table.py</span></code> - Extracts medical terminology from Wikidata and outputs a TSV.</p></li>
-<li><p><code class="docutils literal notranslate"><span class="pre">kwd_map_columns.py</span></code> - Maps dataset columns to codes using a keyword search index over a Datasette-backed terminology index.</p></li>
-<li><p><code class="docutils literal notranslate"><span class="pre">llm_map_columns.py</span></code> - Utilizes an LLM to map dataset columns to codes from a Datasette-backed terminology index.</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">build_snomed_loinc_codes_table.py</span></code> – Build a TSV containing SNOMED CT and
+LOINC codes.</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">build_wikidata_medical_codes_table.py</span></code> – Extract medical terminology from
+Wikidata into <code class="docutils literal notranslate"><span class="pre">codes.tsv</span></code>.</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">codes_map_columns.py</span></code> – Perform offline lexical matching between dataset
+columns and entries in <code class="docutils literal notranslate"><span class="pre">codes.tsv</span></code>.</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">kwd_map_columns.py</span></code> – Query a Datasette instance and apply lexical scoring
+to rank results.</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">embed_map_columns.py</span></code> – Re-rank terminology candidates by combining
+sentence-transformer cosine similarity with lexical overlap diagnostics.</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">llm_map_columns.py</span></code> – Orchestrate an LLM with Datasette tool access to
+obtain curated mappings.</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">evaluate.py</span></code> – Compute micro/macro precision/recall/F1, MAP, and nDCG for
+SSSOM TSV files against a gold standard.</p></li>
 </ol>
 </section>
 <section id="prerequisites">
 <h2>Prerequisites<a class="headerlink" href="#prerequisites" title="Link to this heading"></a></h2>
-<p>You can install the necessary libraries using pip:</p>
-<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>pip<span class="w"> </span>install<span class="w"> </span>requests<span class="w"> </span>defopt<span class="w"> </span>datasette<span class="w"> </span>sqlite-utils<span class="w"> </span>sssom
+<p>Install the baseline dependencies:</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>pip<span class="w"> </span>install<span class="w"> </span>defopt<span class="w"> </span>requests<span class="w"> </span>pandas<span class="w"> </span>numpy
 </pre></div>
 </div>
-<p>To use the LLM script, run:</p>
-<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>pip<span class="w"> </span>install<span class="w"> </span>llm
-llm<span class="w"> </span>install<span class="w"> </span>llm-tools-datasette
-</pre></div>
-</div>
+<p>Optional extras:</p>
+<ul class="simple">
+<li><p>Datasette helpers: <code class="docutils literal notranslate"><span class="pre">pip</span> <span class="pre">install</span> <span class="pre">datasette</span> <span class="pre">sqlite-utils</span> <span class="pre">llm-tools-datasette</span></code></p></li>
+<li><p>Embedding re-ranking: <code class="docutils literal notranslate"><span class="pre">pip</span> <span class="pre">install</span> <span class="pre">sentence-transformers</span> <span class="pre">torch</span></code></p></li>
+<li><p>LLM orchestration: <code class="docutils literal notranslate"><span class="pre">pip</span> <span class="pre">install</span> <span class="pre">llm</span></code></p></li>
+<li><p>Evaluation: no additional packages beyond the baseline list</p></li>
+</ul>
 </section>
 <section id="usage">
 <h2>Usage<a class="headerlink" href="#usage" title="Link to this heading"></a></h2>
-<section id="build-codes-table">
-<h3>1. Build Codes Table<a class="headerlink" href="#build-codes-table" title="Link to this heading"></a></h3>
-<section id="option-a-build-snomed-and-loinc-codes-table">
-<h4>Option A: Build SNOMED and LOINC Codes Table<a class="headerlink" href="#option-a-build-snomed-and-loinc-codes-table" title="Link to this heading"></a></h4>
-<p>This script processes SNOMED CT and LOINC files to create a <code class="docutils literal notranslate"><span class="pre">codes.tsv</span></code> file.</p>
+<section id="build-terminology-tables">
+<h3>1. Build Terminology Tables<a class="headerlink" href="#build-terminology-tables" title="Link to this heading"></a></h3>
+<section id="option-a-snomed-loinc">
+<h4>Option A: SNOMED + LOINC<a class="headerlink" href="#option-a-snomed-loinc" title="Link to this heading"></a></h4>
 <div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>python<span class="w"> </span>build_snomed_loinc_codes_table.py<span class="w"> </span><span class="se">\</span>
 <span class="w">    </span>--snomed-description<span class="w"> </span>/path/to/Snapshot/Terminology/sct2_Description_Snapshot-en_INT_*.txt<span class="w"> </span><span class="se">\</span>
 <span class="w">    </span>--loinc<span class="w"> </span>/path/to/Loinc.csv<span class="w"> </span><span class="se">\</span>
@@ -150,52 +177,23 @@ llm<span class="w"> </span>install<span class="w"> </span>llm-tools-datasette
 </pre></div>
 </div>
 </section>
-<section id="option-b-extract-medical-codes-from-wikidata">
-<h4>Option B: Extract Medical Codes from Wikidata<a class="headerlink" href="#option-b-extract-medical-codes-from-wikidata" title="Link to this heading"></a></h4>
-<p>This script fetches medical codes from Wikidata and outputs them to <code class="docutils literal notranslate"><span class="pre">codes.tsv</span></code>.</p>
+<section id="option-b-wikidata-snapshot">
+<h4>Option B: Wikidata snapshot<a class="headerlink" href="#option-b-wikidata-snapshot" title="Link to this heading"></a></h4>
 <div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>python<span class="w"> </span>build_wikidata_medical_codes_table.py
 </pre></div>
 </div>
-<p>Run the command above to perform the extraction. After execution, the results will be written to <code class="docutils literal notranslate"><span class="pre">codes.tsv</span></code> in the current directory.</p>
-</section>
-<section id="loading-codes-table">
-<h4>Loading Codes Table<a class="headerlink" href="#loading-codes-table" title="Link to this heading"></a></h4>
-<p>After running the script, you can insert the data into a SQLite database:</p>
+<p>After generating <code class="docutils literal notranslate"><span class="pre">codes.tsv</span></code>, you can load it into a SQLite / Datasette friendly
+database:</p>
 <div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>sqlite-utils<span class="w"> </span>insert<span class="w"> </span>terminology.db<span class="w"> </span>codes<span class="w"> </span>codes.tsv<span class="w"> </span>--tsv
 sqlite-utils<span class="w"> </span>enable-fts<span class="w"> </span>terminology.db<span class="w"> </span>codes<span class="w"> </span>label<span class="w"> </span>synonyms<span class="w"> </span>--create-triggers
 </pre></div>
 </div>
 </section>
 </section>
-<section id="map-dataset-columns-to-codes-using-keyword-search">
-<h3>2. Map Dataset Columns to Codes using Keyword Search<a class="headerlink" href="#map-dataset-columns-to-codes-using-keyword-search" title="Link to this heading"></a></h3>
-<p>This script maps dataset columns to semantic codes from a Datasette database based on their descriptions.</p>
-<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>python<span class="w"> </span>kwd_map_columns.py<span class="w"> </span>dataset.json<span class="w"> </span><span class="se">\</span>
-<span class="w">    </span>--datasette-db-url<span class="w"> </span>http://127.0.0.1:8001/terminology<span class="w"> </span><span class="se">\</span>
-<span class="w">    </span>--table<span class="w"> </span>codes<span class="w"> </span><span class="se">\</span>
-<span class="w">    </span>--limit<span class="w"> </span><span class="m">5</span><span class="w"> </span><span class="se">\</span>
-<span class="w">    </span>--verbose
-</pre></div>
-</div>
-<p>Replace <code class="docutils literal notranslate"><span class="pre">dataset.json</span></code> with the path to your JSON file that contains the dataset schema. The results of the mapping will be printed in the terminal.</p>
-</section>
-<section id="map-dataset-columns-to-codes-using-llm">
-<h3>3. Map Dataset Columns to Codes using LLM<a class="headerlink" href="#map-dataset-columns-to-codes-using-llm" title="Link to this heading"></a></h3>
-<p>This script uses an LLM to intelligently map dataset columns to codes based on their metadata from a Datasette instance.</p>
-<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>python<span class="w"> </span>llm_map_columns.py<span class="w"> </span><span class="se">\</span>
-<span class="w">    </span>dataset.json<span class="w"> </span><span class="se">\</span>
-<span class="w">    </span>--datasette-url<span class="w"> </span>http://127.0.0.1:8001/terminology<span class="w"> </span><span class="se">\</span>
-<span class="w">    </span>--model<span class="w"> </span>gpt-4.1-mini<span class="w"> </span><span class="se">\</span>
-<span class="w">    </span>--output<span class="w"> </span>mappings.sssom.tsv<span class="w"> </span><span class="se">\</span>
-<span class="w">    </span>--extra-prompt<span class="w"> </span><span class="s2">&quot;Prefer WD_DISEASE and WD_TEST over SNOMED for this project.&quot;</span><span class="w"> </span><span class="se">\</span>
-<span class="w">    </span>--verbose
-</pre></div>
-</div>
-<p>Providing a JSON with dataset metadata as <code class="docutils literal notranslate"><span class="pre">dataset.json</span></code> will produce SSSOM-style mappings and save them to <code class="docutils literal notranslate"><span class="pre">mappings.sssom.tsv</span></code>.</p>
-</section>
-<section id="map-dataset-columns-to-codes-using-a-local-tsv">
-<h3>4. Map Dataset Columns to Codes using a Local TSV<a class="headerlink" href="#map-dataset-columns-to-codes-using-a-local-tsv" title="Link to this heading"></a></h3>
-<p>Use this script when you want completely offline mappings driven by a pre-built <code class="docutils literal notranslate"><span class="pre">codes.tsv</span></code> file. It supports optional manual overrides for edge cases and writes the result in SSSOM format.</p>
+<section id="mapping-approaches">
+<h3>2. Mapping Approaches<a class="headerlink" href="#mapping-approaches" title="Link to this heading"></a></h3>
+<section id="offline-tsv-lexical">
+<h4>2.1 Offline TSV (lexical)<a class="headerlink" href="#offline-tsv-lexical" title="Link to this heading"></a></h4>
 <div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>python<span class="w"> </span>-m<span class="w"> </span>map_columns.codes_map_columns<span class="w"> </span><span class="se">\</span>
 <span class="w">    </span>dataset.semmap.json<span class="w"> </span><span class="se">\</span>
 <span class="w">    </span>--codes-tsv<span class="w"> </span>map_columns/codes.tsv<span class="w"> </span><span class="se">\</span>
@@ -204,20 +202,92 @@ sqlite-utils<span class="w"> </span>enable-fts<span class="w"> </span>terminolog
 <span class="w">    </span>--verbose
 </pre></div>
 </div>
-<p>Manual override files are JSON dictionaries keyed by column name. Each entry references an existing CURIE from <code class="docutils literal notranslate"><span class="pre">codes.tsv</span></code> so that mappings remain auditable.</p>
-<section id="integrated-cli-helper">
-<h4>Integrated CLI helper<a class="headerlink" href="#integrated-cli-helper" title="Link to this heading"></a></h4>
-<p>SemSynth exposes a convenience wrapper that connects the exporter, TSV matcher,
-and SemMap merger:</p>
-<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>python<span class="w"> </span>-m<span class="w"> </span>semsynth<span class="w"> </span>create-mapping<span class="w"> </span>uciml<span class="w"> </span>--datasets<span class="w"> </span><span class="m">145</span><span class="w"> </span><span class="se">\</span>
-<span class="w">    </span>--codes-tsv<span class="w"> </span>map_columns/codes.tsv<span class="w"> </span><span class="se">\</span>
-<span class="w">    </span>--manual-overrides-dir<span class="w"> </span>map_columns/manual
+<p>This mode keeps everything offline by comparing dataset metadata with the
+synonyms contained in <code class="docutils literal notranslate"><span class="pre">codes.tsv</span></code>. Optional manual overrides provide exact
+matches when lexical scoring is insufficient.</p>
+</section>
+<section id="datasette-keyword-search">
+<h4>2.2 Datasette keyword search<a class="headerlink" href="#datasette-keyword-search" title="Link to this heading"></a></h4>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>python<span class="w"> </span>map_columns/kwd_map_columns.py<span class="w"> </span>dataset.json<span class="w"> </span><span class="se">\</span>
+<span class="w">    </span>--datasette-db-url<span class="w"> </span>http://127.0.0.1:8001/terminology<span class="w"> </span><span class="se">\</span>
+<span class="w">    </span>--table<span class="w"> </span>codes<span class="w"> </span><span class="se">\</span>
+<span class="w">    </span>--limit<span class="w"> </span><span class="m">10</span><span class="w"> </span><span class="se">\</span>
+<span class="w">    </span>--lexical-threshold<span class="w"> </span><span class="m">0</span>.3<span class="w"> </span><span class="se">\</span>
+<span class="w">    </span>--top-k<span class="w"> </span><span class="m">3</span><span class="w"> </span><span class="se">\</span>
+<span class="w">    </span>--output<span class="w"> </span>mappings/uciml-145.keyword.sssom.tsv
 </pre></div>
 </div>
-<p>Both the SSSOM output and the merged SemMap JSON-LD will be written to
-<code class="docutils literal notranslate"><span class="pre">mappings/</span></code>, ready for use by the reporting pipeline.</p>
+<p>The script requests candidate rows from Datasette, re-scores them with lexical
+overlap, and emits SSSOM TSV rows. Results can be redirected to stdout by
+omitting <code class="docutils literal notranslate"><span class="pre">--output</span></code>.</p>
+</section>
+<section id="embedding-re-ranking">
+<h4>2.3 Embedding re-ranking<a class="headerlink" href="#embedding-re-ranking" title="Link to this heading"></a></h4>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>python<span class="w"> </span>map_columns/embed_map_columns.py<span class="w"> </span>dataset.json<span class="w"> </span><span class="se">\</span>
+<span class="w">    </span>map_columns/codes.tsv<span class="w"> </span><span class="se">\</span>
+<span class="w">    </span>--model-name<span class="w"> </span>sentence-transformers/all-MiniLM-L6-v2<span class="w"> </span><span class="se">\</span>
+<span class="w">    </span>--top-k<span class="w"> </span><span class="m">5</span><span class="w"> </span><span class="se">\</span>
+<span class="w">    </span>--cosine-threshold<span class="w"> </span><span class="m">0</span>.25<span class="w"> </span><span class="se">\</span>
+<span class="w">    </span>--lexical-threshold<span class="w"> </span><span class="m">0</span>.25<span class="w"> </span><span class="se">\</span>
+<span class="w">    </span>--output<span class="w"> </span>mappings/uciml-145.embed.sssom.tsv
+</pre></div>
+</div>
+<p>Candidates are first retrieved by lexical similarity and then re-ranked using a
+sentence-transformer model. The exported TSV includes both lexical and cosine
+diagnostics in the comments.</p>
+</section>
+<section id="llm-assisted-mapping">
+<h4>2.4 LLM-assisted mapping<a class="headerlink" href="#llm-assisted-mapping" title="Link to this heading"></a></h4>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>python<span class="w"> </span>map_columns/llm_map_columns.py<span class="w"> </span>dataset.json<span class="w"> </span><span class="se">\</span>
+<span class="w">    </span>--datasette-url<span class="w"> </span>http://127.0.0.1:8001/terminology<span class="w"> </span><span class="se">\</span>
+<span class="w">    </span>--model<span class="w"> </span>gpt-4.1-mini<span class="w"> </span><span class="se">\</span>
+<span class="w">    </span>--top-k<span class="w"> </span><span class="m">3</span><span class="w"> </span><span class="se">\</span>
+<span class="w">    </span>--confidence-threshold<span class="w"> </span><span class="m">0</span>.5<span class="w"> </span><span class="se">\</span>
+<span class="w">    </span>--output<span class="w"> </span>mappings/uciml-145.llm.sssom.tsv
+</pre></div>
+</div>
+<p>The LLM uses the Datasette tool to inspect code candidates and emits SSSOM rows
+directly. Use <code class="docutils literal notranslate"><span class="pre">--extra-prompt</span></code> to provide project-specific guidance.</p>
 </section>
 </section>
+<section id="evaluate-sssom-outputs">
+<h3>3. Evaluate SSSOM outputs<a class="headerlink" href="#evaluate-sssom-outputs" title="Link to this heading"></a></h3>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>python<span class="w"> </span>map_columns/evaluate.py<span class="w"> </span><span class="se">\</span>
+<span class="w">    </span>gold/uciml-145.gold.sssom.tsv<span class="w"> </span><span class="se">\</span>
+<span class="w">    </span>--predictions<span class="w"> </span>mappings/uciml-145.sssom.tsv<span class="w"> </span>mappings/uciml-145.embed.sssom.tsv<span class="w"> </span><span class="se">\</span>
+<span class="w">    </span>--output<span class="w"> </span>eval/uciml-145.json
+</pre></div>
+</div>
+<p>Metrics (micro/macro P/R/F1, MAP, nDCG) are printed for each prediction file.
+When <code class="docutils literal notranslate"><span class="pre">--output</span></code> is supplied, the metrics are also written to a JSON report.</p>
+</section>
+</section>
+<section id="semsynth-cli-integration">
+<h2>SemSynth CLI integration<a class="headerlink" href="#semsynth-cli-integration" title="Link to this heading"></a></h2>
+<p>The end-to-end workflow can be launched via the SemSynth CLI. All mapping
+strategies are now available under a single command:</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>python<span class="w"> </span>-m<span class="w"> </span>semsynth<span class="w"> </span>create-mapping<span class="w"> </span>uciml<span class="w"> </span><span class="se">\</span>
+<span class="w">    </span>--datasets<span class="w"> </span><span class="m">145</span><span class="w"> </span><span class="se">\</span>
+<span class="w">    </span>--method<span class="w"> </span>embed<span class="w"> </span><span class="se">\</span>
+<span class="w">    </span>--codes-tsv<span class="w"> </span>map_columns/codes.tsv<span class="w"> </span><span class="se">\</span>
+<span class="w">    </span>--datasette-url<span class="w"> </span>http://127.0.0.1:8001/terminology<span class="w"> </span><span class="se">\</span>
+<span class="w">    </span>--lexical-threshold<span class="w"> </span><span class="m">0</span>.25<span class="w"> </span><span class="se">\</span>
+<span class="w">    </span>--top-k<span class="w"> </span><span class="m">3</span><span class="w"> </span><span class="se">\</span>
+<span class="w">    </span>--outdir<span class="w"> </span>mappings/
+</pre></div>
+</div>
+<p>Key flags:</p>
+<ul class="simple">
+<li><p><code class="docutils literal notranslate"><span class="pre">--method</span></code>: <code class="docutils literal notranslate"><span class="pre">lexical</span></code> (default), <code class="docutils literal notranslate"><span class="pre">keyword</span></code>, <code class="docutils literal notranslate"><span class="pre">embed</span></code>, or <code class="docutils literal notranslate"><span class="pre">llm</span></code></p></li>
+<li><p>Datasette-backed methods honour <code class="docutils literal notranslate"><span class="pre">--datasette-url</span></code>, <code class="docutils literal notranslate"><span class="pre">--datasette-table</span></code>, and
+<code class="docutils literal notranslate"><span class="pre">--datasette-limit</span></code></p></li>
+<li><p>Embedding mode accepts <code class="docutils literal notranslate"><span class="pre">--embed-model</span></code>, <code class="docutils literal notranslate"><span class="pre">--candidate-pool-multiplier</span></code>, and
+<code class="docutils literal notranslate"><span class="pre">--cosine-threshold</span></code></p></li>
+<li><p>LLM mode exposes <code class="docutils literal notranslate"><span class="pre">--llm-model</span></code>, <code class="docutils literal notranslate"><span class="pre">--llm-extra-prompt</span></code>, <code class="docutils literal notranslate"><span class="pre">--llm-subject-prefix</span></code>,
+and <code class="docutils literal notranslate"><span class="pre">--confidence-threshold</span></code></p></li>
+</ul>
+<p>Manual overrides continue to be respected. When overrides exist for a column,
+the CLI replaces any automatically generated matches with the curated entries.</p>
 </section>
 </section>
 

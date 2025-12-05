@@ -1,4 +1,4 @@
-semsynth.datasets
+﻿semsynth.datasets
 =================
 
 .. automodule:: semsynth.datasets

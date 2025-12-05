@@ -46,8 +46,12 @@
 <li class="toctree-l1 current"><a class="current reference internal" href="#">Home</a></li>
 <li class="toctree-l1"><a class="reference internal" href="getting-started.html">Getting started</a></li>
 <li class="toctree-l1"><a class="reference internal" href="schema.html">SemMap metadata schema</a></li>
-<li class="toctree-l1"><a class="reference internal" href="map_columns.html">Column Terminology Mapping</a></li>
+<li class="toctree-l1"><a class="reference internal" href="map_columns.html">Column terminology mapping</a></li>
 <li class="toctree-l1"><a class="reference internal" href="provenance.html">Provenance workflow guide</a></li>
+<li class="toctree-l1"><a class="reference internal" href="backends.html">Backends overview</a></li>
+<li class="toctree-l1"><a class="reference internal" href="missingness.html">Missingness handling</a></li>
+<li class="toctree-l1"><a class="reference internal" href="privacy-metrics.html">Privacy metrics</a></li>
+<li class="toctree-l1"><a class="reference internal" href="downstream-fidelity.html">Downstream fidelity</a></li>
 <li class="toctree-l1"><a class="reference internal" href="api.html">API reference</a></li>
 </ul>
 
@@ -209,12 +213,8 @@
 <h2>🧰 Metadata templates &amp; column mappings<a class="headerlink" href="#metadata-templates-column-mappings" title="Link to this heading"></a></h2>
 <ul class="simple">
 <li><p><code class="docutils literal notranslate"><span class="pre">semsynth/dataproviders/uciml.py</span></code> exposes a CLI that turns the JSON payloads cached under <code class="docutils literal notranslate"><span class="pre">uciml-cache/</span></code> (sometimes referenced as <code class="docutils literal notranslate"><span class="pre">uci-cache/</span></code> in earlier docs) into DCAT + DSV JSON-LD that downstream tools can ingest.</p></li>
-<li><p>Scripts under <code class="docutils literal notranslate"><span class="pre">map_columns/</span></code> take that JSON-LD and suggest or write terminology mappings (see <code class="docutils literal notranslate"><span class="pre">map_columns/README.md</span></code>).</p>
-<ul>
-<li><p><code class="docutils literal notranslate"><span class="pre">map_columns/codes_map_columns.py</span></code> performs fully offline Wikidata matching against <code class="docutils literal notranslate"><span class="pre">map_columns/codes.tsv</span></code>, optionally merging manual overrides into SSSOM output.</p></li>
-<li><p><code class="docutils literal notranslate"><span class="pre">python</span> <span class="pre">-m</span> <span class="pre">semsynth</span> <span class="pre">create-mapping</span> <span class="pre">uciml</span> <span class="pre">--datasets</span> <span class="pre">145</span></code> automates the end-to-end workflow (JSON-LD export → Wikidata scoring → SSSOM merge) and stores the results under <code class="docutils literal notranslate"><span class="pre">mappings/</span></code>.</p></li>
-</ul>
-</li>
+<li><p>Scripts under <code class="docutils literal notranslate"><span class="pre">map_columns/</span></code> take that JSON-LD and suggest or write terminology mappings (see <code class="docutils literal notranslate"><span class="pre">map_columns/README.md</span></code> for the full strategy catalog covering lexical, Datasette keyword, embedding, and LLM workflows).</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">python</span> <span class="pre">-m</span> <span class="pre">semsynth</span> <span class="pre">create-mapping</span> <span class="pre">uciml</span> <span class="pre">--datasets</span> <span class="pre">145</span> <span class="pre">--method</span> <span class="pre">lexical</span></code> automates the end-to-end workflow (JSON-LD export → terminology scoring → SSSOM merge) and stores the results under <code class="docutils literal notranslate"><span class="pre">mappings/</span></code>.</p></li>
 </ul>
 <section id="example-uci-dataset-45-heart-disease">
 <h3>Example: UCI dataset 45 (Heart Disease)<a class="headerlink" href="#example-uci-dataset-45-heart-disease" title="Link to this heading"></a></h3>
@@ -231,18 +231,27 @@
 </div>
 <p>The resulting <code class="docutils literal notranslate"><span class="pre">heart-dataset.jsonld</span></code> contains dataset-level <code class="docutils literal notranslate"><span class="pre">dcat:Dataset</span></code> fields plus a <code class="docutils literal notranslate"><span class="pre">dsv:datasetSchema</span></code> block with each variable from the Heart Disease dataset.</p>
 </li>
-<li><p>Suggest terminology mappings for every variable description using the keyword search helper:</p>
+<li><p>Suggest terminology mappings for every variable description using the keyword search helper (writes SSSOM when <code class="docutils literal notranslate"><span class="pre">--output</span></code> is provided):</p>
 <div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>python<span class="w"> </span>map_columns/kwd_map_columns.py<span class="w"> </span>heart-dataset.jsonld<span class="w"> </span><span class="se">\</span>
 <span class="w">    </span>--datasette-db-url<span class="w"> </span>http://127.0.0.1:8001/terminology<span class="w"> </span><span class="se">\</span>
 <span class="w">    </span>--table<span class="w"> </span>codes<span class="w"> </span><span class="se">\</span>
-<span class="w">    </span>--limit<span class="w"> </span><span class="m">5</span><span class="w"> </span><span class="se">\</span>
+<span class="w">    </span>--limit<span class="w"> </span><span class="m">10</span><span class="w"> </span><span class="se">\</span>
+<span class="w">    </span>--top-k<span class="w"> </span><span class="m">3</span><span class="w"> </span><span class="se">\</span>
+<span class="w">    </span>--output<span class="w"> </span>mappings/uciml-45.keyword.sssom.tsv<span class="w"> </span><span class="se">\</span>
 <span class="w">    </span>--verbose
 </pre></div>
 </div>
-<p>Swap in <code class="docutils literal notranslate"><span class="pre">map_columns/llm_map_columns.py</span></code> to drive an LLM-backed workflow that writes an <code class="docutils literal notranslate"><span class="pre">*.sssom.tsv</span></code> file (see <code class="docutils literal notranslate"><span class="pre">map_columns/README.md</span></code> for details).</p>
+<p>Swap in <code class="docutils literal notranslate"><span class="pre">map_columns/embed_map_columns.py</span></code> or <code class="docutils literal notranslate"><span class="pre">map_columns/llm_map_columns.py</span></code> to use embedding or LLM variants (see <code class="docutils literal notranslate"><span class="pre">map_columns/README.md</span></code> for full parameter lists).</p>
 </li>
 <li><p>Run the integrated helper to write mappings and SemMap metadata in one go:</p>
-<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>python<span class="w"> </span>-m<span class="w"> </span>semsynth<span class="w"> </span>create-mapping<span class="w"> </span>uciml<span class="w"> </span>--datasets<span class="w"> </span><span class="m">45</span><span class="w"> </span>--codes-tsv<span class="w"> </span>map_columns/codes.tsv<span class="w"> </span>--verbose
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>python<span class="w"> </span>-m<span class="w"> </span>semsynth<span class="w"> </span>create-mapping<span class="w"> </span>uciml<span class="w"> </span><span class="se">\</span>
+<span class="w">    </span>--datasets<span class="w"> </span><span class="m">45</span><span class="w"> </span><span class="se">\</span>
+<span class="w">    </span>--method<span class="w"> </span>embed<span class="w"> </span><span class="se">\</span>
+<span class="w">    </span>--codes-tsv<span class="w"> </span>map_columns/codes.tsv<span class="w"> </span><span class="se">\</span>
+<span class="w">    </span>--datasette-url<span class="w"> </span>http://127.0.0.1:8001/terminology<span class="w"> </span><span class="se">\</span>
+<span class="w">    </span>--lexical-threshold<span class="w"> </span><span class="m">0</span>.25<span class="w"> </span><span class="se">\</span>
+<span class="w">    </span>--top-k<span class="w"> </span><span class="m">3</span><span class="w"> </span><span class="se">\</span>
+<span class="w">    </span>--verbose
 </pre></div>
 </div>
 <p>The resulting files (e.g., <code class="docutils literal notranslate"><span class="pre">mappings/uciml-45.sssom.tsv</span></code>) can be fed back into the reporting pipeline without extra steps.</p>
@@ -262,7 +271,7 @@
 <section id="testing-contributing-documentation">
 <h2>📚 Testing, Contributing, Documentation<a class="headerlink" href="#testing-contributing-documentation" title="Link to this heading"></a></h2>
 <ul class="simple">
-<li><p>Install dev deps with <code class="docutils literal notranslate"><span class="pre">python</span> <span class="pre">-m</span> <span class="pre">pip</span> <span class="pre">install</span> <span class="pre">-e</span> <span class="pre">.[dev]</span></code></p></li>
+<li><p>Install dev and documentation deps with <code class="docutils literal notranslate"><span class="pre">python</span> <span class="pre">-m</span> <span class="pre">pip</span> <span class="pre">install</span> <span class="pre">-e</span> <span class="pre">.[dev,docs]</span></code> (use <code class="docutils literal notranslate"><span class="pre">.[dev]</span></code> if you do not need to build docs).</p></li>
 <li><p>Run tests with <code class="docutils literal notranslate"><span class="pre">python</span> <span class="pre">-m</span> <span class="pre">pytest</span></code></p></li>
 <li><p>Build the Sphinx site with <code class="docutils literal notranslate"><span class="pre">sphinx-build</span> <span class="pre">-b</span> <span class="pre">html</span> <span class="pre">sphinx</span> <span class="pre">docs</span></code>.</p></li>
 </ul>
@@ -284,11 +293,12 @@
 <li class="toctree-l2"><a class="reference internal" href="schema.html#reporting-and-exports">Reporting and exports</a></li>
 </ul>
 </li>
-<li class="toctree-l1"><a class="reference internal" href="map_columns.html">Column Terminology Mapping</a><ul>
+<li class="toctree-l1"><a class="reference internal" href="map_columns.html">Column terminology mapping</a><ul>
 <li class="toctree-l2"><a class="reference internal" href="map_columns.html#table-of-contents">Table of Contents</a></li>
 <li class="toctree-l2"><a class="reference internal" href="map_columns.html#scripts-overview">Scripts Overview</a></li>
 <li class="toctree-l2"><a class="reference internal" href="map_columns.html#prerequisites">Prerequisites</a></li>
 <li class="toctree-l2"><a class="reference internal" href="map_columns.html#usage">Usage</a></li>
+<li class="toctree-l2"><a class="reference internal" href="map_columns.html#semsynth-cli-integration">SemSynth CLI integration</a></li>
 </ul>
 </li>
 <li class="toctree-l1"><a class="reference internal" href="provenance.html">Provenance workflow guide</a><ul>
@@ -298,6 +308,31 @@
 <li class="toctree-l2"><a class="reference internal" href="provenance.html#pipeline-orchestration-rules">Pipeline orchestration rules</a></li>
 <li class="toctree-l2"><a class="reference internal" href="provenance.html#provenance-outputs-and-validation">Provenance outputs and validation</a></li>
 <li class="toctree-l2"><a class="reference internal" href="provenance.html#practical-usage-patterns">Practical usage patterns</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="backends.html">Backends overview</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="backends.html#metasyn">MetaSyn</a></li>
+<li class="toctree-l2"><a class="reference internal" href="backends.html#pybnesian">PyBNesian</a></li>
+<li class="toctree-l2"><a class="reference internal" href="backends.html#synthcity">SynthCity</a></li>
+<li class="toctree-l2"><a class="reference internal" href="backends.html#references">References</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="missingness.html">Missingness handling</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="missingness.html#column-level-modeling">Column-level modeling</a></li>
+<li class="toctree-l2"><a class="reference internal" href="missingness.html#dataframe-level-application">Dataframe-level application</a></li>
+<li class="toctree-l2"><a class="reference internal" href="missingness.html#references">References</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="privacy-metrics.html">Privacy metrics</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="privacy-metrics.html#metric-suite">Metric suite</a></li>
+<li class="toctree-l2"><a class="reference internal" href="privacy-metrics.html#references">References</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="downstream-fidelity.html">Downstream fidelity</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="downstream-fidelity.html#formula-discovery">Formula discovery</a></li>
+<li class="toctree-l2"><a class="reference internal" href="downstream-fidelity.html#multiple-imputation-and-estimation">Multiple imputation and estimation</a></li>
+<li class="toctree-l2"><a class="reference internal" href="downstream-fidelity.html#comparative-reporting">Comparative reporting</a></li>
+<li class="toctree-l2"><a class="reference internal" href="downstream-fidelity.html#references">References</a></li>
 </ul>
 </li>
 <li class="toctree-l1"><a class="reference internal" href="api.html">API reference</a><ul>

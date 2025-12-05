@@ -1,4 +1,4 @@
-# Column Terminology Mapping
+# Column terminology mapping
 
 The `map_columns/` directory contains utilities for building terminology
 resources, mapping dataset columns to codes, and evaluating the resulting SSSOM

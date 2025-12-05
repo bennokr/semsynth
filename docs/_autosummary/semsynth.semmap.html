@@ -49,6 +49,10 @@
 <li class="toctree-l1"><a class="reference internal" href="../schema.html">SemMap metadata schema</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../map_columns.html">Column Terminology Mapping</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../provenance.html">Provenance workflow guide</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../backends.html">Backends overview</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../missingness.html">Missingness handling</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../privacy-metrics.html">Privacy metrics</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../downstream-fidelity.html">Downstream fidelity</a></li>
 <li class="toctree-l1 current"><a class="reference internal" href="../api.html">API reference</a><ul class="current">
 <li class="toctree-l2 current"><a class="reference internal" href="semsynth.html">semsynth</a><ul class="current">
 <li class="toctree-l3"><a class="reference internal" href="semsynth.html#semsynth.get_version"><code class="docutils literal notranslate"><span class="pre">get_version()</span></code></a></li>
@@ -152,7 +156,7 @@
 <tr class="row-even"><td><p><a class="reference internal" href="#semsynth.semmap.DatasetSchema" title="semsynth.semmap.DatasetSchema"><code class="xref py py-obj docutils literal notranslate"><span class="pre">DatasetSchema</span></code></a>(columns)</p></td>
 <td><p></p></td>
 </tr>
-<tr class="row-odd"><td><p><code class="xref py py-obj docutils literal notranslate"><span class="pre">Enum</span></code>(value)</p></td>
+<tr class="row-odd"><td><p><code class="xref py py-obj docutils literal notranslate"><span class="pre">Enum</span></code>(new_class_name, /, names, *[, module, ...])</p></td>
 <td><p>Create a collection of name/value pairs.</p></td>
 </tr>
 <tr class="row-even"><td><p><a class="reference internal" href="#semsynth.semmap.Metadata" title="semsynth.semmap.Metadata"><code class="xref py py-obj docutils literal notranslate"><span class="pre">Metadata</span></code></a>(datasetSchema[, summaryStatistics, ...])</p></td>
@@ -173,7 +177,7 @@
 <tr class="row-odd"><td><p><a class="reference internal" href="#semsynth.semmap.SkosMappings" title="semsynth.semmap.SkosMappings"><code class="xref py py-obj docutils literal notranslate"><span class="pre">SkosMappings</span></code></a>(*[, exactMatch, closeMatch, ...])</p></td>
 <td><p></p></td>
 </tr>
-<tr class="row-even"><td><p><a class="reference internal" href="#semsynth.semmap.StatisticalDataType" title="semsynth.semmap.StatisticalDataType"><code class="xref py py-obj docutils literal notranslate"><span class="pre">StatisticalDataType</span></code></a>(value)</p></td>
+<tr class="row-even"><td><p><a class="reference internal" href="#semsynth.semmap.StatisticalDataType" title="semsynth.semmap.StatisticalDataType"><code class="xref py py-obj docutils literal notranslate"><span class="pre">StatisticalDataType</span></code></a>(*values)</p></td>
 <td><p></p></td>
 </tr>
 <tr class="row-odd"><td><p><a class="reference internal" href="#semsynth.semmap.SummaryStatistics" title="semsynth.semmap.SummaryStatistics"><code class="xref py py-obj docutils literal notranslate"><span class="pre">SummaryStatistics</span></code></a>([statisticalDataType, ...])</p></td>
@@ -558,7 +562,7 @@ containing per-column missingness probabilities.</p></li>
 
 <dl class="py class">
 <dt class="sig sig-object py" id="semsynth.semmap.StatisticalDataType">
-<em class="property"><span class="k"><span class="pre">class</span></span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">semsynth.semmap.</span></span><span class="sig-name descname"><span class="pre">StatisticalDataType</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">value</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#semsynth.semmap.StatisticalDataType" title="Link to this definition"></a></dt>
+<em class="property"><span class="k"><span class="pre">class</span></span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">semsynth.semmap.</span></span><span class="sig-name descname"><span class="pre">StatisticalDataType</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="o"><span class="pre">*</span></span><span class="n"><span class="pre">values</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#semsynth.semmap.StatisticalDataType" title="Link to this definition"></a></dt>
 <dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code>, <code class="xref py py-class docutils literal notranslate"><span class="pre">Enum</span></code></p>
 <dl class="py attribute">
 <dt class="sig sig-object py" id="semsynth.semmap.StatisticalDataType.Interval">

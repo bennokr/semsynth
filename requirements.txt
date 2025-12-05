@@ -1,5 +1,5 @@
-# Install SemSynth in editable mode with dev tools for testing.
--e .[dev]
+# Install SemSynth in editable mode with dev tools for testing and docs builds.
+-e .[dev,docs]
 
 # Optional extras are available for specific backends:
 #   pip install -e .[pybnesian]

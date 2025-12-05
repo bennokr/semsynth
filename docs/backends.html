@@ -1,0 +1,154 @@
+
+
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" data-content_root="./">
+<head>
+  <meta charset="utf-8" /><meta name="viewport" content="width=device-width, initial-scale=1" />
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Backends overview &mdash; semsynth  documentation</title>
+      <link rel="stylesheet" type="text/css" href="_static/pygments.css?v=b86133f3" />
+      <link rel="stylesheet" type="text/css" href="_static/css/theme.css?v=e59714d7" />
+
+  
+      <script src="_static/jquery.js?v=5d32c60e"></script>
+      <script src="_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
+      <script src="_static/documentation_options.js?v=5929fcd5"></script>
+      <script src="_static/doctools.js?v=9bcbadda"></script>
+      <script src="_static/sphinx_highlight.js?v=dc90522c"></script>
+    <script src="_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="genindex.html" />
+    <link rel="search" title="Search" href="search.html" />
+    <link rel="next" title="Missingness handling" href="missingness.html" />
+    <link rel="prev" title="Provenance workflow guide" href="provenance.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+
+          
+          
+          <a href="index.html" class="icon icon-home">
+            semsynth
+          </a>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <p class="caption" role="heading"><span class="caption-text">Contents</span></p>
+<ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="index.html">Home</a></li>
+<li class="toctree-l1"><a class="reference internal" href="getting-started.html">Getting started</a></li>
+<li class="toctree-l1"><a class="reference internal" href="schema.html">SemMap metadata schema</a></li>
+<li class="toctree-l1"><a class="reference internal" href="map_columns.html">Column terminology mapping</a></li>
+<li class="toctree-l1"><a class="reference internal" href="provenance.html">Provenance workflow guide</a></li>
+<li class="toctree-l1 current"><a class="current reference internal" href="#">Backends overview</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="#metasyn">MetaSyn</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#pybnesian">PyBNesian</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#synthcity">SynthCity</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#references">References</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="missingness.html">Missingness handling</a></li>
+<li class="toctree-l1"><a class="reference internal" href="privacy-metrics.html">Privacy metrics</a></li>
+<li class="toctree-l1"><a class="reference internal" href="downstream-fidelity.html">Downstream fidelity</a></li>
+<li class="toctree-l1"><a class="reference internal" href="api.html">API reference</a></li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="index.html">semsynth</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="index.html" class="icon icon-home" aria-label="Home"></a></li>
+      <li class="breadcrumb-item active">Backends overview</li>
+      <li class="wy-breadcrumbs-aside">
+            <a href="_sources/backends.md.txt" rel="nofollow"> View page source</a>
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <section id="backends-overview">
+<h1>Backends overview<a class="headerlink" href="#backends-overview" title="Link to this heading"></a></h1>
+<p>SemSynth ships three interchangeable generation backends—MetaSyn, PyBNesian, and SynthCity—that follow the common <code class="docutils literal notranslate"><span class="pre">run_experiment</span></code> contract and produce aligned artifacts (synthetic CSVs, per-variable metrics, and manifests). The backends share the same type inference and train/test splitting utilities so synthetic rows and downstream metrics remain comparable across runs. If a backend’s optional dependency is missing, the implementation raises a clear runtime error suggesting the corresponding extras install (for example, <code class="docutils literal notranslate"><span class="pre">pip</span> <span class="pre">install</span> <span class="pre">semsynth[metasyn]</span></code>).</p>
+<section id="metasyn">
+<h2>MetaSyn<a class="headerlink" href="#metasyn" title="Link to this heading"></a></h2>
+<ul class="simple">
+<li><p>Uses <code class="docutils literal notranslate"><span class="pre">MetaFrame.fit_dataframe</span></code> to learn column-wise distributions after inferring discrete and continuous fields, then synthesizes a user-specified number of rows. The backend coerces continuous features to floats, preserves categorical categories, and writes a <code class="docutils literal notranslate"><span class="pre">synthetic.csv</span></code> aligned to the original schema.</p></li>
+<li><p>Persists evaluation artifacts alongside the dataset, including per-variable distance metrics and summary statistics derived from the held-out test split. A manifest records the backend name, dataset identifiers, seed, requested rows, and split ratio to keep runs auditable.</p></li>
+</ul>
+</section>
+<section id="pybnesian">
+<h2>PyBNesian<a class="headerlink" href="#pybnesian" title="Link to this heading"></a></h2>
+<ul class="simple">
+<li><p>Learns a Bayesian network with hill climbing and configurable network types (<code class="docutils literal notranslate"><span class="pre">clg</span></code> or <code class="docutils literal notranslate"><span class="pre">semiparametric</span></code>) and scoring/structure-search options. Sensitive roots (age, sex, race by default) are blacklisted from being child nodes to avoid trivial leakage pathways.</p></li>
+<li><p>Samples synthetic rows from the fitted network, exports optional SemMap parquet, and computes per-variable distances plus a held-out log-likelihood statistic. The backend serializes GraphViz and GraphML structures (when optional dependencies are present) and stores a manifest capturing structure parameters and dataset metadata.</p></li>
+</ul>
+</section>
+<section id="synthcity">
+<h2>SynthCity<a class="headerlink" href="#synthcity" title="Link to this heading"></a></h2>
+<ul class="simple">
+<li><p>Normalizes generator aliases (e.g., <code class="docutils literal notranslate"><span class="pre">ctgan</span></code>, <code class="docutils literal notranslate"><span class="pre">pategan</span></code>, <code class="docutils literal notranslate"><span class="pre">bayesiannetwork</span></code>) to the canonical SynthCity plugin names, then loads the chosen plugin with sanitized parameters. Continuous features are coerced to numeric types and categories are string-safe before fitting on the training split.</p></li>
+<li><p>Generates synthetic rows through the plugin’s <code class="docutils literal notranslate"><span class="pre">generate</span></code> API, aligns columns to the training schema, and writes synthetic CSVs and optional SemMap parquet. Per-variable distances and summary statistics are emitted alongside a manifest documenting the generator, seed, row count, and split settings.</p></li>
+</ul>
+</section>
+<section id="references">
+<h2>References<a class="headerlink" href="#references" title="Link to this heading"></a></h2>
+<ul class="simple">
+<li><p>MetaSyn documentation: <a class="reference external" href="https://metasyn.readthedocs.io/">https://metasyn.readthedocs.io/</a></p></li>
+<li><p>PyBNesian documentation: <a class="reference external" href="https://pybnesian.readthedocs.io/">https://pybnesian.readthedocs.io/</a></p></li>
+<li><p>SynthCity documentation: <a class="reference external" href="https://synthcity.readthedocs.io/">https://synthcity.readthedocs.io/</a></p></li>
+</ul>
+</section>
+</section>
+
+
+           </div>
+          </div>
+          <footer><div class="rst-footer-buttons" role="navigation" aria-label="Footer">
+        <a href="provenance.html" class="btn btn-neutral float-left" title="Provenance workflow guide" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
+        <a href="missingness.html" class="btn btn-neutral float-right" title="Missingness handling" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+    </div>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright .</p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>

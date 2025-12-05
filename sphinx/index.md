@@ -11,5 +11,9 @@ getting-started
 schema
 map_columns
 provenance
+backends
+missingness
+privacy-metrics
+downstream-fidelity
 api
 ```

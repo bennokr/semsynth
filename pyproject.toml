@@ -34,6 +34,13 @@ dev = [
   "pytest",
   "pytest-cov"
 ]
+docs = [
+  "sphinx",
+  "myst-parser",
+  "sphinx-rtd-theme",
+  "statsmodels",
+  "linkify-it-py",
+]
 metasyn = [
   "metasyn"
 ]

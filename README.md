@@ -152,6 +152,6 @@ configs:
 - If external dataset hosts are unreachable, cached payloads under `downloads-cache/` may contain synthetic stand-ins that mimic the documented schema so pipeline checks can proceed. Keep README notes in sync when such fallbacks are introduced.
 
 ## 📚 Testing, Contributing, Documentation
-- Install dev deps with `python -m pip install -e .[dev]`
+- Install dev and documentation deps with `python -m pip install -e .[dev,docs]` (use `.[dev]` if you do not need to build docs).
 - Run tests with `python -m pytest`
 - Build the Sphinx site with `sphinx-build -b html sphinx docs`.

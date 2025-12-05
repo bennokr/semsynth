@@ -53,13 +53,13 @@ and alternate labels.
 
 ## Generate reports
 
-With mappings in place, execute the reporting pipeline. The default
-`configs/maximal_config.yaml` keeps MetaSyn as the primary backend to ensure
+With mappings in place, execute the reporting pipeline. The
+`configs/only_metasyn_config.yaml` keeps MetaSyn as the primary backend to ensure
 runs complete even without GPU or shared-memory support:
 
 ```bash
 python -m semsynth report uciml --datasets 145 \
-    --configs-yaml configs/maximal_config.yaml \
+    --configs-yaml configs/only_metasyn_config.yaml \
     --verbose
 ```
 
