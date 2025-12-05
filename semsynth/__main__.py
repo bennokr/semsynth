@@ -6,7 +6,7 @@ import json
 import logging
 import re
 from pathlib import Path
-from typing import TYPE_CHECKING, Any, List, Optional, Sequence
+from typing import TYPE_CHECKING, Any, Dict, List, Optional, Sequence
 
 from makeprov import GLOBAL_CONFIG, OutPath, main, rule
 
@@ -149,6 +149,18 @@ def create_mapping(
     codes_tsv: str = "map_columns/codes.tsv",
     manual_overrides_dir: Optional[str] = "map_columns/manual",
     systems: Sequence[str] = ("WD",),
+    method: str = "lexical",
+    datasette_url: str = "http://127.0.0.1:8001/terminology",
+    datasette_table: str = "codes",
+    datasette_limit: int = 15,
+    lexical_threshold: float = 0.35,
+    embed_model: str = "sentence-transformers/all-MiniLM-L6-v2",
+    candidate_pool_multiplier: int = 5,
+    cosine_threshold: float = 0.0,
+    llm_model: str = "gpt-4.1-mini",
+    llm_extra_prompt: str = "",
+    llm_subject_prefix: str = "dataset",
+    confidence_threshold: float = 0.0,
     min_score: float = 0.45,
     top_k: int = 2,
     outdir: OutPath = OutPath("mappings/"),
@@ -159,14 +171,34 @@ def create_mapping(
     """Create SemMap-aware SSSOM mappings for one or more datasets.
 
     Args:
-        provider: Dataset provider key (``\"uciml\"`` or ``\"openml\"``).
+        provider: Dataset provider key (``"uciml"`` or ``"openml"``).
         datasets: Optional list of dataset identifiers; falls back to default
             provider catalog when omitted.
         codes_tsv: Path to the terminology TSV produced by
             :mod:`map_columns.build_wikidata_medical_codes_table`.
         manual_overrides_dir: Directory holding optional ``*.json`` overrides.
         systems: Terminology systems to consider during matching.
-        min_score: Minimum similarity score applied to automatic matches.
+        method: Mapping strategy to use. Supported values are ``"lexical"``
+            (offline TSV scoring), ``"keyword"`` (Datasette keyword search),
+            ``"embed"`` (sentence-transformer re-ranking), and ``"llm"`` (tool
+            augmented LLM).
+        datasette_url: Base URL for Datasette-backed strategies (keyword and
+            LLM).
+        datasette_table: Table name used by Datasette strategies.
+        datasette_limit: Number of rows fetched per column for keyword lookup.
+        lexical_threshold: Minimum lexical similarity required by Datasette and
+            embedding strategies.
+        embed_model: Sentence-transformer model identifier.
+        candidate_pool_multiplier: Pool size factor before lexical re-scoring
+            in the embedding strategy.
+        cosine_threshold: Minimum cosine similarity for embedding candidates.
+        llm_model: Identifier of the LLM registered with ``llm``.
+        llm_extra_prompt: Optional extra instructions appended to the LLM
+            system prompt.
+        llm_subject_prefix: Prefix applied to ``subject_id`` when using LLMs.
+        confidence_threshold: Minimum confidence required for LLM results.
+        min_score: Minimum similarity score applied to automatic matches
+            produced by the lexical strategy.
         top_k: Maximum number of automatic matches per column.
         outdir: Output directory for SSSOM and merged SemMap metadata.
         indent: JSON indentation for saved SemMap metadata.
@@ -178,8 +210,7 @@ def create_mapping(
     from .semmap import Metadata
     from .utils import ensure_dir
     from map_columns.codes_map_columns import (
-        generate_matches,
-        load_codes,
+        build_manual_matches,
         load_manual_overrides,
         write_sssom,
     )
@@ -190,14 +221,24 @@ def create_mapping(
         logging.root.setLevel(logging.INFO)
 
     specs = specs_from_input(provider=provider, datasets=datasets)
-    codes = load_codes(Path(codes_tsv), allowed_systems=systems)
     overrides_dir = Path(manual_overrides_dir) if manual_overrides_dir else None
+    allowed_systems = tuple(system for system in systems if system)
+
+    codes_cache: Optional[Dict[str, Any]] = None
+    if method.lower() in {"lexical", "embed"} or overrides_dir:
+        from map_columns.codes_map_columns import load_codes
+
+        codes_cache = load_codes(
+            Path(codes_tsv), allowed_systems=allowed_systems or None
+        )
 
     outdir_path = Path(outdir)
     ensure_dir(str(outdir_path))
 
     def _slug(text: str) -> str:
         return re.sub(r"[^a-z0-9]+", "-", text.lower()).strip("-")
+
+    method_key = method.lower()
 
     for spec in specs:
         payload = load_dataset(spec)
@@ -232,13 +273,85 @@ def create_mapping(
                     break
         overrides = load_manual_overrides(manual_overrides_path)
 
-        matches = generate_matches(
-            columns,
-            codes,
-            min_score=min_score,
-            top_k=top_k,
-            manual_overrides=overrides,
-        )
+        if method_key == "lexical":
+            from map_columns.codes_map_columns import generate_matches as lexical_generate_matches
+
+            matches = lexical_generate_matches(
+                columns,
+                codes_cache or {},
+                min_score=min_score,
+                top_k=top_k,
+                manual_overrides=overrides,
+            )
+        elif method_key == "keyword":
+            from map_columns.kwd_map_columns import generate_matches as keyword_generate_matches
+
+            matches = keyword_generate_matches(
+                columns,
+                dataset_meta,
+                datasette_db_url=datasette_url,
+                table=datasette_table,
+                limit=datasette_limit,
+                allowed_systems=allowed_systems,
+                lexical_threshold=lexical_threshold,
+                top_k=top_k,
+            )
+        elif method_key == "embed":
+            from map_columns.embed_map_columns import generate_matches as embed_generate_matches
+
+            if not codes_cache:
+                raise SystemExit(
+                    "Embedding-based mapping requires a terminology codes TSV."
+                )
+            matches = embed_generate_matches(
+                columns,
+                dataset_meta,
+                list(codes_cache.values()),
+                model_name=embed_model,
+                top_k=top_k,
+                candidate_pool_multiplier=candidate_pool_multiplier,
+                cosine_threshold=cosine_threshold,
+                lexical_threshold=lexical_threshold,
+            )
+        elif method_key == "llm":
+            from map_columns.llm_map_columns import generate_matches as llm_generate_matches
+
+            matches = llm_generate_matches(
+                columns,
+                dataset_meta,
+                datasette_url=datasette_url,
+                model=llm_model,
+                extra_prompt=llm_extra_prompt,
+                subject_prefix=llm_subject_prefix,
+                allowed_systems=allowed_systems,
+                top_k=top_k,
+                confidence_threshold=confidence_threshold,
+            )
+        else:
+            raise SystemExit(
+                f"Unknown mapping method '{method}'. Expected lexical, keyword, embed, or llm."
+            )
+
+        if overrides and method_key != "lexical":
+            if codes_cache is None:
+                from map_columns.codes_map_columns import load_codes
+
+                codes_cache = load_codes(
+                    Path(codes_tsv), allowed_systems=allowed_systems or None
+                )
+            manual_matches = []
+            overridden = set()
+            for column in columns:
+                manual = build_manual_matches(
+                    column, overrides, codes_cache, min_score=min_score
+                )
+                if manual:
+                    manual_matches.extend(manual)
+                    overridden.add(column)
+            if manual_matches:
+                matches = manual_matches + [
+                    match for match in matches if match.column not in overridden
+                ]
 
         sssom_path = outdir_path / f"{slug}.sssom.tsv"
         write_sssom(
@@ -257,11 +370,7 @@ def create_mapping(
             encoding="utf-8",
         )
 
-        logging.info(
-            "Wrote mappings for %s -> %s",
-            slug,
-            sssom_path,
-        )
+        logging.info("Wrote mappings for %s -> %s", slug, sssom_path)
 
 if __name__ == "__main__":
     main(argparse_kwargs = dict(

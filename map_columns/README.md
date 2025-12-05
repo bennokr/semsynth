@@ -1,46 +1,61 @@
 # Column Terminology Mapping
 
-The `map_columns/` directory contains several Python scripts designed to build a small medical terminology index and perform mappings between dataset variables and relevant medical codes. You can use both closed (license based) SNOMED CT / LOINC and open data from Wikidata. The mapping can be done with a keyword index or an LLM that wraps this index and re-ranks.
+The `map_columns/` directory contains utilities for building terminology
+resources, mapping dataset columns to codes, and evaluating the resulting SSSOM
+artifacts. The tooling supports offline TSV lookups, Datasette-backed keyword
+search, embedding re-ranking, and LLM-assisted coding.
 
 ## Table of Contents
 
 - [Scripts Overview](#scripts-overview)
 - [Prerequisites](#prerequisites)
 - [Usage](#usage)
-  - [1. Build SNOMED and LOINC Codes Table](#1-build-snomed-and-loinc-codes-table)
-  - [2. Extract Medical Codes from Wikidata](#2-extract-medical-codes-from-wikidata)
-  - [3. Map Dataset Columns to Codes using Keyword Search](#3-map-dataset-columns-to-codes-using-keyword-search)
-  - [4. Map Dataset Columns to Codes using LLM](#4-map-dataset-columns-to-codes-using-llm)
+  - [1. Build Terminology Tables](#1-build-terminology-tables)
+  - [2. Mapping Approaches](#2-mapping-approaches)
+    - [2.1 Offline TSV (lexical)](#21-offline-tsv-lexical)
+    - [2.2 Datasette keyword search](#22-datasette-keyword-search)
+    - [2.3 Embedding re-ranking](#23-embedding-re-ranking)
+    - [2.4 LLM-assisted mapping](#24-llm-assisted-mapping)
+  - [3. Evaluate SSSOM outputs](#3-evaluate-sssom-outputs)
+- [SemSynth CLI integration](#semsynth-cli-integration)
 
 ## Scripts Overview
 
-1. `build_snomed_loinc_codes_table.py` - Builds a TSV containing codes from SNOMED CT and LOINC.
-2. `build_wikidata_medical_codes_table.py` - Extracts medical terminology from Wikidata and outputs a TSV.
-3. `kwd_map_columns.py` - Maps dataset columns to codes using a keyword search index over a Datasette-backed terminology index.
-4. `llm_map_columns.py` - Utilizes an LLM to map dataset columns to codes from a Datasette-backed terminology index.
+1. `build_snomed_loinc_codes_table.py` – Build a TSV containing SNOMED CT and
+   LOINC codes.
+2. `build_wikidata_medical_codes_table.py` – Extract medical terminology from
+   Wikidata into `codes.tsv`.
+3. `codes_map_columns.py` – Perform offline lexical matching between dataset
+   columns and entries in `codes.tsv`.
+4. `kwd_map_columns.py` – Query a Datasette instance and apply lexical scoring
+   to rank results.
+5. `embed_map_columns.py` – Re-rank terminology candidates by combining
+   sentence-transformer cosine similarity with lexical overlap diagnostics.
+6. `llm_map_columns.py` – Orchestrate an LLM with Datasette tool access to
+   obtain curated mappings.
+7. `evaluate.py` – Compute micro/macro precision/recall/F1, MAP, and nDCG for
+   SSSOM TSV files against a gold standard.
 
 ## Prerequisites
 
-You can install the necessary libraries using pip:
+Install the baseline dependencies:
 
 ```bash
-pip install requests defopt datasette sqlite-utils sssom
+pip install defopt requests pandas numpy
 ```
 
-To use the LLM script, run:
+Optional extras:
 
-```bash
-pip install llm
-llm install llm-tools-datasette
-```
+- Datasette helpers: `pip install datasette sqlite-utils llm-tools-datasette`
+- Embedding re-ranking: `pip install sentence-transformers torch`
+- LLM orchestration: `pip install llm`
+- Evaluation: no additional packages beyond the baseline list
 
 ## Usage
 
-### 1. Build Codes Table
+### 1. Build Terminology Tables
 
-#### Option A: Build SNOMED and LOINC Codes Table
-
-This script processes SNOMED CT and LOINC files to create a `codes.tsv` file.
+#### Option A: SNOMED + LOINC
 
 ```bash
 python build_snomed_loinc_codes_table.py \
@@ -50,58 +65,23 @@ python build_snomed_loinc_codes_table.py \
     --max-snomed 50000
 ```
 
-#### Option B: Extract Medical Codes from Wikidata
-
-This script fetches medical codes from Wikidata and outputs them to `codes.tsv`.
+#### Option B: Wikidata snapshot
 
 ```bash
 python build_wikidata_medical_codes_table.py
 ```
 
-Run the command above to perform the extraction. After execution, the results will be written to `codes.tsv` in the current directory.
-
-#### Loading Codes Table
-
-After running the script, you can insert the data into a SQLite database:
+After generating `codes.tsv`, you can load it into a SQLite / Datasette friendly
+database:
 
 ```bash
 sqlite-utils insert terminology.db codes codes.tsv --tsv
 sqlite-utils enable-fts terminology.db codes label synonyms --create-triggers
 ```
 
-### 2. Map Dataset Columns to Codes using Keyword Search
+### 2. Mapping Approaches
 
-This script maps dataset columns to semantic codes from a Datasette database based on their descriptions.
-
-```bash
-python kwd_map_columns.py dataset.json \
-    --datasette-db-url http://127.0.0.1:8001/terminology \
-    --table codes \
-    --limit 5 \
-    --verbose
-```
-
-Replace `dataset.json` with the path to your JSON file that contains the dataset schema. The results of the mapping will be printed in the terminal.
-
-### 3. Map Dataset Columns to Codes using LLM
-
-This script uses an LLM to intelligently map dataset columns to codes based on their metadata from a Datasette instance.
-
-```bash
-python llm_map_columns.py \
-    dataset.json \
-    --datasette-url http://127.0.0.1:8001/terminology \
-    --model gpt-4.1-mini \
-    --output mappings.sssom.tsv \
-    --extra-prompt "Prefer LOINC over SNOMED for this project." \
-    --verbose
-```
-
-Providing a JSON with dataset metadata as `dataset.json` will produce SSSOM-style mappings and save them to `mappings.sssom.tsv`.
-
-### 4. Map Dataset Columns to Codes using a Local TSV
-
-Use this script when you want completely offline mappings driven by a pre-built `codes.tsv` file. It supports optional manual overrides for edge cases and writes the result in SSSOM format.
+#### 2.1 Offline TSV (lexical)
 
 ```bash
 python -m map_columns.codes_map_columns \
@@ -112,18 +92,93 @@ python -m map_columns.codes_map_columns \
     --verbose
 ```
 
-Manual override files are JSON dictionaries keyed by column name. Each entry references an existing CURIE from `codes.tsv` so that mappings remain auditable.
+This mode keeps everything offline by comparing dataset metadata with the
+synonyms contained in `codes.tsv`. Optional manual overrides provide exact
+matches when lexical scoring is insufficient.
 
-#### Integrated CLI helper
-
-SemSynth exposes a convenience wrapper that connects the exporter, TSV matcher,
-and SemMap merger:
+#### 2.2 Datasette keyword search
 
 ```bash
-python -m semsynth create-mapping uciml --datasets 145 \
-    --codes-tsv map_columns/codes.tsv \
-    --manual-overrides-dir map_columns/manual
+python map_columns/kwd_map_columns.py dataset.json \
+    --datasette-db-url http://127.0.0.1:8001/terminology \
+    --table codes \
+    --limit 10 \
+    --lexical-threshold 0.3 \
+    --top-k 3 \
+    --output mappings/uciml-145.keyword.sssom.tsv
 ```
 
-Both the SSSOM output and the merged SemMap JSON-LD will be written to
-`mappings/`, ready for use by the reporting pipeline.
+The script requests candidate rows from Datasette, re-scores them with lexical
+overlap, and emits SSSOM TSV rows. Results can be redirected to stdout by
+omitting `--output`.
+
+#### 2.3 Embedding re-ranking
+
+```bash
+python map_columns/embed_map_columns.py dataset.json \
+    map_columns/codes.tsv \
+    --model-name sentence-transformers/all-MiniLM-L6-v2 \
+    --top-k 5 \
+    --cosine-threshold 0.25 \
+    --lexical-threshold 0.25 \
+    --output mappings/uciml-145.embed.sssom.tsv
+```
+
+Candidates are first retrieved by lexical similarity and then re-ranked using a
+sentence-transformer model. The exported TSV includes both lexical and cosine
+diagnostics in the comments.
+
+#### 2.4 LLM-assisted mapping
+
+```bash
+python map_columns/llm_map_columns.py dataset.json \
+    --datasette-url http://127.0.0.1:8001/terminology \
+    --model gpt-4.1-mini \
+    --top-k 3 \
+    --confidence-threshold 0.5 \
+    --output mappings/uciml-145.llm.sssom.tsv
+```
+
+The LLM uses the Datasette tool to inspect code candidates and emits SSSOM rows
+directly. Use `--extra-prompt` to provide project-specific guidance.
+
+### 3. Evaluate SSSOM outputs
+
+```bash
+python map_columns/evaluate.py \
+    gold/uciml-145.gold.sssom.tsv \
+    --predictions mappings/uciml-145.sssom.tsv mappings/uciml-145.embed.sssom.tsv \
+    --output eval/uciml-145.json
+```
+
+Metrics (micro/macro P/R/F1, MAP, nDCG) are printed for each prediction file.
+When `--output` is supplied, the metrics are also written to a JSON report.
+
+## SemSynth CLI integration
+
+The end-to-end workflow can be launched via the SemSynth CLI. All mapping
+strategies are now available under a single command:
+
+```bash
+python -m semsynth create-mapping uciml \
+    --datasets 145 \
+    --method embed \
+    --codes-tsv map_columns/codes.tsv \
+    --datasette-url http://127.0.0.1:8001/terminology \
+    --lexical-threshold 0.25 \
+    --top-k 3 \
+    --outdir mappings/
+```
+
+Key flags:
+
+- `--method`: `lexical` (default), `keyword`, `embed`, or `llm`
+- Datasette-backed methods honour `--datasette-url`, `--datasette-table`, and
+  `--datasette-limit`
+- Embedding mode accepts `--embed-model`, `--candidate-pool-multiplier`, and
+  `--cosine-threshold`
+- LLM mode exposes `--llm-model`, `--llm-extra-prompt`, `--llm-subject-prefix`,
+  and `--confidence-threshold`
+
+Manual overrides continue to be respected. When overrides exist for a column,
+the CLI replaces any automatically generated matches with the curated entries.

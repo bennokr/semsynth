@@ -28,7 +28,8 @@ from typing import Dict, List, Tuple
 
 import requests
 
-ENDPOINT = "https://query.wikidata.org/sparql"
+# ENDPOINT = "https://query.wikidata.org/sparql"
+ENDPOINT = "https://qlever.dev/api/wikidata"
 USER_AGENT = "WikidataMedicalProxy/0.1 (b.b.kruit@amsterdamumc.nl)"
 
 # Safety limits to reduce timeouts – tune these as needed
@@ -56,7 +57,11 @@ WHERE {
   {
     ?item wdt:P279/wdt:P279* %(root)s .
   }
-  ?item wikibase:sitelinks ?links .
+  UNION
+  {
+    BIND(%(root)s AS ?item) # singleton
+  }
+  ?item ^schema:about/wikibase:sitelinks ?links .
   FILTER(?links > 0)
 
   # English label for display
@@ -85,6 +90,13 @@ ROOTS: List[Tuple[str, str]] = [
     ("PROCEDURE", "wd:Q796194"),  # medical procedure
     ("TEST", "wd:Q2671652"),    # medical test
     ("SIGN", "wd:Q1441305"),    # clinical sign
+    ("MEASURAND",      "wd:Q42014143"),
+
+    # singletons
+    ("AGE",            "wd:Q185836"),
+    ("GENDER_IDENTITY","wd:Q48264"),
+    ("SEX_OF_HUMANS",  "wd:Q4369513"),
+    ("SEX_OR_GENDER",  "wd:Q18382802"),
 ]
 
 
@@ -92,7 +104,7 @@ def run_sparql(query: str) -> Dict:
     """Run a SPARQL query and return the JSON result."""
     headers = {"User-Agent": USER_AGENT}
     params = {"query": query, "format": "json"}
-    resp = requests.get(ENDPOINT, headers=headers, params=params, timeout=60)
+    resp = requests.get(ENDPOINT, headers=headers, params=params, timeout=120)
     resp.raise_for_status()
     return resp.json()
 
@@ -110,6 +122,7 @@ def fetch_system(system: str, root: str, limit: int) -> Dict[Tuple[str, str], Di
     bindings = data.get("results", {}).get("bindings", [])
 
     rows: Dict[Tuple[str, str], Dict] = {}
+    print(f"Got {len(bindings)} results")
     for b in bindings:
         qid = b["qid"]["value"]          # e.g. "Q12136"
         label = b["labelEn"]["value"]    # English label
@@ -133,6 +146,8 @@ def fetch_system(system: str, root: str, limit: int) -> Dict[Tuple[str, str], Di
                     rows[key]["synonyms"].add(alt)
         if rows[key]["description"]:
             rows[key]["synonyms"].add(rows[key]["description"])
+    
+    print(f"Added {sum(1 for v in rows.values() for _ in v)} rows")
 
     return rows
 
@@ -147,6 +162,7 @@ def write_codes_tsv(rows: Dict[Tuple[str, str], Dict], out_path: Path) -> None:
             row = rows[key]
             synonyms_str = "; ".join(sorted(row["synonyms"]))
             all_rows.add((row["system"], row["code"], row["label"], synonyms_str))
+        print(f"Collected {len(all_rows)} items total")
         for row in all_rows:
             writer.writerow(row)
 
@@ -167,7 +183,7 @@ def main() -> None:
         # Be polite to the WDQS service
         time.sleep(2)
 
-    print(f"Collected {len(all_rows)} items total")
+    # print(f"Collected {len(all_rows)} items total")
     write_codes_tsv(all_rows, out_path)
     print(f"Wrote {out_path}")
 

@@ -1,23 +1,5 @@
 #!/usr/bin/env python3
-"""
-Use an LLM to map dataset columns to codes from a Datasette-backed terminology index
-(using llm + llm-tools-datasette) and emit SSSOM TSV.
-
-- Input: DCAT style JSON/JSON-LD with dsv:datasetSchema.dsv:column[], and optionally:
-    dcterms:title, dcterms:description, dcterms:tableOfContents
-- Terminology: any vocabularies exposed via a Datasette `codes` table
-  (e.g. SNOMED, LOINC, Wikidata proxy)
-
-Example:
-
-    python llm_map_columns.py \
-    dataset.json \
-    --datasette-url http://127.0.0.1:8001/terminology \
-    --model gpt-4.1-mini \
-    --output mappings.sssom.tsv \
-    --extra-prompt "Prefer LOINC over SNOMED for this project." \
-    --verbose
-"""
+"""LLM-assisted mapping of dataset columns via Datasette-backed vocabularies."""
 
 from __future__ import annotations
 
@@ -25,17 +7,24 @@ import csv
 import json
 import logging
 from pathlib import Path
-from typing import Any, Dict, List
+from typing import Any, Dict, Iterable, List, Optional, Sequence
 
 import defopt
 import llm
 from llm_tools_datasette import Datasette
 
-from map_columns.shared import ColumnInfo, load_columns
+from map_columns.codes_map_columns import (
+    DEFAULT_JUSTIFICATION,
+    DEFAULT_PREDICATE,
+    CodeEntry,
+    MatchResult,
+    write_sssom,
+)
+from map_columns.shared import ColumnInfo, DatasetMetadata, load_columns
 
-logger = logging.getLogger(__name__)
+LOGGER = logging.getLogger(__name__)
 
-# Core SSSOM columns + a couple of useful extras
+# Core SSSOM columns + a couple of useful extras for backwards compatibility.
 SSSOM_COLUMNS = [
     "subject_id",
     "subject_label",
@@ -52,7 +41,9 @@ def build_system_prompt(dataset_meta: Any, extra_prompt: str = "") -> str:
     """Build the system prompt, including dataset-level metadata and codebook."""
     title = getattr(dataset_meta, "title", None) or ""
     desc = getattr(dataset_meta, "description", None) or ""
-    toc = getattr(dataset_meta, "tableOfContents", None) or getattr(dataset_meta, "table_of_contents", None) or ""
+    toc = getattr(dataset_meta, "tableOfContents", None) or getattr(
+        dataset_meta, "table_of_contents", None
+    ) or ""
 
     base = f"""
 You map dataset variables to codes from one or more vocabularies loaded into a Datasette `codes` table.
@@ -170,7 +161,7 @@ Rules:
 - Do NOT include any text before or after the JSON. The entire response must be valid JSON.
 """
 
-    logger.info("Requesting mapping for column %s", var_id)
+    LOGGER.info("Requesting mapping for column %s", var_id)
 
     chain = model.chain(
         user_prompt,
@@ -180,52 +171,133 @@ Rules:
 
     text = chain.text().strip()
     if not text:
-        logger.warning("Empty response for column %s", var_id)
+        LOGGER.warning("Empty response for column %s", var_id)
         return []
 
     try:
         data = json.loads(text)
     except json.JSONDecodeError:
-        logger.warning("Invalid JSON for column %s; skipping", var_id)
+        LOGGER.warning("Invalid JSON for column %s; skipping", var_id)
         return []
 
     if isinstance(data, dict):
         data = [data]
     if not isinstance(data, list):
-        logger.warning("Unexpected JSON structure for column %s; skipping", var_id)
+        LOGGER.warning("Unexpected JSON structure for column %s; skipping", var_id)
         return []
 
     cleaned: List[Dict[str, Any]] = []
-    for m in data:
-        if not isinstance(m, dict):
+    for mapping in data:
+        if not isinstance(mapping, dict):
             continue
-        row = {
-            "subject_id": m.get("subject_id", f"{subject_prefix}:{var_id}"),
-            "subject_label": m.get("subject_label", column_name),
-            "predicate_id": m.get("predicate_id", ""),
-            "object_id": m.get("object_id", ""),
-            "object_label": m.get("object_label", ""),
-            "mapping_justification": m.get("mapping_justification", ""),
-            "confidence": m.get("confidence", ""),
-            "comment": m.get("comment", ""),
-        }
-        if not row["object_id"]:
+        object_id = mapping.get("object_id", "")
+        if not object_id:
             continue
-        cleaned.append(row)
+        cleaned.append(
+            {
+                "subject_id": mapping.get("subject_id", f"{subject_prefix}:{var_id}"),
+                "subject_label": mapping.get("subject_label", column_name),
+                "predicate_id": mapping.get("predicate_id", ""),
+                "object_id": object_id,
+                "object_label": mapping.get("object_label", ""),
+                "mapping_justification": mapping.get(
+                    "mapping_justification", DEFAULT_JUSTIFICATION
+                ),
+                "confidence": mapping.get("confidence", 0.0),
+                "comment": mapping.get("comment", ""),
+            }
+        )
 
-    logger.info("Column %s: produced %d mappings", var_id, len(cleaned))
+    LOGGER.info("Column %s: produced %d mappings", var_id, len(cleaned))
     return cleaned
 
 
-def write_sssom(rows: List[Dict[str, Any]], out_path: Path) -> None:
-    """Write mappings as SSSOM TSV."""
+def generate_matches(
+    columns: Sequence[ColumnInfo],
+    dataset_meta: DatasetMetadata,
+    *,
+    datasette_url: str,
+    model: str,
+    extra_prompt: str = "",
+    subject_prefix: str = "dataset",
+    allowed_systems: Optional[Iterable[str]] = None,
+    top_k: int = 3,
+    confidence_threshold: float = 0.0,
+) -> List[MatchResult]:
+    """Run the LLM mapping workflow and convert to MatchResult objects."""
+
+    allowed = {system.strip() for system in allowed_systems or [] if system.strip()}
+    system_prompt = build_system_prompt(dataset_meta, extra_prompt)
+    model_obj = llm.get_model(model)
+    datasette_tool = Datasette(datasette_url)
+
+    matches: List[MatchResult] = []
+    for column in columns:
+        raw_mappings = map_column(
+            model=model_obj,
+            ds_tool=datasette_tool,
+            column=column,
+            system_prompt=system_prompt,
+            subject_prefix=subject_prefix,
+        )
+
+        def _confidence(mapping: Dict[str, Any]) -> float:
+            try:
+                return float(mapping.get("confidence", 0.0))
+            except (TypeError, ValueError):
+                return 0.0
+
+        filtered = [
+            mapping
+            for mapping in raw_mappings
+            if _confidence(mapping) >= confidence_threshold
+        ]
+        if allowed:
+            filtered = [
+                mapping
+                for mapping in filtered
+                if mapping.get("object_id", "").split(":", 1)[0] in allowed
+            ]
+
+        filtered.sort(key=_confidence, reverse=True)
+        for mapping in filtered[:top_k]:
+            object_id = mapping.get("object_id", "")
+            if ":" not in object_id:
+                continue
+            system, code = object_id.split(":", 1)
+            confidence = _confidence(mapping)
+            code_entry = CodeEntry(
+                system=system,
+                code=code,
+                label=mapping.get("object_label", ""),
+                synonyms=tuple(),
+            )
+            matches.append(
+                MatchResult(
+                    column=column,
+                    code=code_entry,
+                    score=confidence,
+                    predicate_id=mapping.get("predicate_id") or DEFAULT_PREDICATE,
+                    mapping_justification=mapping.get(
+                        "mapping_justification", DEFAULT_JUSTIFICATION
+                    ),
+                    comment=mapping.get("comment", ""),
+                )
+            )
+
+    return matches
+
+
+def write_rows(rows: List[Dict[str, Any]], out_path: Path) -> None:
+    """Write raw LLM rows in SSSOM TSV form (legacy helper)."""
+
     out_path.parent.mkdir(parents=True, exist_ok=True)
-    with out_path.open("w", newline="", encoding="utf-8") as f:
-        writer = csv.DictWriter(f, fieldnames=SSSOM_COLUMNS, delimiter="\t")
+    with out_path.open("w", newline="", encoding="utf-8") as handle:
+        writer = csv.DictWriter(handle, fieldnames=SSSOM_COLUMNS, delimiter="\t")
         writer.writeheader()
-        for m in rows:
-            writer.writerow({k: m.get(k, "") for k in SSSOM_COLUMNS})
-    logger.info("Wrote %d mappings to %s", len(rows), out_path)
+        for row in rows:
+            writer.writerow({key: row.get(key, "") for key in SSSOM_COLUMNS})
+    LOGGER.info("Wrote %d mappings to %s", len(rows), out_path)
 
 
 def main(
@@ -233,22 +305,16 @@ def main(
     *,
     datasette_url: str = "http://127.0.0.1:8001/terminology",
     model: str = "gpt-4.1-mini",
-    output: Path = Path("mappings.sssom.tsv"),
     extra_prompt: str = "",
     subject_prefix: str = "dataset",
+    top_k: int = 3,
+    confidence_threshold: float = 0.0,
+    systems: Optional[Sequence[str]] = None,
+    output: Optional[Path] = None,
     verbose: bool = False,
 ) -> None:
-    """
-    Map dataset columns (from JSON/JSON-LD) to terminology codes via Datasette.
+    """Map dataset columns (from JSON/JSON-LD) to terminology codes via Datasette."""
 
-    :param dataset_json: Path to JSON/JSON-LD file with dsv:datasetSchema/dsv:column[].
-    :param datasette_url: Base URL of the Datasette database that hosts the `codes` table.
-    :param model: llm model ID (as configured in `llm`, e.g. "gpt-4.1-mini").
-    :param output: Output SSSOM TSV path.
-    :param extra_prompt: Extra hints appended to the system prompt.
-    :param subject_prefix: Prefix for subject_id, default "dataset".
-    :param verbose: If True, set log level to INFO (else WARNING).
-    """
     logging.basicConfig(
         level=logging.INFO if verbose else logging.WARNING,
         format="%(levelname)s:%(name)s:%(message)s",
@@ -256,26 +322,31 @@ def main(
 
     columns, dataset_meta = load_columns(dataset_json)
     if not columns:
-        logger.warning("No columns found in %s; nothing to do", dataset_json)
+        LOGGER.warning("No columns found in %s; nothing to do", dataset_json)
         return
 
-    system_prompt = build_system_prompt(dataset_meta, extra_prompt)
+    matches = generate_matches(
+        columns,
+        dataset_meta,
+        datasette_url=datasette_url,
+        model=model,
+        extra_prompt=extra_prompt,
+        subject_prefix=subject_prefix,
+        allowed_systems=systems,
+        top_k=top_k,
+        confidence_threshold=confidence_threshold,
+    )
 
-    model_obj = llm.get_model(model)
-    ds_tool = Datasette(datasette_url)
+    if output is None:
+        for match in matches:
+            row = match.to_sssom_row()
+            print(
+                f"{row['subject_id']}\t{row['object_id']}\t"
+                f"confidence={row['confidence']}\t{row['comment']}"
+            )
+        return
 
-    all_mappings: List[Dict[str, Any]] = []
-    for col in columns:
-        mappings = map_column(
-            model=model_obj,
-            ds_tool=ds_tool,
-            column=col,
-            system_prompt=system_prompt,
-            subject_prefix=subject_prefix,
-        )
-        all_mappings.extend(mappings)
-
-    write_sssom(all_mappings, output)
+    write_sssom(matches, output, dataset_meta=dataset_meta)
 
 
 if __name__ == "__main__":

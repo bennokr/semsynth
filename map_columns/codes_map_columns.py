@@ -14,14 +14,23 @@ from __future__ import annotations
 import csv
 import json
 import logging
-import re
+from collections import defaultdict
 from dataclasses import dataclass, field
 from pathlib import Path
 from typing import Any, Dict, Iterable, List, Optional, Sequence, Set, Tuple
 
 import defopt
 
-from map_columns.shared import ColumnInfo, DatasetMetadata, load_columns
+from map_columns.shared import (
+    ColumnInfo,
+    DatasetMetadata,
+    DEFAULT_STOP_WORDS,
+    column_tokens,
+    format_similarity_comment,
+    load_columns,
+    score_column_against_texts,
+    tokenize,
+)
 
 LOGGER = logging.getLogger(__name__)
 
@@ -32,54 +41,7 @@ DEFAULT_PREDICATE = "skos:closeMatch"
 
 # Stop words removed from tokens before scoring. Keep short to avoid
 # discarding medically relevant terms.
-STOP_WORDS: Set[str] = {
-    "the",
-    "a",
-    "an",
-    "of",
-    "and",
-    "in",
-    "or",
-    "for",
-    "presence",
-    "type",
-    "number",
-    "value",
-    "values",
-    "results",
-    "result",
-    "measure",
-    "measurement",
-    "test",
-    "level",
-    "levels",
-}
-
-
-def _tokenize(text: str) -> Set[str]:
-    """Split ``text`` into lowercase tokens with punctuation removed."""
-
-    cleaned = re.sub(r"[^0-9A-Za-z]+", " ", text).lower()
-    return {token for token in cleaned.split() if token and token not in STOP_WORDS}
-
-
-def _sequence_ratio(lhs: str, rhs: str) -> float:
-    """Return a rough similarity ratio in the range [0, 1]."""
-
-    if not lhs or not rhs:
-        return 0.0
-
-    # Lightweight Sørensen–Dice coefficient using bigrams to reward partial
-    # matches when descriptions contain typographical mistakes.
-    def _bigrams(value: str) -> Set[str]:
-        return {value[i : i + 2] for i in range(len(value) - 1)}
-
-    left = _bigrams(lhs.lower())
-    right = _bigrams(rhs.lower())
-    if not left or not right:
-        return 0.0
-    overlap = len(left & right)
-    return (2.0 * overlap) / (len(left) + len(right))
+STOP_WORDS: Set[str] = set(DEFAULT_STOP_WORDS)
 
 
 @dataclass(frozen=True)
@@ -90,16 +52,37 @@ class CodeEntry:
     code: str
     label: str
     synonyms: Tuple[str, ...] = field(default_factory=tuple)
-    _tokens: Set[str] = field(init=False, repr=False)
-
-    def __post_init__(self) -> None:
-        object.__setattr__(self, "_tokens", _tokenize(" ".join((self.label, " ".join(self.synonyms)))))
 
     @property
     def curie(self) -> str:
         """Return the CURIE-form of the code (e.g. ``WD_TEST:Q123``)."""
 
         return f"{self.system}:{self.code}"
+
+class CodeIndex:
+    """Simple token index for code synonyms."""
+
+    def __init__(self, codes: Iterable[CodeEntry]):
+        self._index: Dict[str, Set[CodeEntry]] = defaultdict(set)
+        total_codes = 0
+        for code in codes:
+            total_codes += 1
+            for synonym in code.synonyms:
+                for token in tokenize(synonym, stop_words=STOP_WORDS):
+                    self._index[token].add(code)
+        LOGGER.debug(
+            "Constructed code index for %d codes with %d unique tokens",
+            total_codes,
+            len(self._index),
+        )
+
+    def query(self, tokens: Iterable[str]) -> Set[CodeEntry]:
+        """Return candidate codes matching any of the provided tokens."""
+
+        candidates: Set[CodeEntry] = set()
+        for token in tokens:
+            candidates.update(self._index.get(token, set()))
+        return candidates
 
 
 @dataclass
@@ -209,78 +192,17 @@ def load_codes(
     return store
 
 
-def _column_text_and_tokens(column: ColumnInfo) -> Tuple[str, Set[str]]:
-    """Return a column's descriptive text alongside normalized tokens."""
-
-    pieces: Iterable[str] = filter(
-        None,
-        [
-            column.name,
-            column.description,
-            column.about,
-            column.unit,
-            column.role,
-        ],
-    )
-    combined = " ".join(pieces)
-    if not combined:
-        return "", set()
-    tokens = _tokenize(combined)
-    if column.name:
-        tokens |= _tokenize(column.name)
-    return combined, tokens
-
-
-def _score_column_against_code(
-    column: ColumnInfo,
-    code: CodeEntry,
-    *,
-    combined_text: str,
-    column_tokens: Set[str],
-) -> Tuple[float, Set[str]]:
-    """Compute similarity between column metadata and a code entry."""
-
-    if not combined_text or not column_tokens:
-        return 0.0, set()
-
-    overlap_terms = column_tokens & code._tokens
-    union = len(column_tokens | code._tokens) or 1
-    jaccard = len(overlap_terms) / union
-    ratio = _sequence_ratio(combined_text, code.label)
-    # Weighted average emphasising token overlap while retaining robustness to
-    # minor spelling variations in the original metadata.
-    score = (0.7 * jaccard) + (0.3 * ratio)
-    LOGGER.debug(
-        "Score column=%s code=%s jaccard=%.3f ratio=%.3f total=%.3f",
-        column.name,
-        code.curie,
-        jaccard,
-        ratio,
-        score,
-    )
-    return score, overlap_terms
-
-
-def _format_overlap_comment(overlap_terms: Set[str]) -> str:
-    """Construct an SSSOM comment string from overlapping tokens."""
-
-    if not overlap_terms:
-        return "Lexical overlap terms: (none)"
-    quoted = ", ".join(f'"{term}"' for term in sorted(overlap_terms))
-    return f"Lexical overlap terms: {quoted}"
-
-
 def rank_codes_for_column(
     column: ColumnInfo,
-    codes: Iterable[CodeEntry],
+    code_index: CodeIndex,
     *,
     min_score: float,
     top_k: int,
 ) -> List[MatchResult]:
     """Return the best ``top_k`` codes for ``column`` above ``min_score``."""
 
-    combined_text, column_tokens = _column_text_and_tokens(column)
-    if not combined_text or not column_tokens:
+    tokens = column_tokens(column, stop_words=STOP_WORDS)
+    if not tokens:
         LOGGER.info(
             "Skipping column %s due to missing descriptive text",
             column.name or column.column_id,
@@ -289,16 +211,18 @@ def rank_codes_for_column(
 
     scored: List[Tuple[float, CodeEntry]] = []
     comments: Dict[str, str] = {}
-    for code in codes:
-        score, overlap_terms = _score_column_against_code(
+    for code in code_index.query(tokens):
+        similarity = score_column_against_texts(
             column,
-            code,
-            combined_text=combined_text,
-            column_tokens=column_tokens,
+            code.synonyms,
+            stop_words=STOP_WORDS,
         )
+        score = similarity.score
         if score >= min_score:
             scored.append((score, code))
-            comments[code.curie] = _format_overlap_comment(overlap_terms)
+            comm = format_similarity_comment(similarity)
+            comments[code.curie] = comm
+            LOGGER.debug("Matched %.2f %s", score, comm)
     scored.sort(key=lambda item: item[0], reverse=True)
     results = [
         MatchResult(
@@ -340,7 +264,7 @@ def load_manual_overrides(overrides_path: Optional[Path]) -> Dict[str, List[Dict
     return overrides
 
 
-def _build_manual_matches(
+def build_manual_matches(
     column: ColumnInfo,
     overrides: Dict[str, List[Dict[str, Any]]],
     codes: Dict[str, CodeEntry],
@@ -417,16 +341,17 @@ def generate_matches(
     """
 
     overrides = manual_overrides or {}
+    code_index = CodeIndex(codes.values())
     matches: List[MatchResult] = []
     for column in columns:
-        manual = _build_manual_matches(column, overrides, codes, min_score=min_score)
+        manual = build_manual_matches(column, overrides, codes, min_score=min_score)
         if manual:
             LOGGER.info("Applying manual overrides for column %s", column.name)
             matches.extend(manual)
             continue
 
         results = rank_codes_for_column(
-            column, codes.values(), min_score=min_score, top_k=top_k
+            column, code_index, min_score=min_score, top_k=top_k
         )
         matches.extend(results)
 

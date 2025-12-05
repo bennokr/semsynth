@@ -20,19 +20,27 @@ python -m pip install -e .[umap,pybnesian,synthcity]
 ## Create semantic mappings
 
 SemSynth now ships with a dedicated command that orchestrates the full
-mapping workflow – metadata parsing, Wikidata lookup, SSSOM emission, and
-SemMap enrichment:
+mapping workflow – metadata parsing, terminology lookup, SSSOM emission, and
+SemMap enrichment. Pick a strategy with `--method`:
 
 ```bash
-python -m semsynth create-mapping uciml --datasets 145 \
+python -m semsynth create-mapping uciml \
+    --datasets 145 \
+    --method lexical \
     --codes-tsv map_columns/codes.tsv \
     --manual-overrides-dir map_columns/manual \
+    --datasette-url http://127.0.0.1:8001/terminology \
+    --lexical-threshold 0.3 \
+    --top-k 3 \
     --verbose
 ```
 
 The command writes `*.sssom.tsv` and `*.metadata.json` artefacts under
 `mappings/`. Manual overrides are optional JSON files where each key is a
-column identifier pointing to a list of SSSOM-style dictionaries.
+column identifier pointing to a list of SSSOM-style dictionaries. Alternate
+strategies include `--method keyword` (Datasette keyword search),
+`--method embed` (sentence-transformer re-ranking), and `--method llm` (LLM +
+Datasette). Each honours the flags documented in `map_columns/README.md`.
 
 To rebuild the Wikidata terminology table offline, run:
 

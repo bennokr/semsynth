@@ -1,12 +1,13 @@
-"""Shared helpers for parsing dataset column metadata."""
+"""Shared helpers for parsing dataset column metadata and similarity scoring."""
 
 from __future__ import annotations
 
 import json
 import logging
-from dataclasses import dataclass
+import re
+from dataclasses import dataclass, field
 from pathlib import Path
-from typing import Any, Dict, List, Mapping, Optional, Tuple
+from typing import Any, Dict, FrozenSet, Iterable, List, Mapping, Optional, Sequence, Tuple
 
 from semsynth.semmap import Column, Metadata
 
@@ -44,6 +45,58 @@ class DatasetMetadata:
             "description": self.description,
             "table_of_contents": self.table_of_contents,
         }
+
+
+@dataclass(frozen=True)
+class SimilarityResult:
+    """Similarity statistics between a column and candidate texts."""
+
+    score: float = 0.0
+    jaccard: float = 0.0
+    ratio: float = 0.0
+    overlap_terms: FrozenSet[str] = field(default_factory=frozenset)
+    matched_pair: Optional[Tuple[str, str]] = None
+
+    @property
+    def has_overlap(self) -> bool:
+        """Return whether term overlap is non-empty."""
+
+        return bool(self.overlap_terms)
+
+
+DEFAULT_STOP_WORDS: FrozenSet[str] = frozenset(
+    {
+        "the",
+        "a",
+        "an",
+        "of",
+        "and",
+        "in",
+        "or",
+        "for",
+        "due",
+        "to",
+        "by",
+        "no",
+        "that",
+        "with",
+        "s",
+        "is",
+        "per",
+        "presence",
+        "type",
+        "number",
+        "value",
+        "values",
+        "results",
+        "result",
+        "measure",
+        "measurement",
+        "test",
+        "level",
+        "levels",
+    }
+)
 
 
 def _coerce_optional_str(value: Any) -> Optional[str]:
@@ -120,3 +173,177 @@ def load_columns(path: Path) -> Tuple[List[ColumnInfo], DatasetMetadata]:
     columns, dataset_meta = parse_columns(data)
     logger.info("Loaded %d columns from %s", len(columns), path)
     return columns, dataset_meta
+
+
+def tokenize(
+    text: Optional[str],
+    *,
+    stop_words: Optional[Iterable[str]] = None,
+    min_token_length: int = 2,
+) -> FrozenSet[str]:
+    """Tokenize ``text`` removing punctuation and optional stop words.
+
+    Args:
+        text: Input text to tokenize.
+        stop_words: Optional iterable of words to exclude after lowercasing.
+        min_token_length: Minimum length of tokens to retain.
+
+    Returns:
+        ``frozenset`` of lowercase tokens that met the filtering criteria.
+    """
+
+    if not text:
+        return frozenset()
+    cleaned = re.sub(r"[^0-9A-Za-z]+", " ", text).lower()
+    words = cleaned.split()
+    stop_set = {word.lower() for word in stop_words or []}
+    filtered = {
+        token
+        for token in words
+        if token and len(token) >= min_token_length and token not in stop_set
+    }
+    return frozenset(filtered)
+
+
+def column_tokens(
+    column: ColumnInfo,
+    *,
+    stop_words: Optional[Iterable[str]] = None,
+) -> FrozenSet[str]:
+    """Return the union of tokens derived from a column's name and description.
+
+    Args:
+        column: Column metadata to analyze.
+        stop_words: Optional iterable of stop words to exclude.
+
+    Returns:
+        ``frozenset`` containing the aggregated tokens.
+    """
+
+    texts = [column.name, column.description]
+    token_sets = [
+        tokenize(text, stop_words=stop_words) for text in texts if text
+    ]
+    if not token_sets:
+        return frozenset()
+    return frozenset().union(*token_sets)
+
+
+def format_similarity_comment(
+    similarity: SimilarityResult,
+    *,
+    include_match_text: bool = True,
+) -> str:
+    """Return a human-readable description of lexical overlap.
+
+    Args:
+        similarity: Result produced by :func:`score_column_against_texts`.
+        include_match_text: Whether to include the matching column/code text.
+
+    Returns:
+        Comment suitable for the SSSOM ``comment`` field.
+    """
+
+    if not similarity.has_overlap:
+        base = "Lexical overlap terms: (none)"
+    else:
+        quoted = ", ".join(f'"{term}"' for term in sorted(similarity.overlap_terms))
+        base = f"Lexical overlap terms: {quoted}"
+    if include_match_text and similarity.matched_pair:
+        lhs, rhs = similarity.matched_pair
+        return f"{base}; match: {lhs!r} vs {rhs!r}"
+    return base
+
+
+def sequence_ratio(lhs: Optional[str], rhs: Optional[str]) -> float:
+    """Compute a Sørensen–Dice-like bigram similarity ratio in [0, 1].
+
+    Args:
+        lhs: Left-hand text input.
+        rhs: Right-hand text input.
+
+    Returns:
+        Floating-point similarity ratio.
+    """
+
+    if not lhs or not rhs:
+        return 0.0
+
+    def _bigrams(value: str) -> FrozenSet[str]:
+        cleaned = value.lower()
+        return frozenset({cleaned[i : i + 2] for i in range(len(cleaned) - 1)})
+
+    left = _bigrams(lhs)
+    right = _bigrams(rhs)
+    if not left or not right:
+        return 0.0
+    overlap = len(left & right)
+    return (2.0 * overlap) / (len(left) + len(right))
+
+
+def score_column_against_texts(
+    column: ColumnInfo,
+    candidate_texts: Sequence[str],
+    *,
+    stop_words: Optional[Iterable[str]] = None,
+) -> SimilarityResult:
+    """Score similarity between column metadata and candidate text snippets.
+
+    Args:
+        column: Column information containing name and description.
+        candidate_texts: Iterable of labels/synonyms describing a code.
+        stop_words: Optional iterable of stop words to exclude when tokenizing.
+
+    Returns:
+        :class:`SimilarityResult` aggregating the best overlap and ratio.
+    """
+
+    texts = tuple(text for text in candidate_texts if text)
+    if not texts:
+        return SimilarityResult()
+
+    column_fields = tuple(filter(None, (column.name, column.description)))
+    if not column_fields:
+        return SimilarityResult()
+
+    best_jaccard = 0.0
+    best_overlap: FrozenSet[str] = frozenset()
+    best_pair: Optional[Tuple[str, str]] = None
+
+    for field_text in column_fields:
+        field_tokens = tokenize(field_text, stop_words=stop_words)
+        if not field_tokens:
+            continue
+        for candidate in texts:
+            candidate_tokens = tokenize(candidate, stop_words=stop_words)
+            if not candidate_tokens:
+                continue
+            overlap = field_tokens & candidate_tokens
+            universe = field_tokens | candidate_tokens
+            jaccard = len(overlap) / (len(universe) or 1)
+            if jaccard > best_jaccard:
+                best_jaccard = jaccard
+                best_overlap = frozenset(overlap)
+                best_pair = (field_text, candidate)
+
+    if not best_pair:
+        logger.debug(
+            "No token overlap between column '%s' and candidates %s",
+            column.name or column.column_id,
+            texts,
+        )
+
+    ratios = [
+        sequence_ratio(field_text, candidate)
+        for field_text in column_fields
+        for candidate in texts
+    ]
+    best_ratio = max(ratios) if ratios else 0.0
+    score = (0.7 * best_jaccard) + (0.3 * best_ratio)
+    return SimilarityResult(
+        score=score,
+        jaccard=best_jaccard,
+        ratio=best_ratio,
+        overlap_terms=best_overlap,
+        matched_pair=best_pair,
+    )
