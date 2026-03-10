@@ -6,6 +6,7 @@ import json
 import logging
 import mimetypes
 import re
+from importlib import resources
 from dataclasses import dataclass, field
 from datetime import datetime, timezone
 from hashlib import sha256
@@ -20,53 +21,38 @@ LOGGER = logging.getLogger(__name__)
 
 
 SPARQL_ENDPOINT_ID = "browser://semsynth-static-catalog"
-SPARQL_EXAMPLE_QUERIES: Tuple[Tuple[str, str], ...] = (
-    (
-        "Datasets with SemMap metadata",
-        """PREFIX dcat: <http://www.w3.org/ns/dcat#>
-PREFIX dct: <http://purl.org/dc/terms/>
 
-SELECT ?dataset ?title ?semmap
-WHERE {
-  ?dataset a dcat:Dataset ;
-           dct:title ?title ;
-           dcat:distribution ?dist .
-  ?dist dcat:downloadURL ?semmap .
-  FILTER(CONTAINS(LCASE(STR(?semmap)), "dataset.semmap.json"))
-}
-ORDER BY ?title""",
+
+@dataclass(frozen=True)
+class SparqlQueryDefinition:
+    """Metadata for a packaged SPARQL example query.
+
+    Attributes:
+        name: Human-readable label shown in the playground.
+        filename: Query filename written under output/sparql.
+        description: Short explanation shown in query cards.
+    """
+
+    name: str
+    filename: str
+    description: str
+
+
+SPARQL_QUERY_DEFINITIONS: Tuple[SparqlQueryDefinition, ...] = (
+    SparqlQueryDefinition(
+        name="SemMap coverage per dataset",
+        filename="query-semmap-coverage.rq",
+        description="Counts SemMap distributions across datasets to confirm semantic metadata coverage.",
     ),
-    (
-        "Synthetic artifacts with provenance hints",
-        """PREFIX dcat: <http://www.w3.org/ns/dcat#>
-PREFIX dct: <http://purl.org/dc/terms/>
-PREFIX prov: <http://www.w3.org/ns/prov#>
-
-SELECT ?dataset ?title ?artifact
-WHERE {
-  ?dataset a dcat:Dataset ;
-           dct:title ?title ;
-           prov:wasDerivedFrom ?source ;
-           dcat:distribution ?dist .
-  ?source ?p ?sourceValue .
-  ?dist dcat:downloadURL ?artifact .
-  FILTER(CONTAINS(LCASE(STR(?artifact)), "synthetic"))
-}
-ORDER BY ?title""",
+    SparqlQueryDefinition(
+        name="Provenance sources driving synthetic artifacts",
+        filename="query-provenance-artifacts.rq",
+        description="Aggregates provenance sources linked to multiple synthetic artifact distributions.",
     ),
-    (
-        "Model outputs per dataset",
-        """PREFIX dcat: <http://www.w3.org/ns/dcat#>
-PREFIX dct: <http://purl.org/dc/terms/>
-
-SELECT ?title (COUNT(?dist) AS ?distributionCount)
-WHERE {
-  ?dataset a dcat:Dataset ;
-           dct:title ?title ;
-           dcat:distribution ?dist .
-}
-GROUP BY ?title
-ORDER BY DESC(?distributionCount)""",
+    SparqlQueryDefinition(
+        name="Datasets with SemMap + provenance synthetic outputs",
+        filename="query-semmap-and-provenance-artifacts.rq",
+        description="Joins SemMap and provenance-linked synthetic distributions per dataset.",
     ),
 )
 
@@ -170,6 +156,7 @@ class DataCatalog(RDFMixin):
     type: List[str] = field(default_factory=lambda: ["dcat:Catalog"])
     modified: Optional[str] = None
     datasets: List[CatalogDataset] = field(default_factory=list)
+    distributions: List[CatalogDistribution] = field(default_factory=list)
     wasGeneratedBy: Optional[Dict[str, str]] = None
 
 
@@ -357,12 +344,77 @@ def collect_datasets(
     return datasets, inputs
 
 
-def write_index(index_path: Path, dataset_dirs: Sequence[Path]) -> None:
+def read_packaged_sparql_queries() -> List[Dict[str, str]]:
+    """Load packaged SPARQL query templates.
+
+    Returns:
+        Query descriptors with name, description, filename, and query text.
+    """
+
+    templates_dir = resources.files("semsynth.templates")
+    queries: List[Dict[str, str]] = []
+    for definition in SPARQL_QUERY_DEFINITIONS:
+        query_text = (templates_dir / definition.filename).read_text(encoding="utf-8").strip()
+        queries.append(
+            {
+                "name": definition.name,
+                "description": definition.description,
+                "filename": definition.filename,
+                "query": query_text,
+            }
+        )
+    return queries
+
+
+def write_sparql_query_files(base_dir: Path, mapper: PathURLMapper) -> List[CatalogDistribution]:
+    """Write packaged SPARQL query files under output/sparql and return distributions.
+
+    Args:
+        base_dir: Catalog output root (typically ``output``).
+        mapper: URL mapper for converting files to catalog URLs.
+
+    Returns:
+        Catalog distributions for generated SPARQL query files.
+    """
+
+    query_dir = base_dir / "sparql"
+    query_dir.mkdir(parents=True, exist_ok=True)
+
+    distributions: List[CatalogDistribution] = []
+    now_iso = to_iso(datetime.now(timezone.utc))
+    for query in read_packaged_sparql_queries():
+        query_path = query_dir / query["filename"]
+        query_path.write_text(query["query"] + "\n", encoding="utf-8")
+        file_slug = slugify(query["filename"].replace(".rq", ""))
+        query_url = mapper.for_path(query_path)
+        distributions.append(
+            CatalogDistribution(
+                id=f"urn:distribution:sparql:{file_slug}",
+                title=f"SPARQL example: {query['name']}",
+                access_url=query_url,
+                download_url=query_url,
+                media_type="application/sparql-query",
+                format="RQ",
+                byte_size=query_path.stat().st_size,
+                modified=now_iso,
+                issued=now_iso,
+            )
+        )
+
+    return distributions
+
+
+def write_index(
+    index_path: Path,
+    dataset_dirs: Sequence[Path],
+    query_examples: Sequence[Dict[str, str]],
+) -> None:
     """Rewrite output/index.html with dataset links and a static SPARQL UI.
 
     Args:
         index_path: Destination HTML file.
         dataset_dirs: Dataset directories to expose in the report index.
+        query_examples: Query metadata used for cards and YASGUI tabs.
     """
 
     css_href = "../templates/report_style.css"
@@ -371,14 +423,16 @@ def write_index(index_path: Path, dataset_dirs: Sequence[Path]) -> None:
         for directory in dataset_dirs
     )
 
-    example_queries = [
-        {
-            "name": title,
-            "query": query,
-        }
-        for title, query in SPARQL_EXAMPLE_QUERIES
-    ]
-    query_json = json.dumps(example_queries)
+    query_json = json.dumps(
+        [
+            {
+                "name": query["name"],
+                "filename": query["filename"],
+                "description": query["description"],
+            }
+            for query in query_examples
+        ]
+    )
 
     html = f"""<!doctype html>
 <html lang="en">
@@ -410,17 +464,17 @@ def write_index(index_path: Path, dataset_dirs: Sequence[Path]) -> None:
       This page embeds YASGUI + the browser Comunica SPARQL engine (no server-side SPARQL service).
     </p>
     <p>
-      The engine queries static catalog files (<code>output/catalog.json</code> and <code>output/catalog.jsonld</code>) and ships example queries for SemMap and provenance-linked synthetic artifacts.
+      The engine queries <code>output/catalog.jsonld</code> and loads query tabs from <code>output/sparql/*.rq</code> files.
     </p>
     <div class="sparql-grid">
 """
 
-    for idx, (title, query) in enumerate(SPARQL_EXAMPLE_QUERIES, start=1):
+    for idx, query in enumerate(query_examples, start=1):
         html += (
             '<article class="sparql-card">\n'
-            f"<h3>{title}</h3>\n"
-            f"<p><strong>Query {idx}</strong></p>\n"
-            f"<pre><code>{query}</code></pre>\n"
+            f"<h3>{query['name']}</h3>\n"
+            f"<p><strong>Query {idx}</strong> — {query['description']}</p>\n"
+            f"<pre><code>{query['query']}</code></pre>\n"
             "</article>\n"
         )
 
@@ -497,17 +551,27 @@ def write_index(index_path: Path, dataset_dirs: Sequence[Path]) -> None:
       }}));
     }};
 
+    const loadQueryText = async (queryInfo) => {{
+      const queryUrl = new URL(`sparql/${{queryInfo.filename}}`, location.href).toString();
+      const response = await fetch(queryUrl);
+      if (!response.ok) {{
+        throw new Error(`Unable to load query file ${{queryInfo.filename}} (${{response.status}})`);
+      }}
+      return response.text();
+    }};
+
     const firstTab = yasgui.getTab();
     wireTab(firstTab);
 
     if (exampleQueries.length) {{
-      firstTab.setName(exampleQueries[0].name);
-      firstTab.getYasqe().setValue(exampleQueries[0].query);
+      const firstQuery = exampleQueries[0];
+      firstTab.setName(firstQuery.name);
+      firstTab.getYasqe().setValue(await loadQueryText(firstQuery));
       for (const queryInfo of exampleQueries.slice(1)) {{
         const tab = yasgui.addTab(true);
         tab.setName(queryInfo.name);
         tab.show();
-        tab.getYasqe().setValue(queryInfo.query);
+        tab.getYasqe().setValue(await loadQueryText(queryInfo));
         wireTab(tab);
       }}
       firstTab.show();
@@ -556,7 +620,10 @@ def build_catalog(
         if (path / "report.md").exists():
             dataset_dirs.append(path)
 
-    datasets, inputs = collect_datasets(base_dir, dataset_dirs, mapper)
+    datasets, _inputs = collect_datasets(base_dir, dataset_dirs, mapper)
+    query_examples = read_packaged_sparql_queries()
+    sparql_distributions = write_sparql_query_files(base_dir, mapper)
+
     now = datetime.now(timezone.utc)
     catalog = DataCatalog(
         id="urn:catalog:semsynth-demo",
@@ -564,8 +631,9 @@ def build_catalog(
         description="DCAT catalog of SemSynth reports and synthetic datasets.",
         modified=to_iso(now),
         datasets=datasets,
+        distributions=sparql_distributions,
     )
-    write_index(index_path, dataset_dirs)
+    write_index(index_path, dataset_dirs, query_examples)
     catalog_payload = normalize_jsonld_payload(catalog.to_jsonld())
     catalog_json = json.dumps(catalog_payload, indent=2)
     out_path.write_text(catalog_json)

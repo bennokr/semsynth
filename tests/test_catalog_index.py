@@ -4,7 +4,7 @@ from __future__ import annotations
 
 from pathlib import Path
 
-from semsynth.catalog import SPARQL_ENDPOINT_ID, write_index
+from semsynth.catalog import SPARQL_ENDPOINT_ID, read_packaged_sparql_queries, write_index
 
 
 def test_write_index_includes_sparql_section(tmp_path: Path) -> None:
@@ -18,12 +18,16 @@ def test_write_index_includes_sparql_section(tmp_path: Path) -> None:
     index_path = tmp_path / "output" / "index.html"
     index_path.parent.mkdir(parents=True, exist_ok=True)
 
-    write_index(index_path, [dataset_a, dataset_b])
+    query_examples = read_packaged_sparql_queries()
+    write_index(index_path, [dataset_a, dataset_b], query_examples)
     html = index_path.read_text(encoding="utf-8")
 
     assert "Static SPARQL endpoint playground" in html
     assert SPARQL_ENDPOINT_ID in html
-    assert "Datasets with SemMap metadata" in html
+    assert "output/sparql/*.rq" in html
+    assert "query-semmap-coverage.rq" in html
+    assert "query-provenance-artifacts.rq" in html
+    assert "query-semmap-and-provenance-artifacts.rq" in html
     assert 'href="Dataset A"' in html
     assert 'href="Dataset B"' in html
 

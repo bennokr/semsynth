@@ -1,0 +1,20 @@
+PREFIX dcat: <http://www.w3.org/ns/dcat#>
+PREFIX dct: <http://purl.org/dc/terms/>
+PREFIX prov: <http://www.w3.org/ns/prov#>
+
+SELECT ?dataset ?title ?source
+       (COUNT(DISTINCT ?semmap) AS ?semmapFiles)
+       (COUNT(DISTINCT ?artifact) AS ?syntheticArtifacts)
+WHERE {
+  ?dataset a dcat:Dataset ;
+           dct:title ?title ;
+           prov:wasDerivedFrom ?source ;
+           dcat:distribution ?semmapDist, ?artifactDist .
+  ?semmapDist dcat:downloadURL ?semmap .
+  ?artifactDist dcat:downloadURL ?artifact .
+  FILTER(CONTAINS(LCASE(STR(?semmap)), "dataset.semmap"))
+  FILTER(CONTAINS(LCASE(STR(?artifact)), "synthetic"))
+}
+GROUP BY ?dataset ?title ?source
+HAVING (COUNT(DISTINCT ?artifact) >= 2)
+ORDER BY DESC(?syntheticArtifacts) ?title

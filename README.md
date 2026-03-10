@@ -58,7 +58,7 @@ For extra features, run `python -m pip install -e .[EXTRA]` with `EXTRA` in (
 
 4. Catalog + app helpers
    - Build a DCAT catalog and HTML index from existing outputs: `python -m semsynth build-catalog`
-   - The generated `output/index.html` now embeds **YASGUI + Comunica (browser)** with a static endpoint identifier (`browser://semsynth-static-catalog`) and runnable example queries for SemMap metadata and provenance-linked synthetic artifacts.
+   - The generated `output/index.html` now embeds **YASGUI + Comunica (browser)** with a static endpoint identifier (`browser://semsynth-static-catalog`) and loads runnable query tabs from `output/sparql/*.rq` files for SemMap and provenance-linked synthetic artifacts.
    - Launch a minimal Flask UI for search and report actions: `python -m semsynth app --host 0.0.0.0 --port 5000`
 
 ## 📄 Unified YAML format
@@ -159,9 +159,10 @@ configs:
 - Build the Sphinx site with `sphinx-build -b html sphinx docs`.
 
 ## 🔎 Static SPARQL endpoint (demo index)
-- `python -m semsynth build-catalog` writes `output/index.html`, `output/catalog.json`, and `output/catalog.jsonld` with an embedded YASGUI editor and browser Comunica query engine targeting static files only.
+- `python -m semsynth build-catalog` writes `output/index.html`, `output/catalog.json`, `output/catalog.jsonld`, and `output/sparql/*.rq` with an embedded YASGUI editor and browser Comunica query engine targeting static files only.
 - The page advertises endpoint id `browser://semsynth-static-catalog` and includes ready-to-run query tabs covering:
   - datasets that publish `dataset.semmap.json`,
   - provenance-linked synthetic artifacts,
   - distribution counts per dataset.
 - This mirrors the static-browser pattern from `data-catalog-sparql-playground` (catalog + local query UI, no server-side SPARQL service required).
+- SPARQL query templates are also described as catalog distributions so tooling can discover and preload them as tabs.

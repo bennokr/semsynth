@@ -32,58 +32,70 @@
       This page embeds YASGUI + the browser Comunica SPARQL engine (no server-side SPARQL service).
     </p>
     <p>
-      The engine queries static catalog files (<code>output/catalog.json</code> and <code>output/catalog.jsonld</code>) and ships example queries for SemMap and provenance-linked synthetic artifacts.
+      The engine queries <code>output/catalog.jsonld</code> and loads query tabs from <code>output/sparql/*.rq</code> files.
     </p>
     <div class="sparql-grid">
 <article class="sparql-card">
-<h3>Datasets with SemMap metadata</h3>
-<p><strong>Query 1</strong></p>
+<h3>SemMap coverage per dataset</h3>
+<p><strong>Query 1</strong> — Counts SemMap distributions across datasets to confirm semantic metadata coverage.</p>
 <pre><code>PREFIX dcat: <http://www.w3.org/ns/dcat#>
 PREFIX dct: <http://purl.org/dc/terms/>
 
-SELECT ?dataset ?title ?semmap
+SELECT ?dataset ?title (COUNT(DISTINCT ?semmap) AS ?semmapCount)
 WHERE {
   ?dataset a dcat:Dataset ;
            dct:title ?title ;
            dcat:distribution ?dist .
   ?dist dcat:downloadURL ?semmap .
-  FILTER(CONTAINS(LCASE(STR(?semmap)), "dataset.semmap.json"))
+  FILTER(CONTAINS(LCASE(STR(?semmap)), "dataset.semmap"))
 }
-ORDER BY ?title</code></pre>
+GROUP BY ?dataset ?title
+HAVING (COUNT(DISTINCT ?semmap) >= 1)
+ORDER BY DESC(?semmapCount) ?title</code></pre>
 </article>
 <article class="sparql-card">
-<h3>Synthetic artifacts with provenance hints</h3>
-<p><strong>Query 2</strong></p>
+<h3>Provenance sources driving synthetic artifacts</h3>
+<p><strong>Query 2</strong> — Aggregates provenance sources linked to multiple synthetic artifact distributions.</p>
 <pre><code>PREFIX dcat: <http://www.w3.org/ns/dcat#>
 PREFIX dct: <http://purl.org/dc/terms/>
 PREFIX prov: <http://www.w3.org/ns/prov#>
 
-SELECT ?dataset ?title ?artifact
+SELECT ?source (COUNT(DISTINCT ?dataset) AS ?datasetCount) (COUNT(DISTINCT ?artifact) AS ?artifactCount)
 WHERE {
   ?dataset a dcat:Dataset ;
            dct:title ?title ;
            prov:wasDerivedFrom ?source ;
            dcat:distribution ?dist .
-  ?source ?p ?sourceValue .
   ?dist dcat:downloadURL ?artifact .
   FILTER(CONTAINS(LCASE(STR(?artifact)), "synthetic"))
 }
-ORDER BY ?title</code></pre>
+GROUP BY ?source
+HAVING (COUNT(DISTINCT ?artifact) >= 2)
+ORDER BY DESC(?artifactCount) DESC(?datasetCount)</code></pre>
 </article>
 <article class="sparql-card">
-<h3>Model outputs per dataset</h3>
-<p><strong>Query 3</strong></p>
+<h3>Datasets with SemMap + provenance synthetic outputs</h3>
+<p><strong>Query 3</strong> — Joins SemMap and provenance-linked synthetic distributions per dataset.</p>
 <pre><code>PREFIX dcat: <http://www.w3.org/ns/dcat#>
 PREFIX dct: <http://purl.org/dc/terms/>
+PREFIX prov: <http://www.w3.org/ns/prov#>
 
-SELECT ?title (COUNT(?dist) AS ?distributionCount)
+SELECT ?dataset ?title ?source
+       (COUNT(DISTINCT ?semmap) AS ?semmapFiles)
+       (COUNT(DISTINCT ?artifact) AS ?syntheticArtifacts)
 WHERE {
   ?dataset a dcat:Dataset ;
            dct:title ?title ;
-           dcat:distribution ?dist .
+           prov:wasDerivedFrom ?source ;
+           dcat:distribution ?semmapDist, ?artifactDist .
+  ?semmapDist dcat:downloadURL ?semmap .
+  ?artifactDist dcat:downloadURL ?artifact .
+  FILTER(CONTAINS(LCASE(STR(?semmap)), "dataset.semmap"))
+  FILTER(CONTAINS(LCASE(STR(?artifact)), "synthetic"))
 }
-GROUP BY ?title
-ORDER BY DESC(?distributionCount)</code></pre>
+GROUP BY ?dataset ?title ?source
+HAVING (COUNT(DISTINCT ?artifact) >= 2)
+ORDER BY DESC(?syntheticArtifacts) ?title</code></pre>
 </article>
     </div>
     <div id="sparql-app"></div>
@@ -94,7 +106,7 @@ ORDER BY DESC(?distributionCount)</code></pre>
 <script src="https://unpkg.com/@triply/yasgui/build/yasgui.min.js"></script>
 <script>
   const endpointId = "browser://semsynth-static-catalog";
-  const exampleQueries = [{"name": "Datasets with SemMap metadata", "query": "PREFIX dcat: <http://www.w3.org/ns/dcat#>\nPREFIX dct: <http://purl.org/dc/terms/>\n\nSELECT ?dataset ?title ?semmap\nWHERE {\n  ?dataset a dcat:Dataset ;\n           dct:title ?title ;\n           dcat:distribution ?dist .\n  ?dist dcat:downloadURL ?semmap .\n  FILTER(CONTAINS(LCASE(STR(?semmap)), \"dataset.semmap.json\"))\n}\nORDER BY ?title"}, {"name": "Synthetic artifacts with provenance hints", "query": "PREFIX dcat: <http://www.w3.org/ns/dcat#>\nPREFIX dct: <http://purl.org/dc/terms/>\nPREFIX prov: <http://www.w3.org/ns/prov#>\n\nSELECT ?dataset ?title ?artifact\nWHERE {\n  ?dataset a dcat:Dataset ;\n           dct:title ?title ;\n           prov:wasDerivedFrom ?source ;\n           dcat:distribution ?dist .\n  ?source ?p ?sourceValue .\n  ?dist dcat:downloadURL ?artifact .\n  FILTER(CONTAINS(LCASE(STR(?artifact)), \"synthetic\"))\n}\nORDER BY ?title"}, {"name": "Model outputs per dataset", "query": "PREFIX dcat: <http://www.w3.org/ns/dcat#>\nPREFIX dct: <http://purl.org/dc/terms/>\n\nSELECT ?title (COUNT(?dist) AS ?distributionCount)\nWHERE {\n  ?dataset a dcat:Dataset ;\n           dct:title ?title ;\n           dcat:distribution ?dist .\n}\nGROUP BY ?title\nORDER BY DESC(?distributionCount)"}];
+  const exampleQueries = [{"name": "SemMap coverage per dataset", "filename": "query-semmap-coverage.rq", "description": "Counts SemMap distributions across datasets to confirm semantic metadata coverage."}, {"name": "Provenance sources driving synthetic artifacts", "filename": "query-provenance-artifacts.rq", "description": "Aggregates provenance sources linked to multiple synthetic artifact distributions."}, {"name": "Datasets with SemMap + provenance synthetic outputs", "filename": "query-semmap-and-provenance-artifacts.rq", "description": "Joins SemMap and provenance-linked synthetic distributions per dataset."}];
 
   function streamToString(stream) {
     return new Promise((resolve, reject) => {
@@ -158,17 +170,27 @@ ORDER BY DESC(?distributionCount)</code></pre>
       }));
     };
 
+    const loadQueryText = async (queryInfo) => {
+      const queryUrl = new URL(`sparql/${queryInfo.filename}`, location.href).toString();
+      const response = await fetch(queryUrl);
+      if (!response.ok) {
+        throw new Error(`Unable to load query file ${queryInfo.filename} (${response.status})`);
+      }
+      return response.text();
+    };
+
     const firstTab = yasgui.getTab();
     wireTab(firstTab);
 
     if (exampleQueries.length) {
-      firstTab.setName(exampleQueries[0].name);
-      firstTab.getYasqe().setValue(exampleQueries[0].query);
+      const firstQuery = exampleQueries[0];
+      firstTab.setName(firstQuery.name);
+      firstTab.getYasqe().setValue(await loadQueryText(firstQuery));
       for (const queryInfo of exampleQueries.slice(1)) {
         const tab = yasgui.addTab(true);
         tab.setName(queryInfo.name);
         tab.show();
-        tab.getYasqe().setValue(queryInfo.query);
+        tab.getYasqe().setValue(await loadQueryText(queryInfo));
         wireTab(tab);
       }
       firstTab.show();
