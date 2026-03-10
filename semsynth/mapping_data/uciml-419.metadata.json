@@ -1,0 +1,263 @@
+{
+  "@context": {
+    "dcat": "http://www.w3.org/ns/dcat#",
+    "dcterms": "http://purl.org/dc/terms/",
+    "schema": "http://schema.org/",
+    "dsv": "https://w3id.org/dsv-ontology#",
+    "xsd": "http://www.w3.org/2001/XMLSchema#"
+  },
+  "@type": "dcat:Dataset",
+  "dcterms:title": "Autistic Spectrum Disorder Screening Data for Children  ",
+  "dcterms:abstract": "Children screening data for autism suitable for classification and predictive tasks ",
+  "dcterms:created": 2017,
+  "dcterms:modified": "2024-04-03",
+  "dcat:landingPage": "https://archive.ics.uci.edu/dataset/419/autistic+spectrum+disorder+screening+data+for+children",
+  "dcat:theme": "Health and Medicine",
+  "dcterms:identifier": [
+    {
+      "@type": "schema:PropertyValue",
+      "schema:propertyID": "uci",
+      "schema:value": 419
+    },
+    {
+      "@type": "schema:PropertyValue",
+      "schema:propertyID": "DOI",
+      "schema:value": "10.24432/C5659W"
+    }
+  ],
+  "dcat:keyword": [
+    "\u0000",
+    "Age",
+    "Gender",
+    "Ethnicity",
+    "Nationality",
+    "Classification",
+    "Multivariate"
+  ],
+  "schema:numberOfItems": 292,
+  "dcterms:extent": "20 features",
+  "dcterms:creator": [
+    {
+      "@type": "schema:Person",
+      "schema:name": "Fadi Thabtah"
+    }
+  ],
+  "dcat:distribution": [
+    {
+      "@type": "dcat:Distribution",
+      "dcat:downloadURL": "https://archive.ics.uci.edu/static/public/419/data.csv",
+      "dcat:mediaType": "text/csv",
+      "dcterms:format": "text/csv"
+    }
+  ],
+  "dsv:datasetSchema": {
+    "@type": "dsv:DatasetSchema",
+    "dsv:column": [
+      {
+        "@type": "dsv:Column",
+        "schema:name": "A1_Score",
+        "prov:hadRole": "Feature",
+        "dsv:summaryStatistics": {
+          "@type": "dsv:SummaryStatistics",
+          "dsv:statisticalDataType": "dsv:NumericalDataType"
+        }
+      },
+      {
+        "@type": "dsv:Column",
+        "schema:name": "A2_Score",
+        "prov:hadRole": "Feature",
+        "schema:about": "\u0000",
+        "dsv:summaryStatistics": {
+          "@type": "dsv:SummaryStatistics",
+          "dsv:statisticalDataType": "dsv:NumericalDataType"
+        }
+      },
+      {
+        "@type": "dsv:Column",
+        "schema:name": "A3_Score",
+        "prov:hadRole": "Feature",
+        "dsv:summaryStatistics": {
+          "@type": "dsv:SummaryStatistics",
+          "dsv:statisticalDataType": "dsv:NumericalDataType"
+        }
+      },
+      {
+        "@type": "dsv:Column",
+        "schema:name": "A4_Score",
+        "prov:hadRole": "Feature",
+        "dsv:summaryStatistics": {
+          "@type": "dsv:SummaryStatistics",
+          "dsv:statisticalDataType": "dsv:NumericalDataType"
+        }
+      },
+      {
+        "@type": "dsv:Column",
+        "schema:name": "A5_Score",
+        "prov:hadRole": "Feature",
+        "dsv:summaryStatistics": {
+          "@type": "dsv:SummaryStatistics",
+          "dsv:statisticalDataType": "dsv:NumericalDataType"
+        }
+      },
+      {
+        "@type": "dsv:Column",
+        "schema:name": "A6_Score",
+        "prov:hadRole": "Feature",
+        "dsv:summaryStatistics": {
+          "@type": "dsv:SummaryStatistics",
+          "dsv:statisticalDataType": "dsv:NumericalDataType"
+        }
+      },
+      {
+        "@type": "dsv:Column",
+        "schema:name": "A7_Score",
+        "prov:hadRole": "Feature",
+        "dsv:summaryStatistics": {
+          "@type": "dsv:SummaryStatistics",
+          "dsv:statisticalDataType": "dsv:NumericalDataType"
+        }
+      },
+      {
+        "@type": "dsv:Column",
+        "schema:name": "A8_Score",
+        "prov:hadRole": "Feature",
+        "dsv:summaryStatistics": {
+          "@type": "dsv:SummaryStatistics",
+          "dsv:statisticalDataType": "dsv:NumericalDataType"
+        }
+      },
+      {
+        "@type": "dsv:Column",
+        "schema:name": "A9_Score",
+        "prov:hadRole": "Feature",
+        "dsv:summaryStatistics": {
+          "@type": "dsv:SummaryStatistics",
+          "dsv:statisticalDataType": "dsv:NumericalDataType"
+        }
+      },
+      {
+        "@type": "dsv:Column",
+        "schema:name": "A10_Score",
+        "prov:hadRole": "Feature",
+        "dsv:summaryStatistics": {
+          "@type": "dsv:SummaryStatistics",
+          "dsv:statisticalDataType": "dsv:NumericalDataType"
+        }
+      },
+      {
+        "@type": "dsv:Column",
+        "schema:name": "age",
+        "prov:hadRole": "Feature",
+        "schema:about": "Age",
+        "dsv:summaryStatistics": {
+          "@type": "dsv:SummaryStatistics",
+          "dsv:statisticalDataType": "dsv:NumericalDataType"
+        }
+      },
+      {
+        "@type": "dsv:Column",
+        "schema:name": "gender",
+        "prov:hadRole": "Feature",
+        "schema:about": "Gender",
+        "dsv:summaryStatistics": {
+          "@type": "dsv:SummaryStatistics",
+          "dsv:statisticalDataType": "dsv:CategoricalDataType"
+        }
+      },
+      {
+        "@type": "dsv:Column",
+        "schema:name": "ethnicity",
+        "prov:hadRole": "Feature",
+        "schema:about": "Ethnicity",
+        "dsv:summaryStatistics": {
+          "@type": "dsv:SummaryStatistics",
+          "dsv:statisticalDataType": "dsv:CategoricalDataType",
+          "dsv:missingValueFormat": "NaN"
+        }
+      },
+      {
+        "@type": "dsv:Column",
+        "schema:name": "jaundice",
+        "prov:hadRole": "Feature",
+        "dsv:summaryStatistics": {
+          "@type": "dsv:SummaryStatistics",
+          "dsv:statisticalDataType": "dsv:StatisticalDataType"
+        }
+      },
+      {
+        "@type": "dsv:Column",
+        "schema:name": "autism",
+        "prov:hadRole": "Feature",
+        "dsv:summaryStatistics": {
+          "@type": "dsv:SummaryStatistics",
+          "dsv:statisticalDataType": "dsv:StatisticalDataType"
+        }
+      },
+      {
+        "@type": "dsv:Column",
+        "schema:name": "country_of_res",
+        "prov:hadRole": "Feature",
+        "schema:about": "Nationality",
+        "dsv:summaryStatistics": {
+          "@type": "dsv:SummaryStatistics",
+          "dsv:statisticalDataType": "dsv:CategoricalDataType"
+        }
+      },
+      {
+        "@type": "dsv:Column",
+        "schema:name": "used_app_before",
+        "prov:hadRole": "Feature",
+        "dsv:summaryStatistics": {
+          "@type": "dsv:SummaryStatistics",
+          "dsv:statisticalDataType": "dsv:StatisticalDataType"
+        }
+      },
+      {
+        "@type": "dsv:Column",
+        "schema:name": "result",
+        "prov:hadRole": "Feature",
+        "dsv:summaryStatistics": {
+          "@type": "dsv:SummaryStatistics",
+          "dsv:statisticalDataType": "dsv:NumericalDataType"
+        }
+      },
+      {
+        "@type": "dsv:Column",
+        "schema:name": "age_desc",
+        "prov:hadRole": "Feature",
+        "schema:about": "Age",
+        "dsv:summaryStatistics": {
+          "@type": "dsv:SummaryStatistics",
+          "dsv:statisticalDataType": "dsv:CategoricalDataType"
+        }
+      },
+      {
+        "@type": "dsv:Column",
+        "schema:name": "relation",
+        "prov:hadRole": "Feature",
+        "dsv:summaryStatistics": {
+          "@type": "dsv:SummaryStatistics",
+          "dsv:statisticalDataType": "dsv:CategoricalDataType",
+          "dsv:missingValueFormat": "NaN"
+        }
+      },
+      {
+        "@type": "dsv:Column",
+        "schema:name": "class",
+        "prov:hadRole": "Target",
+        "dsv:summaryStatistics": {
+          "@type": "dsv:SummaryStatistics",
+          "dsv:statisticalDataType": "dsv:StatisticalDataType"
+        }
+      }
+    ]
+  },
+  "dsv:summaryStatistics": {
+    "@type": "dsv:SummaryStatistics",
+    "dsv:numberOfRows": 292,
+    "dsv:numberOfColumns": 20,
+    "dsv:missingValueFormat": "NaN"
+  },
+  "dcterms:description": "see attached file for variables' description ",
+  "dcterms:tableOfContents": "see attached file for variables' description "
+}

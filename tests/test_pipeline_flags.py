@@ -184,3 +184,49 @@ def test_existing_umap_is_respected(
     pipeline_module.process_dataset(spec, df, None, str(tmp_path), model_bundle=bundle)
 
     assert len(calls) == 1, "only the real-data UMAP should be plotted"
+
+
+def test_process_dataset_does_not_load_optional_metrics_when_disabled(
+    tmp_path: Path,
+    monkeypatch: pytest.MonkeyPatch,
+    dummy_utils: _DummyUtils,
+    dummy_reporting: _DummyReporting,
+) -> None:
+    """Avoid loading privacy/downstream dependencies during metadata-only runs."""
+
+    import importlib
+    import semsynth.pipeline as pipeline_module
+
+    pipeline_module = importlib.reload(pipeline_module)
+
+    monkeypatch.setattr(pipeline_module, "_load_utils_module", lambda: dummy_utils)
+    monkeypatch.setattr(pipeline_module, "_load_reporting_module", lambda: dummy_reporting)
+    monkeypatch.setattr(
+        pipeline_module,
+        "_load_privacy_summarizer",
+        lambda: (_ for _ in ()).throw(RuntimeError("privacy dependency missing")),
+    )
+    monkeypatch.setattr(
+        pipeline_module,
+        "_load_downstream_compare",
+        lambda: (_ for _ in ()).throw(RuntimeError("downstream dependency missing")),
+    )
+    monkeypatch.setattr(pipeline_module, "resolve_mapping_json", lambda *_: None)
+    monkeypatch.setattr(pipeline_module, "get_uciml_variable_descriptions", lambda *_: {})
+    monkeypatch.setattr(pipeline_module, "discover_model_runs", lambda *_: [])
+
+    df = pd.DataFrame({"a": [1, 2, 3], "b": ["x", "y", "z"]})
+    spec = DatasetSpec(provider="openml", name="demo", id=1, target=None)
+    cfg = PipelineConfig(compute_privacy=False, compute_downstream=False)
+    bundle = ModelConfigBundle(specs=[])
+
+    pipeline_module.process_dataset(
+        spec,
+        df,
+        None,
+        str(tmp_path),
+        model_bundle=bundle,
+        pipeline_config=cfg,
+    )
+
+    assert dummy_reporting.calls, "reporting should complete for metadata-only runs"

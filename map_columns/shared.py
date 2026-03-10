@@ -136,6 +136,62 @@ def _column_to_info(col: Column) -> ColumnInfo:
     )
 
 
+
+
+def _parse_columns_direct(data: Mapping[str, Any]) -> Tuple[List[ColumnInfo], DatasetMetadata]:
+    """Parse column metadata directly from JSON-LD mapping.
+
+    Args:
+        data: Raw DCAT/DSV mapping.
+
+    Returns:
+        Parsed columns and dataset metadata.
+    """
+
+    schema = data.get("dsv:datasetSchema") or data.get("datasetSchema") or {}
+    raw_columns = []
+    if isinstance(schema, Mapping):
+        raw = schema.get("dsv:column") or schema.get("columns") or []
+        if isinstance(raw, Mapping):
+            raw_columns = [raw]
+        elif isinstance(raw, list):
+            raw_columns = [item for item in raw if isinstance(item, Mapping)]
+
+    columns: List[ColumnInfo] = []
+    for raw_col in raw_columns:
+        summary_stats = raw_col.get("dsv:summaryStatistics") or raw_col.get("summaryStatistics")
+        if not isinstance(summary_stats, dict):
+            summary_stats = None
+        statistical_data_type = None
+        if isinstance(summary_stats, dict):
+            statistical_data_type = _coerce_optional_str(
+                summary_stats.get("dsv:statisticalDataType")
+                or summary_stats.get("statisticalDataType")
+            )
+        columns.append(
+            ColumnInfo(
+                column_id=_coerce_optional_str(raw_col.get("schema:identifier") or raw_col.get("identifier") or raw_col.get("schema:name") or raw_col.get("name") or raw_col.get("dcterms:title")),
+                name=_coerce_optional_str(raw_col.get("schema:name") or raw_col.get("name") or raw_col.get("dcterms:title") or raw_col.get("schema:identifier") or raw_col.get("identifier")),
+                description=_coerce_optional_str(raw_col.get("dcterms:description") or raw_col.get("description")),
+                about=_coerce_optional_str(raw_col.get("schema:about") or raw_col.get("about")),
+                unit=_coerce_optional_str(raw_col.get("schema:unitText") or raw_col.get("unitText")),
+                role=_coerce_optional_str(raw_col.get("prov:hadRole") or raw_col.get("hadRole")),
+                statistical_data_type=statistical_data_type,
+                summary_statistics=summary_stats,
+                source=_coerce_optional_str(raw_col.get("dct:source") or raw_col.get("source")),
+            )
+        )
+
+    dataset_meta = DatasetMetadata(
+        title=_coerce_optional_str(data.get("dcterms:title") or data.get("title")),
+        description=_coerce_optional_str(data.get("dcterms:description") or data.get("description")),
+        table_of_contents=_coerce_optional_str(
+            data.get("dcterms:tableOfContents") or data.get("tableOfContents")
+        ),
+    )
+    return columns, dataset_meta
+
+
 def parse_columns(data: Mapping[str, Any]) -> Tuple[List[ColumnInfo], DatasetMetadata]:
     """Normalize raw metadata payload into column info and dataset summary.
 
@@ -147,7 +203,14 @@ def parse_columns(data: Mapping[str, Any]) -> Tuple[List[ColumnInfo], DatasetMet
         the second item is the simplified dataset metadata.
     """
 
-    metadata = Metadata.from_dcat_dsv(data)
+    try:
+        metadata = Metadata.from_dcat_dsv(data)
+    except Exception:
+        logger.exception("Metadata parsing via semmap failed; falling back to direct parser")
+        columns, dataset_meta = _parse_columns_direct(data)
+        logger.info("Parsed %d columns from metadata payload (direct)", len(columns))
+        return columns, dataset_meta
+
     columns = [_column_to_info(col) for col in metadata.datasetSchema.columns]
     dataset_meta = DatasetMetadata(
         title=_coerce_optional_str(metadata.title),

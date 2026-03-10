@@ -43,8 +43,6 @@ CONTEXT = {
         "columns": {"@id": "dsv:column", "@container": "@set"},
         "name": "csvw:name",
         "titles": "csvw:titles",
-        "description": "dct:description",
-        "identifier": "schema:identifier",
         "about": "schema:about",
         "hadRole": "prov:hadRole",
         "defaultValue": "schema:defaultValue",
@@ -131,7 +129,6 @@ class SummaryStatistics(RDFMixin):
     maximum: Optional[float] = None
 
 
-@dataclass
 class Unit(SkosMappings):
     ucumCode: Optional[str] = None  # e.g., "a"
 
@@ -423,14 +420,22 @@ class SemMapSeriesAccessor:
 
     def __init__(self, s: pd.Series) -> None:
         self._s = s
-        self.col_semmap = None
+        stored = s.attrs.get("semmap_col")
+        self.col_semmap = stored if isinstance(stored, Column) else None
+
+    def _persist_col_semmap(self) -> None:
+        """Persist column semantics in ``Series.attrs`` for accessor re-instantiation."""
+
+        if self.col_semmap is not None:
+            self._s.attrs["semmap_col"] = self.col_semmap
 
     # ---- helpers -------------------------------------------------------------
 
     def _try_convert_to_pint(self) -> None:
         """Best-effort conversion of the Series to a pint dtype using unit_text."""
         # Derive unit_text from UCUM if needed
-        if not self.col_semmap: return
+        if not self.col_semmap:
+            return
         col_prop = self.col_semmap.columnProperty
         if col_prop is None:
             return
@@ -488,6 +493,7 @@ class SemMapSeriesAccessor:
         # Optionally convert to pint dtype
         if convert_to_pint:
             self._try_convert_to_pint()
+        self._persist_col_semmap()
 
         return self
 
@@ -522,6 +528,7 @@ class SemMapSeriesAccessor:
         except Exception:
             pass
 
+        self._persist_col_semmap()
         return self
     
     def _infer_statistical_data_type(self) -> StatisticalDataType:
@@ -548,12 +555,50 @@ class SemMapSeriesAccessor:
             columnCompleteness=float(self._s.notna().mean()) if n else 1.0,
             numberOfRows=n,
         )
+        self._persist_col_semmap()
         return self.col_semmap
 
-    def from_jsonld(self, metadata: Dict[str, Any], convert_pint:bool =True) -> "SemMapSeriesAccessor":
+    def from_jsonld(self, metadata: Dict[str, Any], convert_pint: bool = True) -> "SemMapSeriesAccessor":
+        """Attach column semantics from a JSON-LD payload.
+
+        Args:
+            metadata: Column-level JSON-LD mapping.
+            convert_pint: Whether to attempt pint dtype conversion.
+
+        Returns:
+            Accessor instance for chaining.
+        """
+
         self.col_semmap = Column.from_jsonld(metadata)
+
+        if isinstance(metadata, Mapping):
+            if not getattr(self.col_semmap, "name", None):
+                self.col_semmap.name = (
+                    metadata.get("name")
+                    or metadata.get("schema:name")
+                    or metadata.get("identifier")
+                    or metadata.get("schema:identifier")
+                    or str(self._s.name)
+                )
+            col_prop_json = metadata.get("columnProperty") or metadata.get("dsv:columnProperty")
+            if isinstance(col_prop_json, Mapping):
+                try:
+                    self.col_semmap.columnProperty = ColumnProperty.from_jsonld(col_prop_json)
+                except Exception:
+                    unit_text = col_prop_json.get("unitText") or col_prop_json.get("schema:unitText")
+                    has_unit = col_prop_json.get("hasUnit")
+                    ucum_code = None
+                    if isinstance(has_unit, Mapping):
+                        ucum_code = has_unit.get("ucumCode") or has_unit.get("qudt:ucumCode")
+                    unit_node = Unit(ucumCode=str(ucum_code)) if ucum_code else None
+                    self.col_semmap.columnProperty = ColumnProperty(
+                        unitText=str(unit_text) if unit_text else None,
+                        hasUnit=unit_node,
+                    )
+
         if convert_pint:
             self._try_convert_to_pint()
+        self._persist_col_semmap()
         return self
 
     def to_jsonld(self) -> Optional[Dict[str, Any]]:
@@ -566,7 +611,14 @@ class SemMapSeriesAccessor:
         s = self._s
         if isinstance(s.dtype, PintType):
             # Store magnitudes; metadata carries units for reconstruction
-            s = pd.Series(s.to_numpy().magnitude, index=s.index, name=s.name)
+            try:
+                magnitudes = s.to_numpy().magnitude
+            except Exception:
+                try:
+                    magnitudes = s.array.quantity.magnitude
+                except Exception:
+                    magnitudes = [getattr(value, "magnitude", value) for value in s.to_numpy()]
+            s = pd.Series(magnitudes, index=s.index, name=s.name)
         return s
 
 
@@ -620,8 +672,15 @@ class SemMapFrameAccessor:
 
         # 3) attach column semantics on each Field
         fields = []
+        raw_columns = self._df.attrs.get("semmap_columns_raw")
         for field in table.schema:
-            s_meta = self._df[field.name].semmap.to_jsonld()
+            s_meta = None
+            if isinstance(raw_columns, Mapping):
+                candidate = raw_columns.get(field.name)
+                if isinstance(candidate, Mapping):
+                    s_meta = dict(candidate)
+            if s_meta is None:
+                s_meta = self._df[field.name].semmap.to_jsonld()
             fmeta = dict(field.metadata or {})
             if s_meta is not None:
                 fmeta[_COLUMN_SEMMAP_KEY] = json.dumps(
@@ -673,11 +732,53 @@ class SemMapFrameAccessor:
         for i, field in enumerate(schema):
             name = field.name
             if field.metadata and _COLUMN_SEMMAP_KEY in field.metadata:
-                df[name].semmap.from_jsonld(json.loads(
+                col_jsonld = json.loads(
                     field.metadata[_COLUMN_SEMMAP_KEY].decode("utf-8")
-                ), convert_pint=convert_pint)
+                )
+                df[name].semmap.from_jsonld(col_jsonld, convert_pint=convert_pint)
+                if convert_pint:
+                    SemMapFrameAccessor._coerce_column_to_pint(df, name, col_jsonld)
 
         return df
+
+
+
+    @staticmethod
+    def _coerce_column_to_pint(df: pd.DataFrame, column_name: str, col_jsonld: Mapping[str, Any]) -> None:
+        """Best-effort conversion of a dataframe column to pint dtype.
+
+        Args:
+            df: Dataframe containing the target column.
+            column_name: Name of the column to convert.
+            col_jsonld: Column metadata payload.
+        """
+
+        col_prop = col_jsonld.get("columnProperty") or col_jsonld.get("dsv:columnProperty") or {}
+        unit_text = col_prop.get("unitText") or col_prop.get("schema:unitText")
+        has_unit = col_prop.get("hasUnit") or col_prop.get("qudt:hasUnit") or {}
+        ucum_code = None
+        if isinstance(has_unit, Mapping):
+            ucum_code = has_unit.get("ucumCode") or has_unit.get("qudt:ucumCode")
+
+        candidate_units: List[str] = []
+        if isinstance(unit_text, str) and unit_text.strip():
+            candidate_units.append(unit_text.strip())
+        if isinstance(ucum_code, str) and ucum_code.strip():
+            ucum_clean = ucum_code.strip()
+            candidate_units.append(ucum_clean)
+            candidate_units.append(ucum_clean.replace("[", "").replace("]", ""))
+
+        deduped_candidates: List[str] = []
+        for candidate in candidate_units:
+            if candidate and candidate not in deduped_candidates:
+                deduped_candidates.append(candidate)
+
+        for candidate in deduped_candidates:
+            try:
+                df[column_name] = df[column_name].astype(f"pint[{candidate}]")
+                return
+            except Exception:
+                continue
 
     # ---- External metadata loader -------------------------------------------
 
@@ -715,9 +816,12 @@ class SemMapFrameAccessor:
         by_name = {
             c.get("name"): c for c in cols if isinstance(c, dict) and "name" in c
         }
+        self._df.attrs["semmap_columns_raw"] = by_name
 
         for name, col_jsonld in by_name.items():
             if name in self._df.columns:
                 self._df[name].semmap.from_jsonld(col_jsonld, convert_pint=convert_pint)
+                if convert_pint:
+                    self._coerce_column_to_pint(self._df, name, col_jsonld)
 
         return self

@@ -1,11 +1,185 @@
-<head><link rel="stylesheet" href="../templates/report_style.css"></head>
-<main>
-<h1>Data Reports</h1>
-
-<ul>
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>SemSynth demo reports</title>
+  <link rel="stylesheet" href="../templates/report_style.css" />
+  <link rel="stylesheet" href="https://unpkg.com/@triply/yasgui/build/yasgui.min.css" />
+  <style>
+    .sparql-grid { display: grid; gap: 1rem; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); }
+    .sparql-card pre { max-height: 22rem; overflow: auto; white-space: pre-wrap; }
+    .endpoint-pill { display: inline-block; font-family: monospace; background: #f4f4f4; padding: 0.35rem 0.55rem; border-radius: 0.35rem; }
+    #sparql-app { height: 70vh; min-height: 520px; border: 1px solid #ddd; border-radius: 0.5rem; overflow: hidden; }
+    .semsynth-query-result { margin: 0.75rem; padding: 0.75rem; max-height: 16rem; overflow: auto; border-radius: 0.35rem; background: #fafafa; border: 1px solid #ddd; font-family: monospace; white-space: pre-wrap; }
+  </style>
+</head>
+<body>
+<main class="report-container">
+  <h1>Data Reports</h1>
+  <ul>
 <li><a href="CDC Diabetes Health Indicators">CDC Diabetes Health Indicators</a></li>
 <li><a href="Chronic Kidney Disease">Chronic Kidney Disease</a></li>
 <li><a href="Heart Disease">Heart Disease</a></li>
 <li><a href="Hepatitis">Hepatitis</a></li>
-</li>
+<li><a href="Statlog (Heart)">Statlog (Heart)</a></li>
+  </ul>
+
+  <section>
+    <h2>Static SPARQL endpoint playground</h2>
+    <p>
+      Endpoint identifier: <span class="endpoint-pill">browser://semsynth-static-catalog</span>.
+      This page embeds YASGUI + the browser Comunica SPARQL engine (no server-side SPARQL service).
+    </p>
+    <p>
+      The engine queries static catalog files (<code>output/catalog.json</code> and <code>output/catalog.jsonld</code>) and ships example queries for SemMap and provenance-linked synthetic artifacts.
+    </p>
+    <div class="sparql-grid">
+<article class="sparql-card">
+<h3>Datasets with SemMap metadata</h3>
+<p><strong>Query 1</strong></p>
+<pre><code>PREFIX dcat: <http://www.w3.org/ns/dcat#>
+PREFIX dct: <http://purl.org/dc/terms/>
+
+SELECT ?dataset ?title ?semmap
+WHERE {
+  ?dataset a dcat:Dataset ;
+           dct:title ?title ;
+           dcat:distribution ?dist .
+  ?dist dcat:downloadURL ?semmap .
+  FILTER(CONTAINS(LCASE(STR(?semmap)), "dataset.semmap.json"))
+}
+ORDER BY ?title</code></pre>
+</article>
+<article class="sparql-card">
+<h3>Synthetic artifacts with provenance hints</h3>
+<p><strong>Query 2</strong></p>
+<pre><code>PREFIX dcat: <http://www.w3.org/ns/dcat#>
+PREFIX dct: <http://purl.org/dc/terms/>
+PREFIX prov: <http://www.w3.org/ns/prov#>
+
+SELECT ?dataset ?title ?artifact
+WHERE {
+  ?dataset a dcat:Dataset ;
+           dct:title ?title ;
+           prov:wasDerivedFrom ?source ;
+           dcat:distribution ?dist .
+  ?source ?p ?sourceValue .
+  ?dist dcat:downloadURL ?artifact .
+  FILTER(CONTAINS(LCASE(STR(?artifact)), "synthetic"))
+}
+ORDER BY ?title</code></pre>
+</article>
+<article class="sparql-card">
+<h3>Model outputs per dataset</h3>
+<p><strong>Query 3</strong></p>
+<pre><code>PREFIX dcat: <http://www.w3.org/ns/dcat#>
+PREFIX dct: <http://purl.org/dc/terms/>
+
+SELECT ?title (COUNT(?dist) AS ?distributionCount)
+WHERE {
+  ?dataset a dcat:Dataset ;
+           dct:title ?title ;
+           dcat:distribution ?dist .
+}
+GROUP BY ?title
+ORDER BY DESC(?distributionCount)</code></pre>
+</article>
+    </div>
+    <div id="sparql-app"></div>
+  </section>
 </main>
+
+<script src="https://rdf.js.org/comunica-browser/versions/v4/engines/query-sparql/comunica-browser.js"></script>
+<script src="https://unpkg.com/@triply/yasgui/build/yasgui.min.js"></script>
+<script>
+  const endpointId = "browser://semsynth-static-catalog";
+  const exampleQueries = [{"name": "Datasets with SemMap metadata", "query": "PREFIX dcat: <http://www.w3.org/ns/dcat#>\nPREFIX dct: <http://purl.org/dc/terms/>\n\nSELECT ?dataset ?title ?semmap\nWHERE {\n  ?dataset a dcat:Dataset ;\n           dct:title ?title ;\n           dcat:distribution ?dist .\n  ?dist dcat:downloadURL ?semmap .\n  FILTER(CONTAINS(LCASE(STR(?semmap)), \"dataset.semmap.json\"))\n}\nORDER BY ?title"}, {"name": "Synthetic artifacts with provenance hints", "query": "PREFIX dcat: <http://www.w3.org/ns/dcat#>\nPREFIX dct: <http://purl.org/dc/terms/>\nPREFIX prov: <http://www.w3.org/ns/prov#>\n\nSELECT ?dataset ?title ?artifact\nWHERE {\n  ?dataset a dcat:Dataset ;\n           dct:title ?title ;\n           prov:wasDerivedFrom ?source ;\n           dcat:distribution ?dist .\n  ?source ?p ?sourceValue .\n  ?dist dcat:downloadURL ?artifact .\n  FILTER(CONTAINS(LCASE(STR(?artifact)), \"synthetic\"))\n}\nORDER BY ?title"}, {"name": "Model outputs per dataset", "query": "PREFIX dcat: <http://www.w3.org/ns/dcat#>\nPREFIX dct: <http://purl.org/dc/terms/>\n\nSELECT ?title (COUNT(?dist) AS ?distributionCount)\nWHERE {\n  ?dataset a dcat:Dataset ;\n           dct:title ?title ;\n           dcat:distribution ?dist .\n}\nGROUP BY ?title\nORDER BY DESC(?distributionCount)"}];
+
+  function streamToString(stream) {
+    return new Promise((resolve, reject) => {
+      const chunks = [];
+      stream.on("data", (chunk) => chunks.push(typeof chunk === "string" ? chunk : new TextDecoder().decode(chunk)));
+      stream.on("end", () => resolve(chunks.join("")));
+      stream.on("error", reject);
+    });
+  }
+
+  async function initStaticSparql() {
+    const yasgui = new Yasgui(document.getElementById("sparql-app"), {
+      requestConfig: { endpoint: endpointId },
+      copyEndpointOnNewTab: false,
+    });
+
+    const engine = new Comunica.QueryEngine();
+    const sources = [{
+      type: "file",
+      value: new URL("catalog.jsonld", location.href).toString(),
+      mediaType: "application/ld+json",
+    }];
+
+    const renderPayload = (yasr, payload, mediaType) => {
+      const host = yasr.rootEl.parentElement;
+      let pre = host.querySelector(".semsynth-query-result");
+      if (!pre) {
+        pre = document.createElement("pre");
+        pre.className = "semsynth-query-result";
+        host.appendChild(pre);
+      }
+      pre.dataset.mediaType = mediaType;
+      pre.textContent = payload;
+    };
+
+    const runWithComunica = async (tab) => {
+      tab.show();
+      const yasqe = tab.getYasqe();
+      const yasr = tab.getYasr();
+      const queryText = yasqe.getValue();
+      try {
+        const result = await engine.query(queryText, { sources });
+        const media = result.resultType === "bindings"
+          ? "application/sparql-results+json"
+          : (result.resultType === "boolean" ? "application/sparql-results+json" : "application/trig");
+        const serialized = await engine.resultToString(result, media);
+        const payload = await streamToString(serialized.data);
+        renderPayload(yasr, payload, media);
+      } catch (error) {
+        renderPayload(yasr, JSON.stringify({ error: String(error) }, null, 2), "application/json");
+      }
+    };
+
+    const wireTab = (tab) => {
+      const yasqe = tab.getYasqe();
+      yasqe.query = () => runWithComunica(tab);
+      const keys = yasqe.getOption("extraKeys") || {};
+      yasqe.setOption("extraKeys", Object.assign({}, keys, {
+        "Cmd-Enter": () => { runWithComunica(tab); return false; },
+        "Ctrl-Enter": () => { runWithComunica(tab); return false; },
+      }));
+    };
+
+    const firstTab = yasgui.getTab();
+    wireTab(firstTab);
+
+    if (exampleQueries.length) {
+      firstTab.setName(exampleQueries[0].name);
+      firstTab.getYasqe().setValue(exampleQueries[0].query);
+      for (const queryInfo of exampleQueries.slice(1)) {
+        const tab = yasgui.addTab(true);
+        tab.setName(queryInfo.name);
+        tab.show();
+        tab.getYasqe().setValue(queryInfo.query);
+        wireTab(tab);
+      }
+      firstTab.show();
+    }
+  }
+
+  initStaticSparql().catch((error) => {
+    const container = document.getElementById("sparql-app");
+    container.innerHTML = `<pre>Failed to initialize static SPARQL UI: ${String(error)}</pre>`;
+  });
+</script>
+</body>
+</html>
+

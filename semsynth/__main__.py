@@ -118,6 +118,7 @@ def report(
     cfg.compute_downstream = compute_downstream
     cfg.overwrite_umap = overwrite_umap
 
+    failures: List[str] = []
     for dataset_spec in dataset_specs:
         logging.info("Loading dataset %s", dataset_spec)
         try:
@@ -135,10 +136,12 @@ def report(
                 pipeline_config=cfg,
             )
         except Exception as exc:  # pragma: no cover - surfaced to CLI
+            failures.append(f"{dataset_spec.provider}:{dataset_spec.name or dataset_spec.id}: {exc}")
             logging.exception(
                 "Skipped %s:%s due to error", dataset_spec.provider, dataset_spec.name
             )
-            raise SystemExit(str(exc))
+    if failures:
+        raise SystemExit("; ".join(failures))
 
 
 @rule(merge=True, phony=True)

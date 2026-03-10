@@ -18,6 +18,7 @@ from __future__ import annotations
 
 from dataclasses import dataclass
 from pathlib import Path
+from importlib import resources
 from typing import Any, Dict, Iterable, List, Optional, Sequence
 import json
 import logging
@@ -25,7 +26,7 @@ import os
 import textwrap
 from numbers import Integral, Real
 
-from jinja2 import Environment, FileSystemLoader, select_autoescape
+from jinja2 import Environment, DictLoader, select_autoescape
 from markupsafe import Markup
 import pandas as pd
 from makeprov import OutPath, rule
@@ -34,7 +35,16 @@ from .jsonld_to_rdfa import SCHEMA_ORG, render_rdfa
 from .models import ModelRun
 
 
-_TEMPLATES_DIR = Path(__file__).resolve().parent.parent / "templates"
+_TEMPLATE_FILES = ("report.md.j2", "report_template.html", "report_style.css", "semmap_style.css")
+
+
+def _load_template_sources() -> Dict[str, str]:
+    """Load packaged template text for Jinja and static CSS assets."""
+
+    return {
+        name: resources.files("semsynth.templates").joinpath(name).read_text(encoding="utf-8")
+        for name in _TEMPLATE_FILES
+    }
 
 
 @dataclass
@@ -64,7 +74,7 @@ def _jinja_environment() -> Environment:
     """Return a configured Jinja environment for report templates."""
 
     return Environment(
-        loader=FileSystemLoader(str(_TEMPLATES_DIR)),
+        loader=DictLoader(_load_template_sources()),
         autoescape=select_autoescape(("html", "xml"), default=False),
         trim_blocks=True,
         lstrip_blocks=True,
@@ -474,8 +484,7 @@ def _provider_link(
 def _read_template_text(template_name: str) -> str:
     """Load template text from disk and fail fast when missing."""
 
-    path = _TEMPLATES_DIR / template_name
-    return path.read_text(encoding="utf-8")
+    return _load_template_sources()[template_name]
 
 
 def _load_html_template(env: Environment):
