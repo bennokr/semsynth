@@ -1,0 +1,59 @@
+# Data Report — {{ dataset_name }}
+
+{% if dataset_description %}{{ dataset_description }}
+
+{% endif %}{% if dataset_purpose %}**Purpose**: {{ dataset_purpose }}
+
+{% endif %}{% if dataset_table %}**Documentation**: {{ dataset_table }}
+
+{% endif %}{% if dataset_citation %}**Citation**: {{ dataset_citation }}
+
+{% endif %}
+{% if provider_link %}**Source**: [{{ provider_link.text }}]({{ provider_link.url }})
+
+{% endif %}{% if semmap_json_name %}**SemMap JSON-LD**: [{{ semmap_json_name }}]({{ semmap_json_name }}){% if semmap_html_name %} · [RDFa HTML]({{ semmap_html_name }}){% endif %}
+
+{% endif %}
+## Overview
+
+{{ overview_table }}
+
+## Variables and summary
+
+{{ variable_table }}
+
+{% if missingness_summary %}## Missingness model
+
+- Columns with learned missingness: {{ missingness_summary.nonzero_count }} of {{ missingness_summary.total_columns }}
+{% if missingness_summary.zero_count %}- Columns without missingness: {{ missingness_summary.zero_count }}{% endif %}
+{% if missingness_table %}{{ missingness_table }}{% else %}No columns required missingness injection.
+{% endif %}
+
+{% endif %}
+{% if fidelity_table %}## Fidelity summary
+
+{{ fidelity_table }}
+
+{% endif %}## Models
+
+<table>
+<tr><th>UMAP</th><th>Details</th><th>Structure</th></tr>
+{% if real_umap %}<tr><td><img src='{{ real_umap }}' width='280'/></td><td>
+<h3>Real data</h3></td><td></td></tr>
+{% endif %}{% for model in model_rows %}<tr><td>{% if model.umap_rel %}<img src='{{ model.umap_rel }}' width='280'/>{% endif %}</td><td>
+
+<h3>Model: {{ model.name }} ({{ model.backend }})</h3>
+<ul>
+<li>Seed: {{ model.seed }}, rows: {{ model.rows }}</li>
+{% if model.params_json %}<li> Params: <tt>{{ model.params_json }}</tt></li>{% endif %}
+{% if model.missingness %}<li> Missingness: {% if model.missingness.wrapped %}wrapped{% else %}{{ model.missingness }}{% endif %}{% if model.missingness.random_state is not none %} (random state {{ model.missingness.random_state }}){% endif %}{% if model.missingness.source %} via {{ model.missingness.source }}{% endif %}</li>{% endif %}
+{% for link in model.links %}<li> <a href="{{ link.href }}">{{ link.label }}</a></li>
+{% endfor %}
+</ul>
+
+</td><td>
+{% if model.structure_rel %}<a href='{{ model.structure_rel }}'><img src='{{ model.structure_rel }}' width='280'/></a>{% endif %}
+</td></tr>
+
+{% endfor %}</table>
+

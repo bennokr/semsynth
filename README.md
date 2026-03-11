@@ -12,6 +12,7 @@ SemSynth is a compact toolkit to profile tabular datasets, synthesize data with 
 Clone and run `python -m pip install -e .`
 
 For extra features, run `python -m pip install -e .[EXTRA]` with `EXTRA` in (
+`app`
 `metasyn`
 `pybnesian`
 `synthcity`
@@ -56,7 +57,8 @@ For extra features, run `python -m pip install -e .[EXTRA]` with `EXTRA` in (
    Report toggles are now simple booleans: include `--generate-umap`, `--compute-privacy`, or `--compute-downstream` to switch them on for a run (their absence leaves them disabled). Global defaults defined in a YAML bundle still apply when you omit the flags.
 
 4. Catalog + app helpers
-   - Build a DCAT catalog and HTML index from existing outputs: `python -m semsynth catalog --base-dir output`
+   - Build a DCAT catalog and HTML index from existing outputs: `python -m semsynth build-catalog`
+   - The generated `output/index.html` now embeds **YASGUI + Comunica (browser)** with a static endpoint identifier (`browser://semsynth-static-catalog`) and loads runnable query tabs from `output/sparql/*.rq` files for SemMap and provenance-linked synthetic artifacts.
    - Launch a minimal Flask UI for search and report actions: `python -m semsynth app --host 0.0.0.0 --port 5000`
 
 ## 📄 Unified YAML format
@@ -91,13 +93,13 @@ configs:
 
 ## 📦 Outputs
 - Per dataset (e.g., `output/Heart Disease/`):
-  - `dataset.json` (schema.org/Dataset JSON-LD)
-  - `dataset.semmap.json` (optional, if curated metadata is found)
   - `index.html` and `report.md`
-  - `umap_real.png` and optional `umap_metasyn.png`
+  - `dataset.semmap.json` and `dataset.semmap.html` (when SemMap metadata is available)
+  - `umap_real.png` (when `--generate-umap` is enabled and UMAP dependencies are installed)
 - Per model (e.g., `output/Heart Disease/models/<name>/`):
-  - `synthetic.csv`, `per_variable_metrics.csv`, `metrics.json`, `umap.png`
-  - PyBNesian-only extras: `bn_<name>.png`, `structure_<name>.graphml`, `model_<name>.pickle`
+  - `synthetic.csv`, `metrics.json`, and `umap.png`
+  - Optional metrics sidecars: `metrics.privacy.json`, `metrics.downstream.json`
+  - PyBNesian extras: `structure.png`, `structure.graphml`, `model.pickle`
   - `synthetic.semmap.parquet` (when SemMap metadata is available)
 
 ## 🧰 Metadata templates & column mappings
@@ -155,3 +157,12 @@ configs:
 - Install dev and documentation deps with `python -m pip install -e .[dev,docs]` (use `.[dev]` if you do not need to build docs).
 - Run tests with `python -m pytest`
 - Build the Sphinx site with `sphinx-build -b html sphinx docs`.
+
+## 🔎 Static SPARQL endpoint (demo index)
+- `python -m semsynth build-catalog` writes `output/index.html`, `output/catalog.json`, `output/catalog.jsonld`, and `output/sparql/*.rq` with an embedded YASGUI editor and browser Comunica query engine targeting static files only.
+- The page advertises endpoint id `browser://semsynth-static-catalog` and includes ready-to-run query tabs covering:
+  - datasets that publish `dataset.semmap.json`,
+  - provenance-linked synthetic artifacts,
+  - distribution counts per dataset.
+- This mirrors the static-browser pattern from `data-catalog-sparql-playground` (catalog + local query UI, no server-side SPARQL service required).
+- SPARQL query templates are also described as catalog distributions so tooling can discover and preload them as tabs.

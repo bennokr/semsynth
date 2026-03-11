@@ -21,6 +21,7 @@ class DatasetPrivacySummary:
     nn_distance_stats: Dict[str, float]     # {'mean','median','p95','min','max'}
     k_min: Optional[int]
     k_pct_lt5: Optional[float]
+    k_map: Optional[int]
     rare_qi_reproduction_rate: Optional[float]
     t_closeness: Dict[str, Dict[str, float]]  # per sensitive var: {'mean','p95','max'}
     identifiability_score: Optional[float] = None
@@ -37,7 +38,6 @@ def _load_synthcity_modules():
             CloseValuesProbability,
         )
         from synthcity.metrics.eval_privacy import (
-            kAnonymization,
             kMap,
             IdentifiabilityScore,
             DeltaPresence,
@@ -51,7 +51,6 @@ def _load_synthcity_modules():
         CommonRowsProportion,
         NearestSyntheticNeighborDistance,
         CloseValuesProbability,
-        kAnonymization,
         kMap,
         IdentifiabilityScore,
         DeltaPresence,
@@ -70,8 +69,9 @@ def _prep(df: "pd.DataFrame", meta: "pd.DataFrame") -> "pd.DataFrame":
             out[c] = out[c].fillna(out[c].median())
         elif kind == "datetime":
             x = pd.to_datetime(out[c], errors="coerce")
-            med = x.dropna().astype("int64").median() if x.notna().any() else 0
-            out[c] = x.astype("int64").fillna(med)
+            timestamps = x.view("int64").where(x.notna())
+            med = timestamps.dropna().median() if x.notna().any() else 0
+            out[c] = timestamps.fillna(med)
         else:
             out[c] = out[c].astype("object").where(out[c].notna(), "__MISSING__")
     return out
@@ -105,7 +105,6 @@ def summarize_privacy_synthcity(df_real: "pd.DataFrame",
         CommonRowsProportion,
         NearestSyntheticNeighborDistance,
         CloseValuesProbability,
-        kAnonymization,
         kMap,
         IdentifiabilityScore,
         DeltaPresence,
@@ -124,7 +123,7 @@ def summarize_privacy_synthcity(df_real: "pd.DataFrame",
     Xr = GenericDataLoader(df_r, sensitive_features=sens or [])
     Xs = GenericDataLoader(df_s, sensitive_features=sens or [])
 
-    # synthcity metrics (documented interfaces) :contentReference[oaicite:0]{index=0}
+    # synthcity metrics (documented interfaces)
     exact_overlap = float(CommonRowsProportion().evaluate_default(Xr, Xs))
     close_prob = float(CloseValuesProbability().evaluate_default(Xr, Xs))  # uses internal 0.2 threshold
     nn_eval = NearestSyntheticNeighborDistance()
@@ -201,6 +200,7 @@ def summarize_privacy_synthcity(df_real: "pd.DataFrame",
         nn_distance_stats=nn_stats,
         k_min=k_min,
         k_pct_lt5=k_pct_lt5,
+        k_map=k_map_val,
         rare_qi_reproduction_rate=rare_rate,
         t_closeness=t_close,
         identifiability_score=ident,

@@ -25,11 +25,12 @@ _DATA_CACHE_ROOT = pathlib.Path(".") / "downloads-cache"
 _OPENML_CACHE_DIR = _DATA_CACHE_ROOT / "openml"
 _UCIML_CACHE_DIR = _DATA_CACHE_ROOT / "uciml"
 
-for _d in (_OPENML_CACHE_DIR, _UCIML_CACHE_DIR):
-    try:
-        _d.mkdir(parents=True, exist_ok=True)
-    except Exception:
-        pass
+
+def _ensure_cache_dirs(openml_cache_dir: pathlib.Path, uciml_cache_dir: pathlib.Path) -> None:
+    """Create cache directories lazily when dataset APIs are invoked."""
+
+    openml_cache_dir.mkdir(parents=True, exist_ok=True)
+    uciml_cache_dir.mkdir(parents=True, exist_ok=True)
 
 
 def _as_path(path_like: pathlib.Path | InPath | OutPath | str) -> pathlib.Path:
@@ -46,7 +47,9 @@ def specs_from_input(
     openml_cache_dir: OutPath = OutPath(str(_OPENML_CACHE_DIR)),
     uciml_cache_dir: OutPath = OutPath(str(_UCIML_CACHE_DIR)),
 ) -> List[DatasetSpec]:
-    _ = (_as_path(openml_cache_dir), _as_path(uciml_cache_dir))
+    openml_cache = _as_path(openml_cache_dir)
+    uciml_cache = _as_path(uciml_cache_dir)
+    _ensure_cache_dirs(openml_cache, uciml_cache)
     provider = provider.lower()
     if provider not in {"openml", "uciml"}:
         raise ValueError("provider must be 'openml' or 'uciml'")
@@ -77,13 +80,17 @@ def load_dataset(
     openml_cache_dir: pathlib.Path = pathlib.Path(str(_OPENML_CACHE_DIR)),
     uciml_cache_dir: pathlib.Path = pathlib.Path(str(_UCIML_CACHE_DIR)),
 ) -> DatasetPayload:
+    openml_cache = _as_path(openml_cache_dir)
+    uciml_cache = _as_path(uciml_cache_dir)
+    _ensure_cache_dirs(openml_cache, uciml_cache)
+
     if spec.provider == "openml":
         if not spec.name:
             raise ValueError("OpenML dataset requires a name.")
-        return load_openml_by_name(spec.name, _as_path(openml_cache_dir))
+        return load_openml_by_name(spec.name, openml_cache)
     elif spec.provider == "uciml":
         if spec.id is None:
             raise ValueError("uciml dataset requires an 'id'")
-        return load_uciml_by_id(spec.id, _as_path(uciml_cache_dir))
+        return load_uciml_by_id(spec.id, uciml_cache)
     else:
         raise ValueError(f"Unknown provider: {spec.provider}")

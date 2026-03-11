@@ -1,0 +1,67 @@
+{
+  "@context": "https://w3id.org/semmap/context/v1",
+  "dataset": {
+    "@type": ["disco:LogicalDataSet", "dsv:Dataset", "dcat:Dataset"],
+    "dct:title": "Gallstone-1 (UCI ML Repository, ID 1150)"
+  },
+  "datasetSchema": {
+    "columns": [
+      {
+        "name": "GallstoneStatus",
+        "titles": "0=Yes (gallstones present), 1=No",
+        "columnProperty": {
+          "statisticalDataType": "dsv:NominalDataType",
+          "hasCodeBook": {
+            "hasTopConcept": [
+              { "notation": "0", "prefLabel": "Gallstones present", "exactMatch": ["sct:235919008"] },
+              { "notation": "1", "prefLabel": "Gallstones absent" }
+            ]
+          }
+        }
+      },
+      {
+        "name": "Age",
+        "titles": "Age",
+        "columnProperty": {
+          "statisticalDataType": "dsv:QuantitativeDataType",
+          "valueType": "xsd:integer",
+          "hasUnit": "unit:YR"
+        }
+      },
+      {
+        "name": "Gender",
+        "titles": "Gender",
+        "columnProperty": {
+          "statisticalDataType": "dsv:NominalDataType",
+          "hasCodeBook": {
+            "hasTopConcept": [
+              { "notation": "0", "prefLabel": "Male",   "exactMatch": ["sct:248153007"] },
+              { "notation": "1", "prefLabel": "Female", "exactMatch": ["sct:248152002"] }
+            ]
+          }
+        }
+      },
+      {
+        "name": "BMI",
+        "titles": "BMI",
+        "columnProperty": {
+          "statisticalDataType": "dsv:QuantitativeDataType",
+          "valueType": "xsd:decimal",
+          "hasUnit": "unit:KiloGM-PER-M2",
+          "source": "https://loinc.org/39156-5"
+        }
+      },
+      {
+        "name": "Glucose",
+        "titles": "Glucose",
+        "columnProperty": {
+          "statisticalDataType": "dsv:QuantitativeDataType",
+          "valueType": "xsd:decimal",
+          "hasUnit": "unit:MilliGM-PER-DeciL",
+          "ucumCode": "mg/dL",
+          "source": "https://loinc.org/2345-7"
+        }
+      }
+    ]
+  }
+}

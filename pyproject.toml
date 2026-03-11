@@ -14,11 +14,12 @@ authors = [
 keywords = ["synthetic-data", "data-profiling", "metadata", "uci"]
 dependencies = [
   "defopt",
+  "flask",
   "markdown",
   "jinja2",
-  "numpy",
+  "numpy<2",
   "openml",
-  "pandas",
+  "pandas<3",
   "pint-pandas",
   "makeprov==0.4.2",
   "pyarrow",
@@ -32,7 +33,13 @@ dependencies = [
 [project.optional-dependencies]
 dev = [
   "pytest",
-  "pytest-cov"
+  "pytest-cov",
+  "ruff",
+  "black",
+  "mypy"
+]
+app = [
+  "flask"
 ]
 docs = [
   "sphinx",
@@ -81,7 +88,23 @@ all = [
 ]
 
 [project.scripts]
-semsynth = "semsynth.cli:main"
+semsynth = "semsynth.__main__:main"
 
 [tool.setuptools]
-packages = ["semsynth", "map_columns"]
+
+[tool.setuptools.packages.find]
+include = ["semsynth*", "map_columns*"]
+
+[tool.setuptools.package-data]
+semsynth = ["templates/*.j2", "templates/*.html", "templates/*.css", "templates/*.rq", "mapping_data/*.json"]
+
+[tool.ruff]
+line-length = 100
+
+[tool.black]
+line-length = 100
+
+[tool.mypy]
+python_version = "3.9"
+ignore_missing_imports = true
+

@@ -50,7 +50,7 @@ class PipelineConfig:
     umap_n_neighbors: int = 30
     umap_min_dist: float = 0.1
     umap_n_components: int = 2
-    generate_umap: bool = False
+    generate_umap: bool = True
     compute_privacy: bool = False
     compute_downstream: bool = False
     overwrite_umap: bool = False
@@ -881,9 +881,10 @@ class BackendExecutor:
                         "Wrote privacy metrics",
                         extra={"label": label},
                     )
-                except ImportError:
+                except RuntimeError as exc:
                     LOGGER.warning(
-                        "synthcity not installed; skipping privacy metrics",
+                        "Privacy metrics unavailable; skipping: %s",
+                        exc,
                         extra={"label": label},
                     )
                 except Exception:
@@ -912,9 +913,10 @@ class BackendExecutor:
                         "Wrote downstream metrics",
                         extra={"label": label},
                     )
-                except ImportError:
+                except RuntimeError as exc:
                     LOGGER.warning(
-                        "statsmodels/sklearn not installed; skipping downstream metrics",
+                        "Downstream metrics unavailable; skipping: %s",
+                        exc,
                         extra={"label": label},
                     )
                 except Exception:
@@ -1082,8 +1084,22 @@ def process_dataset(
     if preprocessed.semmap_metadata is not None:
         dataset_spec.meta = preprocessed.semmap_metadata
 
-    privacy_summarizer = _load_privacy_summarizer()
-    downstream_compare = _load_downstream_compare()
+    privacy_summarizer = None
+    downstream_compare = None
+    if cfg.compute_privacy:
+        try:
+            privacy_summarizer = _load_privacy_summarizer()
+        except RuntimeError as exc:
+            LOGGER.warning("Privacy metrics unavailable; disabling privacy computation: %s", exc)
+            cfg.compute_privacy = False
+    if cfg.compute_downstream:
+        try:
+            downstream_compare = _load_downstream_compare()
+        except RuntimeError as exc:
+            LOGGER.warning(
+                "Downstream metrics unavailable; disabling downstream computation: %s", exc
+            )
+            cfg.compute_downstream = False
 
     metric_writer = MetricWriter(
         privacy_summarizer=privacy_summarizer,

@@ -6,6 +6,7 @@ import json
 import logging
 import mimetypes
 import re
+from importlib import resources
 from dataclasses import dataclass, field
 from datetime import datetime, timezone
 from hashlib import sha256
@@ -17,6 +18,43 @@ from makeprov import GLOBAL_CONFIG, InPath, RDFMixin, OutPath, main, rule
 from .mappings import normalize_jsonld_payload
 
 LOGGER = logging.getLogger(__name__)
+
+
+SPARQL_ENDPOINT_ID = "browser://semsynth-static-catalog"
+
+
+@dataclass(frozen=True)
+class SparqlQueryDefinition:
+    """Metadata for a packaged SPARQL example query.
+
+    Attributes:
+        name: Human-readable label shown in the playground.
+        filename: Query filename written under output/sparql.
+        description: Short explanation shown in query cards.
+    """
+
+    name: str
+    filename: str
+    description: str
+
+
+SPARQL_QUERY_DEFINITIONS: Tuple[SparqlQueryDefinition, ...] = (
+    SparqlQueryDefinition(
+        name="SemMap coverage per dataset",
+        filename="query-semmap-coverage.rq",
+        description="Counts SemMap distributions across datasets to confirm semantic metadata coverage.",
+    ),
+    SparqlQueryDefinition(
+        name="Provenance sources driving synthetic artifacts",
+        filename="query-provenance-artifacts.rq",
+        description="Aggregates provenance sources linked to multiple synthetic artifact distributions.",
+    ),
+    SparqlQueryDefinition(
+        name="Datasets with SemMap + provenance synthetic outputs",
+        filename="query-semmap-and-provenance-artifacts.rq",
+        description="Joins SemMap and provenance-linked synthetic distributions per dataset.",
+    ),
+)
 
 
 @dataclass
@@ -118,6 +156,7 @@ class DataCatalog(RDFMixin):
     type: List[str] = field(default_factory=lambda: ["dcat:Catalog"])
     modified: Optional[str] = None
     datasets: List[CatalogDataset] = field(default_factory=list)
+    distributions: List[CatalogDistribution] = field(default_factory=list)
     wasGeneratedBy: Optional[Dict[str, str]] = None
 
 
@@ -305,15 +344,250 @@ def collect_datasets(
     return datasets, inputs
 
 
-def write_index(index_path: Path, dataset_dirs: Sequence[Path]) -> None:
-    """Rewrite output/index.html with dataset links."""
+def read_packaged_sparql_queries() -> List[Dict[str, str]]:
+    """Load packaged SPARQL query templates.
 
-    lines = ['<head><link rel="stylesheet" href="../templates/report_style.css"></head>']
-    lines += ["<main>", "<h1>Data Reports</h1>", "", "<ul>"]
-    for directory in dataset_dirs:
-        lines.append(f'<li><a href="{directory.name}">{directory.name}</a></li>')
-    lines += ["</li>", "</main>"]
-    index_path.write_text("\n".join(lines) + "\n", encoding="utf-8")
+    Returns:
+        Query descriptors with name, description, filename, and query text.
+    """
+
+    templates_dir = resources.files("semsynth.templates")
+    queries: List[Dict[str, str]] = []
+    for definition in SPARQL_QUERY_DEFINITIONS:
+        query_text = (templates_dir / definition.filename).read_text(encoding="utf-8").strip()
+        queries.append(
+            {
+                "name": definition.name,
+                "description": definition.description,
+                "filename": definition.filename,
+                "query": query_text,
+            }
+        )
+    return queries
+
+
+def write_sparql_query_files(base_dir: Path, mapper: PathURLMapper) -> List[CatalogDistribution]:
+    """Write packaged SPARQL query files under output/sparql and return distributions.
+
+    Args:
+        base_dir: Catalog output root (typically ``output``).
+        mapper: URL mapper for converting files to catalog URLs.
+
+    Returns:
+        Catalog distributions for generated SPARQL query files.
+    """
+
+    query_dir = base_dir / "sparql"
+    query_dir.mkdir(parents=True, exist_ok=True)
+
+    distributions: List[CatalogDistribution] = []
+    now_iso = to_iso(datetime.now(timezone.utc))
+    for query in read_packaged_sparql_queries():
+        query_path = query_dir / query["filename"]
+        query_path.write_text(query["query"] + "\n", encoding="utf-8")
+        file_slug = slugify(query["filename"].replace(".rq", ""))
+        query_url = mapper.for_path(query_path)
+        distributions.append(
+            CatalogDistribution(
+                id=f"urn:distribution:sparql:{file_slug}",
+                title=f"SPARQL example: {query['name']}",
+                access_url=query_url,
+                download_url=query_url,
+                media_type="application/sparql-query",
+                format="RQ",
+                byte_size=query_path.stat().st_size,
+                modified=now_iso,
+                issued=now_iso,
+            )
+        )
+
+    return distributions
+
+
+def write_index(
+    index_path: Path,
+    dataset_dirs: Sequence[Path],
+    query_examples: Sequence[Dict[str, str]],
+) -> None:
+    """Rewrite output/index.html with dataset links and a static SPARQL UI.
+
+    Args:
+        index_path: Destination HTML file.
+        dataset_dirs: Dataset directories to expose in the report index.
+        query_examples: Query metadata used for cards and YASGUI tabs.
+    """
+
+    css_href = "../templates/report_style.css"
+    dataset_items = "\n".join(
+        f'<li><a href="{directory.name}">{directory.name}</a></li>'
+        for directory in dataset_dirs
+    )
+
+    query_json = json.dumps(
+        [
+            {
+                "name": query["name"],
+                "filename": query["filename"],
+                "description": query["description"],
+            }
+            for query in query_examples
+        ]
+    )
+
+    html = f"""<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>SemSynth demo reports</title>
+  <link rel="stylesheet" href="{css_href}" />
+  <link rel="stylesheet" href="https://unpkg.com/@triply/yasgui/build/yasgui.min.css" />
+  <style>
+    .sparql-grid {{ display: grid; gap: 1rem; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); }}
+    .sparql-card pre {{ max-height: 22rem; overflow: auto; white-space: pre-wrap; }}
+    .endpoint-pill {{ display: inline-block; font-family: monospace; background: #f4f4f4; padding: 0.35rem 0.55rem; border-radius: 0.35rem; }}
+    #sparql-app {{ height: 70vh; min-height: 520px; border: 1px solid #ddd; border-radius: 0.5rem; overflow: hidden; }}
+    .semsynth-query-result {{ margin: 0.75rem; padding: 0.75rem; max-height: 16rem; overflow: auto; border-radius: 0.35rem; background: #fafafa; border: 1px solid #ddd; font-family: monospace; white-space: pre-wrap; }}
+  </style>
+</head>
+<body>
+<main class="report-container">
+  <h1>Data Reports</h1>
+  <ul>
+{dataset_items}
+  </ul>
+
+  <section>
+    <h2>Static SPARQL endpoint playground</h2>
+    <p>
+      Endpoint identifier: <span class="endpoint-pill">{SPARQL_ENDPOINT_ID}</span>.
+      This page embeds YASGUI + the browser Comunica SPARQL engine (no server-side SPARQL service).
+    </p>
+    <p>
+      The engine queries <code>output/catalog.jsonld</code> and loads query tabs from <code>output/sparql/*.rq</code> files.
+    </p>
+    <div class="sparql-grid">
+"""
+
+    for idx, query in enumerate(query_examples, start=1):
+        html += (
+            '<article class="sparql-card">\n'
+            f"<h3>{query['name']}</h3>\n"
+            f"<p><strong>Query {idx}</strong> — {query['description']}</p>\n"
+            f"<pre><code>{query['query']}</code></pre>\n"
+            "</article>\n"
+        )
+
+    html += f"""    </div>
+    <div id="sparql-app"></div>
+  </section>
+</main>
+
+<script src="https://rdf.js.org/comunica-browser/versions/v4/engines/query-sparql/comunica-browser.js"></script>
+<script src="https://unpkg.com/@triply/yasgui/build/yasgui.min.js"></script>
+<script>
+  const endpointId = {json.dumps(SPARQL_ENDPOINT_ID)};
+  const exampleQueries = {query_json};
+
+  function streamToString(stream) {{
+    return new Promise((resolve, reject) => {{
+      const chunks = [];
+      stream.on("data", (chunk) => chunks.push(typeof chunk === "string" ? chunk : new TextDecoder().decode(chunk)));
+      stream.on("end", () => resolve(chunks.join("")));
+      stream.on("error", reject);
+    }});
+  }}
+
+  async function initStaticSparql() {{
+    const yasgui = new Yasgui(document.getElementById("sparql-app"), {{
+      requestConfig: {{ endpoint: endpointId }},
+      copyEndpointOnNewTab: false,
+    }});
+
+    const engine = new Comunica.QueryEngine();
+    const sources = [{{
+      type: "file",
+      value: new URL("catalog.jsonld", location.href).toString(),
+      mediaType: "application/ld+json",
+    }}];
+
+    const renderPayload = (yasr, payload, mediaType) => {{
+      const host = yasr.rootEl.parentElement;
+      let pre = host.querySelector(".semsynth-query-result");
+      if (!pre) {{
+        pre = document.createElement("pre");
+        pre.className = "semsynth-query-result";
+        host.appendChild(pre);
+      }}
+      pre.dataset.mediaType = mediaType;
+      pre.textContent = payload;
+    }};
+
+    const runWithComunica = async (tab) => {{
+      tab.show();
+      const yasqe = tab.getYasqe();
+      const yasr = tab.getYasr();
+      const queryText = yasqe.getValue();
+      try {{
+        const result = await engine.query(queryText, {{ sources }});
+        const media = result.resultType === "bindings"
+          ? "application/sparql-results+json"
+          : (result.resultType === "boolean" ? "application/sparql-results+json" : "application/trig");
+        const serialized = await engine.resultToString(result, media);
+        const payload = await streamToString(serialized.data);
+        renderPayload(yasr, payload, media);
+      }} catch (error) {{
+        renderPayload(yasr, JSON.stringify({{ error: String(error) }}, null, 2), "application/json");
+      }}
+    }};
+
+    const wireTab = (tab) => {{
+      const yasqe = tab.getYasqe();
+      yasqe.query = () => runWithComunica(tab);
+      const keys = yasqe.getOption("extraKeys") || {{}};
+      yasqe.setOption("extraKeys", Object.assign({{}}, keys, {{
+        "Cmd-Enter": () => {{ runWithComunica(tab); return false; }},
+        "Ctrl-Enter": () => {{ runWithComunica(tab); return false; }},
+      }}));
+    }};
+
+    const loadQueryText = async (queryInfo) => {{
+      const queryUrl = new URL(`sparql/${{queryInfo.filename}}`, location.href).toString();
+      const response = await fetch(queryUrl);
+      if (!response.ok) {{
+        throw new Error(`Unable to load query file ${{queryInfo.filename}} (${{response.status}})`);
+      }}
+      return response.text();
+    }};
+
+    const firstTab = yasgui.getTab();
+    wireTab(firstTab);
+
+    if (exampleQueries.length) {{
+      const firstQuery = exampleQueries[0];
+      firstTab.setName(firstQuery.name);
+      firstTab.getYasqe().setValue(await loadQueryText(firstQuery));
+      for (const queryInfo of exampleQueries.slice(1)) {{
+        const tab = yasgui.addTab(true);
+        tab.setName(queryInfo.name);
+        tab.show();
+        tab.getYasqe().setValue(await loadQueryText(queryInfo));
+        wireTab(tab);
+      }}
+      firstTab.show();
+    }}
+  }}
+
+  initStaticSparql().catch((error) => {{
+    const container = document.getElementById("sparql-app");
+    container.innerHTML = `<pre>Failed to initialize static SPARQL UI: ${{String(error)}}</pre>`;
+  }});
+</script>
+</body>
+</html>
+"""
+
+    index_path.write_text(html + "\n", encoding="utf-8")
     LOGGER.info("Updated %s", index_path)
 
 
@@ -346,7 +620,10 @@ def build_catalog(
         if (path / "report.md").exists():
             dataset_dirs.append(path)
 
-    datasets, inputs = collect_datasets(base_dir, dataset_dirs, mapper)
+    datasets, _inputs = collect_datasets(base_dir, dataset_dirs, mapper)
+    query_examples = read_packaged_sparql_queries()
+    sparql_distributions = write_sparql_query_files(base_dir, mapper)
+
     now = datetime.now(timezone.utc)
     catalog = DataCatalog(
         id="urn:catalog:semsynth-demo",
@@ -354,10 +631,16 @@ def build_catalog(
         description="DCAT catalog of SemSynth reports and synthetic datasets.",
         modified=to_iso(now),
         datasets=datasets,
+        distributions=sparql_distributions,
     )
-    write_index(index_path, dataset_dirs)
+    write_index(index_path, dataset_dirs, query_examples)
     catalog_payload = normalize_jsonld_payload(catalog.to_jsonld())
-    out_path.write_text(json.dumps(catalog_payload, indent=2))
+    catalog_json = json.dumps(catalog_payload, indent=2)
+    out_path.write_text(catalog_json)
+
+    jsonld_path = out_path.with_suffix(".jsonld")
+    jsonld_path.write_text(catalog_json)
+    LOGGER.info("Updated %s", jsonld_path)
 
 
 if __name__ == "__main__":  # pragma: no cover - CLI bridge
