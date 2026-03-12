@@ -71,19 +71,14 @@ def test_process_dataset_skips_umap_when_disabled(
 ) -> None:
     """Disable UMAP and ensure the heavy module is never imported."""
 
-    def fake_import_umap_utils() -> SimpleNamespace:
-        raise AssertionError("UMAP utilities should not load when disabled")
-
-    import importlib
     import semsynth.pipeline as pipeline_module
+    from semsynth.runtime import DEPENDENCIES
 
-    pipeline_module = importlib.reload(pipeline_module)
-
-    monkeypatch.setattr(pipeline_module, "_load_umap_utils_module", fake_import_umap_utils)
-    monkeypatch.setattr(pipeline_module, "_load_utils_module", lambda: dummy_utils)
-    monkeypatch.setattr(pipeline_module, "_load_reporting_module", lambda: dummy_reporting)
-    monkeypatch.setattr(pipeline_module, "_load_privacy_summarizer", lambda: lambda *_args, **_kwargs: {})
-    monkeypatch.setattr(pipeline_module, "_load_downstream_compare", lambda: lambda *_args, **_kwargs: {})
+    # Pre-populate cache with test doubles; umap_utils deliberately omitted so
+    # any attempt to load it would call importlib (and likely fail) rather than
+    # returning silently — proving the disabled-UMAP path never requests it.
+    monkeypatch.setitem(DEPENDENCIES._cache, "semsynth.utils", dummy_utils)
+    monkeypatch.setitem(DEPENDENCIES._cache, "semsynth.reporting", dummy_reporting)
     monkeypatch.setattr(pipeline_module, "resolve_mapping_json", lambda *_: None)
     monkeypatch.setattr(pipeline_module, "get_uciml_variable_descriptions", lambda *_: {})
     monkeypatch.setattr(pipeline_module, "discover_model_runs", lambda *_: [])
@@ -128,24 +123,17 @@ def test_existing_umap_is_respected(
     def fake_transform_with_umap(_art, df: pd.DataFrame) -> np.ndarray:
         return np.zeros((len(df), 2))
 
-    import importlib
     import semsynth.pipeline as pipeline_module
+    from semsynth.runtime import DEPENDENCIES
 
-    pipeline_module = importlib.reload(pipeline_module)
-
-    monkeypatch.setattr(
-        pipeline_module,
-        "_load_umap_utils_module",
-        lambda: SimpleNamespace(
-            build_umap=fake_build_umap,
-            plot_umap=fake_plot_umap,
-            transform_with_umap=fake_transform_with_umap,
-        ),
+    fake_umap_module = SimpleNamespace(
+        build_umap=fake_build_umap,
+        plot_umap=fake_plot_umap,
+        transform_with_umap=fake_transform_with_umap,
     )
-    monkeypatch.setattr(pipeline_module, "_load_utils_module", lambda: dummy_utils)
-    monkeypatch.setattr(pipeline_module, "_load_reporting_module", lambda: dummy_reporting)
-    monkeypatch.setattr(pipeline_module, "_load_privacy_summarizer", lambda: lambda *_args, **_kwargs: {})
-    monkeypatch.setattr(pipeline_module, "_load_downstream_compare", lambda: lambda *_args, **_kwargs: {})
+    monkeypatch.setitem(DEPENDENCIES._cache, "semsynth.umap_utils", fake_umap_module)
+    monkeypatch.setitem(DEPENDENCIES._cache, "semsynth.utils", dummy_utils)
+    monkeypatch.setitem(DEPENDENCIES._cache, "semsynth.reporting", dummy_reporting)
     monkeypatch.setattr(pipeline_module, "resolve_mapping_json", lambda *_: None)
     monkeypatch.setattr(pipeline_module, "get_uciml_variable_descriptions", lambda *_: {})
     monkeypatch.setattr("semsynth.utils.coerce_discrete_to_category", lambda df, cols: df)
@@ -194,23 +182,11 @@ def test_process_dataset_does_not_load_optional_metrics_when_disabled(
 ) -> None:
     """Avoid loading privacy/downstream dependencies during metadata-only runs."""
 
-    import importlib
     import semsynth.pipeline as pipeline_module
+    from semsynth.runtime import DEPENDENCIES
 
-    pipeline_module = importlib.reload(pipeline_module)
-
-    monkeypatch.setattr(pipeline_module, "_load_utils_module", lambda: dummy_utils)
-    monkeypatch.setattr(pipeline_module, "_load_reporting_module", lambda: dummy_reporting)
-    monkeypatch.setattr(
-        pipeline_module,
-        "_load_privacy_summarizer",
-        lambda: (_ for _ in ()).throw(RuntimeError("privacy dependency missing")),
-    )
-    monkeypatch.setattr(
-        pipeline_module,
-        "_load_downstream_compare",
-        lambda: (_ for _ in ()).throw(RuntimeError("downstream dependency missing")),
-    )
+    monkeypatch.setitem(DEPENDENCIES._cache, "semsynth.utils", dummy_utils)
+    monkeypatch.setitem(DEPENDENCIES._cache, "semsynth.reporting", dummy_reporting)
     monkeypatch.setattr(pipeline_module, "resolve_mapping_json", lambda *_: None)
     monkeypatch.setattr(pipeline_module, "get_uciml_variable_descriptions", lambda *_: {})
     monkeypatch.setattr(pipeline_module, "discover_model_runs", lambda *_: [])

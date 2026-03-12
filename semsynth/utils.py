@@ -3,7 +3,7 @@ from __future__ import annotations
 import math
 import os
 from dataclasses import dataclass
-from typing import Dict, Iterable, List, Mapping, Optional, Tuple
+from typing import Dict, Iterable, List, Mapping, Optional, Sequence, Tuple
 
 import numpy as np
 import pandas as pd
@@ -380,12 +380,7 @@ def normalize_variable_descriptors(
     for entry in variables:
         if not isinstance(entry, Mapping):
             continue
-        raw_name = (
-            entry.get("schema:name")
-            or entry.get("name")
-            or entry.get("column")
-            or entry.get("column_name")
-        )
+        raw_name = get_column_name(entry)
         if not raw_name:
             continue
         description = entry.get("dcterms:description") or entry.get("description")
@@ -400,3 +395,64 @@ def normalize_variable_descriptors(
             )
         )
     return descriptors
+
+
+def normalize_role(raw: Optional[str]) -> str:
+    """Normalise a raw role string into a canonical privacy role label.
+
+    Args:
+        raw: Raw role string from metadata (e.g. ``"quasi-identifier"``).
+
+    Returns:
+        One of ``"qi"``, ``"sensitive"``, ``"id"``, ``"ignore"``, ``"target"``,
+        or the original value lower-cased and stripped if no mapping is found.
+    """
+    if not raw:
+        return "qi"
+    role = raw.strip().lower()
+    if role in {"quasiidentifier", "quasi-identifier", "quasi_identifier"}:
+        return "qi"
+    if role in {"sensitive", "sensitive_attribute"}:
+        return "sensitive"
+    if role in {"identifier", "id", "primary_key"}:
+        return "id"
+    if role in {"ignore", "drop", "exclude"}:
+        return "ignore"
+    if role in {"target", "label", "outcome"}:
+        return "target"
+    if role in {"feature", "predictor"}:
+        return "qi"
+    return role
+
+
+_COLUMN_NAME_KEYS: Sequence[str] = (
+    "schema:name",
+    "name",
+    "csvw:name",
+    "dcterms:title",
+    "schema:identifier",
+    "identifier",
+    "column",
+    "column_name",
+)
+
+
+def get_column_name(
+    entry: Mapping[str, object],
+    *,
+    extra_keys: Sequence[str] = (),
+) -> Optional[str]:
+    """Return the first non-empty column name found in ``entry``.
+
+    Args:
+        entry: A mapping representing a column metadata entry.
+        extra_keys: Additional keys to check after the standard set.
+
+    Returns:
+        The first non-empty string value found, or ``None``.
+    """
+    for key in (*_COLUMN_NAME_KEYS, *extra_keys):
+        value = entry.get(key)
+        if isinstance(value, str) and value:
+            return value
+    return None

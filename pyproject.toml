@@ -96,7 +96,7 @@ semsynth = "semsynth.__main__:main"
 include = ["semsynth*", "map_columns*"]
 
 [tool.setuptools.package-data]
-semsynth = ["templates/*.j2", "templates/*.html", "templates/*.css", "templates/*.rq", "mapping_data/*.json"]
+semsynth = ["templates/*.j2", "templates/*.html", "templates/*.css", "templates/*.rq", "mapping_data/*.json", "*.jsonld"]
 
 [tool.ruff]
 line-length = 100

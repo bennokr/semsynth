@@ -7,8 +7,8 @@ import json
 import logging
 from pathlib import Path
 from collections.abc import Mapping
-from dataclasses import asdict, dataclass, is_dataclass
-from typing import TYPE_CHECKING, Any, Dict, Iterable, List, Optional, Set, cast
+from dataclasses import asdict, dataclass, field, is_dataclass
+from typing import TYPE_CHECKING, Any, Dict, Iterable, List, Optional, Set
 
 import pandas as pd
 import makeprov.core as prov_core
@@ -22,6 +22,7 @@ from .models import ModelConfigBundle, discover_model_runs, load_model_configs
 from .runtime import DEPENDENCIES
 from .specs import DatasetSpec
 from .semmap import Metadata
+from .utils import normalize_role
 
 LOGGER = logging.getLogger(__name__)
 
@@ -35,7 +36,13 @@ _BACKEND_MODULE_PATHS = {
     "metasyn": "semsynth.backends.metasyn",
 }
 
-_BACKEND_CACHE: Dict[str, BackendModule] = {}
+@dataclass
+class UmapConfig:
+    """UMAP geometry parameters."""
+
+    n_neighbors: int = 30
+    min_dist: float = 0.1
+    n_components: int = 2
 
 
 @dataclass
@@ -47,9 +54,7 @@ class PipelineConfig:
     fit_on_sample: Optional[int] = 1000
     synthetic_sample: int = 1000
     test_size: float = 0.2
-    umap_n_neighbors: int = 30
-    umap_min_dist: float = 0.1
-    umap_n_components: int = 2
+    umap: UmapConfig = field(default_factory=UmapConfig)
     generate_umap: bool = True
     compute_privacy: bool = False
     compute_downstream: bool = False
@@ -62,55 +67,12 @@ def _load_backend_module(name: str) -> BackendModule:
     module_path = _BACKEND_MODULE_PATHS.get(name)
     if not module_path:
         raise ValueError(f"Unknown backend '{name}'")
-    if name in _BACKEND_CACHE:
-        return _BACKEND_CACHE[name]
-    try:
-        module = importlib.import_module(module_path)
-    except ImportError as exc:  # pragma: no cover - optional deps
-        message = f"Failed to import backend '{name}'. "
-        message += f"Install with `pip install semsynth[{name}]`."
-        raise RuntimeError(message) from exc
+    module = DEPENDENCIES.require_module(
+        module_path,
+        hint=f"Install with `pip install semsynth[{name}]`.",
+    )
     ensure_backend_contract(module)
-    typed_module = cast(BackendModule, module)
-    _BACKEND_CACHE[name] = typed_module
-    return typed_module
-
-
-def _load_utils_module():
-    return DEPENDENCIES.require_module(
-        "semsynth.utils",
-        hint="Install SemSynth with base dependencies.",
-    )
-
-
-def _load_umap_utils_module():
-    return DEPENDENCIES.require_module(
-        "semsynth.umap_utils",
-        hint="Install UMAP extras via `pip install semsynth[umap]`.",
-    )
-
-
-def _load_reporting_module():
-    return DEPENDENCIES.require_module(
-        "semsynth.reporting",
-        hint="SemSynth reporting module missing. Reinstall package.",
-    )
-
-
-def _load_privacy_summarizer():
-    return DEPENDENCIES.require_attr(
-        "semsynth.privacy_metrics",
-        "summarize_privacy_synthcity",
-        hint="Install SemSynth with `synthcity` extras: `pip install semsynth[synthcity]`.",
-    )
-
-
-def _load_downstream_compare():
-    return DEPENDENCIES.require_attr(
-        "semsynth.downstream_fidelity",
-        "compare_real_vs_synth",
-        hint="Install downstream fidelity extras: `pip install semsynth[statsmodels]`.",
-    )
+    return module  # type: ignore[return-value]
 
 
 def _build_privacy_metadata(
@@ -122,24 +84,6 @@ def _build_privacy_metadata(
     target: Optional[str] = None,
 ) -> "pd.DataFrame":
     import pandas as pd
-
-    def _normalize_role(raw: Optional[str]) -> str:
-        if not raw:
-            return "qi"
-        role = raw.strip().lower()
-        if role in {"quasiidentifier", "quasi-identifier", "quasi_identifier"}:
-            return "qi"
-        if role in {"sensitive", "sensitive_attribute"}:
-            return "sensitive"
-        if role in {"identifier", "id", "primary_key"}:
-            return "id"
-        if role in {"ignore", "drop", "exclude"}:
-            return "ignore"
-        if role in {"target", "label", "outcome"}:
-            return "target"
-        if role in {"feature", "predictor"}:
-            return "qi"
-        return role
 
     metadata_df: Optional["pd.DataFrame"] = None
     meta_obj: Optional[Metadata] = metadata if isinstance(metadata, Metadata) else None
@@ -171,7 +115,7 @@ def _build_privacy_metadata(
 
     if role_overrides:
         for column, raw_role in role_overrides.items():
-            normalized = _normalize_role(raw_role)
+            normalized = normalize_role(raw_role)
             if column in metadata_df.variable.values:
                 metadata_df.loc[metadata_df.variable == column, "role"] = normalized
 
@@ -452,9 +396,9 @@ class DatasetPreprocessor:
                     rng=rng,
                     random_state=cfg.random_state,
                     max_sample=cfg.max_umap_sample,
-                    n_neighbors=cfg.umap_n_neighbors,
-                    min_dist=cfg.umap_min_dist,
-                    n_components=cfg.umap_n_components,
+                    n_neighbors=cfg.umap.n_neighbors,
+                    min_dist=cfg.umap.min_dist,
+                    n_components=cfg.umap.n_components,
                 )
                 umap_lims = umap_utils.plot_umap(
                     umap_art.embedding,
@@ -569,7 +513,11 @@ class MetricWriter:
             Dict[str, Any]: Serialized payload written to disk.
         """
 
-        summarizer = self._privacy_summarizer or _load_privacy_summarizer()
+        summarizer = self._privacy_summarizer or DEPENDENCIES.require_attr(
+            "semsynth.privacy_metrics",
+            "summarize_privacy_synthcity",
+            hint="Install SemSynth with `synthcity` extras: `pip install semsynth[synthcity]`.",
+        )
 
         if synth_df is None:
             synth_df = self._read_synthetic_df(run_dir)
@@ -625,7 +573,11 @@ class MetricWriter:
             Dict[str, Any]: Serialized payload written to disk.
         """
 
-        comparer = self._downstream_compare or _load_downstream_compare()
+        comparer = self._downstream_compare or DEPENDENCIES.require_attr(
+            "semsynth.downstream_fidelity",
+            "compare_real_vs_synth",
+            hint="Install downstream fidelity extras: `pip install semsynth[statsmodels]`.",
+        )
 
         unique_targets: Optional[int] = None
         if target_series is not None:
@@ -1050,8 +1002,14 @@ def process_dataset(
 
     from . import semmap  # noqa: F401  # register pandas accessor
 
-    utils = _load_utils_module()
-    reporting = _load_reporting_module()
+    utils = DEPENDENCIES.require_module(
+        "semsynth.utils",
+        hint="Install SemSynth with base dependencies.",
+    )
+    reporting = DEPENDENCIES.require_module(
+        "semsynth.reporting",
+        hint="SemSynth reporting module missing. Reinstall package.",
+    )
 
     bundle = model_bundle or load_model_configs(None)
     cfg = pipeline_config or PipelineConfig()
@@ -1064,7 +1022,14 @@ def process_dataset(
     if bundle.generate_umap is not None:
         generate_umap_flag = bundle.generate_umap
 
-    umap_utils = _load_umap_utils_module() if generate_umap_flag else None
+    umap_utils = (
+        DEPENDENCIES.require_module(
+            "semsynth.umap_utils",
+            hint="Install UMAP extras via `pip install semsynth[umap]`.",
+        )
+        if generate_umap_flag
+        else None
+    )
 
     preprocessor = DatasetPreprocessor(
         utils_module=utils,
@@ -1088,13 +1053,21 @@ def process_dataset(
     downstream_compare = None
     if cfg.compute_privacy:
         try:
-            privacy_summarizer = _load_privacy_summarizer()
+            privacy_summarizer = DEPENDENCIES.require_attr(
+                "semsynth.privacy_metrics",
+                "summarize_privacy_synthcity",
+                hint="Install SemSynth with `synthcity` extras: `pip install semsynth[synthcity]`.",
+            )
         except RuntimeError as exc:
             LOGGER.warning("Privacy metrics unavailable; disabling privacy computation: %s", exc)
             cfg.compute_privacy = False
     if cfg.compute_downstream:
         try:
-            downstream_compare = _load_downstream_compare()
+            downstream_compare = DEPENDENCIES.require_attr(
+                "semsynth.downstream_fidelity",
+                "compare_real_vs_synth",
+                hint="Install downstream fidelity extras: `pip install semsynth[statsmodels]`.",
+            )
         except RuntimeError as exc:
             LOGGER.warning(
                 "Downstream metrics unavailable; disabling downstream computation: %s", exc

@@ -1,49 +1,14 @@
-"""Measure downstream fidelity of a synthetic dataset by training regression models.
+"""Measure downstream fidelity of a synthetic dataset relative to the real data.
 
-# Example usage (sketch)
-
->>> meta = {
->>>   "dsv:datasetSchema": {
->>>       "dsv:column": [
->>>           {
->>>               "schema:name": "target",
->>>               "prov:hadRole": "target",
->>>               "dsv:summaryStatistics": {
->>>                   "dsv:statisticalDataType": "dsv:NominalDataType"
->>>               },
->>>               "schema:defaultValue": "0",
->>>               "dsv:columnProperty": {
->>>                   "dsv:hasCodeBook": {
->>>                       "skos:hasTopConcept": [
->>>                           {"skos:notation": "0"},
->>>                           {"skos:notation": "1"},
->>>                       ]
->>>                   }
->>>               }
->>>           },
->>>           {
->>>               "schema:name": "age",
->>>               "prov:hadRole": "predictor",
->>>               "dsv:summaryStatistics": {
->>>                   "dsv:statisticalDataType": "dsv:QuantitativeDataType"
->>>               }
->>>           },
->>>       ]
->>>   }
->>> }
-
->>> out = compare_real_vs_synth(
->>>   df_real, df_synth, meta,
->>>   m=20, burnin=5, max_interactions=5, cv=5
->>> )
->>> print(out["formula"])
->>> print(out["compare"])
+Uses regression models trained on both datasets to compare coefficient sign agreement.
 """
 
 import copy
 import itertools
 import re
 from typing import Any, Dict, Iterable, List, Mapping, Optional, Sequence, Tuple
+
+from .utils import get_column_name
 
 import numpy as np
 import pandas as pd
@@ -74,11 +39,7 @@ def _columns(meta: Mapping[str, Any]) -> Sequence[Mapping[str, Any]]:
 
 
 def _column_name(col_meta: Mapping[str, Any]) -> Optional[str]:
-    for key in ("schema:name", "name", "column", "column_name"):
-        value = col_meta.get(key)
-        if isinstance(value, str) and value:
-            return value
-    return None
+    return get_column_name(col_meta)
 
 
 def _column_role(col_meta: Mapping[str, Any]) -> str:
