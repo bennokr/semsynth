@@ -14,7 +14,7 @@
 | Discrete    | 42                                                                            |
 | Continuous  | 6                                                                             |
 | SemMap      | [SemMap JSON-LD](dataset.semmap.json)<br />[SemMap HTML](dataset.semmap.html) |
-| Missingness | Not modeled                                                                   |
+| Missingness | modeled 9 of 48 (seed 42)                                                     |
 
 ## Variables and summary
 
@@ -69,6 +69,20 @@
 | diabetesMed              | discrete   | Yes: 78363 (77.00%)                                                                                                                                                                                                                                                                                                                                                             |
 | readmitted               | discrete   | NO: 54864 (53.91%)<br />>30: 35545 (34.93%)<br /><30: 11357 (11.16%)                                                                                                                                                                                                                                                                                                            |
 
+## Missingness model
+
+- Columns with learned missingness: 9 of 48
+- Columns without missingness: 39| Column            |   Missing rate |   Missing % |
+|:------------------|---------------:|------------:|
+| weight            |         0.9686 |       96.86 |
+| max_glu_serum     |         0.9475 |       94.75 |
+| A1Cresult         |         0.8328 |       83.28 |
+| medical_specialty |         0.4908 |       49.08 |
+| payer_code        |         0.3956 |       39.56 |
+| race              |         0.0223 |        2.23 |
+| diag_3            |         0.014  |        1.4  |
+| diag_2            |         0.0035 |        0.35 |
+| diag_1            |         0.0002 |        0.02 |
 ## Fidelity summary
 
 | model      | backend   |   disc_jsd_mean |   disc_jsd_median |   cont_ks_mean |   cont_w1_mean | privacy_overlap   | downstream_sign_match   |

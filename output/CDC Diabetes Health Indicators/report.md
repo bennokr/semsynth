@@ -14,7 +14,7 @@
 | Discrete    | 19                                                                            |
 | Continuous  | 3                                                                             |
 | SemMap      | [SemMap JSON-LD](dataset.semmap.json)<br />[SemMap HTML](dataset.semmap.html) |
-| Missingness | Not modeled                                                                   |
+| Missingness | modeled 0 of 22 (seed 42)                                                     |
 
 ## Variables and summary
 
@@ -43,6 +43,11 @@
 | Income               | discrete   | 8: 90385 (35.63%)<br />7: 43219 (17.04%)<br />6: 36470 (14.38%)<br />5: 25883 (10.20%)<br />4: 20135 (7.94%)<br />3: 15994 (6.30%)<br />2: 11783 (4.64%)<br />1: 9811 (3.87%)                                                                   |
 | Diabetes_binary      | discrete   | 1: 35346 (13.93%)                                                                                                                                                                                                                               |
 
+## Missingness model
+
+- Columns with learned missingness: 0 of 22
+- Columns without missingness: 22No columns required missingness injection.
+
 ## Fidelity summary
 
 | model      | backend   |   disc_jsd_mean |   disc_jsd_median |   cont_ks_mean |   cont_w1_mean | privacy_overlap   | downstream_sign_match   |
@@ -57,8 +62,6 @@
 
 <table>
 <tr><th>UMAP</th><th>Details</th><th>Structure</th></tr>
-<tr><td><img src='umap_real.png' width='280'/></td><td>
-<h3>Real data</h3></td><td></td></tr>
 <tr><td><img src='models/metasyn/umap.png' width='280'/></td><td>
 
 <h3>Model: metasyn (metasyn)</h3>

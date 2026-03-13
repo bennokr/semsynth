@@ -9,43 +9,72 @@
 |:------------|:------------------------------------------------------------------------------|
 | Dataset     | Chronic Kidney Disease                                                        |
 | Source      | [UCI dataset 336](https://archive.ics.uci.edu/dataset/336)                    |
-| Rows        | 400                                                                           |
+| Rows        | 158                                                                           |
 | Columns     | 25                                                                            |
-| Discrete    | 22                                                                            |
-| Continuous  | 3                                                                             |
+| Discrete    | 11                                                                            |
+| Continuous  | 14                                                                            |
 | SemMap      | [SemMap JSON-LD](dataset.semmap.json)<br />[SemMap HTML](dataset.semmap.html) |
-| Missingness | Not modeled                                                                   |
+| Missingness | modeled 24 of 25 (seed 42)                                                    |
 
 ## Variables and summary
 
-| variable   | inferred   | dist                                                            |
-|:-----------|:-----------|:----------------------------------------------------------------|
-| age        | discrete   |                                                                 |
-| bp         | discrete   |                                                                 |
-| sg         | continuous | 1.0172 ± 0.0057 [1.005, 1.01, 1.02, 1.02, 1.025]                |
-| al         | discrete   |                                                                 |
-| su         | discrete   |                                                                 |
-| rbc        | discrete   | normal: 291 (72.75%)                                            |
-| pc         | discrete   | normal: 309 (77.25%)                                            |
-| pcc        | discrete   | notpresent: 358 (89.50%)                                        |
-| ba         | discrete   | notpresent: 378 (94.50%)                                        |
-| bgr        | discrete   |                                                                 |
-| bu         | discrete   |                                                                 |
-| sc         | discrete   |                                                                 |
-| sod        | discrete   |                                                                 |
-| pot        | discrete   |                                                                 |
-| hemo       | discrete   |                                                                 |
-| pcv        | discrete   |                                                                 |
-| wbcc       | continuous | 8448.0000 ± 2951.5632 [2200, 6575, 8000, 9800, 26400]           |
-| rbcc       | continuous | 4.4730 ± 1.0091 [2.1, 3.8, 4.5, 5.2, 8]                         |
-| htn        | discrete   | yes: 147 (36.75%)                                               |
-| dm         | discrete   | no: 262 (65.50%)<br />yes: 137 (34.25%)<br />no: 1 (0.25%)      |
-| cad        | discrete   | yes: 34 (8.50%)                                                 |
-| appet      | discrete   | good: 318 (79.50%)                                              |
-| pe         | discrete   | yes: 76 (19.00%)                                                |
-| ane        | discrete   | yes: 60 (15.00%)                                                |
-| class      | discrete   | ckd: 248 (62.00%)<br />notckd: 150 (37.50%)<br />ckd: 2 (0.50%) |
+| variable   | inferred   | dist                                                           |
+|:-----------|:-----------|:---------------------------------------------------------------|
+| age        | continuous | 49.5633 ± 15.5122 [6, 39.25, 50.5, 60, 83]                     |
+| bp         | continuous | 74.0506 ± 11.1754 [50, 60, 80, 80, 110]                        |
+| sg         | continuous | 1.0199 ± 0.0055 [1.005, 1.02, 1.02, 1.025, 1.025]              |
+| al         | continuous | 0.7975 ± 1.4131 [0, 0, 0, 1, 4]                                |
+| su         | continuous | 0.2532 ± 0.8134 [0, 0, 0, 0, 5]                                |
+| rbc        | discrete   | normal: 140 (88.61%)                                           |
+| pc         | discrete   | normal: 129 (81.65%)                                           |
+| pcc        | discrete   | notpresent: 144 (91.14%)                                       |
+| ba         | discrete   | notpresent: 146 (92.41%)                                       |
+| bgr        | continuous | 131.3418 ± 64.9398 [70, 97, 115.5, 131.75, 490]                |
+| bu         | continuous | 52.5759 ± 47.3954 [10, 26, 39.5, 49.75, 309]                   |
+| sc         | continuous | 2.1886 ± 3.0776 [0.4, 0.7, 1.1, 1.6, 15.2]                     |
+| sod        | continuous | 138.8481 ± 7.4894 [111, 135, 139, 144, 150]                    |
+| pot        | continuous | 4.6367 ± 3.4764 [2.5, 3.7, 4.5, 4.9, 47]                       |
+| hemo       | continuous | 13.6873 ± 2.8822 [3.1, 12.6, 14.25, 15.775, 17.8]              |
+| pcv        | continuous | 41.9177 ± 9.1052 [9, 37.5, 44, 48, 54]                         |
+| wbcc       | continuous | 8475.9494 ± 3126.8802 [3800, 6525, 7800, 9775, 26400]          |
+| rbcc       | continuous | 4.8918 ± 1.0194 [2.1, 4.5, 4.95, 5.6, 8]                       |
+| htn        | discrete   | yes: 34 (21.52%)                                               |
+| dm         | discrete   | no: 130 (82.28%)<br />yes: 28 (17.72%)<br />no: 0 (0.00%)      |
+| cad        | discrete   | yes: 11 (6.96%)                                                |
+| appet      | discrete   | good: 139 (87.97%)                                             |
+| pe         | discrete   | yes: 20 (12.66%)                                               |
+| ane        | discrete   | yes: 16 (10.13%)                                               |
+| class      | discrete   | notckd: 115 (72.78%)<br />ckd: 43 (27.22%)<br />ckd: 0 (0.00%) |
 
+## Missingness model
+
+- Columns with learned missingness: 24 of 25
+- Columns without missingness: 1| Column   |   Missing rate |   Missing % |
+|:---------|---------------:|------------:|
+| rbc      |         0.38   |       38    |
+| rbcc     |         0.3275 |       32.75 |
+| wbcc     |         0.265  |       26.5  |
+| pot      |         0.22   |       22    |
+| sod      |         0.2175 |       21.75 |
+| pcv      |         0.1775 |       17.75 |
+| pc       |         0.1625 |       16.25 |
+| hemo     |         0.13   |       13    |
+| su       |         0.1225 |       12.25 |
+| sg       |         0.1175 |       11.75 |
+| al       |         0.115  |       11.5  |
+| bgr      |         0.11   |       11    |
+| bu       |         0.0475 |        4.75 |
+| sc       |         0.0425 |        4.25 |
+| bp       |         0.03   |        3    |
+| age      |         0.0225 |        2.25 |
+| ba       |         0.01   |        1    |
+| pcc      |         0.01   |        1    |
+| dm       |         0.005  |        0.5  |
+| cad      |         0.005  |        0.5  |
+| htn      |         0.005  |        0.5  |
+| appet    |         0.0025 |        0.25 |
+| ane      |         0.0025 |        0.25 |
+| pe       |         0.0025 |        0.25 |
 ## Fidelity summary
 
 | model      | backend   |   disc_jsd_mean |   disc_jsd_median |   cont_ks_mean |   cont_w1_mean | privacy_overlap   | downstream_sign_match   |
@@ -60,8 +89,6 @@
 
 <table>
 <tr><th>UMAP</th><th>Details</th><th>Structure</th></tr>
-<tr><td><img src='umap_real.png' width='280'/></td><td>
-<h3>Real data</h3></td><td></td></tr>
 <tr><td></td><td>
 
 <h3>Model: metasyn (metasyn)</h3>

@@ -11,29 +11,34 @@
 | Source      | [UCI dataset 145](https://archive.ics.uci.edu/dataset/145)                    |
 | Rows        | 270                                                                           |
 | Columns     | 14                                                                            |
-| Discrete    | 9                                                                             |
-| Continuous  | 5                                                                             |
+| Discrete    | 1                                                                             |
+| Continuous  | 13                                                                            |
 | SemMap      | [SemMap JSON-LD](dataset.semmap.json)<br />[SemMap HTML](dataset.semmap.html) |
-| Missingness | Not modeled                                                                   |
+| Missingness | modeled 0 of 14 (seed 42)                                                     |
 
 ## Variables and summary
 
-| variable             | inferred   | dist                                                                       |
-|:---------------------|:-----------|:---------------------------------------------------------------------------|
-| age                  | continuous | 54.4333 ± 9.1091 [29, 48, 55, 61, 77]                                      |
-| sex                  | discrete   | 1: 183 (67.78%)                                                            |
-| chest-pain           | discrete   | 4: 129 (47.78%)<br />3: 79 (29.26%)<br />2: 42 (15.56%)<br />1: 20 (7.41%) |
-| rest-bp              | continuous | 131.3444 ± 17.8616 [94, 120, 130, 140, 200]                                |
-| serum-chol           | continuous | 249.6593 ± 51.6862 [126, 213, 245, 280, 564]                               |
-| fasting-blood-sugar  | discrete   | 1: 40 (14.81%)                                                             |
-| electrocardiographic | discrete   | 2: 137 (50.74%)<br />0: 131 (48.52%)<br />1: 2 (0.74%)                     |
-| max-heart-rate       | continuous | 149.6778 ± 23.1657 [71, 133, 153.5, 166, 202]                              |
-| angina               | discrete   | 1: 89 (32.96%)                                                             |
-| oldpeak              | continuous | 1.0500 ± 1.1452 [0, 0, 0.8, 1.6, 6.2]                                      |
-| slope                | discrete   | 1: 130 (48.15%)<br />2: 122 (45.19%)<br />3: 18 (6.67%)                    |
-| major-vessels        | discrete   | 0: 160 (59.26%)<br />1: 58 (21.48%)<br />2: 33 (12.22%)<br />3: 19 (7.04%) |
-| thal                 | discrete   | 3: 152 (56.30%)<br />7: 104 (38.52%)<br />6: 14 (5.19%)                    |
-| heart-disease        | discrete   | 1: 150 (55.56%)                                                            |
+| variable             | inferred   | dist                                          |
+|:---------------------|:-----------|:----------------------------------------------|
+| age                  | continuous | 54.4333 ± 9.1091 [29, 48, 55, 61, 77]         |
+| sex                  | continuous | 0.6778 ± 0.4682 [0, 0, 1, 1, 1]               |
+| chest-pain           | continuous | 3.1741 ± 0.9501 [1, 3, 3, 4, 4]               |
+| rest-bp              | continuous | 131.3444 ± 17.8616 [94, 120, 130, 140, 200]   |
+| serum-chol           | continuous | 249.6593 ± 51.6862 [126, 213, 245, 280, 564]  |
+| fasting-blood-sugar  | continuous | 0.1481 ± 0.3559 [0, 0, 0, 0, 1]               |
+| electrocardiographic | continuous | 1.0222 ± 0.9979 [0, 0, 2, 2, 2]               |
+| max-heart-rate       | continuous | 149.6778 ± 23.1657 [71, 133, 153.5, 166, 202] |
+| angina               | continuous | 0.3296 ± 0.4710 [0, 0, 0, 1, 1]               |
+| oldpeak              | continuous | 1.0500 ± 1.1452 [0, 0, 0.8, 1.6, 6.2]         |
+| slope                | continuous | 1.5852 ± 0.6144 [1, 1, 2, 2, 3]               |
+| major-vessels        | continuous | 0.6704 ± 0.9439 [0, 0, 0, 1, 3]               |
+| thal                 | continuous | 4.6963 ± 1.9407 [3, 3, 3, 7, 7]               |
+| heart-disease        | discrete   | 1: 150 (55.56%)                               |
+
+## Missingness model
+
+- Columns with learned missingness: 0 of 14
+- Columns without missingness: 14No columns required missingness injection.
 
 ## Fidelity summary
 

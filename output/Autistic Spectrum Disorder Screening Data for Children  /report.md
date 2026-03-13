@@ -14,7 +14,7 @@
 | Discrete    | 20                                                                            |
 | Continuous  | 1                                                                             |
 | SemMap      | [SemMap JSON-LD](dataset.semmap.json)<br />[SemMap HTML](dataset.semmap.html) |
-| Missingness | Not modeled                                                                   |
+| Missingness | modeled 3 of 21 (seed 42)                                                     |
 
 ## Variables and summary
 
@@ -42,6 +42,14 @@
 | relation        | discrete   | Parent: 213 (85.89%)<br />Relative: 17 (6.85%)<br />'Health care professional': 13 (5.24%)<br />Self: 4 (1.61%)<br />self: 1 (0.40%)                                                                                                                                                                            |
 | class           | discrete   | YES: 126 (50.81%)                                                                                                                                                                                                                                                                                               |
 
+## Missingness model
+
+- Columns with learned missingness: 3 of 21
+- Columns without missingness: 18| Column    |   Missing rate |   Missing % |
+|:----------|---------------:|------------:|
+| ethnicity |         0.1473 |       14.73 |
+| relation  |         0.1473 |       14.73 |
+| age       |         0.0137 |        1.37 |
 ## Fidelity summary
 
 | model      | backend   |   disc_jsd_mean |   disc_jsd_median |   cont_ks_mean |   cont_w1_mean | privacy_overlap   | downstream_sign_match   |

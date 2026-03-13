@@ -14,7 +14,7 @@
 | Discrete    | 6                                                                             |
 | Continuous  | 4                                                                             |
 | SemMap      | [SemMap JSON-LD](dataset.semmap.json)<br />[SemMap HTML](dataset.semmap.html) |
-| Missingness | Not modeled                                                                   |
+| Missingness | modeled 0 of 10 (seed 42)                                                     |
 
 ## Variables and summary
 
@@ -30,6 +30,11 @@
 | smoking               | discrete   | -1: 56 (56.00%)<br />0: 23 (23.00%)<br />1: 21 (21.00%) |
 | hrs_sitting           | continuous | 0.4068 ± 0.1864 [0.06, 0.25, 0.38, 0.5, 1]              |
 | diagnosis             | discrete   | N: 88 (88.00%)                                          |
+
+## Missingness model
+
+- Columns with learned missingness: 0 of 10
+- Columns without missingness: 10No columns required missingness injection.
 
 ## Fidelity summary
 

@@ -101,7 +101,7 @@
         "name": "Age",
         "summaryStatistics": {
           "statisticalDataType": "dsv:NumericalDataType",
-          "columnCompleteness": 0.0,
+          "columnCompleteness": 1.0,
           "numberOfRows": 155
         }
       },
@@ -109,7 +109,7 @@
         "name": "Sex",
         "summaryStatistics": {
           "statisticalDataType": "dsv:NumericalDataType",
-          "columnCompleteness": 0.0,
+          "columnCompleteness": 1.0,
           "numberOfRows": 155
         }
       },
@@ -117,7 +117,7 @@
         "name": "Steroid",
         "summaryStatistics": {
           "statisticalDataType": "dsv:NumericalDataType",
-          "columnCompleteness": 0.0,
+          "columnCompleteness": 0.9935483870967742,
           "numberOfRows": 155
         }
       },
@@ -125,7 +125,7 @@
         "name": "Antivirals",
         "summaryStatistics": {
           "statisticalDataType": "dsv:NumericalDataType",
-          "columnCompleteness": 0.0,
+          "columnCompleteness": 1.0,
           "numberOfRows": 155
         }
       },
@@ -133,7 +133,7 @@
         "name": "Fatigue",
         "summaryStatistics": {
           "statisticalDataType": "dsv:NumericalDataType",
-          "columnCompleteness": 0.0,
+          "columnCompleteness": 0.9935483870967742,
           "numberOfRows": 155
         }
       },
@@ -141,7 +141,7 @@
         "name": "Malaise",
         "summaryStatistics": {
           "statisticalDataType": "dsv:NumericalDataType",
-          "columnCompleteness": 0.0,
+          "columnCompleteness": 0.9935483870967742,
           "numberOfRows": 155
         }
       },
@@ -149,7 +149,7 @@
         "name": "Anorexia",
         "summaryStatistics": {
           "statisticalDataType": "dsv:NumericalDataType",
-          "columnCompleteness": 0.0,
+          "columnCompleteness": 0.9935483870967742,
           "numberOfRows": 155
         }
       },
@@ -157,7 +157,7 @@
         "name": "Liver Big",
         "summaryStatistics": {
           "statisticalDataType": "dsv:NumericalDataType",
-          "columnCompleteness": 0.0,
+          "columnCompleteness": 0.935483870967742,
           "numberOfRows": 155
         }
       },
@@ -165,7 +165,7 @@
         "name": "Liver Firm",
         "summaryStatistics": {
           "statisticalDataType": "dsv:NumericalDataType",
-          "columnCompleteness": 0.0,
+          "columnCompleteness": 0.9290322580645162,
           "numberOfRows": 155
         }
       },
@@ -173,7 +173,7 @@
         "name": "Spleen Palpable",
         "summaryStatistics": {
           "statisticalDataType": "dsv:NumericalDataType",
-          "columnCompleteness": 0.0,
+          "columnCompleteness": 0.967741935483871,
           "numberOfRows": 155
         }
       },
@@ -181,7 +181,7 @@
         "name": "Spiders",
         "summaryStatistics": {
           "statisticalDataType": "dsv:NumericalDataType",
-          "columnCompleteness": 0.0,
+          "columnCompleteness": 0.967741935483871,
           "numberOfRows": 155
         }
       },
@@ -189,7 +189,7 @@
         "name": "Ascites",
         "summaryStatistics": {
           "statisticalDataType": "dsv:NumericalDataType",
-          "columnCompleteness": 0.0,
+          "columnCompleteness": 0.967741935483871,
           "numberOfRows": 155
         }
       },
@@ -197,7 +197,7 @@
         "name": "Varices",
         "summaryStatistics": {
           "statisticalDataType": "dsv:NumericalDataType",
-          "columnCompleteness": 0.0,
+          "columnCompleteness": 0.967741935483871,
           "numberOfRows": 155
         }
       },
@@ -205,7 +205,7 @@
         "name": "Bilirubin",
         "summaryStatistics": {
           "statisticalDataType": "dsv:NumericalDataType",
-          "columnCompleteness": 0.0,
+          "columnCompleteness": 0.9612903225806452,
           "numberOfRows": 155
         }
       },
@@ -213,7 +213,7 @@
         "name": "Alk Phosphate",
         "summaryStatistics": {
           "statisticalDataType": "dsv:NumericalDataType",
-          "columnCompleteness": 0.0,
+          "columnCompleteness": 0.8129032258064516,
           "numberOfRows": 155
         }
       },
@@ -221,7 +221,7 @@
         "name": "Sgot",
         "summaryStatistics": {
           "statisticalDataType": "dsv:NumericalDataType",
-          "columnCompleteness": 0.0,
+          "columnCompleteness": 0.9741935483870968,
           "numberOfRows": 155
         }
       },
@@ -229,7 +229,7 @@
         "name": "Albumin",
         "summaryStatistics": {
           "statisticalDataType": "dsv:NumericalDataType",
-          "columnCompleteness": 0.0,
+          "columnCompleteness": 0.896774193548387,
           "numberOfRows": 155
         }
       },
@@ -237,7 +237,7 @@
         "name": "Protime",
         "summaryStatistics": {
           "statisticalDataType": "dsv:NumericalDataType",
-          "columnCompleteness": 0.0,
+          "columnCompleteness": 0.567741935483871,
           "numberOfRows": 155
         }
       },
@@ -245,7 +245,7 @@
         "name": "Histology",
         "summaryStatistics": {
           "statisticalDataType": "dsv:NumericalDataType",
-          "columnCompleteness": 0.0,
+          "columnCompleteness": 1.0,
           "numberOfRows": 155
         }
       },
@@ -254,14 +254,14 @@
         "hadRole": "target",
         "summaryStatistics": {
           "statisticalDataType": "dsv:NumericalDataType",
-          "columnCompleteness": 0.0,
+          "columnCompleteness": 1.0,
           "numberOfRows": 155
         }
       }
     ]
   },
   "summaryStatistics": {
-    "datasetCompleteness": 0.0,
+    "datasetCompleteness": 0.9461290322580646,
     "numberOfRows": 155,
     "numberOfColumns": 20
   }
