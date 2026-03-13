@@ -1,63 +1,308 @@
 {
-  "dataset": {
-    "@type": [
-      "disco:LogicalDataSet",
-      "dsv:Dataset",
-      "dcat:Dataset"
-    ],
-    "dct:title": "Chronic Kidney Disease (UCI id 336)",
-    "dct:description": "Clinical records for early detection of CKD (subset of variables mapped)."
+  "@context": {
+    "@context": {
+      "csvw": "http://www.w3.org/ns/csvw#",
+      "dsv": "https://w3id.org/dsv-ontology#",
+      "skos": "http://www.w3.org/2004/02/skos/core#",
+      "prov": "http://www.w3.org/ns/prov#",
+      "qudt": "http://qudt.org/schema/qudt/",
+      "unit": "http://qudt.org/vocab/unit/",
+      "quantitykind": "http://qudt.org/vocab/quantitykind/",
+      "sdmx-dimension": "http://purl.org/linked-data/sdmx/2009/dimension#",
+      "schema": "https://schema.org/",
+      "wd": "http://www.wikidata.org/entity/",
+      "dct": "http://purl.org/dc/terms/",
+      "dcat": "http://www.w3.org/ns/dcat#",
+      "title": "dct:title",
+      "description": "dct:description",
+      "abstract": "dct:abstract",
+      "purpose": "dct:purpose",
+      "tableOfContents": "dct:tableOfContents",
+      "landingPage": "dcat:landingPage",
+      "accessRights": "dct:accessRights",
+      "citation": "schema:citation",
+      "identifier": "dct:identifier",
+      "funding": "schema:funding",
+      "populationType": "schema:populationType",
+      "url": "csvw:url",
+      "datasetSchema": "dsv:datasetSchema",
+      "columns": {
+        "@id": "dsv:column",
+        "@container": "@set"
+      },
+      "name": "csvw:name",
+      "titles": "csvw:titles",
+      "about": "schema:about",
+      "hadRole": "prov:hadRole",
+      "defaultValue": "schema:defaultValue",
+      "columnProperty": "dsv:columnProperty",
+      "columnCompleteness": "dsv:columnCompleteness",
+      "summaryStatistics": "dsv:summaryStatistics",
+      "statisticalDataType": {
+        "@id": "dsv:statisticalDataType",
+        "@type": "@id"
+      },
+      "hasCodeBook": {
+        "@id": "dsv:hasCodeBook",
+        "@type": "@id"
+      },
+      "hasVariable": {
+        "@id": "dsv:hasVariable",
+        "@type": "@id"
+      },
+      "datasetCompleteness": "dsv:datasetCompleteness",
+      "numberOfRows": "dsv:numberOfRows",
+      "numberOfColumns": "dsv:numberOfColumns",
+      "missingValueFormat": "dsv:missingValueFormat",
+      "notation": "skos:notation",
+      "prefLabel": "skos:prefLabel",
+      "exactMatch": {
+        "@id": "skos:exactMatch",
+        "@type": "@id",
+        "@container": "@set"
+      },
+      "closeMatch": {
+        "@id": "skos:closeMatch",
+        "@type": "@id",
+        "@container": "@set"
+      },
+      "broadMatch": {
+        "@id": "skos:broadMatch",
+        "@type": "@id",
+        "@container": "@set"
+      },
+      "narrowMatch": {
+        "@id": "skos:narrowMatch",
+        "@type": "@id",
+        "@container": "@set"
+      },
+      "relatedMatch": {
+        "@id": "skos:relatedMatch",
+        "@type": "@id",
+        "@container": "@set"
+      },
+      "hasTopConcept": {
+        "@id": "skos:hasTopConcept",
+        "@type": "@id",
+        "@container": "@set"
+      },
+      "unitText": "schema:unitText",
+      "ucumCode": "qudt:ucumCode",
+      "hasUnit": "qudt:hasUnit",
+      "source": {
+        "@id": "dct:source",
+        "@type": "@id"
+      }
+    }
   },
   "datasetSchema": {
     "columns": [
       {
+        "name": "age",
+        "summaryStatistics": {
+          "statisticalDataType": "dsv:NumericalDataType",
+          "columnCompleteness": 0.9775,
+          "numberOfRows": 400
+        }
+      },
+      {
         "name": "bp",
-        "titles": "Diastolic blood pressure",
-        "columnProperty": {
-          "statisticalDataType": "dsv:QuantitativeDataType",
-          "valueType": "xsd:integer",
-          "hasUnit": "unit:MilliM_HG",
-          "ucumCode": "mm[Hg]",
-          "source": "https://loinc.org/8462-4"
+        "summaryStatistics": {
+          "statisticalDataType": "dsv:NumericalDataType",
+          "columnCompleteness": 0.97,
+          "numberOfRows": 400
         }
       },
       {
         "name": "sg",
-        "titles": "Urine specific gravity",
-        "columnProperty": {
-          "statisticalDataType": "dsv:QuantitativeDataType",
-          "valueType": "xsd:decimal",
-          "source": "https://loinc.org/2965-2"
+        "summaryStatistics": {
+          "statisticalDataType": "dsv:NumericalDataType",
+          "columnCompleteness": 0.8825000000000001,
+          "numberOfRows": 400
+        }
+      },
+      {
+        "name": "al",
+        "summaryStatistics": {
+          "statisticalDataType": "dsv:NumericalDataType",
+          "columnCompleteness": 0.885,
+          "numberOfRows": 400
+        }
+      },
+      {
+        "name": "su",
+        "summaryStatistics": {
+          "statisticalDataType": "dsv:NumericalDataType",
+          "columnCompleteness": 0.8775,
+          "numberOfRows": 400
+        }
+      },
+      {
+        "name": "rbc",
+        "summaryStatistics": {
+          "statisticalDataType": "dsv:NumericalDataType",
+          "columnCompleteness": 0.62,
+          "numberOfRows": 400
+        }
+      },
+      {
+        "name": "pc",
+        "summaryStatistics": {
+          "statisticalDataType": "dsv:NumericalDataType",
+          "columnCompleteness": 0.8375,
+          "numberOfRows": 400
+        }
+      },
+      {
+        "name": "pcc",
+        "summaryStatistics": {
+          "statisticalDataType": "dsv:NumericalDataType",
+          "columnCompleteness": 0.99,
+          "numberOfRows": 400
+        }
+      },
+      {
+        "name": "ba",
+        "summaryStatistics": {
+          "statisticalDataType": "dsv:NumericalDataType",
+          "columnCompleteness": 0.99,
+          "numberOfRows": 400
         }
       },
       {
         "name": "bgr",
-        "titles": "Blood glucose (random)",
-        "columnProperty": {
-          "statisticalDataType": "dsv:QuantitativeDataType",
-          "valueType": "xsd:integer",
-          "hasUnit": "unit:MilliGM-PER-DeciL",
-          "ucumCode": "mg/dL"
+        "summaryStatistics": {
+          "statisticalDataType": "dsv:NumericalDataType",
+          "columnCompleteness": 0.89,
+          "numberOfRows": 400
         }
       },
       {
         "name": "bu",
-        "titles": "Blood urea",
-        "columnProperty": {
-          "statisticalDataType": "dsv:QuantitativeDataType",
-          "valueType": "xsd:integer",
-          "hasUnit": "unit:MilliGM-PER-DeciL",
-          "ucumCode": "mg/dL"
+        "summaryStatistics": {
+          "statisticalDataType": "dsv:NumericalDataType",
+          "columnCompleteness": 0.9525,
+          "numberOfRows": 400
+        }
+      },
+      {
+        "name": "sc",
+        "summaryStatistics": {
+          "statisticalDataType": "dsv:NumericalDataType",
+          "columnCompleteness": 0.9575,
+          "numberOfRows": 400
+        }
+      },
+      {
+        "name": "sod",
+        "summaryStatistics": {
+          "statisticalDataType": "dsv:NumericalDataType",
+          "columnCompleteness": 0.7825,
+          "numberOfRows": 400
+        }
+      },
+      {
+        "name": "pot",
+        "summaryStatistics": {
+          "statisticalDataType": "dsv:NumericalDataType",
+          "columnCompleteness": 0.78,
+          "numberOfRows": 400
+        }
+      },
+      {
+        "name": "hemo",
+        "summaryStatistics": {
+          "statisticalDataType": "dsv:NumericalDataType",
+          "columnCompleteness": 0.87,
+          "numberOfRows": 400
+        }
+      },
+      {
+        "name": "pcv",
+        "summaryStatistics": {
+          "statisticalDataType": "dsv:NumericalDataType",
+          "columnCompleteness": 0.8225,
+          "numberOfRows": 400
+        }
+      },
+      {
+        "name": "wbcc",
+        "summaryStatistics": {
+          "statisticalDataType": "dsv:NumericalDataType",
+          "columnCompleteness": 0.735,
+          "numberOfRows": 400
+        }
+      },
+      {
+        "name": "rbcc",
+        "summaryStatistics": {
+          "statisticalDataType": "dsv:NumericalDataType",
+          "columnCompleteness": 0.6725,
+          "numberOfRows": 400
+        }
+      },
+      {
+        "name": "htn",
+        "summaryStatistics": {
+          "statisticalDataType": "dsv:NumericalDataType",
+          "columnCompleteness": 0.995,
+          "numberOfRows": 400
+        }
+      },
+      {
+        "name": "dm",
+        "summaryStatistics": {
+          "statisticalDataType": "dsv:NumericalDataType",
+          "columnCompleteness": 0.995,
+          "numberOfRows": 400
+        }
+      },
+      {
+        "name": "cad",
+        "summaryStatistics": {
+          "statisticalDataType": "dsv:NumericalDataType",
+          "columnCompleteness": 0.995,
+          "numberOfRows": 400
+        }
+      },
+      {
+        "name": "appet",
+        "summaryStatistics": {
+          "statisticalDataType": "dsv:NumericalDataType",
+          "columnCompleteness": 0.9975,
+          "numberOfRows": 400
+        }
+      },
+      {
+        "name": "pe",
+        "summaryStatistics": {
+          "statisticalDataType": "dsv:NumericalDataType",
+          "columnCompleteness": 0.9975,
+          "numberOfRows": 400
+        }
+      },
+      {
+        "name": "ane",
+        "summaryStatistics": {
+          "statisticalDataType": "dsv:NumericalDataType",
+          "columnCompleteness": 0.9975,
+          "numberOfRows": 400
         }
       },
       {
         "name": "class",
-        "titles": "Outcome label (CKD)",
-        "columnProperty": {
-          "statisticalDataType": "dsv:NominalDataType"
+        "hadRole": "target",
+        "summaryStatistics": {
+          "statisticalDataType": "dsv:NumericalDataType",
+          "columnCompleteness": 1.0,
+          "numberOfRows": 400
         }
       }
     ]
   },
-  "@context": "https://w3id.org/semmap/context/v1"
+  "summaryStatistics": {
+    "datasetCompleteness": 0.8988,
+    "numberOfRows": 400,
+    "numberOfColumns": 25
+  }
 }

@@ -249,9 +249,13 @@ def apply_missingness_to_outputs(
     synth_path = run_dir / "synthetic.csv"
 
     try:
-        if not pristine_path.exists():
-            synth_df.to_csv(pristine_path, index=False)
-        updated_df = missingness_model.apply(synth_df).convert_dtypes()
+        if pristine_path.exists():
+            import pandas as _pd
+            source_df = _pd.read_csv(pristine_path).convert_dtypes()
+        else:
+            source_df = synth_df
+            source_df.to_csv(pristine_path, index=False)
+        updated_df = missingness_model.apply(source_df).convert_dtypes()
         updated_df.to_csv(synth_path, index=False)
     except Exception:
         logging.exception(

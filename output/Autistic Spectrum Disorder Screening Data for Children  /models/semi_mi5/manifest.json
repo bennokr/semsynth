@@ -1,0 +1,19 @@
+{
+  "backend": "pybnesian",
+  "name": "semi_mi5",
+  "provider": "uciml",
+  "dataset_name": "Autistic Spectrum Disorder Screening Data for Children  ",
+  "provider_id": 419,
+  "type": "semiparametric",
+  "params": {
+    "type": "semiparametric",
+    "score": "bic",
+    "operators": [
+      "arcs"
+    ],
+    "max_indegree": 5
+  },
+  "seed": 42,
+  "rows": 292,
+  "test_size": 0.2
+}

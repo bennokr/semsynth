@@ -1,0 +1,285 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Data Report — Fertility</title>
+  <style>
+  /* Report base styles */
+:root { color-scheme: light; }
+body { margin: 0; font-family: "Inter", "Segoe UI", system-ui, -apple-system, BlinkMacSystemFont, "Helvetica Neue", Arial, sans-serif; background: #f4f7fb; color: #1f2937; line-height: 1.65; }
+main { max-width: 1040px; margin: 0 auto; padding: 3rem 3rem 4rem; background: #ffffff; box-shadow: 0 18px 45px rgba(15, 23, 42, 0.08); border-radius: 18px; }
+h1 { font-size: 2.5rem; margin-top: 0; color: #0f172a; letter-spacing: -0.02em; }
+h2 { margin-top: 2.75rem; padding-bottom: 0.35rem; border-bottom: 1px solid #e2e8f0; color: #1e293b; font-size: 1.6rem; }
+h3 { margin-top: 2.2rem; color: #334155; font-size: 1.25rem; }
+p { margin: 0.85rem 0; }
+ul, ol { margin: 0.75rem 0 0.75rem 1.5rem; padding: 0; }
+li { margin: 0.35rem 0; }
+table { border-collapse: collapse; width: 100%; margin: 1.75rem 0; font-size: 0.95rem; }
+th, td { border: 1px solid #e2e8f0; padding: 0.6rem 0.75rem; text-align: left; vertical-align: top; }
+thead th { background: #f8fafc; text-transform: uppercase; letter-spacing: 0.04em; font-size: 0.75rem; color: #475569; }
+tbody tr:nth-child(odd) { background: #fdfefe; }
+a { color: #2563eb; text-decoration: none; }
+a:hover { text-decoration: underline; }
+code { background: #f1f5f9; padding: 0.15rem 0.4rem; border-radius: 4px; font-size: 0.85em; }
+img { border-radius: 12px; box-shadow: 0 4px 28px rgba(15, 23, 42, 0.12); }
+blockquote { border-left: 4px solid #cbd5f5; margin: 1.5rem 0; padding: 0.75rem 1.25rem; background: #f8fafc; color: #1e293b; }
+table.per-var-dist { margin-top: 2.25rem; }
+table.per-var-dist thead th { text-align: center; }
+
+  </style>
+</head>
+<body>
+  <main class="report-container">
+      <h1>Data Report — Fertility</h1>
+    <p><strong>Source</strong>: <a href="https://archive.ics.uci.edu/dataset/244">UCI dataset 244</a></p>
+    <p><strong>SemMap JSON-LD</strong>: <a href="dataset.semmap.json">dataset.semmap.json</a> · <a href="dataset.semmap.html">RDFa HTML</a></p>
+    <h2>Overview</h2>
+    <table>
+    <thead>
+    <tr>
+    <th style="text-align: left;">Metric</th>
+    <th style="text-align: left;">Value</th>
+    </tr>
+    </thead>
+    <tbody>
+    <tr>
+    <td style="text-align: left;">Dataset</td>
+    <td style="text-align: left;">Fertility</td>
+    </tr>
+    <tr>
+    <td style="text-align: left;">Source</td>
+    <td style="text-align: left;"><a href="https://archive.ics.uci.edu/dataset/244">UCI dataset 244</a></td>
+    </tr>
+    <tr>
+    <td style="text-align: left;">Rows</td>
+    <td style="text-align: left;">100</td>
+    </tr>
+    <tr>
+    <td style="text-align: left;">Columns</td>
+    <td style="text-align: left;">10</td>
+    </tr>
+    <tr>
+    <td style="text-align: left;">Discrete</td>
+    <td style="text-align: left;">6</td>
+    </tr>
+    <tr>
+    <td style="text-align: left;">Continuous</td>
+    <td style="text-align: left;">4</td>
+    </tr>
+    <tr>
+    <td style="text-align: left;">SemMap</td>
+    <td style="text-align: left;"><a href="dataset.semmap.json">SemMap JSON-LD</a><br /><a href="dataset.semmap.html">SemMap HTML</a></td>
+    </tr>
+    <tr>
+    <td style="text-align: left;">Missingness</td>
+    <td style="text-align: left;">modeled 0 of 10 (seed 42)</td>
+    </tr>
+    </tbody>
+    </table>
+    <h2>Variables and summary</h2>
+    <table>
+    <thead>
+    <tr>
+    <th style="text-align: left;">variable</th>
+    <th style="text-align: left;">inferred</th>
+    <th style="text-align: left;">dist</th>
+    </tr>
+    </thead>
+    <tbody>
+    <tr>
+    <td style="text-align: left;">season</td>
+    <td style="text-align: left;">continuous</td>
+    <td style="text-align: left;">-0.0789 ± 0.7967 [-1, -1, -0.33, 1, 1]</td>
+    </tr>
+    <tr>
+    <td style="text-align: left;">age</td>
+    <td style="text-align: left;">continuous</td>
+    <td style="text-align: left;">0.6690 ± 0.1213 [0.5, 0.56, 0.67, 0.75, 1]</td>
+    </tr>
+    <tr>
+    <td style="text-align: left;">child_diseases</td>
+    <td style="text-align: left;">discrete</td>
+    <td style="text-align: left;">1: 87 (87.00%)</td>
+    </tr>
+    <tr>
+    <td style="text-align: left;">accident</td>
+    <td style="text-align: left;">discrete</td>
+    <td style="text-align: left;">1: 44 (44.00%)</td>
+    </tr>
+    <tr>
+    <td style="text-align: left;">surgical_intervention</td>
+    <td style="text-align: left;">discrete</td>
+    <td style="text-align: left;">1: 51 (51.00%)</td>
+    </tr>
+    <tr>
+    <td style="text-align: left;">high_fevers</td>
+    <td style="text-align: left;">discrete</td>
+    <td style="text-align: left;">0: 63 (63.00%)<br />1: 28 (28.00%)<br />-1: 9 (9.00%)</td>
+    </tr>
+    <tr>
+    <td style="text-align: left;">alcohol</td>
+    <td style="text-align: left;">continuous</td>
+    <td style="text-align: left;">0.8320 ± 0.1675 [0.2, 0.8, 0.8, 1, 1]</td>
+    </tr>
+    <tr>
+    <td style="text-align: left;">smoking</td>
+    <td style="text-align: left;">discrete</td>
+    <td style="text-align: left;">-1: 56 (56.00%)<br />0: 23 (23.00%)<br />1: 21 (21.00%)</td>
+    </tr>
+    <tr>
+    <td style="text-align: left;">hrs_sitting</td>
+    <td style="text-align: left;">continuous</td>
+    <td style="text-align: left;">0.4068 ± 0.1864 [0.06, 0.25, 0.38, 0.5, 1]</td>
+    </tr>
+    <tr>
+    <td style="text-align: left;">diagnosis</td>
+    <td style="text-align: left;">discrete</td>
+    <td style="text-align: left;">N: 88 (88.00%)</td>
+    </tr>
+    </tbody>
+    </table>
+    <h2>Missingness model</h2>
+    <ul>
+    <li>Columns with learned missingness: 0 of 10</li>
+    <li>Columns without missingness: 10No columns required missingness injection.</li>
+    </ul>
+    <h2>Fidelity summary</h2>
+    <table>
+    <thead>
+    <tr>
+    <th style="text-align: left;">model</th>
+    <th style="text-align: left;">backend</th>
+    <th style="text-align: right;">disc_jsd_mean</th>
+    <th style="text-align: right;">disc_jsd_median</th>
+    <th style="text-align: right;">cont_ks_mean</th>
+    <th style="text-align: right;">cont_w1_mean</th>
+    <th style="text-align: left;">privacy_overlap</th>
+    <th style="text-align: left;">downstream_sign_match</th>
+    </tr>
+    </thead>
+    <tbody>
+    <tr>
+    <td style="text-align: left;">metasyn</td>
+    <td style="text-align: left;">metasyn</td>
+    <td style="text-align: right;">0.1592</td>
+    <td style="text-align: right;">0.1304</td>
+    <td style="text-align: right;">0.2725</td>
+    <td style="text-align: right;">0.1284</td>
+    <td style="text-align: left;"></td>
+    <td style="text-align: left;"></td>
+    </tr>
+    <tr>
+    <td style="text-align: left;">clg_mi2</td>
+    <td style="text-align: left;">pybnesian</td>
+    <td style="text-align: right;">0.1179</td>
+    <td style="text-align: right;">0.1088</td>
+    <td style="text-align: right;">0.235</td>
+    <td style="text-align: right;">0.1188</td>
+    <td style="text-align: left;"></td>
+    <td style="text-align: left;"></td>
+    </tr>
+    <tr>
+    <td style="text-align: left;">semi_mi5</td>
+    <td style="text-align: left;">pybnesian</td>
+    <td style="text-align: right;">0.1179</td>
+    <td style="text-align: right;">0.1088</td>
+    <td style="text-align: right;">0.235</td>
+    <td style="text-align: right;">0.1188</td>
+    <td style="text-align: left;"></td>
+    <td style="text-align: left;"></td>
+    </tr>
+    <tr>
+    <td style="text-align: left;">ctgan_fast</td>
+    <td style="text-align: left;">synthcity</td>
+    <td style="text-align: right;">0.402</td>
+    <td style="text-align: right;">0.4298</td>
+    <td style="text-align: right;">0.3225</td>
+    <td style="text-align: right;">0.1808</td>
+    <td style="text-align: left;"></td>
+    <td style="text-align: left;"></td>
+    </tr>
+    <tr>
+    <td style="text-align: left;">tvae_quick</td>
+    <td style="text-align: left;">synthcity</td>
+    <td style="text-align: right;">0.1649</td>
+    <td style="text-align: right;">0.1524</td>
+    <td style="text-align: right;">0.2175</td>
+    <td style="text-align: right;">0.1154</td>
+    <td style="text-align: left;"></td>
+    <td style="text-align: left;"></td>
+    </tr>
+    </tbody>
+    </table>
+    <h2>Models</h2>
+    <table>
+    <tr><th>UMAP</th><th>Details</th><th>Structure</th></tr>
+    <tr><td></td><td>
+
+    <h3>Model: metasyn (metasyn)</h3>
+    <ul>
+    <li>Seed: 42, rows: 100</li>
+    <li> <a href="models/metasyn/synthetic.csv">Synthetic CSV</a></li>
+    <li> <a href="models/metasyn/per_variable_metrics.csv">Per-variable metrics</a></li>
+    <li> <a href="models/metasyn/metrics.json">Metrics JSON</a></li>
+    </ul>
+
+    </td><td>
+    </td></tr>
+
+    <tr><td></td><td>
+
+    <h3>Model: clg_mi2 (pybnesian)</h3>
+    <ul>
+    <li>Seed: 42, rows: 100</li>
+    <li> Params: <tt>{"max_indegree": 2, "operators": ["arcs"], "score": "bic", "type": "clg"}</tt></li><li> <a href="models/clg_mi2/synthetic.csv">Synthetic CSV</a></li>
+    <li> <a href="models/clg_mi2/per_variable_metrics.csv">Per-variable metrics</a></li>
+    <li> <a href="models/clg_mi2/metrics.json">Metrics JSON</a></li>
+    </ul>
+
+    </td><td>
+    </td></tr>
+
+    <tr><td></td><td>
+
+    <h3>Model: semi_mi5 (pybnesian)</h3>
+    <ul>
+    <li>Seed: 42, rows: 100</li>
+    <li> Params: <tt>{"max_indegree": 5, "operators": ["arcs"], "score": "bic", "type": "semiparametric"}</tt></li><li> <a href="models/semi_mi5/synthetic.csv">Synthetic CSV</a></li>
+    <li> <a href="models/semi_mi5/per_variable_metrics.csv">Per-variable metrics</a></li>
+    <li> <a href="models/semi_mi5/metrics.json">Metrics JSON</a></li>
+    </ul>
+
+    </td><td>
+    </td></tr>
+
+    <tr><td></td><td>
+
+    <h3>Model: ctgan_fast (synthcity)</h3>
+    <ul>
+    <li>Seed: 42, rows: 100</li>
+    <li> Params: <tt>{"batch_size": 256, "n_iter": 5}</tt></li><li> <a href="models/ctgan_fast/synthetic.csv">Synthetic CSV</a></li>
+    <li> <a href="models/ctgan_fast/per_variable_metrics.csv">Per-variable metrics</a></li>
+    <li> <a href="models/ctgan_fast/metrics.json">Metrics JSON</a></li>
+    </ul>
+
+    </td><td>
+    </td></tr>
+
+    <tr><td></td><td>
+
+    <h3>Model: tvae_quick (synthcity)</h3>
+    <ul>
+    <li>Seed: 42, rows: 100</li>
+    <li> Params: <tt>{"batch_size": 256}</tt></li><li> <a href="models/tvae_quick/synthetic.csv">Synthetic CSV</a></li>
+    <li> <a href="models/tvae_quick/per_variable_metrics.csv">Per-variable metrics</a></li>
+    <li> <a href="models/tvae_quick/metrics.json">Metrics JSON</a></li>
+    </ul>
+
+    </td><td>
+    </td></tr>
+
+    </table>
+  </main>
+</body>
+</html>

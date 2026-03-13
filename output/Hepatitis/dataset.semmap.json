@@ -21,7 +21,7 @@
       "landingPage": "dcat:landingPage",
       "accessRights": "dct:accessRights",
       "citation": "schema:citation",
-      "identifier": "schema:identifier",
+      "identifier": "dct:identifier",
       "funding": "schema:funding",
       "populationType": "schema:populationType",
       "url": "csvw:url",
@@ -98,491 +98,164 @@
   "datasetSchema": {
     "columns": [
       {
-        "name": "Class",
-        "titles": "Patient outcome class (1=die, 2=live)",
-        "hadRole": "target",
-        "columnProperty": {
-          "summaryStatistics": {
-            "statisticalDataType": "dsv:NominalDataType"
-          },
-          "hasCodeBook": {
-            "hasTopConcept": [
-              {
-                "notation": "DIE",
-                "prefLabel": "Outcome recorded as death"
-              },
-              {
-                "notation": "LIVE",
-                "prefLabel": "Outcome recorded as survival"
-              }
-            ]
-          },
-          "valueType": "xsd:string"
-        },
-        "summaryStatistics": {
-          "columnCompleteness": 1.0
-        },
-        "prov:hadRole": "target"
-      },
-      {
         "name": "Age",
-        "titles": "Age in years",
-        "columnProperty": {
-          "summaryStatistics": {
-            "statisticalDataType": "dsv:ContinuousDataType"
-          },
-          "unitText": "years",
-          "exactMatch": [
-            "https://loinc.org/30525-0/"
-          ],
-          "valueType": "xsd:integer",
-          "hasQuantityKind": "quantitykind:Time",
-          "ucumCode": "a"
-        },
         "summaryStatistics": {
-          "columnCompleteness": 1.0
+          "statisticalDataType": "dsv:NumericalDataType",
+          "columnCompleteness": 1.0,
+          "numberOfRows": 155
         }
       },
       {
         "name": "Sex",
-        "titles": "Sex recorded for participant",
-        "columnProperty": {
-          "summaryStatistics": {
-            "statisticalDataType": "dsv:NominalDataType"
-          },
-          "hasCodeBook": {
-            "hasTopConcept": [
-              {
-                "notation": "male",
-                "prefLabel": "Male"
-              },
-              {
-                "notation": "female",
-                "prefLabel": "Female"
-              }
-            ]
-          },
-          "exactMatch": [
-            "https://loinc.org/76689-9/"
-          ],
-          "valueType": "xsd:string"
-        },
         "summaryStatistics": {
-          "columnCompleteness": 1.0
+          "statisticalDataType": "dsv:NumericalDataType",
+          "columnCompleteness": 1.0,
+          "numberOfRows": 155
         }
       },
       {
         "name": "Steroid",
-        "titles": "Systemic corticosteroid therapy indicator",
-        "columnProperty": {
-          "summaryStatistics": {
-            "statisticalDataType": "dsv:NominalDataType"
-          },
-          "hasCodeBook": {
-            "hasTopConcept": [
-              {
-                "notation": "yes",
-                "prefLabel": "Yes"
-              },
-              {
-                "notation": "no",
-                "prefLabel": "No"
-              }
-            ]
-          },
-          "valueType": "xsd:string"
-        },
         "summaryStatistics": {
-          "columnCompleteness": 0.9935483870967742
+          "statisticalDataType": "dsv:NumericalDataType",
+          "columnCompleteness": 0.9935483870967742,
+          "numberOfRows": 155
         }
       },
       {
         "name": "Antivirals",
-        "titles": "Antiviral therapy indicator",
-        "columnProperty": {
-          "summaryStatistics": {
-            "statisticalDataType": "dsv:NominalDataType"
-          },
-          "hasCodeBook": {
-            "hasTopConcept": [
-              {
-                "notation": "yes",
-                "prefLabel": "Yes"
-              },
-              {
-                "notation": "no",
-                "prefLabel": "No"
-              }
-            ]
-          },
-          "valueType": "xsd:string"
-        },
         "summaryStatistics": {
-          "columnCompleteness": 1.0
+          "statisticalDataType": "dsv:NumericalDataType",
+          "columnCompleteness": 1.0,
+          "numberOfRows": 155
         }
       },
       {
         "name": "Fatigue",
-        "titles": "Reported fatigue",
-        "columnProperty": {
-          "summaryStatistics": {
-            "statisticalDataType": "dsv:NominalDataType"
-          },
-          "hasCodeBook": {
-            "hasTopConcept": [
-              {
-                "notation": "yes",
-                "prefLabel": "Yes"
-              },
-              {
-                "notation": "no",
-                "prefLabel": "No"
-              }
-            ]
-          },
-          "closeMatch": [
-            "http://snomed.info/id/84229001"
-          ],
-          "valueType": "xsd:string"
-        },
         "summaryStatistics": {
-          "columnCompleteness": 0.9935483870967742
+          "statisticalDataType": "dsv:NumericalDataType",
+          "columnCompleteness": 0.9935483870967742,
+          "numberOfRows": 155
         }
       },
       {
         "name": "Malaise",
-        "titles": "Reported malaise",
-        "columnProperty": {
-          "summaryStatistics": {
-            "statisticalDataType": "dsv:NominalDataType"
-          },
-          "hasCodeBook": {
-            "hasTopConcept": [
-              {
-                "notation": "yes",
-                "prefLabel": "Yes"
-              },
-              {
-                "notation": "no",
-                "prefLabel": "No"
-              }
-            ]
-          },
-          "closeMatch": [
-            "http://snomed.info/id/367391008"
-          ],
-          "valueType": "xsd:string"
-        },
         "summaryStatistics": {
-          "columnCompleteness": 0.9935483870967742
+          "statisticalDataType": "dsv:NumericalDataType",
+          "columnCompleteness": 0.9935483870967742,
+          "numberOfRows": 155
         }
       },
       {
         "name": "Anorexia",
-        "titles": "Loss of appetite indicator",
-        "columnProperty": {
-          "summaryStatistics": {
-            "statisticalDataType": "dsv:NominalDataType"
-          },
-          "hasCodeBook": {
-            "hasTopConcept": [
-              {
-                "notation": "yes",
-                "prefLabel": "Yes"
-              },
-              {
-                "notation": "no",
-                "prefLabel": "No"
-              }
-            ]
-          },
-          "closeMatch": [
-            "http://snomed.info/id/79890006"
-          ],
-          "valueType": "xsd:string"
-        },
         "summaryStatistics": {
-          "columnCompleteness": 0.9935483870967742
+          "statisticalDataType": "dsv:NumericalDataType",
+          "columnCompleteness": 0.9935483870967742,
+          "numberOfRows": 155
         }
       },
       {
         "name": "Liver Big",
-        "titles": "Clinically enlarged liver",
-        "columnProperty": {
-          "summaryStatistics": {
-            "statisticalDataType": "dsv:NominalDataType"
-          },
-          "hasCodeBook": {
-            "hasTopConcept": [
-              {
-                "notation": "yes",
-                "prefLabel": "Yes"
-              },
-              {
-                "notation": "no",
-                "prefLabel": "No"
-              }
-            ]
-          },
-          "closeMatch": [
-            "http://snomed.info/id/80515008"
-          ],
-          "valueType": "xsd:string"
-        },
         "summaryStatistics": {
-          "columnCompleteness": 0.935483870967742
+          "statisticalDataType": "dsv:NumericalDataType",
+          "columnCompleteness": 0.935483870967742,
+          "numberOfRows": 155
         }
       },
       {
         "name": "Liver Firm",
-        "titles": "Palpable firm liver",
-        "columnProperty": {
-          "summaryStatistics": {
-            "statisticalDataType": "dsv:NominalDataType"
-          },
-          "hasCodeBook": {
-            "hasTopConcept": [
-              {
-                "notation": "yes",
-                "prefLabel": "Yes"
-              },
-              {
-                "notation": "no",
-                "prefLabel": "No"
-              }
-            ]
-          },
-          "valueType": "xsd:string"
-        },
         "summaryStatistics": {
-          "columnCompleteness": 0.9290322580645162
+          "statisticalDataType": "dsv:NumericalDataType",
+          "columnCompleteness": 0.9290322580645162,
+          "numberOfRows": 155
         }
       },
       {
         "name": "Spleen Palpable",
-        "titles": "Palpable spleen",
-        "columnProperty": {
-          "summaryStatistics": {
-            "statisticalDataType": "dsv:NominalDataType"
-          },
-          "hasCodeBook": {
-            "hasTopConcept": [
-              {
-                "notation": "yes",
-                "prefLabel": "Yes"
-              },
-              {
-                "notation": "no",
-                "prefLabel": "No"
-              }
-            ]
-          },
-          "closeMatch": [
-            "http://snomed.info/id/249572006"
-          ],
-          "valueType": "xsd:string"
-        },
         "summaryStatistics": {
-          "columnCompleteness": 0.967741935483871
+          "statisticalDataType": "dsv:NumericalDataType",
+          "columnCompleteness": 0.967741935483871,
+          "numberOfRows": 155
         }
       },
       {
         "name": "Spiders",
-        "titles": "Spider angioma observed",
-        "columnProperty": {
-          "summaryStatistics": {
-            "statisticalDataType": "dsv:NominalDataType"
-          },
-          "hasCodeBook": {
-            "hasTopConcept": [
-              {
-                "notation": "yes",
-                "prefLabel": "Yes"
-              },
-              {
-                "notation": "no",
-                "prefLabel": "No"
-              }
-            ]
-          },
-          "closeMatch": [
-            "http://snomed.info/id/195382003"
-          ],
-          "valueType": "xsd:string"
-        },
         "summaryStatistics": {
-          "columnCompleteness": 0.967741935483871
+          "statisticalDataType": "dsv:NumericalDataType",
+          "columnCompleteness": 0.967741935483871,
+          "numberOfRows": 155
         }
       },
       {
         "name": "Ascites",
-        "titles": "Ascites observed",
-        "columnProperty": {
-          "summaryStatistics": {
-            "statisticalDataType": "dsv:NominalDataType"
-          },
-          "hasCodeBook": {
-            "hasTopConcept": [
-              {
-                "notation": "yes",
-                "prefLabel": "Yes"
-              },
-              {
-                "notation": "no",
-                "prefLabel": "No"
-              }
-            ]
-          },
-          "closeMatch": [
-            "http://snomed.info/id/389026000"
-          ],
-          "valueType": "xsd:string"
-        },
         "summaryStatistics": {
-          "columnCompleteness": 0.967741935483871
+          "statisticalDataType": "dsv:NumericalDataType",
+          "columnCompleteness": 0.967741935483871,
+          "numberOfRows": 155
         }
       },
       {
         "name": "Varices",
-        "titles": "Esophageal varices observed",
-        "columnProperty": {
-          "summaryStatistics": {
-            "statisticalDataType": "dsv:NominalDataType"
-          },
-          "hasCodeBook": {
-            "hasTopConcept": [
-              {
-                "notation": "yes",
-                "prefLabel": "Yes"
-              },
-              {
-                "notation": "no",
-                "prefLabel": "No"
-              }
-            ]
-          },
-          "closeMatch": [
-            "http://snomed.info/id/28670008"
-          ],
-          "valueType": "xsd:string"
-        },
         "summaryStatistics": {
-          "columnCompleteness": 0.967741935483871
+          "statisticalDataType": "dsv:NumericalDataType",
+          "columnCompleteness": 0.967741935483871,
+          "numberOfRows": 155
         }
       },
       {
         "name": "Bilirubin",
-        "titles": "Total bilirubin concentration",
-        "columnProperty": {
-          "summaryStatistics": {
-            "statisticalDataType": "dsv:ContinuousDataType"
-          },
-          "unitText": "mg/dL",
-          "exactMatch": [
-            "https://loinc.org/1975-2/"
-          ],
-          "valueType": "xsd:float",
-          "ucumCode": "mg/dL"
-        },
         "summaryStatistics": {
-          "columnCompleteness": 0.9612903225806452
+          "statisticalDataType": "dsv:NumericalDataType",
+          "columnCompleteness": 0.9612903225806452,
+          "numberOfRows": 155
         }
       },
       {
         "name": "Alk Phosphate",
-        "titles": "Alkaline phosphatase activity",
-        "columnProperty": {
-          "summaryStatistics": {
-            "statisticalDataType": "dsv:ContinuousDataType"
-          },
-          "unitText": "U/L",
-          "exactMatch": [
-            "https://loinc.org/6768-6/"
-          ],
-          "valueType": "xsd:float",
-          "ucumCode": "U/L"
-        },
         "summaryStatistics": {
-          "columnCompleteness": 0.8129032258064516
+          "statisticalDataType": "dsv:NumericalDataType",
+          "columnCompleteness": 0.8129032258064516,
+          "numberOfRows": 155
         }
       },
       {
         "name": "Sgot",
-        "titles": "Aspartate aminotransferase activity",
-        "columnProperty": {
-          "summaryStatistics": {
-            "statisticalDataType": "dsv:ContinuousDataType"
-          },
-          "unitText": "U/L",
-          "exactMatch": [
-            "https://loinc.org/1920-8/"
-          ],
-          "valueType": "xsd:float",
-          "ucumCode": "U/L"
-        },
         "summaryStatistics": {
-          "columnCompleteness": 0.9741935483870968
+          "statisticalDataType": "dsv:NumericalDataType",
+          "columnCompleteness": 0.9741935483870968,
+          "numberOfRows": 155
         }
       },
       {
         "name": "Albumin",
-        "titles": "Serum albumin concentration",
-        "columnProperty": {
-          "summaryStatistics": {
-            "statisticalDataType": "dsv:ContinuousDataType"
-          },
-          "unitText": "g/dL",
-          "exactMatch": [
-            "https://loinc.org/1751-7/"
-          ],
-          "valueType": "xsd:float",
-          "ucumCode": "g/dL"
-        },
         "summaryStatistics": {
-          "columnCompleteness": 0.896774193548387
+          "statisticalDataType": "dsv:NumericalDataType",
+          "columnCompleteness": 0.896774193548387,
+          "numberOfRows": 155
         }
       },
       {
         "name": "Protime",
-        "titles": "Prothrombin time",
-        "columnProperty": {
-          "summaryStatistics": {
-            "statisticalDataType": "dsv:ContinuousDataType"
-          },
-          "unitText": "seconds",
-          "exactMatch": [
-            "https://loinc.org/5902-2/"
-          ],
-          "valueType": "xsd:float",
-          "ucumCode": "s"
-        },
         "summaryStatistics": {
-          "columnCompleteness": 0.567741935483871
+          "statisticalDataType": "dsv:NumericalDataType",
+          "columnCompleteness": 0.567741935483871,
+          "numberOfRows": 155
         }
       },
       {
         "name": "Histology",
-        "titles": "Histology result available",
-        "columnProperty": {
-          "summaryStatistics": {
-            "statisticalDataType": "dsv:NominalDataType"
-          },
-          "hasCodeBook": {
-            "hasTopConcept": [
-              {
-                "notation": "yes",
-                "prefLabel": "Yes"
-              },
-              {
-                "notation": "no",
-                "prefLabel": "No"
-              }
-            ]
-          },
-          "valueType": "xsd:string"
-        },
         "summaryStatistics": {
-          "columnCompleteness": 1.0
+          "statisticalDataType": "dsv:NumericalDataType",
+          "columnCompleteness": 1.0,
+          "numberOfRows": 155
+        }
+      },
+      {
+        "name": "Class",
+        "hadRole": "target",
+        "summaryStatistics": {
+          "statisticalDataType": "dsv:NumericalDataType",
+          "columnCompleteness": 1.0,
+          "numberOfRows": 155
         }
       }
     ]

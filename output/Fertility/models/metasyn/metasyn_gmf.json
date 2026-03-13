@@ -1,0 +1,348 @@
+{
+    "gmf_version": "1.1",
+    "n_rows": 80,
+    "n_columns": 10,
+    "provenance": {
+        "created by": {
+            "name": "metasyn",
+            "version": "2.0.0"
+        },
+        "creation time": "2026-03-13T09:08:56.448332"
+    },
+    "vars": [
+        {
+            "name": "season",
+            "type": "continuous",
+            "dtype": "Float64",
+            "prop_missing": 0.0,
+            "distribution": {
+                "name": "core.uniform",
+                "version": "1.0",
+                "class_name": "ContinuousUniformDistribution",
+                "unique": false,
+                "parameters": {
+                    "lower": -1.0,
+                    "upper": 1.0
+                }
+            },
+            "creation_method": {
+                "created_by": "metasyn",
+                "fitter": {
+                    "name": "ContinuousUniformFitter",
+                    "privacy": {
+                        "name": "none",
+                        "parameters": {}
+                    },
+                    "version": "1.0",
+                    "plugin": "builtin",
+                    "plugin_version": "2.0.0"
+                }
+            }
+        },
+        {
+            "name": "age",
+            "type": "continuous",
+            "dtype": "Float64",
+            "prop_missing": 0.0,
+            "distribution": {
+                "name": "core.truncated_normal",
+                "version": "1.0",
+                "class_name": "ContinuousTruncatedNormalDistribution",
+                "unique": false,
+                "parameters": {
+                    "lower": 0.49999999,
+                    "upper": 1.00000001,
+                    "mean": 0.4568615476972663,
+                    "sd": 0.24871025622911153
+                }
+            },
+            "creation_method": {
+                "created_by": "metasyn",
+                "fitter": {
+                    "name": "ContinuousTruncatedNormalFitter",
+                    "privacy": {
+                        "name": "none",
+                        "parameters": {}
+                    },
+                    "version": "1.0",
+                    "plugin": "builtin",
+                    "plugin_version": "2.0.0"
+                }
+            }
+        },
+        {
+            "name": "child_diseases",
+            "type": "categorical",
+            "dtype": "Categorical",
+            "prop_missing": 0.0,
+            "distribution": {
+                "name": "core.multinoulli",
+                "version": "1.0",
+                "class_name": "MultinoulliDistribution",
+                "unique": false,
+                "parameters": {
+                    "labels": [
+                        "0",
+                        "1"
+                    ],
+                    "probs": [
+                        0.15,
+                        0.85
+                    ]
+                }
+            },
+            "creation_method": {
+                "created_by": "metasyn",
+                "fitter": {
+                    "name": "MultinoulliFitter",
+                    "privacy": {
+                        "name": "none",
+                        "parameters": {}
+                    },
+                    "version": "1.0",
+                    "plugin": "builtin",
+                    "plugin_version": "2.0.0"
+                }
+            }
+        },
+        {
+            "name": "accident",
+            "type": "categorical",
+            "dtype": "Categorical",
+            "prop_missing": 0.0,
+            "distribution": {
+                "name": "core.multinoulli",
+                "version": "1.0",
+                "class_name": "MultinoulliDistribution",
+                "unique": false,
+                "parameters": {
+                    "labels": [
+                        "0",
+                        "1"
+                    ],
+                    "probs": [
+                        0.625,
+                        0.375
+                    ]
+                }
+            },
+            "creation_method": {
+                "created_by": "metasyn",
+                "fitter": {
+                    "name": "MultinoulliFitter",
+                    "privacy": {
+                        "name": "none",
+                        "parameters": {}
+                    },
+                    "version": "1.0",
+                    "plugin": "builtin",
+                    "plugin_version": "2.0.0"
+                }
+            }
+        },
+        {
+            "name": "surgical_intervention",
+            "type": "categorical",
+            "dtype": "Categorical",
+            "prop_missing": 0.0,
+            "distribution": {
+                "name": "core.multinoulli",
+                "version": "1.0",
+                "class_name": "MultinoulliDistribution",
+                "unique": false,
+                "parameters": {
+                    "labels": [
+                        "0",
+                        "1"
+                    ],
+                    "probs": [
+                        0.4875,
+                        0.5125
+                    ]
+                }
+            },
+            "creation_method": {
+                "created_by": "metasyn",
+                "fitter": {
+                    "name": "MultinoulliFitter",
+                    "privacy": {
+                        "name": "none",
+                        "parameters": {}
+                    },
+                    "version": "1.0",
+                    "plugin": "builtin",
+                    "plugin_version": "2.0.0"
+                }
+            }
+        },
+        {
+            "name": "high_fevers",
+            "type": "categorical",
+            "dtype": "Categorical",
+            "prop_missing": 0.0,
+            "distribution": {
+                "name": "core.multinoulli",
+                "version": "1.0",
+                "class_name": "MultinoulliDistribution",
+                "unique": false,
+                "parameters": {
+                    "labels": [
+                        "-1",
+                        "0",
+                        "1"
+                    ],
+                    "probs": [
+                        0.075,
+                        0.675,
+                        0.25
+                    ]
+                }
+            },
+            "creation_method": {
+                "created_by": "metasyn",
+                "fitter": {
+                    "name": "MultinoulliFitter",
+                    "privacy": {
+                        "name": "none",
+                        "parameters": {}
+                    },
+                    "version": "1.0",
+                    "plugin": "builtin",
+                    "plugin_version": "2.0.0"
+                }
+            }
+        },
+        {
+            "name": "alcohol",
+            "type": "continuous",
+            "dtype": "Float64",
+            "prop_missing": 0.0,
+            "distribution": {
+                "name": "core.truncated_normal",
+                "version": "1.0",
+                "class_name": "ContinuousTruncatedNormalDistribution",
+                "unique": false,
+                "parameters": {
+                    "lower": 0.19999999000000002,
+                    "upper": 1.00000001,
+                    "mean": 59.90600200737001,
+                    "sd": 3.348615084773221
+                }
+            },
+            "creation_method": {
+                "created_by": "metasyn",
+                "fitter": {
+                    "name": "ContinuousTruncatedNormalFitter",
+                    "privacy": {
+                        "name": "none",
+                        "parameters": {}
+                    },
+                    "version": "1.0",
+                    "plugin": "builtin",
+                    "plugin_version": "2.0.0"
+                }
+            }
+        },
+        {
+            "name": "smoking",
+            "type": "categorical",
+            "dtype": "Categorical",
+            "prop_missing": 0.0,
+            "distribution": {
+                "name": "core.multinoulli",
+                "version": "1.0",
+                "class_name": "MultinoulliDistribution",
+                "unique": false,
+                "parameters": {
+                    "labels": [
+                        "-1",
+                        "0",
+                        "1"
+                    ],
+                    "probs": [
+                        0.575,
+                        0.1875,
+                        0.2375
+                    ]
+                }
+            },
+            "creation_method": {
+                "created_by": "metasyn",
+                "fitter": {
+                    "name": "MultinoulliFitter",
+                    "privacy": {
+                        "name": "none",
+                        "parameters": {}
+                    },
+                    "version": "1.0",
+                    "plugin": "builtin",
+                    "plugin_version": "2.0.0"
+                }
+            }
+        },
+        {
+            "name": "hrs_sitting",
+            "type": "continuous",
+            "dtype": "Float64",
+            "prop_missing": 0.0,
+            "distribution": {
+                "name": "core.normal",
+                "version": "1.0",
+                "class_name": "ContinuousNormalDistribution",
+                "unique": false,
+                "parameters": {
+                    "mean": 0.401875,
+                    "sd": 0.18139799992006528
+                }
+            },
+            "creation_method": {
+                "created_by": "metasyn",
+                "fitter": {
+                    "name": "ContinuousNormalFitter",
+                    "privacy": {
+                        "name": "none",
+                        "parameters": {}
+                    },
+                    "version": "1.0",
+                    "plugin": "builtin",
+                    "plugin_version": "2.0.0"
+                }
+            }
+        },
+        {
+            "name": "diagnosis",
+            "type": "categorical",
+            "dtype": "Categorical",
+            "prop_missing": 0.0,
+            "distribution": {
+                "name": "core.multinoulli",
+                "version": "1.0",
+                "class_name": "MultinoulliDistribution",
+                "unique": false,
+                "parameters": {
+                    "labels": [
+                        "N",
+                        "O"
+                    ],
+                    "probs": [
+                        0.875,
+                        0.125
+                    ]
+                }
+            },
+            "creation_method": {
+                "created_by": "metasyn",
+                "fitter": {
+                    "name": "MultinoulliFitter",
+                    "privacy": {
+                        "name": "none",
+                        "parameters": {}
+                    },
+                    "version": "1.0",
+                    "plugin": "builtin",
+                    "plugin_version": "2.0.0"
+                }
+            }
+        }
+    ]
+}

@@ -1,3 +1,8 @@
+generate_umap: true
+compute_privacy: true
+compute_downstream: true
+enable_missingness_wrapping: true
+
 configs:
   - name: metasyn
     backend: metasyn

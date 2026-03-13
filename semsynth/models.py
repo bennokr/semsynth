@@ -35,6 +35,7 @@ class ModelConfigBundle:
     generate_umap: Optional[bool] = None
     compute_privacy: Optional[bool] = None
     compute_downstream: Optional[bool] = None
+    enable_missingness_wrapping: Optional[bool] = None
 
 
 @dataclass
@@ -66,7 +67,7 @@ def _as_list(data: Any) -> List[Dict[str, Any]]:
             {
                 k: v
                 for k, v in data.items()
-                if k not in {"generate_umap", "compute_privacy", "compute_downstream"}
+                if k not in {"generate_umap", "compute_privacy", "compute_downstream", "enable_missingness_wrapping"}
             }
         ]
     if isinstance(data, list):
@@ -93,7 +94,7 @@ def _extract_globals(data: Any) -> Tuple[List[Dict[str, Any]], Dict[str, Optiona
         items = _as_list(data)
         globals_map = {
             key: _coerce_optional_bool(data.get(key))
-            for key in ("generate_umap", "compute_privacy", "compute_downstream")
+            for key in ("generate_umap", "compute_privacy", "compute_downstream", "enable_missingness_wrapping")
             if key in data
         }
         return items, globals_map
@@ -109,7 +110,7 @@ def load_model_configs(yaml_path: Optional[str]) -> ModelConfigBundle:
     """
 
     if yaml_path is None:
-        return ModelConfigBundle(specs=[], generate_umap=None, compute_privacy=None, compute_downstream=None)
+        return ModelConfigBundle(specs=[])
 
     try:
         import yaml  # type: ignore
@@ -158,6 +159,7 @@ def load_model_configs(yaml_path: Optional[str]) -> ModelConfigBundle:
         generate_umap=globals_map.get("generate_umap"),
         compute_privacy=globals_map.get("compute_privacy"),
         compute_downstream=globals_map.get("compute_downstream"),
+        enable_missingness_wrapping=globals_map.get("enable_missingness_wrapping"),
     )
 
 

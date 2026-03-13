@@ -1,0 +1,68 @@
+{
+  "provenance": [
+    {
+      "id": "__main__.py#model_run_root-20260313T0909",
+      "type": "prov:Activity",
+      "startedAtTime": "2026-03-13T09:09:10.335674+00:00",
+      "endedAtTime": "2026-03-13T09:09:10.335744+00:00",
+      "wasAssociatedWith": "__main__.py",
+      "used": [
+        "env-20260313T0909"
+      ]
+    },
+    {
+      "id": "output/Fertility",
+      "type": "prov:Entity",
+      "format": "application/octet-stream",
+      "extent": 4096,
+      "modified": "2026-03-13T09:08:55.034763+00:00",
+      "wasGeneratedBy": "__main__.py#model_run_root-20260313T0909"
+    },
+    {
+      "id": "__main__.py",
+      "type": [
+        "prov:Agent",
+        "prov:SoftwareAgent",
+        "schema:SoftwareSourceCode"
+      ],
+      "label": "__main__.py",
+      "hasVersion": "e41b22a7869f00c7cee24c2109bb44cfb5904da6",
+      "source": "http://local_proxy@127.0.0.1:45617/git/bennokr/semsynth"
+    },
+    {
+      "id": "env-20260313T0909",
+      "type": [
+        "prov:Entity",
+        "prov:Collection"
+      ],
+      "label": "Python environment",
+      "title": "makeprov",
+      "hasVersion": "0.4.2",
+      "requires": [
+        {
+          "id": "https://pypi.org/project/parse/",
+          "type": "schema:SoftwareSourceCode",
+          "label": "parse>=1.20"
+        }
+      ]
+    },
+    {
+      "id": "output/Fertility/models/ctgan_fast",
+      "type": "prov:Entity",
+      "format": "application/octet-stream",
+      "extent": 4096,
+      "modified": "2026-03-13T09:09:10.500435+00:00",
+      "wasGeneratedBy": "__main__.py#write_manifest-20260313T0909"
+    },
+    {
+      "id": "__main__.py#write_manifest-20260313T0909",
+      "type": "prov:Activity",
+      "startedAtTime": "2026-03-13T09:09:10.500521+00:00",
+      "endedAtTime": "2026-03-13T09:09:10.500622+00:00",
+      "wasAssociatedWith": "__main__.py",
+      "used": [
+        "env-20260313T0909"
+      ]
+    }
+  ]
+}

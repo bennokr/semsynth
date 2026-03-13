@@ -1,0 +1,344 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Data Report — Autistic Spectrum Disorder Screening Data for Children  </title>
+  <style>
+  /* Report base styles */
+:root { color-scheme: light; }
+body { margin: 0; font-family: "Inter", "Segoe UI", system-ui, -apple-system, BlinkMacSystemFont, "Helvetica Neue", Arial, sans-serif; background: #f4f7fb; color: #1f2937; line-height: 1.65; }
+main { max-width: 1040px; margin: 0 auto; padding: 3rem 3rem 4rem; background: #ffffff; box-shadow: 0 18px 45px rgba(15, 23, 42, 0.08); border-radius: 18px; }
+h1 { font-size: 2.5rem; margin-top: 0; color: #0f172a; letter-spacing: -0.02em; }
+h2 { margin-top: 2.75rem; padding-bottom: 0.35rem; border-bottom: 1px solid #e2e8f0; color: #1e293b; font-size: 1.6rem; }
+h3 { margin-top: 2.2rem; color: #334155; font-size: 1.25rem; }
+p { margin: 0.85rem 0; }
+ul, ol { margin: 0.75rem 0 0.75rem 1.5rem; padding: 0; }
+li { margin: 0.35rem 0; }
+table { border-collapse: collapse; width: 100%; margin: 1.75rem 0; font-size: 0.95rem; }
+th, td { border: 1px solid #e2e8f0; padding: 0.6rem 0.75rem; text-align: left; vertical-align: top; }
+thead th { background: #f8fafc; text-transform: uppercase; letter-spacing: 0.04em; font-size: 0.75rem; color: #475569; }
+tbody tr:nth-child(odd) { background: #fdfefe; }
+a { color: #2563eb; text-decoration: none; }
+a:hover { text-decoration: underline; }
+code { background: #f1f5f9; padding: 0.15rem 0.4rem; border-radius: 4px; font-size: 0.85em; }
+img { border-radius: 12px; box-shadow: 0 4px 28px rgba(15, 23, 42, 0.12); }
+blockquote { border-left: 4px solid #cbd5f5; margin: 1.5rem 0; padding: 0.75rem 1.25rem; background: #f8fafc; color: #1e293b; }
+table.per-var-dist { margin-top: 2.25rem; }
+table.per-var-dist thead th { text-align: center; }
+
+  </style>
+</head>
+<body>
+  <main class="report-container">
+      <h1>Data Report — Autistic Spectrum Disorder Screening Data for Children</h1>
+    <p><strong>Source</strong>: <a href="https://archive.ics.uci.edu/dataset/419">UCI dataset 419</a></p>
+    <p><strong>SemMap JSON-LD</strong>: <a href="dataset.semmap.json">dataset.semmap.json</a> · <a href="dataset.semmap.html">RDFa HTML</a></p>
+    <h2>Overview</h2>
+    <table>
+    <thead>
+    <tr>
+    <th style="text-align: left;">Metric</th>
+    <th style="text-align: left;">Value</th>
+    </tr>
+    </thead>
+    <tbody>
+    <tr>
+    <td style="text-align: left;">Dataset</td>
+    <td style="text-align: left;">Autistic Spectrum Disorder Screening Data for Children</td>
+    </tr>
+    <tr>
+    <td style="text-align: left;">Source</td>
+    <td style="text-align: left;"><a href="https://archive.ics.uci.edu/dataset/419">UCI dataset 419</a></td>
+    </tr>
+    <tr>
+    <td style="text-align: left;">Rows</td>
+    <td style="text-align: left;">248</td>
+    </tr>
+    <tr>
+    <td style="text-align: left;">Columns</td>
+    <td style="text-align: left;">21</td>
+    </tr>
+    <tr>
+    <td style="text-align: left;">Discrete</td>
+    <td style="text-align: left;">20</td>
+    </tr>
+    <tr>
+    <td style="text-align: left;">Continuous</td>
+    <td style="text-align: left;">1</td>
+    </tr>
+    <tr>
+    <td style="text-align: left;">SemMap</td>
+    <td style="text-align: left;"><a href="dataset.semmap.json">SemMap JSON-LD</a><br /><a href="dataset.semmap.html">SemMap HTML</a></td>
+    </tr>
+    <tr>
+    <td style="text-align: left;">Missingness</td>
+    <td style="text-align: left;">modeled 3 of 21 (seed 42)</td>
+    </tr>
+    </tbody>
+    </table>
+    <h2>Variables and summary</h2>
+    <table>
+    <thead>
+    <tr>
+    <th style="text-align: left;">variable</th>
+    <th style="text-align: left;">inferred</th>
+    <th style="text-align: left;">dist</th>
+    </tr>
+    </thead>
+    <tbody>
+    <tr>
+    <td style="text-align: left;">A1_Score</td>
+    <td style="text-align: left;">discrete</td>
+    <td style="text-align: left;">1: 170 (68.55%)</td>
+    </tr>
+    <tr>
+    <td style="text-align: left;">A2_Score</td>
+    <td style="text-align: left;">discrete</td>
+    <td style="text-align: left;">1: 128 (51.61%)</td>
+    </tr>
+    <tr>
+    <td style="text-align: left;">A3_Score</td>
+    <td style="text-align: left;">discrete</td>
+    <td style="text-align: left;">1: 185 (74.60%)</td>
+    </tr>
+    <tr>
+    <td style="text-align: left;">A4_Score</td>
+    <td style="text-align: left;">discrete</td>
+    <td style="text-align: left;">1: 142 (57.26%)</td>
+    </tr>
+    <tr>
+    <td style="text-align: left;">A5_Score</td>
+    <td style="text-align: left;">discrete</td>
+    <td style="text-align: left;">1: 187 (75.40%)</td>
+    </tr>
+    <tr>
+    <td style="text-align: left;">A6_Score</td>
+    <td style="text-align: left;">discrete</td>
+    <td style="text-align: left;">1: 177 (71.37%)</td>
+    </tr>
+    <tr>
+    <td style="text-align: left;">A7_Score</td>
+    <td style="text-align: left;">discrete</td>
+    <td style="text-align: left;">1: 155 (62.50%)</td>
+    </tr>
+    <tr>
+    <td style="text-align: left;">A8_Score</td>
+    <td style="text-align: left;">discrete</td>
+    <td style="text-align: left;">1: 119 (47.98%)</td>
+    </tr>
+    <tr>
+    <td style="text-align: left;">A9_Score</td>
+    <td style="text-align: left;">discrete</td>
+    <td style="text-align: left;">1: 134 (54.03%)</td>
+    </tr>
+    <tr>
+    <td style="text-align: left;">A10_Score</td>
+    <td style="text-align: left;">discrete</td>
+    <td style="text-align: left;">1: 182 (73.39%)</td>
+    </tr>
+    <tr>
+    <td style="text-align: left;">age</td>
+    <td style="text-align: left;">continuous</td>
+    <td style="text-align: left;">6.4274 ± 2.3864 [4, 4, 6, 8, 11]</td>
+    </tr>
+    <tr>
+    <td style="text-align: left;">gender</td>
+    <td style="text-align: left;">discrete</td>
+    <td style="text-align: left;">m: 174 (70.16%)</td>
+    </tr>
+    <tr>
+    <td style="text-align: left;">ethnicity</td>
+    <td style="text-align: left;">discrete</td>
+    <td style="text-align: left;">White-European: 108 (43.55%)<br />Asian: 46 (18.55%)<br />'Middle Eastern ': 26 (10.48%)<br />'South Asian': 21 (8.47%)<br />Black: 14 (5.65%)<br />Others: 14 (5.65%)<br />Latino: 8 (3.23%)<br />Hispanic: 7 (2.82%)<br />Pasifika: 2 (0.81%)<br />Turkish: 2 (0.81%)</td>
+    </tr>
+    <tr>
+    <td style="text-align: left;">jaundice</td>
+    <td style="text-align: left;">discrete</td>
+    <td style="text-align: left;">yes: 61 (24.60%)</td>
+    </tr>
+    <tr>
+    <td style="text-align: left;">autism</td>
+    <td style="text-align: left;">discrete</td>
+    <td style="text-align: left;">yes: 45 (18.15%)</td>
+    </tr>
+    <tr>
+    <td style="text-align: left;">country_of_res</td>
+    <td style="text-align: left;">discrete</td>
+    <td style="text-align: left;">'United Kingdom': 49 (19.76%)<br />'United States': 42 (16.94%)<br />India: 42 (16.94%)<br />Australia: 23 (9.27%)<br />'New Zealand': 13 (5.24%)<br />Jordan: 9 (3.63%)<br />Canada: 7 (2.82%)<br />Bangladesh: 6 (2.42%)<br />'United Arab Emirates': 5 (2.02%)<br />Philippines: 4 (1.61%)<br />… (+42 more)</td>
+    </tr>
+    <tr>
+    <td style="text-align: left;">used_app_before</td>
+    <td style="text-align: left;">discrete</td>
+    <td style="text-align: left;">yes: 6 (2.42%)</td>
+    </tr>
+    <tr>
+    <td style="text-align: left;">result</td>
+    <td style="text-align: left;">discrete</td>
+    <td style="text-align: left;">8: 37 (14.92%)<br />7: 36 (14.52%)<br />6: 34 (13.71%)<br />9: 32 (12.90%)<br />4: 30 (12.10%)<br />5: 28 (11.29%)<br />10: 21 (8.47%)<br />3: 16 (6.45%)<br />2: 8 (3.23%)<br />1: 5 (2.02%)<br />… (+1 more)</td>
+    </tr>
+    <tr>
+    <td style="text-align: left;">age_desc</td>
+    <td style="text-align: left;">discrete</td>
+    <td style="text-align: left;">'4-11 years': 248 (100.00%)</td>
+    </tr>
+    <tr>
+    <td style="text-align: left;">relation</td>
+    <td style="text-align: left;">discrete</td>
+    <td style="text-align: left;">Parent: 213 (85.89%)<br />Relative: 17 (6.85%)<br />'Health care professional': 13 (5.24%)<br />Self: 4 (1.61%)<br />self: 1 (0.40%)</td>
+    </tr>
+    <tr>
+    <td style="text-align: left;">class</td>
+    <td style="text-align: left;">discrete</td>
+    <td style="text-align: left;">YES: 126 (50.81%)</td>
+    </tr>
+    </tbody>
+    </table>
+    <h2>Missingness model</h2>
+    <ul>
+    <li>Columns with learned missingness: 3 of 21</li>
+    <li>Columns without missingness: 18| Column    |   Missing rate |   Missing % |
+    |:----------|---------------:|------------:|
+    | ethnicity |         0.1473 |       14.73 |
+    | relation  |         0.1473 |       14.73 |
+    | age       |         0.0137 |        1.37 |</li>
+    </ul>
+    <h2>Fidelity summary</h2>
+    <table>
+    <thead>
+    <tr>
+    <th style="text-align: left;">model</th>
+    <th style="text-align: left;">backend</th>
+    <th style="text-align: right;">disc_jsd_mean</th>
+    <th style="text-align: right;">disc_jsd_median</th>
+    <th style="text-align: right;">cont_ks_mean</th>
+    <th style="text-align: right;">cont_w1_mean</th>
+    <th style="text-align: left;">privacy_overlap</th>
+    <th style="text-align: left;">downstream_sign_match</th>
+    </tr>
+    </thead>
+    <tbody>
+    <tr>
+    <td style="text-align: left;">metasyn</td>
+    <td style="text-align: left;">metasyn</td>
+    <td style="text-align: right;">0.1038</td>
+    <td style="text-align: right;">0.0714</td>
+    <td style="text-align: right;">0.28</td>
+    <td style="text-align: right;">0.6037</td>
+    <td style="text-align: left;"></td>
+    <td style="text-align: left;"></td>
+    </tr>
+    <tr>
+    <td style="text-align: left;">clg_mi2</td>
+    <td style="text-align: left;">pybnesian</td>
+    <td style="text-align: right;">0.1018</td>
+    <td style="text-align: right;">0.0576</td>
+    <td style="text-align: right;">0.2759</td>
+    <td style="text-align: right;">0.8696</td>
+    <td style="text-align: left;"></td>
+    <td style="text-align: left;"></td>
+    </tr>
+    <tr>
+    <td style="text-align: left;">semi_mi5</td>
+    <td style="text-align: left;">pybnesian</td>
+    <td style="text-align: right;">0.1018</td>
+    <td style="text-align: right;">0.0576</td>
+    <td style="text-align: right;">0.2759</td>
+    <td style="text-align: right;">0.8696</td>
+    <td style="text-align: left;"></td>
+    <td style="text-align: left;"></td>
+    </tr>
+    <tr>
+    <td style="text-align: left;">ctgan_fast</td>
+    <td style="text-align: left;">synthcity</td>
+    <td style="text-align: right;">0.3058</td>
+    <td style="text-align: right;">0.2503</td>
+    <td style="text-align: right;">0.1834</td>
+    <td style="text-align: right;">0.777</td>
+    <td style="text-align: left;"></td>
+    <td style="text-align: left;"></td>
+    </tr>
+    <tr>
+    <td style="text-align: left;">tvae_quick</td>
+    <td style="text-align: left;">synthcity</td>
+    <td style="text-align: right;">0.1649</td>
+    <td style="text-align: right;">0.1167</td>
+    <td style="text-align: right;">0.131</td>
+    <td style="text-align: right;">0.3644</td>
+    <td style="text-align: left;"></td>
+    <td style="text-align: left;"></td>
+    </tr>
+    </tbody>
+    </table>
+    <h2>Models</h2>
+    <table>
+    <tr><th>UMAP</th><th>Details</th><th>Structure</th></tr>
+    <tr><td></td><td>
+
+    <h3>Model: metasyn (metasyn)</h3>
+    <ul>
+    <li>Seed: 42, rows: 292</li>
+    <li> <a href="models/metasyn/synthetic.csv">Synthetic CSV</a></li>
+    <li> <a href="models/metasyn/per_variable_metrics.csv">Per-variable metrics</a></li>
+    <li> <a href="models/metasyn/metrics.json">Metrics JSON</a></li>
+    </ul>
+
+    </td><td>
+    </td></tr>
+
+    <tr><td></td><td>
+
+    <h3>Model: clg_mi2 (pybnesian)</h3>
+    <ul>
+    <li>Seed: 42, rows: 292</li>
+    <li> Params: <tt>{"max_indegree": 2, "operators": ["arcs"], "score": "bic", "type": "clg"}</tt></li><li> <a href="models/clg_mi2/synthetic.csv">Synthetic CSV</a></li>
+    <li> <a href="models/clg_mi2/per_variable_metrics.csv">Per-variable metrics</a></li>
+    <li> <a href="models/clg_mi2/metrics.json">Metrics JSON</a></li>
+    </ul>
+
+    </td><td>
+    </td></tr>
+
+    <tr><td></td><td>
+
+    <h3>Model: semi_mi5 (pybnesian)</h3>
+    <ul>
+    <li>Seed: 42, rows: 292</li>
+    <li> Params: <tt>{"max_indegree": 5, "operators": ["arcs"], "score": "bic", "type": "semiparametric"}</tt></li><li> <a href="models/semi_mi5/synthetic.csv">Synthetic CSV</a></li>
+    <li> <a href="models/semi_mi5/per_variable_metrics.csv">Per-variable metrics</a></li>
+    <li> <a href="models/semi_mi5/metrics.json">Metrics JSON</a></li>
+    </ul>
+
+    </td><td>
+    </td></tr>
+
+    <tr><td></td><td>
+
+    <h3>Model: ctgan_fast (synthcity)</h3>
+    <ul>
+    <li>Seed: 42, rows: 292</li>
+    <li> Params: <tt>{"batch_size": 256, "n_iter": 5}</tt></li><li> <a href="models/ctgan_fast/synthetic.csv">Synthetic CSV</a></li>
+    <li> <a href="models/ctgan_fast/per_variable_metrics.csv">Per-variable metrics</a></li>
+    <li> <a href="models/ctgan_fast/metrics.json">Metrics JSON</a></li>
+    </ul>
+
+    </td><td>
+    </td></tr>
+
+    <tr><td></td><td>
+
+    <h3>Model: tvae_quick (synthcity)</h3>
+    <ul>
+    <li>Seed: 42, rows: 292</li>
+    <li> Params: <tt>{"batch_size": 256}</tt></li><li> <a href="models/tvae_quick/synthetic.csv">Synthetic CSV</a></li>
+    <li> <a href="models/tvae_quick/per_variable_metrics.csv">Per-variable metrics</a></li>
+    <li> <a href="models/tvae_quick/metrics.json">Metrics JSON</a></li>
+    </ul>
+
+    </td><td>
+    </td></tr>
+
+    </table>
+  </main>
+</body>
+</html>

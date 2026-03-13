@@ -1,10 +1,10 @@
 {
   "backend": "synthcity",
   "summary": {
-    "disc_jsd_mean": 0.20042351713714265,
-    "disc_jsd_median": 0.16650049966671923,
-    "cont_ks_mean": 0.8093333333333333,
-    "cont_w1_mean": 7.199828609040104
+    "disc_jsd_mean": 0.2383113205816949,
+    "disc_jsd_median": 0.21508839466197774,
+    "cont_ks_mean": 0.8226666666666667,
+    "cont_w1_mean": 6.101330342672753
   },
   "train_rows": 800,
   "test_rows": 200,

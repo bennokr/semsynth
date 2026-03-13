@@ -10,6 +10,7 @@ from pathlib import Path
 from typing import Any, Dict, FrozenSet, Iterable, List, Mapping, Optional, Sequence, Tuple
 
 from semsynth.semmap import Column, Metadata
+from semsynth.utils import get_column_name
 
 logger = logging.getLogger(__name__)
 
@@ -170,8 +171,8 @@ def _parse_columns_direct(data: Mapping[str, Any]) -> Tuple[List[ColumnInfo], Da
             )
         columns.append(
             ColumnInfo(
-                column_id=_coerce_optional_str(raw_col.get("schema:identifier") or raw_col.get("identifier") or raw_col.get("schema:name") or raw_col.get("name") or raw_col.get("dcterms:title")),
-                name=_coerce_optional_str(raw_col.get("schema:name") or raw_col.get("name") or raw_col.get("dcterms:title") or raw_col.get("schema:identifier") or raw_col.get("identifier")),
+                column_id=get_column_name(raw_col),
+                name=get_column_name(raw_col),
                 description=_coerce_optional_str(raw_col.get("dcterms:description") or raw_col.get("description")),
                 about=_coerce_optional_str(raw_col.get("schema:about") or raw_col.get("about")),
                 unit=_coerce_optional_str(raw_col.get("schema:unitText") or raw_col.get("unitText")),

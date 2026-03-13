@@ -32,6 +32,8 @@ table.per-var-dist thead th { text-align: center; }
 <body>
   <main class="report-container">
       <h1>Data Report — Hepatitis</h1>
+    <p><strong>Source</strong>: <a href="https://archive.ics.uci.edu/dataset/46">UCI dataset 46</a></p>
+    <p><strong>SemMap JSON-LD</strong>: <a href="dataset.semmap.json">dataset.semmap.json</a> · <a href="dataset.semmap.html">RDFa HTML</a></p>
     <h2>Overview</h2>
     <table>
     <thead>
@@ -71,7 +73,7 @@ table.per-var-dist thead th { text-align: center; }
     </tr>
     <tr>
     <td style="text-align: left;">Missingness</td>
-    <td style="text-align: left;">Not modeled</td>
+    <td style="text-align: left;">modeled 15 of 20 (seed 42)</td>
     </tr>
     </tbody>
     </table>
@@ -93,62 +95,62 @@ table.per-var-dist thead th { text-align: center; }
     <tr>
     <td style="text-align: left;">Sex</td>
     <td style="text-align: left;">discrete</td>
-    <td style="text-align: left;">69 (86.25%)</td>
+    <td style="text-align: left;">1: 69 (86.25%)</td>
     </tr>
     <tr>
     <td style="text-align: left;">Steroid</td>
     <td style="text-align: left;">discrete</td>
-    <td style="text-align: left;">38 (47.50%)</td>
+    <td style="text-align: left;">1: 38 (47.50%)</td>
     </tr>
     <tr>
     <td style="text-align: left;">Antivirals</td>
     <td style="text-align: left;">discrete</td>
-    <td style="text-align: left;">21 (26.25%)</td>
+    <td style="text-align: left;">1: 21 (26.25%)</td>
     </tr>
     <tr>
     <td style="text-align: left;">Fatigue</td>
     <td style="text-align: left;">discrete</td>
-    <td style="text-align: left;">52 (65.00%)</td>
+    <td style="text-align: left;">1: 52 (65.00%)</td>
     </tr>
     <tr>
     <td style="text-align: left;">Malaise</td>
     <td style="text-align: left;">discrete</td>
-    <td style="text-align: left;">31 (38.75%)</td>
+    <td style="text-align: left;">1: 31 (38.75%)</td>
     </tr>
     <tr>
     <td style="text-align: left;">Anorexia</td>
     <td style="text-align: left;">discrete</td>
-    <td style="text-align: left;">12 (15.00%)</td>
+    <td style="text-align: left;">1: 12 (15.00%)</td>
     </tr>
     <tr>
     <td style="text-align: left;">Liver Big</td>
     <td style="text-align: left;">discrete</td>
-    <td style="text-align: left;">13 (16.25%)</td>
+    <td style="text-align: left;">1: 13 (16.25%)</td>
     </tr>
     <tr>
     <td style="text-align: left;">Liver Firm</td>
     <td style="text-align: left;">discrete</td>
-    <td style="text-align: left;">38 (47.50%)</td>
+    <td style="text-align: left;">1: 38 (47.50%)</td>
     </tr>
     <tr>
     <td style="text-align: left;">Spleen Palpable</td>
     <td style="text-align: left;">discrete</td>
-    <td style="text-align: left;">15 (18.75%)</td>
+    <td style="text-align: left;">1: 15 (18.75%)</td>
     </tr>
     <tr>
     <td style="text-align: left;">Spiders</td>
     <td style="text-align: left;">discrete</td>
-    <td style="text-align: left;">25 (31.25%)</td>
+    <td style="text-align: left;">1: 25 (31.25%)</td>
     </tr>
     <tr>
     <td style="text-align: left;">Ascites</td>
     <td style="text-align: left;">discrete</td>
-    <td style="text-align: left;">12 (15.00%)</td>
+    <td style="text-align: left;">1: 12 (15.00%)</td>
     </tr>
     <tr>
     <td style="text-align: left;">Varices</td>
     <td style="text-align: left;">discrete</td>
-    <td style="text-align: left;">10 (12.50%)</td>
+    <td style="text-align: left;">1: 10 (12.50%)</td>
     </tr>
     <tr>
     <td style="text-align: left;">Bilirubin</td>
@@ -178,15 +180,36 @@ table.per-var-dist thead th { text-align: center; }
     <tr>
     <td style="text-align: left;">Histology</td>
     <td style="text-align: left;">discrete</td>
-    <td style="text-align: left;">47 (58.75%)</td>
+    <td style="text-align: left;">1: 47 (58.75%)</td>
     </tr>
     <tr>
     <td style="text-align: left;">Class</td>
     <td style="text-align: left;">discrete</td>
-    <td style="text-align: left;">13 (16.25%)</td>
+    <td style="text-align: left;">1: 13 (16.25%)</td>
     </tr>
     </tbody>
     </table>
+    <h2>Missingness model</h2>
+    <ul>
+    <li>Columns with learned missingness: 15 of 20</li>
+    <li>Columns without missingness: 5| Column          |   Missing rate |   Missing % |
+    |:----------------|---------------:|------------:|
+    | Protime         |         0.4323 |       43.23 |
+    | Alk Phosphate   |         0.1871 |       18.71 |
+    | Albumin         |         0.1032 |       10.32 |
+    | Liver Firm      |         0.071  |        7.1  |
+    | Liver Big       |         0.0645 |        6.45 |
+    | Bilirubin       |         0.0387 |        3.87 |
+    | Ascites         |         0.0323 |        3.23 |
+    | Varices         |         0.0323 |        3.23 |
+    | Spiders         |         0.0323 |        3.23 |
+    | Spleen Palpable |         0.0323 |        3.23 |
+    | Sgot            |         0.0258 |        2.58 |
+    | Fatigue         |         0.0065 |        0.65 |
+    | Anorexia        |         0.0065 |        0.65 |
+    | Malaise         |         0.0065 |        0.65 |
+    | Steroid         |         0.0065 |        0.65 |</li>
+    </ul>
     <h2>Fidelity summary</h2>
     <table>
     <thead>
@@ -195,8 +218,8 @@ table.per-var-dist thead th { text-align: center; }
     <th style="text-align: left;">backend</th>
     <th style="text-align: right;">disc_jsd_mean</th>
     <th style="text-align: right;">disc_jsd_median</th>
-    <th style="text-align: right;">cont_ks_mean</th>
-    <th style="text-align: right;">cont_w1_mean</th>
+    <th style="text-align: left;">cont_ks_mean</th>
+    <th style="text-align: left;">cont_w1_mean</th>
     <th style="text-align: right;">privacy_overlap</th>
     <th style="text-align: right;">downstream_sign_match</th>
     </tr>
@@ -205,32 +228,52 @@ table.per-var-dist thead th { text-align: center; }
     <tr>
     <td style="text-align: left;">metasyn</td>
     <td style="text-align: left;">metasyn</td>
-    <td style="text-align: right;">0.1351</td>
-    <td style="text-align: right;">0.1056</td>
-    <td style="text-align: right;">0.2181</td>
-    <td style="text-align: right;">9.9006</td>
-    <td style="text-align: right;">0</td>
-    <td style="text-align: right;">0.2414</td>
+    <td style="text-align: right;"></td>
+    <td style="text-align: right;"></td>
+    <td style="text-align: left;"></td>
+    <td style="text-align: left;"></td>
+    <td style="text-align: right;"></td>
+    <td style="text-align: right;"></td>
     </tr>
     <tr>
     <td style="text-align: left;">clg_mi2</td>
     <td style="text-align: left;">pybnesian</td>
-    <td style="text-align: right;">0.1287</td>
-    <td style="text-align: right;">0.1415</td>
-    <td style="text-align: right;">0.2147</td>
-    <td style="text-align: right;">9.5402</td>
+    <td style="text-align: right;">0.0805</td>
+    <td style="text-align: right;">0.0329</td>
+    <td style="text-align: left;"></td>
+    <td style="text-align: left;"></td>
     <td style="text-align: right;">0</td>
     <td style="text-align: right;">0.2931</td>
     </tr>
     <tr>
     <td style="text-align: left;">semi_mi5</td>
     <td style="text-align: left;">pybnesian</td>
-    <td style="text-align: right;">0.1336</td>
-    <td style="text-align: right;">0.1378</td>
-    <td style="text-align: right;">0.2009</td>
-    <td style="text-align: right;">10.8894</td>
+    <td style="text-align: right;">0.0805</td>
+    <td style="text-align: right;">0.0329</td>
+    <td style="text-align: left;"></td>
+    <td style="text-align: left;"></td>
     <td style="text-align: right;">0</td>
     <td style="text-align: right;">0.3103</td>
+    </tr>
+    <tr>
+    <td style="text-align: left;">ctgan_fast</td>
+    <td style="text-align: left;">synthcity</td>
+    <td style="text-align: right;"></td>
+    <td style="text-align: right;"></td>
+    <td style="text-align: left;"></td>
+    <td style="text-align: left;"></td>
+    <td style="text-align: right;"></td>
+    <td style="text-align: right;"></td>
+    </tr>
+    <tr>
+    <td style="text-align: left;">tvae_quick</td>
+    <td style="text-align: left;">synthcity</td>
+    <td style="text-align: right;"></td>
+    <td style="text-align: right;"></td>
+    <td style="text-align: left;"></td>
+    <td style="text-align: left;"></td>
+    <td style="text-align: right;"></td>
+    <td style="text-align: right;"></td>
     </tr>
     </tbody>
     </table>
@@ -242,11 +285,6 @@ table.per-var-dist thead th { text-align: center; }
     <h3>Model: metasyn (metasyn)</h3>
     <ul>
     <li>Seed: 42, rows: 155</li>
-    <li> <a href="models/metasyn/synthetic.csv">Synthetic CSV</a></li>
-    <li> <a href="models/metasyn/per_variable_metrics.csv">Per-variable metrics</a></li>
-    <li> <a href="models/metasyn/metrics.json">Metrics JSON</a></li>
-    <li> <a href="models/metasyn/metrics.privacy.json">Privacy metrics</a></li>
-    <li> <a href="models/metasyn/metrics.downstream.json">Downstream metrics</a></li>
     </ul>
 
     </td><td>
@@ -281,6 +319,26 @@ table.per-var-dist thead th { text-align: center; }
 
     </td><td>
     <a href='models/semi_mi5/structure.png'><img src='models/semi_mi5/structure.png' width='280'/></a></td></tr>
+
+    <tr><td></td><td>
+
+    <h3>Model: ctgan_fast (synthcity)</h3>
+    <ul>
+    <li>Seed: 42, rows: 155</li>
+    <li> Params: <tt>{"batch_size": 256, "n_iter": 5}</tt></li></ul>
+
+    </td><td>
+    </td></tr>
+
+    <tr><td></td><td>
+
+    <h3>Model: tvae_quick (synthcity)</h3>
+    <ul>
+    <li>Seed: 42, rows: 155</li>
+    <li> Params: <tt>{"batch_size": 256}</tt></li></ul>
+
+    </td><td>
+    </td></tr>
 
     </table>
   </main>

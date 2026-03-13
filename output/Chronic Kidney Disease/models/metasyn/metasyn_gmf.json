@@ -1,0 +1,668 @@
+{
+    "gmf_version": "1.1",
+    "n_rows": 320,
+    "n_columns": 25,
+    "provenance": {
+        "created by": {
+            "name": "metasyn",
+            "version": "2.0.0"
+        },
+        "creation time": "2026-03-13T07:42:36.365745"
+    },
+    "vars": [
+        {
+            "name": "age",
+            "type": "categorical",
+            "dtype": "Categorical",
+            "prop_missing": 1.0,
+            "distribution": {
+                "name": "core.na",
+                "version": "1.0",
+                "class_name": "NADistribution",
+                "unique": false,
+                "parameters": {}
+            },
+            "creation_method": {
+                "created_by": "metasyn"
+            }
+        },
+        {
+            "name": "bp",
+            "type": "categorical",
+            "dtype": "Categorical",
+            "prop_missing": 1.0,
+            "distribution": {
+                "name": "core.na",
+                "version": "1.0",
+                "class_name": "NADistribution",
+                "unique": false,
+                "parameters": {}
+            },
+            "creation_method": {
+                "created_by": "metasyn"
+            }
+        },
+        {
+            "name": "sg",
+            "type": "continuous",
+            "dtype": "Float64",
+            "prop_missing": 0.0,
+            "distribution": {
+                "name": "core.truncated_normal",
+                "version": "1.0",
+                "class_name": "ContinuousTruncatedNormalDistribution",
+                "unique": false,
+                "parameters": {
+                    "lower": 1.00499999,
+                    "upper": 1.0250000099999999,
+                    "mean": 2.137260425627021,
+                    "sd": 0.1250718249301394
+                }
+            },
+            "creation_method": {
+                "created_by": "metasyn",
+                "fitter": {
+                    "name": "ContinuousTruncatedNormalFitter",
+                    "privacy": {
+                        "name": "none",
+                        "parameters": {}
+                    },
+                    "version": "1.0",
+                    "plugin": "builtin",
+                    "plugin_version": "2.0.0"
+                }
+            }
+        },
+        {
+            "name": "al",
+            "type": "categorical",
+            "dtype": "Categorical",
+            "prop_missing": 1.0,
+            "distribution": {
+                "name": "core.na",
+                "version": "1.0",
+                "class_name": "NADistribution",
+                "unique": false,
+                "parameters": {}
+            },
+            "creation_method": {
+                "created_by": "metasyn"
+            }
+        },
+        {
+            "name": "su",
+            "type": "categorical",
+            "dtype": "Categorical",
+            "prop_missing": 1.0,
+            "distribution": {
+                "name": "core.na",
+                "version": "1.0",
+                "class_name": "NADistribution",
+                "unique": false,
+                "parameters": {}
+            },
+            "creation_method": {
+                "created_by": "metasyn"
+            }
+        },
+        {
+            "name": "rbc",
+            "type": "categorical",
+            "dtype": "Categorical",
+            "prop_missing": 0.0,
+            "distribution": {
+                "name": "core.multinoulli",
+                "version": "1.0",
+                "class_name": "MultinoulliDistribution",
+                "unique": false,
+                "parameters": {
+                    "labels": [
+                        "abnormal",
+                        "normal"
+                    ],
+                    "probs": [
+                        0.259375,
+                        0.740625
+                    ]
+                }
+            },
+            "creation_method": {
+                "created_by": "metasyn",
+                "fitter": {
+                    "name": "MultinoulliFitter",
+                    "privacy": {
+                        "name": "none",
+                        "parameters": {}
+                    },
+                    "version": "1.0",
+                    "plugin": "builtin",
+                    "plugin_version": "2.0.0"
+                }
+            }
+        },
+        {
+            "name": "pc",
+            "type": "categorical",
+            "dtype": "Categorical",
+            "prop_missing": 0.0,
+            "distribution": {
+                "name": "core.multinoulli",
+                "version": "1.0",
+                "class_name": "MultinoulliDistribution",
+                "unique": false,
+                "parameters": {
+                    "labels": [
+                        "abnormal",
+                        "normal"
+                    ],
+                    "probs": [
+                        0.21875,
+                        0.78125
+                    ]
+                }
+            },
+            "creation_method": {
+                "created_by": "metasyn",
+                "fitter": {
+                    "name": "MultinoulliFitter",
+                    "privacy": {
+                        "name": "none",
+                        "parameters": {}
+                    },
+                    "version": "1.0",
+                    "plugin": "builtin",
+                    "plugin_version": "2.0.0"
+                }
+            }
+        },
+        {
+            "name": "pcc",
+            "type": "categorical",
+            "dtype": "Categorical",
+            "prop_missing": 0.0,
+            "distribution": {
+                "name": "core.multinoulli",
+                "version": "1.0",
+                "class_name": "MultinoulliDistribution",
+                "unique": false,
+                "parameters": {
+                    "labels": [
+                        "notpresent",
+                        "present"
+                    ],
+                    "probs": [
+                        0.903125,
+                        0.096875
+                    ]
+                }
+            },
+            "creation_method": {
+                "created_by": "metasyn",
+                "fitter": {
+                    "name": "MultinoulliFitter",
+                    "privacy": {
+                        "name": "none",
+                        "parameters": {}
+                    },
+                    "version": "1.0",
+                    "plugin": "builtin",
+                    "plugin_version": "2.0.0"
+                }
+            }
+        },
+        {
+            "name": "ba",
+            "type": "categorical",
+            "dtype": "Categorical",
+            "prop_missing": 0.0,
+            "distribution": {
+                "name": "core.multinoulli",
+                "version": "1.0",
+                "class_name": "MultinoulliDistribution",
+                "unique": false,
+                "parameters": {
+                    "labels": [
+                        "notpresent",
+                        "present"
+                    ],
+                    "probs": [
+                        0.94375,
+                        0.05625
+                    ]
+                }
+            },
+            "creation_method": {
+                "created_by": "metasyn",
+                "fitter": {
+                    "name": "MultinoulliFitter",
+                    "privacy": {
+                        "name": "none",
+                        "parameters": {}
+                    },
+                    "version": "1.0",
+                    "plugin": "builtin",
+                    "plugin_version": "2.0.0"
+                }
+            }
+        },
+        {
+            "name": "bgr",
+            "type": "categorical",
+            "dtype": "Categorical",
+            "prop_missing": 1.0,
+            "distribution": {
+                "name": "core.na",
+                "version": "1.0",
+                "class_name": "NADistribution",
+                "unique": false,
+                "parameters": {}
+            },
+            "creation_method": {
+                "created_by": "metasyn"
+            }
+        },
+        {
+            "name": "bu",
+            "type": "categorical",
+            "dtype": "Categorical",
+            "prop_missing": 1.0,
+            "distribution": {
+                "name": "core.na",
+                "version": "1.0",
+                "class_name": "NADistribution",
+                "unique": false,
+                "parameters": {}
+            },
+            "creation_method": {
+                "created_by": "metasyn"
+            }
+        },
+        {
+            "name": "sc",
+            "type": "categorical",
+            "dtype": "Categorical",
+            "prop_missing": 1.0,
+            "distribution": {
+                "name": "core.na",
+                "version": "1.0",
+                "class_name": "NADistribution",
+                "unique": false,
+                "parameters": {}
+            },
+            "creation_method": {
+                "created_by": "metasyn"
+            }
+        },
+        {
+            "name": "sod",
+            "type": "categorical",
+            "dtype": "Categorical",
+            "prop_missing": 1.0,
+            "distribution": {
+                "name": "core.na",
+                "version": "1.0",
+                "class_name": "NADistribution",
+                "unique": false,
+                "parameters": {}
+            },
+            "creation_method": {
+                "created_by": "metasyn"
+            }
+        },
+        {
+            "name": "pot",
+            "type": "categorical",
+            "dtype": "Categorical",
+            "prop_missing": 1.0,
+            "distribution": {
+                "name": "core.na",
+                "version": "1.0",
+                "class_name": "NADistribution",
+                "unique": false,
+                "parameters": {}
+            },
+            "creation_method": {
+                "created_by": "metasyn"
+            }
+        },
+        {
+            "name": "hemo",
+            "type": "categorical",
+            "dtype": "Categorical",
+            "prop_missing": 1.0,
+            "distribution": {
+                "name": "core.na",
+                "version": "1.0",
+                "class_name": "NADistribution",
+                "unique": false,
+                "parameters": {}
+            },
+            "creation_method": {
+                "created_by": "metasyn"
+            }
+        },
+        {
+            "name": "pcv",
+            "type": "categorical",
+            "dtype": "Categorical",
+            "prop_missing": 1.0,
+            "distribution": {
+                "name": "core.na",
+                "version": "1.0",
+                "class_name": "NADistribution",
+                "unique": false,
+                "parameters": {}
+            },
+            "creation_method": {
+                "created_by": "metasyn"
+            }
+        },
+        {
+            "name": "wbcc",
+            "type": "continuous",
+            "dtype": "Float64",
+            "prop_missing": 0.0,
+            "distribution": {
+                "name": "core.lognormal",
+                "version": "1.0",
+                "class_name": "LogNormalDistribution",
+                "unique": false,
+                "parameters": {
+                    "mean": 8.979508123344948,
+                    "sd": 0.3456006755059324
+                }
+            },
+            "creation_method": {
+                "created_by": "metasyn",
+                "fitter": {
+                    "name": "LogNormalFitter",
+                    "privacy": {
+                        "name": "none",
+                        "parameters": {}
+                    },
+                    "version": "1.0",
+                    "plugin": "builtin",
+                    "plugin_version": "2.0.0"
+                }
+            }
+        },
+        {
+            "name": "rbcc",
+            "type": "continuous",
+            "dtype": "Float64",
+            "prop_missing": 0.0,
+            "distribution": {
+                "name": "core.normal",
+                "version": "1.0",
+                "class_name": "ContinuousNormalDistribution",
+                "unique": false,
+                "parameters": {
+                    "mean": 4.4868749999999995,
+                    "sd": 0.9994136953109058
+                }
+            },
+            "creation_method": {
+                "created_by": "metasyn",
+                "fitter": {
+                    "name": "ContinuousNormalFitter",
+                    "privacy": {
+                        "name": "none",
+                        "parameters": {}
+                    },
+                    "version": "1.0",
+                    "plugin": "builtin",
+                    "plugin_version": "2.0.0"
+                }
+            }
+        },
+        {
+            "name": "htn",
+            "type": "categorical",
+            "dtype": "Categorical",
+            "prop_missing": 0.0,
+            "distribution": {
+                "name": "core.multinoulli",
+                "version": "1.0",
+                "class_name": "MultinoulliDistribution",
+                "unique": false,
+                "parameters": {
+                    "labels": [
+                        "no",
+                        "yes"
+                    ],
+                    "probs": [
+                        0.65,
+                        0.35
+                    ]
+                }
+            },
+            "creation_method": {
+                "created_by": "metasyn",
+                "fitter": {
+                    "name": "MultinoulliFitter",
+                    "privacy": {
+                        "name": "none",
+                        "parameters": {}
+                    },
+                    "version": "1.0",
+                    "plugin": "builtin",
+                    "plugin_version": "2.0.0"
+                }
+            }
+        },
+        {
+            "name": "dm",
+            "type": "categorical",
+            "dtype": "Categorical",
+            "prop_missing": 0.0,
+            "distribution": {
+                "name": "core.multinoulli",
+                "version": "1.0",
+                "class_name": "MultinoulliDistribution",
+                "unique": false,
+                "parameters": {
+                    "labels": [
+                        "\tno",
+                        "no",
+                        "yes"
+                    ],
+                    "probs": [
+                        0.003125,
+                        0.653125,
+                        0.34375
+                    ]
+                }
+            },
+            "creation_method": {
+                "created_by": "metasyn",
+                "fitter": {
+                    "name": "MultinoulliFitter",
+                    "privacy": {
+                        "name": "none",
+                        "parameters": {}
+                    },
+                    "version": "1.0",
+                    "plugin": "builtin",
+                    "plugin_version": "2.0.0"
+                }
+            }
+        },
+        {
+            "name": "cad",
+            "type": "categorical",
+            "dtype": "Categorical",
+            "prop_missing": 0.0,
+            "distribution": {
+                "name": "core.multinoulli",
+                "version": "1.0",
+                "class_name": "MultinoulliDistribution",
+                "unique": false,
+                "parameters": {
+                    "labels": [
+                        "no",
+                        "yes"
+                    ],
+                    "probs": [
+                        0.915625,
+                        0.084375
+                    ]
+                }
+            },
+            "creation_method": {
+                "created_by": "metasyn",
+                "fitter": {
+                    "name": "MultinoulliFitter",
+                    "privacy": {
+                        "name": "none",
+                        "parameters": {}
+                    },
+                    "version": "1.0",
+                    "plugin": "builtin",
+                    "plugin_version": "2.0.0"
+                }
+            }
+        },
+        {
+            "name": "appet",
+            "type": "categorical",
+            "dtype": "Categorical",
+            "prop_missing": 0.0,
+            "distribution": {
+                "name": "core.multinoulli",
+                "version": "1.0",
+                "class_name": "MultinoulliDistribution",
+                "unique": false,
+                "parameters": {
+                    "labels": [
+                        "good",
+                        "poor"
+                    ],
+                    "probs": [
+                        0.7875,
+                        0.2125
+                    ]
+                }
+            },
+            "creation_method": {
+                "created_by": "metasyn",
+                "fitter": {
+                    "name": "MultinoulliFitter",
+                    "privacy": {
+                        "name": "none",
+                        "parameters": {}
+                    },
+                    "version": "1.0",
+                    "plugin": "builtin",
+                    "plugin_version": "2.0.0"
+                }
+            }
+        },
+        {
+            "name": "pe",
+            "type": "categorical",
+            "dtype": "Categorical",
+            "prop_missing": 0.0,
+            "distribution": {
+                "name": "core.multinoulli",
+                "version": "1.0",
+                "class_name": "MultinoulliDistribution",
+                "unique": false,
+                "parameters": {
+                    "labels": [
+                        "no",
+                        "yes"
+                    ],
+                    "probs": [
+                        0.81875,
+                        0.18125
+                    ]
+                }
+            },
+            "creation_method": {
+                "created_by": "metasyn",
+                "fitter": {
+                    "name": "MultinoulliFitter",
+                    "privacy": {
+                        "name": "none",
+                        "parameters": {}
+                    },
+                    "version": "1.0",
+                    "plugin": "builtin",
+                    "plugin_version": "2.0.0"
+                }
+            }
+        },
+        {
+            "name": "ane",
+            "type": "categorical",
+            "dtype": "Categorical",
+            "prop_missing": 0.0,
+            "distribution": {
+                "name": "core.multinoulli",
+                "version": "1.0",
+                "class_name": "MultinoulliDistribution",
+                "unique": false,
+                "parameters": {
+                    "labels": [
+                        "no",
+                        "yes"
+                    ],
+                    "probs": [
+                        0.85625,
+                        0.14375
+                    ]
+                }
+            },
+            "creation_method": {
+                "created_by": "metasyn",
+                "fitter": {
+                    "name": "MultinoulliFitter",
+                    "privacy": {
+                        "name": "none",
+                        "parameters": {}
+                    },
+                    "version": "1.0",
+                    "plugin": "builtin",
+                    "plugin_version": "2.0.0"
+                }
+            }
+        },
+        {
+            "name": "class",
+            "type": "categorical",
+            "dtype": "Categorical",
+            "prop_missing": 0.0,
+            "distribution": {
+                "name": "core.multinoulli",
+                "version": "1.0",
+                "class_name": "MultinoulliDistribution",
+                "unique": false,
+                "parameters": {
+                    "labels": [
+                        "ckd",
+                        "ckd\t",
+                        "notckd"
+                    ],
+                    "probs": [
+                        0.6125,
+                        0.00625,
+                        0.38125
+                    ]
+                }
+            },
+            "creation_method": {
+                "created_by": "metasyn",
+                "fitter": {
+                    "name": "MultinoulliFitter",
+                    "privacy": {
+                        "name": "none",
+                        "parameters": {}
+                    },
+                    "version": "1.0",
+                    "plugin": "builtin",
+                    "plugin_version": "2.0.0"
+                }
+            }
+        }
+    ]
+}

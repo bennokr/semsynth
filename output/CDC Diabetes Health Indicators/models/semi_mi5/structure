@@ -1,0 +1,52 @@
+// CDC Diabetes Health Indicators — semi_mi5 BN
+digraph {
+	rankdir=LR
+	Age [label=Age fillcolor="#f3d19c" shape=box style=filled]
+	Sex [label=Sex fillcolor="#f3d19c" shape=box style=filled]
+	MentHlth [label=MentHlth fillcolor="#9cc9f3" shape=ellipse style=filled]
+	DiffWalk [label=DiffWalk fillcolor="#f3d19c" shape=box style=filled]
+	GenHlth [label=GenHlth fillcolor="#f3d19c" shape=box style=filled]
+	HighBP [label=HighBP fillcolor="#f3d19c" shape=box style=filled]
+	Stroke [label=Stroke fillcolor="#f3d19c" shape=box style=filled]
+	Education [label=Education fillcolor="#f3d19c" shape=box style=filled]
+	HeartDiseaseorAttack [label=HeartDiseaseorAttack fillcolor="#f3d19c" shape=box style=filled]
+	Veggies [label=Veggies fillcolor="#f3d19c" shape=box style=filled]
+	Diabetes_binary [label=Diabetes_binary fillcolor="#f3d19c" shape=box style=filled]
+	PhysHlth [label=PhysHlth fillcolor="#9cc9f3" shape=ellipse style=filled]
+	HighChol [label=HighChol fillcolor="#f3d19c" shape=box style=filled]
+	CholCheck [label=CholCheck fillcolor="#f3d19c" shape=box style=filled]
+	Income [label=Income fillcolor="#f3d19c" shape=box style=filled]
+	BMI [label=BMI fillcolor="#9cc9f3" shape=ellipse style=filled]
+	Smoker [label=Smoker fillcolor="#f3d19c" shape=box style=filled]
+	PhysActivity [label=PhysActivity fillcolor="#f3d19c" shape=box style=filled]
+	NoDocbcCost [label=NoDocbcCost fillcolor="#f3d19c" shape=box style=filled]
+	Fruits [label=Fruits fillcolor="#f3d19c" shape=box style=filled]
+	HvyAlcoholConsump [label=HvyAlcoholConsump fillcolor="#f3d19c" shape=box style=filled]
+	AnyHealthcare [label=AnyHealthcare fillcolor="#f3d19c" shape=box style=filled]
+	Veggies -> Fruits
+	Sex -> HeartDiseaseorAttack
+	Diabetes_binary -> HighChol
+	PhysActivity -> Veggies
+	DiffWalk -> NoDocbcCost
+	NoDocbcCost -> AnyHealthcare
+	HighChol -> MentHlth
+	Sex -> MentHlth
+	HeartDiseaseorAttack -> Stroke
+	HighChol -> CholCheck
+	GenHlth -> PhysHlth
+	PhysActivity -> Education
+	DiffWalk -> HeartDiseaseorAttack
+	GenHlth -> MentHlth
+	Diabetes_binary -> BMI
+	HeartDiseaseorAttack -> Smoker
+	DiffWalk -> BMI
+	Smoker -> PhysHlth
+	HighBP -> HighChol
+	Income -> DiffWalk
+	HighBP -> Diabetes_binary
+	DiffWalk -> GenHlth
+	GenHlth -> HighBP
+	HighBP -> HeartDiseaseorAttack
+	GenHlth -> PhysActivity
+	PhysHlth -> MentHlth
+}

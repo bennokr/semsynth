@@ -79,6 +79,7 @@ def report(
     overwrite_umap: bool = False,
     compute_privacy: bool = False,
     compute_downstream: bool = False,
+    enable_missingness_wrapping: bool = False,
 ) -> None:
     """Run the report pipeline on a collection of datasets.
 
@@ -94,6 +95,7 @@ def report(
         overwrite_umap: Whether to regenerate synthetic UMAP plots when files exist.
         compute_privacy: Whether to compute privacy metrics for each model run.
         compute_downstream: Whether to compute downstream fidelity metrics.
+        enable_missingness_wrapping: Whether to model and inject realistic missingness.
     """
     from .datasets import DatasetSpec, load_dataset, specs_from_input
     from .models import ModelConfigBundle, load_model_configs
@@ -109,14 +111,17 @@ def report(
     dataset_specs: List[DatasetSpec]
     dataset_specs = specs_from_input(provider=provider, datasets=datasets, area=area)
 
-    bundle: ModelConfigBundle 
+    bundle: ModelConfigBundle
     bundle = load_model_configs(configs_yaml.strip() or None)
 
     cfg = PipelineConfig()
-    cfg.generate_umap = generate_umap
-    cfg.compute_privacy = compute_privacy
-    cfg.compute_downstream = compute_downstream
+    cfg.generate_umap = generate_umap or (bundle.generate_umap is True)
+    cfg.compute_privacy = compute_privacy or (bundle.compute_privacy is True)
+    cfg.compute_downstream = compute_downstream or (bundle.compute_downstream is True)
     cfg.overwrite_umap = overwrite_umap
+    cfg.enable_missingness_wrapping = enable_missingness_wrapping or (
+        getattr(bundle, "enable_missingness_wrapping", None) is True
+    )
 
     failures: List[str] = []
     for dataset_spec in dataset_specs:

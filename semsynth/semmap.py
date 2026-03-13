@@ -1,6 +1,7 @@
 from __future__ import annotations
 import json
-from typing import Any, Dict, List, Mapping, Optional, Union
+from importlib import resources as _importlib_resources
+from typing import Any, Dict, List, Mapping, Optional
 from enum import Enum
 from dataclasses import dataclass
 
@@ -11,77 +12,15 @@ import pyarrow as pa
 import pyarrow.parquet as pq
 from pint_pandas import PintType
 
-from .utils import normalize_variable_descriptors
+from .utils import normalize_variable_descriptors, normalize_role, get_column_name
 
-CONTEXT = {
-    "@context": {
-        "csvw": "http://www.w3.org/ns/csvw#",
-        "dsv": "https://w3id.org/dsv-ontology#",
-        "skos": "http://www.w3.org/2004/02/skos/core#",
-        "prov": "http://www.w3.org/ns/prov#",
-        "qudt": "http://qudt.org/schema/qudt/",
-        "unit": "http://qudt.org/vocab/unit/",
-        "quantitykind": "http://qudt.org/vocab/quantitykind/",
-        "sdmx-dimension": "http://purl.org/linked-data/sdmx/2009/dimension#",
-        "schema": "https://schema.org/",
-        "wd": "http://www.wikidata.org/entity/",
-        "dct": "http://purl.org/dc/terms/",
-        "dcat": "http://www.w3.org/ns/dcat#",
-        "title": "dct:title",
-        "description": "dct:description",
-        "abstract": "dct:abstract",
-        "purpose": "dct:purpose",
-        "tableOfContents": "dct:tableOfContents",
-        "landingPage": "dcat:landingPage",
-        "accessRights": "dct:accessRights",
-        "citation": "schema:citation",
-        "identifier": "dct:identifier",
-        "funding": "schema:funding",
-        "populationType": "schema:populationType",
-        "url": "csvw:url",
-        "datasetSchema": "dsv:datasetSchema",
-        "columns": {"@id": "dsv:column", "@container": "@set"},
-        "name": "csvw:name",
-        "titles": "csvw:titles",
-        "about": "schema:about",
-        "hadRole": "prov:hadRole",
-        "defaultValue": "schema:defaultValue",
-        "columnProperty": "dsv:columnProperty",
-        "columnCompleteness": "dsv:columnCompleteness",
-        "summaryStatistics": "dsv:summaryStatistics",
-        "statisticalDataType": {"@id": "dsv:statisticalDataType", "@type": "@id"},
-        "hasCodeBook": {"@id": "dsv:hasCodeBook", "@type": "@id"},
-        "hasVariable": {"@id": "dsv:hasVariable", "@type": "@id"},
-        "datasetCompleteness": "dsv:datasetCompleteness",
-        "numberOfRows": "dsv:numberOfRows",
-        "numberOfColumns": "dsv:numberOfColumns",
-        "missingValueFormat": "dsv:missingValueFormat",
-        "notation": "skos:notation",
-        "prefLabel": "skos:prefLabel",
-        "exactMatch": {"@id": "skos:exactMatch", "@type": "@id", "@container": "@set"},
-        "closeMatch": {"@id": "skos:closeMatch", "@type": "@id", "@container": "@set"},
-        "broadMatch": {"@id": "skos:broadMatch", "@type": "@id", "@container": "@set"},
-        "narrowMatch": {
-            "@id": "skos:narrowMatch",
-            "@type": "@id",
-            "@container": "@set",
-        },
-        "relatedMatch": {
-            "@id": "skos:relatedMatch",
-            "@type": "@id",
-            "@container": "@set",
-        },
-        "hasTopConcept": {
-            "@id": "skos:hasTopConcept",
-            "@type": "@id",
-            "@container": "@set",
-        },
-        "unitText": "schema:unitText",
-        "ucumCode": "qudt:ucumCode",
-        "hasUnit": "qudt:hasUnit",
-        "source": {"@id": "dct:source", "@type": "@id"},
-    }
-}
+
+def _load_context() -> dict:
+    data = _importlib_resources.files("semsynth").joinpath("context.jsonld").read_text("utf-8")
+    return json.loads(data)
+
+
+CONTEXT = _load_context()
 
 # --- SKOS mapping mixin -------------------------------------------------------
 @dataclass(kw_only=True)
@@ -140,14 +79,14 @@ class ColumnProperty(SkosMappings, RDFMixin):
     hasUnit: Optional[Unit] = None  # Unit node with possible QUDT IRI skos match
     source: Optional[str] = None  # web page with documentation
     hasCodeBook: Optional[CodeBook] = None
-    hasVariable: Optional[Union[str, CodeConcept]] = None  # link to variable definition
+    hasVariable: str | CodeConcept | None = None  # link to variable definition
 
 
 # --- CSVW/DSV column and schema ----------------------------------------------
 @dataclass
 class Column(RDFMixin):
     name: str  # required
-    titles: Optional[Union[str, List[str]]] = None
+    titles: str | list[str] | None = None
     description: Optional[str] = None
     identifier: Optional[str] = None
     about: Optional[str] = None
@@ -235,12 +174,7 @@ class Metadata(RDFMixin):
             col_prop_json = col_json.get("dsv:columnProperty") or col_json.get("columnProperty")
             col_prop = ColumnProperty.from_jsonld(col_prop_json) if isinstance(col_prop_json, Mapping) else None
             descriptor = descriptor_lookup.get(
-                str(
-                    col_json.get("schema:name")
-                    or col_json.get("name")
-                    or col_json.get("column")
-                    or ""
-                )
+                get_column_name(col_json) or ""
             )
             unit_text = (
                 descriptor.unit if descriptor and descriptor.unit else None
@@ -250,13 +184,7 @@ class Metadata(RDFMixin):
                     col_prop = ColumnProperty(unitText=unit_text)
                 elif not col_prop.unitText:
                     col_prop.unitText = unit_text
-            name = (
-                col_json.get("schema:name")
-                or col_json.get("name")
-                or col_json.get("dcterms:title")
-                or col_json.get("schema:identifier")
-                or col_json.get("identifier")
-            )
+            name = get_column_name(col_json)
             if not name:
                 continue
             descriptor = descriptor_lookup.get(str(name))
@@ -315,24 +243,6 @@ class Metadata(RDFMixin):
 
         import pandas as pd
 
-        def _normalize_role(raw: Optional[str]) -> str:
-            if not raw:
-                return "qi"
-            role = raw.strip().lower()
-            if role in {"quasiidentifier", "quasi-identifier", "quasi_identifier"}:
-                return "qi"
-            if role in {"sensitive", "sensitive_attribute"}:
-                return "sensitive"
-            if role in {"identifier", "id", "primary_key"}:
-                return "id"
-            if role in {"ignore", "drop", "exclude"}:
-                return "ignore"
-            if role in {"target", "label", "outcome"}:
-                return "target"
-            if role in {"feature", "predictor"}:
-                return "qi"
-            return role
-
         rows = []
         
         def _statistical_dtype(node: Optional[Any]) -> Optional[str]:
@@ -345,7 +255,7 @@ class Metadata(RDFMixin):
             return None
 
         for col in self.datasetSchema.columns:
-            role = _normalize_role(col.hadRole)
+            role = normalize_role(col.hadRole)
             dtype = None
             stats_nodes = [col.summaryStatistics, getattr(col, "columnProperty", None)]
             for node in stats_nodes:
@@ -473,7 +383,7 @@ class SemMapSeriesAccessor:
     ) -> "SemMapSeriesAccessor":
         """Attach numeric variable metadata and (optionally) convert dtype to pint."""
         # Units node/string based on available inputs
-        has_unit: Optional[Union[str, Unit]] = None
+        has_unit: str | Unit | None = None
         # If both UCUM and QUDT provided, use a Unit node to capture both
         if ucum_code or qudt_unit_iri:
             if qudt_unit_iri:
@@ -502,7 +412,7 @@ class SemMapSeriesAccessor:
         name: str,
         label: str,
         *,
-        codes: Dict[Union[int, str], str],
+        codes: dict[int | str, str],
         scheme_source_iri: Optional[str] = None,
         source_iri: Optional[str] = None,
     ) -> "SemMapSeriesAccessor":
@@ -784,7 +694,7 @@ class SemMapFrameAccessor:
 
     def from_jsonld(
         self,
-        metadata: Union[str, Dict[str, Any]],
+        metadata: str | dict[str, Any],
         *,
         convert_pint: bool = True,
     ) -> "SemMapFrameAccessor":

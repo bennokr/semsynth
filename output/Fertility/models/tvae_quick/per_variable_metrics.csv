@@ -1,0 +1,11 @@
+variable,type,KS,W1,JSD
+season,continuous,0.21,0.27369999999999994,
+age,continuous,0.3,0.04834594957596873,
+child_diseases,discrete,,,0.020505141776379854
+accident,discrete,,,0.35344276940609276
+surgical_intervention,discrete,,,0.00849371351375273
+high_fevers,discrete,,,0.30208783179809146
+alcohol,continuous,0.08,0.02000000000000001,
+smoking,discrete,,,0.24197689611053816
+hrs_sitting,continuous,0.28,0.1197,
+diagnosis,discrete,,,0.0629200590869408

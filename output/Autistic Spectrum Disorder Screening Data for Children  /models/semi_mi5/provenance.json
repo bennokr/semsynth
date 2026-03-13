@@ -1,0 +1,68 @@
+{
+  "provenance": [
+    {
+      "id": "__main__.py#model_run_root-20260313T0839",
+      "type": "prov:Activity",
+      "startedAtTime": "2026-03-13T08:39:03.719434+00:00",
+      "endedAtTime": "2026-03-13T08:39:03.719503+00:00",
+      "wasAssociatedWith": "__main__.py",
+      "used": [
+        "env-20260313T0839"
+      ]
+    },
+    {
+      "id": "__main__.py#write_manifest-20260313T0839",
+      "type": "prov:Activity",
+      "startedAtTime": "2026-03-13T08:39:03.828860+00:00",
+      "endedAtTime": "2026-03-13T08:39:03.828990+00:00",
+      "wasAssociatedWith": "__main__.py",
+      "used": [
+        "env-20260313T0839"
+      ]
+    },
+    {
+      "id": "output/Autistic Spectrum Disorder Screening Data for Children  ",
+      "type": "prov:Entity",
+      "format": "application/octet-stream",
+      "extent": 4096,
+      "modified": "2026-03-13T08:39:02.622656+00:00",
+      "wasGeneratedBy": "__main__.py#model_run_root-20260313T0839"
+    },
+    {
+      "id": "env-20260313T0839",
+      "type": [
+        "prov:Entity",
+        "prov:Collection"
+      ],
+      "label": "Python environment",
+      "title": "makeprov",
+      "hasVersion": "0.4.2",
+      "requires": [
+        {
+          "id": "https://pypi.org/project/parse/",
+          "type": "schema:SoftwareSourceCode",
+          "label": "parse>=1.20"
+        }
+      ]
+    },
+    {
+      "id": "output/Autistic Spectrum Disorder Screening Data for Children  /models/semi_mi5",
+      "type": "prov:Entity",
+      "format": "application/octet-stream",
+      "extent": 4096,
+      "modified": "2026-03-13T08:39:03.828164+00:00",
+      "wasGeneratedBy": "__main__.py#write_manifest-20260313T0839"
+    },
+    {
+      "id": "__main__.py",
+      "type": [
+        "prov:Agent",
+        "prov:SoftwareAgent",
+        "schema:SoftwareSourceCode"
+      ],
+      "label": "__main__.py",
+      "hasVersion": "e41b22a7869f00c7cee24c2109bb44cfb5904da6",
+      "source": "http://local_proxy@127.0.0.1:45617/git/bennokr/semsynth"
+    }
+  ]
+}
