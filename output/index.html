@@ -62,10 +62,13 @@
     });
 
     const engine = new Comunica.QueryEngine();
+    const catalogUrl = new URL("catalog.jsonld", location.href).toString();
+    const catalogText = await fetch(catalogUrl).then(r => r.text());
     const sources = [{
-      type: "file",
-      value: new URL("catalog.jsonld", location.href).toString(),
+      type: "string",
+      value: catalogText,
       mediaType: "application/ld+json",
+      baseIRI: catalogUrl,
     }];
 
     const renderPayload = (yasr, payload, mediaType) => {
