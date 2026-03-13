@@ -8,7 +8,7 @@
   /* Report base styles */
 :root { color-scheme: light; }
 body { margin: 0; font-family: "Inter", "Segoe UI", system-ui, -apple-system, BlinkMacSystemFont, "Helvetica Neue", Arial, sans-serif; background: #f4f7fb; color: #1f2937; line-height: 1.65; }
-main.report-container { max-width: 1040px; margin: 0 auto; padding: 3rem 3rem 4rem; background: #ffffff; box-shadow: 0 18px 45px rgba(15, 23, 42, 0.08); border-radius: 18px; }
+main { max-width: 1040px; margin: 0 auto; padding: 3rem 3rem 4rem; background: #ffffff; box-shadow: 0 18px 45px rgba(15, 23, 42, 0.08); border-radius: 18px; }
 h1 { font-size: 2.5rem; margin-top: 0; color: #0f172a; letter-spacing: -0.02em; }
 h2 { margin-top: 2.75rem; padding-bottom: 0.35rem; border-bottom: 1px solid #e2e8f0; color: #1e293b; font-size: 1.6rem; }
 h3 { margin-top: 2.2rem; color: #334155; font-size: 1.25rem; }
@@ -33,13 +33,50 @@ table.per-var-dist thead th { text-align: center; }
   <main class="report-container">
       <h1>Data Report — CDC Diabetes Health Indicators</h1>
     <p><strong>Source</strong>: <a href="https://archive.ics.uci.edu/dataset/891">UCI dataset 891</a></p>
-    <ul>
-    <li>SemMap JSON-LD: <a href="dataset.semmap.json">dataset.semmap.json</a></li>
-    <li>SemMap HTML: <a href="dataset.semmap.html">dataset.semmap.html</a></li>
-    <li>Rows: 253680</li>
-    <li>Columns: 22</li>
-    <li>Discrete: 19  |  Continuous: 3</li>
-    </ul>
+    <p><strong>SemMap JSON-LD</strong>: <a href="dataset.semmap.json">dataset.semmap.json</a> · <a href="dataset.semmap.html">RDFa HTML</a></p>
+    <h2>Overview</h2>
+    <table>
+    <thead>
+    <tr>
+    <th style="text-align: left;">Metric</th>
+    <th style="text-align: left;">Value</th>
+    </tr>
+    </thead>
+    <tbody>
+    <tr>
+    <td style="text-align: left;">Dataset</td>
+    <td style="text-align: left;">CDC Diabetes Health Indicators</td>
+    </tr>
+    <tr>
+    <td style="text-align: left;">Source</td>
+    <td style="text-align: left;"><a href="https://archive.ics.uci.edu/dataset/891">UCI dataset 891</a></td>
+    </tr>
+    <tr>
+    <td style="text-align: left;">Rows</td>
+    <td style="text-align: left;">253,680</td>
+    </tr>
+    <tr>
+    <td style="text-align: left;">Columns</td>
+    <td style="text-align: left;">22</td>
+    </tr>
+    <tr>
+    <td style="text-align: left;">Discrete</td>
+    <td style="text-align: left;">19</td>
+    </tr>
+    <tr>
+    <td style="text-align: left;">Continuous</td>
+    <td style="text-align: left;">3</td>
+    </tr>
+    <tr>
+    <td style="text-align: left;">SemMap</td>
+    <td style="text-align: left;"><a href="dataset.semmap.json">SemMap JSON-LD</a><br /><a href="dataset.semmap.html">SemMap HTML</a></td>
+    </tr>
+    <tr>
+    <td style="text-align: left;">Missingness</td>
+    <td style="text-align: left;">Not modeled</td>
+    </tr>
+    </tbody>
+    </table>
     <h2>Variables and summary</h2>
     <table>
     <thead>
@@ -53,17 +90,17 @@ table.per-var-dist thead th { text-align: center; }
     <tr>
     <td style="text-align: left;">HighBP</td>
     <td style="text-align: left;">discrete</td>
-    <td style="text-align: left;">108829 (42.90%)</td>
+    <td style="text-align: left;">1: 108829 (42.90%)</td>
     </tr>
     <tr>
     <td style="text-align: left;">HighChol</td>
     <td style="text-align: left;">discrete</td>
-    <td style="text-align: left;">107591 (42.41%)</td>
+    <td style="text-align: left;">1: 107591 (42.41%)</td>
     </tr>
     <tr>
     <td style="text-align: left;">CholCheck</td>
     <td style="text-align: left;">discrete</td>
-    <td style="text-align: left;">244210 (96.27%)</td>
+    <td style="text-align: left;">1: 244210 (96.27%)</td>
     </tr>
     <tr>
     <td style="text-align: left;">BMI</td>
@@ -73,72 +110,52 @@ table.per-var-dist thead th { text-align: center; }
     <tr>
     <td style="text-align: left;">Smoker</td>
     <td style="text-align: left;">discrete</td>
-    <td style="text-align: left;">112423 (44.32%)</td>
+    <td style="text-align: left;">1: 112423 (44.32%)</td>
     </tr>
     <tr>
     <td style="text-align: left;">Stroke</td>
     <td style="text-align: left;">discrete</td>
-    <td style="text-align: left;">10292 (4.06%)</td>
+    <td style="text-align: left;">1: 10292 (4.06%)</td>
     </tr>
     <tr>
     <td style="text-align: left;">HeartDiseaseorAttack</td>
     <td style="text-align: left;">discrete</td>
-    <td style="text-align: left;">23893 (9.42%)</td>
+    <td style="text-align: left;">1: 23893 (9.42%)</td>
     </tr>
     <tr>
     <td style="text-align: left;">PhysActivity</td>
     <td style="text-align: left;">discrete</td>
-    <td style="text-align: left;">191920 (75.65%)</td>
+    <td style="text-align: left;">1: 191920 (75.65%)</td>
     </tr>
     <tr>
     <td style="text-align: left;">Fruits</td>
     <td style="text-align: left;">discrete</td>
-    <td style="text-align: left;">160898 (63.43%)</td>
+    <td style="text-align: left;">1: 160898 (63.43%)</td>
     </tr>
     <tr>
     <td style="text-align: left;">Veggies</td>
     <td style="text-align: left;">discrete</td>
-    <td style="text-align: left;">205841 (81.14%)</td>
+    <td style="text-align: left;">1: 205841 (81.14%)</td>
     </tr>
     <tr>
     <td style="text-align: left;">HvyAlcoholConsump</td>
     <td style="text-align: left;">discrete</td>
-    <td style="text-align: left;">14256 (5.62%)</td>
+    <td style="text-align: left;">1: 14256 (5.62%)</td>
     </tr>
     <tr>
     <td style="text-align: left;">AnyHealthcare</td>
     <td style="text-align: left;">discrete</td>
-    <td style="text-align: left;">241263 (95.11%)</td>
+    <td style="text-align: left;">1: 241263 (95.11%)</td>
     </tr>
     <tr>
     <td style="text-align: left;">NoDocbcCost</td>
     <td style="text-align: left;">discrete</td>
-    <td style="text-align: left;">21354 (8.42%)</td>
+    <td style="text-align: left;">1: 21354 (8.42%)</td>
     </tr>
     <tr>
     <td style="text-align: left;">GenHlth</td>
     <td style="text-align: left;">discrete</td>
-    <td style="text-align: left;">2: 89084 (35.12%)</td>
-    </tr>
-    <tr>
-    <td style="text-align: left;"></td>
-    <td style="text-align: left;"></td>
-    <td style="text-align: left;">3: 75646 (29.82%)</td>
-    </tr>
-    <tr>
-    <td style="text-align: left;"></td>
-    <td style="text-align: left;"></td>
-    <td style="text-align: left;">1: 45299 (17.86%)</td>
-    </tr>
-    <tr>
-    <td style="text-align: left;"></td>
-    <td style="text-align: left;"></td>
-    <td style="text-align: left;">4: 31570 (12.44%)</td>
-    </tr>
-    <tr>
-    <td style="text-align: left;"></td>
-    <td style="text-align: left;"></td>
-    <td style="text-align: left;">5: 12081 (4.76%)</td>
+    <td style="text-align: left;">2: 89084 (35.12%)<br />3: 75646 (29.82%)<br />1: 45299 (17.86%)<br />4: 31570 (12.44%)<br />5: 12081 (4.76%)</td>
     </tr>
     <tr>
     <td style="text-align: left;">MentHlth</td>
@@ -153,142 +170,32 @@ table.per-var-dist thead th { text-align: center; }
     <tr>
     <td style="text-align: left;">DiffWalk</td>
     <td style="text-align: left;">discrete</td>
-    <td style="text-align: left;">42675 (16.82%)</td>
+    <td style="text-align: left;">1: 42675 (16.82%)</td>
     </tr>
     <tr>
     <td style="text-align: left;">Sex</td>
     <td style="text-align: left;">discrete</td>
-    <td style="text-align: left;">111706 (44.03%)</td>
+    <td style="text-align: left;">1: 111706 (44.03%)</td>
     </tr>
     <tr>
     <td style="text-align: left;">Age</td>
     <td style="text-align: left;">discrete</td>
-    <td style="text-align: left;">9: 33244 (13.10%)</td>
-    </tr>
-    <tr>
-    <td style="text-align: left;"></td>
-    <td style="text-align: left;"></td>
-    <td style="text-align: left;">10: 32194 (12.69%)</td>
-    </tr>
-    <tr>
-    <td style="text-align: left;"></td>
-    <td style="text-align: left;"></td>
-    <td style="text-align: left;">8: 30832 (12.15%)</td>
-    </tr>
-    <tr>
-    <td style="text-align: left;"></td>
-    <td style="text-align: left;"></td>
-    <td style="text-align: left;">7: 26314 (10.37%)</td>
-    </tr>
-    <tr>
-    <td style="text-align: left;"></td>
-    <td style="text-align: left;"></td>
-    <td style="text-align: left;">11: 23533 (9.28%)</td>
-    </tr>
-    <tr>
-    <td style="text-align: left;"></td>
-    <td style="text-align: left;"></td>
-    <td style="text-align: left;">6: 19819 (7.81%)</td>
-    </tr>
-    <tr>
-    <td style="text-align: left;"></td>
-    <td style="text-align: left;"></td>
-    <td style="text-align: left;">13: 17363 (6.84%)</td>
-    </tr>
-    <tr>
-    <td style="text-align: left;"></td>
-    <td style="text-align: left;"></td>
-    <td style="text-align: left;">5: 16157 (6.37%)</td>
-    </tr>
-    <tr>
-    <td style="text-align: left;"></td>
-    <td style="text-align: left;"></td>
-    <td style="text-align: left;">12: 15980 (6.30%)</td>
-    </tr>
-    <tr>
-    <td style="text-align: left;"></td>
-    <td style="text-align: left;"></td>
-    <td style="text-align: left;">4: 13823 (5.45%)</td>
-    </tr>
-    <tr>
-    <td style="text-align: left;"></td>
-    <td style="text-align: left;"></td>
-    <td style="text-align: left;">… (+3 more)</td>
+    <td style="text-align: left;">9: 33244 (13.10%)<br />10: 32194 (12.69%)<br />8: 30832 (12.15%)<br />7: 26314 (10.37%)<br />11: 23533 (9.28%)<br />6: 19819 (7.81%)<br />13: 17363 (6.84%)<br />5: 16157 (6.37%)<br />12: 15980 (6.30%)<br />4: 13823 (5.45%)<br />… (+3 more)</td>
     </tr>
     <tr>
     <td style="text-align: left;">Education</td>
     <td style="text-align: left;">discrete</td>
-    <td style="text-align: left;">6: 107325 (42.31%)</td>
-    </tr>
-    <tr>
-    <td style="text-align: left;"></td>
-    <td style="text-align: left;"></td>
-    <td style="text-align: left;">5: 69910 (27.56%)</td>
-    </tr>
-    <tr>
-    <td style="text-align: left;"></td>
-    <td style="text-align: left;"></td>
-    <td style="text-align: left;">4: 62750 (24.74%)</td>
-    </tr>
-    <tr>
-    <td style="text-align: left;"></td>
-    <td style="text-align: left;"></td>
-    <td style="text-align: left;">3: 9478 (3.74%)</td>
-    </tr>
-    <tr>
-    <td style="text-align: left;"></td>
-    <td style="text-align: left;"></td>
-    <td style="text-align: left;">2: 4043 (1.59%)</td>
-    </tr>
-    <tr>
-    <td style="text-align: left;"></td>
-    <td style="text-align: left;"></td>
-    <td style="text-align: left;">1: 174 (0.07%)</td>
+    <td style="text-align: left;">6: 107325 (42.31%)<br />5: 69910 (27.56%)<br />4: 62750 (24.74%)<br />3: 9478 (3.74%)<br />2: 4043 (1.59%)<br />1: 174 (0.07%)</td>
     </tr>
     <tr>
     <td style="text-align: left;">Income</td>
     <td style="text-align: left;">discrete</td>
-    <td style="text-align: left;">8: 90385 (35.63%)</td>
-    </tr>
-    <tr>
-    <td style="text-align: left;"></td>
-    <td style="text-align: left;"></td>
-    <td style="text-align: left;">7: 43219 (17.04%)</td>
-    </tr>
-    <tr>
-    <td style="text-align: left;"></td>
-    <td style="text-align: left;"></td>
-    <td style="text-align: left;">6: 36470 (14.38%)</td>
-    </tr>
-    <tr>
-    <td style="text-align: left;"></td>
-    <td style="text-align: left;"></td>
-    <td style="text-align: left;">5: 25883 (10.20%)</td>
-    </tr>
-    <tr>
-    <td style="text-align: left;"></td>
-    <td style="text-align: left;"></td>
-    <td style="text-align: left;">4: 20135 (7.94%)</td>
-    </tr>
-    <tr>
-    <td style="text-align: left;"></td>
-    <td style="text-align: left;"></td>
-    <td style="text-align: left;">3: 15994 (6.30%)</td>
-    </tr>
-    <tr>
-    <td style="text-align: left;"></td>
-    <td style="text-align: left;"></td>
-    <td style="text-align: left;">2: 11783 (4.64%)</td>
-    </tr>
-    <tr>
-    <td style="text-align: left;"></td>
-    <td style="text-align: left;"></td>
-    <td style="text-align: left;">1: 9811 (3.87%)</td>
+    <td style="text-align: left;">8: 90385 (35.63%)<br />7: 43219 (17.04%)<br />6: 36470 (14.38%)<br />5: 25883 (10.20%)<br />4: 20135 (7.94%)<br />3: 15994 (6.30%)<br />2: 11783 (4.64%)<br />1: 9811 (3.87%)</td>
     </tr>
     <tr>
     <td style="text-align: left;">Diabetes_binary</td>
     <td style="text-align: left;">discrete</td>
-    <td style="text-align: left;">35346 (13.93%)</td>
+    <td style="text-align: left;">1: 35346 (13.93%)</td>
     </tr>
     </tbody>
     </table>
@@ -302,86 +209,134 @@ table.per-var-dist thead th { text-align: center; }
     <th style="text-align: right;">disc_jsd_median</th>
     <th style="text-align: right;">cont_ks_mean</th>
     <th style="text-align: right;">cont_w1_mean</th>
+    <th style="text-align: left;">privacy_overlap</th>
+    <th style="text-align: left;">downstream_sign_match</th>
     </tr>
     </thead>
     <tbody>
     <tr>
     <td style="text-align: left;">metasyn</td>
     <td style="text-align: left;">metasyn</td>
-    <td style="text-align: right;">0.0429</td>
-    <td style="text-align: right;">0.0336</td>
-    <td style="text-align: right;">0.468</td>
-    <td style="text-align: right;">2.3811</td>
+    <td style="text-align: right;">0.0408</td>
+    <td style="text-align: right;">0.0369</td>
+    <td style="text-align: right;">0.4563</td>
+    <td style="text-align: right;">2.2709</td>
+    <td style="text-align: left;"></td>
+    <td style="text-align: left;"></td>
     </tr>
     <tr>
     <td style="text-align: left;">clg_mi2</td>
     <td style="text-align: left;">pybnesian</td>
-    <td style="text-align: right;">0.0378</td>
-    <td style="text-align: right;">0.0296</td>
-    <td style="text-align: right;">0.267</td>
-    <td style="text-align: right;">2.9337</td>
+    <td style="text-align: right;">0.0436</td>
+    <td style="text-align: right;">0.0312</td>
+    <td style="text-align: right;">0.2663</td>
+    <td style="text-align: right;">3.0082</td>
+    <td style="text-align: left;"></td>
+    <td style="text-align: left;"></td>
     </tr>
     <tr>
     <td style="text-align: left;">semi_mi5</td>
     <td style="text-align: left;">pybnesian</td>
-    <td style="text-align: right;">0.0374</td>
-    <td style="text-align: right;">0.0296</td>
-    <td style="text-align: right;">0.269</td>
-    <td style="text-align: right;">2.9477</td>
+    <td style="text-align: right;">0.0388</td>
+    <td style="text-align: right;">0.0244</td>
+    <td style="text-align: right;">0.263</td>
+    <td style="text-align: right;">2.9479</td>
+    <td style="text-align: left;"></td>
+    <td style="text-align: left;"></td>
+    </tr>
+    <tr>
+    <td style="text-align: left;">ctgan_fast</td>
+    <td style="text-align: left;">synthcity</td>
+    <td style="text-align: right;">0.2383</td>
+    <td style="text-align: right;">0.2151</td>
+    <td style="text-align: right;">0.8227</td>
+    <td style="text-align: right;">6.1013</td>
+    <td style="text-align: left;"></td>
+    <td style="text-align: left;"></td>
+    </tr>
+    <tr>
+    <td style="text-align: left;">tvae_quick</td>
+    <td style="text-align: left;">synthcity</td>
+    <td style="text-align: right;">0.1005</td>
+    <td style="text-align: right;">0.0882</td>
+    <td style="text-align: right;">0.394</td>
+    <td style="text-align: right;">1.949</td>
+    <td style="text-align: left;"></td>
+    <td style="text-align: left;"></td>
     </tr>
     </tbody>
     </table>
     <h2>Models</h2>
     <table>
     <tr><th>UMAP</th><th>Details</th><th>Structure</th></tr>
-    <tr><td><img src='umap_real.png' width='280'/></td><td><h3>Real data</h3></td><td></td></tr>
-    <tr><td>
-    <img src='models/metasyn/umap.png' width='280'/></td><td>
+    <tr><td><img src='umap_real.png' width='280'/></td><td>
+    <h3>Real data</h3></td><td></td></tr>
+    <tr><td><img src='models/metasyn/umap.png' width='280'/></td><td>
 
     <h3>Model: metasyn (metasyn)</h3>
     <ul>
     <li>Seed: 42, rows: 1000</li>
-    <li><a href="models/metasyn/synthetic.csv">Synthetic CSV</a></li>
-    <li><a href="models/metasyn/per_variable_metrics.csv">Per-variable metrics</a></li>
-    <li><a href="models/metasyn/metrics.json">Metrics JSON</a></li>
-    </ul></td><td>
+    <li> <a href="models/metasyn/synthetic.csv">Synthetic CSV</a></li>
+    <li> <a href="models/metasyn/per_variable_metrics.csv">Per-variable metrics</a></li>
+    <li> <a href="models/metasyn/metrics.json">Metrics JSON</a></li>
+    </ul>
 
+    </td><td>
     </td></tr>
 
-
-    <tr><td>
-    <img src='models/clg_mi2/umap.png' width='280'/></td><td>
+    <tr><td><img src='models/clg_mi2/umap.png' width='280'/></td><td>
 
     <h3>Model: clg_mi2 (pybnesian)</h3>
     <ul>
     <li>Seed: 42, rows: 1000</li>
-    <li>Params: <code>{"max_indegree": 2, "operators": ["arcs"], "score": "bic", "type": "clg"}</code></li>
-    <li><a href="models/clg_mi2/synthetic.csv">Synthetic CSV</a></li>
-    <li><a href="models/clg_mi2/per_variable_metrics.csv">Per-variable metrics</a></li>
-    <li><a href="models/clg_mi2/metrics.json">Metrics JSON</a></li>
-    </ul></td><td>
+    <li> Params: <tt>{"max_indegree": 2, "operators": ["arcs"], "score": "bic", "type": "clg"}</tt></li><li> <a href="models/clg_mi2/synthetic.csv">Synthetic CSV</a></li>
+    <li> <a href="models/clg_mi2/per_variable_metrics.csv">Per-variable metrics</a></li>
+    <li> <a href="models/clg_mi2/metrics.json">Metrics JSON</a></li>
+    </ul>
 
-    <img src='models/clg_mi2/structure.png' width='280'/>
-    </td></tr>
+    </td><td>
+    <a href='models/clg_mi2/structure.png'><img src='models/clg_mi2/structure.png' width='280'/></a></td></tr>
 
-
-    <tr><td>
-    <img src='models/semi_mi5/umap.png' width='280'/></td><td>
+    <tr><td><img src='models/semi_mi5/umap.png' width='280'/></td><td>
 
     <h3>Model: semi_mi5 (pybnesian)</h3>
     <ul>
     <li>Seed: 42, rows: 1000</li>
-    <li>Params: <code>{"max_indegree": 5, "operators": ["arcs"], "score": "bic", "type": "semiparametric"}</code></li>
-    <li><a href="models/semi_mi5/synthetic.csv">Synthetic CSV</a></li>
-    <li><a href="models/semi_mi5/per_variable_metrics.csv">Per-variable metrics</a></li>
-    <li><a href="models/semi_mi5/metrics.json">Metrics JSON</a></li>
-    </ul></td><td>
+    <li> Params: <tt>{"max_indegree": 5, "operators": ["arcs"], "score": "bic", "type": "semiparametric"}</tt></li><li> <a href="models/semi_mi5/synthetic.csv">Synthetic CSV</a></li>
+    <li> <a href="models/semi_mi5/per_variable_metrics.csv">Per-variable metrics</a></li>
+    <li> <a href="models/semi_mi5/metrics.json">Metrics JSON</a></li>
+    </ul>
 
-    <img src='models/semi_mi5/structure.png' width='280'/>
+    </td><td>
+    <a href='models/semi_mi5/structure.png'><img src='models/semi_mi5/structure.png' width='280'/></a></td></tr>
+
+    <tr><td><img src='models/ctgan_fast/umap.png' width='280'/></td><td>
+
+    <h3>Model: ctgan_fast (synthcity)</h3>
+    <ul>
+    <li>Seed: 42, rows: 1000</li>
+    <li> Params: <tt>{"batch_size": 256, "n_iter": 5}</tt></li><li> <a href="models/ctgan_fast/synthetic.csv">Synthetic CSV</a></li>
+    <li> <a href="models/ctgan_fast/per_variable_metrics.csv">Per-variable metrics</a></li>
+    <li> <a href="models/ctgan_fast/metrics.json">Metrics JSON</a></li>
+    </ul>
+
+    </td><td>
     </td></tr>
 
+    <tr><td></td><td>
 
-    <table>
+    <h3>Model: tvae_quick (synthcity)</h3>
+    <ul>
+    <li>Seed: 42, rows: 1000</li>
+    <li> Params: <tt>{"batch_size": 256}</tt></li><li> <a href="models/tvae_quick/synthetic.csv">Synthetic CSV</a></li>
+    <li> <a href="models/tvae_quick/per_variable_metrics.csv">Per-variable metrics</a></li>
+    <li> <a href="models/tvae_quick/metrics.json">Metrics JSON</a></li>
+    </ul>
+
+    </td><td>
+    </td></tr>
+
+    </table>
   </main>
 </body>
 </html>

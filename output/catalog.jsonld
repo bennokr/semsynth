@@ -57,7 +57,7 @@
   ],
   "title": "SemSynth Synthetic Data Catalog",
   "description": "DCAT catalog of SemSynth reports and synthetic datasets.",
-  "modified": "2026-03-13T09:15:50.904123+00:00",
+  "modified": "2026-03-13T09:19:50.061714+00:00",
   "datasets": [
     {
       "id": "urn:dataset:autistic-spectrum-disorder-screening-data-for-children",
@@ -278,9 +278,12 @@
         "SemSynth"
       ],
       "landing_page": "https://w3id.org/semsynth/demo#/output/CDC Diabetes Health Indicators/index.html",
-      "modified": "2026-03-13T08:29:02.645787+00:00",
-      "issued": "2026-03-13T08:28:39.070619+00:00",
+      "modified": "2026-03-13T09:17:16.109404+00:00",
+      "issued": "2026-03-13T09:17:16.109404+00:00",
       "wasDerivedFrom": [
+        {
+          "id": "https://w3id.org/semsynth/demo#/output/CDC Diabetes Health Indicators/dataset.semmap.json"
+        },
         {
           "id": "https://w3id.org/semsynth/demo#/output/CDC Diabetes Health Indicators/models/clg_mi2/synthetic.csv"
         },
@@ -307,9 +310,29 @@
         },
         {
           "id": "https://w3id.org/semsynth/demo#/output/CDC Diabetes Health Indicators/models/semi_mi5/synthetic.semmap.parquet"
+        },
+        {
+          "id": "https://w3id.org/semsynth/demo#/output/CDC Diabetes Health Indicators/models/tvae_quick/synthetic.csv"
+        },
+        {
+          "id": "https://w3id.org/semsynth/demo#/output/CDC Diabetes Health Indicators/models/tvae_quick/synthetic.semmap.parquet"
         }
       ],
       "distributions": [
+        {
+          "id": "urn:distribution:cdc-diabetes-health-indicators:semmap-json",
+          "type": [
+            "dcat:Distribution"
+          ],
+          "title": "CDC Diabetes Health Indicators SemMap JSON-LD",
+          "access_url": "https://w3id.org/semsynth/demo#/output/CDC Diabetes Health Indicators/dataset.semmap.json",
+          "download_url": "https://w3id.org/semsynth/demo#/output/CDC Diabetes Health Indicators/dataset.semmap.json",
+          "media_type": "application/ld+json",
+          "format": "JSON-LD",
+          "byte_size": 7908,
+          "modified": "2026-03-13T09:17:16.109404+00:00",
+          "issued": "2026-03-13T09:17:16.109404+00:00"
+        },
         {
           "id": "urn:distribution:cdc-diabetes-health-indicators-cdc-diabetes-health-indicators-models-semi-mi5-synthetic-csv",
           "type": [
@@ -337,6 +360,20 @@
           "byte_size": 94656,
           "modified": "2026-03-13T08:28:38.742619+00:00",
           "issued": "2026-03-13T08:28:38.742619+00:00"
+        },
+        {
+          "id": "urn:distribution:cdc-diabetes-health-indicators-cdc-diabetes-health-indicators-models-tvae-quick-synthetic-csv",
+          "type": [
+            "dcat:Distribution"
+          ],
+          "title": "CDC Diabetes Health Indicators synthetic data (tvae_quick, csv)",
+          "access_url": "https://w3id.org/semsynth/demo#/output/CDC Diabetes Health Indicators/models/tvae_quick/synthetic.csv",
+          "download_url": "https://w3id.org/semsynth/demo#/output/CDC Diabetes Health Indicators/models/tvae_quick/synthetic.csv",
+          "media_type": "text/csv",
+          "format": "CSV",
+          "byte_size": 89986,
+          "modified": "2026-03-13T09:17:13.579669+00:00",
+          "issued": "2026-03-13T09:17:13.579669+00:00"
         },
         {
           "id": "urn:distribution:cdc-diabetes-health-indicators-cdc-diabetes-health-indicators-models-ctgan-fast-synthetic-csv",
@@ -391,6 +428,19 @@
           "byte_size": 56853,
           "modified": "2026-03-13T08:28:38.808848+00:00",
           "issued": "2026-03-13T08:28:38.808848+00:00"
+        },
+        {
+          "id": "urn:distribution:cdc-diabetes-health-indicators-cdc-diabetes-health-indicators-models-tvae-quick-synthetic-semmap-parquet",
+          "type": [
+            "dcat:Distribution"
+          ],
+          "title": "CDC Diabetes Health Indicators synthetic data (tvae_quick, parquet)",
+          "access_url": "https://w3id.org/semsynth/demo#/output/CDC Diabetes Health Indicators/models/tvae_quick/synthetic.semmap.parquet",
+          "download_url": "https://w3id.org/semsynth/demo#/output/CDC Diabetes Health Indicators/models/tvae_quick/synthetic.semmap.parquet",
+          "format": "PARQUET",
+          "byte_size": 53382,
+          "modified": "2026-03-13T09:17:13.618536+00:00",
+          "issued": "2026-03-13T09:17:13.618536+00:00"
         },
         {
           "id": "urn:distribution:cdc-diabetes-health-indicators-cdc-diabetes-health-indicators-models-ctgan-fast-synthetic-semmap-parquet",
@@ -650,6 +700,210 @@
           "byte_size": 41387,
           "modified": "2026-03-13T07:42:36.606455+00:00",
           "issued": "2026-03-13T07:42:36.606455+00:00"
+        }
+      ]
+    },
+    {
+      "id": "urn:dataset:diabetes-130-us-hospitals-for-years-1999-2008",
+      "type": [
+        "dcat:Dataset"
+      ],
+      "identifier": "diabetes-130-us-hospitals-for-years-1999-2008",
+      "title": "Diabetes 130-US Hospitals for Years 1999-2008",
+      "description": "Source: UCI dataset 296 \u2014 synthetic assets curated by SemSynth.",
+      "keywords": [
+        "Diabetes 130-US Hospitals for Years 1999-2008",
+        "synthetic data",
+        "SemMap",
+        "SemSynth"
+      ],
+      "landing_page": "https://w3id.org/semsynth/demo#/output/Diabetes 130-US Hospitals for Years 1999-2008/index.html",
+      "modified": "2026-03-13T09:18:32.536610+00:00",
+      "issued": "2026-03-13T09:18:32.536610+00:00",
+      "wasDerivedFrom": [
+        {
+          "id": "https://w3id.org/semsynth/demo#/output/Diabetes 130-US Hospitals for Years 1999-2008/dataset.semmap.json"
+        },
+        {
+          "id": "https://w3id.org/semsynth/demo#/output/Diabetes 130-US Hospitals for Years 1999-2008/models/clg_mi2/synthetic.csv"
+        },
+        {
+          "id": "https://w3id.org/semsynth/demo#/output/Diabetes 130-US Hospitals for Years 1999-2008/models/clg_mi2/synthetic.semmap.parquet"
+        },
+        {
+          "id": "https://w3id.org/semsynth/demo#/output/Diabetes 130-US Hospitals for Years 1999-2008/models/ctgan_fast/synthetic.csv"
+        },
+        {
+          "id": "https://w3id.org/semsynth/demo#/output/Diabetes 130-US Hospitals for Years 1999-2008/models/ctgan_fast/synthetic.semmap.parquet"
+        },
+        {
+          "id": "https://w3id.org/semsynth/demo#/output/Diabetes 130-US Hospitals for Years 1999-2008/models/metasyn/synthetic.csv"
+        },
+        {
+          "id": "https://w3id.org/semsynth/demo#/output/Diabetes 130-US Hospitals for Years 1999-2008/models/metasyn/synthetic.semmap.parquet"
+        },
+        {
+          "id": "https://w3id.org/semsynth/demo#/output/Diabetes 130-US Hospitals for Years 1999-2008/models/semi_mi5/synthetic.csv"
+        },
+        {
+          "id": "https://w3id.org/semsynth/demo#/output/Diabetes 130-US Hospitals for Years 1999-2008/models/semi_mi5/synthetic.semmap.parquet"
+        },
+        {
+          "id": "https://w3id.org/semsynth/demo#/output/Diabetes 130-US Hospitals for Years 1999-2008/models/tvae_quick/synthetic.csv"
+        },
+        {
+          "id": "https://w3id.org/semsynth/demo#/output/Diabetes 130-US Hospitals for Years 1999-2008/models/tvae_quick/synthetic.semmap.parquet"
+        }
+      ],
+      "distributions": [
+        {
+          "id": "urn:distribution:diabetes-130-us-hospitals-for-years-1999-2008:semmap-json",
+          "type": [
+            "dcat:Distribution"
+          ],
+          "title": "Diabetes 130-US Hospitals for Years 1999-2008 SemMap JSON-LD",
+          "access_url": "https://w3id.org/semsynth/demo#/output/Diabetes 130-US Hospitals for Years 1999-2008/dataset.semmap.json",
+          "download_url": "https://w3id.org/semsynth/demo#/output/Diabetes 130-US Hospitals for Years 1999-2008/dataset.semmap.json",
+          "media_type": "application/ld+json",
+          "format": "JSON-LD",
+          "byte_size": 13818,
+          "modified": "2026-03-13T09:18:32.536610+00:00",
+          "issued": "2026-03-13T09:18:32.536610+00:00"
+        },
+        {
+          "id": "urn:distribution:diabetes-130-us-hospitals-for-years-1999-2008-diabetes-130-us-hospitals-for-years-1999-2008-models-semi-mi5-synthetic-csv",
+          "type": [
+            "dcat:Distribution"
+          ],
+          "title": "Diabetes 130-US Hospitals for Years 1999-2008 synthetic data (semi_mi5, csv)",
+          "access_url": "https://w3id.org/semsynth/demo#/output/Diabetes 130-US Hospitals for Years 1999-2008/models/semi_mi5/synthetic.csv",
+          "download_url": "https://w3id.org/semsynth/demo#/output/Diabetes 130-US Hospitals for Years 1999-2008/models/semi_mi5/synthetic.csv",
+          "media_type": "text/csv",
+          "format": "CSV",
+          "byte_size": 282938,
+          "modified": "2026-03-13T08:28:40.522619+00:00",
+          "issued": "2026-03-13T08:28:40.522619+00:00"
+        },
+        {
+          "id": "urn:distribution:diabetes-130-us-hospitals-for-years-1999-2008-diabetes-130-us-hospitals-for-years-1999-2008-models-clg-mi2-synthetic-csv",
+          "type": [
+            "dcat:Distribution"
+          ],
+          "title": "Diabetes 130-US Hospitals for Years 1999-2008 synthetic data (clg_mi2, csv)",
+          "access_url": "https://w3id.org/semsynth/demo#/output/Diabetes 130-US Hospitals for Years 1999-2008/models/clg_mi2/synthetic.csv",
+          "download_url": "https://w3id.org/semsynth/demo#/output/Diabetes 130-US Hospitals for Years 1999-2008/models/clg_mi2/synthetic.csv",
+          "media_type": "text/csv",
+          "format": "CSV",
+          "byte_size": 282938,
+          "modified": "2026-03-13T08:28:40.038619+00:00",
+          "issued": "2026-03-13T08:28:40.038619+00:00"
+        },
+        {
+          "id": "urn:distribution:diabetes-130-us-hospitals-for-years-1999-2008-diabetes-130-us-hospitals-for-years-1999-2008-models-tvae-quick-synthetic-csv",
+          "type": [
+            "dcat:Distribution"
+          ],
+          "title": "Diabetes 130-US Hospitals for Years 1999-2008 synthetic data (tvae_quick, csv)",
+          "access_url": "https://w3id.org/semsynth/demo#/output/Diabetes 130-US Hospitals for Years 1999-2008/models/tvae_quick/synthetic.csv",
+          "download_url": "https://w3id.org/semsynth/demo#/output/Diabetes 130-US Hospitals for Years 1999-2008/models/tvae_quick/synthetic.csv",
+          "media_type": "text/csv",
+          "format": "CSV",
+          "byte_size": 231205,
+          "modified": "2026-03-13T09:18:29.782797+00:00",
+          "issued": "2026-03-13T09:18:29.782797+00:00"
+        },
+        {
+          "id": "urn:distribution:diabetes-130-us-hospitals-for-years-1999-2008-diabetes-130-us-hospitals-for-years-1999-2008-models-ctgan-fast-synthetic-csv",
+          "type": [
+            "dcat:Distribution"
+          ],
+          "title": "Diabetes 130-US Hospitals for Years 1999-2008 synthetic data (ctgan_fast, csv)",
+          "access_url": "https://w3id.org/semsynth/demo#/output/Diabetes 130-US Hospitals for Years 1999-2008/models/ctgan_fast/synthetic.csv",
+          "download_url": "https://w3id.org/semsynth/demo#/output/Diabetes 130-US Hospitals for Years 1999-2008/models/ctgan_fast/synthetic.csv",
+          "media_type": "text/csv",
+          "format": "CSV",
+          "byte_size": 214011,
+          "modified": "2026-03-13T08:29:21.286622+00:00",
+          "issued": "2026-03-13T08:29:21.286622+00:00"
+        },
+        {
+          "id": "urn:distribution:diabetes-130-us-hospitals-for-years-1999-2008-diabetes-130-us-hospitals-for-years-1999-2008-models-metasyn-synthetic-csv",
+          "type": [
+            "dcat:Distribution"
+          ],
+          "title": "Diabetes 130-US Hospitals for Years 1999-2008 synthetic data (metasyn, csv)",
+          "access_url": "https://w3id.org/semsynth/demo#/output/Diabetes 130-US Hospitals for Years 1999-2008/models/metasyn/synthetic.csv",
+          "download_url": "https://w3id.org/semsynth/demo#/output/Diabetes 130-US Hospitals for Years 1999-2008/models/metasyn/synthetic.csv",
+          "media_type": "text/csv",
+          "format": "CSV",
+          "byte_size": 282776,
+          "modified": "2026-03-13T08:28:39.462619+00:00",
+          "issued": "2026-03-13T08:28:39.462619+00:00"
+        },
+        {
+          "id": "urn:distribution:diabetes-130-us-hospitals-for-years-1999-2008-diabetes-130-us-hospitals-for-years-1999-2008-models-semi-mi5-synthetic-semmap-parquet",
+          "type": [
+            "dcat:Distribution"
+          ],
+          "title": "Diabetes 130-US Hospitals for Years 1999-2008 synthetic data (semi_mi5, parquet)",
+          "access_url": "https://w3id.org/semsynth/demo#/output/Diabetes 130-US Hospitals for Years 1999-2008/models/semi_mi5/synthetic.semmap.parquet",
+          "download_url": "https://w3id.org/semsynth/demo#/output/Diabetes 130-US Hospitals for Years 1999-2008/models/semi_mi5/synthetic.semmap.parquet",
+          "format": "PARQUET",
+          "byte_size": 127995,
+          "modified": "2026-03-13T08:28:40.614619+00:00",
+          "issued": "2026-03-13T08:28:40.614619+00:00"
+        },
+        {
+          "id": "urn:distribution:diabetes-130-us-hospitals-for-years-1999-2008-diabetes-130-us-hospitals-for-years-1999-2008-models-clg-mi2-synthetic-semmap-parquet",
+          "type": [
+            "dcat:Distribution"
+          ],
+          "title": "Diabetes 130-US Hospitals for Years 1999-2008 synthetic data (clg_mi2, parquet)",
+          "access_url": "https://w3id.org/semsynth/demo#/output/Diabetes 130-US Hospitals for Years 1999-2008/models/clg_mi2/synthetic.semmap.parquet",
+          "download_url": "https://w3id.org/semsynth/demo#/output/Diabetes 130-US Hospitals for Years 1999-2008/models/clg_mi2/synthetic.semmap.parquet",
+          "format": "PARQUET",
+          "byte_size": 127995,
+          "modified": "2026-03-13T08:28:40.126619+00:00",
+          "issued": "2026-03-13T08:28:40.126619+00:00"
+        },
+        {
+          "id": "urn:distribution:diabetes-130-us-hospitals-for-years-1999-2008-diabetes-130-us-hospitals-for-years-1999-2008-models-tvae-quick-synthetic-semmap-parquet",
+          "type": [
+            "dcat:Distribution"
+          ],
+          "title": "Diabetes 130-US Hospitals for Years 1999-2008 synthetic data (tvae_quick, parquet)",
+          "access_url": "https://w3id.org/semsynth/demo#/output/Diabetes 130-US Hospitals for Years 1999-2008/models/tvae_quick/synthetic.semmap.parquet",
+          "download_url": "https://w3id.org/semsynth/demo#/output/Diabetes 130-US Hospitals for Years 1999-2008/models/tvae_quick/synthetic.semmap.parquet",
+          "format": "PARQUET",
+          "byte_size": 88367,
+          "modified": "2026-03-13T09:18:29.879463+00:00",
+          "issued": "2026-03-13T09:18:29.879463+00:00"
+        },
+        {
+          "id": "urn:distribution:diabetes-130-us-hospitals-for-years-1999-2008-diabetes-130-us-hospitals-for-years-1999-2008-models-ctgan-fast-synthetic-semmap-parquet",
+          "type": [
+            "dcat:Distribution"
+          ],
+          "title": "Diabetes 130-US Hospitals for Years 1999-2008 synthetic data (ctgan_fast, parquet)",
+          "access_url": "https://w3id.org/semsynth/demo#/output/Diabetes 130-US Hospitals for Years 1999-2008/models/ctgan_fast/synthetic.semmap.parquet",
+          "download_url": "https://w3id.org/semsynth/demo#/output/Diabetes 130-US Hospitals for Years 1999-2008/models/ctgan_fast/synthetic.semmap.parquet",
+          "format": "PARQUET",
+          "byte_size": 68519,
+          "modified": "2026-03-13T08:29:21.386621+00:00",
+          "issued": "2026-03-13T08:29:21.386621+00:00"
+        },
+        {
+          "id": "urn:distribution:diabetes-130-us-hospitals-for-years-1999-2008-diabetes-130-us-hospitals-for-years-1999-2008-models-metasyn-synthetic-semmap-parquet",
+          "type": [
+            "dcat:Distribution"
+          ],
+          "title": "Diabetes 130-US Hospitals for Years 1999-2008 synthetic data (metasyn, parquet)",
+          "access_url": "https://w3id.org/semsynth/demo#/output/Diabetes 130-US Hospitals for Years 1999-2008/models/metasyn/synthetic.semmap.parquet",
+          "download_url": "https://w3id.org/semsynth/demo#/output/Diabetes 130-US Hospitals for Years 1999-2008/models/metasyn/synthetic.semmap.parquet",
+          "format": "PARQUET",
+          "byte_size": 127930,
+          "modified": "2026-03-13T08:28:39.627770+00:00",
+          "issued": "2026-03-13T08:28:39.627770+00:00"
         }
       ]
     },
@@ -1531,8 +1785,8 @@
       "media_type": "application/sparql-query",
       "format": "RQ",
       "byte_size": 444,
-      "modified": "2026-03-13T09:15:50.903329+00:00",
-      "issued": "2026-03-13T09:15:50.903329+00:00"
+      "modified": "2026-03-13T09:19:50.060836+00:00",
+      "issued": "2026-03-13T09:19:50.060836+00:00"
     },
     {
       "id": "urn:distribution:sparql:query-provenance-artifacts",
@@ -1545,8 +1799,8 @@
       "media_type": "application/sparql-query",
       "format": "RQ",
       "byte_size": 575,
-      "modified": "2026-03-13T09:15:50.903329+00:00",
-      "issued": "2026-03-13T09:15:50.903329+00:00"
+      "modified": "2026-03-13T09:19:50.060836+00:00",
+      "issued": "2026-03-13T09:19:50.060836+00:00"
     },
     {
       "id": "urn:distribution:sparql:query-semmap-and-provenance-artifacts",
@@ -1559,8 +1813,8 @@
       "media_type": "application/sparql-query",
       "format": "RQ",
       "byte_size": 744,
-      "modified": "2026-03-13T09:15:50.903329+00:00",
-      "issued": "2026-03-13T09:15:50.903329+00:00"
+      "modified": "2026-03-13T09:19:50.060836+00:00",
+      "issued": "2026-03-13T09:19:50.060836+00:00"
     }
   ]
 }
