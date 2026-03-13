@@ -32,35 +32,8 @@ table.per-var-dist thead th { text-align: center; }
 <body>
   <main class="report-container">
       <h1>Data Report — Statlog (Heart)</h1>
-    <p>Cost Matrix</p>
-    <p><strong><em>_</em></strong>  abse  pres
-    absence  0  1
-    presence  5 0</p>
-    <p>where the rows represent the true values and the columns the predicted.</p>
-    <p><strong>Documentation</strong>: 
-    Attribute Information:</p>
-    <hr />
-    <pre><code>  -- 1. age       
-      -- 2. sex       
-      -- 3. chest pain type  (4 values)       
-      -- 4. resting blood pressure  
-      -- 5. serum cholestoral in mg/dl      
-      -- 6. fasting blood sugar &gt; 120 mg/dl       
-      -- 7. resting electrocardiographic results  (values 0,1,2) 
-      -- 8. maximum heart rate achieved  
-      -- 9. exercise induced angina    
-      -- 10. oldpeak = ST depression induced by exercise relative to rest   
-      -- 11. the slope of the peak exercise ST segment     
-      -- 12. number of major vessels (0-3) colored by flourosopy        
-      -- 13.  thal: 3 = normal; 6 = fixed defect; 7 = reversable defect
-    </code></pre>
-    <h2>Attributes types</h2>
-    <p>Real: 1,4,5,8,10,12
-    Ordered:11,
-    Binary: 2,6,9
-    Nominal:7,3,13</p>
-    <h2>Variable to be predicted</h2>
-    <p>Absence (1) or presence (2) of heart disease</p>
+    <p><strong>Source</strong>: <a href="https://archive.ics.uci.edu/dataset/145">UCI dataset 145</a></p>
+    <p><strong>SemMap JSON-LD</strong>: <a href="dataset.semmap.json">dataset.semmap.json</a> · <a href="dataset.semmap.html">RDFa HTML</a></p>
     <h2>Overview</h2>
     <table>
     <thead>
@@ -109,7 +82,6 @@ table.per-var-dist thead th { text-align: center; }
     <thead>
     <tr>
     <th style="text-align: left;">variable</th>
-    <th style="text-align: left;">description</th>
     <th style="text-align: left;">inferred</th>
     <th style="text-align: left;">dist</th>
     </tr>
@@ -117,85 +89,71 @@ table.per-var-dist thead th { text-align: center; }
     <tbody>
     <tr>
     <td style="text-align: left;">age</td>
-    <td style="text-align: left;"></td>
     <td style="text-align: left;">continuous</td>
     <td style="text-align: left;">54.4333 ± 9.1091 [29, 48, 55, 61, 77]</td>
     </tr>
     <tr>
     <td style="text-align: left;">sex</td>
-    <td style="text-align: left;"></td>
     <td style="text-align: left;">discrete</td>
     <td style="text-align: left;">1: 183 (67.78%)</td>
     </tr>
     <tr>
     <td style="text-align: left;">chest-pain</td>
-    <td style="text-align: left;">chest pain type</td>
     <td style="text-align: left;">discrete</td>
     <td style="text-align: left;">4: 129 (47.78%)<br />3: 79 (29.26%)<br />2: 42 (15.56%)<br />1: 20 (7.41%)</td>
     </tr>
     <tr>
     <td style="text-align: left;">rest-bp</td>
-    <td style="text-align: left;">resting blood pressure</td>
     <td style="text-align: left;">continuous</td>
     <td style="text-align: left;">131.3444 ± 17.8616 [94, 120, 130, 140, 200]</td>
     </tr>
     <tr>
     <td style="text-align: left;">serum-chol</td>
-    <td style="text-align: left;">serum cholesterol</td>
     <td style="text-align: left;">continuous</td>
     <td style="text-align: left;">249.6593 ± 51.6862 [126, 213, 245, 280, 564]</td>
     </tr>
     <tr>
     <td style="text-align: left;">fasting-blood-sugar</td>
-    <td style="text-align: left;">fasting blood sugar &gt; 120 mg/dl</td>
     <td style="text-align: left;">discrete</td>
     <td style="text-align: left;">1: 40 (14.81%)</td>
     </tr>
     <tr>
     <td style="text-align: left;">electrocardiographic</td>
-    <td style="text-align: left;">resting electrocardiographic results</td>
     <td style="text-align: left;">discrete</td>
     <td style="text-align: left;">2: 137 (50.74%)<br />0: 131 (48.52%)<br />1: 2 (0.74%)</td>
     </tr>
     <tr>
     <td style="text-align: left;">max-heart-rate</td>
-    <td style="text-align: left;">maximum heart rate achieved</td>
     <td style="text-align: left;">continuous</td>
     <td style="text-align: left;">149.6778 ± 23.1657 [71, 133, 153.5, 166, 202]</td>
     </tr>
     <tr>
     <td style="text-align: left;">angina</td>
-    <td style="text-align: left;">exercise induced anigna</td>
     <td style="text-align: left;">discrete</td>
     <td style="text-align: left;">1: 89 (32.96%)</td>
     </tr>
     <tr>
     <td style="text-align: left;">oldpeak</td>
-    <td style="text-align: left;">oldpeak = ST depression induced by exercise relative to rest</td>
     <td style="text-align: left;">continuous</td>
     <td style="text-align: left;">1.0500 ± 1.1452 [0, 0, 0.8, 1.6, 6.2]</td>
     </tr>
     <tr>
     <td style="text-align: left;">slope</td>
-    <td style="text-align: left;">the slope of the peak exercise ST sgment</td>
     <td style="text-align: left;">discrete</td>
     <td style="text-align: left;">1: 130 (48.15%)<br />2: 122 (45.19%)<br />3: 18 (6.67%)</td>
     </tr>
     <tr>
     <td style="text-align: left;">major-vessels</td>
-    <td style="text-align: left;">number of major vessels (0-3) colored by fluorosopy</td>
     <td style="text-align: left;">discrete</td>
     <td style="text-align: left;">0: 160 (59.26%)<br />1: 58 (21.48%)<br />2: 33 (12.22%)<br />3: 19 (7.04%)</td>
     </tr>
     <tr>
     <td style="text-align: left;">thal</td>
-    <td style="text-align: left;">thal: 3 = normal; 6 = fixed defect; 7 = reversable defect</td>
     <td style="text-align: left;">discrete</td>
     <td style="text-align: left;">3: 152 (56.30%)<br />7: 104 (38.52%)<br />6: 14 (5.19%)</td>
     </tr>
     <tr>
     <td style="text-align: left;">heart-disease</td>
-    <td style="text-align: left;"></td>
     <td style="text-align: left;">discrete</td>
     <td style="text-align: left;">1: 150 (55.56%)</td>
     </tr>
@@ -217,12 +175,62 @@ table.per-var-dist thead th { text-align: center; }
     </thead>
     <tbody>
     <tr>
+    <td style="text-align: left;">metasyn</td>
+    <td style="text-align: left;">metasyn</td>
+    <td style="text-align: right;">0.1074</td>
+    <td style="text-align: right;">0.0871</td>
+    <td style="text-align: right;">0.1859</td>
+    <td style="text-align: right;">3.779</td>
+    <td style="text-align: left;"></td>
+    <td style="text-align: left;"></td>
+    </tr>
+    <tr>
     <td style="text-align: left;">metasyn_full</td>
     <td style="text-align: left;">metasyn</td>
     <td style="text-align: right;">0.1044</td>
     <td style="text-align: right;">0.0935</td>
     <td style="text-align: right;">0.1889</td>
     <td style="text-align: right;">4.2565</td>
+    <td style="text-align: left;"></td>
+    <td style="text-align: left;"></td>
+    </tr>
+    <tr>
+    <td style="text-align: left;">clg_mi2</td>
+    <td style="text-align: left;">pybnesian</td>
+    <td style="text-align: right;">0.0928</td>
+    <td style="text-align: right;">0.078</td>
+    <td style="text-align: right;">0.1504</td>
+    <td style="text-align: right;">3.3633</td>
+    <td style="text-align: left;"></td>
+    <td style="text-align: left;"></td>
+    </tr>
+    <tr>
+    <td style="text-align: left;">semi_mi5</td>
+    <td style="text-align: left;">pybnesian</td>
+    <td style="text-align: right;">0.0928</td>
+    <td style="text-align: right;">0.078</td>
+    <td style="text-align: right;">0.1459</td>
+    <td style="text-align: right;">3.23</td>
+    <td style="text-align: left;"></td>
+    <td style="text-align: left;"></td>
+    </tr>
+    <tr>
+    <td style="text-align: left;">ctgan_fast</td>
+    <td style="text-align: left;">synthcity</td>
+    <td style="text-align: right;">0.3521</td>
+    <td style="text-align: right;">0.3518</td>
+    <td style="text-align: right;">0.6933</td>
+    <td style="text-align: right;">35.8363</td>
+    <td style="text-align: left;"></td>
+    <td style="text-align: left;"></td>
+    </tr>
+    <tr>
+    <td style="text-align: left;">tvae_quick</td>
+    <td style="text-align: left;">synthcity</td>
+    <td style="text-align: right;">0.1147</td>
+    <td style="text-align: right;">0.134</td>
+    <td style="text-align: right;">0.2578</td>
+    <td style="text-align: right;">8.0448</td>
     <td style="text-align: left;"></td>
     <td style="text-align: left;"></td>
     </tr>
@@ -233,12 +241,77 @@ table.per-var-dist thead th { text-align: center; }
     <tr><th>UMAP</th><th>Details</th><th>Structure</th></tr>
     <tr><td></td><td>
 
+    <h3>Model: metasyn (metasyn)</h3>
+    <ul>
+    <li>Seed: 42, rows: 270</li>
+    <li> <a href="models/metasyn/synthetic.csv">Synthetic CSV</a></li>
+    <li> <a href="models/metasyn/per_variable_metrics.csv">Per-variable metrics</a></li>
+    <li> <a href="models/metasyn/metrics.json">Metrics JSON</a></li>
+    </ul>
+
+    </td><td>
+    </td></tr>
+
+    <tr><td></td><td>
+
     <h3>Model: metasyn_full (metasyn)</h3>
     <ul>
     <li>Seed: 42, rows: 270</li>
     <li> <a href="models/metasyn_full/synthetic.csv">Synthetic CSV</a></li>
     <li> <a href="models/metasyn_full/per_variable_metrics.csv">Per-variable metrics</a></li>
     <li> <a href="models/metasyn_full/metrics.json">Metrics JSON</a></li>
+    </ul>
+
+    </td><td>
+    </td></tr>
+
+    <tr><td></td><td>
+
+    <h3>Model: clg_mi2 (pybnesian)</h3>
+    <ul>
+    <li>Seed: 42, rows: 270</li>
+    <li> Params: <tt>{"max_indegree": 2, "operators": ["arcs"], "score": "bic", "type": "clg"}</tt></li><li> <a href="models/clg_mi2/synthetic.csv">Synthetic CSV</a></li>
+    <li> <a href="models/clg_mi2/per_variable_metrics.csv">Per-variable metrics</a></li>
+    <li> <a href="models/clg_mi2/metrics.json">Metrics JSON</a></li>
+    </ul>
+
+    </td><td>
+    </td></tr>
+
+    <tr><td></td><td>
+
+    <h3>Model: semi_mi5 (pybnesian)</h3>
+    <ul>
+    <li>Seed: 42, rows: 270</li>
+    <li> Params: <tt>{"max_indegree": 5, "operators": ["arcs"], "score": "bic", "type": "semiparametric"}</tt></li><li> <a href="models/semi_mi5/synthetic.csv">Synthetic CSV</a></li>
+    <li> <a href="models/semi_mi5/per_variable_metrics.csv">Per-variable metrics</a></li>
+    <li> <a href="models/semi_mi5/metrics.json">Metrics JSON</a></li>
+    </ul>
+
+    </td><td>
+    </td></tr>
+
+    <tr><td></td><td>
+
+    <h3>Model: ctgan_fast (synthcity)</h3>
+    <ul>
+    <li>Seed: 42, rows: 270</li>
+    <li> Params: <tt>{"batch_size": 256, "n_iter": 5}</tt></li><li> <a href="models/ctgan_fast/synthetic.csv">Synthetic CSV</a></li>
+    <li> <a href="models/ctgan_fast/per_variable_metrics.csv">Per-variable metrics</a></li>
+    <li> <a href="models/ctgan_fast/metrics.json">Metrics JSON</a></li>
+    </ul>
+
+    </td><td>
+    </td></tr>
+
+    <tr><td></td><td>
+
+    <h3>Model: tvae_quick (synthcity)</h3>
+    <ul>
+    <li>Seed: 42, rows: 270</li>
+    <li> Params: <tt>{"batch_size": 256}</tt></li><li> <a href="models/tvae_quick/synthetic.csv">Synthetic CSV</a></li>
+    <li> <a href="models/tvae_quick/per_variable_metrics.csv">Per-variable metrics</a></li>
+    <li> <a href="models/tvae_quick/metrics.json">Metrics JSON</a></li>
     </ul>
 
     </td><td>

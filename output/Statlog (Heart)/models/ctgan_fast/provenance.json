@@ -1,0 +1,68 @@
+{
+  "provenance": [
+    {
+      "id": "__main__.py",
+      "type": [
+        "prov:Agent",
+        "prov:SoftwareAgent",
+        "schema:SoftwareSourceCode"
+      ],
+      "label": "__main__.py",
+      "hasVersion": "e41b22a7869f00c7cee24c2109bb44cfb5904da6",
+      "source": "http://local_proxy@127.0.0.1:45617/git/bennokr/semsynth"
+    },
+    {
+      "id": "__main__.py#write_manifest-20260313T0823",
+      "type": "prov:Activity",
+      "startedAtTime": "2026-03-13T08:23:28.116577+00:00",
+      "endedAtTime": "2026-03-13T08:23:28.116674+00:00",
+      "wasAssociatedWith": "__main__.py",
+      "used": [
+        "env-20260313T0823"
+      ]
+    },
+    {
+      "id": "__main__.py#model_run_root-20260313T0823",
+      "type": "prov:Activity",
+      "startedAtTime": "2026-03-13T08:23:27.911861+00:00",
+      "endedAtTime": "2026-03-13T08:23:27.911931+00:00",
+      "wasAssociatedWith": "__main__.py",
+      "used": [
+        "env-20260313T0823"
+      ]
+    },
+    {
+      "id": "output/Statlog (Heart)/models/ctgan_fast",
+      "type": "prov:Entity",
+      "format": "application/octet-stream",
+      "extent": 4096,
+      "modified": "2026-03-13T08:23:28.116488+00:00",
+      "wasGeneratedBy": "__main__.py#write_manifest-20260313T0823"
+    },
+    {
+      "id": "output/Statlog (Heart)",
+      "type": "prov:Entity",
+      "format": "application/octet-stream",
+      "extent": 4096,
+      "modified": "2026-03-11T16:36:34.560710+00:00",
+      "wasGeneratedBy": "__main__.py#model_run_root-20260313T0823"
+    },
+    {
+      "id": "env-20260313T0823",
+      "type": [
+        "prov:Entity",
+        "prov:Collection"
+      ],
+      "label": "Python environment",
+      "title": "makeprov",
+      "hasVersion": "0.4.2",
+      "requires": [
+        {
+          "id": "https://pypi.org/project/parse/",
+          "type": "schema:SoftwareSourceCode",
+          "label": "parse>=1.20"
+        }
+      ]
+    }
+  ]
+}

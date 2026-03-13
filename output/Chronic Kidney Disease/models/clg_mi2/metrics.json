@@ -1,21 +1,21 @@
 {
   "backend": "pybnesian",
   "summary": {
-    "disc_jsd_mean": 0.05444900140681918,
-    "disc_jsd_median": 0.05020761778280342,
-    "cont_ks_mean": 0.24053996598639454,
-    "cont_w1_mean": 49.38465981698698
+    "disc_jsd_mean": 0.08574705593631796,
+    "disc_jsd_median": 0.057985533950701766,
+    "cont_ks_mean": 0.15916666666666668,
+    "cont_w1_mean": 198.246354387874
   },
-  "train_rows": 126,
-  "test_rows": 32,
-  "synth_rows": 126,
-  "discrete_cols": 11,
-  "continuous_cols": 14,
+  "train_rows": 320,
+  "test_rows": 80,
+  "synth_rows": 400,
+  "discrete_cols": 22,
+  "continuous_cols": 3,
   "heldout_loglik": {
-    "mean_loglik": -104.69483887367012,
-    "std_loglik": 390.30875573786363,
-    "sum_loglik": -3350.234843957444,
-    "n_rows": 32
+    "mean_loglik": -6.736472125199439,
+    "std_loglik": 6.433005038304741,
+    "sum_loglik": -538.9177700159552,
+    "n_rows": 80
   },
   "umap_png": null
 }

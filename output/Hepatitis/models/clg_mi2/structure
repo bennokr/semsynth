@@ -1,0 +1,24 @@
+// Hepatitis — clg_mi2 BN
+digraph {
+	rankdir=LR
+	Class [label=Class fillcolor="#f3d19c" shape=box style=filled]
+	Histology [label=Histology fillcolor="#f3d19c" shape=box style=filled]
+	Protime [label=Protime fillcolor="#f3d19c" shape=box style=filled]
+	Albumin [label=Albumin fillcolor="#f3d19c" shape=box style=filled]
+	Bilirubin [label=Bilirubin fillcolor="#f3d19c" shape=box style=filled]
+	Age [label=Age fillcolor="#f3d19c" shape=box style=filled]
+	Varices [label=Varices fillcolor="#f3d19c" shape=box style=filled]
+	Steroid [label=Steroid fillcolor="#f3d19c" shape=box style=filled]
+	Antivirals [label=Antivirals fillcolor="#f3d19c" shape=box style=filled]
+	Fatigue [label=Fatigue fillcolor="#f3d19c" shape=box style=filled]
+	Malaise [label=Malaise fillcolor="#f3d19c" shape=box style=filled]
+	Sgot [label=Sgot fillcolor="#f3d19c" shape=box style=filled]
+	"Alk Phosphate" [label="Alk Phosphate" fillcolor="#f3d19c" shape=box style=filled]
+	Anorexia [label=Anorexia fillcolor="#f3d19c" shape=box style=filled]
+	"Spleen Palpable" [label="Spleen Palpable" fillcolor="#f3d19c" shape=box style=filled]
+	"Liver Firm" [label="Liver Firm" fillcolor="#f3d19c" shape=box style=filled]
+	"Liver Big" [label="Liver Big" fillcolor="#f3d19c" shape=box style=filled]
+	Spiders [label=Spiders fillcolor="#f3d19c" shape=box style=filled]
+	Sex [label=Sex fillcolor="#f3d19c" shape=box style=filled]
+	Ascites [label=Ascites fillcolor="#f3d19c" shape=box style=filled]
+}

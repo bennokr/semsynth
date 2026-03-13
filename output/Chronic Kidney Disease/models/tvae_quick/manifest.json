@@ -9,6 +9,6 @@
     "batch_size": 256
   },
   "seed": 42,
-  "rows": 1000,
+  "rows": 400,
   "test_size": 0.2
 }

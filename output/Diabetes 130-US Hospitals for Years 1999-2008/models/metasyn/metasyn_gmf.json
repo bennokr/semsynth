@@ -1,0 +1,2898 @@
+{
+    "gmf_version": "1.1",
+    "n_rows": 800,
+    "n_columns": 48,
+    "provenance": {
+        "created by": {
+            "name": "metasyn",
+            "version": "2.0.0"
+        },
+        "creation time": "2026-03-13T08:28:38.934827"
+    },
+    "vars": [
+        {
+            "name": "race",
+            "type": "categorical",
+            "dtype": "Categorical",
+            "prop_missing": 0.0,
+            "distribution": {
+                "name": "core.multinoulli",
+                "version": "1.0",
+                "class_name": "MultinoulliDistribution",
+                "unique": false,
+                "parameters": {
+                    "labels": [
+                        "AfricanAmerican",
+                        "Asian",
+                        "Caucasian",
+                        "Hispanic",
+                        "Other"
+                    ],
+                    "probs": [
+                        0.2125,
+                        0.00625,
+                        0.7475,
+                        0.02,
+                        0.01375
+                    ]
+                }
+            },
+            "creation_method": {
+                "created_by": "metasyn",
+                "fitter": {
+                    "name": "MultinoulliFitter",
+                    "privacy": {
+                        "name": "none",
+                        "parameters": {}
+                    },
+                    "version": "1.0",
+                    "plugin": "builtin",
+                    "plugin_version": "2.0.0"
+                }
+            }
+        },
+        {
+            "name": "gender",
+            "type": "categorical",
+            "dtype": "Categorical",
+            "prop_missing": 0.0,
+            "distribution": {
+                "name": "core.multinoulli",
+                "version": "1.0",
+                "class_name": "MultinoulliDistribution",
+                "unique": false,
+                "parameters": {
+                    "labels": [
+                        "Female",
+                        "Male",
+                        "Unknown/Invalid"
+                    ],
+                    "probs": [
+                        0.555,
+                        0.44375,
+                        0.00125
+                    ]
+                }
+            },
+            "creation_method": {
+                "created_by": "metasyn",
+                "fitter": {
+                    "name": "MultinoulliFitter",
+                    "privacy": {
+                        "name": "none",
+                        "parameters": {}
+                    },
+                    "version": "1.0",
+                    "plugin": "builtin",
+                    "plugin_version": "2.0.0"
+                }
+            }
+        },
+        {
+            "name": "age",
+            "type": "categorical",
+            "dtype": "Categorical",
+            "prop_missing": 0.0,
+            "distribution": {
+                "name": "core.multinoulli",
+                "version": "1.0",
+                "class_name": "MultinoulliDistribution",
+                "unique": false,
+                "parameters": {
+                    "labels": [
+                        "[0-10)",
+                        "[10-20)",
+                        "[20-30)",
+                        "[30-40)",
+                        "[40-50)",
+                        "[50-60)",
+                        "[60-70)",
+                        "[70-80)",
+                        "[80-90)",
+                        "[90-100)"
+                    ],
+                    "probs": [
+                        0.005,
+                        0.00875,
+                        0.02,
+                        0.0375,
+                        0.08625,
+                        0.16875,
+                        0.1975,
+                        0.255,
+                        0.18625,
+                        0.035
+                    ]
+                }
+            },
+            "creation_method": {
+                "created_by": "metasyn",
+                "fitter": {
+                    "name": "MultinoulliFitter",
+                    "privacy": {
+                        "name": "none",
+                        "parameters": {}
+                    },
+                    "version": "1.0",
+                    "plugin": "builtin",
+                    "plugin_version": "2.0.0"
+                }
+            }
+        },
+        {
+            "name": "weight",
+            "type": "categorical",
+            "dtype": "Categorical",
+            "prop_missing": 0.0,
+            "distribution": {
+                "name": "core.multinoulli",
+                "version": "1.0",
+                "class_name": "MultinoulliDistribution",
+                "unique": false,
+                "parameters": {
+                    "labels": [
+                        "[0-25)",
+                        "[100-125)",
+                        "[125-150)",
+                        "[150-175)",
+                        "[175-200)",
+                        "[25-50)",
+                        "[50-75)",
+                        "[75-100)"
+                    ],
+                    "probs": [
+                        0.01625,
+                        0.16375,
+                        0.0525,
+                        0.0075,
+                        0.00875,
+                        0.0275,
+                        0.27125,
+                        0.4525
+                    ]
+                }
+            },
+            "creation_method": {
+                "created_by": "metasyn",
+                "fitter": {
+                    "name": "MultinoulliFitter",
+                    "privacy": {
+                        "name": "none",
+                        "parameters": {}
+                    },
+                    "version": "1.0",
+                    "plugin": "builtin",
+                    "plugin_version": "2.0.0"
+                }
+            }
+        },
+        {
+            "name": "admission_type_id",
+            "type": "categorical",
+            "dtype": "Categorical",
+            "prop_missing": 0.0,
+            "distribution": {
+                "name": "core.multinoulli",
+                "version": "1.0",
+                "class_name": "MultinoulliDistribution",
+                "unique": false,
+                "parameters": {
+                    "labels": [
+                        "1",
+                        "2",
+                        "3",
+                        "5",
+                        "6",
+                        "7",
+                        "8"
+                    ],
+                    "probs": [
+                        0.5637500000000001,
+                        0.18000000000000002,
+                        0.15750000000000003,
+                        0.037500000000000006,
+                        0.05500000000000001,
+                        0.0012500000000000002,
+                        0.005000000000000001
+                    ]
+                }
+            },
+            "creation_method": {
+                "created_by": "metasyn",
+                "fitter": {
+                    "name": "MultinoulliFitter",
+                    "privacy": {
+                        "name": "none",
+                        "parameters": {}
+                    },
+                    "version": "1.0",
+                    "plugin": "builtin",
+                    "plugin_version": "2.0.0"
+                }
+            }
+        },
+        {
+            "name": "discharge_disposition_id",
+            "type": "continuous",
+            "dtype": "Float64",
+            "prop_missing": 0.0,
+            "distribution": {
+                "name": "core.truncated_normal",
+                "version": "1.0",
+                "class_name": "ContinuousTruncatedNormalDistribution",
+                "unique": false,
+                "parameters": {
+                    "lower": 0.99999999,
+                    "upper": 25.00000001,
+                    "mean": -1255.3789410672805,
+                    "sd": 57.886932853094955
+                }
+            },
+            "creation_method": {
+                "created_by": "metasyn",
+                "fitter": {
+                    "name": "ContinuousTruncatedNormalFitter",
+                    "privacy": {
+                        "name": "none",
+                        "parameters": {}
+                    },
+                    "version": "1.0",
+                    "plugin": "builtin",
+                    "plugin_version": "2.0.0"
+                }
+            }
+        },
+        {
+            "name": "admission_source_id",
+            "type": "categorical",
+            "dtype": "Categorical",
+            "prop_missing": 0.0,
+            "distribution": {
+                "name": "core.multinoulli",
+                "version": "1.0",
+                "class_name": "MultinoulliDistribution",
+                "unique": false,
+                "parameters": {
+                    "labels": [
+                        "1",
+                        "17",
+                        "2",
+                        "20",
+                        "3",
+                        "4",
+                        "5",
+                        "6",
+                        "7",
+                        "9"
+                    ],
+                    "probs": [
+                        0.27,
+                        0.06375,
+                        0.01,
+                        0.00375,
+                        0.0025,
+                        0.02625,
+                        0.0075,
+                        0.02625,
+                        0.58875,
+                        0.00125
+                    ]
+                }
+            },
+            "creation_method": {
+                "created_by": "metasyn",
+                "fitter": {
+                    "name": "MultinoulliFitter",
+                    "privacy": {
+                        "name": "none",
+                        "parameters": {}
+                    },
+                    "version": "1.0",
+                    "plugin": "builtin",
+                    "plugin_version": "2.0.0"
+                }
+            }
+        },
+        {
+            "name": "time_in_hospital",
+            "type": "categorical",
+            "dtype": "Categorical",
+            "prop_missing": 0.0,
+            "distribution": {
+                "name": "core.multinoulli",
+                "version": "1.0",
+                "class_name": "MultinoulliDistribution",
+                "unique": false,
+                "parameters": {
+                    "labels": [
+                        "1",
+                        "10",
+                        "11",
+                        "12",
+                        "13",
+                        "14",
+                        "2",
+                        "3",
+                        "4",
+                        "5",
+                        "6",
+                        "7",
+                        "8",
+                        "9"
+                    ],
+                    "probs": [
+                        0.14625,
+                        0.02125,
+                        0.02375,
+                        0.01375,
+                        0.01,
+                        0.01,
+                        0.17,
+                        0.165,
+                        0.13125,
+                        0.09625,
+                        0.08625,
+                        0.0525,
+                        0.04125,
+                        0.0325
+                    ]
+                }
+            },
+            "creation_method": {
+                "created_by": "metasyn",
+                "fitter": {
+                    "name": "MultinoulliFitter",
+                    "privacy": {
+                        "name": "none",
+                        "parameters": {}
+                    },
+                    "version": "1.0",
+                    "plugin": "builtin",
+                    "plugin_version": "2.0.0"
+                }
+            }
+        },
+        {
+            "name": "payer_code",
+            "type": "categorical",
+            "dtype": "Categorical",
+            "prop_missing": 0.0,
+            "distribution": {
+                "name": "core.multinoulli",
+                "version": "1.0",
+                "class_name": "MultinoulliDistribution",
+                "unique": false,
+                "parameters": {
+                    "labels": [
+                        "BC",
+                        "CH",
+                        "CM",
+                        "CP",
+                        "DM",
+                        "HM",
+                        "MC",
+                        "MD",
+                        "OG",
+                        "OT",
+                        "PO",
+                        "SP",
+                        "UN",
+                        "WC"
+                    ],
+                    "probs": [
+                        0.04999999999999999,
+                        0.0012499999999999998,
+                        0.021249999999999998,
+                        0.029999999999999992,
+                        0.013749999999999997,
+                        0.06749999999999999,
+                        0.6387499999999999,
+                        0.04999999999999999,
+                        0.008749999999999999,
+                        0.0024999999999999996,
+                        0.004999999999999999,
+                        0.061249999999999985,
+                        0.04749999999999999,
+                        0.0024999999999999996
+                    ]
+                }
+            },
+            "creation_method": {
+                "created_by": "metasyn",
+                "fitter": {
+                    "name": "MultinoulliFitter",
+                    "privacy": {
+                        "name": "none",
+                        "parameters": {}
+                    },
+                    "version": "1.0",
+                    "plugin": "builtin",
+                    "plugin_version": "2.0.0"
+                }
+            }
+        },
+        {
+            "name": "medical_specialty",
+            "type": "categorical",
+            "dtype": "Categorical",
+            "prop_missing": 0.0,
+            "distribution": {
+                "name": "core.multinoulli",
+                "version": "1.0",
+                "class_name": "MultinoulliDistribution",
+                "unique": false,
+                "parameters": {
+                    "labels": [
+                        "Anesthesiology-Pediatric",
+                        "Cardiology",
+                        "Emergency/Trauma",
+                        "Endocrinology",
+                        "Family/GeneralPractice",
+                        "Gastroenterology",
+                        "Hematology",
+                        "Hematology/Oncology",
+                        "Hospitalist",
+                        "InfectiousDiseases",
+                        "InternalMedicine",
+                        "Nephrology",
+                        "Neurology",
+                        "ObstetricsandGynecology",
+                        "Oncology",
+                        "Ophthalmology",
+                        "Orthopedics",
+                        "Orthopedics-Reconstructive",
+                        "Otolaryngology",
+                        "Pathology",
+                        "Pediatrics",
+                        "Pediatrics-CriticalCare",
+                        "Pediatrics-Endocrinology",
+                        "PhysicalMedicineandRehabilitation",
+                        "Podiatry",
+                        "Psychiatry",
+                        "Psychology",
+                        "Pulmonology",
+                        "Radiologist",
+                        "Radiology",
+                        "Surgeon",
+                        "Surgery-Cardiovascular",
+                        "Surgery-Cardiovascular/Thoracic",
+                        "Surgery-General",
+                        "Surgery-Neuro",
+                        "Surgery-Thoracic",
+                        "Surgery-Vascular",
+                        "SurgicalSpecialty",
+                        "Urology"
+                    ],
+                    "probs": [
+                        0.0025000000000000005,
+                        0.10500000000000002,
+                        0.19375000000000006,
+                        0.0037500000000000007,
+                        0.13875000000000004,
+                        0.010000000000000002,
+                        0.0012500000000000002,
+                        0.0025000000000000005,
+                        0.0012500000000000002,
+                        0.0012500000000000002,
+                        0.27125000000000005,
+                        0.022500000000000003,
+                        0.006250000000000002,
+                        0.008750000000000003,
+                        0.008750000000000003,
+                        0.0012500000000000002,
+                        0.028750000000000008,
+                        0.016250000000000004,
+                        0.0012500000000000002,
+                        0.0037500000000000007,
+                        0.0075000000000000015,
+                        0.0025000000000000005,
+                        0.0037500000000000007,
+                        0.006250000000000002,
+                        0.0012500000000000002,
+                        0.015000000000000003,
+                        0.0037500000000000007,
+                        0.012500000000000004,
+                        0.03125000000000001,
+                        0.0012500000000000002,
+                        0.0025000000000000005,
+                        0.0025000000000000005,
+                        0.0075000000000000015,
+                        0.04250000000000001,
+                        0.005000000000000001,
+                        0.006250000000000002,
+                        0.0075000000000000015,
+                        0.0012500000000000002,
+                        0.011250000000000001
+                    ]
+                }
+            },
+            "creation_method": {
+                "created_by": "metasyn",
+                "fitter": {
+                    "name": "MultinoulliFitter",
+                    "privacy": {
+                        "name": "none",
+                        "parameters": {}
+                    },
+                    "version": "1.0",
+                    "plugin": "builtin",
+                    "plugin_version": "2.0.0"
+                }
+            }
+        },
+        {
+            "name": "num_lab_procedures",
+            "type": "continuous",
+            "dtype": "Float64",
+            "prop_missing": 0.0,
+            "distribution": {
+                "name": "core.truncated_normal",
+                "version": "1.0",
+                "class_name": "ContinuousTruncatedNormalDistribution",
+                "unique": false,
+                "parameters": {
+                    "lower": 0.99999999,
+                    "upper": 96.00000001,
+                    "mean": 43.42871611110231,
+                    "sd": 20.134105375050943
+                }
+            },
+            "creation_method": {
+                "created_by": "metasyn",
+                "fitter": {
+                    "name": "ContinuousTruncatedNormalFitter",
+                    "privacy": {
+                        "name": "none",
+                        "parameters": {}
+                    },
+                    "version": "1.0",
+                    "plugin": "builtin",
+                    "plugin_version": "2.0.0"
+                }
+            }
+        },
+        {
+            "name": "num_procedures",
+            "type": "categorical",
+            "dtype": "Categorical",
+            "prop_missing": 0.0,
+            "distribution": {
+                "name": "core.multinoulli",
+                "version": "1.0",
+                "class_name": "MultinoulliDistribution",
+                "unique": false,
+                "parameters": {
+                    "labels": [
+                        "0",
+                        "1",
+                        "2",
+                        "3",
+                        "4",
+                        "5",
+                        "6"
+                    ],
+                    "probs": [
+                        0.48750000000000004,
+                        0.19500000000000003,
+                        0.12125000000000001,
+                        0.08875000000000001,
+                        0.03250000000000001,
+                        0.022500000000000003,
+                        0.052500000000000005
+                    ]
+                }
+            },
+            "creation_method": {
+                "created_by": "metasyn",
+                "fitter": {
+                    "name": "MultinoulliFitter",
+                    "privacy": {
+                        "name": "none",
+                        "parameters": {}
+                    },
+                    "version": "1.0",
+                    "plugin": "builtin",
+                    "plugin_version": "2.0.0"
+                }
+            }
+        },
+        {
+            "name": "num_medications",
+            "type": "continuous",
+            "dtype": "Float64",
+            "prop_missing": 0.0,
+            "distribution": {
+                "name": "core.truncated_normal",
+                "version": "1.0",
+                "class_name": "ContinuousTruncatedNormalDistribution",
+                "unique": false,
+                "parameters": {
+                    "lower": 1.99999999,
+                    "upper": 47.00000001,
+                    "mean": 13.901401935888915,
+                    "sd": 9.026057245736535
+                }
+            },
+            "creation_method": {
+                "created_by": "metasyn",
+                "fitter": {
+                    "name": "ContinuousTruncatedNormalFitter",
+                    "privacy": {
+                        "name": "none",
+                        "parameters": {}
+                    },
+                    "version": "1.0",
+                    "plugin": "builtin",
+                    "plugin_version": "2.0.0"
+                }
+            }
+        },
+        {
+            "name": "number_outpatient",
+            "type": "continuous",
+            "dtype": "Float64",
+            "prop_missing": 0.0,
+            "distribution": {
+                "name": "core.truncated_normal",
+                "version": "1.0",
+                "class_name": "ContinuousTruncatedNormalDistribution",
+                "unique": false,
+                "parameters": {
+                    "lower": -1e-08,
+                    "upper": 20.00000001,
+                    "mean": -338.61854867206944,
+                    "sd": 11.716738192724545
+                }
+            },
+            "creation_method": {
+                "created_by": "metasyn",
+                "fitter": {
+                    "name": "ContinuousTruncatedNormalFitter",
+                    "privacy": {
+                        "name": "none",
+                        "parameters": {}
+                    },
+                    "version": "1.0",
+                    "plugin": "builtin",
+                    "plugin_version": "2.0.0"
+                }
+            }
+        },
+        {
+            "name": "number_emergency",
+            "type": "continuous",
+            "dtype": "Float64",
+            "prop_missing": 0.0,
+            "distribution": {
+                "name": "core.truncated_normal",
+                "version": "1.0",
+                "class_name": "ContinuousTruncatedNormalDistribution",
+                "unique": false,
+                "parameters": {
+                    "lower": -1e-08,
+                    "upper": 5.00000001,
+                    "mean": -250.46188192323987,
+                    "sd": 6.428733262432773
+                }
+            },
+            "creation_method": {
+                "created_by": "metasyn",
+                "fitter": {
+                    "name": "ContinuousTruncatedNormalFitter",
+                    "privacy": {
+                        "name": "none",
+                        "parameters": {}
+                    },
+                    "version": "1.0",
+                    "plugin": "builtin",
+                    "plugin_version": "2.0.0"
+                }
+            }
+        },
+        {
+            "name": "number_inpatient",
+            "type": "continuous",
+            "dtype": "Float64",
+            "prop_missing": 0.0,
+            "distribution": {
+                "name": "core.truncated_normal",
+                "version": "1.0",
+                "class_name": "ContinuousTruncatedNormalDistribution",
+                "unique": false,
+                "parameters": {
+                    "lower": -1e-08,
+                    "upper": 8.00000001,
+                    "mean": -822.7782479659701,
+                    "sd": 21.800181560120357
+                }
+            },
+            "creation_method": {
+                "created_by": "metasyn",
+                "fitter": {
+                    "name": "ContinuousTruncatedNormalFitter",
+                    "privacy": {
+                        "name": "none",
+                        "parameters": {}
+                    },
+                    "version": "1.0",
+                    "plugin": "builtin",
+                    "plugin_version": "2.0.0"
+                }
+            }
+        },
+        {
+            "name": "diag_1",
+            "type": "categorical",
+            "dtype": "Categorical",
+            "prop_missing": 0.0,
+            "distribution": {
+                "name": "core.multinoulli",
+                "version": "1.0",
+                "class_name": "MultinoulliDistribution",
+                "unique": false,
+                "parameters": {
+                    "labels": [
+                        "112",
+                        "150",
+                        "151",
+                        "153",
+                        "162",
+                        "174",
+                        "182",
+                        "185",
+                        "188",
+                        "196",
+                        "198",
+                        "225",
+                        "241",
+                        "250",
+                        "250.01",
+                        "250.02",
+                        "250.03",
+                        "250.1",
+                        "250.11",
+                        "250.12",
+                        "250.13",
+                        "250.2",
+                        "250.22",
+                        "250.4",
+                        "250.42",
+                        "250.6",
+                        "250.7",
+                        "250.8",
+                        "250.82",
+                        "275",
+                        "276",
+                        "278",
+                        "280",
+                        "282",
+                        "286",
+                        "290",
+                        "293",
+                        "295",
+                        "296",
+                        "305",
+                        "307",
+                        "311",
+                        "340",
+                        "342",
+                        "346",
+                        "348",
+                        "38",
+                        "380",
+                        "386",
+                        "398",
+                        "401",
+                        "402",
+                        "403",
+                        "404",
+                        "41",
+                        "410",
+                        "414",
+                        "415",
+                        "420",
+                        "421",
+                        "424",
+                        "426",
+                        "427",
+                        "428",
+                        "432",
+                        "433",
+                        "434",
+                        "435",
+                        "436",
+                        "438",
+                        "440",
+                        "441",
+                        "443",
+                        "447",
+                        "453",
+                        "455",
+                        "458",
+                        "466",
+                        "482",
+                        "485",
+                        "486",
+                        "491",
+                        "493",
+                        "494",
+                        "507",
+                        "511",
+                        "514",
+                        "515",
+                        "518",
+                        "527",
+                        "530",
+                        "531",
+                        "532",
+                        "535",
+                        "536",
+                        "550",
+                        "552",
+                        "553",
+                        "555",
+                        "557",
+                        "558",
+                        "560",
+                        "562",
+                        "564",
+                        "567",
+                        "571",
+                        "572",
+                        "574",
+                        "575",
+                        "577",
+                        "578",
+                        "579",
+                        "582",
+                        "584",
+                        "590",
+                        "592",
+                        "593",
+                        "595",
+                        "599",
+                        "608",
+                        "611",
+                        "618",
+                        "620",
+                        "626",
+                        "644",
+                        "648",
+                        "658",
+                        "682",
+                        "694",
+                        "705",
+                        "707",
+                        "710",
+                        "715",
+                        "719",
+                        "721",
+                        "722",
+                        "723",
+                        "724",
+                        "726",
+                        "728",
+                        "729",
+                        "733",
+                        "780",
+                        "781",
+                        "785",
+                        "786",
+                        "787",
+                        "789",
+                        "79",
+                        "790",
+                        "794",
+                        "8",
+                        "802",
+                        "805",
+                        "808",
+                        "812",
+                        "813",
+                        "820",
+                        "822",
+                        "824",
+                        "844",
+                        "860",
+                        "861",
+                        "920",
+                        "922",
+                        "935",
+                        "959",
+                        "990",
+                        "995",
+                        "996",
+                        "997",
+                        "998",
+                        "V55",
+                        "V57",
+                        "V58"
+                    ],
+                    "probs": [
+                        0.00125,
+                        0.0025,
+                        0.0025,
+                        0.0025,
+                        0.01,
+                        0.00125,
+                        0.0025,
+                        0.00125,
+                        0.0025,
+                        0.00125,
+                        0.005,
+                        0.00125,
+                        0.00125,
+                        0.00375,
+                        0.00125,
+                        0.00125,
+                        0.005,
+                        0.0025,
+                        0.00625,
+                        0.005,
+                        0.015,
+                        0.00125,
+                        0.00125,
+                        0.005,
+                        0.00125,
+                        0.00625,
+                        0.00375,
+                        0.01625,
+                        0.005,
+                        0.00125,
+                        0.02,
+                        0.005,
+                        0.00125,
+                        0.00125,
+                        0.0025,
+                        0.0025,
+                        0.00375,
+                        0.00375,
+                        0.00875,
+                        0.00125,
+                        0.00125,
+                        0.00125,
+                        0.00125,
+                        0.00125,
+                        0.00125,
+                        0.0025,
+                        0.01875,
+                        0.00125,
+                        0.00375,
+                        0.00125,
+                        0.0075,
+                        0.00375,
+                        0.00375,
+                        0.00375,
+                        0.00125,
+                        0.02875,
+                        0.065,
+                        0.00375,
+                        0.00125,
+                        0.00125,
+                        0.00125,
+                        0.00125,
+                        0.02375,
+                        0.07375,
+                        0.00125,
+                        0.00875,
+                        0.02125,
+                        0.0125,
+                        0.00375,
+                        0.00125,
+                        0.00875,
+                        0.00125,
+                        0.00125,
+                        0.00125,
+                        0.00625,
+                        0.00125,
+                        0.00375,
+                        0.00625,
+                        0.0025,
+                        0.00125,
+                        0.04375,
+                        0.02,
+                        0.01,
+                        0.00125,
+                        0.0075,
+                        0.005,
+                        0.00125,
+                        0.00125,
+                        0.0025,
+                        0.00125,
+                        0.00125,
+                        0.00375,
+                        0.00125,
+                        0.00125,
+                        0.00125,
+                        0.00125,
+                        0.005,
+                        0.00125,
+                        0.00125,
+                        0.0025,
+                        0.0025,
+                        0.01,
+                        0.015,
+                        0.00125,
+                        0.0025,
+                        0.00625,
+                        0.00375,
+                        0.01625,
+                        0.00125,
+                        0.00625,
+                        0.0025,
+                        0.00125,
+                        0.00125,
+                        0.02,
+                        0.00125,
+                        0.00125,
+                        0.00125,
+                        0.00125,
+                        0.01375,
+                        0.00125,
+                        0.00125,
+                        0.00125,
+                        0.0025,
+                        0.00125,
+                        0.0025,
+                        0.0025,
+                        0.00125,
+                        0.01625,
+                        0.00125,
+                        0.00125,
+                        0.00375,
+                        0.00125,
+                        0.025,
+                        0.0025,
+                        0.00125,
+                        0.01125,
+                        0.00125,
+                        0.0025,
+                        0.0025,
+                        0.00125,
+                        0.00125,
+                        0.0075,
+                        0.02625,
+                        0.00125,
+                        0.0025,
+                        0.05125,
+                        0.0025,
+                        0.00875,
+                        0.005,
+                        0.0025,
+                        0.00125,
+                        0.0075,
+                        0.00125,
+                        0.00375,
+                        0.00125,
+                        0.00375,
+                        0.0025,
+                        0.00875,
+                        0.0025,
+                        0.0025,
+                        0.00125,
+                        0.00125,
+                        0.00125,
+                        0.00125,
+                        0.00125,
+                        0.00125,
+                        0.00125,
+                        0.00125,
+                        0.0025,
+                        0.005,
+                        0.00625,
+                        0.0075,
+                        0.00125,
+                        0.0125,
+                        0.00125
+                    ]
+                }
+            },
+            "creation_method": {
+                "created_by": "metasyn",
+                "fitter": {
+                    "name": "MultinoulliFitter",
+                    "privacy": {
+                        "name": "none",
+                        "parameters": {}
+                    },
+                    "version": "1.0",
+                    "plugin": "builtin",
+                    "plugin_version": "2.0.0"
+                }
+            }
+        },
+        {
+            "name": "diag_2",
+            "type": "categorical",
+            "dtype": "Categorical",
+            "prop_missing": 0.0,
+            "distribution": {
+                "name": "core.multinoulli",
+                "version": "1.0",
+                "class_name": "MultinoulliDistribution",
+                "unique": false,
+                "parameters": {
+                    "labels": [
+                        "112",
+                        "117",
+                        "135",
+                        "153",
+                        "155",
+                        "162",
+                        "197",
+                        "198",
+                        "202",
+                        "203",
+                        "204",
+                        "220",
+                        "244",
+                        "250",
+                        "250.01",
+                        "250.02",
+                        "250.03",
+                        "250.11",
+                        "250.12",
+                        "250.4",
+                        "250.41",
+                        "250.42",
+                        "250.5",
+                        "250.53",
+                        "250.6",
+                        "250.8",
+                        "250.82",
+                        "250.92",
+                        "255",
+                        "262",
+                        "272",
+                        "276",
+                        "277",
+                        "278",
+                        "279",
+                        "280",
+                        "281",
+                        "284",
+                        "285",
+                        "287",
+                        "288",
+                        "293",
+                        "295",
+                        "296",
+                        "300",
+                        "301",
+                        "305",
+                        "324",
+                        "331",
+                        "336",
+                        "340",
+                        "342",
+                        "346",
+                        "348",
+                        "373",
+                        "38",
+                        "396",
+                        "397",
+                        "398",
+                        "401",
+                        "402",
+                        "403",
+                        "41",
+                        "410",
+                        "411",
+                        "413",
+                        "414",
+                        "42",
+                        "420",
+                        "421",
+                        "424",
+                        "425",
+                        "426",
+                        "427",
+                        "428",
+                        "429",
+                        "432",
+                        "433",
+                        "435",
+                        "436",
+                        "440",
+                        "443",
+                        "444",
+                        "453",
+                        "456",
+                        "458",
+                        "478",
+                        "485",
+                        "486",
+                        "490",
+                        "491",
+                        "492",
+                        "493",
+                        "496",
+                        "507",
+                        "511",
+                        "515",
+                        "518",
+                        "535",
+                        "536",
+                        "54",
+                        "553",
+                        "560",
+                        "564",
+                        "569",
+                        "571",
+                        "573",
+                        "574",
+                        "577",
+                        "578",
+                        "581",
+                        "584",
+                        "585",
+                        "586",
+                        "591",
+                        "593",
+                        "599",
+                        "614",
+                        "648",
+                        "681",
+                        "682",
+                        "70",
+                        "707",
+                        "710",
+                        "719",
+                        "721",
+                        "722",
+                        "724",
+                        "726",
+                        "729",
+                        "730",
+                        "733",
+                        "780",
+                        "781",
+                        "784",
+                        "785",
+                        "786",
+                        "788",
+                        "789",
+                        "790",
+                        "794",
+                        "799",
+                        "840",
+                        "850",
+                        "873",
+                        "980",
+                        "995",
+                        "996",
+                        "998",
+                        "E878",
+                        "E880",
+                        "E881",
+                        "E885",
+                        "V12",
+                        "V15",
+                        "V42",
+                        "V45",
+                        "V46",
+                        "V49",
+                        "V58",
+                        "V62",
+                        "V85"
+                    ],
+                    "probs": [
+                        0.00625,
+                        0.00125,
+                        0.00125,
+                        0.00125,
+                        0.00125,
+                        0.0025,
+                        0.005,
+                        0.00375,
+                        0.00125,
+                        0.00125,
+                        0.00125,
+                        0.00125,
+                        0.00125,
+                        0.06625,
+                        0.02125,
+                        0.02,
+                        0.0025,
+                        0.00125,
+                        0.00125,
+                        0.00125,
+                        0.00375,
+                        0.00375,
+                        0.00125,
+                        0.00125,
+                        0.00875,
+                        0.00125,
+                        0.00125,
+                        0.00125,
+                        0.00125,
+                        0.00125,
+                        0.00375,
+                        0.0675,
+                        0.00125,
+                        0.0025,
+                        0.00125,
+                        0.00625,
+                        0.0025,
+                        0.0025,
+                        0.015,
+                        0.00375,
+                        0.00125,
+                        0.0025,
+                        0.0025,
+                        0.00125,
+                        0.0025,
+                        0.00125,
+                        0.00875,
+                        0.00125,
+                        0.0025,
+                        0.00125,
+                        0.0025,
+                        0.00375,
+                        0.00125,
+                        0.005,
+                        0.00125,
+                        0.00625,
+                        0.0025,
+                        0.00125,
+                        0.0025,
+                        0.0375,
+                        0.005,
+                        0.02,
+                        0.005,
+                        0.0025,
+                        0.02125,
+                        0.02,
+                        0.02875,
+                        0.00125,
+                        0.00125,
+                        0.00125,
+                        0.015,
+                        0.01375,
+                        0.005,
+                        0.0525,
+                        0.06625,
+                        0.00125,
+                        0.00125,
+                        0.00125,
+                        0.00375,
+                        0.00125,
+                        0.0025,
+                        0.0025,
+                        0.00125,
+                        0.005,
+                        0.0025,
+                        0.0025,
+                        0.0025,
+                        0.00125,
+                        0.015,
+                        0.00125,
+                        0.015,
+                        0.005,
+                        0.00875,
+                        0.02125,
+                        0.00125,
+                        0.0075,
+                        0.00125,
+                        0.02,
+                        0.0025,
+                        0.0025,
+                        0.00125,
+                        0.00125,
+                        0.00625,
+                        0.00125,
+                        0.00125,
+                        0.005,
+                        0.00125,
+                        0.00625,
+                        0.005,
+                        0.00125,
+                        0.00125,
+                        0.025,
+                        0.0175,
+                        0.00125,
+                        0.0025,
+                        0.00125,
+                        0.02625,
+                        0.00125,
+                        0.00375,
+                        0.00125,
+                        0.01375,
+                        0.00375,
+                        0.00875,
+                        0.00375,
+                        0.0025,
+                        0.0025,
+                        0.00125,
+                        0.00125,
+                        0.00125,
+                        0.00125,
+                        0.005,
+                        0.00125,
+                        0.015,
+                        0.00125,
+                        0.0025,
+                        0.00125,
+                        0.00875,
+                        0.0075,
+                        0.0075,
+                        0.00375,
+                        0.00125,
+                        0.0025,
+                        0.00125,
+                        0.0025,
+                        0.00125,
+                        0.00125,
+                        0.00125,
+                        0.0075,
+                        0.00375,
+                        0.00125,
+                        0.00125,
+                        0.00125,
+                        0.00125,
+                        0.0025,
+                        0.00125,
+                        0.00125,
+                        0.00375,
+                        0.00125,
+                        0.00125,
+                        0.00125,
+                        0.00125,
+                        0.0025
+                    ]
+                }
+            },
+            "creation_method": {
+                "created_by": "metasyn",
+                "fitter": {
+                    "name": "MultinoulliFitter",
+                    "privacy": {
+                        "name": "none",
+                        "parameters": {}
+                    },
+                    "version": "1.0",
+                    "plugin": "builtin",
+                    "plugin_version": "2.0.0"
+                }
+            }
+        },
+        {
+            "name": "diag_3",
+            "type": "categorical",
+            "dtype": "Categorical",
+            "prop_missing": 0.0,
+            "distribution": {
+                "name": "core.multinoulli",
+                "version": "1.0",
+                "class_name": "MultinoulliDistribution",
+                "unique": false,
+                "parameters": {
+                    "labels": [
+                        "117",
+                        "131",
+                        "135",
+                        "153",
+                        "155",
+                        "162",
+                        "197",
+                        "202",
+                        "211",
+                        "218",
+                        "242",
+                        "244",
+                        "250",
+                        "250.01",
+                        "250.02",
+                        "250.41",
+                        "250.42",
+                        "250.43",
+                        "250.5",
+                        "250.51",
+                        "250.6",
+                        "250.8",
+                        "250.82",
+                        "255",
+                        "260",
+                        "262",
+                        "263",
+                        "272",
+                        "274",
+                        "276",
+                        "278",
+                        "280",
+                        "284",
+                        "285",
+                        "290",
+                        "291",
+                        "294",
+                        "295",
+                        "296",
+                        "298",
+                        "300",
+                        "303",
+                        "305",
+                        "311",
+                        "317",
+                        "331",
+                        "332",
+                        "333",
+                        "340",
+                        "342",
+                        "344",
+                        "348",
+                        "349",
+                        "357",
+                        "359",
+                        "362",
+                        "38",
+                        "389",
+                        "396",
+                        "397",
+                        "401",
+                        "402",
+                        "403",
+                        "404",
+                        "41",
+                        "410",
+                        "411",
+                        "412",
+                        "414",
+                        "415",
+                        "416",
+                        "424",
+                        "425",
+                        "426",
+                        "427",
+                        "428",
+                        "433",
+                        "435",
+                        "437",
+                        "438",
+                        "440",
+                        "441",
+                        "443",
+                        "446",
+                        "453",
+                        "458",
+                        "465",
+                        "477",
+                        "486",
+                        "491",
+                        "493",
+                        "496",
+                        "511",
+                        "512",
+                        "515",
+                        "518",
+                        "522",
+                        "53",
+                        "530",
+                        "535",
+                        "536",
+                        "558",
+                        "560",
+                        "562",
+                        "569",
+                        "571",
+                        "573",
+                        "576",
+                        "577",
+                        "578",
+                        "581",
+                        "584",
+                        "585",
+                        "588",
+                        "591",
+                        "592",
+                        "593",
+                        "595",
+                        "599",
+                        "611",
+                        "659",
+                        "664",
+                        "670",
+                        "682",
+                        "693",
+                        "70",
+                        "707",
+                        "710",
+                        "715",
+                        "716",
+                        "719",
+                        "724",
+                        "729",
+                        "731",
+                        "733",
+                        "736",
+                        "780",
+                        "781",
+                        "782",
+                        "784",
+                        "785",
+                        "786",
+                        "787",
+                        "788",
+                        "789",
+                        "790",
+                        "794",
+                        "799",
+                        "8",
+                        "807",
+                        "916",
+                        "924",
+                        "995",
+                        "997",
+                        "998",
+                        "E878",
+                        "E885",
+                        "E888",
+                        "E941",
+                        "E965",
+                        "V09",
+                        "V10",
+                        "V12",
+                        "V15",
+                        "V17",
+                        "V42",
+                        "V43",
+                        "V44",
+                        "V45",
+                        "V54",
+                        "V58",
+                        "V61",
+                        "V85"
+                    ],
+                    "probs": [
+                        0.0012500000000000002,
+                        0.0012500000000000002,
+                        0.0012500000000000002,
+                        0.0012500000000000002,
+                        0.0025000000000000005,
+                        0.0012500000000000002,
+                        0.005000000000000001,
+                        0.0012500000000000002,
+                        0.0012500000000000002,
+                        0.0012500000000000002,
+                        0.0025000000000000005,
+                        0.010000000000000002,
+                        0.10500000000000002,
+                        0.006250000000000002,
+                        0.011250000000000001,
+                        0.0025000000000000005,
+                        0.0012500000000000002,
+                        0.0012500000000000002,
+                        0.0012500000000000002,
+                        0.0012500000000000002,
+                        0.010000000000000002,
+                        0.0012500000000000002,
+                        0.0037500000000000007,
+                        0.0012500000000000002,
+                        0.0012500000000000002,
+                        0.0012500000000000002,
+                        0.0025000000000000005,
+                        0.023750000000000007,
+                        0.0012500000000000002,
+                        0.055000000000000014,
+                        0.0075000000000000015,
+                        0.005000000000000001,
+                        0.0012500000000000002,
+                        0.010000000000000002,
+                        0.0012500000000000002,
+                        0.0012500000000000002,
+                        0.0025000000000000005,
+                        0.0075000000000000015,
+                        0.0012500000000000002,
+                        0.0025000000000000005,
+                        0.0025000000000000005,
+                        0.0012500000000000002,
+                        0.010000000000000002,
+                        0.0012500000000000002,
+                        0.0012500000000000002,
+                        0.0025000000000000005,
+                        0.0012500000000000002,
+                        0.0012500000000000002,
+                        0.0012500000000000002,
+                        0.0025000000000000005,
+                        0.0012500000000000002,
+                        0.0012500000000000002,
+                        0.0012500000000000002,
+                        0.0012500000000000002,
+                        0.0012500000000000002,
+                        0.0012500000000000002,
+                        0.0012500000000000002,
+                        0.0012500000000000002,
+                        0.0037500000000000007,
+                        0.0012500000000000002,
+                        0.09750000000000003,
+                        0.0012500000000000002,
+                        0.027500000000000007,
+                        0.0025000000000000005,
+                        0.0075000000000000015,
+                        0.0037500000000000007,
+                        0.0012500000000000002,
+                        0.0012500000000000002,
+                        0.05000000000000002,
+                        0.0012500000000000002,
+                        0.0025000000000000005,
+                        0.008750000000000003,
+                        0.012500000000000004,
+                        0.0025000000000000005,
+                        0.037500000000000006,
+                        0.048750000000000016,
+                        0.0025000000000000005,
+                        0.0025000000000000005,
+                        0.0037500000000000007,
+                        0.0025000000000000005,
+                        0.0012500000000000002,
+                        0.0012500000000000002,
+                        0.0012500000000000002,
+                        0.0012500000000000002,
+                        0.0025000000000000005,
+                        0.0012500000000000002,
+                        0.0025000000000000005,
+                        0.0012500000000000002,
+                        0.010000000000000002,
+                        0.008750000000000003,
+                        0.0037500000000000007,
+                        0.017500000000000005,
+                        0.006250000000000002,
+                        0.0012500000000000002,
+                        0.0025000000000000005,
+                        0.006250000000000002,
+                        0.0012500000000000002,
+                        0.0012500000000000002,
+                        0.0025000000000000005,
+                        0.0025000000000000005,
+                        0.005000000000000001,
+                        0.0012500000000000002,
+                        0.0037500000000000007,
+                        0.0012500000000000002,
+                        0.0037500000000000007,
+                        0.0025000000000000005,
+                        0.0025000000000000005,
+                        0.0012500000000000002,
+                        0.0012500000000000002,
+                        0.0012500000000000002,
+                        0.0012500000000000002,
+                        0.006250000000000002,
+                        0.016250000000000004,
+                        0.0012500000000000002,
+                        0.0012500000000000002,
+                        0.0012500000000000002,
+                        0.0075000000000000015,
+                        0.0012500000000000002,
+                        0.03125000000000001,
+                        0.0012500000000000002,
+                        0.0012500000000000002,
+                        0.0012500000000000002,
+                        0.0012500000000000002,
+                        0.005000000000000001,
+                        0.0012500000000000002,
+                        0.0037500000000000007,
+                        0.010000000000000002,
+                        0.0025000000000000005,
+                        0.0025000000000000005,
+                        0.0025000000000000005,
+                        0.0025000000000000005,
+                        0.0012500000000000002,
+                        0.0012500000000000002,
+                        0.0025000000000000005,
+                        0.0012500000000000002,
+                        0.0012500000000000002,
+                        0.015000000000000003,
+                        0.0012500000000000002,
+                        0.0012500000000000002,
+                        0.0025000000000000005,
+                        0.0025000000000000005,
+                        0.011250000000000001,
+                        0.006250000000000002,
+                        0.006250000000000002,
+                        0.0025000000000000005,
+                        0.0037500000000000007,
+                        0.0012500000000000002,
+                        0.0025000000000000005,
+                        0.0025000000000000005,
+                        0.0012500000000000002,
+                        0.0012500000000000002,
+                        0.0012500000000000002,
+                        0.0037500000000000007,
+                        0.005000000000000001,
+                        0.0025000000000000005,
+                        0.0025000000000000005,
+                        0.0012500000000000002,
+                        0.0037500000000000007,
+                        0.0012500000000000002,
+                        0.0012500000000000002,
+                        0.0025000000000000005,
+                        0.0037500000000000007,
+                        0.0037500000000000007,
+                        0.005000000000000001,
+                        0.0012500000000000002,
+                        0.0012500000000000002,
+                        0.0012500000000000002,
+                        0.0012500000000000002,
+                        0.018750000000000003,
+                        0.0012500000000000002,
+                        0.0025000000000000005,
+                        0.0012500000000000002,
+                        0.0037500000000000007
+                    ]
+                }
+            },
+            "creation_method": {
+                "created_by": "metasyn",
+                "fitter": {
+                    "name": "MultinoulliFitter",
+                    "privacy": {
+                        "name": "none",
+                        "parameters": {}
+                    },
+                    "version": "1.0",
+                    "plugin": "builtin",
+                    "plugin_version": "2.0.0"
+                }
+            }
+        },
+        {
+            "name": "number_diagnoses",
+            "type": "categorical",
+            "dtype": "Categorical",
+            "prop_missing": 0.0,
+            "distribution": {
+                "name": "core.multinoulli",
+                "version": "1.0",
+                "class_name": "MultinoulliDistribution",
+                "unique": false,
+                "parameters": {
+                    "labels": [
+                        "1",
+                        "2",
+                        "3",
+                        "4",
+                        "5",
+                        "6",
+                        "7",
+                        "8",
+                        "9"
+                    ],
+                    "probs": [
+                        0.005,
+                        0.01,
+                        0.02875,
+                        0.06375,
+                        0.13375,
+                        0.09,
+                        0.0925,
+                        0.12375,
+                        0.4525
+                    ]
+                }
+            },
+            "creation_method": {
+                "created_by": "metasyn",
+                "fitter": {
+                    "name": "MultinoulliFitter",
+                    "privacy": {
+                        "name": "none",
+                        "parameters": {}
+                    },
+                    "version": "1.0",
+                    "plugin": "builtin",
+                    "plugin_version": "2.0.0"
+                }
+            }
+        },
+        {
+            "name": "max_glu_serum",
+            "type": "categorical",
+            "dtype": "Categorical",
+            "prop_missing": 0.0,
+            "distribution": {
+                "name": "core.multinoulli",
+                "version": "1.0",
+                "class_name": "MultinoulliDistribution",
+                "unique": false,
+                "parameters": {
+                    "labels": [
+                        ">200",
+                        ">300",
+                        "Norm"
+                    ],
+                    "probs": [
+                        0.225,
+                        0.37625,
+                        0.39875
+                    ]
+                }
+            },
+            "creation_method": {
+                "created_by": "metasyn",
+                "fitter": {
+                    "name": "MultinoulliFitter",
+                    "privacy": {
+                        "name": "none",
+                        "parameters": {}
+                    },
+                    "version": "1.0",
+                    "plugin": "builtin",
+                    "plugin_version": "2.0.0"
+                }
+            }
+        },
+        {
+            "name": "A1Cresult",
+            "type": "categorical",
+            "dtype": "Categorical",
+            "prop_missing": 0.0,
+            "distribution": {
+                "name": "core.multinoulli",
+                "version": "1.0",
+                "class_name": "MultinoulliDistribution",
+                "unique": false,
+                "parameters": {
+                    "labels": [
+                        ">7",
+                        ">8",
+                        "Norm"
+                    ],
+                    "probs": [
+                        0.235,
+                        0.5025,
+                        0.2625
+                    ]
+                }
+            },
+            "creation_method": {
+                "created_by": "metasyn",
+                "fitter": {
+                    "name": "MultinoulliFitter",
+                    "privacy": {
+                        "name": "none",
+                        "parameters": {}
+                    },
+                    "version": "1.0",
+                    "plugin": "builtin",
+                    "plugin_version": "2.0.0"
+                }
+            }
+        },
+        {
+            "name": "metformin",
+            "type": "categorical",
+            "dtype": "Categorical",
+            "prop_missing": 0.0,
+            "distribution": {
+                "name": "core.multinoulli",
+                "version": "1.0",
+                "class_name": "MultinoulliDistribution",
+                "unique": false,
+                "parameters": {
+                    "labels": [
+                        "Down",
+                        "No",
+                        "Steady",
+                        "Up"
+                    ],
+                    "probs": [
+                        0.0075,
+                        0.8,
+                        0.18375,
+                        0.00875
+                    ]
+                }
+            },
+            "creation_method": {
+                "created_by": "metasyn",
+                "fitter": {
+                    "name": "MultinoulliFitter",
+                    "privacy": {
+                        "name": "none",
+                        "parameters": {}
+                    },
+                    "version": "1.0",
+                    "plugin": "builtin",
+                    "plugin_version": "2.0.0"
+                }
+            }
+        },
+        {
+            "name": "repaglinide",
+            "type": "categorical",
+            "dtype": "Categorical",
+            "prop_missing": 0.0,
+            "distribution": {
+                "name": "core.multinoulli",
+                "version": "1.0",
+                "class_name": "MultinoulliDistribution",
+                "unique": false,
+                "parameters": {
+                    "labels": [
+                        "No",
+                        "Steady",
+                        "Up"
+                    ],
+                    "probs": [
+                        0.99375,
+                        0.005,
+                        0.00125
+                    ]
+                }
+            },
+            "creation_method": {
+                "created_by": "metasyn",
+                "fitter": {
+                    "name": "MultinoulliFitter",
+                    "privacy": {
+                        "name": "none",
+                        "parameters": {}
+                    },
+                    "version": "1.0",
+                    "plugin": "builtin",
+                    "plugin_version": "2.0.0"
+                }
+            }
+        },
+        {
+            "name": "nateglinide",
+            "type": "categorical",
+            "dtype": "Categorical",
+            "prop_missing": 0.0,
+            "distribution": {
+                "name": "core.multinoulli",
+                "version": "1.0",
+                "class_name": "MultinoulliDistribution",
+                "unique": false,
+                "parameters": {
+                    "labels": [
+                        "No",
+                        "Steady"
+                    ],
+                    "probs": [
+                        0.9875,
+                        0.0125
+                    ]
+                }
+            },
+            "creation_method": {
+                "created_by": "metasyn",
+                "fitter": {
+                    "name": "MultinoulliFitter",
+                    "privacy": {
+                        "name": "none",
+                        "parameters": {}
+                    },
+                    "version": "1.0",
+                    "plugin": "builtin",
+                    "plugin_version": "2.0.0"
+                }
+            }
+        },
+        {
+            "name": "chlorpropamide",
+            "type": "categorical",
+            "dtype": "Categorical",
+            "prop_missing": 0.0,
+            "distribution": {
+                "name": "core.multinoulli",
+                "version": "1.0",
+                "class_name": "MultinoulliDistribution",
+                "unique": false,
+                "parameters": {
+                    "labels": [
+                        "No"
+                    ],
+                    "probs": [
+                        1.0
+                    ]
+                }
+            },
+            "creation_method": {
+                "created_by": "metasyn",
+                "fitter": {
+                    "name": "MultinoulliFitter",
+                    "privacy": {
+                        "name": "none",
+                        "parameters": {}
+                    },
+                    "version": "1.0",
+                    "plugin": "builtin",
+                    "plugin_version": "2.0.0"
+                }
+            }
+        },
+        {
+            "name": "glimepiride",
+            "type": "categorical",
+            "dtype": "Categorical",
+            "prop_missing": 0.0,
+            "distribution": {
+                "name": "core.multinoulli",
+                "version": "1.0",
+                "class_name": "MultinoulliDistribution",
+                "unique": false,
+                "parameters": {
+                    "labels": [
+                        "Down",
+                        "No",
+                        "Steady",
+                        "Up"
+                    ],
+                    "probs": [
+                        0.0025000000000000005,
+                        0.9387500000000001,
+                        0.051250000000000004,
+                        0.007500000000000001
+                    ]
+                }
+            },
+            "creation_method": {
+                "created_by": "metasyn",
+                "fitter": {
+                    "name": "MultinoulliFitter",
+                    "privacy": {
+                        "name": "none",
+                        "parameters": {}
+                    },
+                    "version": "1.0",
+                    "plugin": "builtin",
+                    "plugin_version": "2.0.0"
+                }
+            }
+        },
+        {
+            "name": "acetohexamide",
+            "type": "categorical",
+            "dtype": "Categorical",
+            "prop_missing": 0.0,
+            "distribution": {
+                "name": "core.multinoulli",
+                "version": "1.0",
+                "class_name": "MultinoulliDistribution",
+                "unique": false,
+                "parameters": {
+                    "labels": [
+                        "No"
+                    ],
+                    "probs": [
+                        1.0
+                    ]
+                }
+            },
+            "creation_method": {
+                "created_by": "metasyn",
+                "fitter": {
+                    "name": "MultinoulliFitter",
+                    "privacy": {
+                        "name": "none",
+                        "parameters": {}
+                    },
+                    "version": "1.0",
+                    "plugin": "builtin",
+                    "plugin_version": "2.0.0"
+                }
+            }
+        },
+        {
+            "name": "glipizide",
+            "type": "categorical",
+            "dtype": "Categorical",
+            "prop_missing": 0.0,
+            "distribution": {
+                "name": "core.multinoulli",
+                "version": "1.0",
+                "class_name": "MultinoulliDistribution",
+                "unique": false,
+                "parameters": {
+                    "labels": [
+                        "Down",
+                        "No",
+                        "Steady",
+                        "Up"
+                    ],
+                    "probs": [
+                        0.0025,
+                        0.87125,
+                        0.1175,
+                        0.00875
+                    ]
+                }
+            },
+            "creation_method": {
+                "created_by": "metasyn",
+                "fitter": {
+                    "name": "MultinoulliFitter",
+                    "privacy": {
+                        "name": "none",
+                        "parameters": {}
+                    },
+                    "version": "1.0",
+                    "plugin": "builtin",
+                    "plugin_version": "2.0.0"
+                }
+            }
+        },
+        {
+            "name": "glyburide",
+            "type": "categorical",
+            "dtype": "Categorical",
+            "prop_missing": 0.0,
+            "distribution": {
+                "name": "core.multinoulli",
+                "version": "1.0",
+                "class_name": "MultinoulliDistribution",
+                "unique": false,
+                "parameters": {
+                    "labels": [
+                        "Down",
+                        "No",
+                        "Steady",
+                        "Up"
+                    ],
+                    "probs": [
+                        0.01,
+                        0.9075,
+                        0.07875,
+                        0.00375
+                    ]
+                }
+            },
+            "creation_method": {
+                "created_by": "metasyn",
+                "fitter": {
+                    "name": "MultinoulliFitter",
+                    "privacy": {
+                        "name": "none",
+                        "parameters": {}
+                    },
+                    "version": "1.0",
+                    "plugin": "builtin",
+                    "plugin_version": "2.0.0"
+                }
+            }
+        },
+        {
+            "name": "tolbutamide",
+            "type": "categorical",
+            "dtype": "Categorical",
+            "prop_missing": 0.0,
+            "distribution": {
+                "name": "core.multinoulli",
+                "version": "1.0",
+                "class_name": "MultinoulliDistribution",
+                "unique": false,
+                "parameters": {
+                    "labels": [
+                        "No"
+                    ],
+                    "probs": [
+                        1.0
+                    ]
+                }
+            },
+            "creation_method": {
+                "created_by": "metasyn",
+                "fitter": {
+                    "name": "MultinoulliFitter",
+                    "privacy": {
+                        "name": "none",
+                        "parameters": {}
+                    },
+                    "version": "1.0",
+                    "plugin": "builtin",
+                    "plugin_version": "2.0.0"
+                }
+            }
+        },
+        {
+            "name": "pioglitazone",
+            "type": "categorical",
+            "dtype": "Categorical",
+            "prop_missing": 0.0,
+            "distribution": {
+                "name": "core.multinoulli",
+                "version": "1.0",
+                "class_name": "MultinoulliDistribution",
+                "unique": false,
+                "parameters": {
+                    "labels": [
+                        "Down",
+                        "No",
+                        "Steady",
+                        "Up"
+                    ],
+                    "probs": [
+                        0.00125,
+                        0.925,
+                        0.07125,
+                        0.0025
+                    ]
+                }
+            },
+            "creation_method": {
+                "created_by": "metasyn",
+                "fitter": {
+                    "name": "MultinoulliFitter",
+                    "privacy": {
+                        "name": "none",
+                        "parameters": {}
+                    },
+                    "version": "1.0",
+                    "plugin": "builtin",
+                    "plugin_version": "2.0.0"
+                }
+            }
+        },
+        {
+            "name": "rosiglitazone",
+            "type": "categorical",
+            "dtype": "Categorical",
+            "prop_missing": 0.0,
+            "distribution": {
+                "name": "core.multinoulli",
+                "version": "1.0",
+                "class_name": "MultinoulliDistribution",
+                "unique": false,
+                "parameters": {
+                    "labels": [
+                        "Down",
+                        "No",
+                        "Steady"
+                    ],
+                    "probs": [
+                        0.0012500000000000002,
+                        0.9400000000000001,
+                        0.058750000000000004
+                    ]
+                }
+            },
+            "creation_method": {
+                "created_by": "metasyn",
+                "fitter": {
+                    "name": "MultinoulliFitter",
+                    "privacy": {
+                        "name": "none",
+                        "parameters": {}
+                    },
+                    "version": "1.0",
+                    "plugin": "builtin",
+                    "plugin_version": "2.0.0"
+                }
+            }
+        },
+        {
+            "name": "acarbose",
+            "type": "categorical",
+            "dtype": "Categorical",
+            "prop_missing": 0.0,
+            "distribution": {
+                "name": "core.multinoulli",
+                "version": "1.0",
+                "class_name": "MultinoulliDistribution",
+                "unique": false,
+                "parameters": {
+                    "labels": [
+                        "No",
+                        "Steady"
+                    ],
+                    "probs": [
+                        0.99625,
+                        0.00375
+                    ]
+                }
+            },
+            "creation_method": {
+                "created_by": "metasyn",
+                "fitter": {
+                    "name": "MultinoulliFitter",
+                    "privacy": {
+                        "name": "none",
+                        "parameters": {}
+                    },
+                    "version": "1.0",
+                    "plugin": "builtin",
+                    "plugin_version": "2.0.0"
+                }
+            }
+        },
+        {
+            "name": "miglitol",
+            "type": "categorical",
+            "dtype": "Categorical",
+            "prop_missing": 0.0,
+            "distribution": {
+                "name": "core.multinoulli",
+                "version": "1.0",
+                "class_name": "MultinoulliDistribution",
+                "unique": false,
+                "parameters": {
+                    "labels": [
+                        "No"
+                    ],
+                    "probs": [
+                        1.0
+                    ]
+                }
+            },
+            "creation_method": {
+                "created_by": "metasyn",
+                "fitter": {
+                    "name": "MultinoulliFitter",
+                    "privacy": {
+                        "name": "none",
+                        "parameters": {}
+                    },
+                    "version": "1.0",
+                    "plugin": "builtin",
+                    "plugin_version": "2.0.0"
+                }
+            }
+        },
+        {
+            "name": "troglitazone",
+            "type": "categorical",
+            "dtype": "Categorical",
+            "prop_missing": 0.0,
+            "distribution": {
+                "name": "core.multinoulli",
+                "version": "1.0",
+                "class_name": "MultinoulliDistribution",
+                "unique": false,
+                "parameters": {
+                    "labels": [
+                        "No"
+                    ],
+                    "probs": [
+                        1.0
+                    ]
+                }
+            },
+            "creation_method": {
+                "created_by": "metasyn",
+                "fitter": {
+                    "name": "MultinoulliFitter",
+                    "privacy": {
+                        "name": "none",
+                        "parameters": {}
+                    },
+                    "version": "1.0",
+                    "plugin": "builtin",
+                    "plugin_version": "2.0.0"
+                }
+            }
+        },
+        {
+            "name": "tolazamide",
+            "type": "categorical",
+            "dtype": "Categorical",
+            "prop_missing": 0.0,
+            "distribution": {
+                "name": "core.multinoulli",
+                "version": "1.0",
+                "class_name": "MultinoulliDistribution",
+                "unique": false,
+                "parameters": {
+                    "labels": [
+                        "No",
+                        "Steady"
+                    ],
+                    "probs": [
+                        0.99875,
+                        0.00125
+                    ]
+                }
+            },
+            "creation_method": {
+                "created_by": "metasyn",
+                "fitter": {
+                    "name": "MultinoulliFitter",
+                    "privacy": {
+                        "name": "none",
+                        "parameters": {}
+                    },
+                    "version": "1.0",
+                    "plugin": "builtin",
+                    "plugin_version": "2.0.0"
+                }
+            }
+        },
+        {
+            "name": "examide",
+            "type": "categorical",
+            "dtype": "Categorical",
+            "prop_missing": 0.0,
+            "distribution": {
+                "name": "core.multinoulli",
+                "version": "1.0",
+                "class_name": "MultinoulliDistribution",
+                "unique": false,
+                "parameters": {
+                    "labels": [
+                        "No"
+                    ],
+                    "probs": [
+                        1.0
+                    ]
+                }
+            },
+            "creation_method": {
+                "created_by": "metasyn",
+                "fitter": {
+                    "name": "MultinoulliFitter",
+                    "privacy": {
+                        "name": "none",
+                        "parameters": {}
+                    },
+                    "version": "1.0",
+                    "plugin": "builtin",
+                    "plugin_version": "2.0.0"
+                }
+            }
+        },
+        {
+            "name": "citoglipton",
+            "type": "categorical",
+            "dtype": "Categorical",
+            "prop_missing": 0.0,
+            "distribution": {
+                "name": "core.multinoulli",
+                "version": "1.0",
+                "class_name": "MultinoulliDistribution",
+                "unique": false,
+                "parameters": {
+                    "labels": [
+                        "No"
+                    ],
+                    "probs": [
+                        1.0
+                    ]
+                }
+            },
+            "creation_method": {
+                "created_by": "metasyn",
+                "fitter": {
+                    "name": "MultinoulliFitter",
+                    "privacy": {
+                        "name": "none",
+                        "parameters": {}
+                    },
+                    "version": "1.0",
+                    "plugin": "builtin",
+                    "plugin_version": "2.0.0"
+                }
+            }
+        },
+        {
+            "name": "insulin",
+            "type": "categorical",
+            "dtype": "Categorical",
+            "prop_missing": 0.0,
+            "distribution": {
+                "name": "core.multinoulli",
+                "version": "1.0",
+                "class_name": "MultinoulliDistribution",
+                "unique": false,
+                "parameters": {
+                    "labels": [
+                        "Down",
+                        "No",
+                        "Steady",
+                        "Up"
+                    ],
+                    "probs": [
+                        0.1075,
+                        0.4575,
+                        0.315,
+                        0.12
+                    ]
+                }
+            },
+            "creation_method": {
+                "created_by": "metasyn",
+                "fitter": {
+                    "name": "MultinoulliFitter",
+                    "privacy": {
+                        "name": "none",
+                        "parameters": {}
+                    },
+                    "version": "1.0",
+                    "plugin": "builtin",
+                    "plugin_version": "2.0.0"
+                }
+            }
+        },
+        {
+            "name": "glyburide-metformin",
+            "type": "categorical",
+            "dtype": "Categorical",
+            "prop_missing": 0.0,
+            "distribution": {
+                "name": "core.multinoulli",
+                "version": "1.0",
+                "class_name": "MultinoulliDistribution",
+                "unique": false,
+                "parameters": {
+                    "labels": [
+                        "No",
+                        "Steady"
+                    ],
+                    "probs": [
+                        0.9925,
+                        0.0075
+                    ]
+                }
+            },
+            "creation_method": {
+                "created_by": "metasyn",
+                "fitter": {
+                    "name": "MultinoulliFitter",
+                    "privacy": {
+                        "name": "none",
+                        "parameters": {}
+                    },
+                    "version": "1.0",
+                    "plugin": "builtin",
+                    "plugin_version": "2.0.0"
+                }
+            }
+        },
+        {
+            "name": "glipizide-metformin",
+            "type": "categorical",
+            "dtype": "Categorical",
+            "prop_missing": 0.0,
+            "distribution": {
+                "name": "core.multinoulli",
+                "version": "1.0",
+                "class_name": "MultinoulliDistribution",
+                "unique": false,
+                "parameters": {
+                    "labels": [
+                        "No"
+                    ],
+                    "probs": [
+                        1.0
+                    ]
+                }
+            },
+            "creation_method": {
+                "created_by": "metasyn",
+                "fitter": {
+                    "name": "MultinoulliFitter",
+                    "privacy": {
+                        "name": "none",
+                        "parameters": {}
+                    },
+                    "version": "1.0",
+                    "plugin": "builtin",
+                    "plugin_version": "2.0.0"
+                }
+            }
+        },
+        {
+            "name": "glimepiride-pioglitazone",
+            "type": "categorical",
+            "dtype": "Categorical",
+            "prop_missing": 0.0,
+            "distribution": {
+                "name": "core.multinoulli",
+                "version": "1.0",
+                "class_name": "MultinoulliDistribution",
+                "unique": false,
+                "parameters": {
+                    "labels": [
+                        "No"
+                    ],
+                    "probs": [
+                        1.0
+                    ]
+                }
+            },
+            "creation_method": {
+                "created_by": "metasyn",
+                "fitter": {
+                    "name": "MultinoulliFitter",
+                    "privacy": {
+                        "name": "none",
+                        "parameters": {}
+                    },
+                    "version": "1.0",
+                    "plugin": "builtin",
+                    "plugin_version": "2.0.0"
+                }
+            }
+        },
+        {
+            "name": "metformin-rosiglitazone",
+            "type": "categorical",
+            "dtype": "Categorical",
+            "prop_missing": 0.0,
+            "distribution": {
+                "name": "core.multinoulli",
+                "version": "1.0",
+                "class_name": "MultinoulliDistribution",
+                "unique": false,
+                "parameters": {
+                    "labels": [
+                        "No"
+                    ],
+                    "probs": [
+                        1.0
+                    ]
+                }
+            },
+            "creation_method": {
+                "created_by": "metasyn",
+                "fitter": {
+                    "name": "MultinoulliFitter",
+                    "privacy": {
+                        "name": "none",
+                        "parameters": {}
+                    },
+                    "version": "1.0",
+                    "plugin": "builtin",
+                    "plugin_version": "2.0.0"
+                }
+            }
+        },
+        {
+            "name": "metformin-pioglitazone",
+            "type": "categorical",
+            "dtype": "Categorical",
+            "prop_missing": 0.0,
+            "distribution": {
+                "name": "core.multinoulli",
+                "version": "1.0",
+                "class_name": "MultinoulliDistribution",
+                "unique": false,
+                "parameters": {
+                    "labels": [
+                        "No"
+                    ],
+                    "probs": [
+                        1.0
+                    ]
+                }
+            },
+            "creation_method": {
+                "created_by": "metasyn",
+                "fitter": {
+                    "name": "MultinoulliFitter",
+                    "privacy": {
+                        "name": "none",
+                        "parameters": {}
+                    },
+                    "version": "1.0",
+                    "plugin": "builtin",
+                    "plugin_version": "2.0.0"
+                }
+            }
+        },
+        {
+            "name": "change",
+            "type": "categorical",
+            "dtype": "Categorical",
+            "prop_missing": 0.0,
+            "distribution": {
+                "name": "core.multinoulli",
+                "version": "1.0",
+                "class_name": "MultinoulliDistribution",
+                "unique": false,
+                "parameters": {
+                    "labels": [
+                        "Ch",
+                        "No"
+                    ],
+                    "probs": [
+                        0.455,
+                        0.545
+                    ]
+                }
+            },
+            "creation_method": {
+                "created_by": "metasyn",
+                "fitter": {
+                    "name": "MultinoulliFitter",
+                    "privacy": {
+                        "name": "none",
+                        "parameters": {}
+                    },
+                    "version": "1.0",
+                    "plugin": "builtin",
+                    "plugin_version": "2.0.0"
+                }
+            }
+        },
+        {
+            "name": "diabetesMed",
+            "type": "categorical",
+            "dtype": "Categorical",
+            "prop_missing": 0.0,
+            "distribution": {
+                "name": "core.multinoulli",
+                "version": "1.0",
+                "class_name": "MultinoulliDistribution",
+                "unique": false,
+                "parameters": {
+                    "labels": [
+                        "No",
+                        "Yes"
+                    ],
+                    "probs": [
+                        0.225,
+                        0.775
+                    ]
+                }
+            },
+            "creation_method": {
+                "created_by": "metasyn",
+                "fitter": {
+                    "name": "MultinoulliFitter",
+                    "privacy": {
+                        "name": "none",
+                        "parameters": {}
+                    },
+                    "version": "1.0",
+                    "plugin": "builtin",
+                    "plugin_version": "2.0.0"
+                }
+            }
+        },
+        {
+            "name": "readmitted",
+            "type": "categorical",
+            "dtype": "Categorical",
+            "prop_missing": 0.0,
+            "distribution": {
+                "name": "core.multinoulli",
+                "version": "1.0",
+                "class_name": "MultinoulliDistribution",
+                "unique": false,
+                "parameters": {
+                    "labels": [
+                        "<30",
+                        ">30",
+                        "NO"
+                    ],
+                    "probs": [
+                        0.11125,
+                        0.35875,
+                        0.53
+                    ]
+                }
+            },
+            "creation_method": {
+                "created_by": "metasyn",
+                "fitter": {
+                    "name": "MultinoulliFitter",
+                    "privacy": {
+                        "name": "none",
+                        "parameters": {}
+                    },
+                    "version": "1.0",
+                    "plugin": "builtin",
+                    "plugin_version": "2.0.0"
+                }
+            }
+        }
+    ]
+}

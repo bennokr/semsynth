@@ -4,6 +4,7 @@
       "csvw": "http://www.w3.org/ns/csvw#",
       "dsv": "https://w3id.org/dsv-ontology#",
       "skos": "http://www.w3.org/2004/02/skos/core#",
+      "prov": "http://www.w3.org/ns/prov#",
       "qudt": "http://qudt.org/schema/qudt/",
       "unit": "http://qudt.org/vocab/unit/",
       "quantitykind": "http://qudt.org/vocab/quantitykind/",
@@ -11,6 +12,18 @@
       "schema": "https://schema.org/",
       "wd": "http://www.wikidata.org/entity/",
       "dct": "http://purl.org/dc/terms/",
+      "dcat": "http://www.w3.org/ns/dcat#",
+      "title": "dct:title",
+      "description": "dct:description",
+      "abstract": "dct:abstract",
+      "purpose": "dct:purpose",
+      "tableOfContents": "dct:tableOfContents",
+      "landingPage": "dcat:landingPage",
+      "accessRights": "dct:accessRights",
+      "citation": "schema:citation",
+      "identifier": "dct:identifier",
+      "funding": "schema:funding",
+      "populationType": "schema:populationType",
       "url": "csvw:url",
       "datasetSchema": "dsv:datasetSchema",
       "columns": {
@@ -19,6 +32,9 @@
       },
       "name": "csvw:name",
       "titles": "csvw:titles",
+      "about": "schema:about",
+      "hadRole": "prov:hadRole",
+      "defaultValue": "schema:defaultValue",
       "columnProperty": "dsv:columnProperty",
       "columnCompleteness": "dsv:columnCompleteness",
       "summaryStatistics": "dsv:summaryStatistics",
@@ -83,20 +99,6 @@
     "columns": [
       {
         "name": "age",
-        "titles": "Age",
-        "columnProperty": {
-          "summaryStatistics": {
-            "statisticalDataType": "dsv:QuantitativeDataType"
-          },
-          "unitText": "year",
-          "hasUnit": {
-            "ucumCode": "a",
-            "exactMatch": [
-              "unit:YR"
-            ]
-          },
-          "source": "https://loinc.org/30525-0"
-        },
         "summaryStatistics": {
           "statisticalDataType": "dsv:NumericalDataType",
           "columnCompleteness": 1.0,
@@ -105,31 +107,6 @@
       },
       {
         "name": "sex",
-        "titles": "Administrative sex",
-        "columnProperty": {
-          "summaryStatistics": {
-            "statisticalDataType": "dsv:NominalDataType"
-          },
-          "source": "https://docs.snomed.org/implementation-guides/snomed-ct-guide-for-covid-19/2-coding-covid-19-related-data/2.2-patient-demographics",
-          "hasCodeBook": {
-            "hasTopConcept": [
-              {
-                "notation": "0",
-                "prefLabel": "female",
-                "exactMatch": [
-                  "http://snomed.info/id/248152002"
-                ]
-              },
-              {
-                "notation": "1",
-                "prefLabel": "male",
-                "exactMatch": [
-                  "http://snomed.info/id/248153007"
-                ]
-              }
-            ]
-          }
-        },
         "summaryStatistics": {
           "statisticalDataType": "dsv:NumericalDataType",
           "columnCompleteness": 1.0,
@@ -138,46 +115,6 @@
       },
       {
         "name": "cp",
-        "titles": "Chest pain type",
-        "columnProperty": {
-          "summaryStatistics": {
-            "statisticalDataType": "dsv:NominalDataType"
-          },
-          "source": "https://dicom.nema.org/medical/dicom/current/output/chtml/part16/sect_CID_3202.html",
-          "hasCodeBook": {
-            "hasTopConcept": [
-              {
-                "notation": "1",
-                "prefLabel": "Typical angina",
-                "exactMatch": [
-                  "http://snomed.info/id/429559004"
-                ]
-              },
-              {
-                "notation": "2",
-                "prefLabel": "Atypical angina",
-                "exactMatch": [
-                  "http://snomed.info/id/371807002"
-                ]
-              },
-              {
-                "notation": "3",
-                "prefLabel": "Non-cardiac chest pain",
-                "exactMatch": [
-                  "http://snomed.info/id/274668005"
-                ]
-              },
-              {
-                "notation": "4",
-                "prefLabel": "Asymptomatic",
-                "exactMatch": [
-                  "http://snomed.info/id/161971004"
-                ]
-              }
-            ],
-            "source": "https://dicom.nema.org/medical/dicom/current/output/chtml/part16/sect_CID_3202.html"
-          }
-        },
         "summaryStatistics": {
           "statisticalDataType": "dsv:NumericalDataType",
           "columnCompleteness": 1.0,
@@ -186,20 +123,6 @@
       },
       {
         "name": "trestbps",
-        "titles": "Resting systolic blood pressure",
-        "columnProperty": {
-          "summaryStatistics": {
-            "statisticalDataType": "dsv:QuantitativeDataType"
-          },
-          "unitText": "millimeter_Hg",
-          "hasUnit": {
-            "ucumCode": "mm[Hg]",
-            "exactMatch": [
-              "unit:MilliM_HG"
-            ]
-          },
-          "source": "https://loinc.org/8480-6"
-        },
         "summaryStatistics": {
           "statisticalDataType": "dsv:NumericalDataType",
           "columnCompleteness": 1.0,
@@ -208,20 +131,6 @@
       },
       {
         "name": "chol",
-        "titles": "Total cholesterol",
-        "columnProperty": {
-          "summaryStatistics": {
-            "statisticalDataType": "dsv:QuantitativeDataType"
-          },
-          "unitText": "milligram / deciliter",
-          "hasUnit": {
-            "ucumCode": "mg/dL",
-            "exactMatch": [
-              "unit:MilliGM-PER-DeciL"
-            ]
-          },
-          "source": "https://loinc.org/2093-3"
-        },
         "summaryStatistics": {
           "statisticalDataType": "dsv:NumericalDataType",
           "columnCompleteness": 1.0,
@@ -230,26 +139,6 @@
       },
       {
         "name": "fbs",
-        "titles": "Fasting blood sugar >120 mg/dL (indicator)",
-        "columnProperty": {
-          "summaryStatistics": {
-            "statisticalDataType": "dsv:NominalDataType"
-          },
-          "source": "https://loinc.org/2345-7",
-          "hasCodeBook": {
-            "hasTopConcept": [
-              {
-                "notation": "0",
-                "prefLabel": "\u2264120 mg/dL"
-              },
-              {
-                "notation": "1",
-                "prefLabel": ">120 mg/dL"
-              }
-            ],
-            "source": "https://loinc.org/2345-7"
-          }
-        },
         "summaryStatistics": {
           "statisticalDataType": "dsv:NumericalDataType",
           "columnCompleteness": 1.0,
@@ -258,38 +147,6 @@
       },
       {
         "name": "restecg",
-        "titles": "Resting ECG result",
-        "columnProperty": {
-          "summaryStatistics": {
-            "statisticalDataType": "dsv:NominalDataType"
-          },
-          "source": "https://cvquality.acc.org/docs/default-source/ncdr/data-collection/epdeviceimplant_v2-3_datadictionarycoders.pdf",
-          "hasCodeBook": {
-            "hasTopConcept": [
-              {
-                "notation": "0",
-                "prefLabel": "normal",
-                "exactMatch": [
-                  "http://snomed.info/id/164854000"
-                ]
-              },
-              {
-                "notation": "1",
-                "prefLabel": "ST-T abnormality",
-                "exactMatch": [
-                  "http://snomed.info/id/428750005"
-                ]
-              },
-              {
-                "notation": "2",
-                "prefLabel": "LVH (Estes)",
-                "exactMatch": [
-                  "http://snomed.info/id/25488008"
-                ]
-              }
-            ]
-          }
-        },
         "summaryStatistics": {
           "statisticalDataType": "dsv:NumericalDataType",
           "columnCompleteness": 1.0,
@@ -298,13 +155,6 @@
       },
       {
         "name": "thalach",
-        "titles": "Maximum heart rate achieved",
-        "columnProperty": {
-          "summaryStatistics": {
-            "statisticalDataType": "dsv:QuantitativeDataType"
-          },
-          "source": "https://loinc.org/101692-2"
-        },
         "summaryStatistics": {
           "statisticalDataType": "dsv:NumericalDataType",
           "columnCompleteness": 1.0,
@@ -313,25 +163,6 @@
       },
       {
         "name": "exang",
-        "titles": "Exercise-induced angina",
-        "columnProperty": {
-          "summaryStatistics": {
-            "statisticalDataType": "dsv:NominalDataType"
-          },
-          "source": "https://archive.datadictionary.nhs.uk/DD%20Release%20June%202021/Covid19PRA/Coronary_Heart.html",
-          "hasCodeBook": {
-            "hasTopConcept": [
-              {
-                "notation": "0",
-                "prefLabel": "no"
-              },
-              {
-                "notation": "1",
-                "prefLabel": "yes"
-              }
-            ]
-          }
-        },
         "summaryStatistics": {
           "statisticalDataType": "dsv:NumericalDataType",
           "columnCompleteness": 1.0,
@@ -340,13 +171,6 @@
       },
       {
         "name": "oldpeak",
-        "titles": "ST depression vs rest (max during study)",
-        "columnProperty": {
-          "summaryStatistics": {
-            "statisticalDataType": "dsv:QuantitativeDataType"
-          },
-          "source": "https://loinc.org/91546-2"
-        },
         "summaryStatistics": {
           "statisticalDataType": "dsv:NumericalDataType",
           "columnCompleteness": 1.0,
@@ -355,29 +179,6 @@
       },
       {
         "name": "slope",
-        "titles": "Slope of peak exercise ST segment",
-        "columnProperty": {
-          "summaryStatistics": {
-            "statisticalDataType": "dsv:NominalDataType"
-          },
-          "source": "https://dicom.nema.org/medical/dicom/current/output/chtml/part16/sect_CID_3233.html",
-          "hasCodeBook": {
-            "hasTopConcept": [
-              {
-                "notation": "1",
-                "prefLabel": "upsloping"
-              },
-              {
-                "notation": "2",
-                "prefLabel": "flat"
-              },
-              {
-                "notation": "3",
-                "prefLabel": "downsloping"
-              }
-            ]
-          }
-        },
         "summaryStatistics": {
           "statisticalDataType": "dsv:NumericalDataType",
           "columnCompleteness": 1.0,
@@ -386,12 +187,6 @@
       },
       {
         "name": "ca",
-        "titles": "Number of major vessels (colored by fluoroscopy)",
-        "columnProperty": {
-          "summaryStatistics": {
-            "statisticalDataType": "dsv:QuantitativeDataType"
-          }
-        },
         "summaryStatistics": {
           "statisticalDataType": "dsv:NumericalDataType",
           "columnCompleteness": 0.9867986798679867,
@@ -400,37 +195,6 @@
       },
       {
         "name": "thal",
-        "titles": "Thallium perfusion test",
-        "columnProperty": {
-          "summaryStatistics": {
-            "statisticalDataType": "dsv:NominalDataType"
-          },
-          "hasCodeBook": {
-            "hasTopConcept": [
-              {
-                "notation": "3",
-                "prefLabel": "normal",
-                "exactMatch": [
-                  "http://snomed.info/id/371801000"
-                ]
-              },
-              {
-                "notation": "6",
-                "prefLabel": "fixed defect",
-                "exactMatch": [
-                  "http://snomed.info/id/371918009"
-                ]
-              },
-              {
-                "notation": "7",
-                "prefLabel": "reversible defect",
-                "exactMatch": [
-                  "http://snomed.info/id/371920002"
-                ]
-              }
-            ]
-          }
-        },
         "summaryStatistics": {
           "statisticalDataType": "dsv:NumericalDataType",
           "columnCompleteness": 0.9933993399339934,
@@ -439,25 +203,7 @@
       },
       {
         "name": "num",
-        "titles": "Angiographic disease status",
-        "columnProperty": {
-          "summaryStatistics": {
-            "statisticalDataType": "dsv:NominalDataType"
-          },
-          "source": "https://purl.bioontology.org/ontology/SNOMEDCT/233970002",
-          "hasCodeBook": {
-            "hasTopConcept": [
-              {
-                "notation": "0",
-                "prefLabel": "<50% narrowing"
-              },
-              {
-                "notation": "1",
-                "prefLabel": "\u226550% narrowing"
-              }
-            ]
-          }
-        },
+        "hadRole": "target",
         "summaryStatistics": {
           "statisticalDataType": "dsv:NumericalDataType",
           "columnCompleteness": 1.0,

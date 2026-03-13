@@ -1,0 +1,15 @@
+variable,type,KS,W1,JSD
+age,continuous,0.4962962962962963,9.65555130233668,
+sex,discrete,,,0.4565838272763731
+chest-pain,discrete,,,0.3518233440962474
+rest-bp,continuous,0.34074074074074073,11.499995650845873,
+serum-chol,continuous,0.9814814814814815,107.24074074074073,
+fasting-blood-sugar,discrete,,,0.21252480667538773
+electrocardiographic,discrete,,,0.15494502731026066
+max-heart-rate,continuous,1.0,49.925925925925924,
+angina,discrete,,,0.29142637587218
+oldpeak,continuous,0.6481481481481481,0.8592592592592594,
+slope,discrete,,,0.4878527765865689
+major-vessels,discrete,,,0.45806594521134975
+thal,discrete,,,0.21431299774106746
+heart-disease,discrete,,,0.5415434190437767

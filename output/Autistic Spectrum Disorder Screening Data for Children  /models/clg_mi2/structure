@@ -1,0 +1,38 @@
+// Autistic Spectrum Disorder Screening Data for Children   — clg_mi2 BN
+digraph {
+	rankdir=LR
+	class [label=class fillcolor="#f3d19c" shape=box style=filled]
+	relation [label=relation fillcolor="#f3d19c" shape=box style=filled]
+	age_desc [label=age_desc fillcolor="#f3d19c" shape=box style=filled]
+	result [label=result fillcolor="#f3d19c" shape=box style=filled]
+	used_app_before [label=used_app_before fillcolor="#f3d19c" shape=box style=filled]
+	jaundice [label=jaundice fillcolor="#f3d19c" shape=box style=filled]
+	A1_Score [label=A1_Score fillcolor="#f3d19c" shape=box style=filled]
+	A9_Score [label=A9_Score fillcolor="#f3d19c" shape=box style=filled]
+	A2_Score [label=A2_Score fillcolor="#f3d19c" shape=box style=filled]
+	A5_Score [label=A5_Score fillcolor="#f3d19c" shape=box style=filled]
+	A3_Score [label=A3_Score fillcolor="#f3d19c" shape=box style=filled]
+	A10_Score [label=A10_Score fillcolor="#f3d19c" shape=box style=filled]
+	A6_Score [label=A6_Score fillcolor="#f3d19c" shape=box style=filled]
+	country_of_res [label=country_of_res fillcolor="#f3d19c" shape=box style=filled]
+	A4_Score [label=A4_Score fillcolor="#f3d19c" shape=box style=filled]
+	A8_Score [label=A8_Score fillcolor="#f3d19c" shape=box style=filled]
+	gender [label=gender fillcolor="#f3d19c" shape=box style=filled]
+	autism [label=autism fillcolor="#f3d19c" shape=box style=filled]
+	A7_Score [label=A7_Score fillcolor="#f3d19c" shape=box style=filled]
+	age [label=age fillcolor="#9cc9f3" shape=ellipse style=filled]
+	ethnicity [label=ethnicity fillcolor="#f3d19c" shape=box style=filled]
+	class -> A2_Score
+	class -> A1_Score
+	class -> A10_Score
+	class -> A8_Score
+	A9_Score -> A7_Score
+	class -> A9_Score
+	class -> A3_Score
+	class -> A5_Score
+	result -> A6_Score
+	A8_Score -> gender
+	A8_Score -> A1_Score
+	class -> A4_Score
+	result -> class
+}

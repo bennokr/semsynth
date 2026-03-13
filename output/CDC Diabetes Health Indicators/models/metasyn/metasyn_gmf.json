@@ -1,12 +1,13 @@
 {
+    "gmf_version": "1.1",
     "n_rows": 800,
     "n_columns": 22,
     "provenance": {
         "created by": {
             "name": "metasyn",
-            "version": "1.1.0"
+            "version": "2.0.0"
         },
-        "creation time": "2025-10-10T16:40:05.712395"
+        "creation time": "2026-03-13T08:28:38.034791"
     },
     "vars": [
         {
@@ -15,9 +16,8 @@
             "dtype": "Categorical",
             "prop_missing": 0.0,
             "distribution": {
-                "implements": "core.multinoulli",
+                "name": "core.multinoulli",
                 "version": "1.0",
-                "provenance": "builtin",
                 "class_name": "MultinoulliDistribution",
                 "unique": false,
                 "parameters": {
@@ -32,7 +32,17 @@
                 }
             },
             "creation_method": {
-                "created_by": "metasyn"
+                "created_by": "metasyn",
+                "fitter": {
+                    "name": "MultinoulliFitter",
+                    "privacy": {
+                        "name": "none",
+                        "parameters": {}
+                    },
+                    "version": "1.0",
+                    "plugin": "builtin",
+                    "plugin_version": "2.0.0"
+                }
             }
         },
         {
@@ -41,9 +51,8 @@
             "dtype": "Categorical",
             "prop_missing": 0.0,
             "distribution": {
-                "implements": "core.multinoulli",
+                "name": "core.multinoulli",
                 "version": "1.0",
-                "provenance": "builtin",
                 "class_name": "MultinoulliDistribution",
                 "unique": false,
                 "parameters": {
@@ -58,7 +67,17 @@
                 }
             },
             "creation_method": {
-                "created_by": "metasyn"
+                "created_by": "metasyn",
+                "fitter": {
+                    "name": "MultinoulliFitter",
+                    "privacy": {
+                        "name": "none",
+                        "parameters": {}
+                    },
+                    "version": "1.0",
+                    "plugin": "builtin",
+                    "plugin_version": "2.0.0"
+                }
             }
         },
         {
@@ -67,9 +86,8 @@
             "dtype": "Categorical",
             "prop_missing": 0.0,
             "distribution": {
-                "implements": "core.multinoulli",
+                "name": "core.multinoulli",
                 "version": "1.0",
-                "provenance": "builtin",
                 "class_name": "MultinoulliDistribution",
                 "unique": false,
                 "parameters": {
@@ -84,7 +102,17 @@
                 }
             },
             "creation_method": {
-                "created_by": "metasyn"
+                "created_by": "metasyn",
+                "fitter": {
+                    "name": "MultinoulliFitter",
+                    "privacy": {
+                        "name": "none",
+                        "parameters": {}
+                    },
+                    "version": "1.0",
+                    "plugin": "builtin",
+                    "plugin_version": "2.0.0"
+                }
             }
         },
         {
@@ -93,9 +121,8 @@
             "dtype": "Float64",
             "prop_missing": 0.0,
             "distribution": {
-                "implements": "core.lognormal",
+                "name": "core.lognormal",
                 "version": "1.0",
-                "provenance": "builtin",
                 "class_name": "LogNormalDistribution",
                 "unique": false,
                 "parameters": {
@@ -104,7 +131,17 @@
                 }
             },
             "creation_method": {
-                "created_by": "metasyn"
+                "created_by": "metasyn",
+                "fitter": {
+                    "name": "LogNormalFitter",
+                    "privacy": {
+                        "name": "none",
+                        "parameters": {}
+                    },
+                    "version": "1.0",
+                    "plugin": "builtin",
+                    "plugin_version": "2.0.0"
+                }
             }
         },
         {
@@ -113,9 +150,8 @@
             "dtype": "Categorical",
             "prop_missing": 0.0,
             "distribution": {
-                "implements": "core.multinoulli",
+                "name": "core.multinoulli",
                 "version": "1.0",
-                "provenance": "builtin",
                 "class_name": "MultinoulliDistribution",
                 "unique": false,
                 "parameters": {
@@ -130,7 +166,17 @@
                 }
             },
             "creation_method": {
-                "created_by": "metasyn"
+                "created_by": "metasyn",
+                "fitter": {
+                    "name": "MultinoulliFitter",
+                    "privacy": {
+                        "name": "none",
+                        "parameters": {}
+                    },
+                    "version": "1.0",
+                    "plugin": "builtin",
+                    "plugin_version": "2.0.0"
+                }
             }
         },
         {
@@ -139,9 +185,8 @@
             "dtype": "Categorical",
             "prop_missing": 0.0,
             "distribution": {
-                "implements": "core.multinoulli",
+                "name": "core.multinoulli",
                 "version": "1.0",
-                "provenance": "builtin",
                 "class_name": "MultinoulliDistribution",
                 "unique": false,
                 "parameters": {
@@ -156,7 +201,17 @@
                 }
             },
             "creation_method": {
-                "created_by": "metasyn"
+                "created_by": "metasyn",
+                "fitter": {
+                    "name": "MultinoulliFitter",
+                    "privacy": {
+                        "name": "none",
+                        "parameters": {}
+                    },
+                    "version": "1.0",
+                    "plugin": "builtin",
+                    "plugin_version": "2.0.0"
+                }
             }
         },
         {
@@ -165,9 +220,8 @@
             "dtype": "Categorical",
             "prop_missing": 0.0,
             "distribution": {
-                "implements": "core.multinoulli",
+                "name": "core.multinoulli",
                 "version": "1.0",
-                "provenance": "builtin",
                 "class_name": "MultinoulliDistribution",
                 "unique": false,
                 "parameters": {
@@ -182,7 +236,17 @@
                 }
             },
             "creation_method": {
-                "created_by": "metasyn"
+                "created_by": "metasyn",
+                "fitter": {
+                    "name": "MultinoulliFitter",
+                    "privacy": {
+                        "name": "none",
+                        "parameters": {}
+                    },
+                    "version": "1.0",
+                    "plugin": "builtin",
+                    "plugin_version": "2.0.0"
+                }
             }
         },
         {
@@ -191,9 +255,8 @@
             "dtype": "Categorical",
             "prop_missing": 0.0,
             "distribution": {
-                "implements": "core.multinoulli",
+                "name": "core.multinoulli",
                 "version": "1.0",
-                "provenance": "builtin",
                 "class_name": "MultinoulliDistribution",
                 "unique": false,
                 "parameters": {
@@ -208,7 +271,17 @@
                 }
             },
             "creation_method": {
-                "created_by": "metasyn"
+                "created_by": "metasyn",
+                "fitter": {
+                    "name": "MultinoulliFitter",
+                    "privacy": {
+                        "name": "none",
+                        "parameters": {}
+                    },
+                    "version": "1.0",
+                    "plugin": "builtin",
+                    "plugin_version": "2.0.0"
+                }
             }
         },
         {
@@ -217,9 +290,8 @@
             "dtype": "Categorical",
             "prop_missing": 0.0,
             "distribution": {
-                "implements": "core.multinoulli",
+                "name": "core.multinoulli",
                 "version": "1.0",
-                "provenance": "builtin",
                 "class_name": "MultinoulliDistribution",
                 "unique": false,
                 "parameters": {
@@ -234,7 +306,17 @@
                 }
             },
             "creation_method": {
-                "created_by": "metasyn"
+                "created_by": "metasyn",
+                "fitter": {
+                    "name": "MultinoulliFitter",
+                    "privacy": {
+                        "name": "none",
+                        "parameters": {}
+                    },
+                    "version": "1.0",
+                    "plugin": "builtin",
+                    "plugin_version": "2.0.0"
+                }
             }
         },
         {
@@ -243,9 +325,8 @@
             "dtype": "Categorical",
             "prop_missing": 0.0,
             "distribution": {
-                "implements": "core.multinoulli",
+                "name": "core.multinoulli",
                 "version": "1.0",
-                "provenance": "builtin",
                 "class_name": "MultinoulliDistribution",
                 "unique": false,
                 "parameters": {
@@ -260,7 +341,17 @@
                 }
             },
             "creation_method": {
-                "created_by": "metasyn"
+                "created_by": "metasyn",
+                "fitter": {
+                    "name": "MultinoulliFitter",
+                    "privacy": {
+                        "name": "none",
+                        "parameters": {}
+                    },
+                    "version": "1.0",
+                    "plugin": "builtin",
+                    "plugin_version": "2.0.0"
+                }
             }
         },
         {
@@ -269,9 +360,8 @@
             "dtype": "Categorical",
             "prop_missing": 0.0,
             "distribution": {
-                "implements": "core.multinoulli",
+                "name": "core.multinoulli",
                 "version": "1.0",
-                "provenance": "builtin",
                 "class_name": "MultinoulliDistribution",
                 "unique": false,
                 "parameters": {
@@ -286,7 +376,17 @@
                 }
             },
             "creation_method": {
-                "created_by": "metasyn"
+                "created_by": "metasyn",
+                "fitter": {
+                    "name": "MultinoulliFitter",
+                    "privacy": {
+                        "name": "none",
+                        "parameters": {}
+                    },
+                    "version": "1.0",
+                    "plugin": "builtin",
+                    "plugin_version": "2.0.0"
+                }
             }
         },
         {
@@ -295,9 +395,8 @@
             "dtype": "Categorical",
             "prop_missing": 0.0,
             "distribution": {
-                "implements": "core.multinoulli",
+                "name": "core.multinoulli",
                 "version": "1.0",
-                "provenance": "builtin",
                 "class_name": "MultinoulliDistribution",
                 "unique": false,
                 "parameters": {
@@ -312,7 +411,17 @@
                 }
             },
             "creation_method": {
-                "created_by": "metasyn"
+                "created_by": "metasyn",
+                "fitter": {
+                    "name": "MultinoulliFitter",
+                    "privacy": {
+                        "name": "none",
+                        "parameters": {}
+                    },
+                    "version": "1.0",
+                    "plugin": "builtin",
+                    "plugin_version": "2.0.0"
+                }
             }
         },
         {
@@ -321,9 +430,8 @@
             "dtype": "Categorical",
             "prop_missing": 0.0,
             "distribution": {
-                "implements": "core.multinoulli",
+                "name": "core.multinoulli",
                 "version": "1.0",
-                "provenance": "builtin",
                 "class_name": "MultinoulliDistribution",
                 "unique": false,
                 "parameters": {
@@ -338,7 +446,17 @@
                 }
             },
             "creation_method": {
-                "created_by": "metasyn"
+                "created_by": "metasyn",
+                "fitter": {
+                    "name": "MultinoulliFitter",
+                    "privacy": {
+                        "name": "none",
+                        "parameters": {}
+                    },
+                    "version": "1.0",
+                    "plugin": "builtin",
+                    "plugin_version": "2.0.0"
+                }
             }
         },
         {
@@ -347,9 +465,8 @@
             "dtype": "Categorical",
             "prop_missing": 0.0,
             "distribution": {
-                "implements": "core.multinoulli",
+                "name": "core.multinoulli",
                 "version": "1.0",
-                "provenance": "builtin",
                 "class_name": "MultinoulliDistribution",
                 "unique": false,
                 "parameters": {
@@ -370,7 +487,17 @@
                 }
             },
             "creation_method": {
-                "created_by": "metasyn"
+                "created_by": "metasyn",
+                "fitter": {
+                    "name": "MultinoulliFitter",
+                    "privacy": {
+                        "name": "none",
+                        "parameters": {}
+                    },
+                    "version": "1.0",
+                    "plugin": "builtin",
+                    "plugin_version": "2.0.0"
+                }
             }
         },
         {
@@ -379,20 +506,29 @@
             "dtype": "Float64",
             "prop_missing": 0.0,
             "distribution": {
-                "implements": "core.truncated_normal",
+                "name": "core.truncated_normal",
                 "version": "1.0",
-                "provenance": "builtin",
-                "class_name": "TruncatedNormalDistribution",
+                "class_name": "ContinuousTruncatedNormalDistribution",
                 "unique": false,
                 "parameters": {
                     "lower": -1e-08,
                     "upper": 30.00000001,
-                    "mean": -1127.446437418128,
-                    "sd": 59.389198207556795
+                    "mean": -1443.6163101564766,
+                    "sd": 67.00980830880493
                 }
             },
             "creation_method": {
-                "created_by": "metasyn"
+                "created_by": "metasyn",
+                "fitter": {
+                    "name": "ContinuousTruncatedNormalFitter",
+                    "privacy": {
+                        "name": "none",
+                        "parameters": {}
+                    },
+                    "version": "1.0",
+                    "plugin": "builtin",
+                    "plugin_version": "2.0.0"
+                }
             }
         },
         {
@@ -401,20 +537,29 @@
             "dtype": "Float64",
             "prop_missing": 0.0,
             "distribution": {
-                "implements": "core.truncated_normal",
+                "name": "core.truncated_normal",
                 "version": "1.0",
-                "provenance": "builtin",
-                "class_name": "TruncatedNormalDistribution",
+                "class_name": "ContinuousTruncatedNormalDistribution",
                 "unique": false,
                 "parameters": {
                     "lower": -1e-08,
                     "upper": 30.00000001,
-                    "mean": -1920.393300529667,
-                    "sd": 90.83710278440631
+                    "mean": -2298.0633818914985,
+                    "sd": 100.14377182280678
                 }
             },
             "creation_method": {
-                "created_by": "metasyn"
+                "created_by": "metasyn",
+                "fitter": {
+                    "name": "ContinuousTruncatedNormalFitter",
+                    "privacy": {
+                        "name": "none",
+                        "parameters": {}
+                    },
+                    "version": "1.0",
+                    "plugin": "builtin",
+                    "plugin_version": "2.0.0"
+                }
             }
         },
         {
@@ -423,9 +568,8 @@
             "dtype": "Categorical",
             "prop_missing": 0.0,
             "distribution": {
-                "implements": "core.multinoulli",
+                "name": "core.multinoulli",
                 "version": "1.0",
-                "provenance": "builtin",
                 "class_name": "MultinoulliDistribution",
                 "unique": false,
                 "parameters": {
@@ -440,7 +584,17 @@
                 }
             },
             "creation_method": {
-                "created_by": "metasyn"
+                "created_by": "metasyn",
+                "fitter": {
+                    "name": "MultinoulliFitter",
+                    "privacy": {
+                        "name": "none",
+                        "parameters": {}
+                    },
+                    "version": "1.0",
+                    "plugin": "builtin",
+                    "plugin_version": "2.0.0"
+                }
             }
         },
         {
@@ -449,9 +603,8 @@
             "dtype": "Categorical",
             "prop_missing": 0.0,
             "distribution": {
-                "implements": "core.multinoulli",
+                "name": "core.multinoulli",
                 "version": "1.0",
-                "provenance": "builtin",
                 "class_name": "MultinoulliDistribution",
                 "unique": false,
                 "parameters": {
@@ -466,7 +619,17 @@
                 }
             },
             "creation_method": {
-                "created_by": "metasyn"
+                "created_by": "metasyn",
+                "fitter": {
+                    "name": "MultinoulliFitter",
+                    "privacy": {
+                        "name": "none",
+                        "parameters": {}
+                    },
+                    "version": "1.0",
+                    "plugin": "builtin",
+                    "plugin_version": "2.0.0"
+                }
             }
         },
         {
@@ -475,9 +638,8 @@
             "dtype": "Categorical",
             "prop_missing": 0.0,
             "distribution": {
-                "implements": "core.multinoulli",
+                "name": "core.multinoulli",
                 "version": "1.0",
-                "provenance": "builtin",
                 "class_name": "MultinoulliDistribution",
                 "unique": false,
                 "parameters": {
@@ -514,7 +676,17 @@
                 }
             },
             "creation_method": {
-                "created_by": "metasyn"
+                "created_by": "metasyn",
+                "fitter": {
+                    "name": "MultinoulliFitter",
+                    "privacy": {
+                        "name": "none",
+                        "parameters": {}
+                    },
+                    "version": "1.0",
+                    "plugin": "builtin",
+                    "plugin_version": "2.0.0"
+                }
             }
         },
         {
@@ -523,9 +695,8 @@
             "dtype": "Categorical",
             "prop_missing": 0.0,
             "distribution": {
-                "implements": "core.multinoulli",
+                "name": "core.multinoulli",
                 "version": "1.0",
-                "provenance": "builtin",
                 "class_name": "MultinoulliDistribution",
                 "unique": false,
                 "parameters": {
@@ -548,7 +719,17 @@
                 }
             },
             "creation_method": {
-                "created_by": "metasyn"
+                "created_by": "metasyn",
+                "fitter": {
+                    "name": "MultinoulliFitter",
+                    "privacy": {
+                        "name": "none",
+                        "parameters": {}
+                    },
+                    "version": "1.0",
+                    "plugin": "builtin",
+                    "plugin_version": "2.0.0"
+                }
             }
         },
         {
@@ -557,9 +738,8 @@
             "dtype": "Categorical",
             "prop_missing": 0.0,
             "distribution": {
-                "implements": "core.multinoulli",
+                "name": "core.multinoulli",
                 "version": "1.0",
-                "provenance": "builtin",
                 "class_name": "MultinoulliDistribution",
                 "unique": false,
                 "parameters": {
@@ -586,7 +766,17 @@
                 }
             },
             "creation_method": {
-                "created_by": "metasyn"
+                "created_by": "metasyn",
+                "fitter": {
+                    "name": "MultinoulliFitter",
+                    "privacy": {
+                        "name": "none",
+                        "parameters": {}
+                    },
+                    "version": "1.0",
+                    "plugin": "builtin",
+                    "plugin_version": "2.0.0"
+                }
             }
         },
         {
@@ -595,9 +785,8 @@
             "dtype": "Categorical",
             "prop_missing": 0.0,
             "distribution": {
-                "implements": "core.multinoulli",
+                "name": "core.multinoulli",
                 "version": "1.0",
-                "provenance": "builtin",
                 "class_name": "MultinoulliDistribution",
                 "unique": false,
                 "parameters": {
@@ -612,7 +801,17 @@
                 }
             },
             "creation_method": {
-                "created_by": "metasyn"
+                "created_by": "metasyn",
+                "fitter": {
+                    "name": "MultinoulliFitter",
+                    "privacy": {
+                        "name": "none",
+                        "parameters": {}
+                    },
+                    "version": "1.0",
+                    "plugin": "builtin",
+                    "plugin_version": "2.0.0"
+                }
             }
         }
     ]

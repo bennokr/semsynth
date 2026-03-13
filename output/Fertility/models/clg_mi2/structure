@@ -1,0 +1,17 @@
+// Fertility — clg_mi2 BN
+digraph {
+	rankdir=LR
+	hrs_sitting [label=hrs_sitting fillcolor="#9cc9f3" shape=ellipse style=filled]
+	smoking [label=smoking fillcolor="#f3d19c" shape=box style=filled]
+	high_fevers [label=high_fevers fillcolor="#f3d19c" shape=box style=filled]
+	diagnosis [label=diagnosis fillcolor="#f3d19c" shape=box style=filled]
+	surgical_intervention [label=surgical_intervention fillcolor="#f3d19c" shape=box style=filled]
+	child_diseases [label=child_diseases fillcolor="#f3d19c" shape=box style=filled]
+	accident [label=accident fillcolor="#f3d19c" shape=box style=filled]
+	age [label=age fillcolor="#9cc9f3" shape=ellipse style=filled]
+	alcohol [label=alcohol fillcolor="#9cc9f3" shape=ellipse style=filled]
+	season [label=season fillcolor="#9cc9f3" shape=ellipse style=filled]
+	surgical_intervention -> high_fevers
+	age -> alcohol
+	age -> hrs_sitting
+}
