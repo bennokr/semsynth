@@ -1,29 +1,26 @@
 {
-    "n_rows": 237,
+    "gmf_version": "1.1",
+    "n_rows": 242,
     "n_columns": 14,
     "provenance": {
         "created by": {
             "name": "metasyn",
-            "version": "1.1.0"
+            "version": "2.0.0"
         },
-        "creation time": "2025-11-13T11:50:50.620729"
+        "creation time": "2026-03-13T07:44:28.918104"
     },
     "vars": [
         {
             "name": "age",
-            "type": "continuous",
-            "dtype": "Float64",
-            "prop_missing": 0.0,
+            "type": "categorical",
+            "dtype": "Categorical",
+            "prop_missing": 1.0,
             "distribution": {
-                "implements": "core.normal",
+                "name": "core.na",
                 "version": "1.0",
-                "provenance": "builtin",
-                "class_name": "NormalDistribution",
+                "class_name": "NADistribution",
                 "unique": false,
-                "parameters": {
-                    "mean": 54.61181434599156,
-                    "sd": 8.963660089125463
-                }
+                "parameters": {}
             },
             "creation_method": {
                 "created_by": "metasyn"
@@ -33,23 +30,13 @@
             "name": "sex",
             "type": "categorical",
             "dtype": "Categorical",
-            "prop_missing": 0.0,
+            "prop_missing": 1.0,
             "distribution": {
-                "implements": "core.multinoulli",
+                "name": "core.na",
                 "version": "1.0",
-                "provenance": "builtin",
-                "class_name": "MultinoulliDistribution",
+                "class_name": "NADistribution",
                 "unique": false,
-                "parameters": {
-                    "labels": [
-                        "0",
-                        "1"
-                    ],
-                    "probs": [
-                        0.29957805907172996,
-                        0.70042194092827
-                    ]
-                }
+                "parameters": {}
             },
             "creation_method": {
                 "created_by": "metasyn"
@@ -59,27 +46,13 @@
             "name": "cp",
             "type": "categorical",
             "dtype": "Categorical",
-            "prop_missing": 0.0,
+            "prop_missing": 1.0,
             "distribution": {
-                "implements": "core.multinoulli",
+                "name": "core.na",
                 "version": "1.0",
-                "provenance": "builtin",
-                "class_name": "MultinoulliDistribution",
+                "class_name": "NADistribution",
                 "unique": false,
-                "parameters": {
-                    "labels": [
-                        "1",
-                        "2",
-                        "3",
-                        "4"
-                    ],
-                    "probs": [
-                        0.08016877637130802,
-                        0.14345991561181434,
-                        0.28270042194092826,
-                        0.4936708860759494
-                    ]
-                }
+                "parameters": {}
             },
             "creation_method": {
                 "created_by": "metasyn"
@@ -87,19 +60,15 @@
         },
         {
             "name": "trestbps",
-            "type": "continuous",
-            "dtype": "Float64",
-            "prop_missing": 0.0,
+            "type": "categorical",
+            "dtype": "Categorical",
+            "prop_missing": 1.0,
             "distribution": {
-                "implements": "core.lognormal",
+                "name": "core.na",
                 "version": "1.0",
-                "provenance": "builtin",
-                "class_name": "LogNormalDistribution",
+                "class_name": "NADistribution",
                 "unique": false,
-                "parameters": {
-                    "mean": 4.875789498051666,
-                    "sd": 0.13271499103457368
-                }
+                "parameters": {}
             },
             "creation_method": {
                 "created_by": "metasyn"
@@ -107,19 +76,15 @@
         },
         {
             "name": "chol",
-            "type": "continuous",
-            "dtype": "Float64",
-            "prop_missing": 0.0,
+            "type": "categorical",
+            "dtype": "Categorical",
+            "prop_missing": 1.0,
             "distribution": {
-                "implements": "core.lognormal",
+                "name": "core.na",
                 "version": "1.0",
-                "provenance": "builtin",
-                "class_name": "LogNormalDistribution",
+                "class_name": "NADistribution",
                 "unique": false,
-                "parameters": {
-                    "mean": 5.49448037997251,
-                    "sd": 0.2029274924103256
-                }
+                "parameters": {}
             },
             "creation_method": {
                 "created_by": "metasyn"
@@ -129,23 +94,13 @@
             "name": "fbs",
             "type": "categorical",
             "dtype": "Categorical",
-            "prop_missing": 0.0,
+            "prop_missing": 1.0,
             "distribution": {
-                "implements": "core.multinoulli",
+                "name": "core.na",
                 "version": "1.0",
-                "provenance": "builtin",
-                "class_name": "MultinoulliDistribution",
+                "class_name": "NADistribution",
                 "unique": false,
-                "parameters": {
-                    "labels": [
-                        "0",
-                        "1"
-                    ],
-                    "probs": [
-                        0.8396624472573839,
-                        0.16033755274261605
-                    ]
-                }
+                "parameters": {}
             },
             "creation_method": {
                 "created_by": "metasyn"
@@ -155,25 +110,13 @@
             "name": "restecg",
             "type": "categorical",
             "dtype": "Categorical",
-            "prop_missing": 0.0,
+            "prop_missing": 1.0,
             "distribution": {
-                "implements": "core.multinoulli",
+                "name": "core.na",
                 "version": "1.0",
-                "provenance": "builtin",
-                "class_name": "MultinoulliDistribution",
+                "class_name": "NADistribution",
                 "unique": false,
-                "parameters": {
-                    "labels": [
-                        "0",
-                        "1",
-                        "2"
-                    ],
-                    "probs": [
-                        0.47257383966244726,
-                        0.012658227848101266,
-                        0.5147679324894515
-                    ]
-                }
+                "parameters": {}
             },
             "creation_method": {
                 "created_by": "metasyn"
@@ -185,41 +128,40 @@
             "dtype": "Float64",
             "prop_missing": 0.0,
             "distribution": {
-                "implements": "core.normal",
+                "name": "core.normal",
                 "version": "1.0",
-                "provenance": "builtin",
-                "class_name": "NormalDistribution",
+                "class_name": "ContinuousNormalDistribution",
                 "unique": false,
                 "parameters": {
-                    "mean": 148.48101265822785,
-                    "sd": 23.18201366629552
+                    "mean": 150.099173553719,
+                    "sd": 22.424494045602994
                 }
             },
             "creation_method": {
-                "created_by": "metasyn"
+                "created_by": "metasyn",
+                "fitter": {
+                    "name": "ContinuousNormalFitter",
+                    "privacy": {
+                        "name": "none",
+                        "parameters": {}
+                    },
+                    "version": "1.0",
+                    "plugin": "builtin",
+                    "plugin_version": "2.0.0"
+                }
             }
         },
         {
             "name": "exang",
             "type": "categorical",
             "dtype": "Categorical",
-            "prop_missing": 0.0,
+            "prop_missing": 1.0,
             "distribution": {
-                "implements": "core.multinoulli",
+                "name": "core.na",
                 "version": "1.0",
-                "provenance": "builtin",
-                "class_name": "MultinoulliDistribution",
+                "class_name": "NADistribution",
                 "unique": false,
-                "parameters": {
-                    "labels": [
-                        "0",
-                        "1"
-                    ],
-                    "probs": [
-                        0.6497890295358649,
-                        0.350210970464135
-                    ]
-                }
+                "parameters": {}
             },
             "creation_method": {
                 "created_by": "metasyn"
@@ -231,45 +173,42 @@
             "dtype": "Float64",
             "prop_missing": 0.0,
             "distribution": {
-                "implements": "core.truncated_normal",
+                "name": "core.truncated_normal",
                 "version": "1.0",
-                "provenance": "builtin",
-                "class_name": "TruncatedNormalDistribution",
+                "class_name": "ContinuousTruncatedNormalDistribution",
                 "unique": false,
                 "parameters": {
                     "lower": -1e-08,
-                    "upper": 5.60000001,
-                    "mean": -254.71821593315843,
-                    "sd": 16.586197844598104
+                    "upper": 6.20000001,
+                    "mean": -323.97080546131133,
+                    "sd": 18.527153104032596
                 }
             },
             "creation_method": {
-                "created_by": "metasyn"
+                "created_by": "metasyn",
+                "fitter": {
+                    "name": "ContinuousTruncatedNormalFitter",
+                    "privacy": {
+                        "name": "none",
+                        "parameters": {}
+                    },
+                    "version": "1.0",
+                    "plugin": "builtin",
+                    "plugin_version": "2.0.0"
+                }
             }
         },
         {
             "name": "slope",
             "type": "categorical",
             "dtype": "Categorical",
-            "prop_missing": 0.0,
+            "prop_missing": 1.0,
             "distribution": {
-                "implements": "core.multinoulli",
+                "name": "core.na",
                 "version": "1.0",
-                "provenance": "builtin",
-                "class_name": "MultinoulliDistribution",
+                "class_name": "NADistribution",
                 "unique": false,
-                "parameters": {
-                    "labels": [
-                        "1",
-                        "2",
-                        "3"
-                    ],
-                    "probs": [
-                        0.4514767932489452,
-                        0.48101265822784817,
-                        0.06751054852320676
-                    ]
-                }
+                "parameters": {}
             },
             "creation_method": {
                 "created_by": "metasyn"
@@ -279,27 +218,13 @@
             "name": "ca",
             "type": "categorical",
             "dtype": "Categorical",
-            "prop_missing": 0.0,
+            "prop_missing": 1.0,
             "distribution": {
-                "implements": "core.multinoulli",
+                "name": "core.na",
                 "version": "1.0",
-                "provenance": "builtin",
-                "class_name": "MultinoulliDistribution",
+                "class_name": "NADistribution",
                 "unique": false,
-                "parameters": {
-                    "labels": [
-                        "0",
-                        "1",
-                        "2",
-                        "3"
-                    ],
-                    "probs": [
-                        0.5864978902953587,
-                        0.21518987341772153,
-                        0.12658227848101267,
-                        0.07172995780590717
-                    ]
-                }
+                "parameters": {}
             },
             "creation_method": {
                 "created_by": "metasyn"
@@ -309,25 +234,13 @@
             "name": "thal",
             "type": "categorical",
             "dtype": "Categorical",
-            "prop_missing": 0.0,
+            "prop_missing": 1.0,
             "distribution": {
-                "implements": "core.multinoulli",
+                "name": "core.na",
                 "version": "1.0",
-                "provenance": "builtin",
-                "class_name": "MultinoulliDistribution",
+                "class_name": "NADistribution",
                 "unique": false,
-                "parameters": {
-                    "labels": [
-                        "3",
-                        "6",
-                        "7"
-                    ],
-                    "probs": [
-                        0.540084388185654,
-                        0.05485232067510549,
-                        0.4050632911392405
-                    ]
-                }
+                "parameters": {}
             },
             "creation_method": {
                 "created_by": "metasyn"
@@ -337,29 +250,13 @@
             "name": "num",
             "type": "categorical",
             "dtype": "Categorical",
-            "prop_missing": 0.0,
+            "prop_missing": 1.0,
             "distribution": {
-                "implements": "core.multinoulli",
+                "name": "core.na",
                 "version": "1.0",
-                "provenance": "builtin",
-                "class_name": "MultinoulliDistribution",
+                "class_name": "NADistribution",
                 "unique": false,
-                "parameters": {
-                    "labels": [
-                        "0",
-                        "1",
-                        "2",
-                        "3",
-                        "4"
-                    ],
-                    "probs": [
-                        0.5232067510548524,
-                        0.189873417721519,
-                        0.12658227848101267,
-                        0.11814345991561181,
-                        0.04219409282700422
-                    ]
-                }
+                "parameters": {}
             },
             "creation_method": {
                 "created_by": "metasyn"

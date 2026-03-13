@@ -5,10 +5,8 @@
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <title>SemSynth demo reports</title>
   <link rel="stylesheet" href="../templates/report_style.css" />
-  <link rel="stylesheet" href="https://unpkg.com/@triply/yasgui/build/yasgui.min.css" />
+  <link rel="stylesheet" href="../templates/yasgui.min.css" />
   <style>
-    .sparql-grid { display: grid; gap: 1rem; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); }
-    .sparql-card pre { max-height: 22rem; overflow: auto; white-space: pre-wrap; }
     .endpoint-pill { display: inline-block; font-family: monospace; background: #f4f4f4; padding: 0.35rem 0.55rem; border-radius: 0.35rem; }
     #sparql-app { height: 70vh; min-height: 520px; border: 1px solid #ddd; border-radius: 0.5rem; overflow: hidden; }
     .semsynth-query-result { margin: 0.75rem; padding: 0.75rem; max-height: 16rem; overflow: auto; border-radius: 0.35rem; background: #fafafa; border: 1px solid #ddd; font-family: monospace; white-space: pre-wrap; }
@@ -18,8 +16,11 @@
 <main class="report-container">
   <h1>Data Reports</h1>
   <ul>
+<li><a href="Autistic Spectrum Disorder Screening Data for Children  ">Autistic Spectrum Disorder Screening Data for Children  </a></li>
 <li><a href="CDC Diabetes Health Indicators">CDC Diabetes Health Indicators</a></li>
 <li><a href="Chronic Kidney Disease">Chronic Kidney Disease</a></li>
+<li><a href="Diabetes 130-US Hospitals for Years 1999-2008">Diabetes 130-US Hospitals for Years 1999-2008</a></li>
+<li><a href="Fertility">Fertility</a></li>
 <li><a href="Heart Disease">Heart Disease</a></li>
 <li><a href="Hepatitis">Hepatitis</a></li>
 <li><a href="Statlog (Heart)">Statlog (Heart)</a></li>
@@ -33,77 +34,14 @@
     </p>
     <p>
       The engine queries <code>output/catalog.jsonld</code> and loads query tabs from <code>output/sparql/*.rq</code> files.
+      Use the tabs below to select and run each example query.
     </p>
-    <div class="sparql-grid">
-<article class="sparql-card">
-<h3>SemMap coverage per dataset</h3>
-<p><strong>Query 1</strong> — Counts SemMap distributions across datasets to confirm semantic metadata coverage.</p>
-<pre><code>PREFIX dcat: <http://www.w3.org/ns/dcat#>
-PREFIX dct: <http://purl.org/dc/terms/>
-
-SELECT ?dataset ?title (COUNT(DISTINCT ?semmap) AS ?semmapCount)
-WHERE {
-  ?dataset a dcat:Dataset ;
-           dct:title ?title ;
-           dcat:distribution ?dist .
-  ?dist dcat:downloadURL ?semmap .
-  FILTER(CONTAINS(LCASE(STR(?semmap)), "dataset.semmap"))
-}
-GROUP BY ?dataset ?title
-HAVING (COUNT(DISTINCT ?semmap) >= 1)
-ORDER BY DESC(?semmapCount) ?title</code></pre>
-</article>
-<article class="sparql-card">
-<h3>Provenance sources driving synthetic artifacts</h3>
-<p><strong>Query 2</strong> — Aggregates provenance sources linked to multiple synthetic artifact distributions.</p>
-<pre><code>PREFIX dcat: <http://www.w3.org/ns/dcat#>
-PREFIX dct: <http://purl.org/dc/terms/>
-PREFIX prov: <http://www.w3.org/ns/prov#>
-
-SELECT ?source (COUNT(DISTINCT ?dataset) AS ?datasetCount) (COUNT(DISTINCT ?artifact) AS ?artifactCount)
-WHERE {
-  ?dataset a dcat:Dataset ;
-           dct:title ?title ;
-           prov:wasDerivedFrom ?source ;
-           dcat:distribution ?dist .
-  ?dist dcat:downloadURL ?artifact .
-  FILTER(CONTAINS(LCASE(STR(?artifact)), "synthetic"))
-}
-GROUP BY ?source
-HAVING (COUNT(DISTINCT ?artifact) >= 2)
-ORDER BY DESC(?artifactCount) DESC(?datasetCount)</code></pre>
-</article>
-<article class="sparql-card">
-<h3>Datasets with SemMap + provenance synthetic outputs</h3>
-<p><strong>Query 3</strong> — Joins SemMap and provenance-linked synthetic distributions per dataset.</p>
-<pre><code>PREFIX dcat: <http://www.w3.org/ns/dcat#>
-PREFIX dct: <http://purl.org/dc/terms/>
-PREFIX prov: <http://www.w3.org/ns/prov#>
-
-SELECT ?dataset ?title ?source
-       (COUNT(DISTINCT ?semmap) AS ?semmapFiles)
-       (COUNT(DISTINCT ?artifact) AS ?syntheticArtifacts)
-WHERE {
-  ?dataset a dcat:Dataset ;
-           dct:title ?title ;
-           prov:wasDerivedFrom ?source ;
-           dcat:distribution ?semmapDist, ?artifactDist .
-  ?semmapDist dcat:downloadURL ?semmap .
-  ?artifactDist dcat:downloadURL ?artifact .
-  FILTER(CONTAINS(LCASE(STR(?semmap)), "dataset.semmap"))
-  FILTER(CONTAINS(LCASE(STR(?artifact)), "synthetic"))
-}
-GROUP BY ?dataset ?title ?source
-HAVING (COUNT(DISTINCT ?artifact) >= 2)
-ORDER BY DESC(?syntheticArtifacts) ?title</code></pre>
-</article>
-    </div>
     <div id="sparql-app"></div>
   </section>
 </main>
 
-<script src="https://rdf.js.org/comunica-browser/versions/v4/engines/query-sparql/comunica-browser.js"></script>
-<script src="https://unpkg.com/@triply/yasgui/build/yasgui.min.js"></script>
+<script src="../templates/comunica-browser.js"></script>
+<script src="../templates/yasgui.min.js"></script>
 <script>
   const endpointId = "browser://semsynth-static-catalog";
   const exampleQueries = [{"name": "SemMap coverage per dataset", "filename": "query-semmap-coverage.rq", "description": "Counts SemMap distributions across datasets to confirm semantic metadata coverage."}, {"name": "Provenance sources driving synthetic artifacts", "filename": "query-provenance-artifacts.rq", "description": "Aggregates provenance sources linked to multiple synthetic artifact distributions."}, {"name": "Datasets with SemMap + provenance synthetic outputs", "filename": "query-semmap-and-provenance-artifacts.rq", "description": "Joins SemMap and provenance-linked synthetic distributions per dataset."}];

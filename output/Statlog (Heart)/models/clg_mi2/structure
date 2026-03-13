@@ -1,0 +1,33 @@
+// Statlog (Heart) — clg_mi2 BN
+digraph {
+	rankdir=LR
+	"heart-disease" [label="heart-disease" fillcolor="#f3d19c" shape=box style=filled]
+	age [label=age fillcolor="#9cc9f3" shape=ellipse style=filled]
+	sex [label=sex fillcolor="#f3d19c" shape=box style=filled]
+	thal [label=thal fillcolor="#f3d19c" shape=box style=filled]
+	"chest-pain" [label="chest-pain" fillcolor="#f3d19c" shape=box style=filled]
+	"rest-bp" [label="rest-bp" fillcolor="#9cc9f3" shape=ellipse style=filled]
+	"serum-chol" [label="serum-chol" fillcolor="#9cc9f3" shape=ellipse style=filled]
+	electrocardiographic [label=electrocardiographic fillcolor="#f3d19c" shape=box style=filled]
+	"major-vessels" [label="major-vessels" fillcolor="#f3d19c" shape=box style=filled]
+	"max-heart-rate" [label="max-heart-rate" fillcolor="#9cc9f3" shape=ellipse style=filled]
+	"fasting-blood-sugar" [label="fasting-blood-sugar" fillcolor="#f3d19c" shape=box style=filled]
+	slope [label=slope fillcolor="#f3d19c" shape=box style=filled]
+	angina [label=angina fillcolor="#f3d19c" shape=box style=filled]
+	oldpeak [label=oldpeak fillcolor="#9cc9f3" shape=ellipse style=filled]
+	slope -> oldpeak
+	"heart-disease" -> "major-vessels"
+	"heart-disease" -> thal
+	sex -> "serum-chol"
+	"chest-pain" -> angina
+	age -> "max-heart-rate"
+	angina -> "max-heart-rate"
+	sex -> "heart-disease"
+	age -> "rest-bp"
+	"heart-disease" -> slope
+	oldpeak -> "rest-bp"
+	age -> "serum-chol"
+	"heart-disease" -> oldpeak
+	"heart-disease" -> "chest-pain"
+	sex -> thal
+}

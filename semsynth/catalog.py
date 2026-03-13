@@ -443,8 +443,6 @@ def write_index(
   <link rel="stylesheet" href="{css_href}" />
   <link rel="stylesheet" href="../templates/yasgui.min.css" />
   <style>
-    .sparql-grid {{ display: grid; gap: 1rem; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); }}
-    .sparql-card pre {{ max-height: 22rem; overflow: auto; white-space: pre-wrap; }}
     .endpoint-pill {{ display: inline-block; font-family: monospace; background: #f4f4f4; padding: 0.35rem 0.55rem; border-radius: 0.35rem; }}
     #sparql-app {{ height: 70vh; min-height: 520px; border: 1px solid #ddd; border-radius: 0.5rem; overflow: hidden; }}
     .semsynth-query-result {{ margin: 0.75rem; padding: 0.75rem; max-height: 16rem; overflow: auto; border-radius: 0.35rem; background: #fafafa; border: 1px solid #ddd; font-family: monospace; white-space: pre-wrap; }}
@@ -465,6 +463,7 @@ def write_index(
     </p>
     <p>
       The engine queries <code>output/catalog.jsonld</code> and loads query tabs from <code>output/sparql/*.rq</code> files.
+      Use the tabs below to select and run each example query.
     </p>
     <div id="sparql-app"></div>
   </section>

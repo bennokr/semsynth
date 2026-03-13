@@ -1,0 +1,72 @@
+// Diabetes 130-US Hospitals for Years 1999-2008 — clg_mi2 BN
+digraph {
+	rankdir=LR
+	readmitted [label=readmitted fillcolor="#f3d19c" shape=box style=filled]
+	diabetesMed [label=diabetesMed fillcolor="#f3d19c" shape=box style=filled]
+	change [label=change fillcolor="#f3d19c" shape=box style=filled]
+	"glimepiride-pioglitazone" [label="glimepiride-pioglitazone" fillcolor="#f3d19c" shape=box style=filled]
+	citoglipton [label=citoglipton fillcolor="#f3d19c" shape=box style=filled]
+	"glyburide-metformin" [label="glyburide-metformin" fillcolor="#f3d19c" shape=box style=filled]
+	tolazamide [label=tolazamide fillcolor="#f3d19c" shape=box style=filled]
+	troglitazone [label=troglitazone fillcolor="#f3d19c" shape=box style=filled]
+	"glipizide-metformin" [label="glipizide-metformin" fillcolor="#f3d19c" shape=box style=filled]
+	acarbose [label=acarbose fillcolor="#f3d19c" shape=box style=filled]
+	num_lab_procedures [label=num_lab_procedures fillcolor="#9cc9f3" shape=ellipse style=filled]
+	payer_code [label=payer_code fillcolor="#f3d19c" shape=box style=filled]
+	glyburide [label=glyburide fillcolor="#f3d19c" shape=box style=filled]
+	medical_specialty [label=medical_specialty fillcolor="#f3d19c" shape=box style=filled]
+	num_procedures [label=num_procedures fillcolor="#f3d19c" shape=box style=filled]
+	num_medications [label=num_medications fillcolor="#9cc9f3" shape=ellipse style=filled]
+	admission_type_id [label=admission_type_id fillcolor="#f3d19c" shape=box style=filled]
+	A1Cresult [label=A1Cresult fillcolor="#f3d19c" shape=box style=filled]
+	"metformin-rosiglitazone" [label="metformin-rosiglitazone" fillcolor="#f3d19c" shape=box style=filled]
+	weight [label=weight fillcolor="#f3d19c" shape=box style=filled]
+	"metformin-pioglitazone" [label="metformin-pioglitazone" fillcolor="#f3d19c" shape=box style=filled]
+	tolbutamide [label=tolbutamide fillcolor="#f3d19c" shape=box style=filled]
+	age [label=age fillcolor="#f3d19c" shape=box style=filled]
+	admission_source_id [label=admission_source_id fillcolor="#f3d19c" shape=box style=filled]
+	number_emergency [label=number_emergency fillcolor="#9cc9f3" shape=ellipse style=filled]
+	insulin [label=insulin fillcolor="#f3d19c" shape=box style=filled]
+	gender [label=gender fillcolor="#f3d19c" shape=box style=filled]
+	examide [label=examide fillcolor="#f3d19c" shape=box style=filled]
+	race [label=race fillcolor="#f3d19c" shape=box style=filled]
+	rosiglitazone [label=rosiglitazone fillcolor="#f3d19c" shape=box style=filled]
+	pioglitazone [label=pioglitazone fillcolor="#f3d19c" shape=box style=filled]
+	max_glu_serum [label=max_glu_serum fillcolor="#f3d19c" shape=box style=filled]
+	number_outpatient [label=number_outpatient fillcolor="#9cc9f3" shape=ellipse style=filled]
+	number_inpatient [label=number_inpatient fillcolor="#9cc9f3" shape=ellipse style=filled]
+	diag_1 [label=diag_1 fillcolor="#f3d19c" shape=box style=filled]
+	metformin [label=metformin fillcolor="#f3d19c" shape=box style=filled]
+	diag_2 [label=diag_2 fillcolor="#f3d19c" shape=box style=filled]
+	diag_3 [label=diag_3 fillcolor="#f3d19c" shape=box style=filled]
+	time_in_hospital [label=time_in_hospital fillcolor="#f3d19c" shape=box style=filled]
+	glipizide [label=glipizide fillcolor="#f3d19c" shape=box style=filled]
+	number_diagnoses [label=number_diagnoses fillcolor="#f3d19c" shape=box style=filled]
+	miglitol [label=miglitol fillcolor="#f3d19c" shape=box style=filled]
+	repaglinide [label=repaglinide fillcolor="#f3d19c" shape=box style=filled]
+	nateglinide [label=nateglinide fillcolor="#f3d19c" shape=box style=filled]
+	discharge_disposition_id [label=discharge_disposition_id fillcolor="#9cc9f3" shape=ellipse style=filled]
+	chlorpropamide [label=chlorpropamide fillcolor="#f3d19c" shape=box style=filled]
+	acetohexamide [label=acetohexamide fillcolor="#f3d19c" shape=box style=filled]
+	glimepiride [label=glimepiride fillcolor="#f3d19c" shape=box style=filled]
+	admission_source_id -> admission_type_id
+	number_outpatient -> number_emergency
+	change -> metformin
+	change -> rosiglitazone
+	diabetesMed -> glyburide
+	change -> pioglitazone
+	insulin -> change
+	readmitted -> number_inpatient
+	insulin -> diabetesMed
+	A1Cresult -> number_outpatient
+	change -> glimepiride
+	diabetesMed -> glipizide
+	time_in_hospital -> num_medications
+	num_medications -> num_lab_procedures
+	number_emergency -> number_inpatient
+	diabetesMed -> metformin
+	insulin -> number_emergency
+	diabetesMed -> number_outpatient
+	diabetesMed -> change
+	insulin -> discharge_disposition_id
+}

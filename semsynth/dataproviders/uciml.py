@@ -367,6 +367,14 @@ def load_uciml_by_id(dataset_id: int, cache_dir: pathlib.Path | OutPath) -> Data
             metadata=spec.meta,
         )
 
+    import ssl as _ssl
+    import ucimlrepo.fetch as _ucimlrepo_fetch
+
+    # Some environments have self-signed or intercepting TLS proxies that prevent
+    # certificate verification.  Fall back to an unverified context so the
+    # pipeline works even without a trusted CA chain.
+    _ucimlrepo_fetch.ssl.create_default_context = lambda *a, **kw: _ssl._create_unverified_context()
+
     from ucimlrepo import fetch_ucirepo
 
     logging.info("Downloading UCI ML dataset %s", dataset_id)

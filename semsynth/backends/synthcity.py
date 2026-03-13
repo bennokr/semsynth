@@ -12,7 +12,7 @@ if TYPE_CHECKING:  # pragma: no cover - typing only
 
 from ..metrics import per_variable_distances, summarize_distance_metrics
 from ..models import model_run_root, write_manifest
-from ..torch_compat import ensure_torch_rmsnorm
+from ..torch_compat import ensure_torch_rmsnorm, ensure_trapz_compat, ensure_npsum_compat
 from ..utils import (
     coerce_continuous_to_float,
     coerce_discrete_to_category,
@@ -76,6 +76,8 @@ class SynthRunArtifacts:
 
 
 def _get_plugin(name: str, params: Dict[str, Any]):
+    ensure_trapz_compat()
+    ensure_npsum_compat()
     ensure_torch_rmsnorm()
     Plugins = _load_synthcity_plugins()
 

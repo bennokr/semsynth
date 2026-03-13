@@ -1,0 +1,105 @@
+{
+  "provenance": [
+    {
+      "id": "output/Chronic Kidney Disease/models/tvae_quick",
+      "type": "prov:Entity",
+      "format": "application/octet-stream",
+      "extent": 4096,
+      "modified": "2026-03-13T07:37:00.998435+00:00",
+      "wasGeneratedBy": "__main__.py#write_downstream-20260313T0743"
+    },
+    {
+      "id": "__main__.py#write_manifest-20260313T0743",
+      "type": "prov:Activity",
+      "startedAtTime": "2026-03-13T07:43:23.604554+00:00",
+      "endedAtTime": "2026-03-13T07:43:23.604680+00:00",
+      "wasAssociatedWith": "__main__.py",
+      "used": [
+        "env-20260313T0743"
+      ]
+    },
+    {
+      "id": "output/Chronic Kidney Disease/models/tvae_quick",
+      "type": "prov:Entity",
+      "format": "application/octet-stream",
+      "extent": 4096,
+      "modified": "2026-03-13T07:37:00.998435+00:00",
+      "wasGeneratedBy": "__main__.py#write_privacy-20260313T0743"
+    },
+    {
+      "id": "__main__.py#model_run_root-20260313T0743",
+      "type": "prov:Activity",
+      "startedAtTime": "2026-03-13T07:43:23.468833+00:00",
+      "endedAtTime": "2026-03-13T07:43:23.468909+00:00",
+      "wasAssociatedWith": "__main__.py",
+      "used": [
+        "env-20260313T0743"
+      ]
+    },
+    {
+      "id": "output/Chronic Kidney Disease/models/tvae_quick",
+      "type": "prov:Entity",
+      "format": "application/octet-stream",
+      "extent": 4096,
+      "modified": "2026-03-13T07:37:00.998435+00:00",
+      "wasGeneratedBy": "__main__.py#write_manifest-20260313T0743"
+    },
+    {
+      "id": "env-20260313T0743",
+      "type": [
+        "prov:Entity",
+        "prov:Collection"
+      ],
+      "label": "Python environment",
+      "title": "makeprov",
+      "hasVersion": "0.4.2",
+      "requires": [
+        {
+          "id": "https://pypi.org/project/parse/",
+          "type": "schema:SoftwareSourceCode",
+          "label": "parse>=1.20"
+        }
+      ]
+    },
+    {
+      "id": "__main__.py#write_downstream-20260313T0743",
+      "type": "prov:Activity",
+      "startedAtTime": "2026-03-13T07:43:23.788166+00:00",
+      "endedAtTime": "2026-03-13T07:43:23.789348+00:00",
+      "wasAssociatedWith": "__main__.py",
+      "used": [
+        "env-20260313T0743"
+      ]
+    },
+    {
+      "id": "__main__.py",
+      "type": [
+        "prov:Agent",
+        "prov:SoftwareAgent",
+        "schema:SoftwareSourceCode"
+      ],
+      "label": "__main__.py",
+      "hasVersion": "e41b22a7869f00c7cee24c2109bb44cfb5904da6",
+      "source": "http://local_proxy@127.0.0.1:45617/git/bennokr/semsynth"
+    },
+    {
+      "id": "output/Chronic Kidney Disease",
+      "type": "prov:Entity",
+      "format": "application/octet-stream",
+      "extent": 4096,
+      "modified": "2026-03-13T07:35:39.266430+00:00",
+      "wasGeneratedBy": "__main__.py#model_run_root-20260313T0743"
+    },
+    {
+      "id": "__main__.py#write_privacy-20260313T0743",
+      "type": "prov:Activity",
+      "startedAtTime": "2026-03-13T07:43:23.653214+00:00",
+      "endedAtTime": "2026-03-13T07:43:23.742790+00:00",
+      "wasAssociatedWith": "__main__.py",
+      "used": [
+        "env-20260313T0743"
+      ],
+      "comment": "task failed"
+    }
+  ]
+}
