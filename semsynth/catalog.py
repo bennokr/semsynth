@@ -441,7 +441,7 @@ def write_index(
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <title>SemSynth demo reports</title>
   <link rel="stylesheet" href="{css_href}" />
-  <link rel="stylesheet" href="https://unpkg.com/@triply/yasgui/build/yasgui.min.css" />
+  <link rel="stylesheet" href="../templates/yasgui.min.css" />
   <style>
     .sparql-grid {{ display: grid; gap: 1rem; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); }}
     .sparql-card pre {{ max-height: 22rem; overflow: auto; white-space: pre-wrap; }}
@@ -466,25 +466,12 @@ def write_index(
     <p>
       The engine queries <code>output/catalog.jsonld</code> and loads query tabs from <code>output/sparql/*.rq</code> files.
     </p>
-    <div class="sparql-grid">
-"""
-
-    for idx, query in enumerate(query_examples, start=1):
-        html += (
-            '<article class="sparql-card">\n'
-            f"<h3>{query['name']}</h3>\n"
-            f"<p><strong>Query {idx}</strong> — {query['description']}</p>\n"
-            f"<pre><code>{query['query']}</code></pre>\n"
-            "</article>\n"
-        )
-
-    html += f"""    </div>
     <div id="sparql-app"></div>
   </section>
 </main>
 
-<script src="https://rdf.js.org/comunica-browser/versions/v4/engines/query-sparql/comunica-browser.js"></script>
-<script src="https://unpkg.com/@triply/yasgui/build/yasgui.min.js"></script>
+<script src="../templates/comunica-browser.js"></script>
+<script src="../templates/yasgui.min.js"></script>
 <script>
   const endpointId = {json.dumps(SPARQL_ENDPOINT_ID)};
   const exampleQueries = {query_json};
@@ -505,10 +492,13 @@ def write_index(
     }});
 
     const engine = new Comunica.QueryEngine();
+    const catalogUrl = new URL("catalog.jsonld", location.href).toString();
+    const catalogText = await fetch(catalogUrl).then(r => r.text());
     const sources = [{{
-      type: "file",
-      value: new URL("catalog.jsonld", location.href).toString(),
+      type: "string",
+      value: catalogText,
       mediaType: "application/ld+json",
+      baseIRI: catalogUrl,
     }}];
 
     const renderPayload = (yasr, payload, mediaType) => {{
