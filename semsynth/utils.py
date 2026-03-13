@@ -66,7 +66,13 @@ def is_numeric_series(s: pd.Series) -> bool:
         True
     """
 
-    return pd.api.types.is_float_dtype(s) or pd.api.types.is_integer_dtype(s)
+    if pd.api.types.is_float_dtype(s) or pd.api.types.is_integer_dtype(s):
+        return True
+    # PintArray columns (pint_pandas) are numeric even though pandas dtype
+    # checks return False for them.
+    if PintType is not None and isinstance(getattr(s, "dtype", None), PintType):
+        return True
+    return False
 
 
 def is_discrete_series(s: pd.Series, cardinality_threshold: int = 20) -> bool:
@@ -220,7 +226,21 @@ def rename_categorical_categories_to_str(
         if pd.api.types.is_categorical_dtype(s):
             try:
                 new_cats = [str(cat) for cat in s.cat.categories]
-                converted = s.cat.rename_categories(new_cats)
+                # Build string-valued series preserving NA positions, then
+                # cast to categorical. This avoids three problems at once:
+                # 1. rename_categories() leaves int values orphaned when
+                #    category dtype changes from int to str (→ all NaN).
+                # 2. PyArrow-backed categories (large_string) trip pybnesian.
+                # 3. CategoricalDtype(new_cats) + int-valued codes produces NaN.
+                na_mask = s.isna()
+                # Map each code to its new string category label.
+                code_to_str = {i: lbl for i, lbl in enumerate(new_cats)}
+                str_vals = s.cat.codes.map(code_to_str)  # -1 (NaN) → NaN
+                new_dtype = pd.CategoricalDtype(
+                    categories=pd.Index(new_cats, dtype=object), ordered=s.cat.ordered
+                )
+                converted = str_vals.astype(new_dtype)
+                converted[na_mask] = np.nan
             except Exception:
                 mask = s.isna()
                 tmp = s.astype(str)

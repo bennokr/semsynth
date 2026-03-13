@@ -441,10 +441,8 @@ def write_index(
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <title>SemSynth demo reports</title>
   <link rel="stylesheet" href="{css_href}" />
-  <link rel="stylesheet" href="https://unpkg.com/@triply/yasgui/build/yasgui.min.css" />
+  <link rel="stylesheet" href="../templates/yasgui.min.css" />
   <style>
-    .sparql-grid {{ display: grid; gap: 1rem; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); }}
-    .sparql-card pre {{ max-height: 22rem; overflow: auto; white-space: pre-wrap; }}
     .endpoint-pill {{ display: inline-block; font-family: monospace; background: #f4f4f4; padding: 0.35rem 0.55rem; border-radius: 0.35rem; }}
     #sparql-app {{ height: 70vh; min-height: 520px; border: 1px solid #ddd; border-radius: 0.5rem; overflow: hidden; }}
     .semsynth-query-result {{ margin: 0.75rem; padding: 0.75rem; max-height: 16rem; overflow: auto; border-radius: 0.35rem; background: #fafafa; border: 1px solid #ddd; font-family: monospace; white-space: pre-wrap; }}
@@ -465,26 +463,14 @@ def write_index(
     </p>
     <p>
       The engine queries <code>output/catalog.jsonld</code> and loads query tabs from <code>output/sparql/*.rq</code> files.
+      Use the tabs below to select and run each example query.
     </p>
-    <div class="sparql-grid">
-"""
-
-    for idx, query in enumerate(query_examples, start=1):
-        html += (
-            '<article class="sparql-card">\n'
-            f"<h3>{query['name']}</h3>\n"
-            f"<p><strong>Query {idx}</strong> — {query['description']}</p>\n"
-            f"<pre><code>{query['query']}</code></pre>\n"
-            "</article>\n"
-        )
-
-    html += f"""    </div>
     <div id="sparql-app"></div>
   </section>
 </main>
 
-<script src="https://rdf.js.org/comunica-browser/versions/v4/engines/query-sparql/comunica-browser.js"></script>
-<script src="https://unpkg.com/@triply/yasgui/build/yasgui.min.js"></script>
+<script src="../templates/comunica-browser.js"></script>
+<script src="../templates/yasgui.min.js"></script>
 <script>
   const endpointId = {json.dumps(SPARQL_ENDPOINT_ID)};
   const exampleQueries = {query_json};

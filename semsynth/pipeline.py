@@ -363,8 +363,8 @@ class DatasetPreprocessor:
         df_no_na = df_processed.dropna(axis=0, how="any").reset_index(drop=True)
         if df_no_na.empty:
             df_no_na = (
-                df_processed.fillna(method="ffill")
-                .fillna(method="bfill")
+                df_processed.ffill()
+                .bfill()
                 .reset_index(drop=True)
             )
 
