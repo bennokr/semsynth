@@ -1,14 +1,104 @@
 {
+  "@context": {
+    "prov": "http://www.w3.org/ns/prov#",
+    "dct": "http://purl.org/dc/terms/",
+    "rdfs": "http://www.w3.org/2000/01/rdf-schema#",
+    "xsd": "http://www.w3.org/2001/XMLSchema#",
+    "rdf": "http://www.w3.org/1999/02/22-rdf-syntax-ns#",
+    "schema": "https://schema.org/",
+    "id": "@id",
+    "type": "@type",
+    "provenance": "@graph",
+    "startedAtTime": {
+      "@id": "prov:startedAtTime",
+      "@type": "xsd:dateTime"
+    },
+    "endedAtTime": {
+      "@id": "prov:endedAtTime",
+      "@type": "xsd:dateTime"
+    },
+    "wasAssociatedWith": {
+      "@id": "prov:wasAssociatedWith",
+      "@type": "@id",
+      "@container": "@set"
+    },
+    "used": {
+      "@id": "prov:used",
+      "@type": "@id",
+      "@container": "@set"
+    },
+    "wasGeneratedBy": {
+      "@id": "prov:wasGeneratedBy",
+      "@type": "@id"
+    },
+    "wasAttributedTo": {
+      "@id": "prov:wasAttributedTo",
+      "@type": "@id",
+      "@container": "@set"
+    },
+    "generatedAtTime": {
+      "@id": "prov:generatedAtTime",
+      "@type": "xsd:dateTime"
+    },
+    "format": "dct:format",
+    "extent": "dct:extent",
+    "modified": {
+      "@id": "dct:modified",
+      "@type": "xsd:dateTime"
+    },
+    "identifier": "dct:identifier",
+    "label": "rdfs:label",
+    "title": "dct:title",
+    "hasVersion": "dct:hasVersion",
+    "source": {
+      "@id": "dct:source",
+      "@type": "@id"
+    },
+    "requires": {
+      "@id": "dct:requires",
+      "@type": "@id",
+      "@container": "@set"
+    },
+    "comment": "rdfs:comment"
+  },
   "provenance": [
     {
-      "id": "env-20260313T0828",
+      "id": "https://w3id.org/semsynth/demo#__main__.py#write_privacy-20260320T1517",
+      "type": "prov:Activity",
+      "startedAtTime": "2026-03-20T15:17:09.194095+00:00",
+      "endedAtTime": "2026-03-20T15:17:09.671567+00:00",
+      "wasAssociatedWith": "https://w3id.org/semsynth/demo#__main__.py",
+      "used": [
+        "https://w3id.org/semsynth/demo#env-b7b3b6f74caf"
+      ]
+    },
+    {
+      "id": "https://w3id.org/semsynth/demo#output/Diabetes 130-US Hospitals for Years 1999-2008/models/metasyn",
+      "type": "prov:Entity",
+      "format": "application/octet-stream",
+      "extent": 384,
+      "modified": "2026-03-20T08:17:13.966377+00:00",
+      "wasGeneratedBy": "https://w3id.org/semsynth/demo#__main__.py#write_manifest-20260320T1517"
+    },
+    {
+      "id": "https://w3id.org/semsynth/demo#__main__.py#model_run_root-20260320T1517",
+      "type": "prov:Activity",
+      "startedAtTime": "2026-03-20T15:17:05.680242+00:00",
+      "endedAtTime": "2026-03-20T15:17:05.680348+00:00",
+      "wasAssociatedWith": "https://w3id.org/semsynth/demo#__main__.py",
+      "used": [
+        "https://w3id.org/semsynth/demo#env-b7b3b6f74caf"
+      ]
+    },
+    {
+      "id": "https://w3id.org/semsynth/demo#env-b7b3b6f74caf",
       "type": [
         "prov:Entity",
         "prov:Collection"
       ],
       "label": "Python environment",
       "title": "makeprov",
-      "hasVersion": "0.4.2",
+      "hasVersion": "0.4.6",
       "requires": [
         {
           "id": "https://pypi.org/project/parse/",
@@ -18,51 +108,41 @@
       ]
     },
     {
-      "id": "__main__.py#model_run_root-20260313T0828",
+      "id": "https://w3id.org/semsynth/demo#output/Diabetes 130-US Hospitals for Years 1999-2008",
+      "type": "prov:Entity",
+      "format": "application/octet-stream",
+      "extent": 256,
+      "modified": "2026-03-16T15:50:05.209100+00:00",
+      "wasGeneratedBy": "https://w3id.org/semsynth/demo#__main__.py#model_run_root-20260320T1517"
+    },
+    {
+      "id": "https://w3id.org/semsynth/demo#output/Diabetes 130-US Hospitals for Years 1999-2008/models/metasyn",
+      "type": "prov:Entity",
+      "format": "application/octet-stream",
+      "extent": 384,
+      "modified": "2026-03-20T08:17:13.966377+00:00",
+      "wasGeneratedBy": "https://w3id.org/semsynth/demo#__main__.py#write_privacy-20260320T1517"
+    },
+    {
+      "id": "https://w3id.org/semsynth/demo#__main__.py#write_manifest-20260320T1517",
       "type": "prov:Activity",
-      "startedAtTime": "2026-03-13T08:28:37.260246+00:00",
-      "endedAtTime": "2026-03-13T08:28:37.260293+00:00",
-      "wasAssociatedWith": "__main__.py",
+      "startedAtTime": "2026-03-20T15:17:09.047210+00:00",
+      "endedAtTime": "2026-03-20T15:17:09.047592+00:00",
+      "wasAssociatedWith": "https://w3id.org/semsynth/demo#__main__.py",
       "used": [
-        "env-20260313T0828"
+        "https://w3id.org/semsynth/demo#env-b7b3b6f74caf"
       ]
     },
     {
-      "id": "output/Diabetes 130-US Hospitals for Years 1999-2008",
-      "type": "prov:Entity",
-      "format": "application/octet-stream",
-      "extent": 4096,
-      "modified": "2026-03-13T07:46:37.758469+00:00",
-      "wasGeneratedBy": "__main__.py#model_run_root-20260313T0828"
-    },
-    {
-      "id": "output/Diabetes 130-US Hospitals for Years 1999-2008/models/metasyn",
-      "type": "prov:Entity",
-      "format": "application/octet-stream",
-      "extent": 4096,
-      "modified": "2026-03-13T07:46:40.778469+00:00",
-      "wasGeneratedBy": "__main__.py#write_manifest-20260313T0828"
-    },
-    {
-      "id": "__main__.py",
+      "id": "https://w3id.org/semsynth/demo#__main__.py",
       "type": [
         "prov:Agent",
         "prov:SoftwareAgent",
         "schema:SoftwareSourceCode"
       ],
       "label": "__main__.py",
-      "hasVersion": "e41b22a7869f00c7cee24c2109bb44cfb5904da6",
-      "source": "http://local_proxy@127.0.0.1:45617/git/bennokr/semsynth"
-    },
-    {
-      "id": "__main__.py#write_manifest-20260313T0828",
-      "type": "prov:Activity",
-      "startedAtTime": "2026-03-13T08:28:39.790826+00:00",
-      "endedAtTime": "2026-03-13T08:28:39.790966+00:00",
-      "wasAssociatedWith": "__main__.py",
-      "used": [
-        "env-20260313T0828"
-      ]
+      "hasVersion": "eb05c8f1ddd8dc85cb1bd200cd2a41543c25a0bf",
+      "source": "https://github.com/bennokr/semsynth.git"
     }
   ]
 }

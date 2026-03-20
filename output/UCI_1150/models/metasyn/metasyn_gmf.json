@@ -1,0 +1,1213 @@
+{
+    "gmf_version": "1.1",
+    "n_rows": 255,
+    "n_columns": 39,
+    "provenance": {
+        "created by": {
+            "name": "metasyn",
+            "version": "2.0.0"
+        },
+        "creation time": "2026-03-20T16:16:28.922495"
+    },
+    "vars": [
+        {
+            "name": "Gallstone Status",
+            "type": "categorical",
+            "dtype": "Categorical",
+            "prop_missing": 0.0,
+            "distribution": {
+                "name": "core.multinoulli",
+                "version": "1.0",
+                "class_name": "MultinoulliDistribution",
+                "unique": false,
+                "parameters": {
+                    "labels": [
+                        "0",
+                        "1"
+                    ],
+                    "probs": [
+                        0.5019607843137255,
+                        0.4980392156862745
+                    ]
+                }
+            },
+            "creation_method": {
+                "created_by": "metasyn",
+                "fitter": {
+                    "name": "MultinoulliFitter",
+                    "privacy": {
+                        "name": "none",
+                        "parameters": {}
+                    },
+                    "version": "1.0",
+                    "plugin": "builtin",
+                    "plugin_version": "2.0.0"
+                }
+            }
+        },
+        {
+            "name": "Age",
+            "type": "continuous",
+            "dtype": "Float64",
+            "prop_missing": 0.0,
+            "distribution": {
+                "name": "core.normal",
+                "version": "1.0",
+                "class_name": "ContinuousNormalDistribution",
+                "unique": false,
+                "parameters": {
+                    "mean": 48.24313725490196,
+                    "sd": 11.818052905252928
+                }
+            },
+            "creation_method": {
+                "created_by": "metasyn",
+                "fitter": {
+                    "name": "ContinuousNormalFitter",
+                    "privacy": {
+                        "name": "none",
+                        "parameters": {}
+                    },
+                    "version": "1.0",
+                    "plugin": "builtin",
+                    "plugin_version": "2.0.0"
+                }
+            }
+        },
+        {
+            "name": "Gender",
+            "type": "categorical",
+            "dtype": "Categorical",
+            "prop_missing": 0.0,
+            "distribution": {
+                "name": "core.multinoulli",
+                "version": "1.0",
+                "class_name": "MultinoulliDistribution",
+                "unique": false,
+                "parameters": {
+                    "labels": [
+                        "0",
+                        "1"
+                    ],
+                    "probs": [
+                        0.5019607843137255,
+                        0.4980392156862745
+                    ]
+                }
+            },
+            "creation_method": {
+                "created_by": "metasyn",
+                "fitter": {
+                    "name": "MultinoulliFitter",
+                    "privacy": {
+                        "name": "none",
+                        "parameters": {}
+                    },
+                    "version": "1.0",
+                    "plugin": "builtin",
+                    "plugin_version": "2.0.0"
+                }
+            }
+        },
+        {
+            "name": "Comorbidity",
+            "type": "categorical",
+            "dtype": "Categorical",
+            "prop_missing": 0.0,
+            "distribution": {
+                "name": "core.multinoulli",
+                "version": "1.0",
+                "class_name": "MultinoulliDistribution",
+                "unique": false,
+                "parameters": {
+                    "labels": [
+                        "0",
+                        "1",
+                        "2",
+                        "3"
+                    ],
+                    "probs": [
+                        0.6666666666666666,
+                        0.3215686274509804,
+                        0.00392156862745098,
+                        0.00784313725490196
+                    ]
+                }
+            },
+            "creation_method": {
+                "created_by": "metasyn",
+                "fitter": {
+                    "name": "MultinoulliFitter",
+                    "privacy": {
+                        "name": "none",
+                        "parameters": {}
+                    },
+                    "version": "1.0",
+                    "plugin": "builtin",
+                    "plugin_version": "2.0.0"
+                }
+            }
+        },
+        {
+            "name": "Coronary Artery Disease (CAD)",
+            "type": "categorical",
+            "dtype": "Categorical",
+            "prop_missing": 0.0,
+            "distribution": {
+                "name": "core.multinoulli",
+                "version": "1.0",
+                "class_name": "MultinoulliDistribution",
+                "unique": false,
+                "parameters": {
+                    "labels": [
+                        "0",
+                        "1"
+                    ],
+                    "probs": [
+                        0.9607843137254902,
+                        0.0392156862745098
+                    ]
+                }
+            },
+            "creation_method": {
+                "created_by": "metasyn",
+                "fitter": {
+                    "name": "MultinoulliFitter",
+                    "privacy": {
+                        "name": "none",
+                        "parameters": {}
+                    },
+                    "version": "1.0",
+                    "plugin": "builtin",
+                    "plugin_version": "2.0.0"
+                }
+            }
+        },
+        {
+            "name": "Hypothyroidism",
+            "type": "categorical",
+            "dtype": "Categorical",
+            "prop_missing": 0.0,
+            "distribution": {
+                "name": "core.multinoulli",
+                "version": "1.0",
+                "class_name": "MultinoulliDistribution",
+                "unique": false,
+                "parameters": {
+                    "labels": [
+                        "0",
+                        "1"
+                    ],
+                    "probs": [
+                        0.9725490196078431,
+                        0.027450980392156862
+                    ]
+                }
+            },
+            "creation_method": {
+                "created_by": "metasyn",
+                "fitter": {
+                    "name": "MultinoulliFitter",
+                    "privacy": {
+                        "name": "none",
+                        "parameters": {}
+                    },
+                    "version": "1.0",
+                    "plugin": "builtin",
+                    "plugin_version": "2.0.0"
+                }
+            }
+        },
+        {
+            "name": "Hyperlipidemia",
+            "type": "categorical",
+            "dtype": "Categorical",
+            "prop_missing": 0.0,
+            "distribution": {
+                "name": "core.multinoulli",
+                "version": "1.0",
+                "class_name": "MultinoulliDistribution",
+                "unique": false,
+                "parameters": {
+                    "labels": [
+                        "0",
+                        "1"
+                    ],
+                    "probs": [
+                        0.9686274509803922,
+                        0.03137254901960784
+                    ]
+                }
+            },
+            "creation_method": {
+                "created_by": "metasyn",
+                "fitter": {
+                    "name": "MultinoulliFitter",
+                    "privacy": {
+                        "name": "none",
+                        "parameters": {}
+                    },
+                    "version": "1.0",
+                    "plugin": "builtin",
+                    "plugin_version": "2.0.0"
+                }
+            }
+        },
+        {
+            "name": "Diabetes Mellitus (DM)",
+            "type": "categorical",
+            "dtype": "Categorical",
+            "prop_missing": 0.0,
+            "distribution": {
+                "name": "core.multinoulli",
+                "version": "1.0",
+                "class_name": "MultinoulliDistribution",
+                "unique": false,
+                "parameters": {
+                    "labels": [
+                        "0",
+                        "1"
+                    ],
+                    "probs": [
+                        0.8549019607843137,
+                        0.1450980392156863
+                    ]
+                }
+            },
+            "creation_method": {
+                "created_by": "metasyn",
+                "fitter": {
+                    "name": "MultinoulliFitter",
+                    "privacy": {
+                        "name": "none",
+                        "parameters": {}
+                    },
+                    "version": "1.0",
+                    "plugin": "builtin",
+                    "plugin_version": "2.0.0"
+                }
+            }
+        },
+        {
+            "name": "Height",
+            "type": "continuous",
+            "dtype": "Float64",
+            "prop_missing": 0.0,
+            "distribution": {
+                "name": "core.truncated_normal",
+                "version": "1.0",
+                "class_name": "ContinuousTruncatedNormalDistribution",
+                "unique": false,
+                "parameters": {
+                    "lower": 144.99999999,
+                    "upper": 191.00000001,
+                    "mean": 166.47355187852247,
+                    "sd": 11.733316261798125
+                }
+            },
+            "creation_method": {
+                "created_by": "metasyn",
+                "fitter": {
+                    "name": "ContinuousTruncatedNormalFitter",
+                    "privacy": {
+                        "name": "none",
+                        "parameters": {}
+                    },
+                    "version": "1.0",
+                    "plugin": "builtin",
+                    "plugin_version": "2.0.0"
+                }
+            }
+        },
+        {
+            "name": "Weight",
+            "type": "continuous",
+            "dtype": "Float64",
+            "prop_missing": 0.0,
+            "distribution": {
+                "name": "core.lognormal",
+                "version": "1.0",
+                "class_name": "LogNormalDistribution",
+                "unique": false,
+                "parameters": {
+                    "mean": 4.371874966206725,
+                    "sd": 0.1933553497113405
+                }
+            },
+            "creation_method": {
+                "created_by": "metasyn",
+                "fitter": {
+                    "name": "LogNormalFitter",
+                    "privacy": {
+                        "name": "none",
+                        "parameters": {}
+                    },
+                    "version": "1.0",
+                    "plugin": "builtin",
+                    "plugin_version": "2.0.0"
+                }
+            }
+        },
+        {
+            "name": "Body Mass Index (BMI)",
+            "type": "continuous",
+            "dtype": "Float64",
+            "prop_missing": 0.0,
+            "distribution": {
+                "name": "core.lognormal",
+                "version": "1.0",
+                "class_name": "LogNormalDistribution",
+                "unique": false,
+                "parameters": {
+                    "mean": 3.351521341253018,
+                    "sd": 0.18119776832234583
+                }
+            },
+            "creation_method": {
+                "created_by": "metasyn",
+                "fitter": {
+                    "name": "LogNormalFitter",
+                    "privacy": {
+                        "name": "none",
+                        "parameters": {}
+                    },
+                    "version": "1.0",
+                    "plugin": "builtin",
+                    "plugin_version": "2.0.0"
+                }
+            }
+        },
+        {
+            "name": "Total Body Water (TBW)",
+            "type": "continuous",
+            "dtype": "Float64",
+            "prop_missing": 0.0,
+            "distribution": {
+                "name": "core.normal",
+                "version": "1.0",
+                "class_name": "ContinuousNormalDistribution",
+                "unique": false,
+                "parameters": {
+                    "mean": 40.46745098039215,
+                    "sd": 8.006306299494328
+                }
+            },
+            "creation_method": {
+                "created_by": "metasyn",
+                "fitter": {
+                    "name": "ContinuousNormalFitter",
+                    "privacy": {
+                        "name": "none",
+                        "parameters": {}
+                    },
+                    "version": "1.0",
+                    "plugin": "builtin",
+                    "plugin_version": "2.0.0"
+                }
+            }
+        },
+        {
+            "name": "Extracellular Water (ECW)",
+            "type": "continuous",
+            "dtype": "Float64",
+            "prop_missing": 0.0,
+            "distribution": {
+                "name": "core.normal",
+                "version": "1.0",
+                "class_name": "ContinuousNormalDistribution",
+                "unique": false,
+                "parameters": {
+                    "mean": 17.050196078431373,
+                    "sd": 3.1841873344954266
+                }
+            },
+            "creation_method": {
+                "created_by": "metasyn",
+                "fitter": {
+                    "name": "ContinuousNormalFitter",
+                    "privacy": {
+                        "name": "none",
+                        "parameters": {}
+                    },
+                    "version": "1.0",
+                    "plugin": "builtin",
+                    "plugin_version": "2.0.0"
+                }
+            }
+        },
+        {
+            "name": "Intracellular Water (ICW)",
+            "type": "continuous",
+            "dtype": "Float64",
+            "prop_missing": 0.0,
+            "distribution": {
+                "name": "core.lognormal",
+                "version": "1.0",
+                "class_name": "LogNormalDistribution",
+                "unique": false,
+                "parameters": {
+                    "mean": 3.136780801432742,
+                    "sd": 0.22212225749902842
+                }
+            },
+            "creation_method": {
+                "created_by": "metasyn",
+                "fitter": {
+                    "name": "LogNormalFitter",
+                    "privacy": {
+                        "name": "none",
+                        "parameters": {}
+                    },
+                    "version": "1.0",
+                    "plugin": "builtin",
+                    "plugin_version": "2.0.0"
+                }
+            }
+        },
+        {
+            "name": "Extracellular Fluid/Total Body Water (ECF/TBW)",
+            "type": "continuous",
+            "dtype": "Float64",
+            "prop_missing": 0.0,
+            "distribution": {
+                "name": "core.normal",
+                "version": "1.0",
+                "class_name": "ContinuousNormalDistribution",
+                "unique": false,
+                "parameters": {
+                    "mean": 42.19207843137255,
+                    "sd": 3.260909411487377
+                }
+            },
+            "creation_method": {
+                "created_by": "metasyn",
+                "fitter": {
+                    "name": "ContinuousNormalFitter",
+                    "privacy": {
+                        "name": "none",
+                        "parameters": {}
+                    },
+                    "version": "1.0",
+                    "plugin": "builtin",
+                    "plugin_version": "2.0.0"
+                }
+            }
+        },
+        {
+            "name": "Total Body Fat Ratio (TBFR) (%)",
+            "type": "continuous",
+            "dtype": "Float64",
+            "prop_missing": 0.0,
+            "distribution": {
+                "name": "core.normal",
+                "version": "1.0",
+                "class_name": "ContinuousNormalDistribution",
+                "unique": false,
+                "parameters": {
+                    "mean": 28.546392156862744,
+                    "sd": 8.434743572885345
+                }
+            },
+            "creation_method": {
+                "created_by": "metasyn",
+                "fitter": {
+                    "name": "ContinuousNormalFitter",
+                    "privacy": {
+                        "name": "none",
+                        "parameters": {}
+                    },
+                    "version": "1.0",
+                    "plugin": "builtin",
+                    "plugin_version": "2.0.0"
+                }
+            }
+        },
+        {
+            "name": "Lean Mass (LM) (%)",
+            "type": "continuous",
+            "dtype": "Float64",
+            "prop_missing": 0.0,
+            "distribution": {
+                "name": "core.normal",
+                "version": "1.0",
+                "class_name": "ContinuousNormalDistribution",
+                "unique": false,
+                "parameters": {
+                    "mean": 71.44133333333333,
+                    "sd": 8.455375769218824
+                }
+            },
+            "creation_method": {
+                "created_by": "metasyn",
+                "fitter": {
+                    "name": "ContinuousNormalFitter",
+                    "privacy": {
+                        "name": "none",
+                        "parameters": {}
+                    },
+                    "version": "1.0",
+                    "plugin": "builtin",
+                    "plugin_version": "2.0.0"
+                }
+            }
+        },
+        {
+            "name": "Body Protein Content (Protein) (%)",
+            "type": "continuous",
+            "dtype": "Float64",
+            "prop_missing": 0.0,
+            "distribution": {
+                "name": "core.normal",
+                "version": "1.0",
+                "class_name": "ContinuousNormalDistribution",
+                "unique": false,
+                "parameters": {
+                    "mean": 15.879019607843135,
+                    "sd": 2.3848719741212245
+                }
+            },
+            "creation_method": {
+                "created_by": "metasyn",
+                "fitter": {
+                    "name": "ContinuousNormalFitter",
+                    "privacy": {
+                        "name": "none",
+                        "parameters": {}
+                    },
+                    "version": "1.0",
+                    "plugin": "builtin",
+                    "plugin_version": "2.0.0"
+                }
+            }
+        },
+        {
+            "name": "Visceral Fat Rating (VFR)",
+            "type": "continuous",
+            "dtype": "Float64",
+            "prop_missing": 0.0,
+            "distribution": {
+                "name": "core.truncated_normal",
+                "version": "1.0",
+                "class_name": "ContinuousTruncatedNormalDistribution",
+                "unique": false,
+                "parameters": {
+                    "lower": 0.99999999,
+                    "upper": 31.00000001,
+                    "mean": 8.45246848098646,
+                    "sd": 4.95851777588033
+                }
+            },
+            "creation_method": {
+                "created_by": "metasyn",
+                "fitter": {
+                    "name": "ContinuousTruncatedNormalFitter",
+                    "privacy": {
+                        "name": "none",
+                        "parameters": {}
+                    },
+                    "version": "1.0",
+                    "plugin": "builtin",
+                    "plugin_version": "2.0.0"
+                }
+            }
+        },
+        {
+            "name": "Bone Mass (BM)",
+            "type": "continuous",
+            "dtype": "Float64",
+            "prop_missing": 0.0,
+            "distribution": {
+                "name": "core.lognormal",
+                "version": "1.0",
+                "class_name": "LogNormalDistribution",
+                "unique": false,
+                "parameters": {
+                    "mean": 1.0121128955856555,
+                    "sd": 0.18342255365829305
+                }
+            },
+            "creation_method": {
+                "created_by": "metasyn",
+                "fitter": {
+                    "name": "LogNormalFitter",
+                    "privacy": {
+                        "name": "none",
+                        "parameters": {}
+                    },
+                    "version": "1.0",
+                    "plugin": "builtin",
+                    "plugin_version": "2.0.0"
+                }
+            }
+        },
+        {
+            "name": "Muscle Mass (MM)",
+            "type": "continuous",
+            "dtype": "Float64",
+            "prop_missing": 0.0,
+            "distribution": {
+                "name": "core.normal",
+                "version": "1.0",
+                "class_name": "ContinuousNormalDistribution",
+                "unique": false,
+                "parameters": {
+                    "mean": 54.1364705882353,
+                    "sd": 10.722797927145221
+                }
+            },
+            "creation_method": {
+                "created_by": "metasyn",
+                "fitter": {
+                    "name": "ContinuousNormalFitter",
+                    "privacy": {
+                        "name": "none",
+                        "parameters": {}
+                    },
+                    "version": "1.0",
+                    "plugin": "builtin",
+                    "plugin_version": "2.0.0"
+                }
+            }
+        },
+        {
+            "name": "Obesity (%)",
+            "type": "continuous",
+            "dtype": "Float64",
+            "prop_missing": 0.0,
+            "distribution": {
+                "name": "core.lognormal",
+                "version": "1.0",
+                "class_name": "LogNormalDistribution",
+                "unique": false,
+                "parameters": {
+                    "mean": 3.099581054773232,
+                    "sd": 1.0074397549453462
+                }
+            },
+            "creation_method": {
+                "created_by": "metasyn",
+                "fitter": {
+                    "name": "LogNormalFitter",
+                    "privacy": {
+                        "name": "none",
+                        "parameters": {}
+                    },
+                    "version": "1.0",
+                    "plugin": "builtin",
+                    "plugin_version": "2.0.0"
+                }
+            }
+        },
+        {
+            "name": "Total Fat Content (TFC)",
+            "type": "continuous",
+            "dtype": "Float64",
+            "prop_missing": 0.0,
+            "distribution": {
+                "name": "core.lognormal",
+                "version": "1.0",
+                "class_name": "LogNormalDistribution",
+                "unique": false,
+                "parameters": {
+                    "mean": 3.0810870953660925,
+                    "sd": 0.4256803959007138
+                }
+            },
+            "creation_method": {
+                "created_by": "metasyn",
+                "fitter": {
+                    "name": "LogNormalFitter",
+                    "privacy": {
+                        "name": "none",
+                        "parameters": {}
+                    },
+                    "version": "1.0",
+                    "plugin": "builtin",
+                    "plugin_version": "2.0.0"
+                }
+            }
+        },
+        {
+            "name": "Visceral Fat Area (VFA)",
+            "type": "continuous",
+            "dtype": "Float64",
+            "prop_missing": 0.0,
+            "distribution": {
+                "name": "core.lognormal",
+                "version": "1.0",
+                "class_name": "LogNormalDistribution",
+                "unique": false,
+                "parameters": {
+                    "mean": 2.4085039395212724,
+                    "sd": 0.46148668898091516
+                }
+            },
+            "creation_method": {
+                "created_by": "metasyn",
+                "fitter": {
+                    "name": "LogNormalFitter",
+                    "privacy": {
+                        "name": "none",
+                        "parameters": {}
+                    },
+                    "version": "1.0",
+                    "plugin": "builtin",
+                    "plugin_version": "2.0.0"
+                }
+            }
+        },
+        {
+            "name": "Visceral Muscle Area (VMA) (Kg)",
+            "type": "continuous",
+            "dtype": "Float64",
+            "prop_missing": 0.0,
+            "distribution": {
+                "name": "core.normal",
+                "version": "1.0",
+                "class_name": "ContinuousNormalDistribution",
+                "unique": false,
+                "parameters": {
+                    "mean": 30.38211976682353,
+                    "sd": 4.575591232718622
+                }
+            },
+            "creation_method": {
+                "created_by": "metasyn",
+                "fitter": {
+                    "name": "ContinuousNormalFitter",
+                    "privacy": {
+                        "name": "none",
+                        "parameters": {}
+                    },
+                    "version": "1.0",
+                    "plugin": "builtin",
+                    "plugin_version": "2.0.0"
+                }
+            }
+        },
+        {
+            "name": "Hepatic Fat Accumulation (HFA)",
+            "type": "categorical",
+            "dtype": "Categorical",
+            "prop_missing": 0.0,
+            "distribution": {
+                "name": "core.multinoulli",
+                "version": "1.0",
+                "class_name": "MultinoulliDistribution",
+                "unique": false,
+                "parameters": {
+                    "labels": [
+                        "0",
+                        "1",
+                        "2",
+                        "3"
+                    ],
+                    "probs": [
+                        0.4117647058823529,
+                        0.12941176470588237,
+                        0.3764705882352941,
+                        0.08235294117647059
+                    ]
+                }
+            },
+            "creation_method": {
+                "created_by": "metasyn",
+                "fitter": {
+                    "name": "MultinoulliFitter",
+                    "privacy": {
+                        "name": "none",
+                        "parameters": {}
+                    },
+                    "version": "1.0",
+                    "plugin": "builtin",
+                    "plugin_version": "2.0.0"
+                }
+            }
+        },
+        {
+            "name": "Glucose",
+            "type": "continuous",
+            "dtype": "Float64",
+            "prop_missing": 0.0,
+            "distribution": {
+                "name": "core.truncated_normal",
+                "version": "1.0",
+                "class_name": "ContinuousTruncatedNormalDistribution",
+                "unique": false,
+                "parameters": {
+                    "lower": 78.99999999,
+                    "upper": 575.00000001,
+                    "mean": -5446.551189170108,
+                    "sd": 422.10417565189294
+                }
+            },
+            "creation_method": {
+                "created_by": "metasyn",
+                "fitter": {
+                    "name": "ContinuousTruncatedNormalFitter",
+                    "privacy": {
+                        "name": "none",
+                        "parameters": {}
+                    },
+                    "version": "1.0",
+                    "plugin": "builtin",
+                    "plugin_version": "2.0.0"
+                }
+            }
+        },
+        {
+            "name": "Total Cholesterol (TC)",
+            "type": "continuous",
+            "dtype": "Float64",
+            "prop_missing": 0.0,
+            "distribution": {
+                "name": "core.normal",
+                "version": "1.0",
+                "class_name": "ContinuousNormalDistribution",
+                "unique": false,
+                "parameters": {
+                    "mean": 202.06274509803922,
+                    "sd": 45.148317497516935
+                }
+            },
+            "creation_method": {
+                "created_by": "metasyn",
+                "fitter": {
+                    "name": "ContinuousNormalFitter",
+                    "privacy": {
+                        "name": "none",
+                        "parameters": {}
+                    },
+                    "version": "1.0",
+                    "plugin": "builtin",
+                    "plugin_version": "2.0.0"
+                }
+            }
+        },
+        {
+            "name": "Low Density Lipoprotein (LDL)",
+            "type": "continuous",
+            "dtype": "Float64",
+            "prop_missing": 0.0,
+            "distribution": {
+                "name": "core.normal",
+                "version": "1.0",
+                "class_name": "ContinuousNormalDistribution",
+                "unique": false,
+                "parameters": {
+                    "mean": 126.40196078431373,
+                    "sd": 38.887825052730776
+                }
+            },
+            "creation_method": {
+                "created_by": "metasyn",
+                "fitter": {
+                    "name": "ContinuousNormalFitter",
+                    "privacy": {
+                        "name": "none",
+                        "parameters": {}
+                    },
+                    "version": "1.0",
+                    "plugin": "builtin",
+                    "plugin_version": "2.0.0"
+                }
+            }
+        },
+        {
+            "name": "High Density Lipoprotein (HDL)",
+            "type": "continuous",
+            "dtype": "Float64",
+            "prop_missing": 0.0,
+            "distribution": {
+                "name": "core.lognormal",
+                "version": "1.0",
+                "class_name": "LogNormalDistribution",
+                "unique": false,
+                "parameters": {
+                    "mean": 3.8573872540472594,
+                    "sd": 0.2709331935407448
+                }
+            },
+            "creation_method": {
+                "created_by": "metasyn",
+                "fitter": {
+                    "name": "LogNormalFitter",
+                    "privacy": {
+                        "name": "none",
+                        "parameters": {}
+                    },
+                    "version": "1.0",
+                    "plugin": "builtin",
+                    "plugin_version": "2.0.0"
+                }
+            }
+        },
+        {
+            "name": "Triglyceride",
+            "type": "continuous",
+            "dtype": "Float64",
+            "prop_missing": 0.0,
+            "distribution": {
+                "name": "core.lognormal",
+                "version": "1.0",
+                "class_name": "LogNormalDistribution",
+                "unique": false,
+                "parameters": {
+                    "mean": 4.804152320718877,
+                    "sd": 0.6311108652646863
+                }
+            },
+            "creation_method": {
+                "created_by": "metasyn",
+                "fitter": {
+                    "name": "LogNormalFitter",
+                    "privacy": {
+                        "name": "none",
+                        "parameters": {}
+                    },
+                    "version": "1.0",
+                    "plugin": "builtin",
+                    "plugin_version": "2.0.0"
+                }
+            }
+        },
+        {
+            "name": "Aspartat Aminotransferaz (AST)",
+            "type": "continuous",
+            "dtype": "Float64",
+            "prop_missing": 0.0,
+            "distribution": {
+                "name": "core.lognormal",
+                "version": "1.0",
+                "class_name": "LogNormalDistribution",
+                "unique": false,
+                "parameters": {
+                    "mean": 2.956354365557292,
+                    "sd": 0.3994505760723476
+                }
+            },
+            "creation_method": {
+                "created_by": "metasyn",
+                "fitter": {
+                    "name": "LogNormalFitter",
+                    "privacy": {
+                        "name": "none",
+                        "parameters": {}
+                    },
+                    "version": "1.0",
+                    "plugin": "builtin",
+                    "plugin_version": "2.0.0"
+                }
+            }
+        },
+        {
+            "name": "Alanin Aminotransferaz (ALT)",
+            "type": "continuous",
+            "dtype": "Float64",
+            "prop_missing": 0.0,
+            "distribution": {
+                "name": "core.lognormal",
+                "version": "1.0",
+                "class_name": "LogNormalDistribution",
+                "unique": false,
+                "parameters": {
+                    "mean": 3.0605861483288077,
+                    "sd": 0.5889733980471064
+                }
+            },
+            "creation_method": {
+                "created_by": "metasyn",
+                "fitter": {
+                    "name": "LogNormalFitter",
+                    "privacy": {
+                        "name": "none",
+                        "parameters": {}
+                    },
+                    "version": "1.0",
+                    "plugin": "builtin",
+                    "plugin_version": "2.0.0"
+                }
+            }
+        },
+        {
+            "name": "Alkaline Phosphatase (ALP)",
+            "type": "continuous",
+            "dtype": "Float64",
+            "prop_missing": 0.0,
+            "distribution": {
+                "name": "core.normal",
+                "version": "1.0",
+                "class_name": "ContinuousNormalDistribution",
+                "unique": false,
+                "parameters": {
+                    "mean": 72.99568627450981,
+                    "sd": 24.57651559205809
+                }
+            },
+            "creation_method": {
+                "created_by": "metasyn",
+                "fitter": {
+                    "name": "ContinuousNormalFitter",
+                    "privacy": {
+                        "name": "none",
+                        "parameters": {}
+                    },
+                    "version": "1.0",
+                    "plugin": "builtin",
+                    "plugin_version": "2.0.0"
+                }
+            }
+        },
+        {
+            "name": "Creatinine",
+            "type": "continuous",
+            "dtype": "Float64",
+            "prop_missing": 0.0,
+            "distribution": {
+                "name": "core.lognormal",
+                "version": "1.0",
+                "class_name": "LogNormalDistribution",
+                "unique": false,
+                "parameters": {
+                    "mean": -0.25490744067506577,
+                    "sd": 0.21171267712272768
+                }
+            },
+            "creation_method": {
+                "created_by": "metasyn",
+                "fitter": {
+                    "name": "LogNormalFitter",
+                    "privacy": {
+                        "name": "none",
+                        "parameters": {}
+                    },
+                    "version": "1.0",
+                    "plugin": "builtin",
+                    "plugin_version": "2.0.0"
+                }
+            }
+        },
+        {
+            "name": "Glomerular Filtration Rate (GFR)",
+            "type": "continuous",
+            "dtype": "Float64",
+            "prop_missing": 0.0,
+            "distribution": {
+                "name": "core.truncated_normal",
+                "version": "1.0",
+                "class_name": "ContinuousTruncatedNormalDistribution",
+                "unique": false,
+                "parameters": {
+                    "lower": 10.599999989999999,
+                    "upper": 132.00000001,
+                    "mean": 103.62360406591658,
+                    "sd": 19.212514320139128
+                }
+            },
+            "creation_method": {
+                "created_by": "metasyn",
+                "fitter": {
+                    "name": "ContinuousTruncatedNormalFitter",
+                    "privacy": {
+                        "name": "none",
+                        "parameters": {}
+                    },
+                    "version": "1.0",
+                    "plugin": "builtin",
+                    "plugin_version": "2.0.0"
+                }
+            }
+        },
+        {
+            "name": "C-Reactive Protein (CRP)",
+            "type": "continuous",
+            "dtype": "Float64",
+            "prop_missing": 0.0,
+            "distribution": {
+                "name": "core.truncated_normal",
+                "version": "1.0",
+                "class_name": "ContinuousTruncatedNormalDistribution",
+                "unique": false,
+                "parameters": {
+                    "lower": -1e-08,
+                    "upper": 43.40000001,
+                    "mean": -1224.2910140784118,
+                    "sd": 48.618116908332524
+                }
+            },
+            "creation_method": {
+                "created_by": "metasyn",
+                "fitter": {
+                    "name": "ContinuousTruncatedNormalFitter",
+                    "privacy": {
+                        "name": "none",
+                        "parameters": {}
+                    },
+                    "version": "1.0",
+                    "plugin": "builtin",
+                    "plugin_version": "2.0.0"
+                }
+            }
+        },
+        {
+            "name": "Hemoglobin (HGB)",
+            "type": "continuous",
+            "dtype": "Float64",
+            "prop_missing": 0.0,
+            "distribution": {
+                "name": "core.normal",
+                "version": "1.0",
+                "class_name": "ContinuousNormalDistribution",
+                "unique": false,
+                "parameters": {
+                    "mean": 14.396470588235294,
+                    "sd": 1.8017549435441904
+                }
+            },
+            "creation_method": {
+                "created_by": "metasyn",
+                "fitter": {
+                    "name": "ContinuousNormalFitter",
+                    "privacy": {
+                        "name": "none",
+                        "parameters": {}
+                    },
+                    "version": "1.0",
+                    "plugin": "builtin",
+                    "plugin_version": "2.0.0"
+                }
+            }
+        },
+        {
+            "name": "Vitamin D",
+            "type": "continuous",
+            "dtype": "Float64",
+            "prop_missing": 0.0,
+            "distribution": {
+                "name": "core.truncated_normal",
+                "version": "1.0",
+                "class_name": "ContinuousTruncatedNormalDistribution",
+                "unique": false,
+                "parameters": {
+                    "lower": 4.69999999,
+                    "upper": 53.10000001,
+                    "mean": 17.349435843054195,
+                    "sd": 13.181118038214638
+                }
+            },
+            "creation_method": {
+                "created_by": "metasyn",
+                "fitter": {
+                    "name": "ContinuousTruncatedNormalFitter",
+                    "privacy": {
+                        "name": "none",
+                        "parameters": {}
+                    },
+                    "version": "1.0",
+                    "plugin": "builtin",
+                    "plugin_version": "2.0.0"
+                }
+            }
+        }
+    ]
+}

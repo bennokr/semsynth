@@ -8,19 +8,20 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>semsynth.torch_compat &mdash; semsynth  documentation</title>
       <link rel="stylesheet" type="text/css" href="../_static/pygments.css?v=b86133f3" />
-      <link rel="stylesheet" type="text/css" href="../_static/css/theme.css?v=e59714d7" />
+      <link rel="stylesheet" type="text/css" href="../_static/css/theme.css?v=9edc463e" />
+      <link rel="stylesheet" type="text/css" href="../_static/mystnb.11b39860a7a0cbfd473a3ad8a317855267ff0bd372690045ca344a6b62be495e.css?v=8cd3d715" />
 
   
       <script src="../_static/jquery.js?v=5d32c60e"></script>
       <script src="../_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
       <script src="../_static/documentation_options.js?v=5929fcd5"></script>
-      <script src="../_static/doctools.js?v=9bcbadda"></script>
-      <script src="../_static/sphinx_highlight.js?v=dc90522c"></script>
+      <script src="../_static/doctools.js?v=fd6eb6e6"></script>
+      <script src="../_static/sphinx_highlight.js?v=6ffebe34"></script>
     <script src="../_static/js/theme.js"></script>
     <link rel="index" title="Index" href="../genindex.html" />
     <link rel="search" title="Search" href="../search.html" />
     <link rel="next" title="semsynth.umap_utils" href="semsynth.umap_utils.html" />
-    <link rel="prev" title="semsynth.specs" href="semsynth.specs.html" /> 
+    <link rel="prev" title="semsynth.templates" href="semsynth.templates.html" /> 
 </head>
 
 <body class="wy-body-for-nav"> 
@@ -47,8 +48,8 @@
 <li class="toctree-l1"><a class="reference internal" href="../index.html">Home</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../getting-started.html">Getting started</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../schema.html">SemMap metadata schema</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../map_columns.html">Column Terminology Mapping</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../provenance.html">Provenance workflow guide</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../map_columns.html">Column terminology mapping</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../provenance.html">Provenance</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../backends.html">Backends overview</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../missingness.html">Missingness handling</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../privacy-metrics.html">Privacy metrics</a></li>
@@ -70,11 +71,15 @@
 <li class="toctree-l3"><a class="reference internal" href="semsynth.pipeline.html">semsynth.pipeline</a></li>
 <li class="toctree-l3"><a class="reference internal" href="semsynth.privacy_metrics.html">semsynth.privacy_metrics</a></li>
 <li class="toctree-l3"><a class="reference internal" href="semsynth.reporting.html">semsynth.reporting</a></li>
+<li class="toctree-l3"><a class="reference internal" href="semsynth.reports_index.html">semsynth.reports_index</a></li>
 <li class="toctree-l3"><a class="reference internal" href="semsynth.runtime.html">semsynth.runtime</a></li>
 <li class="toctree-l3"><a class="reference internal" href="semsynth.semmap.html">semsynth.semmap</a></li>
 <li class="toctree-l3"><a class="reference internal" href="semsynth.specs.html">semsynth.specs</a></li>
+<li class="toctree-l3"><a class="reference internal" href="semsynth.templates.html">semsynth.templates</a></li>
 <li class="toctree-l3 current"><a class="current reference internal" href="#">semsynth.torch_compat</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="#semsynth.torch_compat.ensure_npsum_compat"><code class="docutils literal notranslate"><span class="pre">ensure_npsum_compat()</span></code></a></li>
 <li class="toctree-l4"><a class="reference internal" href="#semsynth.torch_compat.ensure_torch_rmsnorm"><code class="docutils literal notranslate"><span class="pre">ensure_torch_rmsnorm()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#semsynth.torch_compat.ensure_trapz_compat"><code class="docutils literal notranslate"><span class="pre">ensure_trapz_compat()</span></code></a></li>
 </ul>
 </li>
 <li class="toctree-l3"><a class="reference internal" href="semsynth.umap_utils.html">semsynth.umap_utils</a></li>
@@ -117,15 +122,38 @@
 <p class="rubric">Functions</p>
 <table class="autosummary longtable docutils align-default">
 <tbody>
-<tr class="row-odd"><td><p><a class="reference internal" href="#semsynth.torch_compat.ensure_torch_rmsnorm" title="semsynth.torch_compat.ensure_torch_rmsnorm"><code class="xref py py-obj docutils literal notranslate"><span class="pre">ensure_torch_rmsnorm</span></code></a>()</p></td>
+<tr class="row-odd"><td><p><a class="reference internal" href="#semsynth.torch_compat.ensure_npsum_compat" title="semsynth.torch_compat.ensure_npsum_compat"><code class="xref py py-obj docutils literal notranslate"><span class="pre">ensure_npsum_compat</span></code></a>()</p></td>
+<td><p>Patch <code class="docutils literal notranslate"><span class="pre">numpy.sum</span></code> so it accepts generators (removed in NumPy ≥ 2).</p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="#semsynth.torch_compat.ensure_torch_rmsnorm" title="semsynth.torch_compat.ensure_torch_rmsnorm"><code class="xref py py-obj docutils literal notranslate"><span class="pre">ensure_torch_rmsnorm</span></code></a>()</p></td>
 <td><p>Ensure torch.nn exposes RMSNorm on versions that predate it.</p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="#semsynth.torch_compat.ensure_trapz_compat" title="semsynth.torch_compat.ensure_trapz_compat"><code class="xref py py-obj docutils literal notranslate"><span class="pre">ensure_trapz_compat</span></code></a>()</p></td>
+<td><p>Ensure numpy and scipy expose <code class="docutils literal notranslate"><span class="pre">trapz</span></code> (renamed to <code class="docutils literal notranslate"><span class="pre">trapezoid</span></code> in newer versions).</p></td>
 </tr>
 </tbody>
 </table>
 <dl class="py function">
+<dt class="sig sig-object py" id="semsynth.torch_compat.ensure_npsum_compat">
+<span class="sig-prename descclassname"><span class="pre">semsynth.torch_compat.</span></span><span class="sig-name descname"><span class="pre">ensure_npsum_compat</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">None</span></span></span><a class="headerlink" href="#semsynth.torch_compat.ensure_npsum_compat" title="Link to this definition"></a></dt>
+<dd><p>Patch <code class="docutils literal notranslate"><span class="pre">numpy.sum</span></code> so it accepts generators (removed in NumPy ≥ 2).</p>
+<p>Synthcity’s ctgan plugin calls <code class="docutils literal notranslate"><span class="pre">np.sum(some_generator)</span></code> which raises a
+<code class="docutils literal notranslate"><span class="pre">TypeError</span></code> under NumPy 2.  Wrapping <code class="docutils literal notranslate"><span class="pre">np.sum</span></code> to materialise generators
+via <code class="docutils literal notranslate"><span class="pre">list()</span></code> before delegation preserves the original behaviour.</p>
+</dd></dl>
+
+<dl class="py function">
 <dt class="sig sig-object py" id="semsynth.torch_compat.ensure_torch_rmsnorm">
 <span class="sig-prename descclassname"><span class="pre">semsynth.torch_compat.</span></span><span class="sig-name descname"><span class="pre">ensure_torch_rmsnorm</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">None</span></span></span><a class="headerlink" href="#semsynth.torch_compat.ensure_torch_rmsnorm" title="Link to this definition"></a></dt>
 <dd><p>Ensure torch.nn exposes RMSNorm on versions that predate it.</p>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="semsynth.torch_compat.ensure_trapz_compat">
+<span class="sig-prename descclassname"><span class="pre">semsynth.torch_compat.</span></span><span class="sig-name descname"><span class="pre">ensure_trapz_compat</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">None</span></span></span><a class="headerlink" href="#semsynth.torch_compat.ensure_trapz_compat" title="Link to this definition"></a></dt>
+<dd><p>Ensure numpy and scipy expose <code class="docutils literal notranslate"><span class="pre">trapz</span></code> (renamed to <code class="docutils literal notranslate"><span class="pre">trapezoid</span></code> in newer versions).</p>
+<p>Some optional dependencies (e.g. xgbse used by synthcity) import <code class="docutils literal notranslate"><span class="pre">numpy.trapz</span></code>
+and <code class="docutils literal notranslate"><span class="pre">scipy.integrate.trapz</span></code> which were removed in NumPy ≥ 2 / SciPy ≥ 1.14.</p>
 </dd></dl>
 
 </section>
@@ -134,7 +162,7 @@
            </div>
           </div>
           <footer><div class="rst-footer-buttons" role="navigation" aria-label="Footer">
-        <a href="semsynth.specs.html" class="btn btn-neutral float-left" title="semsynth.specs" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
+        <a href="semsynth.templates.html" class="btn btn-neutral float-left" title="semsynth.templates" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
         <a href="semsynth.umap_utils.html" class="btn btn-neutral float-right" title="semsynth.umap_utils" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
     </div>
 

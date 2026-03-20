@@ -7,14 +7,15 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Index &mdash; semsynth  documentation</title>
       <link rel="stylesheet" type="text/css" href="_static/pygments.css?v=b86133f3" />
-      <link rel="stylesheet" type="text/css" href="_static/css/theme.css?v=e59714d7" />
+      <link rel="stylesheet" type="text/css" href="_static/css/theme.css?v=9edc463e" />
+      <link rel="stylesheet" type="text/css" href="_static/mystnb.11b39860a7a0cbfd473a3ad8a317855267ff0bd372690045ca344a6b62be495e.css?v=8cd3d715" />
 
   
       <script src="_static/jquery.js?v=5d32c60e"></script>
       <script src="_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
       <script src="_static/documentation_options.js?v=5929fcd5"></script>
-      <script src="_static/doctools.js?v=9bcbadda"></script>
-      <script src="_static/sphinx_highlight.js?v=dc90522c"></script>
+      <script src="_static/doctools.js?v=fd6eb6e6"></script>
+      <script src="_static/sphinx_highlight.js?v=6ffebe34"></script>
     <script src="_static/js/theme.js"></script>
     <link rel="index" title="Index" href="#" />
     <link rel="search" title="Search" href="search.html" /> 
@@ -45,7 +46,7 @@
 <li class="toctree-l1"><a class="reference internal" href="getting-started.html">Getting started</a></li>
 <li class="toctree-l1"><a class="reference internal" href="schema.html">SemMap metadata schema</a></li>
 <li class="toctree-l1"><a class="reference internal" href="map_columns.html">Column terminology mapping</a></li>
-<li class="toctree-l1"><a class="reference internal" href="provenance.html">Provenance workflow guide</a></li>
+<li class="toctree-l1"><a class="reference internal" href="provenance.html">Provenance</a></li>
 <li class="toctree-l1"><a class="reference internal" href="backends.html">Backends overview</a></li>
 <li class="toctree-l1"><a class="reference internal" href="missingness.html">Missingness handling</a></li>
 <li class="toctree-l1"><a class="reference internal" href="privacy-metrics.html">Privacy metrics</a></li>
@@ -118,15 +119,17 @@
         <li><a href="_autosummary/semsynth.metadata.html#semsynth.metadata.DCATDistribution.access_url">(semsynth.metadata.DCATDistribution attribute)</a>
 </li>
       </ul></li>
-  </ul></td>
-  <td style="width: 33%; vertical-align: top;"><ul>
       <li><a href="_autosummary/semsynth.semmap.html#semsynth.semmap.Metadata.accessRights">accessRights (semsynth.semmap.Metadata attribute)</a>
 </li>
+  </ul></td>
+  <td style="width: 33%; vertical-align: top;"><ul>
       <li><a href="_autosummary/semsynth.missingness.html#semsynth.missingness.DataFrameMissingnessModel.apply">apply() (semsynth.missingness.DataFrameMissingnessModel method)</a>
+</li>
+      <li><a href="_autosummary/semsynth.pipeline.html#semsynth.pipeline.PipelineConfig.apply_mapping">apply_mapping() (semsynth.pipeline.PipelineConfig method)</a>
 </li>
       <li><a href="_autosummary/semsynth.missingness.html#semsynth.missingness.apply_missingness_to_outputs">apply_missingness_to_outputs() (in module semsynth.missingness)</a>
 </li>
-      <li><a href="_autosummary/semsynth.utils.html#semsynth.utils.VariableDescriptor.as_dict">as_dict() (semsynth.utils.VariableDescriptor method)</a>
+      <li><a href="_autosummary/semsynth.semmap.html#semsynth.semmap.VariableDescriptor.as_dict">as_dict() (semsynth.semmap.VariableDescriptor method)</a>
 </li>
       <li><a href="_autosummary/semsynth.downstream_fidelity.html#semsynth.downstream_fidelity.auto_formula">auto_formula() (in module semsynth.downstream_fidelity)</a>
 </li>
@@ -156,10 +159,10 @@
         <li><a href="_autosummary/semsynth.backends.base.html#semsynth.backends.base.BackendModule">(class in semsynth.backends.base)</a>
 </li>
       </ul></li>
-  </ul></td>
-  <td style="width: 33%; vertical-align: top;"><ul>
       <li><a href="_autosummary/semsynth.catalog.html#semsynth.catalog.PathURLMapper.base_url">base_url (semsynth.catalog.PathURLMapper attribute)</a>
 </li>
+  </ul></td>
+  <td style="width: 33%; vertical-align: top;"><ul>
       <li><a href="_autosummary/semsynth.backends.pybnesian.html#semsynth.backends.pybnesian.bn_to_graphviz">bn_to_graphviz() (in module semsynth.backends.pybnesian)</a>
 </li>
       <li><a href="_autosummary/semsynth.backends.pybnesian.html#semsynth.backends.pybnesian.BNArtifacts">BNArtifacts (class in semsynth.backends.pybnesian)</a>
@@ -171,6 +174,8 @@
       <li><a href="_autosummary/semsynth.catalog.html#semsynth.catalog.build_description">build_description() (in module semsynth.catalog)</a>
 </li>
       <li><a href="_autosummary/semsynth.umap_utils.html#semsynth.umap_utils.build_umap">build_umap() (in module semsynth.umap_utils)</a>
+</li>
+      <li><a href="_autosummary/semsynth.downstream_fidelity.html#semsynth.downstream_fidelity.DownstreamConfig.burnin">burnin (semsynth.downstream_fidelity.DownstreamConfig attribute)</a>
 </li>
       <li><a href="_autosummary/semsynth.catalog.html#semsynth.catalog.CatalogDistribution.byte_size">byte_size (semsynth.catalog.CatalogDistribution attribute)</a>
 </li>
@@ -224,8 +229,6 @@
 </li>
       <li><a href="_autosummary/semsynth.semmap.html#semsynth.semmap.DatasetSchema.columns">columns (semsynth.semmap.DatasetSchema attribute)</a>
 </li>
-      <li><a href="_autosummary/semsynth.downstream_fidelity.html#semsynth.downstream_fidelity.compare_real_vs_synth">compare_real_vs_synth() (in module semsynth.downstream_fidelity)</a>
-</li>
       <li><a href="_autosummary/semsynth.models.html#semsynth.models.ModelConfigBundle.compute_downstream">compute_downstream (semsynth.models.ModelConfigBundle attribute)</a>
 
       <ul>
@@ -234,6 +237,8 @@
         <li><a href="_autosummary/semsynth.pipeline.html#semsynth.pipeline.PipelineConfig.compute_downstream">(semsynth.pipeline.PipelineConfig attribute)</a>
 </li>
       </ul></li>
+      <li><a href="_autosummary/semsynth.downstream_fidelity.html#semsynth.downstream_fidelity.compute_downstream">compute_downstream() (in module semsynth.downstream_fidelity)</a>
+</li>
       <li><a href="_autosummary/semsynth.models.html#semsynth.models.ModelConfigBundle.compute_privacy">compute_privacy (semsynth.models.ModelConfigBundle attribute)</a>
 
       <ul>
@@ -251,6 +256,8 @@
 </li>
       </ul></li>
       <li><a href="_autosummary/semsynth.app.html#semsynth.app.create_app">create_app() (in module semsynth.app)</a>
+</li>
+      <li><a href="_autosummary/semsynth.downstream_fidelity.html#semsynth.downstream_fidelity.DownstreamConfig.cv">cv (semsynth.downstream_fidelity.DownstreamConfig attribute)</a>
 </li>
   </ul></td>
 </tr></table>
@@ -301,13 +308,15 @@
       <ul>
         <li><a href="_autosummary/semsynth.catalog.html#semsynth.catalog.DataCatalog.description">(semsynth.catalog.DataCatalog attribute)</a>
 </li>
+        <li><a href="_autosummary/semsynth.catalog.html#id0">(semsynth.catalog.SparqlQueryDefinition attribute)</a>, <a href="_autosummary/semsynth.catalog.html#semsynth.catalog.SparqlQueryDefinition.description">[1]</a>
+</li>
         <li><a href="_autosummary/semsynth.metadata.html#semsynth.metadata.DCATDataset.description">(semsynth.metadata.DCATDataset attribute)</a>
 </li>
         <li><a href="_autosummary/semsynth.semmap.html#semsynth.semmap.Column.description">(semsynth.semmap.Column attribute)</a>
 </li>
         <li><a href="_autosummary/semsynth.semmap.html#semsynth.semmap.Metadata.description">(semsynth.semmap.Metadata attribute)</a>
 </li>
-        <li><a href="_autosummary/semsynth.utils.html#semsynth.utils.VariableDescriptor.description">(semsynth.utils.VariableDescriptor attribute)</a>
+        <li><a href="_autosummary/semsynth.semmap.html#semsynth.semmap.VariableDescriptor.description">(semsynth.semmap.VariableDescriptor attribute)</a>
 </li>
       </ul></li>
   </ul></td>
@@ -333,6 +342,8 @@
       <li><a href="_autosummary/semsynth.catalog.html#semsynth.catalog.CatalogDataset.distributions">distributions (semsynth.catalog.CatalogDataset attribute)</a>
 
       <ul>
+        <li><a href="_autosummary/semsynth.catalog.html#semsynth.catalog.DataCatalog.distributions">(semsynth.catalog.DataCatalog attribute)</a>
+</li>
         <li><a href="_autosummary/semsynth.metadata.html#semsynth.metadata.DCATDataset.distributions">(semsynth.metadata.DCATDataset attribute)</a>
 </li>
       </ul></li>
@@ -346,6 +357,8 @@
 </li>
       <li><a href="_autosummary/semsynth.models.html#semsynth.models.ModelRun.downstream_metrics">downstream_metrics (semsynth.models.ModelRun attribute)</a>
 </li>
+      <li><a href="_autosummary/semsynth.downstream_fidelity.html#semsynth.downstream_fidelity.DownstreamConfig">DownstreamConfig (class in semsynth.downstream_fidelity)</a>
+</li>
   </ul></td>
 </tr></table>
 
@@ -354,17 +367,25 @@
   <td style="width: 33%; vertical-align: top;"><ul>
       <li><a href="_autosummary/semsynth.umap_utils.html#semsynth.umap_utils.UMAPArtifacts.embedding">embedding (semsynth.umap_utils.UMAPArtifacts attribute)</a>
 </li>
-      <li><a href="_autosummary/semsynth.pipeline.html#semsynth.pipeline.PipelineConfig.enable_missingness_wrapping">enable_missingness_wrapping (semsynth.pipeline.PipelineConfig attribute)</a>
+      <li><a href="_autosummary/semsynth.models.html#semsynth.models.ModelConfigBundle.enable_missingness_wrapping">enable_missingness_wrapping (semsynth.models.ModelConfigBundle attribute)</a>
+
+      <ul>
+        <li><a href="_autosummary/semsynth.pipeline.html#semsynth.pipeline.PipelineConfig.enable_missingness_wrapping">(semsynth.pipeline.PipelineConfig attribute)</a>
 </li>
+      </ul></li>
       <li><a href="_autosummary/semsynth.backends.base.html#semsynth.backends.base.ensure_backend_contract">ensure_backend_contract() (in module semsynth.backends.base)</a>
 </li>
       <li><a href="_autosummary/semsynth.utils.html#semsynth.utils.ensure_dir">ensure_dir() (in module semsynth.utils)</a>
+</li>
+      <li><a href="_autosummary/semsynth.torch_compat.html#semsynth.torch_compat.ensure_npsum_compat">ensure_npsum_compat() (in module semsynth.torch_compat)</a>
 </li>
   </ul></td>
   <td style="width: 33%; vertical-align: top;"><ul>
       <li><a href="_autosummary/semsynth.jsonld_to_rdfa.html#semsynth.jsonld_to_rdfa.ensure_ns">ensure_ns() (in module semsynth.jsonld_to_rdfa)</a>
 </li>
       <li><a href="_autosummary/semsynth.torch_compat.html#semsynth.torch_compat.ensure_torch_rmsnorm">ensure_torch_rmsnorm() (in module semsynth.torch_compat)</a>
+</li>
+      <li><a href="_autosummary/semsynth.torch_compat.html#semsynth.torch_compat.ensure_trapz_compat">ensure_trapz_compat() (in module semsynth.torch_compat)</a>
 </li>
       <li><a href="_autosummary/semsynth.privacy_metrics.html#semsynth.privacy_metrics.DatasetPrivacySummary.exact_overlap_rate">exact_overlap_rate (semsynth.privacy_metrics.DatasetPrivacySummary attribute)</a>
 </li>
@@ -378,6 +399,8 @@
 <h2 id="F">F</h2>
 <table style="width: 100%" class="indextable genindextable"><tr>
   <td style="width: 33%; vertical-align: top;"><ul>
+      <li><a href="_autosummary/semsynth.catalog.html#id1">filename (semsynth.catalog.SparqlQueryDefinition attribute)</a>, <a href="_autosummary/semsynth.catalog.html#semsynth.catalog.SparqlQueryDefinition.filename">[1]</a>
+</li>
       <li><a href="_autosummary/semsynth.missingness.html#semsynth.missingness.ColumnMissingnessModel.fit">fit() (semsynth.missingness.ColumnMissingnessModel method)</a>
 
       <ul>
@@ -388,15 +411,11 @@
 </li>
       <li><a href="_autosummary/semsynth.pipeline.html#semsynth.pipeline.PipelineConfig.fit_on_sample">fit_on_sample (semsynth.pipeline.PipelineConfig attribute)</a>
 </li>
-      <li><a href="_autosummary/semsynth.downstream_fidelity.html#semsynth.downstream_fidelity.fit_with_mi">fit_with_mi() (in module semsynth.downstream_fidelity)</a>
-</li>
       <li><a href="_autosummary/semsynth.catalog.html#semsynth.catalog.PathURLMapper.for_path">for_path() (semsynth.catalog.PathURLMapper method)</a>
-</li>
-      <li><a href="_autosummary/semsynth.catalog.html#semsynth.catalog.CatalogDistribution.format">format (semsynth.catalog.CatalogDistribution attribute)</a>
 </li>
   </ul></td>
   <td style="width: 33%; vertical-align: top;"><ul>
-      <li><a href="_autosummary/semsynth.downstream_fidelity.html#semsynth.downstream_fidelity.formula_from_selected">formula_from_selected() (in module semsynth.downstream_fidelity)</a>
+      <li><a href="_autosummary/semsynth.catalog.html#semsynth.catalog.CatalogDistribution.format">format (semsynth.catalog.CatalogDistribution attribute)</a>
 </li>
       <li><a href="_autosummary/semsynth.datasets.html#semsynth.datasets.DatasetPayload.frame">frame (semsynth.datasets.DatasetPayload attribute)</a>
 </li>
@@ -418,8 +437,6 @@
 <h2 id="G">G</h2>
 <table style="width: 100%" class="indextable genindextable"><tr>
   <td style="width: 33%; vertical-align: top;"><ul>
-      <li><a href="_autosummary/semsynth.downstream_fidelity.html#semsynth.downstream_fidelity.generate_candidates">generate_candidates() (in module semsynth.downstream_fidelity)</a>
-</li>
       <li><a href="_autosummary/semsynth.pipeline.html#semsynth.pipeline.ReportWriter.generate_synthetic_umaps">generate_synthetic_umaps() (semsynth.pipeline.ReportWriter method)</a>
 </li>
       <li><a href="_autosummary/semsynth.models.html#semsynth.models.ModelConfigBundle.generate_umap">generate_umap (semsynth.models.ModelConfigBundle attribute)</a>
@@ -430,6 +447,8 @@
       </ul></li>
   </ul></td>
   <td style="width: 33%; vertical-align: top;"><ul>
+      <li><a href="_autosummary/semsynth.semmap.html#semsynth.semmap.get_column_name">get_column_name() (in module semsynth.semmap)</a>
+</li>
       <li><a href="_autosummary/semsynth.metadata.html#semsynth.metadata.get_uciml_variable_descriptions">get_uciml_variable_descriptions() (in module semsynth.metadata)</a>
 </li>
       <li><a href="_autosummary/semsynth.html#semsynth.get_version">get_version() (in module semsynth)</a>
@@ -522,12 +541,14 @@
 <h2 id="K">K</h2>
 <table style="width: 100%" class="indextable genindextable"><tr>
   <td style="width: 33%; vertical-align: top;"><ul>
-      <li><a href="_autosummary/semsynth.privacy_metrics.html#semsynth.privacy_metrics.DatasetPrivacySummary.k_min">k_min (semsynth.privacy_metrics.DatasetPrivacySummary attribute)</a>
+      <li><a href="_autosummary/semsynth.privacy_metrics.html#semsynth.privacy_metrics.DatasetPrivacySummary.k_map">k_map (semsynth.privacy_metrics.DatasetPrivacySummary attribute)</a>
 </li>
-      <li><a href="_autosummary/semsynth.privacy_metrics.html#semsynth.privacy_metrics.DatasetPrivacySummary.k_pct_lt5">k_pct_lt5 (semsynth.privacy_metrics.DatasetPrivacySummary attribute)</a>
+      <li><a href="_autosummary/semsynth.privacy_metrics.html#semsynth.privacy_metrics.DatasetPrivacySummary.k_min">k_min (semsynth.privacy_metrics.DatasetPrivacySummary attribute)</a>
 </li>
   </ul></td>
   <td style="width: 33%; vertical-align: top;"><ul>
+      <li><a href="_autosummary/semsynth.privacy_metrics.html#semsynth.privacy_metrics.DatasetPrivacySummary.k_pct_lt5">k_pct_lt5 (semsynth.privacy_metrics.DatasetPrivacySummary attribute)</a>
+</li>
       <li><a href="_autosummary/semsynth.catalog.html#semsynth.catalog.CatalogDataset.keywords">keywords (semsynth.catalog.CatalogDataset attribute)</a>
 
       <ul>
@@ -570,9 +591,13 @@
 <h2 id="M">M</h2>
 <table style="width: 100%" class="indextable genindextable"><tr>
   <td style="width: 33%; vertical-align: top;"><ul>
+      <li><a href="_autosummary/semsynth.downstream_fidelity.html#semsynth.downstream_fidelity.DownstreamConfig.m">m (semsynth.downstream_fidelity.DownstreamConfig attribute)</a>
+</li>
       <li><a href="_autosummary/semsynth.jsonld_to_rdfa.html#semsynth.jsonld_to_rdfa.main">main() (in module semsynth.jsonld_to_rdfa)</a>
 </li>
       <li><a href="_autosummary/semsynth.models.html#semsynth.models.ModelRun.manifest">manifest (semsynth.models.ModelRun attribute)</a>
+</li>
+      <li><a href="_autosummary/semsynth.downstream_fidelity.html#semsynth.downstream_fidelity.DownstreamConfig.max_interactions">max_interactions (semsynth.downstream_fidelity.DownstreamConfig attribute)</a>
 </li>
       <li><a href="_autosummary/semsynth.pipeline.html#semsynth.pipeline.PipelineConfig.max_umap_sample">max_umap_sample (semsynth.pipeline.PipelineConfig attribute)</a>
 </li>
@@ -606,6 +631,8 @@
 </li>
       <li><a href="_autosummary/semsynth.catalog.html#semsynth.catalog.mimetype_for">mimetype_for() (in module semsynth.catalog)</a>
 </li>
+      <li><a href="_autosummary/semsynth.pipeline.html#semsynth.pipeline.UmapConfig.min_dist">min_dist (semsynth.pipeline.UmapConfig attribute)</a>
+</li>
       <li><a href="_autosummary/semsynth.semmap.html#semsynth.semmap.SummaryStatistics.minimum">minimum (semsynth.semmap.SummaryStatistics attribute)</a>
 </li>
       <li><a href="_autosummary/semsynth.pipeline.html#semsynth.pipeline.PreprocessingResult.missingness_model">missingness_model (semsynth.pipeline.PreprocessingResult attribute)</a>
@@ -630,14 +657,16 @@
 </li>
       <li><a href="_autosummary/semsynth.models.html#semsynth.models.ModelConfigBundle">ModelConfigBundle (class in semsynth.models)</a>
 </li>
+      <li><a href="_autosummary/semsynth.semmap.html#semsynth.semmap.modeling_role">modeling_role() (in module semsynth.semmap)</a>
+</li>
       <li><a href="_autosummary/semsynth.models.html#semsynth.models.ModelRun">ModelRun (class in semsynth.models)</a>
 </li>
       <li><a href="_autosummary/semsynth.missingness.html#semsynth.missingness.DataFrameMissingnessModel.models_">models_ (semsynth.missingness.DataFrameMissingnessModel attribute)</a>
 </li>
-      <li><a href="_autosummary/semsynth.models.html#semsynth.models.ModelSpec">ModelSpec (class in semsynth.models)</a>
-</li>
   </ul></td>
   <td style="width: 33%; vertical-align: top;"><ul>
+      <li><a href="_autosummary/semsynth.models.html#semsynth.models.ModelSpec">ModelSpec (class in semsynth.models)</a>
+</li>
       <li><a href="_autosummary/semsynth.catalog.html#semsynth.catalog.CatalogDataset.modified">modified (semsynth.catalog.CatalogDataset attribute)</a>
 
       <ul>
@@ -690,11 +719,15 @@
 </li>
         <li><a href="_autosummary/semsynth.reporting.html#module-semsynth.reporting">semsynth.reporting</a>
 </li>
+        <li><a href="_autosummary/semsynth.reports_index.html#module-semsynth.reports_index">semsynth.reports_index</a>
+</li>
         <li><a href="_autosummary/semsynth.runtime.html#module-semsynth.runtime">semsynth.runtime</a>
 </li>
         <li><a href="_autosummary/semsynth.semmap.html#module-semsynth.semmap">semsynth.semmap</a>
 </li>
         <li><a href="_autosummary/semsynth.specs.html#module-semsynth.specs">semsynth.specs</a>
+</li>
+        <li><a href="_autosummary/semsynth.templates.html#module-semsynth.templates">semsynth.templates</a>
 </li>
         <li><a href="_autosummary/semsynth.torch_compat.html#module-semsynth.torch_compat">semsynth.torch_compat</a>
 </li>
@@ -709,28 +742,34 @@
 <h2 id="N">N</h2>
 <table style="width: 100%" class="indextable genindextable"><tr>
   <td style="width: 33%; vertical-align: top;"><ul>
+      <li><a href="_autosummary/semsynth.pipeline.html#semsynth.pipeline.UmapConfig.n_components">n_components (semsynth.pipeline.UmapConfig attribute)</a>
+</li>
+      <li><a href="_autosummary/semsynth.pipeline.html#semsynth.pipeline.UmapConfig.n_neighbors">n_neighbors (semsynth.pipeline.UmapConfig attribute)</a>
+</li>
       <li><a href="_autosummary/semsynth.privacy_metrics.html#semsynth.privacy_metrics.DatasetPrivacySummary.n_real">n_real (semsynth.privacy_metrics.DatasetPrivacySummary attribute)</a>
 </li>
       <li><a href="_autosummary/semsynth.privacy_metrics.html#semsynth.privacy_metrics.DatasetPrivacySummary.n_synth">n_synth (semsynth.privacy_metrics.DatasetPrivacySummary attribute)</a>
 </li>
-      <li><a href="_autosummary/semsynth.datasets.html#semsynth.datasets.DatasetSpec.name">name (semsynth.datasets.DatasetSpec attribute)</a>
+      <li><a href="_autosummary/semsynth.catalog.html#id2">name (semsynth.catalog.SparqlQueryDefinition attribute)</a>, <a href="_autosummary/semsynth.catalog.html#semsynth.catalog.SparqlQueryDefinition.name">[1]</a>
 
       <ul>
+        <li><a href="_autosummary/semsynth.datasets.html#semsynth.datasets.DatasetSpec.name">(semsynth.datasets.DatasetSpec attribute)</a>
+</li>
         <li><a href="_autosummary/semsynth.models.html#semsynth.models.ModelRun.name">(semsynth.models.ModelRun attribute)</a>
 </li>
         <li><a href="_autosummary/semsynth.models.html#semsynth.models.ModelSpec.name">(semsynth.models.ModelSpec attribute)</a>
 </li>
         <li><a href="_autosummary/semsynth.semmap.html#semsynth.semmap.Column.name">(semsynth.semmap.Column attribute)</a>
 </li>
+        <li><a href="_autosummary/semsynth.semmap.html#semsynth.semmap.VariableDescriptor.name">(semsynth.semmap.VariableDescriptor attribute)</a>
+</li>
         <li><a href="_autosummary/semsynth.specs.html#semsynth.specs.DatasetSpec.name">(semsynth.specs.DatasetSpec attribute)</a>
 </li>
-        <li><a href="_autosummary/semsynth.utils.html#semsynth.utils.VariableDescriptor.name">(semsynth.utils.VariableDescriptor attribute)</a>
-</li>
       </ul></li>
-      <li><a href="_autosummary/semsynth.semmap.html#semsynth.semmap.SkosMappings.narrowMatch">narrowMatch (semsynth.semmap.SkosMappings attribute)</a>
-</li>
   </ul></td>
   <td style="width: 33%; vertical-align: top;"><ul>
+      <li><a href="_autosummary/semsynth.semmap.html#semsynth.semmap.SkosMappings.narrowMatch">narrowMatch (semsynth.semmap.SkosMappings attribute)</a>
+</li>
       <li><a href="_autosummary/semsynth.privacy_metrics.html#semsynth.privacy_metrics.DatasetPrivacySummary.near_duplicate_rate_eps">near_duplicate_rate_eps (semsynth.privacy_metrics.DatasetPrivacySummary attribute)</a>
 </li>
       <li><a href="_autosummary/semsynth.privacy_metrics.html#semsynth.privacy_metrics.DatasetPrivacySummary.nn_distance_stats">nn_distance_stats (semsynth.privacy_metrics.DatasetPrivacySummary attribute)</a>
@@ -739,7 +778,9 @@
 </li>
       <li><a href="_autosummary/semsynth.mappings.html#semsynth.mappings.normalize_jsonld_payload">normalize_jsonld_payload() (in module semsynth.mappings)</a>
 </li>
-      <li><a href="_autosummary/semsynth.utils.html#semsynth.utils.normalize_variable_descriptors">normalize_variable_descriptors() (in module semsynth.utils)</a>
+      <li><a href="_autosummary/semsynth.semmap.html#semsynth.semmap.normalize_role">normalize_role() (in module semsynth.semmap)</a>
+</li>
+      <li><a href="_autosummary/semsynth.semmap.html#semsynth.semmap.normalize_variable_descriptors">normalize_variable_descriptors() (in module semsynth.semmap)</a>
 </li>
       <li><a href="_autosummary/semsynth.semmap.html#semsynth.semmap.CodeConcept.notation">notation (semsynth.semmap.CodeConcept attribute)</a>
 </li>
@@ -771,6 +812,8 @@
   <td style="width: 33%; vertical-align: top;"><ul>
       <li><a href="_autosummary/semsynth.missingness.html#semsynth.missingness.ColumnMissingnessModel.p_missing_">p_missing_ (semsynth.missingness.ColumnMissingnessModel attribute)</a>
 </li>
+      <li><a href="_autosummary/semsynth.models.html#semsynth.models.parse_toml_config">parse_toml_config() (in module semsynth.models)</a>
+</li>
       <li><a href="_autosummary/semsynth.catalog.html#semsynth.catalog.PathURLMapper">PathURLMapper (class in semsynth.catalog)</a>
 </li>
       <li><a href="_autosummary/semsynth.models.html#semsynth.models.ModelRun.per_variable_csv">per_variable_csv (semsynth.models.ModelRun attribute)</a>
@@ -791,10 +834,10 @@
 </li>
       <li><a href="_autosummary/semsynth.semmap.html#semsynth.semmap.Metadata.populationType">populationType (semsynth.semmap.Metadata attribute)</a>
 </li>
-      <li><a href="_autosummary/semsynth.semmap.html#semsynth.semmap.CodeConcept.prefLabel">prefLabel (semsynth.semmap.CodeConcept attribute)</a>
-</li>
   </ul></td>
   <td style="width: 33%; vertical-align: top;"><ul>
+      <li><a href="_autosummary/semsynth.semmap.html#semsynth.semmap.CodeConcept.prefLabel">prefLabel (semsynth.semmap.CodeConcept attribute)</a>
+</li>
       <li><a href="_autosummary/semsynth.umap_utils.html#semsynth.umap_utils.UMAPArtifacts.preproc">preproc (semsynth.umap_utils.UMAPArtifacts attribute)</a>
 </li>
       <li><a href="_autosummary/semsynth.pipeline.html#semsynth.pipeline.DatasetPreprocessor.preprocess">preprocess() (semsynth.pipeline.DatasetPreprocessor method)</a>
@@ -845,7 +888,11 @@
 </li>
       <li><a href="_autosummary/semsynth.semmap.html#semsynth.semmap.StatisticalDataType.Ratio">Ratio (semsynth.semmap.StatisticalDataType attribute)</a>
 </li>
+      <li><a href="_autosummary/semsynth.semmap.html#semsynth.semmap.raw_role">raw_role() (in module semsynth.semmap)</a>
+</li>
       <li><a href="_autosummary/semsynth.catalog.html#semsynth.catalog.read_lines">read_lines() (in module semsynth.catalog)</a>
+</li>
+      <li><a href="_autosummary/semsynth.catalog.html#semsynth.catalog.read_packaged_sparql_queries">read_packaged_sparql_queries() (in module semsynth.catalog)</a>
 </li>
       <li><a href="_autosummary/semsynth.semmap.html#semsynth.semmap.SemMapFrameAccessor.read_parquet">read_parquet() (semsynth.semmap.SemMapFrameAccessor static method)</a>
 </li>
@@ -854,6 +901,8 @@
       <li><a href="_autosummary/semsynth.backends.synthcity.html#semsynth.backends.synthcity.SynthRunArtifacts.real_test">real_test (semsynth.backends.synthcity.SynthRunArtifacts attribute)</a>
 </li>
       <li><a href="_autosummary/semsynth.backends.synthcity.html#semsynth.backends.synthcity.SynthRunArtifacts.real_train">real_train (semsynth.backends.synthcity.SynthRunArtifacts attribute)</a>
+</li>
+      <li><a href="_autosummary/semsynth.downstream_fidelity.html#semsynth.downstream_fidelity.recompute_downstream">recompute_downstream() (in module semsynth.downstream_fidelity)</a>
 </li>
       <li><a href="_autosummary/semsynth.semmap.html#semsynth.semmap.SkosMappings.relatedMatch">relatedMatch (semsynth.semmap.SkosMappings attribute)</a>
 </li>
@@ -869,12 +918,12 @@
 </li>
       <li><a href="_autosummary/semsynth.jsonld_to_rdfa.html#semsynth.jsonld_to_rdfa.render_property">render_property() (in module semsynth.jsonld_to_rdfa)</a>
 </li>
+  </ul></td>
+  <td style="width: 33%; vertical-align: top;"><ul>
       <li><a href="_autosummary/semsynth.jsonld_to_rdfa.html#semsynth.jsonld_to_rdfa.render_rdfa">render_rdfa() (in module semsynth.jsonld_to_rdfa)</a>
 </li>
       <li><a href="_autosummary/semsynth.jsonld_to_rdfa.html#semsynth.jsonld_to_rdfa.repeating_headers">repeating_headers() (in module semsynth.jsonld_to_rdfa)</a>
 </li>
-  </ul></td>
-  <td style="width: 33%; vertical-align: top;"><ul>
       <li><a href="_autosummary/semsynth.pipeline.html#semsynth.pipeline.ReportWriter">ReportWriter (class in semsynth.pipeline)</a>
 </li>
       <li><a href="_autosummary/semsynth.runtime.html#semsynth.runtime.DependencyRegistry.require_attr">require_attr() (semsynth.runtime.DependencyRegistry method)</a>
@@ -883,7 +932,7 @@
 </li>
       <li><a href="_autosummary/semsynth.mappings.html#semsynth.mappings.resolve_mapping_json">resolve_mapping_json() (in module semsynth.mappings)</a>
 </li>
-      <li><a href="_autosummary/semsynth.utils.html#semsynth.utils.VariableDescriptor.role">role (semsynth.utils.VariableDescriptor attribute)</a>
+      <li><a href="_autosummary/semsynth.semmap.html#semsynth.semmap.VariableDescriptor.role">role (semsynth.semmap.VariableDescriptor attribute)</a>
 </li>
       <li><a href="_autosummary/semsynth.catalog.html#semsynth.catalog.PathURLMapper.root_dir">root_dir (semsynth.catalog.PathURLMapper attribute)</a>
 </li>
@@ -929,8 +978,6 @@
 </li>
       <li><a href="_autosummary/semsynth.backends.pybnesian.html#semsynth.backends.pybnesian.save_graphml_structure">save_graphml_structure() (in module semsynth.backends.pybnesian)</a>
 </li>
-      <li><a href="_autosummary/semsynth.downstream_fidelity.html#semsynth.downstream_fidelity.screen_terms">screen_terms() (in module semsynth.downstream_fidelity)</a>
-</li>
       <li><a href="_autosummary/semsynth.app.html#semsynth.app.SearchResult">SearchResult (class in semsynth.app)</a>
 </li>
       <li><a href="_autosummary/semsynth.backends.synthcity.html#semsynth.backends.synthcity.SynthRunArtifacts.seed">seed (semsynth.backends.synthcity.SynthRunArtifacts attribute)</a>
@@ -940,6 +987,10 @@
 </li>
       </ul></li>
       <li><a href="_autosummary/semsynth.utils.html#semsynth.utils.seed_all">seed_all() (in module semsynth.utils)</a>
+</li>
+      <li><a href="_autosummary/semsynth.pipeline.html#semsynth.pipeline.PipelineConfig.semmap_context">semmap_context (semsynth.pipeline.PipelineConfig attribute)</a>
+</li>
+      <li><a href="_autosummary/semsynth.pipeline.html#semsynth.pipeline.PipelineConfig.semmap_context_url">semmap_context_url (semsynth.pipeline.PipelineConfig attribute)</a>
 </li>
       <li><a href="_autosummary/semsynth.pipeline.html#semsynth.pipeline.PreprocessingResult.semmap_export">semmap_export (semsynth.pipeline.PreprocessingResult attribute)</a>
 </li>
@@ -1061,8 +1112,6 @@
         <li><a href="_autosummary/semsynth.models.html#module-semsynth.models">module</a>
 </li>
       </ul></li>
-  </ul></td>
-  <td style="width: 33%; vertical-align: top;"><ul>
       <li>
     semsynth.pipeline
 
@@ -1070,6 +1119,8 @@
         <li><a href="_autosummary/semsynth.pipeline.html#module-semsynth.pipeline">module</a>
 </li>
       </ul></li>
+  </ul></td>
+  <td style="width: 33%; vertical-align: top;"><ul>
       <li>
     semsynth.privacy_metrics
 
@@ -1082,6 +1133,13 @@
 
       <ul>
         <li><a href="_autosummary/semsynth.reporting.html#module-semsynth.reporting">module</a>
+</li>
+      </ul></li>
+      <li>
+    semsynth.reports_index
+
+      <ul>
+        <li><a href="_autosummary/semsynth.reports_index.html#module-semsynth.reports_index">module</a>
 </li>
       </ul></li>
       <li>
@@ -1103,6 +1161,13 @@
 
       <ul>
         <li><a href="_autosummary/semsynth.specs.html#module-semsynth.specs">module</a>
+</li>
+      </ul></li>
+      <li>
+    semsynth.templates
+
+      <ul>
+        <li><a href="_autosummary/semsynth.templates.html#module-semsynth.templates">module</a>
 </li>
       </ul></li>
       <li>
@@ -1144,6 +1209,8 @@
         <li><a href="_autosummary/semsynth.semmap.html#semsynth.semmap.ColumnProperty.source">(semsynth.semmap.ColumnProperty attribute)</a>
 </li>
       </ul></li>
+      <li><a href="_autosummary/semsynth.catalog.html#semsynth.catalog.SparqlQueryDefinition">SparqlQueryDefinition (class in semsynth.catalog)</a>
+</li>
       <li><a href="_autosummary/semsynth.datasets.html#semsynth.datasets.DatasetPayload.spec">spec (semsynth.datasets.DatasetPayload attribute)</a>
 </li>
       <li><a href="_autosummary/semsynth.models.html#semsynth.models.ModelConfigBundle.specs">specs (semsynth.models.ModelConfigBundle attribute)</a>
@@ -1260,29 +1327,27 @@
   <td style="width: 33%; vertical-align: top;"><ul>
       <li><a href="_autosummary/semsynth.semmap.html#semsynth.semmap.Unit.ucumCode">ucumCode (semsynth.semmap.Unit attribute)</a>
 </li>
-      <li><a href="_autosummary/semsynth.pipeline.html#semsynth.pipeline.PreprocessingResult.umap_artifacts">umap_artifacts (semsynth.pipeline.PreprocessingResult attribute)</a>
+      <li><a href="_autosummary/semsynth.pipeline.html#semsynth.pipeline.PipelineConfig.umap">umap (semsynth.pipeline.PipelineConfig attribute)</a>
 </li>
-      <li><a href="_autosummary/semsynth.pipeline.html#semsynth.pipeline.PipelineConfig.umap_min_dist">umap_min_dist (semsynth.pipeline.PipelineConfig attribute)</a>
+      <li><a href="_autosummary/semsynth.pipeline.html#semsynth.pipeline.PreprocessingResult.umap_artifacts">umap_artifacts (semsynth.pipeline.PreprocessingResult attribute)</a>
 </li>
       <li><a href="_autosummary/semsynth.umap_utils.html#semsynth.umap_utils.UMAPArtifacts.umap_model">umap_model (semsynth.umap_utils.UMAPArtifacts attribute)</a>
 </li>
-      <li><a href="_autosummary/semsynth.pipeline.html#semsynth.pipeline.PipelineConfig.umap_n_components">umap_n_components (semsynth.pipeline.PipelineConfig attribute)</a>
-</li>
-      <li><a href="_autosummary/semsynth.pipeline.html#semsynth.pipeline.PipelineConfig.umap_n_neighbors">umap_n_neighbors (semsynth.pipeline.PipelineConfig attribute)</a>
-</li>
       <li><a href="_autosummary/semsynth.models.html#semsynth.models.ModelRun.umap_png">umap_png (semsynth.models.ModelRun attribute)</a>
 </li>
-  </ul></td>
-  <td style="width: 33%; vertical-align: top;"><ul>
       <li><a href="_autosummary/semsynth.pipeline.html#semsynth.pipeline.PreprocessingResult.umap_png_real">umap_png_real (semsynth.pipeline.PreprocessingResult attribute)</a>
 </li>
       <li><a href="_autosummary/semsynth.pipeline.html#semsynth.pipeline.UmapArtifacts">UmapArtifacts (class in semsynth.pipeline)</a>
 </li>
+  </ul></td>
+  <td style="width: 33%; vertical-align: top;"><ul>
       <li><a href="_autosummary/semsynth.umap_utils.html#semsynth.umap_utils.UMAPArtifacts">UMAPArtifacts (class in semsynth.umap_utils)</a>
+</li>
+      <li><a href="_autosummary/semsynth.pipeline.html#semsynth.pipeline.UmapConfig">UmapConfig (class in semsynth.pipeline)</a>
 </li>
       <li><a href="_autosummary/semsynth.semmap.html#semsynth.semmap.Unit">Unit (class in semsynth.semmap)</a>
 </li>
-      <li><a href="_autosummary/semsynth.utils.html#semsynth.utils.VariableDescriptor.unit">unit (semsynth.utils.VariableDescriptor attribute)</a>
+      <li><a href="_autosummary/semsynth.semmap.html#semsynth.semmap.VariableDescriptor.unit">unit (semsynth.semmap.VariableDescriptor attribute)</a>
 </li>
       <li><a href="_autosummary/semsynth.semmap.html#semsynth.semmap.ColumnProperty.unitText">unitText (semsynth.semmap.ColumnProperty attribute)</a>
 </li>
@@ -1296,7 +1361,7 @@
 <h2 id="V">V</h2>
 <table style="width: 100%" class="indextable genindextable"><tr>
   <td style="width: 33%; vertical-align: top;"><ul>
-      <li><a href="_autosummary/semsynth.utils.html#semsynth.utils.VariableDescriptor">VariableDescriptor (class in semsynth.utils)</a>
+      <li><a href="_autosummary/semsynth.semmap.html#semsynth.semmap.VariableDescriptor">VariableDescriptor (class in semsynth.semmap)</a>
 </li>
   </ul></td>
 </tr></table>
@@ -1321,6 +1386,8 @@
       <li><a href="_autosummary/semsynth.pipeline.html#semsynth.pipeline.ReportWriter.write_report">write_report() (semsynth.pipeline.ReportWriter method)</a>
 </li>
       <li><a href="_autosummary/semsynth.reporting.html#semsynth.reporting.write_report_md">write_report_md() (in module semsynth.reporting)</a>
+</li>
+      <li><a href="_autosummary/semsynth.catalog.html#semsynth.catalog.write_sparql_query_files">write_sparql_query_files() (in module semsynth.catalog)</a>
 </li>
   </ul></td>
 </tr></table>

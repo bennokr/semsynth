@@ -5,6 +5,21 @@ resources, mapping dataset columns to codes, and evaluating the resulting SSSOM
 artifacts. The tooling supports offline TSV lookups, Datasette-backed keyword
 search, embedding re-ranking, and LLM-assisted coding.
 
+```{code-cell} python
+# Summarize the most common codebook notations in the curated Heart Disease mapping.
+import json
+from collections import Counter
+
+meta = json.load(open("../mappings/uciml-45.metadata.json"))
+codes = []
+for col in meta["datasetSchema"]["columns"]:
+    cb = col.get("columnProperty", {}).get("hasCodeBook") or {}
+    concepts = cb.get("hasConcept") or []
+    codes.extend([c.get("notation") for c in concepts if isinstance(c, dict) and c.get("notation")])
+
+Counter(codes).most_common(5)
+```
+
 ## Table of Contents
 
 - [Scripts Overview](#scripts-overview)

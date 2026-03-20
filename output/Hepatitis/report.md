@@ -14,7 +14,7 @@
 | Discrete    | 14                                                                            |
 | Continuous  | 6                                                                             |
 | SemMap      | [SemMap JSON-LD](dataset.semmap.json)<br />[SemMap HTML](dataset.semmap.html) |
-| Missingness | modeled 15 of 20 (seed 42)                                                    |
+| Missingness | Not modeled                                                                   |
 
 ## Variables and summary
 
@@ -41,98 +41,280 @@
 | Histology       | discrete   | 1: 47 (58.75%)                                   |
 | Class           | discrete   | 1: 13 (16.25%)                                   |
 
-## Missingness model
-
-- Columns with learned missingness: 15 of 20
-- Columns without missingness: 5| Column          |   Missing rate |   Missing % |
-|:----------------|---------------:|------------:|
-| Protime         |         0.4323 |       43.23 |
-| Alk Phosphate   |         0.1871 |       18.71 |
-| Albumin         |         0.1032 |       10.32 |
-| Liver Firm      |         0.071  |        7.1  |
-| Liver Big       |         0.0645 |        6.45 |
-| Bilirubin       |         0.0387 |        3.87 |
-| Ascites         |         0.0323 |        3.23 |
-| Varices         |         0.0323 |        3.23 |
-| Spiders         |         0.0323 |        3.23 |
-| Spleen Palpable |         0.0323 |        3.23 |
-| Sgot            |         0.0258 |        2.58 |
-| Fatigue         |         0.0065 |        0.65 |
-| Anorexia        |         0.0065 |        0.65 |
-| Malaise         |         0.0065 |        0.65 |
-| Steroid         |         0.0065 |        0.65 |
 ## Fidelity summary
 
-| model      | backend   |   disc_jsd_mean |   disc_jsd_median | cont_ks_mean   | cont_w1_mean   |   privacy_overlap |   downstream_sign_match |
-|:-----------|:----------|----------------:|------------------:|:---------------|:---------------|------------------:|------------------------:|
-| metasyn    | metasyn   |                 |                   |                |                |                   |                         |
-| clg_mi2    | pybnesian |          0.0805 |            0.0329 |                |                |                 0 |                  0.2931 |
-| semi_mi5   | pybnesian |          0.0805 |            0.0329 |                |                |                 0 |                  0.3103 |
-| ctgan_fast | synthcity |                 |                   |                |                |                   |                         |
-| tvae_quick | synthcity |                 |                   |                |                |                   |                         |
+| model   | backend   |   disc jsd mean |   disc jsd median |   cont ks mean |   cont w1 mean |   downstream sign match |
+|:--------|:----------|----------------:|------------------:|---------------:|---------------:|------------------------:|
+| metasyn | metasyn   |          0.1311 |             0.133 |         0.2058 |        11.1459 |                    0.64 |
+
+## Privacy summary
+
+| model   | backend   |   n real |   n synth |   exact overlap rate |   near duplicate rate eps |   nn distance mean |   k min |   k pct lt5 |   k map |   rare qi reproduction rate | identifiability score   |   delta presence |
+|:--------|:----------|---------:|----------:|---------------------:|--------------------------:|-------------------:|--------:|------------:|--------:|----------------------------:|:------------------------|-----------------:|
+| metasyn | metasyn   |       80 |       155 |                    0 |                    0.8875 |             0.1137 |       1 |           1 |       1 |                           0 |                         |                6 |
 
 ## Models
 
 <table>
 <tr><th>UMAP</th><th>Details</th><th>Structure</th></tr>
-<tr><td></td><td>
+<tr><td><img src='umap_real.png' width='280'/></td><td>
+<h3>Real data</h3></td><td></td></tr>
+<tr><td><img src='models/metasyn/umap.png' width='280'/></td><td>
 
 <h3>Model: metasyn (metasyn)</h3>
 <ul>
 <li>Seed: 42, rows: 155</li>
+<li> <a href="models/metasyn/synthetic.csv">Synthetic CSV</a></li>
+<li> <a href="models/metasyn/per_variable_metrics.csv">Per-variable metrics</a></li>
+<li> <a href="models/metasyn/metrics.json">Metrics JSON</a></li>
+<li> <a href="models/metasyn/metrics.privacy.json">Privacy metrics</a></li>
+<li> <a href="models/metasyn/metrics.downstream.json">Downstream metrics</a></li>
 </ul>
-
+<details class="model-subtable"><summary><strong>Per-variable fidelity</strong></summary>
+<table class="dataframe">
+  <thead>
+    <tr style="text-align: right;">
+      <th>variable</th>
+      <th>type</th>
+      <th>KS</th>
+      <th>W1</th>
+      <th>JSD</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td>Age</td>
+      <td>continuous</td>
+      <td>0.1512</td>
+      <td>2.7007</td>
+      <td></td>
+    </tr>
+    <tr>
+      <td>Sex</td>
+      <td>discrete</td>
+      <td></td>
+      <td></td>
+      <td>0.1352</td>
+    </tr>
+    <tr>
+      <td>Steroid</td>
+      <td>discrete</td>
+      <td></td>
+      <td></td>
+      <td>0.2182</td>
+    </tr>
+    <tr>
+      <td>Antivirals</td>
+      <td>discrete</td>
+      <td></td>
+      <td></td>
+      <td>0.0386</td>
+    </tr>
+    <tr>
+      <td>Fatigue</td>
+      <td>discrete</td>
+      <td></td>
+      <td></td>
+      <td>0.1309</td>
+    </tr>
+    <tr>
+      <td>Malaise</td>
+      <td>discrete</td>
+      <td></td>
+      <td></td>
+      <td>0.2295</td>
+    </tr>
+    <tr>
+      <td>Anorexia</td>
+      <td>discrete</td>
+      <td></td>
+      <td></td>
+      <td>0.1484</td>
+    </tr>
+    <tr>
+      <td>Liver Big</td>
+      <td>discrete</td>
+      <td></td>
+      <td></td>
+      <td>0.0147</td>
+    </tr>
+    <tr>
+      <td>Liver Firm</td>
+      <td>discrete</td>
+      <td></td>
+      <td></td>
+      <td>0.0669</td>
+    </tr>
+    <tr>
+      <td>Spleen Palpable</td>
+      <td>discrete</td>
+      <td></td>
+      <td></td>
+      <td>0.0587</td>
+    </tr>
+  </tbody>
+</table>
+</details><details class="model-subtable"><summary><strong>Downstream metrics</strong></summary>
+<table class="dataframe">
+  <thead>
+    <tr style="text-align: right;">
+      <th>metric</th>
+      <th>value</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td>sign_match_rate</td>
+      <td>0.64</td>
+    </tr>
+    <tr>
+      <td>formula</td>
+      <td>Class ~ Age + Sex + Steroid + Antivirals + Fatigue + Malaise + Anorexia + Liver_Big + Liver_Firm + Spleen_Palpable + Spiders + Ascites + Varices + Bilirubin + Alk_Phosphate + Sgot + Albumin + Protime + Histology + Age:Sex + Sex:Steroid + Steroid:Antivirals + Antivirals:Fatigue + Fatigue:Malaise</td>
+    </tr>
+  </tbody>
+</table>
+</details><details class="model-subtable"><summary><strong>Privacy metrics</strong></summary>
+<table class="dataframe">
+  <thead>
+    <tr style="text-align: right;">
+      <th>metric</th>
+      <th>value</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td>n_real</td>
+      <td>80</td>
+    </tr>
+    <tr>
+      <td>n_synth</td>
+      <td>155</td>
+    </tr>
+    <tr>
+      <td>exact_overlap_rate</td>
+      <td>0</td>
+    </tr>
+    <tr>
+      <td>near_duplicate_rate_eps</td>
+      <td>0.8875</td>
+    </tr>
+    <tr>
+      <td>nn_distance_mean</td>
+      <td>0.1137</td>
+    </tr>
+    <tr>
+      <td>k_min</td>
+      <td>1</td>
+    </tr>
+    <tr>
+      <td>k_pct_lt5</td>
+      <td>1</td>
+    </tr>
+    <tr>
+      <td>k_map</td>
+      <td>1</td>
+    </tr>
+    <tr>
+      <td>rare_qi_reproduction_rate</td>
+      <td>0</td>
+    </tr>
+    <tr>
+      <td>delta_presence</td>
+      <td>6</td>
+    </tr>
+  </tbody>
+</table>
+</details>
 </td><td>
-</td></tr>
-
-<tr><td></td><td>
-
-<h3>Model: clg_mi2 (pybnesian)</h3>
-<ul>
-<li>Seed: 42, rows: 155</li>
-<li> Params: <tt>{"max_indegree": 2, "operators": ["arcs"], "score": "bic", "type": "clg"}</tt></li><li> <a href="models/clg_mi2/synthetic.csv">Synthetic CSV</a></li>
-<li> <a href="models/clg_mi2/per_variable_metrics.csv">Per-variable metrics</a></li>
-<li> <a href="models/clg_mi2/metrics.json">Metrics JSON</a></li>
-<li> <a href="models/clg_mi2/metrics.privacy.json">Privacy metrics</a></li>
-<li> <a href="models/clg_mi2/metrics.downstream.json">Downstream metrics</a></li>
-</ul>
-
-</td><td>
-<a href='models/clg_mi2/structure.png'><img src='models/clg_mi2/structure.png' width='280'/></a></td></tr>
-
-<tr><td></td><td>
-
-<h3>Model: semi_mi5 (pybnesian)</h3>
-<ul>
-<li>Seed: 42, rows: 155</li>
-<li> Params: <tt>{"max_indegree": 5, "operators": ["arcs"], "score": "bic", "type": "semiparametric"}</tt></li><li> <a href="models/semi_mi5/synthetic.csv">Synthetic CSV</a></li>
-<li> <a href="models/semi_mi5/per_variable_metrics.csv">Per-variable metrics</a></li>
-<li> <a href="models/semi_mi5/metrics.json">Metrics JSON</a></li>
-<li> <a href="models/semi_mi5/metrics.privacy.json">Privacy metrics</a></li>
-<li> <a href="models/semi_mi5/metrics.downstream.json">Downstream metrics</a></li>
-</ul>
-
-</td><td>
-<a href='models/semi_mi5/structure.png'><img src='models/semi_mi5/structure.png' width='280'/></a></td></tr>
-
-<tr><td></td><td>
-
-<h3>Model: ctgan_fast (synthcity)</h3>
-<ul>
-<li>Seed: 42, rows: 155</li>
-<li> Params: <tt>{"batch_size": 256, "n_iter": 5}</tt></li></ul>
-
-</td><td>
-</td></tr>
-
-<tr><td></td><td>
-
-<h3>Model: tvae_quick (synthcity)</h3>
-<ul>
-<li>Seed: 42, rows: 155</li>
-<li> Params: <tt>{"batch_size": 256}</tt></li></ul>
-
-</td><td>
-</td></tr>
+<table class="dataframe">
+  <thead>
+    <tr style="text-align: right;">
+      <th>variable</th>
+      <th>distribution</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td>Age</td>
+      <td>core.lognormal</td>
+    </tr>
+    <tr>
+      <td>Sex</td>
+      <td>core.multinoulli</td>
+    </tr>
+    <tr>
+      <td>Steroid</td>
+      <td>core.multinoulli</td>
+    </tr>
+    <tr>
+      <td>Antivirals</td>
+      <td>core.multinoulli</td>
+    </tr>
+    <tr>
+      <td>Fatigue</td>
+      <td>core.multinoulli</td>
+    </tr>
+    <tr>
+      <td>Malaise</td>
+      <td>core.multinoulli</td>
+    </tr>
+    <tr>
+      <td>Anorexia</td>
+      <td>core.multinoulli</td>
+    </tr>
+    <tr>
+      <td>Liver Big</td>
+      <td>core.multinoulli</td>
+    </tr>
+    <tr>
+      <td>Liver Firm</td>
+      <td>core.multinoulli</td>
+    </tr>
+    <tr>
+      <td>Spleen Palpable</td>
+      <td>core.multinoulli</td>
+    </tr>
+    <tr>
+      <td>Spiders</td>
+      <td>core.multinoulli</td>
+    </tr>
+    <tr>
+      <td>Ascites</td>
+      <td>core.multinoulli</td>
+    </tr>
+    <tr>
+      <td>Varices</td>
+      <td>core.multinoulli</td>
+    </tr>
+    <tr>
+      <td>Bilirubin</td>
+      <td>core.lognormal</td>
+    </tr>
+    <tr>
+      <td>Alk Phosphate</td>
+      <td>core.lognormal</td>
+    </tr>
+    <tr>
+      <td>Sgot</td>
+      <td>core.truncated_normal</td>
+    </tr>
+    <tr>
+      <td>Albumin</td>
+      <td>core.normal</td>
+    </tr>
+    <tr>
+      <td>Protime</td>
+      <td>core.truncated_normal</td>
+    </tr>
+    <tr>
+      <td>Histology</td>
+      <td>core.multinoulli</td>
+    </tr>
+    <tr>
+      <td>Class</td>
+      <td>core.multinoulli</td>
+    </tr>
+  </tbody>
+</table></td></tr>
 
 </table>

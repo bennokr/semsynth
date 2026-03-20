@@ -1,14 +1,14 @@
 {
   "backend": "metasyn",
   "summary": {
-    "disc_jsd_mean": 0.159159421602498,
-    "disc_jsd_median": 0.13039699012963282,
-    "cont_ks_mean": 0.2725,
-    "cont_w1_mean": 0.12838516033649874
+    "disc_jsd_mean": 0.18645166811196784,
+    "disc_jsd_median": 0.20972923998376716,
+    "cont_ks_mean": 0.22666666666666668,
+    "cont_w1_mean": 0.1333607312959373
   },
   "train_rows": 80,
   "test_rows": 20,
   "synth_rows": 100,
-  "discrete_cols": 6,
-  "continuous_cols": 4
+  "discrete_cols": 7,
+  "continuous_cols": 3
 }

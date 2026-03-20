@@ -73,7 +73,7 @@ table.per-var-dist thead th { text-align: center; }
     </tr>
     <tr>
     <td style="text-align: left;">Missingness</td>
-    <td style="text-align: left;">modeled 9 of 48 (seed 42)</td>
+    <td style="text-align: left;">Not modeled</td>
     </tr>
     </tbody>
     </table>
@@ -90,12 +90,12 @@ table.per-var-dist thead th { text-align: center; }
     <tr>
     <td style="text-align: left;">race</td>
     <td style="text-align: left;">discrete</td>
-    <td style="text-align: left;">Caucasian: 77840 (76.49%)<br />AfricanAmerican: 19622 (19.28%)<br />Hispanic: 2094 (2.06%)<br />Other: 1542 (1.52%)<br />Asian: 668 (0.66%)</td>
+    <td style="text-align: left;">Caucasian [Caucasian]: 77840 (76.49%)<br />African American [AfricanAmerican]: 19622 (19.28%)<br />Hispanic [Hispanic]: 2094 (2.06%)<br />Other [Other]: 1542 (1.52%)<br />Asian [Asian]: 668 (0.66%)</td>
     </tr>
     <tr>
     <td style="text-align: left;">gender</td>
     <td style="text-align: left;">discrete</td>
-    <td style="text-align: left;">Female: 54708 (53.76%)<br />Male: 47055 (46.24%)<br />Unknown/Invalid: 3 (0.00%)</td>
+    <td style="text-align: left;">Female [Female]: 54708 (53.76%)<br />Male [Male]: 47055 (46.24%)<br />Unknown/Invalid [Unknown/Invalid]: 3 (0.00%)</td>
     </tr>
     <tr>
     <td style="text-align: left;">age</td>
@@ -329,92 +329,74 @@ table.per-var-dist thead th { text-align: center; }
     </tr>
     </tbody>
     </table>
-    <h2>Missingness model</h2>
-    <ul>
-    <li>Columns with learned missingness: 9 of 48</li>
-    <li>Columns without missingness: 39| Column            |   Missing rate |   Missing % |
-    |:------------------|---------------:|------------:|
-    | weight            |         0.9686 |       96.86 |
-    | max_glu_serum     |         0.9475 |       94.75 |
-    | A1Cresult         |         0.8328 |       83.28 |
-    | medical_specialty |         0.4908 |       49.08 |
-    | payer_code        |         0.3956 |       39.56 |
-    | race              |         0.0223 |        2.23 |
-    | diag_3            |         0.014  |        1.4  |
-    | diag_2            |         0.0035 |        0.35 |
-    | diag_1            |         0.0002 |        0.02 |</li>
-    </ul>
     <h2>Fidelity summary</h2>
     <table>
     <thead>
     <tr>
     <th style="text-align: left;">model</th>
     <th style="text-align: left;">backend</th>
-    <th style="text-align: right;">disc_jsd_mean</th>
-    <th style="text-align: right;">disc_jsd_median</th>
-    <th style="text-align: right;">cont_ks_mean</th>
-    <th style="text-align: right;">cont_w1_mean</th>
-    <th style="text-align: left;">privacy_overlap</th>
-    <th style="text-align: left;">downstream_sign_match</th>
+    <th style="text-align: right;">disc jsd mean</th>
+    <th style="text-align: right;">disc jsd median</th>
+    <th style="text-align: right;">cont ks mean</th>
+    <th style="text-align: right;">cont w1 mean</th>
+    <th style="text-align: left;">downstream sign match</th>
     </tr>
     </thead>
     <tbody>
     <tr>
     <td style="text-align: left;">metasyn</td>
     <td style="text-align: left;">metasyn</td>
-    <td style="text-align: right;">0.0821</td>
-    <td style="text-align: right;">0.0479</td>
-    <td style="text-align: right;">0.5345</td>
-    <td style="text-align: right;">1.1167</td>
-    <td style="text-align: left;"></td>
-    <td style="text-align: left;"></td>
-    </tr>
-    <tr>
-    <td style="text-align: left;">clg_mi2</td>
-    <td style="text-align: left;">pybnesian</td>
-    <td style="text-align: right;">0.0824</td>
-    <td style="text-align: right;">0.0466</td>
-    <td style="text-align: right;">0.3162</td>
-    <td style="text-align: right;">1.4456</td>
-    <td style="text-align: left;"></td>
+    <td style="text-align: right;">0.0793</td>
+    <td style="text-align: right;">0.0446</td>
+    <td style="text-align: right;">0.5363</td>
+    <td style="text-align: right;">1.2006</td>
     <td style="text-align: left;"></td>
     </tr>
+    </tbody>
+    </table>
+    <h2>Privacy summary</h2>
+    <table>
+    <thead>
     <tr>
-    <td style="text-align: left;">semi_mi5</td>
-    <td style="text-align: left;">pybnesian</td>
-    <td style="text-align: right;">0.0824</td>
-    <td style="text-align: right;">0.0466</td>
-    <td style="text-align: right;">0.3162</td>
-    <td style="text-align: right;">1.4456</td>
-    <td style="text-align: left;"></td>
-    <td style="text-align: left;"></td>
+    <th style="text-align: left;">model</th>
+    <th style="text-align: left;">backend</th>
+    <th style="text-align: right;">n real</th>
+    <th style="text-align: right;">n synth</th>
+    <th style="text-align: right;">exact overlap rate</th>
+    <th style="text-align: right;">near duplicate rate eps</th>
+    <th style="text-align: right;">nn distance mean</th>
+    <th style="text-align: right;">k min</th>
+    <th style="text-align: right;">k pct lt5</th>
+    <th style="text-align: right;">k map</th>
+    <th style="text-align: right;">rare qi reproduction rate</th>
+    <th style="text-align: right;">identifiability score</th>
+    <th style="text-align: right;">delta presence</th>
     </tr>
+    </thead>
+    <tbody>
     <tr>
-    <td style="text-align: left;">ctgan_fast</td>
-    <td style="text-align: left;">synthcity</td>
-    <td style="text-align: right;">0.2643</td>
-    <td style="text-align: right;">0.1706</td>
-    <td style="text-align: right;">0.3728</td>
-    <td style="text-align: right;">7.7862</td>
-    <td style="text-align: left;"></td>
-    <td style="text-align: left;"></td>
-    </tr>
-    <tr>
-    <td style="text-align: left;">tvae_quick</td>
-    <td style="text-align: left;">synthcity</td>
-    <td style="text-align: right;">0.1297</td>
-    <td style="text-align: right;">0.0668</td>
-    <td style="text-align: right;">0.1253</td>
-    <td style="text-align: right;">1.3886</td>
-    <td style="text-align: left;"></td>
-    <td style="text-align: left;"></td>
+    <td style="text-align: left;">metasyn</td>
+    <td style="text-align: left;">metasyn</td>
+    <td style="text-align: right;">101766</td>
+    <td style="text-align: right;">1000</td>
+    <td style="text-align: right;">0.046</td>
+    <td style="text-align: right;">0.987</td>
+    <td style="text-align: right;">0.013</td>
+    <td style="text-align: right;">1</td>
+    <td style="text-align: right;">0.11</td>
+    <td style="text-align: right;">9</td>
+    <td style="text-align: right;">0.5256</td>
+    <td style="text-align: right;">0.006</td>
+    <td style="text-align: right;">1.48</td>
     </tr>
     </tbody>
     </table>
     <h2>Models</h2>
     <table>
     <tr><th>UMAP</th><th>Details</th><th>Structure</th></tr>
-    <tr><td></td><td>
+    <tr><td><img src='umap_real.png' width='280'/></td><td>
+    <h3>Real data</h3></td><td></td></tr>
+    <tr><td><img src='models/metasyn/umap.png' width='280'/></td><td>
 
     <h3>Model: metasyn (metasyn)</h3>
     <ul>
@@ -422,62 +404,371 @@ table.per-var-dist thead th { text-align: center; }
     <li> <a href="models/metasyn/synthetic.csv">Synthetic CSV</a></li>
     <li> <a href="models/metasyn/per_variable_metrics.csv">Per-variable metrics</a></li>
     <li> <a href="models/metasyn/metrics.json">Metrics JSON</a></li>
+    <li> <a href="models/metasyn/metrics.privacy.json">Privacy metrics</a></li>
+    <li> <a href="models/metasyn/metrics.downstream.json">Downstream metrics</a></li>
     </ul>
-
+    <details class="model-subtable"><summary><strong>Per-variable fidelity</strong></summary>
+    <table class="dataframe">
+      <thead>
+        <tr style="text-align: right;">
+          <th>variable</th>
+          <th>type</th>
+          <th>KS</th>
+          <th>W1</th>
+          <th>JSD</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td>race</td>
+          <td>discrete</td>
+          <td></td>
+          <td></td>
+          <td>0.0728</td>
+        </tr>
+        <tr>
+          <td>gender</td>
+          <td>discrete</td>
+          <td></td>
+          <td></td>
+          <td>0.0703</td>
+        </tr>
+        <tr>
+          <td>age</td>
+          <td>discrete</td>
+          <td></td>
+          <td></td>
+          <td>0.0662</td>
+        </tr>
+        <tr>
+          <td>weight</td>
+          <td>discrete</td>
+          <td></td>
+          <td></td>
+          <td>0.1024</td>
+        </tr>
+        <tr>
+          <td>admission_type_id</td>
+          <td>discrete</td>
+          <td></td>
+          <td></td>
+          <td>0.0916</td>
+        </tr>
+        <tr>
+          <td>discharge_disposition_id</td>
+          <td>continuous</td>
+          <td>0.615</td>
+          <td>1.6249</td>
+          <td></td>
+        </tr>
+        <tr>
+          <td>admission_source_id</td>
+          <td>discrete</td>
+          <td></td>
+          <td></td>
+          <td>0.1389</td>
+        </tr>
+        <tr>
+          <td>time_in_hospital</td>
+          <td>discrete</td>
+          <td></td>
+          <td></td>
+          <td>0.0655</td>
+        </tr>
+        <tr>
+          <td>payer_code</td>
+          <td>discrete</td>
+          <td></td>
+          <td></td>
+          <td>0.1445</td>
+        </tr>
+        <tr>
+          <td>medical_specialty</td>
+          <td>discrete</td>
+          <td></td>
+          <td></td>
+          <td>0.1993</td>
+        </tr>
+      </tbody>
+    </table>
+    </details><details class="model-subtable"><summary><strong>Downstream metrics</strong></summary>
+    <table class="dataframe">
+      <thead>
+        <tr style="text-align: right;">
+          <th>metric</th>
+          <th>value</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td>sign_match_rate</td>
+          <td></td>
+        </tr>
+        <tr>
+          <td>formula</td>
+          <td></td>
+        </tr>
+      </tbody>
+    </table>
+    </details><details class="model-subtable"><summary><strong>Privacy metrics</strong></summary>
+    <table class="dataframe">
+      <thead>
+        <tr style="text-align: right;">
+          <th>metric</th>
+          <th>value</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td>n_real</td>
+          <td>101766</td>
+        </tr>
+        <tr>
+          <td>n_synth</td>
+          <td>1000</td>
+        </tr>
+        <tr>
+          <td>exact_overlap_rate</td>
+          <td>0.046</td>
+        </tr>
+        <tr>
+          <td>near_duplicate_rate_eps</td>
+          <td>0.987</td>
+        </tr>
+        <tr>
+          <td>nn_distance_mean</td>
+          <td>0.013</td>
+        </tr>
+        <tr>
+          <td>k_min</td>
+          <td>1</td>
+        </tr>
+        <tr>
+          <td>k_pct_lt5</td>
+          <td>0.11</td>
+        </tr>
+        <tr>
+          <td>k_map</td>
+          <td>9</td>
+        </tr>
+        <tr>
+          <td>rare_qi_reproduction_rate</td>
+          <td>0.5256</td>
+        </tr>
+        <tr>
+          <td>identifiability_score</td>
+          <td>0.006</td>
+        </tr>
+        <tr>
+          <td>delta_presence</td>
+          <td>1.48</td>
+        </tr>
+      </tbody>
+    </table>
+    </details>
     </td><td>
-    </td></tr>
-
-    <tr><td></td><td>
-
-    <h3>Model: clg_mi2 (pybnesian)</h3>
-    <ul>
-    <li>Seed: 42, rows: 1000</li>
-    <li> Params: <tt>{"max_indegree": 2, "operators": ["arcs"], "score": "bic", "type": "clg"}</tt></li><li> <a href="models/clg_mi2/synthetic.csv">Synthetic CSV</a></li>
-    <li> <a href="models/clg_mi2/per_variable_metrics.csv">Per-variable metrics</a></li>
-    <li> <a href="models/clg_mi2/metrics.json">Metrics JSON</a></li>
-    </ul>
-
-    </td><td>
-    </td></tr>
-
-    <tr><td></td><td>
-
-    <h3>Model: semi_mi5 (pybnesian)</h3>
-    <ul>
-    <li>Seed: 42, rows: 1000</li>
-    <li> Params: <tt>{"max_indegree": 5, "operators": ["arcs"], "score": "bic", "type": "semiparametric"}</tt></li><li> <a href="models/semi_mi5/synthetic.csv">Synthetic CSV</a></li>
-    <li> <a href="models/semi_mi5/per_variable_metrics.csv">Per-variable metrics</a></li>
-    <li> <a href="models/semi_mi5/metrics.json">Metrics JSON</a></li>
-    </ul>
-
-    </td><td>
-    </td></tr>
-
-    <tr><td></td><td>
-
-    <h3>Model: ctgan_fast (synthcity)</h3>
-    <ul>
-    <li>Seed: 42, rows: 1000</li>
-    <li> Params: <tt>{"batch_size": 256, "n_iter": 5}</tt></li><li> <a href="models/ctgan_fast/synthetic.csv">Synthetic CSV</a></li>
-    <li> <a href="models/ctgan_fast/per_variable_metrics.csv">Per-variable metrics</a></li>
-    <li> <a href="models/ctgan_fast/metrics.json">Metrics JSON</a></li>
-    </ul>
-
-    </td><td>
-    </td></tr>
-
-    <tr><td></td><td>
-
-    <h3>Model: tvae_quick (synthcity)</h3>
-    <ul>
-    <li>Seed: 42, rows: 1000</li>
-    <li> Params: <tt>{"batch_size": 256}</tt></li><li> <a href="models/tvae_quick/synthetic.csv">Synthetic CSV</a></li>
-    <li> <a href="models/tvae_quick/per_variable_metrics.csv">Per-variable metrics</a></li>
-    <li> <a href="models/tvae_quick/metrics.json">Metrics JSON</a></li>
-    </ul>
-
-    </td><td>
-    </td></tr>
+    <table class="dataframe">
+      <thead>
+        <tr style="text-align: right;">
+          <th>variable</th>
+          <th>distribution</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td>race</td>
+          <td>core.multinoulli</td>
+        </tr>
+        <tr>
+          <td>gender</td>
+          <td>core.multinoulli</td>
+        </tr>
+        <tr>
+          <td>age</td>
+          <td>core.multinoulli</td>
+        </tr>
+        <tr>
+          <td>weight</td>
+          <td>core.multinoulli</td>
+        </tr>
+        <tr>
+          <td>admission_type_id</td>
+          <td>core.multinoulli</td>
+        </tr>
+        <tr>
+          <td>discharge_disposition_id</td>
+          <td>core.truncated_normal</td>
+        </tr>
+        <tr>
+          <td>admission_source_id</td>
+          <td>core.multinoulli</td>
+        </tr>
+        <tr>
+          <td>time_in_hospital</td>
+          <td>core.multinoulli</td>
+        </tr>
+        <tr>
+          <td>payer_code</td>
+          <td>core.multinoulli</td>
+        </tr>
+        <tr>
+          <td>medical_specialty</td>
+          <td>core.multinoulli</td>
+        </tr>
+        <tr>
+          <td>num_lab_procedures</td>
+          <td>core.truncated_normal</td>
+        </tr>
+        <tr>
+          <td>num_procedures</td>
+          <td>core.multinoulli</td>
+        </tr>
+        <tr>
+          <td>num_medications</td>
+          <td>core.truncated_normal</td>
+        </tr>
+        <tr>
+          <td>number_outpatient</td>
+          <td>core.truncated_normal</td>
+        </tr>
+        <tr>
+          <td>number_emergency</td>
+          <td>core.truncated_normal</td>
+        </tr>
+        <tr>
+          <td>number_inpatient</td>
+          <td>core.truncated_normal</td>
+        </tr>
+        <tr>
+          <td>diag_1</td>
+          <td>core.multinoulli</td>
+        </tr>
+        <tr>
+          <td>diag_2</td>
+          <td>core.multinoulli</td>
+        </tr>
+        <tr>
+          <td>diag_3</td>
+          <td>core.multinoulli</td>
+        </tr>
+        <tr>
+          <td>number_diagnoses</td>
+          <td>core.multinoulli</td>
+        </tr>
+        <tr>
+          <td>max_glu_serum</td>
+          <td>core.multinoulli</td>
+        </tr>
+        <tr>
+          <td>A1Cresult</td>
+          <td>core.multinoulli</td>
+        </tr>
+        <tr>
+          <td>metformin</td>
+          <td>core.multinoulli</td>
+        </tr>
+        <tr>
+          <td>repaglinide</td>
+          <td>core.multinoulli</td>
+        </tr>
+        <tr>
+          <td>nateglinide</td>
+          <td>core.multinoulli</td>
+        </tr>
+        <tr>
+          <td>chlorpropamide</td>
+          <td>core.multinoulli</td>
+        </tr>
+        <tr>
+          <td>glimepiride</td>
+          <td>core.multinoulli</td>
+        </tr>
+        <tr>
+          <td>acetohexamide</td>
+          <td>core.multinoulli</td>
+        </tr>
+        <tr>
+          <td>glipizide</td>
+          <td>core.multinoulli</td>
+        </tr>
+        <tr>
+          <td>glyburide</td>
+          <td>core.multinoulli</td>
+        </tr>
+        <tr>
+          <td>tolbutamide</td>
+          <td>core.multinoulli</td>
+        </tr>
+        <tr>
+          <td>pioglitazone</td>
+          <td>core.multinoulli</td>
+        </tr>
+        <tr>
+          <td>rosiglitazone</td>
+          <td>core.multinoulli</td>
+        </tr>
+        <tr>
+          <td>acarbose</td>
+          <td>core.multinoulli</td>
+        </tr>
+        <tr>
+          <td>miglitol</td>
+          <td>core.multinoulli</td>
+        </tr>
+        <tr>
+          <td>troglitazone</td>
+          <td>core.multinoulli</td>
+        </tr>
+        <tr>
+          <td>tolazamide</td>
+          <td>core.multinoulli</td>
+        </tr>
+        <tr>
+          <td>examide</td>
+          <td>core.multinoulli</td>
+        </tr>
+        <tr>
+          <td>citoglipton</td>
+          <td>core.multinoulli</td>
+        </tr>
+        <tr>
+          <td>insulin</td>
+          <td>core.multinoulli</td>
+        </tr>
+        <tr>
+          <td>glyburide-metformin</td>
+          <td>core.multinoulli</td>
+        </tr>
+        <tr>
+          <td>glipizide-metformin</td>
+          <td>core.multinoulli</td>
+        </tr>
+        <tr>
+          <td>glimepiride-pioglitazone</td>
+          <td>core.multinoulli</td>
+        </tr>
+        <tr>
+          <td>metformin-rosiglitazone</td>
+          <td>core.multinoulli</td>
+        </tr>
+        <tr>
+          <td>metformin-pioglitazone</td>
+          <td>core.multinoulli</td>
+        </tr>
+        <tr>
+          <td>change</td>
+          <td>core.multinoulli</td>
+        </tr>
+        <tr>
+          <td>diabetesMed</td>
+          <td>core.multinoulli</td>
+        </tr>
+        <tr>
+          <td>readmitted</td>
+          <td>core.multinoulli</td>
+        </tr>
+      </tbody>
+    </table></td></tr>
 
     </table>
   </main>

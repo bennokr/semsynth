@@ -61,11 +61,11 @@ table.per-var-dist thead th { text-align: center; }
     </tr>
     <tr>
     <td style="text-align: left;">Discrete</td>
-    <td style="text-align: left;">11</td>
+    <td style="text-align: left;">13</td>
     </tr>
     <tr>
     <td style="text-align: left;">Continuous</td>
-    <td style="text-align: left;">14</td>
+    <td style="text-align: left;">12</td>
     </tr>
     <tr>
     <td style="text-align: left;">SemMap</td>
@@ -73,7 +73,7 @@ table.per-var-dist thead th { text-align: center; }
     </tr>
     <tr>
     <td style="text-align: left;">Missingness</td>
-    <td style="text-align: left;">modeled 24 of 25 (seed 42)</td>
+    <td style="text-align: left;">Not modeled</td>
     </tr>
     </tbody>
     </table>
@@ -104,33 +104,33 @@ table.per-var-dist thead th { text-align: center; }
     </tr>
     <tr>
     <td style="text-align: left;">al</td>
-    <td style="text-align: left;">continuous</td>
-    <td style="text-align: left;">0.7975 ± 1.4131 [0, 0, 0, 1, 4]</td>
+    <td style="text-align: left;">discrete</td>
+    <td style="text-align: left;">Albumin negative [0]: 116 (73.42%)<br />Albumin 2+ [3]: 15 (9.49%)<br />Albumin 3+ [4]: 15 (9.49%)<br />Albumin 1+ [2]: 9 (5.70%)<br />Trace albumin [1]: 3 (1.90%)<br />Albumin 4+ [5]: 0 (0.00%)</td>
     </tr>
     <tr>
     <td style="text-align: left;">su</td>
-    <td style="text-align: left;">continuous</td>
-    <td style="text-align: left;">0.2532 ± 0.8134 [0, 0, 0, 0, 5]</td>
+    <td style="text-align: left;">discrete</td>
+    <td style="text-align: left;">Sugar negative [0]: 140 (88.61%)<br />Trace sugar [1]: 6 (3.80%)<br />Sugar 1+ [2]: 6 (3.80%)<br />Sugar 2+ [3]: 3 (1.90%)<br />Sugar 3+ [4]: 2 (1.27%)<br />Sugar 4+ [5]: 1 (0.63%)</td>
     </tr>
     <tr>
     <td style="text-align: left;">rbc</td>
     <td style="text-align: left;">discrete</td>
-    <td style="text-align: left;">normal: 140 (88.61%)</td>
+    <td style="text-align: left;">Normal [normal]: 140 (88.61%)</td>
     </tr>
     <tr>
     <td style="text-align: left;">pc</td>
     <td style="text-align: left;">discrete</td>
-    <td style="text-align: left;">normal: 129 (81.65%)</td>
+    <td style="text-align: left;">Normal [normal]: 129 (81.65%)</td>
     </tr>
     <tr>
     <td style="text-align: left;">pcc</td>
     <td style="text-align: left;">discrete</td>
-    <td style="text-align: left;">notpresent: 144 (91.14%)</td>
+    <td style="text-align: left;">Not present [notpresent]: 144 (91.14%)</td>
     </tr>
     <tr>
     <td style="text-align: left;">ba</td>
     <td style="text-align: left;">discrete</td>
-    <td style="text-align: left;">notpresent: 146 (92.41%)</td>
+    <td style="text-align: left;">Not present [notpresent]: 146 (92.41%)</td>
     </tr>
     <tr>
     <td style="text-align: left;">bgr</td>
@@ -180,141 +180,108 @@ table.per-var-dist thead th { text-align: center; }
     <tr>
     <td style="text-align: left;">htn</td>
     <td style="text-align: left;">discrete</td>
-    <td style="text-align: left;">yes: 34 (21.52%)</td>
+    <td style="text-align: left;">Yes [yes]: 34 (21.52%)</td>
     </tr>
     <tr>
     <td style="text-align: left;">dm</td>
     <td style="text-align: left;">discrete</td>
-    <td style="text-align: left;">no: 130 (82.28%)<br />yes: 28 (17.72%)<br />no: 0 (0.00%)</td>
+    <td style="text-align: left;">No [no]: 130 (82.28%)<br />Yes [yes]: 28 (17.72%)<br />No [no]: 0 (0.00%)</td>
     </tr>
     <tr>
     <td style="text-align: left;">cad</td>
     <td style="text-align: left;">discrete</td>
-    <td style="text-align: left;">yes: 11 (6.96%)</td>
+    <td style="text-align: left;">Yes [yes]: 11 (6.96%)</td>
     </tr>
     <tr>
     <td style="text-align: left;">appet</td>
     <td style="text-align: left;">discrete</td>
-    <td style="text-align: left;">good: 139 (87.97%)</td>
+    <td style="text-align: left;">Good appetite [good]: 139 (87.97%)</td>
     </tr>
     <tr>
     <td style="text-align: left;">pe</td>
     <td style="text-align: left;">discrete</td>
-    <td style="text-align: left;">yes: 20 (12.66%)</td>
+    <td style="text-align: left;">Yes [yes]: 20 (12.66%)</td>
     </tr>
     <tr>
     <td style="text-align: left;">ane</td>
     <td style="text-align: left;">discrete</td>
-    <td style="text-align: left;">yes: 16 (10.13%)</td>
+    <td style="text-align: left;">Yes [yes]: 16 (10.13%)</td>
     </tr>
     <tr>
     <td style="text-align: left;">class</td>
     <td style="text-align: left;">discrete</td>
-    <td style="text-align: left;">notckd: 115 (72.78%)<br />ckd: 43 (27.22%)<br />ckd: 0 (0.00%)</td>
+    <td style="text-align: left;">Not chronic kidney disease [notckd]: 115 (72.78%)<br />Chronic kidney disease [ckd]: 43 (27.22%)<br />Chronic kidney disease [ckd]: 0 (0.00%)</td>
     </tr>
     </tbody>
     </table>
-    <h2>Missingness model</h2>
-    <ul>
-    <li>Columns with learned missingness: 24 of 25</li>
-    <li>Columns without missingness: 1| Column   |   Missing rate |   Missing % |
-    |:---------|---------------:|------------:|
-    | rbc      |         0.38   |       38    |
-    | rbcc     |         0.3275 |       32.75 |
-    | wbcc     |         0.265  |       26.5  |
-    | pot      |         0.22   |       22    |
-    | sod      |         0.2175 |       21.75 |
-    | pcv      |         0.1775 |       17.75 |
-    | pc       |         0.1625 |       16.25 |
-    | hemo     |         0.13   |       13    |
-    | su       |         0.1225 |       12.25 |
-    | sg       |         0.1175 |       11.75 |
-    | al       |         0.115  |       11.5  |
-    | bgr      |         0.11   |       11    |
-    | bu       |         0.0475 |        4.75 |
-    | sc       |         0.0425 |        4.25 |
-    | bp       |         0.03   |        3    |
-    | age      |         0.0225 |        2.25 |
-    | ba       |         0.01   |        1    |
-    | pcc      |         0.01   |        1    |
-    | dm       |         0.005  |        0.5  |
-    | cad      |         0.005  |        0.5  |
-    | htn      |         0.005  |        0.5  |
-    | appet    |         0.0025 |        0.25 |
-    | ane      |         0.0025 |        0.25 |
-    | pe       |         0.0025 |        0.25 |</li>
-    </ul>
     <h2>Fidelity summary</h2>
     <table>
     <thead>
     <tr>
     <th style="text-align: left;">model</th>
     <th style="text-align: left;">backend</th>
-    <th style="text-align: right;">disc_jsd_mean</th>
-    <th style="text-align: right;">disc_jsd_median</th>
-    <th style="text-align: right;">cont_ks_mean</th>
-    <th style="text-align: right;">cont_w1_mean</th>
-    <th style="text-align: left;">privacy_overlap</th>
-    <th style="text-align: left;">downstream_sign_match</th>
+    <th style="text-align: right;">disc jsd mean</th>
+    <th style="text-align: right;">disc jsd median</th>
+    <th style="text-align: right;">cont ks mean</th>
+    <th style="text-align: right;">cont w1 mean</th>
+    <th style="text-align: right;">downstream sign match</th>
     </tr>
     </thead>
     <tbody>
     <tr>
     <td style="text-align: left;">metasyn</td>
     <td style="text-align: left;">metasyn</td>
-    <td style="text-align: right;">0.0539</td>
-    <td style="text-align: right;">0.0557</td>
-    <td style="text-align: right;">0.16</td>
-    <td style="text-align: right;">157.065</td>
-    <td style="text-align: left;"></td>
-    <td style="text-align: left;"></td>
+    <td style="text-align: right;">0.0609</td>
+    <td style="text-align: right;">0.0479</td>
+    <td style="text-align: right;">0.2164</td>
+    <td style="text-align: right;">61.229</td>
+    <td style="text-align: right;">0.5263</td>
     </tr>
+    </tbody>
+    </table>
+    <h2>Privacy summary</h2>
+    <table>
+    <thead>
     <tr>
-    <td style="text-align: left;">clg_mi2</td>
-    <td style="text-align: left;">pybnesian</td>
-    <td style="text-align: right;">0.0857</td>
-    <td style="text-align: right;">0.058</td>
-    <td style="text-align: right;">0.1592</td>
-    <td style="text-align: right;">198.246</td>
-    <td style="text-align: left;"></td>
-    <td style="text-align: left;"></td>
+    <th style="text-align: left;">model</th>
+    <th style="text-align: left;">backend</th>
+    <th style="text-align: right;">n real</th>
+    <th style="text-align: right;">n synth</th>
+    <th style="text-align: right;">exact overlap rate</th>
+    <th style="text-align: right;">near duplicate rate eps</th>
+    <th style="text-align: right;">nn distance mean</th>
+    <th style="text-align: right;">k min</th>
+    <th style="text-align: right;">k pct lt5</th>
+    <th style="text-align: right;">k map</th>
+    <th style="text-align: right;">rare qi reproduction rate</th>
+    <th style="text-align: left;">identifiability score</th>
+    <th style="text-align: right;">delta presence</th>
     </tr>
+    </thead>
+    <tbody>
     <tr>
-    <td style="text-align: left;">semi_mi5</td>
-    <td style="text-align: left;">pybnesian</td>
-    <td style="text-align: right;">0.0857</td>
-    <td style="text-align: right;">0.058</td>
-    <td style="text-align: right;">0.1592</td>
-    <td style="text-align: right;">198.246</td>
+    <td style="text-align: left;">metasyn</td>
+    <td style="text-align: left;">metasyn</td>
+    <td style="text-align: right;">158</td>
+    <td style="text-align: right;">400</td>
+    <td style="text-align: right;">0</td>
+    <td style="text-align: right;">0.9937</td>
+    <td style="text-align: right;">0.0172</td>
+    <td style="text-align: right;">1</td>
+    <td style="text-align: right;">1</td>
+    <td style="text-align: right;">2</td>
+    <td style="text-align: right;">0</td>
     <td style="text-align: left;"></td>
-    <td style="text-align: left;"></td>
-    </tr>
-    <tr>
-    <td style="text-align: left;">ctgan_fast</td>
-    <td style="text-align: left;">synthcity</td>
-    <td style="text-align: right;">0.2545</td>
-    <td style="text-align: right;">0.2495</td>
-    <td style="text-align: right;">0.6192</td>
-    <td style="text-align: right;">1535.26</td>
-    <td style="text-align: left;"></td>
-    <td style="text-align: left;"></td>
-    </tr>
-    <tr>
-    <td style="text-align: left;">tvae_quick</td>
-    <td style="text-align: left;">synthcity</td>
-    <td style="text-align: right;">0.1255</td>
-    <td style="text-align: right;">0.1375</td>
-    <td style="text-align: right;">0.2225</td>
-    <td style="text-align: right;">386.616</td>
-    <td style="text-align: left;"></td>
-    <td style="text-align: left;"></td>
+    <td style="text-align: right;">2.4286</td>
     </tr>
     </tbody>
     </table>
     <h2>Models</h2>
     <table>
     <tr><th>UMAP</th><th>Details</th><th>Structure</th></tr>
-    <tr><td></td><td>
+    <tr><td><img src='umap_real.png' width='280'/></td><td>
+    <h3>Real data</h3></td><td></td></tr>
+    <tr><td><img src='models/metasyn/umap.png' width='280'/></td><td>
 
     <h3>Model: metasyn (metasyn)</h3>
     <ul>
@@ -322,67 +289,275 @@ table.per-var-dist thead th { text-align: center; }
     <li> <a href="models/metasyn/synthetic.csv">Synthetic CSV</a></li>
     <li> <a href="models/metasyn/per_variable_metrics.csv">Per-variable metrics</a></li>
     <li> <a href="models/metasyn/metrics.json">Metrics JSON</a></li>
+    <li> <a href="models/metasyn/metrics.privacy.json">Privacy metrics</a></li>
     <li> <a href="models/metasyn/metrics.downstream.json">Downstream metrics</a></li>
     </ul>
-
+    <details class="model-subtable"><summary><strong>Per-variable fidelity</strong></summary>
+    <table class="dataframe">
+      <thead>
+        <tr style="text-align: right;">
+          <th>variable</th>
+          <th>type</th>
+          <th>KS</th>
+          <th>W1</th>
+          <th>JSD</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td>age</td>
+          <td>continuous</td>
+          <td>0.1325</td>
+          <td>2.6479</td>
+          <td></td>
+        </tr>
+        <tr>
+          <td>bp</td>
+          <td>continuous</td>
+          <td>0.2925</td>
+          <td>3.5696</td>
+          <td></td>
+        </tr>
+        <tr>
+          <td>sg</td>
+          <td>continuous</td>
+          <td>0.4062</td>
+          <td>0.0019</td>
+          <td></td>
+        </tr>
+        <tr>
+          <td>al</td>
+          <td>discrete</td>
+          <td></td>
+          <td></td>
+          <td>0.0838</td>
+        </tr>
+        <tr>
+          <td>su</td>
+          <td>discrete</td>
+          <td></td>
+          <td></td>
+          <td>0.2015</td>
+        </tr>
+        <tr>
+          <td>rbc</td>
+          <td>discrete</td>
+          <td></td>
+          <td></td>
+          <td>0.0458</td>
+        </tr>
+        <tr>
+          <td>pc</td>
+          <td>discrete</td>
+          <td></td>
+          <td></td>
+          <td>0.0921</td>
+        </tr>
+        <tr>
+          <td>pcc</td>
+          <td>discrete</td>
+          <td></td>
+          <td></td>
+          <td>0.0289</td>
+        </tr>
+        <tr>
+          <td>ba</td>
+          <td>discrete</td>
+          <td></td>
+          <td></td>
+          <td>0.0632</td>
+        </tr>
+        <tr>
+          <td>bgr</td>
+          <td>continuous</td>
+          <td>0.265</td>
+          <td>19.8237</td>
+          <td></td>
+        </tr>
+      </tbody>
+    </table>
+    </details><details class="model-subtable"><summary><strong>Downstream metrics</strong></summary>
+    <table class="dataframe">
+      <thead>
+        <tr style="text-align: right;">
+          <th>metric</th>
+          <th>value</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td>sign_match_rate</td>
+          <td>0.5263</td>
+        </tr>
+        <tr>
+          <td>formula</td>
+          <td>col_class ~ Q('age') + Q('bp') + Q('sg') + Q('al') + Q('su') + C(Q('rbc'), levels=['normal', 'abnormal']) + C(Q('pc'), levels=['normal', 'abnormal']) + C(Q('pcc'), levels=['present', 'notpresent']) + C(Q('ba'), levels=['present', 'notpresent']) + Q('bgr') + Q('bu') + Q('sc') + Q('sod') + Q('pot') + Q('hemo') + Q('pcv') + Q('wbcc') + Q('rbcc') + C(Q('htn'), levels=['yes', 'no']) + C(Q('dm'), levels=['yes', 'no']) + C(Q('cad'), levels=['yes', 'no']) + C(Q('appet'), levels=['good', 'poor']) + C(Q('pe'), levels=['yes', 'no']) + C(Q('ane'), levels=['yes', 'no']) + Q('age'):Q('bp') + Q('bp'):Q('sg') + Q('sg'):Q('al') + Q('al'):Q('su') + Q('su'):C(Q('rbc'), levels=['normal', 'abnormal'])</td>
+        </tr>
+      </tbody>
+    </table>
+    </details><details class="model-subtable"><summary><strong>Privacy metrics</strong></summary>
+    <table class="dataframe">
+      <thead>
+        <tr style="text-align: right;">
+          <th>metric</th>
+          <th>value</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td>n_real</td>
+          <td>158</td>
+        </tr>
+        <tr>
+          <td>n_synth</td>
+          <td>400</td>
+        </tr>
+        <tr>
+          <td>exact_overlap_rate</td>
+          <td>0</td>
+        </tr>
+        <tr>
+          <td>near_duplicate_rate_eps</td>
+          <td>0.9937</td>
+        </tr>
+        <tr>
+          <td>nn_distance_mean</td>
+          <td>0.0172</td>
+        </tr>
+        <tr>
+          <td>k_min</td>
+          <td>1</td>
+        </tr>
+        <tr>
+          <td>k_pct_lt5</td>
+          <td>1</td>
+        </tr>
+        <tr>
+          <td>k_map</td>
+          <td>2</td>
+        </tr>
+        <tr>
+          <td>rare_qi_reproduction_rate</td>
+          <td>0</td>
+        </tr>
+        <tr>
+          <td>delta_presence</td>
+          <td>2.4286</td>
+        </tr>
+      </tbody>
+    </table>
+    </details>
     </td><td>
-    </td></tr>
-
-    <tr><td><img src='models/clg_mi2/umap.png' width='280'/></td><td>
-
-    <h3>Model: clg_mi2 (pybnesian)</h3>
-    <ul>
-    <li>Seed: 42, rows: 400</li>
-    <li> Params: <tt>{"max_indegree": 2, "operators": ["arcs"], "score": "bic", "type": "clg"}</tt></li><li> <a href="models/clg_mi2/synthetic.csv">Synthetic CSV</a></li>
-    <li> <a href="models/clg_mi2/per_variable_metrics.csv">Per-variable metrics</a></li>
-    <li> <a href="models/clg_mi2/metrics.json">Metrics JSON</a></li>
-    <li> <a href="models/clg_mi2/metrics.downstream.json">Downstream metrics</a></li>
-    </ul>
-
-    </td><td>
-    <a href='models/clg_mi2/structure.png'><img src='models/clg_mi2/structure.png' width='280'/></a></td></tr>
-
-    <tr><td><img src='models/semi_mi5/umap.png' width='280'/></td><td>
-
-    <h3>Model: semi_mi5 (pybnesian)</h3>
-    <ul>
-    <li>Seed: 42, rows: 400</li>
-    <li> Params: <tt>{"max_indegree": 5, "operators": ["arcs"], "score": "bic", "type": "semiparametric"}</tt></li><li> <a href="models/semi_mi5/synthetic.csv">Synthetic CSV</a></li>
-    <li> <a href="models/semi_mi5/per_variable_metrics.csv">Per-variable metrics</a></li>
-    <li> <a href="models/semi_mi5/metrics.json">Metrics JSON</a></li>
-    <li> <a href="models/semi_mi5/metrics.downstream.json">Downstream metrics</a></li>
-    </ul>
-
-    </td><td>
-    <a href='models/semi_mi5/structure.png'><img src='models/semi_mi5/structure.png' width='280'/></a></td></tr>
-
-    <tr><td><img src='models/ctgan_fast/umap.png' width='280'/></td><td>
-
-    <h3>Model: ctgan_fast (synthcity)</h3>
-    <ul>
-    <li>Seed: 42, rows: 400</li>
-    <li> Params: <tt>{"batch_size": 256, "n_iter": 5}</tt></li><li> <a href="models/ctgan_fast/synthetic.csv">Synthetic CSV</a></li>
-    <li> <a href="models/ctgan_fast/per_variable_metrics.csv">Per-variable metrics</a></li>
-    <li> <a href="models/ctgan_fast/metrics.json">Metrics JSON</a></li>
-    <li> <a href="models/ctgan_fast/metrics.downstream.json">Downstream metrics</a></li>
-    </ul>
-
-    </td><td>
-    </td></tr>
-
-    <tr><td><img src='models/tvae_quick/umap.png' width='280'/></td><td>
-
-    <h3>Model: tvae_quick (synthcity)</h3>
-    <ul>
-    <li>Seed: 42, rows: 400</li>
-    <li> Params: <tt>{"batch_size": 256}</tt></li><li> <a href="models/tvae_quick/synthetic.csv">Synthetic CSV</a></li>
-    <li> <a href="models/tvae_quick/per_variable_metrics.csv">Per-variable metrics</a></li>
-    <li> <a href="models/tvae_quick/metrics.json">Metrics JSON</a></li>
-    <li> <a href="models/tvae_quick/metrics.downstream.json">Downstream metrics</a></li>
-    </ul>
-
-    </td><td>
-    </td></tr>
+    <table class="dataframe">
+      <thead>
+        <tr style="text-align: right;">
+          <th>variable</th>
+          <th>distribution</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td>age</td>
+          <td>core.normal</td>
+        </tr>
+        <tr>
+          <td>bp</td>
+          <td>core.lognormal</td>
+        </tr>
+        <tr>
+          <td>sg</td>
+          <td>core.truncated_normal</td>
+        </tr>
+        <tr>
+          <td>al</td>
+          <td>core.multinoulli</td>
+        </tr>
+        <tr>
+          <td>su</td>
+          <td>core.multinoulli</td>
+        </tr>
+        <tr>
+          <td>rbc</td>
+          <td>core.multinoulli</td>
+        </tr>
+        <tr>
+          <td>pc</td>
+          <td>core.multinoulli</td>
+        </tr>
+        <tr>
+          <td>pcc</td>
+          <td>core.multinoulli</td>
+        </tr>
+        <tr>
+          <td>ba</td>
+          <td>core.multinoulli</td>
+        </tr>
+        <tr>
+          <td>bgr</td>
+          <td>core.truncated_normal</td>
+        </tr>
+        <tr>
+          <td>bu</td>
+          <td>core.lognormal</td>
+        </tr>
+        <tr>
+          <td>sc</td>
+          <td>core.lognormal</td>
+        </tr>
+        <tr>
+          <td>sod</td>
+          <td>core.truncated_normal</td>
+        </tr>
+        <tr>
+          <td>pot</td>
+          <td>core.normal</td>
+        </tr>
+        <tr>
+          <td>hemo</td>
+          <td>core.truncated_normal</td>
+        </tr>
+        <tr>
+          <td>pcv</td>
+          <td>core.truncated_normal</td>
+        </tr>
+        <tr>
+          <td>wbcc</td>
+          <td>core.lognormal</td>
+        </tr>
+        <tr>
+          <td>rbcc</td>
+          <td>core.normal</td>
+        </tr>
+        <tr>
+          <td>htn</td>
+          <td>core.multinoulli</td>
+        </tr>
+        <tr>
+          <td>dm</td>
+          <td>core.multinoulli</td>
+        </tr>
+        <tr>
+          <td>cad</td>
+          <td>core.multinoulli</td>
+        </tr>
+        <tr>
+          <td>appet</td>
+          <td>core.multinoulli</td>
+        </tr>
+        <tr>
+          <td>pe</td>
+          <td>core.multinoulli</td>
+        </tr>
+        <tr>
+          <td>ane</td>
+          <td>core.multinoulli</td>
+        </tr>
+        <tr>
+          <td>class</td>
+          <td>core.multinoulli</td>
+        </tr>
+      </tbody>
+    </table></td></tr>
 
     </table>
   </main>

@@ -9,29 +9,24 @@
    .. autosummary::
    
       auto_formula
-      compare_real_vs_synth
-      fit_with_mi
-      formula_from_selected
-      generate_candidates
+      compute_downstream
+      dataclass
       get_column_name
       modeling_role
       recompute_downstream
       rule
-      screen_terms
    
    .. rubric:: Classes
 
    .. autosummary::
    
       Any
-      GridSearchCV
+      CategoricalDtype
+      Config
+      DownstreamConfig
       InPath
-      LassoCV
       LogisticRegression
-      LogisticRegressionCV
       OutPath
       Path
-      PoissonRegressor
       SimpleImputer
-      StandardScaler
    

@@ -8,18 +8,19 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Column terminology mapping &mdash; semsynth  documentation</title>
       <link rel="stylesheet" type="text/css" href="_static/pygments.css?v=b86133f3" />
-      <link rel="stylesheet" type="text/css" href="_static/css/theme.css?v=e59714d7" />
+      <link rel="stylesheet" type="text/css" href="_static/css/theme.css?v=9edc463e" />
+      <link rel="stylesheet" type="text/css" href="_static/mystnb.11b39860a7a0cbfd473a3ad8a317855267ff0bd372690045ca344a6b62be495e.css?v=8cd3d715" />
 
   
       <script src="_static/jquery.js?v=5d32c60e"></script>
       <script src="_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
       <script src="_static/documentation_options.js?v=5929fcd5"></script>
-      <script src="_static/doctools.js?v=9bcbadda"></script>
-      <script src="_static/sphinx_highlight.js?v=dc90522c"></script>
+      <script src="_static/doctools.js?v=fd6eb6e6"></script>
+      <script src="_static/sphinx_highlight.js?v=6ffebe34"></script>
     <script src="_static/js/theme.js"></script>
     <link rel="index" title="Index" href="genindex.html" />
     <link rel="search" title="Search" href="search.html" />
-    <link rel="next" title="Provenance workflow guide" href="provenance.html" />
+    <link rel="next" title="Provenance" href="provenance.html" />
     <link rel="prev" title="SemMap metadata schema" href="schema.html" /> 
 </head>
 
@@ -70,7 +71,7 @@
 <li class="toctree-l2"><a class="reference internal" href="#semsynth-cli-integration">SemSynth CLI integration</a></li>
 </ul>
 </li>
-<li class="toctree-l1"><a class="reference internal" href="provenance.html">Provenance workflow guide</a></li>
+<li class="toctree-l1"><a class="reference internal" href="provenance.html">Provenance</a></li>
 <li class="toctree-l1"><a class="reference internal" href="backends.html">Backends overview</a></li>
 <li class="toctree-l1"><a class="reference internal" href="missingness.html">Missingness handling</a></li>
 <li class="toctree-l1"><a class="reference internal" href="privacy-metrics.html">Privacy metrics</a></li>
@@ -102,7 +103,9 @@
           <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
            <div itemprop="articleBody">
              
-  <section id="column-terminology-mapping">
+  <p>Mapping helpers are easiest to demonstrate on the curated Heart Disease payload.</p>
+<p>This quick count shows which codelists appear most often, illustrating how curated mappings guide downstream roles and privacy handling.</p>
+<section id="column-terminology-mapping">
 <h1>Column terminology mapping<a class="headerlink" href="#column-terminology-mapping" title="Link to this heading"></a></h1>
 <p>The <code class="docutils literal notranslate"><span class="pre">map_columns/</span></code> directory contains utilities for building terminology
 resources, mapping dataset columns to codes, and evaluating the resulting SSSOM
@@ -111,12 +114,12 @@ search, embedding re-ranking, and LLM-assisted coding.</p>
 <section id="table-of-contents">
 <h2>Table of Contents<a class="headerlink" href="#table-of-contents" title="Link to this heading"></a></h2>
 <ul class="simple">
-<li><p><a class="reference internal" href="#scripts-overview"><span class="xref myst">Scripts Overview</span></a></p></li>
-<li><p><a class="reference internal" href="#prerequisites"><span class="xref myst">Prerequisites</span></a></p></li>
-<li><p><a class="reference internal" href="#usage"><span class="xref myst">Usage</span></a></p>
+<li><p><a class="reference internal" href="#scripts-overview">Scripts Overview</a></p></li>
+<li><p><a class="reference internal" href="#prerequisites">Prerequisites</a></p></li>
+<li><p><a class="reference internal" href="#usage">Usage</a></p>
 <ul>
-<li><p><a class="reference internal" href="#1-build-terminology-tables"><span class="xref myst">1. Build Terminology Tables</span></a></p></li>
-<li><p><a class="reference internal" href="#2-mapping-approaches"><span class="xref myst">2. Mapping Approaches</span></a></p>
+<li><p><a class="reference internal" href="#build-terminology-tables">1. Build Terminology Tables</a></p></li>
+<li><p><a class="reference internal" href="#mapping-approaches">2. Mapping Approaches</a></p>
 <ul>
 <li><p><a class="reference internal" href="#21-offline-tsv-lexical"><span class="xref myst">2.1 Offline TSV (lexical)</span></a></p></li>
 <li><p><a class="reference internal" href="#22-datasette-keyword-search"><span class="xref myst">2.2 Datasette keyword search</span></a></p></li>
@@ -124,10 +127,10 @@ search, embedding re-ranking, and LLM-assisted coding.</p>
 <li><p><a class="reference internal" href="#24-llm-assisted-mapping"><span class="xref myst">2.4 LLM-assisted mapping</span></a></p></li>
 </ul>
 </li>
-<li><p><a class="reference internal" href="#3-evaluate-sssom-outputs"><span class="xref myst">3. Evaluate SSSOM outputs</span></a></p></li>
+<li><p><a class="reference internal" href="#evaluate-sssom-outputs">3. Evaluate SSSOM outputs</a></p></li>
 </ul>
 </li>
-<li><p><a class="reference internal" href="#semsynth-cli-integration"><span class="xref myst">SemSynth CLI integration</span></a></p></li>
+<li><p><a class="reference internal" href="#semsynth-cli-integration">SemSynth CLI integration</a></p></li>
 </ul>
 </section>
 <section id="scripts-overview">
@@ -288,6 +291,29 @@ and <code class="docutils literal notranslate"><span class="pre">--confidence-th
 </ul>
 <p>Manual overrides continue to be respected. When overrides exist for a column,
 the CLI replaces any automatically generated matches with the curated entries.</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># Summarize the most common codebook notations in the curated mapping.</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">json</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">collections</span><span class="w"> </span><span class="kn">import</span> <span class="n">Counter</span>
+
+<span class="n">meta</span> <span class="o">=</span> <span class="n">json</span><span class="o">.</span><span class="n">load</span><span class="p">(</span><span class="nb">open</span><span class="p">(</span><span class="s2">&quot;../mappings/uciml-45.metadata.json&quot;</span><span class="p">))</span>
+<span class="n">codes</span> <span class="o">=</span> <span class="p">[]</span>
+<span class="k">for</span> <span class="n">col</span> <span class="ow">in</span> <span class="n">meta</span><span class="p">[</span><span class="s2">&quot;datasetSchema&quot;</span><span class="p">][</span><span class="s2">&quot;columns&quot;</span><span class="p">]:</span>
+    <span class="n">cb</span> <span class="o">=</span> <span class="n">col</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;columnProperty&quot;</span><span class="p">,</span> <span class="p">{})</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;hasCodeBook&quot;</span><span class="p">)</span> <span class="ow">or</span> <span class="p">{}</span>
+    <span class="n">concepts</span> <span class="o">=</span> <span class="n">cb</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;hasConcept&quot;</span><span class="p">)</span> <span class="ow">or</span> <span class="p">[]</span>
+    <span class="n">codes</span><span class="o">.</span><span class="n">extend</span><span class="p">([</span><span class="n">c</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;notation&quot;</span><span class="p">)</span> <span class="k">for</span> <span class="n">c</span> <span class="ow">in</span> <span class="n">concepts</span> <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">c</span><span class="p">,</span> <span class="nb">dict</span><span class="p">)</span> <span class="ow">and</span> <span class="n">c</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;notation&quot;</span><span class="p">)])</span>
+
+<span class="n">Counter</span><span class="p">(</span><span class="n">codes</span><span class="p">)</span><span class="o">.</span><span class="n">most_common</span><span class="p">(</span><span class="mi">5</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output text_plain highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>[]
+</pre></div>
+</div>
+</div>
+</div>
 </section>
 </section>
 
@@ -296,7 +322,7 @@ the CLI replaces any automatically generated matches with the curated entries.</
           </div>
           <footer><div class="rst-footer-buttons" role="navigation" aria-label="Footer">
         <a href="schema.html" class="btn btn-neutral float-left" title="SemMap metadata schema" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
-        <a href="provenance.html" class="btn btn-neutral float-right" title="Provenance workflow guide" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+        <a href="provenance.html" class="btn btn-neutral float-right" title="Provenance" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
     </div>
 
   <hr/>

@@ -8,19 +8,20 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Backends overview &mdash; semsynth  documentation</title>
       <link rel="stylesheet" type="text/css" href="_static/pygments.css?v=b86133f3" />
-      <link rel="stylesheet" type="text/css" href="_static/css/theme.css?v=e59714d7" />
+      <link rel="stylesheet" type="text/css" href="_static/css/theme.css?v=9edc463e" />
+      <link rel="stylesheet" type="text/css" href="_static/mystnb.11b39860a7a0cbfd473a3ad8a317855267ff0bd372690045ca344a6b62be495e.css?v=8cd3d715" />
 
   
       <script src="_static/jquery.js?v=5d32c60e"></script>
       <script src="_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
       <script src="_static/documentation_options.js?v=5929fcd5"></script>
-      <script src="_static/doctools.js?v=9bcbadda"></script>
-      <script src="_static/sphinx_highlight.js?v=dc90522c"></script>
+      <script src="_static/doctools.js?v=fd6eb6e6"></script>
+      <script src="_static/sphinx_highlight.js?v=6ffebe34"></script>
     <script src="_static/js/theme.js"></script>
     <link rel="index" title="Index" href="genindex.html" />
     <link rel="search" title="Search" href="search.html" />
     <link rel="next" title="Missingness handling" href="missingness.html" />
-    <link rel="prev" title="Provenance workflow guide" href="provenance.html" /> 
+    <link rel="prev" title="Provenance" href="provenance.html" /> 
 </head>
 
 <body class="wy-body-for-nav"> 
@@ -48,7 +49,7 @@
 <li class="toctree-l1"><a class="reference internal" href="getting-started.html">Getting started</a></li>
 <li class="toctree-l1"><a class="reference internal" href="schema.html">SemMap metadata schema</a></li>
 <li class="toctree-l1"><a class="reference internal" href="map_columns.html">Column terminology mapping</a></li>
-<li class="toctree-l1"><a class="reference internal" href="provenance.html">Provenance workflow guide</a></li>
+<li class="toctree-l1"><a class="reference internal" href="provenance.html">Provenance</a></li>
 <li class="toctree-l1 current"><a class="current reference internal" href="#">Backends overview</a><ul>
 <li class="toctree-l2"><a class="reference internal" href="#metasyn">MetaSyn</a></li>
 <li class="toctree-l2"><a class="reference internal" href="#pybnesian">PyBNesian</a></li>
@@ -89,6 +90,25 @@
   <section id="backends-overview">
 <h1>Backends overview<a class="headerlink" href="#backends-overview" title="Link to this heading"></a></h1>
 <p>SemSynth ships three interchangeable generation backends—MetaSyn, PyBNesian, and SynthCity—that follow the common <code class="docutils literal notranslate"><span class="pre">run_experiment</span></code> contract and produce aligned artifacts (synthetic CSVs, per-variable metrics, and manifests). The backends share the same type inference and train/test splitting utilities so synthetic rows and downstream metrics remain comparable across runs. If a backend’s optional dependency is missing, the implementation raises a clear runtime error suggesting the corresponding extras install (for example, <code class="docutils literal notranslate"><span class="pre">pip</span> <span class="pre">install</span> <span class="pre">semsynth[metasyn]</span></code>).</p>
+<p>We keep all backend examples grounded in the cached Heart Disease dataset to keep comparisons consistent.</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># Quick look at the target dataset used below.</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">pandas</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">pd</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">matplotlib.pyplot</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">plt</span>
+
+<span class="n">heart</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">read_csv</span><span class="p">(</span><span class="s2">&quot;../downloads-cache/uciml/45.csv.gz&quot;</span><span class="p">)</span>
+<span class="n">ax</span> <span class="o">=</span> <span class="n">heart</span><span class="p">[</span><span class="s2">&quot;age&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">plot</span><span class="o">.</span><span class="n">hist</span><span class="p">(</span><span class="n">bins</span><span class="o">=</span><span class="mi">20</span><span class="p">,</span> <span class="n">figsize</span><span class="o">=</span><span class="p">(</span><span class="mi">6</span><span class="p">,</span> <span class="mi">3</span><span class="p">),</span> <span class="n">color</span><span class="o">=</span><span class="s2">&quot;salmon&quot;</span><span class="p">,</span> <span class="n">edgecolor</span><span class="o">=</span><span class="s2">&quot;black&quot;</span><span class="p">)</span>
+<span class="n">ax</span><span class="o">.</span><span class="n">set_title</span><span class="p">(</span><span class="s2">&quot;Heart Disease (UCI 45) age distribution&quot;</span><span class="p">)</span>
+<span class="n">ax</span><span class="o">.</span><span class="n">set_xlabel</span><span class="p">(</span><span class="s2">&quot;age&quot;</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">tight_layout</span><span class="p">()</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<img alt="_images/d721a25c1ddea83821baeee55b629ab9747f15c3c1fe81ffd9b7150edf0c70b8.png" src="_images/d721a25c1ddea83821baeee55b629ab9747f15c3c1fe81ffd9b7150edf0c70b8.png" />
+</div>
+</div>
 <section id="metasyn">
 <h2>MetaSyn<a class="headerlink" href="#metasyn" title="Link to this heading"></a></h2>
 <ul class="simple">
@@ -109,6 +129,37 @@
 <li><p>Normalizes generator aliases (e.g., <code class="docutils literal notranslate"><span class="pre">ctgan</span></code>, <code class="docutils literal notranslate"><span class="pre">pategan</span></code>, <code class="docutils literal notranslate"><span class="pre">bayesiannetwork</span></code>) to the canonical SynthCity plugin names, then loads the chosen plugin with sanitized parameters. Continuous features are coerced to numeric types and categories are string-safe before fitting on the training split.</p></li>
 <li><p>Generates synthetic rows through the plugin’s <code class="docutils literal notranslate"><span class="pre">generate</span></code> API, aligns columns to the training schema, and writes synthetic CSVs and optional SemMap parquet. Per-variable distances and summary statistics are emitted alongside a manifest documenting the generator, seed, row count, and split settings.</p></li>
 </ul>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># Inspect a tiny inline TOML snippet to see which backends would execute.</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">semsynth.models</span><span class="w"> </span><span class="kn">import</span> <span class="n">load_model_configs</span><span class="p">,</span> <span class="n">parse_toml_config</span>
+
+<span class="n">toml_text</span> <span class="o">=</span> <span class="s2">&quot;&quot;&quot;</span>
+<span class="s2">[pipeline]</span>
+<span class="s2">generate_umap = true</span>
+<span class="s2">compute_privacy = false</span>
+
+<span class="s2">[[models]]</span>
+<span class="s2">name = &quot;metasyn&quot;</span>
+<span class="s2">backend = &quot;metasyn&quot;</span>
+
+<span class="s2">[[models]]</span>
+<span class="s2">name = &quot;clg_mi2&quot;</span>
+<span class="s2">backend = &quot;pybnesian&quot;</span>
+<span class="s2">&quot;&quot;&quot;</span>
+<span class="n">config</span> <span class="o">=</span> <span class="n">parse_toml_config</span><span class="p">(</span><span class="n">toml_text</span><span class="p">)</span>
+<span class="n">bundle</span> <span class="o">=</span> <span class="n">load_model_configs</span><span class="p">(</span><span class="n">config_data</span><span class="o">=</span><span class="n">config</span><span class="p">)</span>
+<span class="p">[(</span><span class="n">spec</span><span class="o">.</span><span class="n">name</span><span class="p">,</span> <span class="n">spec</span><span class="o">.</span><span class="n">backend</span><span class="p">)</span> <span class="k">for</span> <span class="n">spec</span> <span class="ow">in</span> <span class="n">bundle</span><span class="o">.</span><span class="n">specs</span><span class="p">]</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output text_plain highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>[(&#39;metasyn&#39;, &#39;metasyn&#39;), (&#39;clg_mi2&#39;, &#39;pybnesian&#39;)]
+</pre></div>
+</div>
+</div>
+</div>
+<p>After you run a report, check <code class="docutils literal notranslate"><span class="pre">output/Heart</span> <span class="pre">Disease/models/&lt;backend&gt;/</span></code> to compare manifests, metrics, and synthetic CSVs across engines.</p>
 </section>
 <section id="references">
 <h2>References<a class="headerlink" href="#references" title="Link to this heading"></a></h2>
@@ -124,7 +175,7 @@
            </div>
           </div>
           <footer><div class="rst-footer-buttons" role="navigation" aria-label="Footer">
-        <a href="provenance.html" class="btn btn-neutral float-left" title="Provenance workflow guide" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
+        <a href="provenance.html" class="btn btn-neutral float-left" title="Provenance" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
         <a href="missingness.html" class="btn btn-neutral float-right" title="Missingness handling" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
     </div>
 

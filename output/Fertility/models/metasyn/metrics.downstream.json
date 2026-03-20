@@ -1,0 +1,5 @@
+{
+  "formula": "diagnosis ~ Q('season') + Q('age') + Q('child_diseases') + Q('accident') + Q('surgical_intervention') + Q('hrs_sitting') + Q('season'):Q('age') + Q('age'):Q('child_diseases') + Q('child_diseases'):Q('accident') + Q('accident'):Q('surgical_intervention') + Q('surgical_intervention'):Q('hrs_sitting')",
+  "sign_match_rate": 0.25,
+  "skipped_reason": null
+}

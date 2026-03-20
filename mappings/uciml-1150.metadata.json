@@ -3,8 +3,9 @@
   "datasetSchema": {
     "columns": [
       {
-        "name": "GallstoneStatus",
+        "name": "Gallstone Status",
         "titles": "0=Yes (gallstones present), 1=No",
+        "hadRole": "target",
         "columnProperty": {
           "hasCodeBook": {
             "hasTopConcept": [

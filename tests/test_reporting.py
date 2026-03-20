@@ -1,6 +1,7 @@
 from __future__ import annotations
 
 from pathlib import Path
+import json
 
 import pandas as pd
 import pytest
@@ -21,10 +22,19 @@ def test_write_report_md_renders_expected_sections(tmp_path: Path) -> None:
     run_dir = tmp_path / "models" / "demo"
 
     synthetic_csv = _touch(run_dir / "synthetic.csv")
-    per_variable_csv = _touch(run_dir / "per_variable_metrics.csv")
+    per_variable_csv = _touch(
+        run_dir / "per_variable_metrics.csv",
+        "variable,type,KS,W1,JSD\nage,continuous,0.1,1.2,\nstatus,discrete,,,0.3\n",
+    )
     metrics_json = _touch(run_dir / "metrics.json", "{}")
-    privacy_json = _touch(run_dir / "metrics.privacy.json", "{}")
-    downstream_json = _touch(run_dir / "metrics.downstream.json", "{}")
+    privacy_json = _touch(
+        run_dir / "metrics.privacy.json",
+        json.dumps({"n_real": 3, "n_synth": 3, "exact_overlap_rate": 0.05}),
+    )
+    downstream_json = _touch(
+        run_dir / "metrics.downstream.json",
+        json.dumps({"formula": "status ~ age", "sign_match_rate": 0.9}),
+    )
     umap_png = _touch(run_dir / "umap.png", "binary")
     structure_png = _touch(run_dir / "structure.png", "binary")
 
@@ -97,12 +107,17 @@ def test_write_report_md_renders_expected_sections(tmp_path: Path) -> None:
     assert "## Variables and summary" in md_text
     assert "## Missingness model" in md_text
     assert "## Fidelity summary" in md_text
+    assert "## Privacy summary" in md_text
     assert "## Models" in md_text
+    assert "sign_match_rate" in md_text
+    assert "Per-variable fidelity" in md_text
+    assert "Privacy metrics" in md_text
     assert "models/demo/umap.png" in md_text
     assert "models/demo/structure.png" in md_text
     assert "Synthetic CSV" in md_text
     assert "Missingness: wrapped" in md_text
     assert "status" in md_text and "0.4" in md_text
+    assert "exact_overlap_rate" in md_text
 
     html_text = html_path.read_text(encoding="utf-8")
     assert "Data Report — Demo dataset" in html_text

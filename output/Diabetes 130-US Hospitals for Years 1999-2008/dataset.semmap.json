@@ -98,395 +98,143 @@
   "datasetSchema": {
     "columns": [
       {
-        "name": "race",
+        "name": "age",
+        "titles": "Age (10-year bins)",
+        "columnProperty": {
+          "hasCodeBook": {
+            "hasTopConcept": [
+              {
+                "notation": "[0,10)",
+                "prefLabel": "[0\u201310) years"
+              },
+              {
+                "notation": "[10,20)",
+                "prefLabel": "[10\u201320) years"
+              },
+              {
+                "notation": "[20,30)",
+                "prefLabel": "[20\u201330) years"
+              },
+              {
+                "notation": "[30,40)",
+                "prefLabel": "[30\u201340) years"
+              },
+              {
+                "notation": "[40,50)",
+                "prefLabel": "[40\u201350) years"
+              },
+              {
+                "notation": "[50,60)",
+                "prefLabel": "[50\u201360) years"
+              },
+              {
+                "notation": "[60,70)",
+                "prefLabel": "[60\u201370) years"
+              },
+              {
+                "notation": "[70,80)",
+                "prefLabel": "[70\u201380) years"
+              },
+              {
+                "notation": "[80,90)",
+                "prefLabel": "[80\u201390) years"
+              },
+              {
+                "notation": "[90,100)",
+                "prefLabel": "[90\u2013100) years"
+              }
+            ]
+          },
+          "statisticalDataType": "dsv:NominalDataType"
+        },
         "summaryStatistics": {
-          "statisticalDataType": "dsv:NumericalDataType",
-          "columnCompleteness": 0.9776644458856593,
-          "numberOfRows": 101766
+          "columnCompleteness": 1.0
+        }
+      },
+      {
+        "name": "race",
+        "titles": "Race",
+        "columnProperty": {
+          "hasCodeBook": {
+            "hasTopConcept": [
+              {
+                "notation": "Caucasian",
+                "prefLabel": "Caucasian"
+              },
+              {
+                "notation": "AfricanAmerican",
+                "prefLabel": "African American"
+              },
+              {
+                "notation": "Asian",
+                "prefLabel": "Asian"
+              },
+              {
+                "notation": "Hispanic",
+                "prefLabel": "Hispanic"
+              },
+              {
+                "notation": "Other",
+                "prefLabel": "Other"
+              },
+              {
+                "notation": "Unknown/Invalid",
+                "prefLabel": "Unknown/Invalid"
+              }
+            ]
+          },
+          "statisticalDataType": "dsv:NominalDataType"
+        },
+        "summaryStatistics": {
+          "columnCompleteness": 0.9776644458856593
         }
       },
       {
         "name": "gender",
+        "titles": "Administrative sex/gender",
+        "columnProperty": {
+          "hasCodeBook": {
+            "hasTopConcept": [
+              {
+                "notation": "Male",
+                "prefLabel": "Male"
+              },
+              {
+                "notation": "Female",
+                "prefLabel": "Female"
+              },
+              {
+                "notation": "Unknown/Invalid",
+                "prefLabel": "Unknown/Invalid"
+              }
+            ]
+          },
+          "statisticalDataType": "dsv:NominalDataType"
+        },
         "summaryStatistics": {
-          "statisticalDataType": "dsv:NumericalDataType",
-          "columnCompleteness": 1.0,
-          "numberOfRows": 101766
-        }
-      },
-      {
-        "name": "age",
-        "summaryStatistics": {
-          "statisticalDataType": "dsv:NumericalDataType",
-          "columnCompleteness": 1.0,
-          "numberOfRows": 101766
-        }
-      },
-      {
-        "name": "weight",
-        "summaryStatistics": {
-          "statisticalDataType": "dsv:NumericalDataType",
-          "columnCompleteness": 0.03141520743666848,
-          "numberOfRows": 101766
-        }
-      },
-      {
-        "name": "admission_type_id",
-        "summaryStatistics": {
-          "statisticalDataType": "dsv:NumericalDataType",
-          "columnCompleteness": 1.0,
-          "numberOfRows": 101766
-        }
-      },
-      {
-        "name": "discharge_disposition_id",
-        "summaryStatistics": {
-          "statisticalDataType": "dsv:NumericalDataType",
-          "columnCompleteness": 1.0,
-          "numberOfRows": 101766
-        }
-      },
-      {
-        "name": "admission_source_id",
-        "summaryStatistics": {
-          "statisticalDataType": "dsv:NumericalDataType",
-          "columnCompleteness": 1.0,
-          "numberOfRows": 101766
-        }
-      },
-      {
-        "name": "time_in_hospital",
-        "summaryStatistics": {
-          "statisticalDataType": "dsv:NumericalDataType",
-          "columnCompleteness": 1.0,
-          "numberOfRows": 101766
-        }
-      },
-      {
-        "name": "payer_code",
-        "summaryStatistics": {
-          "statisticalDataType": "dsv:NumericalDataType",
-          "columnCompleteness": 0.6044258396714031,
-          "numberOfRows": 101766
-        }
-      },
-      {
-        "name": "medical_specialty",
-        "summaryStatistics": {
-          "statisticalDataType": "dsv:NumericalDataType",
-          "columnCompleteness": 0.5091779179686733,
-          "numberOfRows": 101766
-        }
-      },
-      {
-        "name": "num_lab_procedures",
-        "summaryStatistics": {
-          "statisticalDataType": "dsv:NumericalDataType",
-          "columnCompleteness": 1.0,
-          "numberOfRows": 101766
-        }
-      },
-      {
-        "name": "num_procedures",
-        "summaryStatistics": {
-          "statisticalDataType": "dsv:NumericalDataType",
-          "columnCompleteness": 1.0,
-          "numberOfRows": 101766
-        }
-      },
-      {
-        "name": "num_medications",
-        "summaryStatistics": {
-          "statisticalDataType": "dsv:NumericalDataType",
-          "columnCompleteness": 1.0,
-          "numberOfRows": 101766
-        }
-      },
-      {
-        "name": "number_outpatient",
-        "summaryStatistics": {
-          "statisticalDataType": "dsv:NumericalDataType",
-          "columnCompleteness": 1.0,
-          "numberOfRows": 101766
-        }
-      },
-      {
-        "name": "number_emergency",
-        "summaryStatistics": {
-          "statisticalDataType": "dsv:NumericalDataType",
-          "columnCompleteness": 1.0,
-          "numberOfRows": 101766
-        }
-      },
-      {
-        "name": "number_inpatient",
-        "summaryStatistics": {
-          "statisticalDataType": "dsv:NumericalDataType",
-          "columnCompleteness": 1.0,
-          "numberOfRows": 101766
-        }
-      },
-      {
-        "name": "diag_1",
-        "summaryStatistics": {
-          "statisticalDataType": "dsv:NumericalDataType",
-          "columnCompleteness": 0.9997936442426744,
-          "numberOfRows": 101766
-        }
-      },
-      {
-        "name": "diag_2",
-        "summaryStatistics": {
-          "statisticalDataType": "dsv:NumericalDataType",
-          "columnCompleteness": 0.9964821256608297,
-          "numberOfRows": 101766
-        }
-      },
-      {
-        "name": "diag_3",
-        "summaryStatistics": {
-          "statisticalDataType": "dsv:NumericalDataType",
-          "columnCompleteness": 0.98601694082503,
-          "numberOfRows": 101766
-        }
-      },
-      {
-        "name": "number_diagnoses",
-        "summaryStatistics": {
-          "statisticalDataType": "dsv:NumericalDataType",
-          "columnCompleteness": 1.0,
-          "numberOfRows": 101766
-        }
-      },
-      {
-        "name": "max_glu_serum",
-        "summaryStatistics": {
-          "statisticalDataType": "dsv:NumericalDataType",
-          "columnCompleteness": 0.05253227993632448,
-          "numberOfRows": 101766
-        }
-      },
-      {
-        "name": "A1Cresult",
-        "summaryStatistics": {
-          "statisticalDataType": "dsv:NumericalDataType",
-          "columnCompleteness": 0.16722677515083628,
-          "numberOfRows": 101766
-        }
-      },
-      {
-        "name": "metformin",
-        "summaryStatistics": {
-          "statisticalDataType": "dsv:NumericalDataType",
-          "columnCompleteness": 1.0,
-          "numberOfRows": 101766
-        }
-      },
-      {
-        "name": "repaglinide",
-        "summaryStatistics": {
-          "statisticalDataType": "dsv:NumericalDataType",
-          "columnCompleteness": 1.0,
-          "numberOfRows": 101766
-        }
-      },
-      {
-        "name": "nateglinide",
-        "summaryStatistics": {
-          "statisticalDataType": "dsv:NumericalDataType",
-          "columnCompleteness": 1.0,
-          "numberOfRows": 101766
-        }
-      },
-      {
-        "name": "chlorpropamide",
-        "summaryStatistics": {
-          "statisticalDataType": "dsv:NumericalDataType",
-          "columnCompleteness": 1.0,
-          "numberOfRows": 101766
-        }
-      },
-      {
-        "name": "glimepiride",
-        "summaryStatistics": {
-          "statisticalDataType": "dsv:NumericalDataType",
-          "columnCompleteness": 1.0,
-          "numberOfRows": 101766
-        }
-      },
-      {
-        "name": "acetohexamide",
-        "summaryStatistics": {
-          "statisticalDataType": "dsv:NumericalDataType",
-          "columnCompleteness": 1.0,
-          "numberOfRows": 101766
-        }
-      },
-      {
-        "name": "glipizide",
-        "summaryStatistics": {
-          "statisticalDataType": "dsv:NumericalDataType",
-          "columnCompleteness": 1.0,
-          "numberOfRows": 101766
-        }
-      },
-      {
-        "name": "glyburide",
-        "summaryStatistics": {
-          "statisticalDataType": "dsv:NumericalDataType",
-          "columnCompleteness": 1.0,
-          "numberOfRows": 101766
-        }
-      },
-      {
-        "name": "tolbutamide",
-        "summaryStatistics": {
-          "statisticalDataType": "dsv:NumericalDataType",
-          "columnCompleteness": 1.0,
-          "numberOfRows": 101766
-        }
-      },
-      {
-        "name": "pioglitazone",
-        "summaryStatistics": {
-          "statisticalDataType": "dsv:NumericalDataType",
-          "columnCompleteness": 1.0,
-          "numberOfRows": 101766
-        }
-      },
-      {
-        "name": "rosiglitazone",
-        "summaryStatistics": {
-          "statisticalDataType": "dsv:NumericalDataType",
-          "columnCompleteness": 1.0,
-          "numberOfRows": 101766
-        }
-      },
-      {
-        "name": "acarbose",
-        "summaryStatistics": {
-          "statisticalDataType": "dsv:NumericalDataType",
-          "columnCompleteness": 1.0,
-          "numberOfRows": 101766
-        }
-      },
-      {
-        "name": "miglitol",
-        "summaryStatistics": {
-          "statisticalDataType": "dsv:NumericalDataType",
-          "columnCompleteness": 1.0,
-          "numberOfRows": 101766
-        }
-      },
-      {
-        "name": "troglitazone",
-        "summaryStatistics": {
-          "statisticalDataType": "dsv:NumericalDataType",
-          "columnCompleteness": 1.0,
-          "numberOfRows": 101766
-        }
-      },
-      {
-        "name": "tolazamide",
-        "summaryStatistics": {
-          "statisticalDataType": "dsv:NumericalDataType",
-          "columnCompleteness": 1.0,
-          "numberOfRows": 101766
-        }
-      },
-      {
-        "name": "examide",
-        "summaryStatistics": {
-          "statisticalDataType": "dsv:NumericalDataType",
-          "columnCompleteness": 1.0,
-          "numberOfRows": 101766
-        }
-      },
-      {
-        "name": "citoglipton",
-        "summaryStatistics": {
-          "statisticalDataType": "dsv:NumericalDataType",
-          "columnCompleteness": 1.0,
-          "numberOfRows": 101766
-        }
-      },
-      {
-        "name": "insulin",
-        "summaryStatistics": {
-          "statisticalDataType": "dsv:NumericalDataType",
-          "columnCompleteness": 1.0,
-          "numberOfRows": 101766
-        }
-      },
-      {
-        "name": "glyburide-metformin",
-        "summaryStatistics": {
-          "statisticalDataType": "dsv:NumericalDataType",
-          "columnCompleteness": 1.0,
-          "numberOfRows": 101766
-        }
-      },
-      {
-        "name": "glipizide-metformin",
-        "summaryStatistics": {
-          "statisticalDataType": "dsv:NumericalDataType",
-          "columnCompleteness": 1.0,
-          "numberOfRows": 101766
-        }
-      },
-      {
-        "name": "glimepiride-pioglitazone",
-        "summaryStatistics": {
-          "statisticalDataType": "dsv:NumericalDataType",
-          "columnCompleteness": 1.0,
-          "numberOfRows": 101766
-        }
-      },
-      {
-        "name": "metformin-rosiglitazone",
-        "summaryStatistics": {
-          "statisticalDataType": "dsv:NumericalDataType",
-          "columnCompleteness": 1.0,
-          "numberOfRows": 101766
-        }
-      },
-      {
-        "name": "metformin-pioglitazone",
-        "summaryStatistics": {
-          "statisticalDataType": "dsv:NumericalDataType",
-          "columnCompleteness": 1.0,
-          "numberOfRows": 101766
-        }
-      },
-      {
-        "name": "change",
-        "summaryStatistics": {
-          "statisticalDataType": "dsv:NumericalDataType",
-          "columnCompleteness": 1.0,
-          "numberOfRows": 101766
-        }
-      },
-      {
-        "name": "diabetesMed",
-        "summaryStatistics": {
-          "statisticalDataType": "dsv:NumericalDataType",
-          "columnCompleteness": 1.0,
-          "numberOfRows": 101766
-        }
-      },
-      {
-        "name": "readmitted",
-        "hadRole": "target",
-        "summaryStatistics": {
-          "statisticalDataType": "dsv:NumericalDataType",
-          "columnCompleteness": 1.0,
-          "numberOfRows": 101766
+          "columnCompleteness": 1.0
         }
       }
-    ]
+    ],
+    "@id": "urn:dataset:diabetes-130-us-hospitals-for-years-1999-2008#schema"
   },
   "summaryStatistics": {
     "datasetCompleteness": 0.9234319828495438,
     "numberOfRows": 101766,
     "numberOfColumns": 48
-  }
+  },
+  "dataset": {
+    "@type": [
+      "disco:LogicalDataSet",
+      "dsv:Dataset",
+      "dcat:Dataset"
+    ],
+    "title": "UCI Diabetes 130-US hospitals (1999\u20132008)",
+    "source": "https://archive.ics.uci.edu/dataset/296/diabetes+130-us+hospitals+for+years+1999-2008"
+  },
+  "@id": "urn:dataset:diabetes-130-us-hospitals-for-years-1999-2008",
+  "@type": [
+    "dcat:Dataset",
+    "dsv:Dataset"
+  ]
 }

@@ -1,3 +1,16 @@
+---
+filetype: mystnb
+jupytext:
+  text_representation:
+    extension: .md
+    format_name: myst
+    format_version: 0.13
+    jupytext_version: 1.16.3
+kernelspec:
+  name: python3
+  display_name: Python 3
+---
+
 # SemMap metadata schema
 
 This project represents dataset semantics using a SemMap-flavoured JSON-LD
@@ -7,6 +20,7 @@ profile that blends [DCAT](https://www.w3.org/TR/vocab-dcat-3/)/[DSV](https://w3
 [SKOS](https://www.w3.org/TR/skos-reference/) mappings. The
 canonical definitions live in `semsynth.semmap` and power every stage of the
 pipeline, from ingestion to reporting.
+
 
 ## Core objects
 
@@ -35,6 +49,15 @@ pipeline, from ingestion to reporting.
 Every dataclass inherits `RDFMixin`, enabling round-trips via
 `to_jsonld()/from_jsonld` and storage inside parquet files through the
 pandas `semmap` accessor.
+
+```{code-cell} python
+# Inspect the first few columns and their statistical data types.
+import json
+from semsynth.semmap import Metadata
+
+meta = Metadata.from_dcat_dsv(json.load(open("../mappings/uciml-45.metadata.json")))
+[(c.name, getattr(c.summaryStatistics, "statisticalDataType", None)) for c in meta.datasetSchema.columns[:5]]
+```
 
 ## Creation and ingestion
 

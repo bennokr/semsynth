@@ -1,0 +1,379 @@
+{
+  "@context": {
+    "@context": {
+      "csvw": "http://www.w3.org/ns/csvw#",
+      "dsv": "https://w3id.org/dsv-ontology#",
+      "skos": "http://www.w3.org/2004/02/skos/core#",
+      "prov": "http://www.w3.org/ns/prov#",
+      "qudt": "http://qudt.org/schema/qudt/",
+      "unit": "http://qudt.org/vocab/unit/",
+      "quantitykind": "http://qudt.org/vocab/quantitykind/",
+      "sdmx-dimension": "http://purl.org/linked-data/sdmx/2009/dimension#",
+      "schema": "https://schema.org/",
+      "wd": "http://www.wikidata.org/entity/",
+      "dct": "http://purl.org/dc/terms/",
+      "dcat": "http://www.w3.org/ns/dcat#",
+      "title": "dct:title",
+      "description": "dct:description",
+      "abstract": "dct:abstract",
+      "purpose": "dct:purpose",
+      "tableOfContents": "dct:tableOfContents",
+      "landingPage": "dcat:landingPage",
+      "accessRights": "dct:accessRights",
+      "citation": "schema:citation",
+      "identifier": "dct:identifier",
+      "funding": "schema:funding",
+      "populationType": "schema:populationType",
+      "url": "csvw:url",
+      "datasetSchema": "dsv:datasetSchema",
+      "columns": {
+        "@id": "dsv:column",
+        "@container": "@set"
+      },
+      "name": "csvw:name",
+      "titles": "csvw:titles",
+      "about": "schema:about",
+      "hadRole": "prov:hadRole",
+      "defaultValue": "schema:defaultValue",
+      "columnProperty": "dsv:columnProperty",
+      "columnCompleteness": "dsv:columnCompleteness",
+      "summaryStatistics": "dsv:summaryStatistics",
+      "statisticalDataType": {
+        "@id": "dsv:statisticalDataType",
+        "@type": "@id"
+      },
+      "hasCodeBook": {
+        "@id": "dsv:hasCodeBook",
+        "@type": "@id"
+      },
+      "hasVariable": {
+        "@id": "dsv:hasVariable",
+        "@type": "@id"
+      },
+      "datasetCompleteness": "dsv:datasetCompleteness",
+      "numberOfRows": "dsv:numberOfRows",
+      "numberOfColumns": "dsv:numberOfColumns",
+      "missingValueFormat": "dsv:missingValueFormat",
+      "notation": "skos:notation",
+      "prefLabel": "skos:prefLabel",
+      "exactMatch": {
+        "@id": "skos:exactMatch",
+        "@type": "@id",
+        "@container": "@set"
+      },
+      "closeMatch": {
+        "@id": "skos:closeMatch",
+        "@type": "@id",
+        "@container": "@set"
+      },
+      "broadMatch": {
+        "@id": "skos:broadMatch",
+        "@type": "@id",
+        "@container": "@set"
+      },
+      "narrowMatch": {
+        "@id": "skos:narrowMatch",
+        "@type": "@id",
+        "@container": "@set"
+      },
+      "relatedMatch": {
+        "@id": "skos:relatedMatch",
+        "@type": "@id",
+        "@container": "@set"
+      },
+      "hasTopConcept": {
+        "@id": "skos:hasTopConcept",
+        "@type": "@id",
+        "@container": "@set"
+      },
+      "unitText": "schema:unitText",
+      "ucumCode": "qudt:ucumCode",
+      "hasUnit": "qudt:hasUnit",
+      "source": {
+        "@id": "dct:source",
+        "@type": "@id"
+      }
+    }
+  },
+  "datasetSchema": {
+    "columns": [
+      {
+        "name": "A1_Score",
+        "hadRole": "Feature",
+        "summaryStatistics": {
+          "statisticalDataType": "dsv:NumericalDataType",
+          "columnCompleteness": 1.0,
+          "@type": "dsv:SummaryStatistics"
+        },
+        "@type": "dsv:Column"
+      },
+      {
+        "name": "A2_Score",
+        "about": "\u0000",
+        "hadRole": "Feature",
+        "summaryStatistics": {
+          "statisticalDataType": "dsv:NumericalDataType",
+          "columnCompleteness": 1.0,
+          "@type": "dsv:SummaryStatistics"
+        },
+        "@type": "dsv:Column"
+      },
+      {
+        "name": "A3_Score",
+        "hadRole": "Feature",
+        "summaryStatistics": {
+          "statisticalDataType": "dsv:NumericalDataType",
+          "columnCompleteness": 1.0,
+          "@type": "dsv:SummaryStatistics"
+        },
+        "@type": "dsv:Column"
+      },
+      {
+        "name": "A4_Score",
+        "hadRole": "Feature",
+        "summaryStatistics": {
+          "statisticalDataType": "dsv:NumericalDataType",
+          "columnCompleteness": 1.0,
+          "@type": "dsv:SummaryStatistics"
+        },
+        "@type": "dsv:Column"
+      },
+      {
+        "name": "A5_Score",
+        "hadRole": "Feature",
+        "summaryStatistics": {
+          "statisticalDataType": "dsv:NumericalDataType",
+          "columnCompleteness": 1.0,
+          "@type": "dsv:SummaryStatistics"
+        },
+        "@type": "dsv:Column"
+      },
+      {
+        "name": "A6_Score",
+        "hadRole": "Feature",
+        "summaryStatistics": {
+          "statisticalDataType": "dsv:NumericalDataType",
+          "columnCompleteness": 1.0,
+          "@type": "dsv:SummaryStatistics"
+        },
+        "@type": "dsv:Column"
+      },
+      {
+        "name": "A7_Score",
+        "hadRole": "Feature",
+        "summaryStatistics": {
+          "statisticalDataType": "dsv:NumericalDataType",
+          "columnCompleteness": 1.0,
+          "@type": "dsv:SummaryStatistics"
+        },
+        "@type": "dsv:Column"
+      },
+      {
+        "name": "A8_Score",
+        "hadRole": "Feature",
+        "summaryStatistics": {
+          "statisticalDataType": "dsv:NumericalDataType",
+          "columnCompleteness": 1.0,
+          "@type": "dsv:SummaryStatistics"
+        },
+        "@type": "dsv:Column"
+      },
+      {
+        "name": "A9_Score",
+        "hadRole": "Feature",
+        "summaryStatistics": {
+          "statisticalDataType": "dsv:NumericalDataType",
+          "columnCompleteness": 1.0,
+          "@type": "dsv:SummaryStatistics"
+        },
+        "@type": "dsv:Column"
+      },
+      {
+        "name": "A10_Score",
+        "hadRole": "Feature",
+        "summaryStatistics": {
+          "statisticalDataType": "dsv:NumericalDataType",
+          "columnCompleteness": 1.0,
+          "@type": "dsv:SummaryStatistics"
+        },
+        "@type": "dsv:Column"
+      },
+      {
+        "name": "age",
+        "about": "Age",
+        "hadRole": "Feature",
+        "summaryStatistics": {
+          "statisticalDataType": "dsv:NumericalDataType",
+          "columnCompleteness": 0.9863013698630136,
+          "@type": "dsv:SummaryStatistics"
+        },
+        "@type": "dsv:Column"
+      },
+      {
+        "name": "gender",
+        "about": "Gender",
+        "hadRole": "Feature",
+        "summaryStatistics": {
+          "statisticalDataType": "dsv:CategoricalDataType",
+          "columnCompleteness": 1.0,
+          "@type": "dsv:SummaryStatistics"
+        },
+        "@type": "dsv:Column"
+      },
+      {
+        "name": "ethnicity",
+        "about": "Ethnicity",
+        "hadRole": "Feature",
+        "summaryStatistics": {
+          "statisticalDataType": "dsv:CategoricalDataType",
+          "columnCompleteness": 0.8527397260273972,
+          "missingValueFormat": "NaN",
+          "@type": "dsv:SummaryStatistics"
+        },
+        "@type": "dsv:Column"
+      },
+      {
+        "name": "jaundice",
+        "hadRole": "Feature",
+        "summaryStatistics": {
+          "statisticalDataType": "dsv:StatisticalDataType",
+          "columnCompleteness": 1.0,
+          "@type": "dsv:SummaryStatistics"
+        },
+        "@type": "dsv:Column"
+      },
+      {
+        "name": "autism",
+        "hadRole": "Feature",
+        "summaryStatistics": {
+          "statisticalDataType": "dsv:StatisticalDataType",
+          "columnCompleteness": 1.0,
+          "@type": "dsv:SummaryStatistics"
+        },
+        "@type": "dsv:Column"
+      },
+      {
+        "name": "country_of_res",
+        "about": "Nationality",
+        "hadRole": "Feature",
+        "summaryStatistics": {
+          "statisticalDataType": "dsv:CategoricalDataType",
+          "columnCompleteness": 1.0,
+          "@type": "dsv:SummaryStatistics"
+        },
+        "@type": "dsv:Column"
+      },
+      {
+        "name": "used_app_before",
+        "hadRole": "Feature",
+        "summaryStatistics": {
+          "statisticalDataType": "dsv:StatisticalDataType",
+          "columnCompleteness": 1.0,
+          "@type": "dsv:SummaryStatistics"
+        },
+        "@type": "dsv:Column"
+      },
+      {
+        "name": "result",
+        "hadRole": "Feature",
+        "summaryStatistics": {
+          "statisticalDataType": "dsv:NumericalDataType",
+          "columnCompleteness": 1.0,
+          "@type": "dsv:SummaryStatistics"
+        },
+        "@type": "dsv:Column"
+      },
+      {
+        "name": "age_desc",
+        "about": "Age",
+        "hadRole": "Feature",
+        "summaryStatistics": {
+          "statisticalDataType": "dsv:CategoricalDataType",
+          "columnCompleteness": 1.0,
+          "@type": "dsv:SummaryStatistics"
+        },
+        "@type": "dsv:Column"
+      },
+      {
+        "name": "relation",
+        "hadRole": "Feature",
+        "summaryStatistics": {
+          "statisticalDataType": "dsv:CategoricalDataType",
+          "columnCompleteness": 0.8527397260273972,
+          "missingValueFormat": "NaN",
+          "@type": "dsv:SummaryStatistics"
+        },
+        "@type": "dsv:Column"
+      },
+      {
+        "name": "class",
+        "hadRole": "target",
+        "summaryStatistics": {
+          "statisticalDataType": "dsv:StatisticalDataType",
+          "columnCompleteness": 1.0,
+          "@type": "dsv:SummaryStatistics"
+        },
+        "@type": "dsv:Column"
+      }
+    ],
+    "@type": "dsv:DatasetSchema",
+    "@id": "urn:dataset:autistic-spectrum-disorder-screening-data-for-children#schema"
+  },
+  "summaryStatistics": {
+    "datasetCompleteness": 0.9853228962818004,
+    "numberOfRows": 292,
+    "numberOfColumns": 21,
+    "missingValueFormat": "NaN",
+    "@type": "dsv:SummaryStatistics"
+  },
+  "title": "Autistic Spectrum Disorder Screening Data for Children",
+  "description": "see attached file for variables' description ",
+  "abstract": "Children screening data for autism suitable for classification and predictive tasks ",
+  "landingPage": "https://archive.ics.uci.edu/dataset/419/autistic+spectrum+disorder+screening+data+for+children",
+  "tableOfContents": "see attached file for variables' description ",
+  "identifier": [
+    {
+      "@type": "schema:PropertyValue",
+      "schema:propertyID": "uci",
+      "schema:value": 419
+    },
+    {
+      "@type": "schema:PropertyValue",
+      "schema:propertyID": "DOI",
+      "schema:value": "10.24432/C5659W"
+    }
+  ],
+  "@type": [
+    "dcat:Dataset",
+    "dsv:Dataset"
+  ],
+  "dcterms:created": 2017,
+  "dcterms:modified": "2024-04-03",
+  "dcat:theme": "Health and Medicine",
+  "dcat:keyword": [
+    "\u0000",
+    "Age",
+    "Gender",
+    "Ethnicity",
+    "Nationality",
+    "Classification",
+    "Multivariate"
+  ],
+  "schema:numberOfItems": 292,
+  "dcterms:extent": "20 features",
+  "dcterms:creator": [
+    {
+      "@type": "schema:Person",
+      "name": "Fadi Thabtah"
+    }
+  ],
+  "dcat:distribution": [
+    {
+      "@type": "dcat:Distribution",
+      "dcat:downloadURL": "https://archive.ics.uci.edu/static/public/419/data.csv",
+      "dcat:mediaType": "text/csv",
+      "dcterms:format": "text/csv"
+    }
+  ],
+  "@id": "urn:dataset:autistic-spectrum-disorder-screening-data-for-children"
+}

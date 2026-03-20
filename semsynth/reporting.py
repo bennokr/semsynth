@@ -19,6 +19,7 @@ from __future__ import annotations
 from dataclasses import dataclass
 from pathlib import Path
 from importlib import resources
+import math
 from typing import Any, Dict, Iterable, List, Optional, Sequence
 import json
 import logging
@@ -68,6 +69,10 @@ class _ModelRow:
     structure_rel: Optional[str]
     links: Sequence[_ModelLink]
     missingness: Optional[Dict[str, Any]] = None
+    per_variable_table: Optional[str] = None
+    downstream_table: Optional[str] = None
+    privacy_table: Optional[str] = None
+    structure_table: Optional[str] = None
 
 
 def _jinja_environment() -> Environment:
@@ -202,6 +207,7 @@ def write_report_md(
         codebook_labels=codebook_labels,
     )
     fidelity_table = _build_fidelity_table(model_runs=model_runs)
+    privacy_table = _build_privacy_table(model_runs=model_runs)
     missingness_table = _build_missingness_table(missingness_summary)
     overview_table = _build_overview_table(
         dataset_name=dataset_title,
@@ -229,6 +235,7 @@ def write_report_md(
         overview_table=overview_table,
         variable_table=variable_table,
         fidelity_table=fidelity_table,
+        privacy_table=privacy_table,
         model_rows=model_rows,
         real_umap=os.path.basename(umap_png_real) if umap_png_real else None,
         missingness_summary=missingness_summary,
@@ -356,6 +363,29 @@ def _build_variable_summary(
     return _dataframe_to_markdown(merged, index=False)
 
 
+def _coerce_numeric(value: Any) -> Optional[float]:
+    """Coerce a value to a finite float when possible."""
+
+    try:
+        num = float(value)
+    except (TypeError, ValueError):
+        return None
+    if math.isnan(num) or math.isinf(num):
+        return None
+    return num
+
+
+def _format_metric_cell(value: Any) -> str:
+    """Render metric values with consistent rounding."""
+
+    num = _coerce_numeric(value)
+    if num is None:
+        return ""
+    if num.is_integer():
+        return str(int(num))
+    return f"{num:.4f}".rstrip("0").rstrip(".")
+
+
 def _build_fidelity_table(*, model_runs: Optional[Sequence[ModelRun]]) -> Optional[str]:
     """Create the markdown representation of the fidelity table."""
 
@@ -370,12 +400,11 @@ def _build_fidelity_table(*, model_runs: Optional[Sequence[ModelRun]]) -> Option
             {
                 "model": run.name,
                 "backend": run.backend,
-                "disc_jsd_mean": summary.get("disc_jsd_mean"),
-                "disc_jsd_median": summary.get("disc_jsd_median"),
-                "cont_ks_mean": summary.get("cont_ks_mean"),
-                "cont_w1_mean": summary.get("cont_w1_mean"),
-                "privacy_overlap": run.privacy_metrics.get("exact_overlap_rate"),
-                "downstream_sign_match": run.downstream_metrics.get("sign_match_rate"),
+                "disc_jsd_mean": _format_metric_cell(summary.get("disc_jsd_mean")),
+                "disc_jsd_median": _format_metric_cell(summary.get("disc_jsd_median")),
+                "cont_ks_mean": _format_metric_cell(summary.get("cont_ks_mean")),
+                "cont_w1_mean": _format_metric_cell(summary.get("cont_w1_mean")),
+                "downstream_sign_match": _format_metric_cell(_extract_downstream_sign_match(run)),
             }
         )
 
@@ -383,7 +412,198 @@ def _build_fidelity_table(*, model_runs: Optional[Sequence[ModelRun]]) -> Option
         return None
 
     out = pd.DataFrame(rows)
-    return _dataframe_to_markdown(out.round(4).fillna(""), index=False)
+    ordered_cols = [
+        "model",
+        "backend",
+        "disc_jsd_mean",
+        "disc_jsd_median",
+        "cont_ks_mean",
+        "cont_w1_mean",
+        "downstream_sign_match",
+    ]
+    present_cols = [col for col in ordered_cols if col in out.columns]
+    out = out[present_cols].fillna("")
+    out.rename(columns=lambda col: col.replace("_", " "), inplace=True)
+    return _dataframe_to_markdown(out, index=False)
+
+
+def _privacy_metrics_summary(metrics: Optional[Dict[str, Any]]) -> Dict[str, Any]:
+    """Pick a consistent subset of privacy metrics for tabular reporting."""
+
+    if not isinstance(metrics, dict) or not metrics:
+        return {}
+    nn_stats = metrics.get("nn_distance_stats", {})
+    nn_mean = nn_stats.get("mean") if isinstance(nn_stats, dict) else None
+    summary = {
+        "n_real": _coerce_numeric(metrics.get("n_real")),
+        "n_synth": _coerce_numeric(metrics.get("n_synth")),
+        "exact_overlap_rate": _coerce_numeric(metrics.get("exact_overlap_rate")),
+        "near_duplicate_rate_eps": _coerce_numeric(metrics.get("near_duplicate_rate_eps")),
+        "nn_distance_mean": _coerce_numeric(nn_mean),
+        "k_min": _coerce_numeric(metrics.get("k_min")),
+        "k_pct_lt5": _coerce_numeric(metrics.get("k_pct_lt5")),
+        "k_map": _coerce_numeric(metrics.get("k_map")),
+        "rare_qi_reproduction_rate": _coerce_numeric(metrics.get("rare_qi_reproduction_rate")),
+        "identifiability_score": _coerce_numeric(metrics.get("identifiability_score")),
+        "delta_presence": _coerce_numeric(metrics.get("delta_presence")),
+    }
+    values = [val for key, val in summary.items() if key not in ("n_real", "n_synth")]
+    if not any(val is not None for val in values):
+        return {}
+    return summary
+
+
+def _build_privacy_table(*, model_runs: Optional[Sequence[ModelRun]]) -> Optional[str]:
+    """Create the markdown representation of the dataset-level privacy table."""
+
+    runs = sorted(model_runs or [], key=lambda run: (run.backend, run.name))
+    rows: List[Dict[str, Any]] = []
+    for run in runs:
+        summary = _privacy_metrics_summary(run.privacy_metrics)
+        if not summary:
+            continue
+        row = {"model": run.name, "backend": run.backend}
+        row.update({key: _format_metric_cell(val) for key, val in summary.items()})
+        rows.append(row)
+    if not rows:
+        return None
+    out = pd.DataFrame(rows)
+    ordered_cols = [
+        "model",
+        "backend",
+        "n_real",
+        "n_synth",
+        "exact_overlap_rate",
+        "near_duplicate_rate_eps",
+        "nn_distance_mean",
+        "k_min",
+        "k_pct_lt5",
+        "k_map",
+        "rare_qi_reproduction_rate",
+        "identifiability_score",
+        "delta_presence",
+    ]
+    present_cols = [col for col in ordered_cols if col in out.columns]
+    out = out[present_cols].fillna("")
+    out.rename(columns=lambda col: col.replace("_", " "), inplace=True)
+    return _dataframe_to_markdown(out, index=False)
+
+
+def _extract_downstream_sign_match(run: ModelRun) -> Optional[float]:
+    """Return the downstream sign match value using available sources."""
+
+    for candidate in (
+        getattr(run, "downstream_metrics", {}) or {},
+        getattr(run, "metrics", {}) or {},
+    ):
+        value = None
+        if isinstance(candidate, dict):
+            value = candidate.get("sign_match_rate")
+            if value is None:
+                nested = candidate.get("downstream") if isinstance(candidate.get("downstream"), dict) else {}
+                if nested:
+                    value = nested.get("sign_match_rate")
+        coerced = _coerce_numeric(value)
+        if coerced is not None:
+            return coerced
+    return None
+
+
+def _build_metric_table(items: List[tuple[str, Any]]) -> Optional[str]:
+    """Convert a list of metric items into an HTML table."""
+
+    if not items:
+        return None
+    rows: List[Dict[str, Any]] = []
+    for label, value in items:
+        formatted = _format_metric_cell(value)
+        cell = formatted if formatted != "" else ("" if value is None else value)
+        rows.append({"metric": label, "value": cell})
+    df = pd.DataFrame(rows)
+    df["value"] = df["value"].astype(str).replace({"nan": "", "None": ""})
+    return df.to_html(index=False, escape=False, border=0)
+
+
+def _downstream_metric_items(metrics: Optional[Dict[str, Any]]) -> List[tuple[str, Any]]:
+    """Select downstream metric entries for display."""
+
+    if not isinstance(metrics, dict) or not metrics:
+        return []
+    items: List[tuple[str, Any]] = []
+    if "sign_match_rate" in metrics:
+        items.append(("sign_match_rate", metrics.get("sign_match_rate")))
+    for key, value in metrics.items():
+        if key == "sign_match_rate":
+            continue
+        items.append((key, value))
+    return items
+
+
+def _privacy_metric_items(metrics: Optional[Dict[str, Any]]) -> List[tuple[str, Any]]:
+    """Select a compact set of privacy metrics for per-model display."""
+
+    summary = _privacy_metrics_summary(metrics)
+    ordered = [
+        ("n_real", summary.get("n_real")),
+        ("n_synth", summary.get("n_synth")),
+        ("exact_overlap_rate", summary.get("exact_overlap_rate")),
+        ("near_duplicate_rate_eps", summary.get("near_duplicate_rate_eps")),
+        ("nn_distance_mean", summary.get("nn_distance_mean")),
+        ("k_min", summary.get("k_min")),
+        ("k_pct_lt5", summary.get("k_pct_lt5")),
+        ("k_map", summary.get("k_map")),
+        ("rare_qi_reproduction_rate", summary.get("rare_qi_reproduction_rate")),
+        ("identifiability_score", summary.get("identifiability_score")),
+        ("delta_presence", summary.get("delta_presence")),
+    ]
+    return [(label, value) for label, value in ordered if value is not None]
+
+
+def _build_per_variable_table(per_variable_path: Optional[Path]) -> Optional[str]:
+    """Render a concise per-variable fidelity table."""
+
+    if per_variable_path is None or not per_variable_path.exists():
+        return None
+    try:
+        per_var = pd.read_csv(per_variable_path)
+    except Exception:
+        return None
+    columns = [col for col in ("variable", "type", "KS", "W1", "JSD") if col in per_var.columns]
+    if not columns:
+        return None
+    per_var = per_var[columns].head(10).copy()
+    for col in ("KS", "W1", "JSD"):
+        if col in per_var:
+            per_var[col] = per_var[col].apply(_format_metric_cell)
+    return per_var.fillna("").to_html(index=False, escape=False, border=0)
+
+
+def _build_metasyn_gmf_table(run_dir: Path) -> Optional[str]:
+    """Render a GMF summary table for MetaSyn models."""
+
+    gmf_path = run_dir / "metasyn_gmf.json"
+    if not gmf_path.exists():
+        return None
+    try:
+        payload = json.loads(gmf_path.read_text(encoding="utf-8"))
+    except Exception:
+        return None
+    vars_block = payload.get("vars")
+    if not isinstance(vars_block, list):
+        return None
+    rows: List[Dict[str, str]] = []
+    for entry in vars_block:
+        if not isinstance(entry, dict):
+            continue
+        name = entry.get("name")
+        dist = entry.get("distribution") if isinstance(entry.get("distribution"), dict) else {}
+        dist_label = dist.get("name") or dist.get("class_name")
+        if name:
+            rows.append({"variable": str(name), "distribution": str(dist_label or "")})
+    if not rows:
+        return None
+    df = pd.DataFrame(rows)
+    return df.to_html(index=False, escape=False, border=0)
 
 
 def _build_missingness_table(summary: Optional[Dict[str, Any]]) -> Optional[str]:
@@ -435,6 +655,11 @@ def _prepare_model_rows(model_runs: Iterable[ModelRun], base_dir: Path) -> List[
             if rel:
                 links.append(_ModelLink(label=label, href=rel))
 
+        per_variable_table = _build_per_variable_table(run.per_variable_csv)
+        downstream_table = _build_metric_table(_downstream_metric_items(run.downstream_metrics))
+        privacy_table = _build_metric_table(_privacy_metric_items(run.privacy_metrics))
+        structure_table = _build_metasyn_gmf_table(run.run_dir) if run.backend == "metasyn" else None
+
         prepared.append(
             _ModelRow(
                 name=run.name,
@@ -446,6 +671,10 @@ def _prepare_model_rows(model_runs: Iterable[ModelRun], base_dir: Path) -> List[
                 structure_rel=_relative_path(run.run_dir / "structure.png", base_dir),
                 links=tuple(links),
                 missingness=manifest.get("missingness"),
+                per_variable_table=per_variable_table,
+                downstream_table=downstream_table,
+                privacy_table=privacy_table,
+                structure_table=structure_table,
             )
         )
     return prepared

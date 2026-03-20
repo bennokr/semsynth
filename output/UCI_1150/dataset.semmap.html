@@ -1,0 +1,40 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>UCI_1150 — SemMap metadata</title>
+  <style>
+    body { font-family: system-ui, Arial, sans-serif; line-height: 1.5; margin: 2rem; }
+    .item { border: 1px solid #ddd; border-radius: 8px; padding: 1rem; margin-bottom: 1rem; }
+    .item-title { margin: 0 0 .5rem; font-size: 1.1rem; }
+    .prop { margin: .2rem 0; }
+    .name { font-weight: 600; margin-right: .25rem; }
+    .id-link { margin: .2rem 0; }
+    table.prop-table { border-collapse: collapse; margin: .25rem 1rem 1rem; }
+    table.prop-table th, table.prop-table td { border: 1px solid #ddd; padding: .35rem .5rem; text-align: left; vertical-align: top; }
+    table.prop-table th { background: #f3f3f3; }
+    div[property] { margin-left: 1rem; }
+    div[property]:before { content: attr(property); font-weight:bold; margin-left: -1rem; }
+  </style>
+</head>
+<body>
+<h1>UCI_1150 — SemMap metadata</h1>
+<div class="item" vocab="https://schema.org/" typeof="dcat:Dataset dsv:Dataset" about="urn:dataset:uci-1150"><div property="datasetSchema" typeof="Thing" resource="urn:dataset:uci-1150#schema"><div class="prop"><span class="name">columns</span></div><table class="prop-table" data-prop="columns"><thead><tr><th>name</th><th>titles</th><th>hadRole</th><th>columnProperty</th><th>summaryStatistics</th></tr></thead><tr property="columns" typeof="Thing"><td><span property="name">Gallstone Status</span></td><td><span property="titles">0=Yes (gallstones present), 1=No</span></td><td><span property="hadRole">target</span></td><td><div property="columnProperty" typeof="Thing"><div property="hasCodeBook" typeof="Thing"><div class="prop"><span class="name">hasTopConcept</span></div><table class="prop-table" data-prop="hasTopConcept"><thead><tr><th>notation</th><th>prefLabel</th><th>exactMatch</th></tr></thead><tr property="hasTopConcept" typeof="Thing"><td><span property="notation">0</span></td><td><span property="prefLabel">Gallstones present</span></td><td><div class="prop"><span class="name">exactMatch</span><span property="exactMatch">sct:235919008</span></div></td></tr><tr property="hasTopConcept" typeof="Thing"><td><span property="notation">1</span></td><td><span property="prefLabel">Gallstones absent</span></td><td></td></tr></table></div>
+<div class="prop"><span class="name">statisticalDataType</span><span property="statisticalDataType">dsv:NominalDataType</span></div></div></td><td><div property="summaryStatistics" typeof="Thing"><div class="prop"><span class="name">columnCompleteness</span><span property="columnCompleteness">1.0</span></div></div></td></tr><tr property="columns" typeof="Thing"><td><span property="name">Age</span></td><td><span property="titles">Age</span></td><td></td><td><div property="columnProperty" typeof="Thing"><div property="hasUnit" typeof="Thing"><div class="prop"><span class="name">exactMatch</span><span property="exactMatch">unit:YR</span></div></div>
+<div class="prop"><span class="name">statisticalDataType</span><span property="statisticalDataType">dsv:QuantitativeDataType</span></div>
+<div class="prop"><span class="name">valueType</span><span property="valueType">xsd:integer</span></div></div></td><td><div property="summaryStatistics" typeof="Thing"><div class="prop"><span class="name">columnCompleteness</span><span property="columnCompleteness">1.0</span></div></div></td></tr><tr property="columns" typeof="Thing"><td><span property="name">Gender</span></td><td><span property="titles">Gender</span></td><td></td><td><div property="columnProperty" typeof="Thing"><div property="hasCodeBook" typeof="Thing"><div class="prop"><span class="name">hasTopConcept</span></div><table class="prop-table" data-prop="hasTopConcept"><thead><tr><th>notation</th><th>prefLabel</th><th>exactMatch</th></tr></thead><tr property="hasTopConcept" typeof="Thing"><td><span property="notation">0</span></td><td><span property="prefLabel">Male</span></td><td><div class="prop"><span class="name">exactMatch</span><span property="exactMatch">sct:248153007</span></div></td></tr><tr property="hasTopConcept" typeof="Thing"><td><span property="notation">1</span></td><td><span property="prefLabel">Female</span></td><td><div class="prop"><span class="name">exactMatch</span><span property="exactMatch">sct:248152002</span></div></td></tr></table></div>
+<div class="prop"><span class="name">statisticalDataType</span><span property="statisticalDataType">dsv:NominalDataType</span></div></div></td><td><div property="summaryStatistics" typeof="Thing"><div class="prop"><span class="name">columnCompleteness</span><span property="columnCompleteness">1.0</span></div></div></td></tr><tr property="columns" typeof="Thing"><td><span property="name">BMI</span></td><td><span property="titles">BMI</span></td><td></td><td><div property="columnProperty" typeof="Thing"><div property="hasUnit" typeof="Thing"><div class="prop"><span class="name">exactMatch</span><span property="exactMatch">unit:KiloGM-PER-M2</span></div></div>
+<div class="prop"><span class="name">source</span><a rel="source" href="https://loinc.org/39156-5">https://loinc.org/39156-5</a></div>
+<div class="prop"><span class="name">statisticalDataType</span><span property="statisticalDataType">dsv:QuantitativeDataType</span></div>
+<div class="prop"><span class="name">valueType</span><span property="valueType">xsd:decimal</span></div></div></td><td><div property="summaryStatistics" typeof="Thing"><div class="prop"><span class="name">columnCompleteness</span><span property="columnCompleteness">1.0</span></div></div></td></tr><tr property="columns" typeof="Thing"><td><span property="name">Glucose</span></td><td><span property="titles">Glucose</span></td><td></td><td><div property="columnProperty" typeof="Thing"><div property="hasUnit" typeof="Thing"><div class="prop"><span class="name">exactMatch</span><span property="exactMatch">unit:MilliGM-PER-DeciL</span></div></div>
+<div class="prop"><span class="name">source</span><a rel="source" href="https://loinc.org/2345-7">https://loinc.org/2345-7</a></div>
+<div class="prop"><span class="name">statisticalDataType</span><span property="statisticalDataType">dsv:QuantitativeDataType</span></div>
+<div class="prop"><span class="name">valueType</span><span property="valueType">xsd:decimal</span></div>
+<div class="prop"><span class="name">ucumCode</span><span property="ucumCode">mg/dL</span></div></div></td><td><div property="summaryStatistics" typeof="Thing"><div class="prop"><span class="name">columnCompleteness</span><span property="columnCompleteness">1.0</span></div></div></td></tr></table></div>
+<div property="summaryStatistics" typeof="Thing"><div class="prop"><span class="name">datasetCompleteness</span><span property="datasetCompleteness">1.0</span></div>
+<div class="prop"><span class="name">numberOfRows</span><span property="numberOfRows">319</span></div>
+<div class="prop"><span class="name">numberOfColumns</span><span property="numberOfColumns">39</span></div></div>
+<div property="dataset" typeof="disco:LogicalDataSet dsv:Dataset dcat:Dataset"><div class="prop"><span class="name">title</span><span property="title">Gallstone-1 (UCI ML Repository, ID 1150)</span></div></div></div>
+</body>
+</html>

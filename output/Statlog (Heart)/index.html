@@ -32,6 +32,35 @@ table.per-var-dist thead th { text-align: center; }
 <body>
   <main class="report-container">
       <h1>Data Report — Statlog (Heart)</h1>
+    <p>Cost Matrix</p>
+    <p><strong><em>_</em></strong>  abse  pres
+    absence  0  1
+    presence  5 0</p>
+    <p>where the rows represent the true values and the columns the predicted.</p>
+    <p><strong>Documentation</strong>: 
+    Attribute Information:</p>
+    <hr />
+    <pre><code>  -- 1. age       
+      -- 2. sex       
+      -- 3. chest pain type  (4 values)       
+      -- 4. resting blood pressure  
+      -- 5. serum cholestoral in mg/dl      
+      -- 6. fasting blood sugar &gt; 120 mg/dl       
+      -- 7. resting electrocardiographic results  (values 0,1,2) 
+      -- 8. maximum heart rate achieved  
+      -- 9. exercise induced angina    
+      -- 10. oldpeak = ST depression induced by exercise relative to rest   
+      -- 11. the slope of the peak exercise ST segment     
+      -- 12. number of major vessels (0-3) colored by flourosopy        
+      -- 13.  thal: 3 = normal; 6 = fixed defect; 7 = reversable defect
+    </code></pre>
+    <h2>Attributes types</h2>
+    <p>Real: 1,4,5,8,10,12
+    Ordered:11,
+    Binary: 2,6,9
+    Nominal:7,3,13</p>
+    <h2>Variable to be predicted</h2>
+    <p>Absence (1) or presence (2) of heart disease</p>
     <p><strong>Source</strong>: <a href="https://archive.ics.uci.edu/dataset/145">UCI dataset 145</a></p>
     <p><strong>SemMap JSON-LD</strong>: <a href="dataset.semmap.json">dataset.semmap.json</a> · <a href="dataset.semmap.html">RDFa HTML</a></p>
     <h2>Overview</h2>
@@ -61,11 +90,11 @@ table.per-var-dist thead th { text-align: center; }
     </tr>
     <tr>
     <td style="text-align: left;">Discrete</td>
-    <td style="text-align: left;">1</td>
+    <td style="text-align: left;">9</td>
     </tr>
     <tr>
     <td style="text-align: left;">Continuous</td>
-    <td style="text-align: left;">13</td>
+    <td style="text-align: left;">5</td>
     </tr>
     <tr>
     <td style="text-align: left;">SemMap</td>
@@ -73,7 +102,7 @@ table.per-var-dist thead th { text-align: center; }
     </tr>
     <tr>
     <td style="text-align: left;">Missingness</td>
-    <td style="text-align: left;">modeled 0 of 14 (seed 42)</td>
+    <td style="text-align: left;">Not modeled</td>
     </tr>
     </tbody>
     </table>
@@ -94,13 +123,13 @@ table.per-var-dist thead th { text-align: center; }
     </tr>
     <tr>
     <td style="text-align: left;">sex</td>
-    <td style="text-align: left;">continuous</td>
-    <td style="text-align: left;">0.6778 ± 0.4682 [0, 0, 1, 1, 1]</td>
+    <td style="text-align: left;">discrete</td>
+    <td style="text-align: left;">1: 183 (67.78%)</td>
     </tr>
     <tr>
     <td style="text-align: left;">chest-pain</td>
-    <td style="text-align: left;">continuous</td>
-    <td style="text-align: left;">3.1741 ± 0.9501 [1, 3, 3, 4, 4]</td>
+    <td style="text-align: left;">discrete</td>
+    <td style="text-align: left;">4: 129 (47.78%)<br />3: 79 (29.26%)<br />2: 42 (15.56%)<br />1: 20 (7.41%)</td>
     </tr>
     <tr>
     <td style="text-align: left;">rest-bp</td>
@@ -114,13 +143,13 @@ table.per-var-dist thead th { text-align: center; }
     </tr>
     <tr>
     <td style="text-align: left;">fasting-blood-sugar</td>
-    <td style="text-align: left;">continuous</td>
-    <td style="text-align: left;">0.1481 ± 0.3559 [0, 0, 0, 0, 1]</td>
+    <td style="text-align: left;">discrete</td>
+    <td style="text-align: left;">1: 40 (14.81%)</td>
     </tr>
     <tr>
     <td style="text-align: left;">electrocardiographic</td>
-    <td style="text-align: left;">continuous</td>
-    <td style="text-align: left;">1.0222 ± 0.9979 [0, 0, 2, 2, 2]</td>
+    <td style="text-align: left;">discrete</td>
+    <td style="text-align: left;">2: 137 (50.74%)<br />0: 131 (48.52%)<br />1: 2 (0.74%)</td>
     </tr>
     <tr>
     <td style="text-align: left;">max-heart-rate</td>
@@ -129,8 +158,8 @@ table.per-var-dist thead th { text-align: center; }
     </tr>
     <tr>
     <td style="text-align: left;">angina</td>
-    <td style="text-align: left;">continuous</td>
-    <td style="text-align: left;">0.3296 ± 0.4710 [0, 0, 0, 1, 1]</td>
+    <td style="text-align: left;">discrete</td>
+    <td style="text-align: left;">1: 89 (32.96%)</td>
     </tr>
     <tr>
     <td style="text-align: left;">oldpeak</td>
@@ -139,18 +168,18 @@ table.per-var-dist thead th { text-align: center; }
     </tr>
     <tr>
     <td style="text-align: left;">slope</td>
-    <td style="text-align: left;">continuous</td>
-    <td style="text-align: left;">1.5852 ± 0.6144 [1, 1, 2, 2, 3]</td>
+    <td style="text-align: left;">discrete</td>
+    <td style="text-align: left;">1: 130 (48.15%)<br />2: 122 (45.19%)<br />3: 18 (6.67%)</td>
     </tr>
     <tr>
     <td style="text-align: left;">major-vessels</td>
-    <td style="text-align: left;">continuous</td>
-    <td style="text-align: left;">0.6704 ± 0.9439 [0, 0, 0, 1, 3]</td>
+    <td style="text-align: left;">discrete</td>
+    <td style="text-align: left;">0: 160 (59.26%)<br />1: 58 (21.48%)<br />2: 33 (12.22%)<br />3: 19 (7.04%)</td>
     </tr>
     <tr>
     <td style="text-align: left;">thal</td>
-    <td style="text-align: left;">continuous</td>
-    <td style="text-align: left;">4.6963 ± 1.9407 [3, 3, 3, 7, 7]</td>
+    <td style="text-align: left;">discrete</td>
+    <td style="text-align: left;">3: 152 (56.30%)<br />7: 104 (38.52%)<br />6: 14 (5.19%)</td>
     </tr>
     <tr>
     <td style="text-align: left;">heart-disease</td>
@@ -159,92 +188,74 @@ table.per-var-dist thead th { text-align: center; }
     </tr>
     </tbody>
     </table>
-    <h2>Missingness model</h2>
-    <ul>
-    <li>Columns with learned missingness: 0 of 14</li>
-    <li>Columns without missingness: 14No columns required missingness injection.</li>
-    </ul>
     <h2>Fidelity summary</h2>
     <table>
     <thead>
     <tr>
     <th style="text-align: left;">model</th>
     <th style="text-align: left;">backend</th>
-    <th style="text-align: right;">disc_jsd_mean</th>
-    <th style="text-align: right;">disc_jsd_median</th>
-    <th style="text-align: right;">cont_ks_mean</th>
-    <th style="text-align: right;">cont_w1_mean</th>
-    <th style="text-align: left;">privacy_overlap</th>
-    <th style="text-align: left;">downstream_sign_match</th>
+    <th style="text-align: right;">disc jsd mean</th>
+    <th style="text-align: right;">disc jsd median</th>
+    <th style="text-align: right;">cont ks mean</th>
+    <th style="text-align: right;">cont w1 mean</th>
+    <th style="text-align: left;">downstream sign match</th>
     </tr>
     </thead>
     <tbody>
     <tr>
     <td style="text-align: left;">metasyn</td>
     <td style="text-align: left;">metasyn</td>
-    <td style="text-align: right;">0.1074</td>
-    <td style="text-align: right;">0.0871</td>
-    <td style="text-align: right;">0.1859</td>
-    <td style="text-align: right;">3.779</td>
-    <td style="text-align: left;"></td>
+    <td style="text-align: right;">0.0836</td>
+    <td style="text-align: right;">0.0831</td>
+    <td style="text-align: right;">0.1622</td>
+    <td style="text-align: right;">2.7434</td>
     <td style="text-align: left;"></td>
     </tr>
+    </tbody>
+    </table>
+    <h2>Privacy summary</h2>
+    <table>
+    <thead>
     <tr>
-    <td style="text-align: left;">metasyn_full</td>
+    <th style="text-align: left;">model</th>
+    <th style="text-align: left;">backend</th>
+    <th style="text-align: right;">n real</th>
+    <th style="text-align: right;">n synth</th>
+    <th style="text-align: right;">exact overlap rate</th>
+    <th style="text-align: right;">near duplicate rate eps</th>
+    <th style="text-align: right;">nn distance mean</th>
+    <th style="text-align: right;">k min</th>
+    <th style="text-align: right;">k pct lt5</th>
+    <th style="text-align: right;">k map</th>
+    <th style="text-align: right;">rare qi reproduction rate</th>
+    <th style="text-align: left;">identifiability score</th>
+    <th style="text-align: right;">delta presence</th>
+    </tr>
+    </thead>
+    <tbody>
+    <tr>
     <td style="text-align: left;">metasyn</td>
-    <td style="text-align: right;">0.1044</td>
-    <td style="text-align: right;">0.0935</td>
-    <td style="text-align: right;">0.1889</td>
-    <td style="text-align: right;">4.2565</td>
+    <td style="text-align: left;">metasyn</td>
+    <td style="text-align: right;">270</td>
+    <td style="text-align: right;">270</td>
+    <td style="text-align: right;">0</td>
+    <td style="text-align: right;">0.9815</td>
+    <td style="text-align: right;">0.0678</td>
+    <td style="text-align: right;">1</td>
+    <td style="text-align: right;">1</td>
+    <td style="text-align: right;">5</td>
+    <td style="text-align: right;">0</td>
     <td style="text-align: left;"></td>
-    <td style="text-align: left;"></td>
-    </tr>
-    <tr>
-    <td style="text-align: left;">clg_mi2</td>
-    <td style="text-align: left;">pybnesian</td>
-    <td style="text-align: right;">0.0928</td>
-    <td style="text-align: right;">0.078</td>
-    <td style="text-align: right;">0.1504</td>
-    <td style="text-align: right;">3.3633</td>
-    <td style="text-align: left;"></td>
-    <td style="text-align: left;"></td>
-    </tr>
-    <tr>
-    <td style="text-align: left;">semi_mi5</td>
-    <td style="text-align: left;">pybnesian</td>
-    <td style="text-align: right;">0.0928</td>
-    <td style="text-align: right;">0.078</td>
-    <td style="text-align: right;">0.1459</td>
-    <td style="text-align: right;">3.23</td>
-    <td style="text-align: left;"></td>
-    <td style="text-align: left;"></td>
-    </tr>
-    <tr>
-    <td style="text-align: left;">ctgan_fast</td>
-    <td style="text-align: left;">synthcity</td>
-    <td style="text-align: right;">0.3521</td>
-    <td style="text-align: right;">0.3518</td>
-    <td style="text-align: right;">0.6933</td>
-    <td style="text-align: right;">35.8363</td>
-    <td style="text-align: left;"></td>
-    <td style="text-align: left;"></td>
-    </tr>
-    <tr>
-    <td style="text-align: left;">tvae_quick</td>
-    <td style="text-align: left;">synthcity</td>
-    <td style="text-align: right;">0.1147</td>
-    <td style="text-align: right;">0.134</td>
-    <td style="text-align: right;">0.2578</td>
-    <td style="text-align: right;">8.0448</td>
-    <td style="text-align: left;"></td>
-    <td style="text-align: left;"></td>
+    <td style="text-align: right;">1.7143</td>
     </tr>
     </tbody>
     </table>
     <h2>Models</h2>
     <table>
     <tr><th>UMAP</th><th>Details</th><th>Structure</th></tr>
-    <tr><td></td><td>
+    <tr><td><img src='umap_real.png' width='280'/></td><td>
+    <h3>Real data</h3></td><td></td></tr>
+    <tr><td><img src='models/metasyn/umap.png' width='280'/></td><td>
 
     <h3>Model: metasyn (metasyn)</h3>
     <ul>
@@ -252,75 +263,231 @@ table.per-var-dist thead th { text-align: center; }
     <li> <a href="models/metasyn/synthetic.csv">Synthetic CSV</a></li>
     <li> <a href="models/metasyn/per_variable_metrics.csv">Per-variable metrics</a></li>
     <li> <a href="models/metasyn/metrics.json">Metrics JSON</a></li>
+    <li> <a href="models/metasyn/metrics.privacy.json">Privacy metrics</a></li>
+    <li> <a href="models/metasyn/metrics.downstream.json">Downstream metrics</a></li>
     </ul>
-
+    <details class="model-subtable"><summary><strong>Per-variable fidelity</strong></summary>
+    <table class="dataframe">
+      <thead>
+        <tr style="text-align: right;">
+          <th>variable</th>
+          <th>type</th>
+          <th>KS</th>
+          <th>W1</th>
+          <th>JSD</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td>age</td>
+          <td>continuous</td>
+          <td>0.1444</td>
+          <td>2.0249</td>
+          <td></td>
+        </tr>
+        <tr>
+          <td>sex</td>
+          <td>discrete</td>
+          <td></td>
+          <td></td>
+          <td>0.0887</td>
+        </tr>
+        <tr>
+          <td>chest-pain</td>
+          <td>discrete</td>
+          <td></td>
+          <td></td>
+          <td>0.1276</td>
+        </tr>
+        <tr>
+          <td>rest-bp</td>
+          <td>continuous</td>
+          <td>0.1407</td>
+          <td>2.6251</td>
+          <td></td>
+        </tr>
+        <tr>
+          <td>serum-chol</td>
+          <td>continuous</td>
+          <td>0.0704</td>
+          <td>5.7916</td>
+          <td></td>
+        </tr>
+        <tr>
+          <td>fasting-blood-sugar</td>
+          <td>discrete</td>
+          <td></td>
+          <td></td>
+          <td>0.1187</td>
+        </tr>
+        <tr>
+          <td>electrocardiographic</td>
+          <td>discrete</td>
+          <td></td>
+          <td></td>
+          <td>0.0831</td>
+        </tr>
+        <tr>
+          <td>max-heart-rate</td>
+          <td>continuous</td>
+          <td>0.1037</td>
+          <td>3.0764</td>
+          <td></td>
+        </tr>
+        <tr>
+          <td>angina</td>
+          <td>discrete</td>
+          <td></td>
+          <td></td>
+          <td>0.0359</td>
+        </tr>
+        <tr>
+          <td>oldpeak</td>
+          <td>continuous</td>
+          <td>0.3519</td>
+          <td>0.199</td>
+          <td></td>
+        </tr>
+      </tbody>
+    </table>
+    </details><details class="model-subtable"><summary><strong>Downstream metrics</strong></summary>
+    <table class="dataframe">
+      <thead>
+        <tr style="text-align: right;">
+          <th>metric</th>
+          <th>value</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td>sign_match_rate</td>
+          <td></td>
+        </tr>
+        <tr>
+          <td>formula</td>
+          <td>heart_disease ~ age + sex + C(chest_pain, levels=[]) + rest_bp + serum_chol + fasting_blood_sugar + C(electrocardiographic, levels=[]) + max_heart_rate + angina + oldpeak + slope + major_vessels + C(thal, levels=[]) + age:sex + sex:C(chest_pain, levels=[]) + C(chest_pain, levels=[]):rest_bp + rest_bp:serum_chol + serum_chol:fasting_blood_sugar</td>
+        </tr>
+      </tbody>
+    </table>
+    </details><details class="model-subtable"><summary><strong>Privacy metrics</strong></summary>
+    <table class="dataframe">
+      <thead>
+        <tr style="text-align: right;">
+          <th>metric</th>
+          <th>value</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td>n_real</td>
+          <td>270</td>
+        </tr>
+        <tr>
+          <td>n_synth</td>
+          <td>270</td>
+        </tr>
+        <tr>
+          <td>exact_overlap_rate</td>
+          <td>0</td>
+        </tr>
+        <tr>
+          <td>near_duplicate_rate_eps</td>
+          <td>0.9815</td>
+        </tr>
+        <tr>
+          <td>nn_distance_mean</td>
+          <td>0.0678</td>
+        </tr>
+        <tr>
+          <td>k_min</td>
+          <td>1</td>
+        </tr>
+        <tr>
+          <td>k_pct_lt5</td>
+          <td>1</td>
+        </tr>
+        <tr>
+          <td>k_map</td>
+          <td>5</td>
+        </tr>
+        <tr>
+          <td>rare_qi_reproduction_rate</td>
+          <td>0</td>
+        </tr>
+        <tr>
+          <td>delta_presence</td>
+          <td>1.7143</td>
+        </tr>
+      </tbody>
+    </table>
+    </details>
     </td><td>
-    </td></tr>
-
-    <tr><td></td><td>
-
-    <h3>Model: metasyn_full (metasyn)</h3>
-    <ul>
-    <li>Seed: 42, rows: 270</li>
-    <li> <a href="models/metasyn_full/synthetic.csv">Synthetic CSV</a></li>
-    <li> <a href="models/metasyn_full/per_variable_metrics.csv">Per-variable metrics</a></li>
-    <li> <a href="models/metasyn_full/metrics.json">Metrics JSON</a></li>
-    </ul>
-
-    </td><td>
-    </td></tr>
-
-    <tr><td></td><td>
-
-    <h3>Model: clg_mi2 (pybnesian)</h3>
-    <ul>
-    <li>Seed: 42, rows: 270</li>
-    <li> Params: <tt>{"max_indegree": 2, "operators": ["arcs"], "score": "bic", "type": "clg"}</tt></li><li> <a href="models/clg_mi2/synthetic.csv">Synthetic CSV</a></li>
-    <li> <a href="models/clg_mi2/per_variable_metrics.csv">Per-variable metrics</a></li>
-    <li> <a href="models/clg_mi2/metrics.json">Metrics JSON</a></li>
-    </ul>
-
-    </td><td>
-    </td></tr>
-
-    <tr><td></td><td>
-
-    <h3>Model: semi_mi5 (pybnesian)</h3>
-    <ul>
-    <li>Seed: 42, rows: 270</li>
-    <li> Params: <tt>{"max_indegree": 5, "operators": ["arcs"], "score": "bic", "type": "semiparametric"}</tt></li><li> <a href="models/semi_mi5/synthetic.csv">Synthetic CSV</a></li>
-    <li> <a href="models/semi_mi5/per_variable_metrics.csv">Per-variable metrics</a></li>
-    <li> <a href="models/semi_mi5/metrics.json">Metrics JSON</a></li>
-    </ul>
-
-    </td><td>
-    </td></tr>
-
-    <tr><td></td><td>
-
-    <h3>Model: ctgan_fast (synthcity)</h3>
-    <ul>
-    <li>Seed: 42, rows: 270</li>
-    <li> Params: <tt>{"batch_size": 256, "n_iter": 5}</tt></li><li> <a href="models/ctgan_fast/synthetic.csv">Synthetic CSV</a></li>
-    <li> <a href="models/ctgan_fast/per_variable_metrics.csv">Per-variable metrics</a></li>
-    <li> <a href="models/ctgan_fast/metrics.json">Metrics JSON</a></li>
-    </ul>
-
-    </td><td>
-    </td></tr>
-
-    <tr><td></td><td>
-
-    <h3>Model: tvae_quick (synthcity)</h3>
-    <ul>
-    <li>Seed: 42, rows: 270</li>
-    <li> Params: <tt>{"batch_size": 256}</tt></li><li> <a href="models/tvae_quick/synthetic.csv">Synthetic CSV</a></li>
-    <li> <a href="models/tvae_quick/per_variable_metrics.csv">Per-variable metrics</a></li>
-    <li> <a href="models/tvae_quick/metrics.json">Metrics JSON</a></li>
-    </ul>
-
-    </td><td>
-    </td></tr>
+    <table class="dataframe">
+      <thead>
+        <tr style="text-align: right;">
+          <th>variable</th>
+          <th>distribution</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td>age</td>
+          <td>core.normal</td>
+        </tr>
+        <tr>
+          <td>sex</td>
+          <td>core.multinoulli</td>
+        </tr>
+        <tr>
+          <td>chest-pain</td>
+          <td>core.multinoulli</td>
+        </tr>
+        <tr>
+          <td>rest-bp</td>
+          <td>core.lognormal</td>
+        </tr>
+        <tr>
+          <td>serum-chol</td>
+          <td>core.lognormal</td>
+        </tr>
+        <tr>
+          <td>fasting-blood-sugar</td>
+          <td>core.multinoulli</td>
+        </tr>
+        <tr>
+          <td>electrocardiographic</td>
+          <td>core.multinoulli</td>
+        </tr>
+        <tr>
+          <td>max-heart-rate</td>
+          <td>core.normal</td>
+        </tr>
+        <tr>
+          <td>angina</td>
+          <td>core.multinoulli</td>
+        </tr>
+        <tr>
+          <td>oldpeak</td>
+          <td>core.truncated_normal</td>
+        </tr>
+        <tr>
+          <td>slope</td>
+          <td>core.multinoulli</td>
+        </tr>
+        <tr>
+          <td>major-vessels</td>
+          <td>core.multinoulli</td>
+        </tr>
+        <tr>
+          <td>thal</td>
+          <td>core.multinoulli</td>
+        </tr>
+        <tr>
+          <td>heart-disease</td>
+          <td>core.multinoulli</td>
+        </tr>
+      </tbody>
+    </table></td></tr>
 
     </table>
   </main>

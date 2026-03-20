@@ -99,210 +99,637 @@
     "columns": [
       {
         "name": "age",
+        "titles": "Participant age in years",
+        "columnProperty": {
+          "summaryStatistics": {
+            "statisticalDataType": "dsv:ContinuousDataType"
+          },
+          "unitText": "years",
+          "exactMatch": [
+            "https://loinc.org/30525-0/"
+          ],
+          "valueType": "xsd:float",
+          "hasQuantityKind": "quantitykind:Time",
+          "ucumCode": "a"
+        },
         "summaryStatistics": {
-          "statisticalDataType": "dsv:NumericalDataType",
-          "columnCompleteness": 0.9775,
-          "numberOfRows": 400
+          "columnCompleteness": 0.9775
         }
       },
       {
         "name": "bp",
+        "titles": "Blood pressure reading (mmHg)",
+        "columnProperty": {
+          "summaryStatistics": {
+            "statisticalDataType": "dsv:ContinuousDataType"
+          },
+          "unitText": "mmHg",
+          "closeMatch": [
+            "https://loinc.org/8462-4/"
+          ],
+          "valueType": "xsd:float",
+          "hasQuantityKind": "quantitykind:Pressure",
+          "ucumCode": "mm[Hg]"
+        },
         "summaryStatistics": {
-          "statisticalDataType": "dsv:NumericalDataType",
-          "columnCompleteness": 0.97,
-          "numberOfRows": 400
+          "columnCompleteness": 0.97
         }
       },
       {
         "name": "sg",
+        "titles": "Urine specific gravity",
+        "columnProperty": {
+          "summaryStatistics": {
+            "statisticalDataType": "dsv:ContinuousDataType"
+          },
+          "exactMatch": [
+            "https://loinc.org/2965-2/"
+          ],
+          "valueType": "xsd:decimal"
+        },
         "summaryStatistics": {
-          "statisticalDataType": "dsv:NumericalDataType",
-          "columnCompleteness": 0.8825000000000001,
-          "numberOfRows": 400
+          "columnCompleteness": 0.8825000000000001
         }
       },
       {
         "name": "al",
+        "titles": "Urine albumin dipstick grade",
+        "columnProperty": {
+          "summaryStatistics": {
+            "statisticalDataType": "dsv:OrdinalDataType"
+          },
+          "hasCodeBook": {
+            "hasTopConcept": [
+              {
+                "notation": "0",
+                "prefLabel": "Albumin negative"
+              },
+              {
+                "notation": "1",
+                "prefLabel": "Trace albumin"
+              },
+              {
+                "notation": "2",
+                "prefLabel": "Albumin 1+"
+              },
+              {
+                "notation": "3",
+                "prefLabel": "Albumin 2+"
+              },
+              {
+                "notation": "4",
+                "prefLabel": "Albumin 3+"
+              },
+              {
+                "notation": "5",
+                "prefLabel": "Albumin 4+"
+              }
+            ]
+          },
+          "closeMatch": [
+            "http://snomed.info/id/274769005"
+          ],
+          "valueType": "xsd:integer"
+        },
         "summaryStatistics": {
-          "statisticalDataType": "dsv:NumericalDataType",
-          "columnCompleteness": 0.885,
-          "numberOfRows": 400
+          "columnCompleteness": 0.885
         }
       },
       {
         "name": "su",
+        "titles": "Urine sugar dipstick grade",
+        "columnProperty": {
+          "summaryStatistics": {
+            "statisticalDataType": "dsv:OrdinalDataType"
+          },
+          "hasCodeBook": {
+            "hasTopConcept": [
+              {
+                "notation": "0",
+                "prefLabel": "Sugar negative"
+              },
+              {
+                "notation": "1",
+                "prefLabel": "Trace sugar"
+              },
+              {
+                "notation": "2",
+                "prefLabel": "Sugar 1+"
+              },
+              {
+                "notation": "3",
+                "prefLabel": "Sugar 2+"
+              },
+              {
+                "notation": "4",
+                "prefLabel": "Sugar 3+"
+              },
+              {
+                "notation": "5",
+                "prefLabel": "Sugar 4+"
+              }
+            ]
+          },
+          "closeMatch": [
+            "http://snomed.info/id/45154002"
+          ],
+          "valueType": "xsd:integer"
+        },
         "summaryStatistics": {
-          "statisticalDataType": "dsv:NumericalDataType",
-          "columnCompleteness": 0.8775,
-          "numberOfRows": 400
+          "columnCompleteness": 0.8775
         }
       },
       {
         "name": "rbc",
+        "titles": "Urine red blood cells (microscopy)",
+        "columnProperty": {
+          "summaryStatistics": {
+            "statisticalDataType": "dsv:NominalDataType"
+          },
+          "hasCodeBook": {
+            "hasTopConcept": [
+              {
+                "notation": "normal",
+                "prefLabel": "Normal"
+              },
+              {
+                "notation": "abnormal",
+                "prefLabel": "Abnormal"
+              }
+            ]
+          },
+          "closeMatch": [
+            "http://snomed.info/id/34436003"
+          ],
+          "valueType": "xsd:string"
+        },
         "summaryStatistics": {
-          "statisticalDataType": "dsv:NumericalDataType",
-          "columnCompleteness": 0.62,
-          "numberOfRows": 400
+          "columnCompleteness": 0.62
         }
       },
       {
         "name": "pc",
+        "titles": "Urine pus cells (leukocytes)",
+        "columnProperty": {
+          "summaryStatistics": {
+            "statisticalDataType": "dsv:NominalDataType"
+          },
+          "hasCodeBook": {
+            "hasTopConcept": [
+              {
+                "notation": "normal",
+                "prefLabel": "Normal"
+              },
+              {
+                "notation": "abnormal",
+                "prefLabel": "Abnormal"
+              }
+            ]
+          },
+          "closeMatch": [
+            "http://snomed.info/id/275741008"
+          ],
+          "valueType": "xsd:string"
+        },
         "summaryStatistics": {
-          "statisticalDataType": "dsv:NumericalDataType",
-          "columnCompleteness": 0.8375,
-          "numberOfRows": 400
+          "columnCompleteness": 0.8375
         }
       },
       {
         "name": "pcc",
+        "titles": "Pus cell clumps in urine",
+        "columnProperty": {
+          "summaryStatistics": {
+            "statisticalDataType": "dsv:NominalDataType"
+          },
+          "hasCodeBook": {
+            "hasTopConcept": [
+              {
+                "notation": "present",
+                "prefLabel": "Present"
+              },
+              {
+                "notation": "notpresent",
+                "prefLabel": "Not present"
+              }
+            ]
+          },
+          "exactMatch": [
+            "https://loinc.org/67848-2/"
+          ],
+          "valueType": "xsd:string"
+        },
         "summaryStatistics": {
-          "statisticalDataType": "dsv:NumericalDataType",
-          "columnCompleteness": 0.99,
-          "numberOfRows": 400
+          "columnCompleteness": 0.99
         }
       },
       {
         "name": "ba",
+        "titles": "Bacteria in urine",
+        "columnProperty": {
+          "summaryStatistics": {
+            "statisticalDataType": "dsv:NominalDataType"
+          },
+          "hasCodeBook": {
+            "hasTopConcept": [
+              {
+                "notation": "present",
+                "prefLabel": "Present"
+              },
+              {
+                "notation": "notpresent",
+                "prefLabel": "Not present"
+              }
+            ]
+          },
+          "closeMatch": [
+            "http://snomed.info/id/61373006"
+          ],
+          "valueType": "xsd:string"
+        },
         "summaryStatistics": {
-          "statisticalDataType": "dsv:NumericalDataType",
-          "columnCompleteness": 0.99,
-          "numberOfRows": 400
+          "columnCompleteness": 0.99
         }
       },
       {
         "name": "bgr",
+        "titles": "Blood glucose (random)",
+        "columnProperty": {
+          "summaryStatistics": {
+            "statisticalDataType": "dsv:ContinuousDataType"
+          },
+          "unitText": "mg/dL",
+          "exactMatch": [
+            "https://loinc.org/2345-7/"
+          ],
+          "valueType": "xsd:float",
+          "ucumCode": "mg/dL"
+        },
         "summaryStatistics": {
-          "statisticalDataType": "dsv:NumericalDataType",
-          "columnCompleteness": 0.89,
-          "numberOfRows": 400
+          "columnCompleteness": 0.89
         }
       },
       {
         "name": "bu",
+        "titles": "Blood urea nitrogen",
+        "columnProperty": {
+          "summaryStatistics": {
+            "statisticalDataType": "dsv:ContinuousDataType"
+          },
+          "unitText": "mg/dL",
+          "exactMatch": [
+            "https://loinc.org/6299-2/"
+          ],
+          "valueType": "xsd:float",
+          "ucumCode": "mg/dL"
+        },
         "summaryStatistics": {
-          "statisticalDataType": "dsv:NumericalDataType",
-          "columnCompleteness": 0.9525,
-          "numberOfRows": 400
+          "columnCompleteness": 0.9525
         }
       },
       {
         "name": "sc",
+        "titles": "Serum creatinine",
+        "columnProperty": {
+          "summaryStatistics": {
+            "statisticalDataType": "dsv:ContinuousDataType"
+          },
+          "unitText": "mg/dL",
+          "exactMatch": [
+            "https://loinc.org/2160-0/"
+          ],
+          "valueType": "xsd:float",
+          "ucumCode": "mg/dL"
+        },
         "summaryStatistics": {
-          "statisticalDataType": "dsv:NumericalDataType",
-          "columnCompleteness": 0.9575,
-          "numberOfRows": 400
+          "columnCompleteness": 0.9575
         }
       },
       {
         "name": "sod",
+        "titles": "Serum sodium",
+        "columnProperty": {
+          "summaryStatistics": {
+            "statisticalDataType": "dsv:ContinuousDataType"
+          },
+          "unitText": "mmol/L",
+          "exactMatch": [
+            "https://loinc.org/2951-2/"
+          ],
+          "valueType": "xsd:float",
+          "ucumCode": "mmol/L"
+        },
         "summaryStatistics": {
-          "statisticalDataType": "dsv:NumericalDataType",
-          "columnCompleteness": 0.7825,
-          "numberOfRows": 400
+          "columnCompleteness": 0.7825
         }
       },
       {
         "name": "pot",
+        "titles": "Serum potassium",
+        "columnProperty": {
+          "summaryStatistics": {
+            "statisticalDataType": "dsv:ContinuousDataType"
+          },
+          "unitText": "mmol/L",
+          "exactMatch": [
+            "https://loinc.org/2823-3/"
+          ],
+          "valueType": "xsd:float",
+          "ucumCode": "mmol/L"
+        },
         "summaryStatistics": {
-          "statisticalDataType": "dsv:NumericalDataType",
-          "columnCompleteness": 0.78,
-          "numberOfRows": 400
+          "columnCompleteness": 0.78
         }
       },
       {
         "name": "hemo",
+        "titles": "Hemoglobin",
+        "columnProperty": {
+          "summaryStatistics": {
+            "statisticalDataType": "dsv:ContinuousDataType"
+          },
+          "unitText": "g/dL",
+          "exactMatch": [
+            "https://loinc.org/718-7/"
+          ],
+          "valueType": "xsd:float",
+          "ucumCode": "g/dL"
+        },
         "summaryStatistics": {
-          "statisticalDataType": "dsv:NumericalDataType",
-          "columnCompleteness": 0.87,
-          "numberOfRows": 400
+          "columnCompleteness": 0.87
         }
       },
       {
         "name": "pcv",
+        "titles": "Packed cell volume (hematocrit)",
+        "columnProperty": {
+          "summaryStatistics": {
+            "statisticalDataType": "dsv:ContinuousDataType"
+          },
+          "unitText": "percent",
+          "exactMatch": [
+            "https://loinc.org/20570-8/"
+          ],
+          "valueType": "xsd:float",
+          "ucumCode": "%"
+        },
         "summaryStatistics": {
-          "statisticalDataType": "dsv:NumericalDataType",
-          "columnCompleteness": 0.8225,
-          "numberOfRows": 400
+          "columnCompleteness": 0.8225
         }
       },
       {
         "name": "wbcc",
+        "titles": "White blood cell count",
+        "columnProperty": {
+          "summaryStatistics": {
+            "statisticalDataType": "dsv:ContinuousDataType"
+          },
+          "unitText": "10^3 cells/\u00b5L",
+          "exactMatch": [
+            "https://loinc.org/6690-2/"
+          ],
+          "valueType": "xsd:float",
+          "ucumCode": "10*3/uL"
+        },
         "summaryStatistics": {
-          "statisticalDataType": "dsv:NumericalDataType",
-          "columnCompleteness": 0.735,
-          "numberOfRows": 400
+          "columnCompleteness": 0.735
         }
       },
       {
         "name": "rbcc",
+        "titles": "Red blood cell count",
+        "columnProperty": {
+          "summaryStatistics": {
+            "statisticalDataType": "dsv:ContinuousDataType"
+          },
+          "unitText": "10^6 cells/\u00b5L",
+          "exactMatch": [
+            "https://loinc.org/789-8/"
+          ],
+          "valueType": "xsd:float",
+          "ucumCode": "10*6/uL"
+        },
         "summaryStatistics": {
-          "statisticalDataType": "dsv:NumericalDataType",
-          "columnCompleteness": 0.6725,
-          "numberOfRows": 400
+          "columnCompleteness": 0.6725
         }
       },
       {
         "name": "htn",
+        "titles": "Hypertension history",
+        "columnProperty": {
+          "summaryStatistics": {
+            "statisticalDataType": "dsv:NominalDataType"
+          },
+          "hasCodeBook": {
+            "hasTopConcept": [
+              {
+                "notation": "yes",
+                "prefLabel": "Yes"
+              },
+              {
+                "notation": "no",
+                "prefLabel": "No"
+              }
+            ]
+          },
+          "closeMatch": [
+            "http://snomed.info/id/38341003"
+          ],
+          "valueType": "xsd:string"
+        },
         "summaryStatistics": {
-          "statisticalDataType": "dsv:NumericalDataType",
-          "columnCompleteness": 0.995,
-          "numberOfRows": 400
+          "columnCompleteness": 0.995
         }
       },
       {
         "name": "dm",
+        "titles": "Diabetes mellitus history",
+        "columnProperty": {
+          "summaryStatistics": {
+            "statisticalDataType": "dsv:NominalDataType"
+          },
+          "hasCodeBook": {
+            "hasTopConcept": [
+              {
+                "notation": "yes",
+                "prefLabel": "Yes"
+              },
+              {
+                "notation": "no",
+                "prefLabel": "No"
+              }
+            ]
+          },
+          "closeMatch": [
+            "http://snomed.info/id/73211009"
+          ],
+          "valueType": "xsd:string"
+        },
         "summaryStatistics": {
-          "statisticalDataType": "dsv:NumericalDataType",
-          "columnCompleteness": 0.995,
-          "numberOfRows": 400
+          "columnCompleteness": 0.995
         }
       },
       {
         "name": "cad",
+        "titles": "Coronary artery disease history",
+        "columnProperty": {
+          "summaryStatistics": {
+            "statisticalDataType": "dsv:NominalDataType"
+          },
+          "hasCodeBook": {
+            "hasTopConcept": [
+              {
+                "notation": "yes",
+                "prefLabel": "Yes"
+              },
+              {
+                "notation": "no",
+                "prefLabel": "No"
+              }
+            ]
+          },
+          "closeMatch": [
+            "http://snomed.info/id/53741008"
+          ],
+          "valueType": "xsd:string"
+        },
         "summaryStatistics": {
-          "statisticalDataType": "dsv:NumericalDataType",
-          "columnCompleteness": 0.995,
-          "numberOfRows": 400
+          "columnCompleteness": 0.995
         }
       },
       {
         "name": "appet",
+        "titles": "Reported appetite",
+        "columnProperty": {
+          "summaryStatistics": {
+            "statisticalDataType": "dsv:NominalDataType"
+          },
+          "hasCodeBook": {
+            "hasTopConcept": [
+              {
+                "notation": "good",
+                "prefLabel": "Good appetite"
+              },
+              {
+                "notation": "poor",
+                "prefLabel": "Poor appetite"
+              }
+            ]
+          },
+          "closeMatch": [
+            "http://snomed.info/id/2492004"
+          ],
+          "valueType": "xsd:string"
+        },
         "summaryStatistics": {
-          "statisticalDataType": "dsv:NumericalDataType",
-          "columnCompleteness": 0.9975,
-          "numberOfRows": 400
+          "columnCompleteness": 0.9975
         }
       },
       {
         "name": "pe",
+        "titles": "Pedal edema",
+        "columnProperty": {
+          "summaryStatistics": {
+            "statisticalDataType": "dsv:NominalDataType"
+          },
+          "hasCodeBook": {
+            "hasTopConcept": [
+              {
+                "notation": "yes",
+                "prefLabel": "Yes"
+              },
+              {
+                "notation": "no",
+                "prefLabel": "No"
+              }
+            ]
+          },
+          "closeMatch": [
+            "http://snomed.info/id/102572006"
+          ],
+          "valueType": "xsd:string"
+        },
         "summaryStatistics": {
-          "statisticalDataType": "dsv:NumericalDataType",
-          "columnCompleteness": 0.9975,
-          "numberOfRows": 400
+          "columnCompleteness": 0.9975
         }
       },
       {
         "name": "ane",
+        "titles": "Anemia",
+        "columnProperty": {
+          "summaryStatistics": {
+            "statisticalDataType": "dsv:NominalDataType"
+          },
+          "hasCodeBook": {
+            "hasTopConcept": [
+              {
+                "notation": "yes",
+                "prefLabel": "Yes"
+              },
+              {
+                "notation": "no",
+                "prefLabel": "No"
+              }
+            ]
+          },
+          "closeMatch": [
+            "http://snomed.info/id/271737000"
+          ],
+          "valueType": "xsd:string"
+        },
         "summaryStatistics": {
-          "statisticalDataType": "dsv:NumericalDataType",
-          "columnCompleteness": 0.9975,
-          "numberOfRows": 400
+          "columnCompleteness": 0.9975
         }
       },
       {
         "name": "class",
+        "titles": "Chronic kidney disease class label",
         "hadRole": "target",
+        "columnProperty": {
+          "summaryStatistics": {
+            "statisticalDataType": "dsv:NominalDataType"
+          },
+          "hasCodeBook": {
+            "hasTopConcept": [
+              {
+                "notation": "ckd",
+                "prefLabel": "Chronic kidney disease"
+              },
+              {
+                "notation": "notckd",
+                "prefLabel": "Not chronic kidney disease"
+              }
+            ]
+          },
+          "closeMatch": [
+            "http://snomed.info/id/709044004"
+          ],
+          "valueType": "xsd:string"
+        },
         "summaryStatistics": {
-          "statisticalDataType": "dsv:NumericalDataType",
-          "columnCompleteness": 1.0,
-          "numberOfRows": 400
+          "columnCompleteness": 1.0
         }
       }
-    ]
+    ],
+    "@id": "urn:dataset:chronic-kidney-disease#schema"
   },
   "summaryStatistics": {
     "datasetCompleteness": 0.8988,
     "numberOfRows": 400,
     "numberOfColumns": 25
-  }
+  },
+  "dataset": {
+    "@type": [
+      "disco:LogicalDataSet",
+      "Dataset",
+      "dcat:Dataset"
+    ],
+    "title": "Chronic Kidney Disease (UCI id 336)",
+    "description": "Clinical records for early detection of CKD (subset of variables ped)."
+  },
+  "@id": "urn:dataset:chronic-kidney-disease",
+  "@type": [
+    "dcat:Dataset",
+    "dsv:Dataset"
+  ]
 }

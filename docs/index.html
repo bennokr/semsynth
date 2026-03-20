@@ -8,14 +8,15 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>SemSynth 🚀 &mdash; semsynth  documentation</title>
       <link rel="stylesheet" type="text/css" href="_static/pygments.css?v=b86133f3" />
-      <link rel="stylesheet" type="text/css" href="_static/css/theme.css?v=e59714d7" />
+      <link rel="stylesheet" type="text/css" href="_static/css/theme.css?v=9edc463e" />
+      <link rel="stylesheet" type="text/css" href="_static/mystnb.11b39860a7a0cbfd473a3ad8a317855267ff0bd372690045ca344a6b62be495e.css?v=8cd3d715" />
 
   
       <script src="_static/jquery.js?v=5d32c60e"></script>
       <script src="_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
       <script src="_static/documentation_options.js?v=5929fcd5"></script>
-      <script src="_static/doctools.js?v=9bcbadda"></script>
-      <script src="_static/sphinx_highlight.js?v=dc90522c"></script>
+      <script src="_static/doctools.js?v=fd6eb6e6"></script>
+      <script src="_static/sphinx_highlight.js?v=6ffebe34"></script>
     <script src="_static/js/theme.js"></script>
     <link rel="index" title="Index" href="genindex.html" />
     <link rel="search" title="Search" href="search.html" />
@@ -47,7 +48,7 @@
 <li class="toctree-l1"><a class="reference internal" href="getting-started.html">Getting started</a></li>
 <li class="toctree-l1"><a class="reference internal" href="schema.html">SemMap metadata schema</a></li>
 <li class="toctree-l1"><a class="reference internal" href="map_columns.html">Column terminology mapping</a></li>
-<li class="toctree-l1"><a class="reference internal" href="provenance.html">Provenance workflow guide</a></li>
+<li class="toctree-l1"><a class="reference internal" href="provenance.html">Provenance</a></li>
 <li class="toctree-l1"><a class="reference internal" href="backends.html">Backends overview</a></li>
 <li class="toctree-l1"><a class="reference internal" href="missingness.html">Missingness handling</a></li>
 <li class="toctree-l1"><a class="reference internal" href="privacy-metrics.html">Privacy metrics</a></li>
@@ -85,7 +86,7 @@
 <section id="features">
 <h2>✨ Features<a class="headerlink" href="#features" title="Link to this heading"></a></h2>
 <ul class="simple">
-<li><p>Unified model interface: run PyBNesian, SynthCity, and MetaSyn models from a single YAML.</p></li>
+<li><p>Unified model interface: run PyBNesian, SynthCity, and MetaSyn models from a single TOML bundle.</p></li>
 <li><p>Uniform outputs: each model writes artifacts under <code class="docutils literal notranslate"><span class="pre">dataset/models/&lt;model-name&gt;/</span></code>.</p></li>
 <li><p>Optional MetaSyn baseline: enable or disable per report via the config bundle.</p></li>
 <li><p>Provider-aware metadata and UMAP visuals.</p></li>
@@ -95,6 +96,7 @@
 <h2>⚙️ Install<a class="headerlink" href="#install" title="Link to this heading"></a></h2>
 <p>Clone and run <code class="docutils literal notranslate"><span class="pre">python</span> <span class="pre">-m</span> <span class="pre">pip</span> <span class="pre">install</span> <span class="pre">-e</span> <span class="pre">.</span></code></p>
 <p>For extra features, run <code class="docutils literal notranslate"><span class="pre">python</span> <span class="pre">-m</span> <span class="pre">pip</span> <span class="pre">install</span> <span class="pre">-e</span> <span class="pre">.[EXTRA]</span></code> with <code class="docutils literal notranslate"><span class="pre">EXTRA</span></code> in (
+<code class="docutils literal notranslate"><span class="pre">app</span></code>
 <code class="docutils literal notranslate"><span class="pre">metasyn</span></code>
 <code class="docutils literal notranslate"><span class="pre">pybnesian</span></code>
 <code class="docutils literal notranslate"><span class="pre">synthcity</span></code>
@@ -120,16 +122,13 @@
 </li>
 <li><p>Minimal report (metadata only) 🧪</p>
 <ul class="simple">
-<li><p>Leave <code class="docutils literal notranslate"><span class="pre">--configs-yaml</span></code> empty to skip model execution.</p></li>
+<li><p>Leave <code class="docutils literal notranslate"><span class="pre">--configs-toml</span></code> empty to skip model execution.</p></li>
 <li><p>Example: <code class="docutils literal notranslate"><span class="pre">python</span> <span class="pre">-m</span> <span class="pre">semsynth</span> <span class="pre">report</span> <span class="pre">uciml</span> <span class="pre">--datasets</span> <span class="pre">45</span> <span class="pre">-v</span></code></p></li>
 <li><p>Optional flags for reports:</p>
 <ul>
 <li><p><code class="docutils literal notranslate"><span class="pre">--datasets</span></code> (one or more dataset identifiers)</p></li>
 <li><p><code class="docutils literal notranslate"><span class="pre">--outdir</span></code> (defaults to <code class="docutils literal notranslate"><span class="pre">output/</span></code>)</p></li>
-<li><p><code class="docutils literal notranslate"><span class="pre">--configs-yaml</span></code> (path to a YAML bundle; omit for metadata-only runs)</p></li>
-<li><p><code class="docutils literal notranslate"><span class="pre">--generate-umap</span></code> (flag; include to emit real/synthetic UMAP projections when the <code class="docutils literal notranslate"><span class="pre">umap</span></code> extra is installed)</p></li>
-<li><p><code class="docutils literal notranslate"><span class="pre">--compute-privacy</span></code> / <code class="docutils literal notranslate"><span class="pre">--compute-downstream</span></code> (flags that enable privacy and downstream metrics)</p></li>
-<li><p><code class="docutils literal notranslate"><span class="pre">--overwrite-umap</span></code> (regenerate even if projections exist)</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">--configs-toml</span></code> (path to a TOML bundle; omit for metadata-only runs)</p></li>
 <li><p><code class="docutils literal notranslate"><span class="pre">--verbose</span></code> (turn on info logging)</p></li>
 </ul>
 </li>
@@ -140,52 +139,67 @@
 <ul class="simple">
 <li><p>Pick a configuration bundle from <code class="docutils literal notranslate"><span class="pre">configs/</span></code>:</p>
 <ul>
-<li><p><code class="docutils literal notranslate"><span class="pre">configs/simple_config.yaml</span></code> (MetaSyn + two PyBNesian models)</p></li>
-<li><p><code class="docutils literal notranslate"><span class="pre">configs/advanced_config.yaml</span></code> (MetaSyn, PyBNesian, and SynthCity models)</p></li>
-<li><p><code class="docutils literal notranslate"><span class="pre">configs/maximal_config.yaml</span></code> (keeps MetaSyn with aggressive options enabled while remaining runnable without GPU or shared-memory support)</p></li>
-<li><p><code class="docutils literal notranslate"><span class="pre">configs/only_metasyn_config.yaml</span></code> (MetaSyn baseline only)</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">configs/simple_config.toml</span></code> (MetaSyn + two PyBNesian models)</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">configs/advanced_config.toml</span></code> (MetaSyn, PyBNesian, and SynthCity models)</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">configs/maximal_config.toml</span></code> (keeps MetaSyn with aggressive options enabled while remaining runnable without GPU or shared-memory support)</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">configs/only_metasyn_config.toml</span></code> (MetaSyn baseline only)</p></li>
 </ul>
 </li>
-<li><p>Example: <code class="docutils literal notranslate"><span class="pre">python</span> <span class="pre">-m</span> <span class="pre">semsynth</span> <span class="pre">report</span> <span class="pre">openml</span> <span class="pre">--datasets</span> <span class="pre">adult</span> <span class="pre">--configs-yaml</span> <span class="pre">configs/advanced_config.yaml</span> <span class="pre">--generate-umap</span> <span class="pre">--compute-privacy</span> <span class="pre">--compute-downstream</span></code></p></li>
+<li><p>Example: <code class="docutils literal notranslate"><span class="pre">python</span> <span class="pre">-m</span> <span class="pre">semsynth</span> <span class="pre">report</span> <span class="pre">openml</span> <span class="pre">--datasets</span> <span class="pre">adult</span> <span class="pre">--configs-toml</span> <span class="pre">&#64;configs/advanced_config.toml</span></code></p></li>
 </ul>
-<p>Report toggles are now simple booleans: include <code class="docutils literal notranslate"><span class="pre">--generate-umap</span></code>, <code class="docutils literal notranslate"><span class="pre">--compute-privacy</span></code>, or <code class="docutils literal notranslate"><span class="pre">--compute-downstream</span></code> to switch them on for a run (their absence leaves them disabled). Global defaults defined in a YAML bundle still apply when you omit the flags.</p>
+<p>Pipeline toggles (UMAP, privacy, downstream, missingness, SemMap context URL, etc.) now live in the TOML bundle under <code class="docutils literal notranslate"><span class="pre">[pipeline]</span></code> rather than separate CLI flags.</p>
 </li>
 <li><p>Catalog + app helpers</p>
 <ul class="simple">
-<li><p>Build a DCAT catalog and HTML index from existing outputs: <code class="docutils literal notranslate"><span class="pre">python</span> <span class="pre">-m</span> <span class="pre">semsynth</span> <span class="pre">catalog</span> <span class="pre">--base-dir</span> <span class="pre">output</span></code></p></li>
+<li><p>Build a DCAT catalog and HTML index from existing outputs: <code class="docutils literal notranslate"><span class="pre">python</span> <span class="pre">-m</span> <span class="pre">semsynth</span> <span class="pre">build-catalog</span></code></p></li>
+<li><p>Regenerate metadata-only reports for all curated SemMap mappings and refresh the catalog/index: <code class="docutils literal notranslate"><span class="pre">python</span> <span class="pre">-m</span> <span class="pre">semsynth</span> <span class="pre">mappings</span> <span class="pre">--pipeline-configs</span> <span class="pre">&quot;&quot;</span></code></p></li>
+<li><p>The generated <code class="docutils literal notranslate"><span class="pre">output/index.html</span></code> now embeds <strong>YASGUI + Comunica (browser)</strong> with a static endpoint identifier (<code class="docutils literal notranslate"><span class="pre">browser://semsynth-static-catalog</span></code>) and loads runnable query tabs from <code class="docutils literal notranslate"><span class="pre">output/sparql/*.rq</span></code> files for SemMap and provenance-linked synthetic artifacts.</p></li>
 <li><p>Launch a minimal Flask UI for search and report actions: <code class="docutils literal notranslate"><span class="pre">python</span> <span class="pre">-m</span> <span class="pre">semsynth</span> <span class="pre">app</span> <span class="pre">--host</span> <span class="pre">0.0.0.0</span> <span class="pre">--port</span> <span class="pre">5000</span></code></p></li>
 </ul>
 </li>
 </ol>
 </section>
-<section id="unified-yaml-format">
-<h2>📄 Unified YAML format<a class="headerlink" href="#unified-yaml-format" title="Link to this heading"></a></h2>
+<section id="toml-bundles">
+<h2>📄 TOML bundles<a class="headerlink" href="#toml-bundles" title="Link to this heading"></a></h2>
 <ul class="simple">
-<li><p><code class="docutils literal notranslate"><span class="pre">configs/simple_config.yaml</span></code> mixes MetaSyn with two PyBNesian baselines.</p></li>
-<li><p><code class="docutils literal notranslate"><span class="pre">configs/advanced_config.yaml</span></code> extends the simple bundle with SynthCity generators.</p></li>
-<li><p><code class="docutils literal notranslate"><span class="pre">configs/maximal_config.yaml</span></code> toggles every optional report hook (UMAP, privacy, downstream) but ships with a MetaSyn-only bundle so it continues to execute inside restricted environments.</p></li>
-<li><p><code class="docutils literal notranslate"><span class="pre">configs/only_metasyn_config.yaml</span></code> keeps MetaSyn as the single synthetic data baseline.</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">configs/simple_config.toml</span></code> mixes MetaSyn with two PyBNesian baselines.</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">configs/advanced_config.toml</span></code> extends the simple bundle with SynthCity generators.</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">configs/maximal_config.toml</span></code> toggles every optional report hook (UMAP, privacy, downstream) but ships with a MetaSyn-only bundle so it continues to execute inside restricted environments.</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">configs/only_metasyn_config.toml</span></code> keeps MetaSyn as the single synthetic data baseline.</p></li>
 </ul>
 <p>Example:</p>
-<div class="highlight-yaml notranslate"><div class="highlight"><pre><span></span><span class="nt">configs</span><span class="p">:</span>
-<span class="w">  </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">metasyn</span>
-<span class="w">    </span><span class="nt">backend</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">metasyn</span>
-<span class="w">  </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">clg_mi2</span>
-<span class="w">    </span><span class="nt">backend</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">pybnesian</span>
-<span class="w">    </span><span class="nt">model</span><span class="p">:</span>
-<span class="w">      </span><span class="nt">type</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">clg</span>
-<span class="w">      </span><span class="nt">score</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">bic</span>
-<span class="w">      </span><span class="nt">operators</span><span class="p">:</span><span class="w"> </span><span class="p p-Indicator">[</span><span class="nv">arcs</span><span class="p p-Indicator">]</span>
-<span class="w">      </span><span class="nt">max_indegree</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">2</span>
-<span class="w">      </span><span class="nt">seed</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">42</span>
-<span class="w">  </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">ctgan_fast</span>
-<span class="w">    </span><span class="nt">backend</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">synthcity</span>
-<span class="w">    </span><span class="nt">model</span><span class="p">:</span>
-<span class="w">      </span><span class="nt">type</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">ctgan</span>
-<span class="w">      </span><span class="nt">epochs</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">5</span>
-<span class="w">      </span><span class="nt">batch_size</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">256</span>
-<span class="w">    </span><span class="nt">rows</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">1000</span>
-<span class="w">    </span><span class="nt">seed</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">42</span>
+<div class="highlight-toml notranslate"><div class="highlight"><pre><span></span><span class="k">[[models]]</span>
+<span class="n">name</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s2">&quot;metasyn&quot;</span>
+<span class="n">backend</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s2">&quot;metasyn&quot;</span>
+
+<span class="k">[[models]]</span>
+<span class="n">name</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s2">&quot;clg_mi2&quot;</span>
+<span class="n">backend</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s2">&quot;pybnesian&quot;</span>
+<span class="n">rows</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">1000</span>
+<span class="n">seed</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">42</span>
+
+<span class="k">[models.model]</span>
+<span class="n">type</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s2">&quot;clg&quot;</span>
+<span class="n">score</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s2">&quot;bic&quot;</span>
+<span class="n">operators</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="p">[</span><span class="s2">&quot;arcs&quot;</span><span class="p">]</span>
+<span class="n">max_indegree</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">2</span>
+
+<span class="k">[[models]]</span>
+<span class="n">name</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s2">&quot;ctgan_fast&quot;</span>
+<span class="n">backend</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s2">&quot;synthcity&quot;</span>
+<span class="n">rows</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">1000</span>
+<span class="n">seed</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">42</span>
+
+<span class="k">[models.model]</span>
+<span class="n">type</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s2">&quot;ctgan&quot;</span>
+<span class="n">epochs</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">5</span>
+<span class="n">batch_size</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">256</span>
+
+<span class="k">[pipeline]</span>
+<span class="n">generate_umap</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="kc">true</span>
+<span class="n">compute_privacy</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="kc">true</span>
+<span class="n">compute_downstream</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="kc">true</span>
+<span class="n">semmap_context_url</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s2">&quot;https://w3id.org/semmap/context&quot;</span>
 </pre></div>
 </div>
 </section>
@@ -194,16 +208,16 @@
 <ul class="simple">
 <li><p>Per dataset (e.g., <code class="docutils literal notranslate"><span class="pre">output/Heart</span> <span class="pre">Disease/</span></code>):</p>
 <ul>
-<li><p><code class="docutils literal notranslate"><span class="pre">dataset.json</span></code> (<a class="reference external" href="http://schema.org/Dataset">schema.org/Dataset</a> JSON-LD)</p></li>
-<li><p><code class="docutils literal notranslate"><span class="pre">dataset.semmap.json</span></code> (optional, if curated metadata is found)</p></li>
 <li><p><code class="docutils literal notranslate"><span class="pre">index.html</span></code> and <code class="docutils literal notranslate"><span class="pre">report.md</span></code></p></li>
-<li><p><code class="docutils literal notranslate"><span class="pre">umap_real.png</span></code> and optional <code class="docutils literal notranslate"><span class="pre">umap_metasyn.png</span></code></p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">dataset.semmap.json</span></code> and <code class="docutils literal notranslate"><span class="pre">dataset.semmap.html</span></code> (when SemMap metadata is available)</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">umap_real.png</span></code> (when <code class="docutils literal notranslate"><span class="pre">--generate-umap</span></code> is enabled and UMAP dependencies are installed)</p></li>
 </ul>
 </li>
 <li><p>Per model (e.g., <code class="docutils literal notranslate"><span class="pre">output/Heart</span> <span class="pre">Disease/models/&lt;name&gt;/</span></code>):</p>
 <ul>
-<li><p><code class="docutils literal notranslate"><span class="pre">synthetic.csv</span></code>, <code class="docutils literal notranslate"><span class="pre">per_variable_metrics.csv</span></code>, <code class="docutils literal notranslate"><span class="pre">metrics.json</span></code>, <code class="docutils literal notranslate"><span class="pre">umap.png</span></code></p></li>
-<li><p>PyBNesian-only extras: <code class="docutils literal notranslate"><span class="pre">bn_&lt;name&gt;.png</span></code>, <code class="docutils literal notranslate"><span class="pre">structure_&lt;name&gt;.graphml</span></code>, <code class="docutils literal notranslate"><span class="pre">model_&lt;name&gt;.pickle</span></code></p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">synthetic.csv</span></code>, <code class="docutils literal notranslate"><span class="pre">metrics.json</span></code>, and <code class="docutils literal notranslate"><span class="pre">umap.png</span></code></p></li>
+<li><p>Optional metrics sidecars: <code class="docutils literal notranslate"><span class="pre">metrics.privacy.json</span></code>, <code class="docutils literal notranslate"><span class="pre">metrics.downstream.json</span></code></p></li>
+<li><p>PyBNesian extras: <code class="docutils literal notranslate"><span class="pre">structure.png</span></code>, <code class="docutils literal notranslate"><span class="pre">structure.graphml</span></code>, <code class="docutils literal notranslate"><span class="pre">model.pickle</span></code></p></li>
 <li><p><code class="docutils literal notranslate"><span class="pre">synthetic.semmap.parquet</span></code> (when SemMap metadata is available)</p></li>
 </ul>
 </li>
@@ -215,12 +229,13 @@
 <li><p><code class="docutils literal notranslate"><span class="pre">semsynth/dataproviders/uciml.py</span></code> exposes a CLI that turns the JSON payloads cached under <code class="docutils literal notranslate"><span class="pre">uciml-cache/</span></code> (sometimes referenced as <code class="docutils literal notranslate"><span class="pre">uci-cache/</span></code> in earlier docs) into DCAT + DSV JSON-LD that downstream tools can ingest.</p></li>
 <li><p>Scripts under <code class="docutils literal notranslate"><span class="pre">map_columns/</span></code> take that JSON-LD and suggest or write terminology mappings (see <code class="docutils literal notranslate"><span class="pre">map_columns/README.md</span></code> for the full strategy catalog covering lexical, Datasette keyword, embedding, and LLM workflows).</p></li>
 <li><p><code class="docutils literal notranslate"><span class="pre">python</span> <span class="pre">-m</span> <span class="pre">semsynth</span> <span class="pre">create-mapping</span> <span class="pre">uciml</span> <span class="pre">--datasets</span> <span class="pre">145</span> <span class="pre">--method</span> <span class="pre">lexical</span></code> automates the end-to-end workflow (JSON-LD export → terminology scoring → SSSOM merge) and stores the results under <code class="docutils literal notranslate"><span class="pre">mappings/</span></code>.</p></li>
+<li><p>Curated SemMap JSON files are repo-only under <code class="docutils literal notranslate"><span class="pre">mappings/</span></code> and are not bundled into wheels; when installing from PyPI, provide your own <code class="docutils literal notranslate"><span class="pre">mappings/</span></code> directory if you want curated mappings.</p></li>
 </ul>
 <section id="example-uci-dataset-45-heart-disease">
 <h3>Example: UCI dataset 45 (Heart Disease)<a class="headerlink" href="#example-uci-dataset-45-heart-disease" title="Link to this heading"></a></h3>
 <ol class="arabic">
 <li><p>Fetch the dataset metadata. Any command that touches the UCI provider will populate <code class="docutils literal notranslate"><span class="pre">uciml-cache/&lt;id&gt;.json</span></code>. For example:</p>
-<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>python<span class="w"> </span>-m<span class="w"> </span>semsynth<span class="w"> </span>report<span class="w"> </span>uciml<span class="w"> </span>--datasets<span class="w"> </span><span class="m">45</span><span class="w"> </span>--configs-yaml<span class="w"> </span>configs/only_metasyn_config.yaml
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>python<span class="w"> </span>-m<span class="w"> </span>semsynth<span class="w"> </span>report<span class="w"> </span>uciml<span class="w"> </span>--datasets<span class="w"> </span><span class="m">45</span><span class="w"> </span>--configs-toml<span class="w"> </span>@configs/only_metasyn_config.toml
 </pre></div>
 </div>
 <p>This creates <code class="docutils literal notranslate"><span class="pre">uciml-cache/45.json</span></code> alongside the cached CSV/metadata used by the reporting pipeline.</p>
@@ -262,9 +277,10 @@
 <section id="notes">
 <h2>📝 Notes<a class="headerlink" href="#notes" title="Link to this heading"></a></h2>
 <ul class="simple">
-<li><p>Metadata-only reports require no YAML file; pass <code class="docutils literal notranslate"><span class="pre">--configs-yaml</span></code> to opt into synthetic runs.</p></li>
+<li><p>Metadata-only reports require no TOML file; pass <code class="docutils literal notranslate"><span class="pre">--configs-toml</span></code> to opt into synthetic runs.</p></li>
 <li><p>All models are treated uniformly in the report; UMAPs share the same projection trained on real data.</p></li>
 <li><p>When optional dependencies (e.g., <code class="docutils literal notranslate"><span class="pre">umap-learn</span></code>, PyBNesian, SynthCity) are missing or blocked by runtime sandboxing, SemSynth logs a warning and continues with the available components. The shipped <code class="docutils literal notranslate"><span class="pre">maximal_config</span></code> keeps MetaSyn as the default to guarantee completion under those constraints.</p></li>
+<li><p>UCI dataset 1150 (Gallstone) is currently unavailable via <code class="docutils literal notranslate"><span class="pre">ucimlrepo</span></code>; the <code class="docutils literal notranslate"><span class="pre">mappings</span></code> target skips it with a warning until a cached stand-in or upstream access is restored.</p></li>
 <li><p>If external dataset hosts are unreachable, cached payloads under <code class="docutils literal notranslate"><span class="pre">downloads-cache/</span></code> may contain synthetic stand-ins that mimic the documented schema so pipeline checks can proceed. Keep README notes in sync when such fallbacks are introduced.</p></li>
 </ul>
 </section>
@@ -274,6 +290,21 @@
 <li><p>Install dev and documentation deps with <code class="docutils literal notranslate"><span class="pre">python</span> <span class="pre">-m</span> <span class="pre">pip</span> <span class="pre">install</span> <span class="pre">-e</span> <span class="pre">.[dev,docs]</span></code> (use <code class="docutils literal notranslate"><span class="pre">.[dev]</span></code> if you do not need to build docs).</p></li>
 <li><p>Run tests with <code class="docutils literal notranslate"><span class="pre">python</span> <span class="pre">-m</span> <span class="pre">pytest</span></code></p></li>
 <li><p>Build the Sphinx site with <code class="docutils literal notranslate"><span class="pre">sphinx-build</span> <span class="pre">-b</span> <span class="pre">html</span> <span class="pre">sphinx</span> <span class="pre">docs</span></code>.</p></li>
+</ul>
+</section>
+<section id="static-sparql-endpoint-demo-index">
+<h2>🔎 Static SPARQL endpoint (demo index)<a class="headerlink" href="#static-sparql-endpoint-demo-index" title="Link to this heading"></a></h2>
+<ul class="simple">
+<li><p><code class="docutils literal notranslate"><span class="pre">python</span> <span class="pre">-m</span> <span class="pre">semsynth</span> <span class="pre">build-catalog</span></code> writes <code class="docutils literal notranslate"><span class="pre">output/index.html</span></code>, <code class="docutils literal notranslate"><span class="pre">output/catalog.json</span></code>, <code class="docutils literal notranslate"><span class="pre">output/catalog.jsonld</span></code>, and <code class="docutils literal notranslate"><span class="pre">output/sparql/*.rq</span></code> with an embedded YASGUI editor and browser Comunica query engine targeting static files only.</p></li>
+<li><p>The page advertises endpoint id <code class="docutils literal notranslate"><span class="pre">browser://semsynth-static-catalog</span></code> and includes ready-to-run query tabs covering:</p>
+<ul>
+<li><p>datasets that publish <code class="docutils literal notranslate"><span class="pre">dataset.semmap.json</span></code>,</p></li>
+<li><p>provenance-linked synthetic artifacts,</p></li>
+<li><p>distribution counts per dataset.</p></li>
+</ul>
+</li>
+<li><p>This mirrors the static-browser pattern from <code class="docutils literal notranslate"><span class="pre">data-catalog-sparql-playground</span></code> (catalog + local query UI, no server-side SPARQL service required).</p></li>
+<li><p>SPARQL query templates are also described as catalog distributions so tooling can discover and preload them as tabs.</p></li>
 </ul>
 <div class="toctree-wrapper compound">
 <p class="caption" role="heading"><span class="caption-text">Contents</span></p>
@@ -301,13 +332,11 @@
 <li class="toctree-l2"><a class="reference internal" href="map_columns.html#semsynth-cli-integration">SemSynth CLI integration</a></li>
 </ul>
 </li>
-<li class="toctree-l1"><a class="reference internal" href="provenance.html">Provenance workflow guide</a><ul>
+<li class="toctree-l1"><a class="reference internal" href="provenance.html">Provenance</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="provenance.html#how-it-is-wired">How it is wired</a></li>
+<li class="toctree-l2"><a class="reference internal" href="provenance.html#browser-catalog">Browser catalog</a></li>
+<li class="toctree-l2"><a class="reference internal" href="provenance.html#handy-commands">Handy commands</a></li>
 <li class="toctree-l2"><a class="reference internal" href="provenance.html#reference-links">Reference links</a></li>
-<li class="toctree-l2"><a class="reference internal" href="provenance.html#configuration-and-entry-points">Configuration and entry points</a></li>
-<li class="toctree-l2"><a class="reference internal" href="provenance.html#dataset-discovery-and-acquisition-rules">Dataset discovery and acquisition rules</a></li>
-<li class="toctree-l2"><a class="reference internal" href="provenance.html#pipeline-orchestration-rules">Pipeline orchestration rules</a></li>
-<li class="toctree-l2"><a class="reference internal" href="provenance.html#provenance-outputs-and-validation">Provenance outputs and validation</a></li>
-<li class="toctree-l2"><a class="reference internal" href="provenance.html#practical-usage-patterns">Practical usage patterns</a></li>
 </ul>
 </li>
 <li class="toctree-l1"><a class="reference internal" href="backends.html">Backends overview</a><ul>

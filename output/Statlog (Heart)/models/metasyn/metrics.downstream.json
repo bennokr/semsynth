@@ -1,0 +1,4 @@
+{
+  "formula": "heart_disease ~ age + sex + C(chest_pain, levels=[]) + rest_bp + serum_chol + fasting_blood_sugar + C(electrocardiographic, levels=[]) + max_heart_rate + angina + oldpeak + slope + major_vessels + C(thal, levels=[]) + age:sex + sex:C(chest_pain, levels=[]) + C(chest_pain, levels=[]):rest_bp + rest_bp:serum_chol + serum_chol:fasting_blood_sugar",
+  "sign_match_rate": NaN
+}

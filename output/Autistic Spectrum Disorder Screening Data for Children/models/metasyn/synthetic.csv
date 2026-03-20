@@ -1,0 +1,293 @@
+A1_Score,A2_Score,A3_Score,A4_Score,A5_Score,A6_Score,A7_Score,A8_Score,A9_Score,A10_Score,age,gender,ethnicity,jaundice,autism,country_of_res,used_app_before,result,age_desc,relation,class
+1,1,1,1,1,1,1,1,0,1,4,m,'Middle Eastern ',no,no,'New Zealand',no,6,'4-11 years',Parent,NO
+0,0,0,0,0,1,1,1,1,1,5,m,White-European,no,yes,Australia,no,7,'4-11 years',Parent,NO
+0,1,1,0,1,1,0,0,1,1,9,f,Asian,no,no,'United Kingdom',no,6,'4-11 years',Parent,YES
+0,0,1,0,1,1,1,0,0,1,4,f,Others,no,no,'New Zealand',no,7,'4-11 years',Parent,YES
+0,1,1,1,0,0,1,0,0,1,5,m,'South Asian',no,yes,'United Kingdom',no,9,'4-11 years','Health care professional',YES
+1,0,1,0,1,1,1,0,0,1,5,m,'Middle Eastern ',no,no,'United Kingdom',no,8,'4-11 years',Parent,YES
+0,0,0,0,1,1,1,0,1,1,7,f,Latino,no,yes,Bhutan,no,7,'4-11 years',Parent,YES
+1,0,1,0,1,0,1,0,1,1,9,m,Others,yes,no,'United Kingdom',no,8,'4-11 years',Parent,NO
+1,1,1,0,0,0,1,0,1,1,7,m,Latino,yes,no,'United Kingdom',no,8,'4-11 years',Self,YES
+1,1,1,1,1,1,0,0,1,0,4,m,Latino,no,yes,'United Kingdom',no,3,'4-11 years',Parent,YES
+0,0,1,1,1,1,1,0,0,1,9,f,White-European,no,yes,India,no,3,'4-11 years',Parent,NO
+1,1,1,1,1,1,0,0,0,0,7,m,Others,no,no,'United States',no,4,'4-11 years',Parent,YES
+1,0,1,0,1,1,1,0,1,1,4,m,White-European,yes,no,'United States',yes,8,'4-11 years',Parent,YES
+1,0,1,0,1,1,0,1,1,1,7,m,'Middle Eastern ',no,no,'United Kingdom',no,8,'4-11 years',Parent,YES
+1,1,1,1,1,1,1,0,0,0,9,m,White-European,no,no,Iraq,no,6,'4-11 years',Parent,NO
+1,0,1,1,1,1,1,0,0,1,5,m,Asian,yes,no,Jordan,no,4,'4-11 years',Parent,NO
+1,1,1,1,1,0,0,1,1,1,4,f,Asian,no,no,Philippines,no,7,'4-11 years',Parent,NO
+1,1,1,0,1,1,0,0,1,1,5,f,White-European,no,yes,'United States',yes,7,'4-11 years',Self,NO
+0,0,0,1,1,1,0,0,0,1,10,m,White-European,no,yes,India,no,8,'4-11 years',Parent,NO
+0,1,1,1,1,0,1,1,1,1,6,m,Hispanic,no,no,India,no,10,'4-11 years',Parent,NO
+0,1,0,1,0,1,0,0,1,1,7,m,'South Asian',no,no,'United States',no,7,'4-11 years','Health care professional',NO
+0,1,1,0,1,1,1,0,0,1,5,m,'Middle Eastern ',no,no,Jordan,no,9,'4-11 years',Parent,NO
+0,0,1,0,1,1,1,1,1,0,9,f,White-European,no,no,'United Kingdom',no,9,'4-11 years',Parent,NO
+1,0,1,1,1,1,1,0,0,0,9,m,White-European,yes,no,India,no,9,'4-11 years',Parent,NO
+1,1,1,0,1,1,0,1,0,1,4,m,White-European,no,no,Egypt,no,10,'4-11 years',Relative,YES
+1,1,1,0,0,0,1,0,0,1,9,f,White-European,no,no,'New Zealand',no,4,'4-11 years',Parent,NO
+1,1,0,0,1,1,1,0,1,1,4,m,White-European,no,yes,'United Kingdom',no,8,'4-11 years',Parent,YES
+1,1,1,1,1,1,1,0,1,1,8,f,'Middle Eastern ',no,yes,'United Kingdom',no,6,'4-11 years',Parent,YES
+1,0,0,1,1,0,0,1,1,1,6,m,White-European,no,no,India,no,9,'4-11 years',Parent,YES
+1,0,1,1,1,1,1,1,1,1,4,f,White-European,no,no,'United States',no,6,'4-11 years',Parent,NO
+0,1,1,1,1,1,0,1,1,0,4,m,White-European,no,no,Canada,no,6,'4-11 years',Parent,NO
+1,1,1,1,1,1,1,1,0,0,7,m,Asian,no,yes,Canada,no,9,'4-11 years',Parent,YES
+1,1,1,1,0,1,1,1,0,1,5,m,White-European,no,no,'United Kingdom',no,5,'4-11 years',Relative,NO
+1,1,0,1,0,1,1,1,1,0,5,m,White-European,no,no,'United States',no,6,'4-11 years',Parent,YES
+0,0,1,1,0,1,1,1,0,0,11,m,Asian,no,no,India,no,9,'4-11 years',Parent,NO
+1,0,1,1,0,1,1,1,0,1,4,m,Latino,no,no,Philippines,no,9,'4-11 years',Parent,YES
+1,1,1,0,1,0,1,1,1,0,11,m,Pasifika,yes,no,Philippines,no,7,'4-11 years',Parent,YES
+0,1,1,1,0,1,1,1,0,0,10,m,'Middle Eastern ',no,no,Canada,no,6,'4-11 years',Parent,YES
+1,0,1,0,1,0,1,0,0,0,4,m,White-European,no,no,'United States',no,9,'4-11 years',Parent,NO
+1,0,1,1,1,0,0,1,0,1,4,f,Latino,yes,no,'United States',no,5,'4-11 years',Parent,YES
+0,1,0,1,0,1,1,0,1,1,9,m,White-European,yes,no,'United States',no,5,'4-11 years',Parent,YES
+1,1,1,1,0,1,0,1,1,0,4,m,White-European,no,no,'United States',no,4,'4-11 years',Parent,YES
+1,1,0,1,1,1,0,0,1,1,11,m,Latino,no,no,'South Africa',no,9,'4-11 years','Health care professional',YES
+0,0,1,0,1,1,0,1,1,1,4,f,White-European,yes,no,Mexico,no,3,'4-11 years',Parent,YES
+1,0,1,0,1,1,1,0,1,0,8,m,Asian,no,no,India,no,6,'4-11 years',Parent,YES
+0,0,0,1,1,1,1,0,0,1,6,f,White-European,no,yes,'United Kingdom',no,8,'4-11 years',Parent,YES
+1,1,1,1,1,0,1,0,0,1,4,m,White-European,yes,no,Bangladesh,no,10,'4-11 years',Parent,YES
+1,0,1,1,1,1,0,1,0,1,11,m,'South Asian',no,no,'United Kingdom',no,1,'4-11 years',Relative,YES
+0,1,1,1,0,1,1,1,1,1,9,f,Hispanic,no,yes,'United Kingdom',no,6,'4-11 years',Parent,NO
+1,0,1,0,1,0,1,0,1,0,5,m,White-European,no,no,Mexico,no,6,'4-11 years',Parent,NO
+1,0,0,0,1,1,0,0,0,1,4,f,White-European,no,no,Georgia,no,4,'4-11 years',Relative,NO
+1,0,1,1,1,1,1,1,0,1,7,f,'Middle Eastern ',no,no,'New Zealand',no,2,'4-11 years',Parent,YES
+1,0,0,0,1,0,0,0,0,1,8,m,White-European,no,yes,'United Kingdom',no,7,'4-11 years',Parent,YES
+1,0,1,1,1,1,1,1,1,1,4,m,White-European,no,no,Australia,no,9,'4-11 years',Relative,YES
+0,1,1,0,1,0,0,1,1,0,8,m,White-European,yes,no,'Saudi Arabia',no,4,'4-11 years',Parent,NO
+1,1,1,1,1,1,0,1,0,1,9,f,White-European,no,no,Australia,no,4,'4-11 years',Parent,NO
+0,0,1,1,1,0,0,1,1,1,11,m,'Middle Eastern ',no,yes,Jordan,no,3,'4-11 years',Relative,NO
+1,1,0,0,0,1,0,1,1,0,5,m,Asian,no,no,Bangladesh,no,8,'4-11 years',Parent,NO
+0,0,1,0,1,1,0,1,0,1,4,m,White-European,no,no,'United Kingdom',no,6,'4-11 years',Parent,YES
+0,1,1,1,0,1,1,0,1,1,4,f,White-European,yes,no,Jordan,no,8,'4-11 years',Parent,NO
+1,0,0,1,1,0,1,0,0,1,5,m,White-European,yes,no,Ghana,no,8,'4-11 years',Parent,YES
+0,1,1,1,0,1,1,0,0,1,6,m,Asian,yes,no,India,no,4,'4-11 years',Parent,YES
+0,1,0,1,1,1,1,1,1,1,4,m,White-European,no,yes,'United Kingdom',no,7,'4-11 years',Parent,YES
+0,0,1,0,1,0,0,0,1,1,5,m,Others,no,yes,Bahrain,no,2,'4-11 years',Parent,YES
+0,0,0,1,1,1,1,1,0,1,4,m,Asian,no,no,Australia,no,2,'4-11 years',Parent,NO
+1,0,1,0,1,1,0,1,0,1,11,f,White-European,yes,yes,India,no,5,'4-11 years',Parent,YES
+1,1,1,1,1,0,1,1,0,1,6,f,Asian,no,yes,'New Zealand',no,3,'4-11 years',Parent,YES
+1,0,1,0,1,0,1,1,1,1,4,f,White-European,no,no,Australia,no,7,'4-11 years',Parent,YES
+1,0,1,0,0,0,0,0,0,1,4,f,'South Asian',yes,yes,'New Zealand',yes,10,'4-11 years','Health care professional',NO
+1,0,1,0,0,1,1,1,1,1,4,m,White-European,yes,no,'United States',no,7,'4-11 years',Parent,YES
+0,0,0,1,1,0,0,0,0,1,4,f,White-European,no,no,India,no,5,'4-11 years',Parent,YES
+1,1,1,1,1,1,0,0,1,1,4,m,White-European,no,no,'United States',no,5,'4-11 years',Parent,NO
+1,0,1,1,1,1,0,1,0,0,6,f,White-European,yes,no,India,no,8,'4-11 years',Parent,YES
+0,1,1,0,1,0,0,1,1,1,8,m,'South Asian',no,no,Jordan,no,3,'4-11 years',Parent,YES
+0,1,1,0,1,1,0,0,1,1,7,m,White-European,no,no,'United Arab Emirates',no,8,'4-11 years',Parent,YES
+0,1,1,1,0,1,0,0,1,1,10,m,White-European,no,no,'United Kingdom',no,7,'4-11 years','Health care professional',YES
+1,1,1,0,0,1,0,1,1,0,5,m,White-European,no,yes,'United Kingdom',no,8,'4-11 years',Parent,NO
+1,0,1,1,0,0,0,0,1,0,4,m,'South Asian',yes,no,India,no,9,'4-11 years',Parent,NO
+0,1,1,0,1,1,1,1,0,1,11,f,'Middle Eastern ',no,no,'United States',no,4,'4-11 years',Parent,YES
+1,0,1,0,1,1,1,0,1,1,4,m,White-European,no,yes,India,no,7,'4-11 years',Parent,NO
+0,0,1,1,1,1,1,1,1,1,4,m,White-European,no,no,Australia,no,8,'4-11 years',Parent,YES
+0,0,1,1,1,1,0,1,1,1,8,f,'South Asian',yes,yes,'United Arab Emirates',no,8,'4-11 years',Parent,YES
+0,1,1,1,0,1,0,1,1,1,4,m,'South Asian',no,yes,Malaysia,no,2,'4-11 years',Relative,NO
+0,1,0,0,1,1,1,0,1,1,11,m,Black,no,no,'United States',no,7,'4-11 years',Parent,YES
+1,0,0,1,1,1,1,0,0,0,11,f,White-European,no,yes,'United States',no,4,'4-11 years',Parent,NO
+0,0,0,1,1,1,1,1,1,1,4,m,White-European,no,no,'United Kingdom',no,3,'4-11 years',Parent,YES
+1,0,0,0,1,1,0,0,0,1,7,m,White-European,yes,no,Germany,no,7,'4-11 years',Parent,YES
+1,1,1,0,1,1,0,1,1,1,6,f,Others,no,no,'United States',no,9,'4-11 years',Parent,YES
+1,1,1,1,1,1,0,1,0,1,5,f,White-European,no,no,'United Kingdom',no,4,'4-11 years',Parent,NO
+0,0,0,1,1,0,1,0,1,1,4,m,White-European,no,yes,Australia,no,8,'4-11 years',Relative,YES
+1,1,0,1,1,1,1,1,1,0,4,f,White-European,yes,no,India,no,5,'4-11 years',Relative,YES
+1,0,0,0,1,1,0,0,0,1,4,m,Asian,yes,no,'United Kingdom',no,4,'4-11 years',Parent,NO
+1,0,1,1,1,1,1,0,1,0,4,f,Others,yes,no,India,no,8,'4-11 years',Parent,NO
+0,1,1,0,0,1,1,0,0,1,4,f,'Middle Eastern ',no,yes,Jordan,no,9,'4-11 years',Parent,YES
+1,0,0,0,0,1,0,0,1,1,5,m,White-European,no,yes,'United States',no,4,'4-11 years',Parent,YES
+1,1,0,1,1,1,0,1,0,0,8,m,White-European,no,no,Bangladesh,no,8,'4-11 years',Parent,YES
+0,1,1,0,0,1,0,1,0,1,4,m,White-European,no,yes,Mexico,no,10,'4-11 years',Parent,NO
+1,1,1,0,1,0,1,0,1,1,7,m,White-European,no,no,Armenia,no,8,'4-11 years','Health care professional',YES
+1,0,0,1,1,1,1,0,0,0,4,m,'South Asian',no,no,'New Zealand',no,4,'4-11 years',Parent,NO
+1,1,0,0,1,0,1,1,1,1,10,m,White-European,no,no,Bulgaria,no,10,'4-11 years',Relative,YES
+1,1,1,0,1,0,1,0,1,1,4,m,White-European,no,no,'United Arab Emirates',no,5,'4-11 years',Parent,YES
+1,1,1,0,0,1,1,1,0,1,4,m,Others,no,yes,'United Kingdom',no,8,'4-11 years',Parent,YES
+1,0,1,1,1,1,0,1,1,1,5,f,Black,no,yes,Jordan,no,4,'4-11 years',Parent,NO
+0,1,1,1,1,1,1,0,0,1,6,f,'South Asian',no,no,'United Arab Emirates',no,4,'4-11 years',Parent,NO
+1,0,1,0,1,0,1,0,1,1,4,m,White-European,no,no,'United Arab Emirates',yes,10,'4-11 years',Parent,YES
+1,1,1,1,1,1,1,0,1,1,8,m,White-European,no,no,'United Arab Emirates',no,9,'4-11 years',Parent,YES
+1,0,1,1,1,1,1,0,0,1,6,f,'Middle Eastern ',yes,no,'United States',no,7,'4-11 years','Health care professional',NO
+1,1,1,0,1,1,1,0,1,1,7,m,Others,no,no,Australia,no,8,'4-11 years','Health care professional',NO
+1,0,1,0,0,0,1,1,1,0,4,m,Pasifika,no,yes,Australia,no,9,'4-11 years',Parent,YES
+1,1,1,0,1,1,1,0,0,0,4,m,Hispanic,no,no,India,no,4,'4-11 years',Self,NO
+1,1,1,1,1,1,1,1,1,1,9,m,Black,no,no,Australia,no,5,'4-11 years',Parent,NO
+0,1,1,0,1,1,0,0,0,1,5,m,White-European,yes,no,Australia,no,8,'4-11 years',Relative,YES
+1,1,1,0,0,1,1,0,1,1,4,f,'Middle Eastern ',no,no,Oman,no,4,'4-11 years',Parent,YES
+1,0,1,1,1,0,0,0,0,0,4,f,'Middle Eastern ',yes,no,Australia,no,6,'4-11 years',Parent,YES
+1,1,0,1,0,1,0,1,1,0,4,m,White-European,yes,no,Australia,no,9,'4-11 years',Parent,NO
+1,1,1,1,1,1,0,1,0,1,6,f,Asian,yes,no,'New Zealand',no,3,'4-11 years',Parent,YES
+0,0,0,0,1,1,1,0,0,1,7,m,White-European,no,no,'New Zealand',no,8,'4-11 years','Health care professional',NO
+1,1,1,0,1,0,1,1,0,1,6,f,Asian,yes,no,Australia,no,6,'4-11 years',Parent,YES
+1,1,1,1,1,1,1,1,1,1,4,f,'South Asian',no,no,India,no,5,'4-11 years','Health care professional',NO
+1,1,1,0,1,0,1,1,1,0,4,f,'Middle Eastern ',no,no,Egypt,no,6,'4-11 years',Parent,NO
+0,1,1,0,0,1,1,0,1,1,4,f,Asian,no,no,'New Zealand',no,4,'4-11 years',Parent,YES
+1,0,0,1,1,0,0,0,1,0,6,f,Asian,no,no,'United Kingdom',no,7,'4-11 years',Parent,NO
+1,0,0,1,1,0,1,0,1,0,9,m,White-European,yes,yes,'United Kingdom',no,6,'4-11 years',Parent,NO
+0,0,1,0,1,0,1,1,0,1,6,m,Pasifika,yes,no,'United States',no,8,'4-11 years',Parent,NO
+1,0,1,1,1,1,0,0,1,1,4,m,Others,no,no,Armenia,no,3,'4-11 years',Parent,NO
+1,1,1,1,1,0,0,1,0,1,6,f,Hispanic,no,no,Australia,no,8,'4-11 years','Health care professional',YES
+1,0,1,1,0,1,1,0,1,1,4,m,White-European,yes,no,India,no,2,'4-11 years',Self,NO
+1,1,1,1,0,1,1,0,0,1,4,m,Asian,no,no,Canada,no,4,'4-11 years',Parent,YES
+0,1,1,1,1,0,1,1,0,0,8,f,White-European,no,no,'New Zealand',no,9,'4-11 years',Parent,NO
+1,0,1,1,1,1,0,0,0,1,4,m,White-European,yes,no,India,no,4,'4-11 years',Parent,YES
+0,0,1,1,1,1,1,1,1,1,7,m,Black,no,no,India,no,6,'4-11 years','Health care professional',YES
+1,0,1,0,0,1,0,1,1,1,8,m,Asian,no,no,'United States',no,8,'4-11 years',Parent,NO
+1,0,0,1,1,1,0,0,1,1,4,m,Latino,no,no,Australia,no,7,'4-11 years',Parent,YES
+0,1,0,1,1,0,1,1,0,1,11,m,White-European,no,no,India,no,9,'4-11 years',Parent,NO
+0,1,0,1,1,1,1,0,1,1,4,m,White-European,no,no,'United States',no,3,'4-11 years',Relative,YES
+0,1,1,1,1,1,0,0,0,1,10,m,White-European,no,yes,'New Zealand',no,6,'4-11 years',Parent,YES
+1,0,0,0,0,1,0,0,1,1,6,m,Hispanic,yes,no,Iraq,no,6,'4-11 years',Parent,YES
+0,1,1,1,1,1,1,0,0,1,8,m,Black,no,no,'United States',no,5,'4-11 years',Parent,YES
+1,0,1,0,1,1,1,0,0,1,4,m,White-European,no,no,'United States',no,9,'4-11 years',Parent,YES
+1,0,1,0,1,1,0,1,0,1,4,f,'Middle Eastern ',no,no,India,no,7,'4-11 years',Parent,YES
+0,0,1,1,0,0,1,1,0,1,11,m,White-European,no,no,Australia,no,7,'4-11 years',Parent,NO
+1,0,1,1,1,1,1,0,1,1,7,m,White-European,no,no,India,no,9,'4-11 years',Parent,YES
+1,0,1,1,1,1,1,1,0,0,9,f,'Middle Eastern ',yes,yes,Germany,no,9,'4-11 years',Self,YES
+1,0,1,0,1,0,0,1,0,0,8,m,Latino,no,yes,Germany,no,10,'4-11 years',Parent,NO
+1,1,1,1,1,1,0,1,1,0,4,m,White-European,no,yes,'United Kingdom',no,7,'4-11 years',Parent,NO
+0,1,1,1,1,0,1,0,1,1,6,m,'South Asian',no,no,'New Zealand',no,5,'4-11 years',Parent,YES
+0,1,1,0,1,1,1,0,1,0,11,m,Black,no,no,Armenia,no,4,'4-11 years',Parent,YES
+1,0,1,1,1,1,1,0,1,0,4,m,Asian,no,yes,'United States',no,4,'4-11 years',Parent,YES
+1,1,1,0,1,1,1,1,0,1,5,m,White-European,no,yes,Jordan,no,6,'4-11 years',Parent,YES
+0,0,0,0,1,1,0,1,1,1,9,m,Others,no,no,Oman,no,5,'4-11 years',Relative,YES
+1,1,1,1,1,1,1,0,1,0,9,m,White-European,yes,yes,Japan,no,8,'4-11 years',Self,NO
+1,1,1,1,1,1,0,0,1,1,9,m,'Middle Eastern ',no,no,Bahrain,no,7,'4-11 years',Parent,NO
+1,0,1,0,1,0,1,0,1,1,6,f,Asian,no,no,'United States',no,10,'4-11 years',Parent,NO
+1,0,1,1,0,0,1,0,1,1,6,f,'South Asian',no,no,Italy,no,1,'4-11 years',Parent,YES
+1,1,1,0,0,1,1,1,1,1,11,m,White-European,no,no,'United States',no,8,'4-11 years',Parent,NO
+1,0,1,1,1,1,0,1,1,0,10,f,Others,no,yes,Canada,no,3,'4-11 years',Parent,YES
+1,1,1,1,1,1,0,1,0,0,4,m,White-European,no,yes,India,no,4,'4-11 years',Parent,NO
+1,0,1,0,1,1,0,0,0,1,5,f,Hispanic,no,no,'United States',no,6,'4-11 years',Parent,YES
+1,0,0,1,1,1,0,0,0,1,4,m,Asian,no,yes,Australia,no,5,'4-11 years',Parent,NO
+1,1,0,1,1,1,1,0,0,1,9,f,Asian,no,yes,Canada,no,9,'4-11 years',Relative,NO
+1,1,1,1,1,1,0,0,0,1,6,m,White-European,no,no,India,no,3,'4-11 years',Parent,NO
+1,1,1,0,1,1,1,0,1,1,6,m,White-European,no,no,'United States',no,9,'4-11 years',Relative,YES
+1,1,1,1,1,1,0,0,0,1,10,m,'South Asian',yes,no,Philippines,no,7,'4-11 years',Parent,YES
+1,0,0,1,0,0,0,1,1,1,11,f,Asian,no,no,'New Zealand',no,8,'4-11 years','Health care professional',NO
+0,0,0,1,1,1,1,1,1,1,7,m,White-European,no,yes,Iraq,no,2,'4-11 years',Parent,NO
+1,1,1,0,1,1,1,1,0,1,6,f,White-European,yes,yes,'United Kingdom',no,9,'4-11 years',Parent,NO
+1,1,1,0,1,1,1,0,0,1,6,f,Black,no,no,Australia,no,6,'4-11 years',Relative,NO
+1,0,1,0,1,0,0,1,0,0,4,f,'Middle Eastern ',yes,no,'United States',no,3,'4-11 years',Parent,NO
+1,0,1,0,0,1,1,0,1,1,10,f,White-European,yes,yes,Australia,no,4,'4-11 years',Parent,YES
+1,1,1,0,1,0,1,0,0,0,4,m,White-European,no,no,'New Zealand',no,6,'4-11 years',Parent,YES
+0,1,1,0,1,1,1,0,0,1,4,m,'Middle Eastern ',no,no,Philippines,no,8,'4-11 years',Parent,YES
+1,0,1,1,0,1,0,0,1,1,5,f,White-European,no,yes,Japan,no,2,'4-11 years',Parent,NO
+0,1,1,1,1,1,0,1,0,0,4,m,Asian,no,yes,'United Kingdom',no,7,'4-11 years',Parent,YES
+0,1,0,0,1,1,1,1,1,1,7,f,White-European,no,yes,Brazil,no,9,'4-11 years',Relative,YES
+0,0,1,0,1,0,0,1,0,1,10,m,'Middle Eastern ',no,no,'United States',no,8,'4-11 years','Health care professional',YES
+0,1,0,0,1,0,1,0,1,1,8,m,'Middle Eastern ',no,no,Australia,no,10,'4-11 years',Relative,YES
+1,0,1,0,1,1,1,0,0,1,5,m,White-European,no,no,'United Kingdom',no,6,'4-11 years',Parent,NO
+1,0,1,0,1,1,0,0,0,1,9,f,Black,no,no,India,no,5,'4-11 years',Parent,YES
+1,0,1,1,1,1,1,0,0,0,4,m,Black,no,no,Australia,no,5,'4-11 years','Health care professional',YES
+1,1,1,0,1,1,1,0,1,0,7,m,White-European,yes,no,'United Arab Emirates',no,7,'4-11 years',Parent,YES
+0,0,1,1,1,1,1,1,0,1,8,m,Others,no,no,India,no,3,'4-11 years',Parent,YES
+1,0,1,1,1,0,1,1,0,1,4,m,Others,no,no,'United Arab Emirates',no,5,'4-11 years',Parent,YES
+1,0,1,1,1,1,1,0,1,0,4,m,'South Asian',no,no,'United Kingdom',no,8,'4-11 years',Parent,NO
+0,0,1,1,0,1,1,1,0,1,9,m,'Middle Eastern ',yes,no,'United States',no,9,'4-11 years',Parent,NO
+1,1,0,1,1,1,0,1,1,1,6,m,White-European,no,no,India,no,4,'4-11 years',Relative,YES
+1,0,1,1,0,1,1,1,0,1,4,m,'South Asian',no,no,Jordan,no,9,'4-11 years',Parent,NO
+1,0,1,1,1,1,0,1,0,1,9,m,White-European,no,no,'United States',no,8,'4-11 years',Parent,YES
+1,1,0,1,0,1,1,1,0,1,4,f,White-European,no,no,Australia,no,8,'4-11 years',Parent,NO
+1,1,1,0,1,1,0,0,1,0,6,m,'Middle Eastern ',no,no,'United States',no,9,'4-11 years',Parent,YES
+0,1,1,0,1,1,0,0,1,1,4,f,Asian,no,no,Ireland,no,4,'4-11 years',Parent,NO
+1,1,1,0,1,0,1,1,0,1,4,f,White-European,yes,no,Bangladesh,no,5,'4-11 years',Parent,YES
+0,1,1,1,1,0,1,0,1,1,11,m,White-European,yes,no,'United Kingdom',yes,1,'4-11 years',Parent,NO
+1,0,0,0,1,0,0,0,1,1,5,m,Asian,no,no,'United Arab Emirates',no,9,'4-11 years',Parent,YES
+1,0,1,1,1,1,1,1,1,0,11,m,Black,no,no,'United Kingdom',no,9,'4-11 years',Parent,NO
+0,0,1,1,1,1,0,1,0,0,4,m,'Middle Eastern ',no,no,Canada,no,10,'4-11 years',Parent,YES
+1,0,1,1,1,1,1,1,1,0,5,m,White-European,no,no,'United States',no,4,'4-11 years',Parent,YES
+1,1,1,0,1,1,0,1,1,1,9,m,Latino,no,no,Bangladesh,no,7,'4-11 years',Parent,NO
+1,1,0,0,1,1,1,0,1,1,6,m,Black,no,yes,Germany,no,8,'4-11 years',Parent,YES
+1,1,1,0,1,0,1,1,0,1,11,f,White-European,no,no,Canada,no,4,'4-11 years',Relative,NO
+0,0,1,0,1,0,1,1,0,1,4,m,'Middle Eastern ',no,no,'United Arab Emirates',no,5,'4-11 years',Relative,YES
+1,1,1,0,1,0,1,0,0,1,5,m,'South Asian',yes,no,'United States',no,7,'4-11 years',Parent,NO
+1,1,1,1,0,1,1,0,0,1,8,m,White-European,no,no,Philippines,no,5,'4-11 years',Relative,YES
+0,1,1,0,1,1,1,0,1,1,4,m,White-European,yes,yes,'United States',no,7,'4-11 years',Relative,YES
+1,1,1,0,1,1,1,1,0,0,6,f,'South Asian',no,no,Jordan,yes,3,'4-11 years',Parent,NO
+0,1,0,1,0,1,1,1,0,1,4,m,Hispanic,no,no,India,no,6,'4-11 years',Parent,NO
+0,0,1,1,1,1,1,0,1,1,11,m,White-European,no,yes,'United States',no,10,'4-11 years',Parent,NO
+1,0,1,1,1,1,1,0,1,1,7,m,'Middle Eastern ',no,no,Australia,no,7,'4-11 years',Parent,YES
+1,1,1,1,1,0,0,1,0,1,9,m,White-European,no,no,'United Arab Emirates',no,7,'4-11 years',Parent,YES
+0,1,1,1,0,1,1,0,0,1,9,f,White-European,yes,no,Australia,no,9,'4-11 years',Parent,NO
+1,1,1,1,1,0,1,0,1,1,4,m,Asian,no,no,'United Kingdom',no,3,'4-11 years',Parent,YES
+0,0,1,0,1,1,1,0,1,1,4,m,White-European,no,no,India,no,7,'4-11 years',Parent,YES
+1,1,1,0,1,1,1,0,1,1,10,m,'South Asian',no,no,'United Arab Emirates',no,7,'4-11 years',Parent,NO
+0,0,1,0,1,1,1,1,0,1,4,m,White-European,no,yes,'United Kingdom',no,4,'4-11 years',Parent,YES
+0,1,1,0,1,1,1,1,0,1,4,m,White-European,no,no,India,no,9,'4-11 years',Parent,YES
+1,0,1,1,0,1,1,0,0,1,8,f,Asian,yes,yes,Ireland,no,8,'4-11 years',Relative,NO
+0,1,0,1,0,1,0,0,1,1,4,m,'Middle Eastern ',yes,no,India,no,6,'4-11 years',Self,NO
+1,1,1,0,1,0,0,0,0,1,10,m,Asian,no,no,Bahrain,no,6,'4-11 years',Relative,NO
+1,0,0,0,1,1,1,1,1,0,6,f,White-European,no,no,'United Kingdom',no,7,'4-11 years',Parent,NO
+1,1,1,1,1,1,1,0,1,1,4,m,White-European,no,yes,'United States',no,5,'4-11 years',Parent,NO
+1,0,1,0,1,1,0,0,0,1,9,m,Black,no,no,'United States',no,10,'4-11 years',Parent,NO
+1,1,1,0,1,1,1,0,1,1,5,m,White-European,yes,yes,Jordan,no,8,'4-11 years',Parent,NO
+1,1,1,1,1,1,1,1,1,1,9,m,White-European,no,no,Australia,no,5,'4-11 years',Parent,YES
+0,1,1,1,1,1,1,1,1,1,4,m,Others,yes,no,'United States',no,9,'4-11 years',Parent,NO
+1,1,1,1,1,1,0,1,1,1,11,f,Others,no,no,'United Kingdom',no,9,'4-11 years',Parent,YES
+0,0,1,1,0,1,0,1,1,1,8,m,Asian,no,yes,'United Kingdom',no,7,'4-11 years',Parent,YES
+1,1,1,1,1,1,1,1,0,1,4,m,White-European,no,yes,'United Kingdom',no,9,'4-11 years',Parent,YES
+1,1,0,1,1,1,1,0,1,1,8,f,Black,no,no,'United States',no,5,'4-11 years',Parent,NO
+1,1,0,1,1,1,1,0,0,0,5,m,'South Asian',no,no,'U.S. Outlying Islands',no,6,'4-11 years',Parent,YES
+1,0,1,1,0,1,1,0,1,1,5,m,White-European,yes,yes,'United States',no,4,'4-11 years',Parent,NO
+1,1,1,0,1,1,1,0,0,1,5,m,Black,no,yes,'United Kingdom',no,4,'4-11 years',Parent,YES
+1,1,1,1,0,1,1,0,0,1,6,m,White-European,no,no,Oman,no,6,'4-11 years',Parent,NO
+0,1,1,0,1,1,1,1,1,1,6,m,Asian,no,yes,India,no,4,'4-11 years',Relative,NO
+1,1,1,1,1,1,1,1,0,1,11,f,'South Asian',no,no,Canada,no,7,'4-11 years',Parent,YES
+1,1,1,1,0,1,1,0,0,0,5,f,Turkish,no,no,'United States',no,5,'4-11 years',Parent,YES
+1,0,1,1,0,1,1,1,1,0,5,m,Latino,no,no,'United Kingdom',no,8,'4-11 years',Parent,YES
+1,1,1,1,1,1,1,1,0,0,7,m,Others,yes,yes,Canada,no,9,'4-11 years',Parent,NO
+0,1,1,0,1,1,1,1,1,1,7,f,Black,yes,no,'United Kingdom',no,10,'4-11 years',Parent,YES
+0,0,1,1,1,0,1,1,1,0,7,m,White-European,no,yes,'United States',no,8,'4-11 years',Parent,NO
+1,0,0,0,1,1,1,0,1,1,7,m,White-European,no,no,'United States',no,8,'4-11 years',Parent,NO
+1,0,1,1,1,1,1,0,1,1,4,m,Asian,no,yes,India,no,4,'4-11 years',Parent,YES
+0,1,1,1,1,1,1,0,0,1,6,m,Others,no,no,'New Zealand',no,6,'4-11 years',Relative,NO
+1,0,0,1,1,1,1,1,0,1,4,m,White-European,no,no,Georgia,no,6,'4-11 years',Parent,YES
+1,0,1,0,1,1,1,0,0,0,8,m,Others,no,no,Australia,no,7,'4-11 years',Parent,YES
+1,1,1,1,0,1,0,1,1,1,10,f,White-European,no,yes,'United States',no,7,'4-11 years',Parent,NO
+1,1,0,0,1,1,1,0,1,1,6,m,'Middle Eastern ',no,no,'United States',no,6,'4-11 years',Parent,YES
+1,0,0,1,1,1,0,1,1,1,5,m,Asian,no,no,'United States',no,6,'4-11 years',Parent,YES
+1,1,1,1,1,0,0,1,0,0,10,f,White-European,no,no,'United Kingdom',no,9,'4-11 years','Health care professional',YES
+1,1,0,1,1,1,0,0,0,1,8,m,White-European,yes,no,India,no,7,'4-11 years',Parent,YES
+1,1,1,1,1,1,0,0,1,0,9,m,White-European,no,no,'United States',no,6,'4-11 years',Parent,YES
+0,1,0,1,1,1,0,1,0,1,4,m,White-European,yes,no,Nepal,no,5,'4-11 years',Parent,YES
+0,0,1,0,1,1,1,0,1,1,5,m,White-European,no,no,'United States',no,4,'4-11 years',Parent,YES
+0,1,1,1,1,1,0,0,1,1,6,m,White-European,no,no,'United Kingdom',no,4,'4-11 years',Self,NO
+1,0,1,0,1,0,1,0,0,1,7,m,Black,no,no,'United States',no,6,'4-11 years',Parent,NO
+1,1,1,1,0,1,1,0,0,0,10,f,White-European,yes,yes,Australia,no,10,'4-11 years',Parent,NO
+1,1,1,1,1,0,1,0,1,1,4,m,White-European,no,no,Australia,no,7,'4-11 years',Parent,YES
+0,1,0,0,1,1,1,1,1,1,5,f,White-European,no,no,'United Kingdom',no,3,'4-11 years',Parent,NO
+0,0,1,1,1,0,0,0,1,0,11,m,Asian,no,no,Bangladesh,no,5,'4-11 years',Parent,YES
+0,1,1,1,0,0,1,1,0,1,5,m,White-European,no,no,'United States',no,6,'4-11 years',Parent,NO
+0,0,1,0,1,1,1,0,1,0,4,m,Black,no,yes,'United States',yes,3,'4-11 years',Parent,YES
+1,1,1,1,1,1,1,1,1,1,4,m,White-European,no,yes,Australia,no,10,'4-11 years',Parent,YES
+0,0,1,1,1,1,1,0,0,0,6,m,White-European,no,yes,India,no,8,'4-11 years',Parent,NO
+0,0,1,0,1,1,0,1,0,0,4,m,White-European,no,no,'United States',no,7,'4-11 years',Parent,YES
+0,0,0,1,0,1,0,1,1,1,4,m,Asian,no,no,India,no,5,'4-11 years',Parent,NO
+1,0,0,1,0,0,1,1,1,1,9,m,White-European,no,no,Bulgaria,no,5,'4-11 years',Parent,NO
+1,1,0,0,1,0,1,0,1,0,6,m,White-European,no,yes,'United States',no,5,'4-11 years',Parent,YES
+1,1,1,0,1,0,1,1,1,1,4,f,'Middle Eastern ',no,no,'U.S. Outlying Islands',no,1,'4-11 years',Relative,YES
+1,0,1,1,1,1,1,0,0,1,5,m,White-European,no,no,Armenia,no,7,'4-11 years',Parent,YES
+1,1,1,0,1,1,0,0,1,1,10,m,White-European,no,no,Bahrain,no,4,'4-11 years',Parent,YES
+0,1,1,1,1,0,0,1,0,1,6,m,Asian,no,no,India,no,4,'4-11 years',Parent,NO
+1,1,1,1,0,1,0,1,1,1,8,m,White-European,no,no,Australia,no,7,'4-11 years',Parent,YES
+1,1,0,1,0,0,1,0,1,1,5,f,White-European,yes,no,Australia,yes,2,'4-11 years',Parent,NO
+1,0,1,1,1,1,1,0,1,1,8,f,White-European,no,no,'United Kingdom',no,4,'4-11 years',Parent,NO
+1,1,1,1,1,1,1,0,1,1,4,m,White-European,no,no,'United Kingdom',no,7,'4-11 years',Parent,NO
+1,1,0,0,1,1,1,0,0,0,6,m,Black,no,no,'United Kingdom',no,3,'4-11 years',Relative,YES
+0,1,1,1,1,0,1,1,0,1,6,f,White-European,no,no,India,no,9,'4-11 years',Parent,NO
+0,0,0,1,1,1,0,1,0,1,4,m,Latino,yes,no,Canada,no,8,'4-11 years',Relative,NO
+1,0,1,0,1,1,1,1,0,0,4,f,White-European,yes,yes,Australia,no,3,'4-11 years',Parent,YES
+0,0,1,0,1,1,1,0,1,1,4,f,Others,no,yes,'United Kingdom',no,8,'4-11 years',Parent,YES
+1,1,0,0,1,1,1,1,1,1,6,m,Black,no,yes,'New Zealand',no,5,'4-11 years',Relative,NO
+1,1,1,1,0,1,1,0,1,1,4,m,White-European,no,yes,Philippines,no,8,'4-11 years',Parent,YES
+1,1,1,1,0,1,1,0,1,1,4,m,'South Asian',yes,yes,India,no,7,'4-11 years',Relative,YES
+0,0,1,1,1,1,1,1,0,0,4,f,Asian,yes,no,India,no,3,'4-11 years',Parent,NO
+0,0,1,1,1,0,1,1,1,1,9,m,'Middle Eastern ',no,no,India,no,4,'4-11 years',Parent,NO
+0,1,1,1,0,1,0,0,0,1,10,m,Asian,no,yes,Australia,no,6,'4-11 years',Parent,YES
+1,1,1,1,1,1,0,1,0,1,8,m,White-European,yes,no,'United Kingdom',no,2,'4-11 years',Parent,NO
+1,0,0,1,1,1,0,1,0,1,4,m,Asian,no,no,Mexico,no,7,'4-11 years',Parent,YES
+0,1,1,0,1,0,0,0,1,1,8,m,White-European,no,no,Iraq,no,3,'4-11 years',Parent,YES
+1,1,1,1,1,1,1,0,1,0,6,f,Latino,yes,yes,'United States',yes,3,'4-11 years',Parent,YES
+1,0,0,0,1,1,0,1,1,0,9,m,White-European,yes,no,'United States',no,1,'4-11 years',Parent,NO
+0,0,1,0,1,0,0,1,0,1,6,m,'South Asian',no,no,'United States',no,8,'4-11 years',Parent,YES
+1,0,0,0,1,1,0,0,0,0,4,f,Hispanic,no,no,Bangladesh,no,10,'4-11 years',Parent,NO
+1,0,0,1,1,0,0,1,1,1,5,f,Asian,no,no,'United Kingdom',no,5,'4-11 years',Parent,NO

@@ -1,0 +1,43 @@
+{
+  "n_real": 100,
+  "n_synth": 100,
+  "used_columns": [
+    "season",
+    "age",
+    "child_diseases",
+    "accident",
+    "surgical_intervention",
+    "high_fevers",
+    "alcohol",
+    "smoking",
+    "hrs_sitting"
+  ],
+  "qi_columns": [
+    "season",
+    "age",
+    "child_diseases",
+    "accident",
+    "surgical_intervention",
+    "high_fevers",
+    "alcohol",
+    "smoking",
+    "hrs_sitting"
+  ],
+  "sensitive_columns": [],
+  "exact_overlap_rate": 0.0,
+  "near_duplicate_rate_eps": 0.24,
+  "nn_distance_stats": {
+    "mean": 0.48922672980272663,
+    "median": 0.48922672980272663,
+    "p95": NaN,
+    "min": 0.48922672980272663,
+    "max": 0.48922672980272663
+  },
+  "k_min": 1,
+  "k_pct_lt5": 1.0,
+  "k_map": 3,
+  "rare_qi_reproduction_rate": 0.0,
+  "t_closeness": {},
+  "identifiability_score": null,
+  "delta_presence": 1.9999999960000001
+}

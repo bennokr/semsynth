@@ -299,6 +299,7 @@
       {
         "name": "num",
         "titles": "Angiographic disease status",
+        "hadRole": "target",
         "columnProperty": {
           "summaryStatistics": {
             "statisticalDataType": "dsv:NominalDataType"

@@ -12,6 +12,7 @@ from typing import TYPE_CHECKING, Any, Dict, List, Optional, Sequence
 from makeprov import OutPath, main, rule
 from makeprov.config import ProvenanceConfig
 
+from . import downstream_fidelity  # noqa: F401 - register build rules
 from .app import run_app
 from .catalog import build_catalog
 
@@ -23,6 +24,7 @@ __all__ = [
     "mappings",
     "run_app",
     "build_catalog",
+    "build",
     "main",
 ]
 
@@ -400,7 +402,49 @@ def mappings(
         base_url: Base IRI used when rebuilding the catalog and HTML index.
         verbose: Whether to enable informational logging.
     """
-    mapping_root = Path("mappings")
+    provider_to_ids = _collect_mapping_targets(Path("mappings"))
+    _run_reports_for_targets(
+        provider_to_ids,
+        outdir=outdir,
+        pipeline_configs=pipeline_configs,
+        verbose=verbose,
+        rebuild_catalog=True,
+        base_url=base_url,
+    )
+
+
+@rule(phony=True)
+def refresh_mapping_reports(
+    *,
+    pipeline_configs: str = "[pipeline]\ngenerate_umap=false\ncompute_privacy=false\ncompute_downstream=false\noverwrite_umap=false\n",
+    outdir: str = "output/",
+    mapping_root: str = "mappings",
+    verbose: bool = False,
+) -> None:
+    """Regenerate reports for curated mapping metadata without re-running mappings.
+
+    Args:
+        pipeline_configs: Optional TOML snippet or file path passed to the ``report``
+            subcommand. Leave empty for metadata-only reports or pass a pipeline block
+            to disable heavy steps (e.g. ``{pipeline={generate_umap=false,compute_privacy=false,compute_downstream=false,overwrite_umap=false}}``).
+        outdir: Output directory where dataset report folders live.
+        mapping_root: Directory containing ``*.metadata.json`` mapping files.
+        verbose: Whether to enable informational logging.
+    """
+
+    provider_to_ids = _collect_mapping_targets(Path(mapping_root))
+    _run_reports_for_targets(
+        provider_to_ids,
+        outdir=outdir,
+        pipeline_configs=pipeline_configs,
+        verbose=verbose,
+        rebuild_catalog=False,
+        base_url=None,
+    )
+
+
+def _collect_mapping_targets(mapping_root: Path) -> Dict[str, List[str]]:
+    """Return provider→dataset_id mappings discovered under a mapping directory."""
 
     provider_to_ids: Dict[str, List[str]] = {}
     for path in sorted(mapping_root.glob("*.metadata.json")):
@@ -410,17 +454,29 @@ def mappings(
         provider, dataset_id = stem.split("-", maxsplit=1)
         dataset_id = dataset_id.removesuffix(".metadata")
         provider_to_ids.setdefault(provider, []).append(dataset_id)
-
     if not provider_to_ids:
         logging.info("No mapping metadata files found under %s", mapping_root)
+    return provider_to_ids
+
+
+def _run_reports_for_targets(
+    provider_to_ids: Dict[str, List[str]],
+    *,
+    outdir: str,
+    pipeline_configs: str,
+    verbose: bool,
+    rebuild_catalog: bool,
+    base_url: Optional[str],
+) -> None:
+    """Invoke the report pipeline for a provider→dataset mapping."""
+
+    if not provider_to_ids:
         return
 
     failures: List[str] = []
-    attempts = 0
     successes = 0
     for provider, dataset_ids in provider_to_ids.items():
         for dataset_id in sorted(set(dataset_ids)):
-            attempts += 1
             try:
                 report(
                     provider=provider,
@@ -433,7 +489,7 @@ def mappings(
             except SystemExit as exc:
                 failures.append(f"{provider}:{dataset_id} ({exc})")
 
-    if successes:
+    if successes and rebuild_catalog and base_url:
         build_catalog(
             base_dir=Path(outdir),
             base_url=base_url,
@@ -445,6 +501,15 @@ def mappings(
         logging.warning("Completed with skipped datasets: %s", "; ".join(failures))
         if successes == 0:
             raise SystemExit("; ".join(failures))
+
+
+def build(*args, **kwargs):  # pragma: no cover - passthrough to makeprov
+    """Expose makeprov build targets via ``python -m semsynth build ...``."""
+
+    from makeprov import main as makeprov_main
+
+    return makeprov_main(*args, **kwargs)
+
 
 if __name__ == "__main__":
     main(argparse_kwargs = dict(

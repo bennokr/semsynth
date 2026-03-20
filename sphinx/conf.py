@@ -35,8 +35,9 @@ myst_enable_extensions = [
 # Auto-anchor headings for internal cross-references in included docs
 myst_heading_anchors = 3
 
-# Execute notebooks with caching to keep builds deterministic/offline
-nb_execution_mode = "cache"
+# Execute notebooks automatically and fail on cell errors
+nb_execution_mode = "auto"
+nb_execution_allow_errors = False
 
 # Automatically generate autosummary stub files
 autosummary_generate = True

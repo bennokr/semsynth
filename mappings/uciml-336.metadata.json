@@ -517,6 +517,7 @@
       {
         "name": "class",
         "titles": "Chronic kidney disease class label",
+        "hadRole": "target",
         "columnProperty": {
           "summaryStatistics": {
             "statisticalDataType": "dsv:NominalDataType"

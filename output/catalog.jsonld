@@ -57,7 +57,7 @@
   ],
   "title": "SemSynth Synthetic Data Catalog",
   "description": "DCAT catalog of SemSynth reports and synthetic datasets.",
-  "modified": "2026-03-13T09:19:50.061714+00:00",
+  "modified": "2026-03-20T15:18:02.615511+00:00",
   "datasets": [
     {
       "id": "urn:dataset:autistic-spectrum-disorder-screening-data-for-children",
@@ -65,50 +65,29 @@
         "dcat:Dataset"
       ],
       "identifier": "autistic-spectrum-disorder-screening-data-for-children",
-      "title": "Autistic Spectrum Disorder Screening Data for Children  ",
-      "description": "Source: UCI dataset 419 \u2014 synthetic assets curated by SemSynth.",
+      "title": "Autistic Spectrum Disorder Screening Data for Children",
+      "description": "see attached file for variables' description \u2014 synthetic assets curated by SemSynth.",
       "keywords": [
-        "Autistic Spectrum Disorder Screening Data for Children  ",
+        "Autistic Spectrum Disorder Screening Data for Children",
         "synthetic data",
         "SemMap",
         "SemSynth"
       ],
-      "landing_page": "https://w3id.org/semsynth/demo#/output/Autistic Spectrum Disorder Screening Data for Children  /index.html",
-      "modified": "2026-03-13T08:45:50.757458+00:00",
-      "issued": "2026-03-13T08:45:50.757458+00:00",
+      "landing_page": "https://w3id.org/semsynth/demo#/output/Autistic Spectrum Disorder Screening Data for Children/index.html",
+      "modified": "2026-03-20T15:17:27.598330+00:00",
+      "issued": "2026-03-20T15:17:27.598330+00:00",
       "wasDerivedFrom": [
         {
-          "id": "https://w3id.org/semsynth/demo#/output/Autistic Spectrum Disorder Screening Data for Children  /dataset.semmap.json"
+          "id": "https://w3id.org/semsynth/demo#/output/Autistic Spectrum Disorder Screening Data for Children/dataset.semmap.json"
         },
         {
-          "id": "https://w3id.org/semsynth/demo#/output/Autistic Spectrum Disorder Screening Data for Children  /models/clg_mi2/synthetic.csv"
+          "id": "https://w3id.org/semsynth/demo#/output/Autistic Spectrum Disorder Screening Data for Children/models/metasyn/provenance.json"
         },
         {
-          "id": "https://w3id.org/semsynth/demo#/output/Autistic Spectrum Disorder Screening Data for Children  /models/clg_mi2/synthetic.semmap.parquet"
+          "id": "https://w3id.org/semsynth/demo#/output/Autistic Spectrum Disorder Screening Data for Children/models/metasyn/synthetic.csv"
         },
         {
-          "id": "https://w3id.org/semsynth/demo#/output/Autistic Spectrum Disorder Screening Data for Children  /models/ctgan_fast/synthetic.csv"
-        },
-        {
-          "id": "https://w3id.org/semsynth/demo#/output/Autistic Spectrum Disorder Screening Data for Children  /models/ctgan_fast/synthetic.semmap.parquet"
-        },
-        {
-          "id": "https://w3id.org/semsynth/demo#/output/Autistic Spectrum Disorder Screening Data for Children  /models/metasyn/synthetic.csv"
-        },
-        {
-          "id": "https://w3id.org/semsynth/demo#/output/Autistic Spectrum Disorder Screening Data for Children  /models/metasyn/synthetic.semmap.parquet"
-        },
-        {
-          "id": "https://w3id.org/semsynth/demo#/output/Autistic Spectrum Disorder Screening Data for Children  /models/semi_mi5/synthetic.csv"
-        },
-        {
-          "id": "https://w3id.org/semsynth/demo#/output/Autistic Spectrum Disorder Screening Data for Children  /models/semi_mi5/synthetic.semmap.parquet"
-        },
-        {
-          "id": "https://w3id.org/semsynth/demo#/output/Autistic Spectrum Disorder Screening Data for Children  /models/tvae_quick/synthetic.csv"
-        },
-        {
-          "id": "https://w3id.org/semsynth/demo#/output/Autistic Spectrum Disorder Screening Data for Children  /models/tvae_quick/synthetic.semmap.parquet"
+          "id": "https://w3id.org/semsynth/demo#/output/Autistic Spectrum Disorder Screening Data for Children/models/metasyn/synthetic.semmap.parquet"
         }
       ],
       "distributions": [
@@ -117,149 +96,55 @@
           "type": [
             "dcat:Distribution"
           ],
-          "title": "Autistic Spectrum Disorder Screening Data for Children   SemMap JSON-LD",
-          "access_url": "https://w3id.org/semsynth/demo#/output/Autistic Spectrum Disorder Screening Data for Children  /dataset.semmap.json",
-          "download_url": "https://w3id.org/semsynth/demo#/output/Autistic Spectrum Disorder Screening Data for Children  /dataset.semmap.json",
+          "title": "Autistic Spectrum Disorder Screening Data for Children SemMap JSON-LD",
+          "access_url": "https://w3id.org/semsynth/demo#/output/Autistic Spectrum Disorder Screening Data for Children/dataset.semmap.json",
+          "download_url": "https://w3id.org/semsynth/demo#/output/Autistic Spectrum Disorder Screening Data for Children/dataset.semmap.json",
           "media_type": "application/ld+json",
           "format": "JSON-LD",
-          "byte_size": 7674,
-          "modified": "2026-03-13T08:45:50.757458+00:00",
-          "issued": "2026-03-13T08:45:50.757458+00:00"
-        },
-        {
-          "id": "urn:distribution:autistic-spectrum-disorder-screening-data-for-children-autistic-spectrum-disorder-screening-data-for-children-models-semi-mi5-synthetic-csv",
-          "type": [
-            "dcat:Distribution"
-          ],
-          "title": "Autistic Spectrum Disorder Screening Data for Children   synthetic data (semi_mi5, csv)",
-          "access_url": "https://w3id.org/semsynth/demo#/output/Autistic Spectrum Disorder Screening Data for Children  /models/semi_mi5/synthetic.csv",
-          "download_url": "https://w3id.org/semsynth/demo#/output/Autistic Spectrum Disorder Screening Data for Children  /models/semi_mi5/synthetic.csv",
-          "media_type": "text/csv",
-          "format": "CSV",
-          "byte_size": 29368,
-          "modified": "2026-03-13T08:39:03.738164+00:00",
-          "issued": "2026-03-13T08:39:03.738164+00:00"
-        },
-        {
-          "id": "urn:distribution:autistic-spectrum-disorder-screening-data-for-children-autistic-spectrum-disorder-screening-data-for-children-models-clg-mi2-synthetic-csv",
-          "type": [
-            "dcat:Distribution"
-          ],
-          "title": "Autistic Spectrum Disorder Screening Data for Children   synthetic data (clg_mi2, csv)",
-          "access_url": "https://w3id.org/semsynth/demo#/output/Autistic Spectrum Disorder Screening Data for Children  /models/clg_mi2/synthetic.csv",
-          "download_url": "https://w3id.org/semsynth/demo#/output/Autistic Spectrum Disorder Screening Data for Children  /models/clg_mi2/synthetic.csv",
-          "media_type": "text/csv",
-          "format": "CSV",
-          "byte_size": 29368,
-          "modified": "2026-03-13T08:39:03.560885+00:00",
-          "issued": "2026-03-13T08:39:03.560885+00:00"
-        },
-        {
-          "id": "urn:distribution:autistic-spectrum-disorder-screening-data-for-children-autistic-spectrum-disorder-screening-data-for-children-models-tvae-quick-synthetic-csv",
-          "type": [
-            "dcat:Distribution"
-          ],
-          "title": "Autistic Spectrum Disorder Screening Data for Children   synthetic data (tvae_quick, csv)",
-          "access_url": "https://w3id.org/semsynth/demo#/output/Autistic Spectrum Disorder Screening Data for Children  /models/tvae_quick/synthetic.csv",
-          "download_url": "https://w3id.org/semsynth/demo#/output/Autistic Spectrum Disorder Screening Data for Children  /models/tvae_quick/synthetic.csv",
-          "media_type": "text/csv",
-          "format": "CSV",
-          "byte_size": 26013,
-          "modified": "2026-03-13T08:45:49.924569+00:00",
-          "issued": "2026-03-13T08:45:49.924569+00:00"
-        },
-        {
-          "id": "urn:distribution:autistic-spectrum-disorder-screening-data-for-children-autistic-spectrum-disorder-screening-data-for-children-models-ctgan-fast-synthetic-csv",
-          "type": [
-            "dcat:Distribution"
-          ],
-          "title": "Autistic Spectrum Disorder Screening Data for Children   synthetic data (ctgan_fast, csv)",
-          "access_url": "https://w3id.org/semsynth/demo#/output/Autistic Spectrum Disorder Screening Data for Children  /models/ctgan_fast/synthetic.csv",
-          "download_url": "https://w3id.org/semsynth/demo#/output/Autistic Spectrum Disorder Screening Data for Children  /models/ctgan_fast/synthetic.csv",
-          "media_type": "text/csv",
-          "format": "CSV",
-          "byte_size": 22557,
-          "modified": "2026-03-13T08:39:19.454608+00:00",
-          "issued": "2026-03-13T08:39:19.454608+00:00"
+          "byte_size": 11111,
+          "modified": "2026-03-20T15:17:27.598330+00:00",
+          "issued": "2026-03-20T15:17:27.598330+00:00"
         },
         {
           "id": "urn:distribution:autistic-spectrum-disorder-screening-data-for-children-autistic-spectrum-disorder-screening-data-for-children-models-metasyn-synthetic-csv",
           "type": [
             "dcat:Distribution"
           ],
-          "title": "Autistic Spectrum Disorder Screening Data for Children   synthetic data (metasyn, csv)",
-          "access_url": "https://w3id.org/semsynth/demo#/output/Autistic Spectrum Disorder Screening Data for Children  /models/metasyn/synthetic.csv",
-          "download_url": "https://w3id.org/semsynth/demo#/output/Autistic Spectrum Disorder Screening Data for Children  /models/metasyn/synthetic.csv",
+          "title": "Autistic Spectrum Disorder Screening Data for Children synthetic data (metasyn, csv)",
+          "access_url": "https://w3id.org/semsynth/demo#/output/Autistic Spectrum Disorder Screening Data for Children/models/metasyn/synthetic.csv",
+          "download_url": "https://w3id.org/semsynth/demo#/output/Autistic Spectrum Disorder Screening Data for Children/models/metasyn/synthetic.csv",
           "media_type": "text/csv",
           "format": "CSV",
-          "byte_size": 29545,
-          "modified": "2026-03-13T08:39:03.378056+00:00",
-          "issued": "2026-03-13T08:39:03.378056+00:00"
-        },
-        {
-          "id": "urn:distribution:autistic-spectrum-disorder-screening-data-for-children-autistic-spectrum-disorder-screening-data-for-children-models-semi-mi5-synthetic-semmap-parquet",
-          "type": [
-            "dcat:Distribution"
-          ],
-          "title": "Autistic Spectrum Disorder Screening Data for Children   synthetic data (semi_mi5, parquet)",
-          "access_url": "https://w3id.org/semsynth/demo#/output/Autistic Spectrum Disorder Screening Data for Children  /models/semi_mi5/synthetic.semmap.parquet",
-          "download_url": "https://w3id.org/semsynth/demo#/output/Autistic Spectrum Disorder Screening Data for Children  /models/semi_mi5/synthetic.semmap.parquet",
-          "format": "PARQUET",
-          "byte_size": 29055,
-          "modified": "2026-03-13T08:39:03.768008+00:00",
-          "issued": "2026-03-13T08:39:03.768008+00:00"
-        },
-        {
-          "id": "urn:distribution:autistic-spectrum-disorder-screening-data-for-children-autistic-spectrum-disorder-screening-data-for-children-models-clg-mi2-synthetic-semmap-parquet",
-          "type": [
-            "dcat:Distribution"
-          ],
-          "title": "Autistic Spectrum Disorder Screening Data for Children   synthetic data (clg_mi2, parquet)",
-          "access_url": "https://w3id.org/semsynth/demo#/output/Autistic Spectrum Disorder Screening Data for Children  /models/clg_mi2/synthetic.semmap.parquet",
-          "download_url": "https://w3id.org/semsynth/demo#/output/Autistic Spectrum Disorder Screening Data for Children  /models/clg_mi2/synthetic.semmap.parquet",
-          "format": "PARQUET",
-          "byte_size": 29055,
-          "modified": "2026-03-13T08:39:03.590464+00:00",
-          "issued": "2026-03-13T08:39:03.590464+00:00"
-        },
-        {
-          "id": "urn:distribution:autistic-spectrum-disorder-screening-data-for-children-autistic-spectrum-disorder-screening-data-for-children-models-tvae-quick-synthetic-semmap-parquet",
-          "type": [
-            "dcat:Distribution"
-          ],
-          "title": "Autistic Spectrum Disorder Screening Data for Children   synthetic data (tvae_quick, parquet)",
-          "access_url": "https://w3id.org/semsynth/demo#/output/Autistic Spectrum Disorder Screening Data for Children  /models/tvae_quick/synthetic.semmap.parquet",
-          "download_url": "https://w3id.org/semsynth/demo#/output/Autistic Spectrum Disorder Screening Data for Children  /models/tvae_quick/synthetic.semmap.parquet",
-          "format": "PARQUET",
-          "byte_size": 26143,
-          "modified": "2026-03-13T08:45:49.955529+00:00",
-          "issued": "2026-03-13T08:45:49.955529+00:00"
-        },
-        {
-          "id": "urn:distribution:autistic-spectrum-disorder-screening-data-for-children-autistic-spectrum-disorder-screening-data-for-children-models-ctgan-fast-synthetic-semmap-parquet",
-          "type": [
-            "dcat:Distribution"
-          ],
-          "title": "Autistic Spectrum Disorder Screening Data for Children   synthetic data (ctgan_fast, parquet)",
-          "access_url": "https://w3id.org/semsynth/demo#/output/Autistic Spectrum Disorder Screening Data for Children  /models/ctgan_fast/synthetic.semmap.parquet",
-          "download_url": "https://w3id.org/semsynth/demo#/output/Autistic Spectrum Disorder Screening Data for Children  /models/ctgan_fast/synthetic.semmap.parquet",
-          "format": "PARQUET",
-          "byte_size": 25607,
-          "modified": "2026-03-13T08:39:19.486564+00:00",
-          "issued": "2026-03-13T08:39:19.486564+00:00"
+          "byte_size": 25017,
+          "modified": "2026-03-20T15:17:25.110666+00:00",
+          "issued": "2026-03-20T15:17:25.110666+00:00"
         },
         {
           "id": "urn:distribution:autistic-spectrum-disorder-screening-data-for-children-autistic-spectrum-disorder-screening-data-for-children-models-metasyn-synthetic-semmap-parquet",
           "type": [
             "dcat:Distribution"
           ],
-          "title": "Autistic Spectrum Disorder Screening Data for Children   synthetic data (metasyn, parquet)",
-          "access_url": "https://w3id.org/semsynth/demo#/output/Autistic Spectrum Disorder Screening Data for Children  /models/metasyn/synthetic.semmap.parquet",
-          "download_url": "https://w3id.org/semsynth/demo#/output/Autistic Spectrum Disorder Screening Data for Children  /models/metasyn/synthetic.semmap.parquet",
+          "title": "Autistic Spectrum Disorder Screening Data for Children synthetic data (metasyn, parquet)",
+          "access_url": "https://w3id.org/semsynth/demo#/output/Autistic Spectrum Disorder Screening Data for Children/models/metasyn/synthetic.semmap.parquet",
+          "download_url": "https://w3id.org/semsynth/demo#/output/Autistic Spectrum Disorder Screening Data for Children/models/metasyn/synthetic.semmap.parquet",
           "format": "PARQUET",
-          "byte_size": 29076,
-          "modified": "2026-03-13T08:39:03.408493+00:00",
-          "issued": "2026-03-13T08:39:03.408493+00:00"
+          "byte_size": 28612,
+          "modified": "2026-03-20T15:17:25.168609+00:00",
+          "issued": "2026-03-20T15:17:25.168609+00:00"
+        },
+        {
+          "id": "urn:distribution:autistic-spectrum-disorder-screening-data-for-children-autistic-spectrum-disorder-screening-data-for-children-models-metasyn-provenance-json",
+          "type": [
+            "dcat:Distribution"
+          ],
+          "title": "Autistic Spectrum Disorder Screening Data for Children provenance (JSON-LD)",
+          "access_url": "https://w3id.org/semsynth/demo#/output/Autistic Spectrum Disorder Screening Data for Children/models/metasyn/provenance.json",
+          "download_url": "https://w3id.org/semsynth/demo#/output/Autistic Spectrum Disorder Screening Data for Children/models/metasyn/provenance.json",
+          "media_type": "application/ld+json",
+          "format": "JSON-LD",
+          "byte_size": 4660,
+          "modified": "2026-03-20T15:17:25.807492+00:00",
+          "issued": "2026-03-20T15:17:25.807492+00:00"
         }
       ]
     },
@@ -278,44 +163,20 @@
         "SemSynth"
       ],
       "landing_page": "https://w3id.org/semsynth/demo#/output/CDC Diabetes Health Indicators/index.html",
-      "modified": "2026-03-13T09:17:16.109404+00:00",
-      "issued": "2026-03-13T09:17:16.109404+00:00",
+      "modified": "2026-03-20T15:18:01.850755+00:00",
+      "issued": "2026-03-20T15:18:01.850755+00:00",
       "wasDerivedFrom": [
         {
           "id": "https://w3id.org/semsynth/demo#/output/CDC Diabetes Health Indicators/dataset.semmap.json"
         },
         {
-          "id": "https://w3id.org/semsynth/demo#/output/CDC Diabetes Health Indicators/models/clg_mi2/synthetic.csv"
-        },
-        {
-          "id": "https://w3id.org/semsynth/demo#/output/CDC Diabetes Health Indicators/models/clg_mi2/synthetic.semmap.parquet"
-        },
-        {
-          "id": "https://w3id.org/semsynth/demo#/output/CDC Diabetes Health Indicators/models/ctgan_fast/synthetic.csv"
-        },
-        {
-          "id": "https://w3id.org/semsynth/demo#/output/CDC Diabetes Health Indicators/models/ctgan_fast/synthetic.semmap.parquet"
+          "id": "https://w3id.org/semsynth/demo#/output/CDC Diabetes Health Indicators/models/metasyn/provenance.json"
         },
         {
           "id": "https://w3id.org/semsynth/demo#/output/CDC Diabetes Health Indicators/models/metasyn/synthetic.csv"
         },
         {
           "id": "https://w3id.org/semsynth/demo#/output/CDC Diabetes Health Indicators/models/metasyn/synthetic.semmap.parquet"
-        },
-        {
-          "id": "https://w3id.org/semsynth/demo#/output/CDC Diabetes Health Indicators/models/metasyn/synthetic_metasyn.semmap.parquet"
-        },
-        {
-          "id": "https://w3id.org/semsynth/demo#/output/CDC Diabetes Health Indicators/models/semi_mi5/synthetic.csv"
-        },
-        {
-          "id": "https://w3id.org/semsynth/demo#/output/CDC Diabetes Health Indicators/models/semi_mi5/synthetic.semmap.parquet"
-        },
-        {
-          "id": "https://w3id.org/semsynth/demo#/output/CDC Diabetes Health Indicators/models/tvae_quick/synthetic.csv"
-        },
-        {
-          "id": "https://w3id.org/semsynth/demo#/output/CDC Diabetes Health Indicators/models/tvae_quick/synthetic.semmap.parquet"
         }
       ],
       "distributions": [
@@ -329,65 +190,9 @@
           "download_url": "https://w3id.org/semsynth/demo#/output/CDC Diabetes Health Indicators/dataset.semmap.json",
           "media_type": "application/ld+json",
           "format": "JSON-LD",
-          "byte_size": 7908,
-          "modified": "2026-03-13T09:17:16.109404+00:00",
-          "issued": "2026-03-13T09:17:16.109404+00:00"
-        },
-        {
-          "id": "urn:distribution:cdc-diabetes-health-indicators-cdc-diabetes-health-indicators-models-semi-mi5-synthetic-csv",
-          "type": [
-            "dcat:Distribution"
-          ],
-          "title": "CDC Diabetes Health Indicators synthetic data (semi_mi5, csv)",
-          "access_url": "https://w3id.org/semsynth/demo#/output/CDC Diabetes Health Indicators/models/semi_mi5/synthetic.csv",
-          "download_url": "https://w3id.org/semsynth/demo#/output/CDC Diabetes Health Indicators/models/semi_mi5/synthetic.csv",
-          "media_type": "text/csv",
-          "format": "CSV",
-          "byte_size": 94781,
-          "modified": "2026-03-13T08:28:39.070619+00:00",
-          "issued": "2026-03-13T08:28:39.070619+00:00"
-        },
-        {
-          "id": "urn:distribution:cdc-diabetes-health-indicators-cdc-diabetes-health-indicators-models-clg-mi2-synthetic-csv",
-          "type": [
-            "dcat:Distribution"
-          ],
-          "title": "CDC Diabetes Health Indicators synthetic data (clg_mi2, csv)",
-          "access_url": "https://w3id.org/semsynth/demo#/output/CDC Diabetes Health Indicators/models/clg_mi2/synthetic.csv",
-          "download_url": "https://w3id.org/semsynth/demo#/output/CDC Diabetes Health Indicators/models/clg_mi2/synthetic.csv",
-          "media_type": "text/csv",
-          "format": "CSV",
-          "byte_size": 94656,
-          "modified": "2026-03-13T08:28:38.742619+00:00",
-          "issued": "2026-03-13T08:28:38.742619+00:00"
-        },
-        {
-          "id": "urn:distribution:cdc-diabetes-health-indicators-cdc-diabetes-health-indicators-models-tvae-quick-synthetic-csv",
-          "type": [
-            "dcat:Distribution"
-          ],
-          "title": "CDC Diabetes Health Indicators synthetic data (tvae_quick, csv)",
-          "access_url": "https://w3id.org/semsynth/demo#/output/CDC Diabetes Health Indicators/models/tvae_quick/synthetic.csv",
-          "download_url": "https://w3id.org/semsynth/demo#/output/CDC Diabetes Health Indicators/models/tvae_quick/synthetic.csv",
-          "media_type": "text/csv",
-          "format": "CSV",
-          "byte_size": 89986,
-          "modified": "2026-03-13T09:17:13.579669+00:00",
-          "issued": "2026-03-13T09:17:13.579669+00:00"
-        },
-        {
-          "id": "urn:distribution:cdc-diabetes-health-indicators-cdc-diabetes-health-indicators-models-ctgan-fast-synthetic-csv",
-          "type": [
-            "dcat:Distribution"
-          ],
-          "title": "CDC Diabetes Health Indicators synthetic data (ctgan_fast, csv)",
-          "access_url": "https://w3id.org/semsynth/demo#/output/CDC Diabetes Health Indicators/models/ctgan_fast/synthetic.csv",
-          "download_url": "https://w3id.org/semsynth/demo#/output/CDC Diabetes Health Indicators/models/ctgan_fast/synthetic.csv",
-          "media_type": "text/csv",
-          "format": "CSV",
-          "byte_size": 80003,
-          "modified": "2026-03-13T08:29:02.606621+00:00",
-          "issued": "2026-03-13T08:29:02.606621+00:00"
+          "byte_size": 21550,
+          "modified": "2026-03-20T15:18:01.850755+00:00",
+          "issued": "2026-03-20T15:18:01.850755+00:00"
         },
         {
           "id": "urn:distribution:cdc-diabetes-health-indicators-cdc-diabetes-health-indicators-models-metasyn-synthetic-csv",
@@ -399,61 +204,9 @@
           "download_url": "https://w3id.org/semsynth/demo#/output/CDC Diabetes Health Indicators/models/metasyn/synthetic.csv",
           "media_type": "text/csv",
           "format": "CSV",
-          "byte_size": 94325,
-          "modified": "2026-03-13T08:28:38.366619+00:00",
-          "issued": "2026-03-13T08:28:38.366619+00:00"
-        },
-        {
-          "id": "urn:distribution:cdc-diabetes-health-indicators-cdc-diabetes-health-indicators-models-semi-mi5-synthetic-semmap-parquet",
-          "type": [
-            "dcat:Distribution"
-          ],
-          "title": "CDC Diabetes Health Indicators synthetic data (semi_mi5, parquet)",
-          "access_url": "https://w3id.org/semsynth/demo#/output/CDC Diabetes Health Indicators/models/semi_mi5/synthetic.semmap.parquet",
-          "download_url": "https://w3id.org/semsynth/demo#/output/CDC Diabetes Health Indicators/models/semi_mi5/synthetic.semmap.parquet",
-          "format": "PARQUET",
-          "byte_size": 56896,
-          "modified": "2026-03-13T08:28:39.102619+00:00",
-          "issued": "2026-03-13T08:28:39.102619+00:00"
-        },
-        {
-          "id": "urn:distribution:cdc-diabetes-health-indicators-cdc-diabetes-health-indicators-models-clg-mi2-synthetic-semmap-parquet",
-          "type": [
-            "dcat:Distribution"
-          ],
-          "title": "CDC Diabetes Health Indicators synthetic data (clg_mi2, parquet)",
-          "access_url": "https://w3id.org/semsynth/demo#/output/CDC Diabetes Health Indicators/models/clg_mi2/synthetic.semmap.parquet",
-          "download_url": "https://w3id.org/semsynth/demo#/output/CDC Diabetes Health Indicators/models/clg_mi2/synthetic.semmap.parquet",
-          "format": "PARQUET",
-          "byte_size": 56853,
-          "modified": "2026-03-13T08:28:38.808848+00:00",
-          "issued": "2026-03-13T08:28:38.808848+00:00"
-        },
-        {
-          "id": "urn:distribution:cdc-diabetes-health-indicators-cdc-diabetes-health-indicators-models-tvae-quick-synthetic-semmap-parquet",
-          "type": [
-            "dcat:Distribution"
-          ],
-          "title": "CDC Diabetes Health Indicators synthetic data (tvae_quick, parquet)",
-          "access_url": "https://w3id.org/semsynth/demo#/output/CDC Diabetes Health Indicators/models/tvae_quick/synthetic.semmap.parquet",
-          "download_url": "https://w3id.org/semsynth/demo#/output/CDC Diabetes Health Indicators/models/tvae_quick/synthetic.semmap.parquet",
-          "format": "PARQUET",
-          "byte_size": 53382,
-          "modified": "2026-03-13T09:17:13.618536+00:00",
-          "issued": "2026-03-13T09:17:13.618536+00:00"
-        },
-        {
-          "id": "urn:distribution:cdc-diabetes-health-indicators-cdc-diabetes-health-indicators-models-ctgan-fast-synthetic-semmap-parquet",
-          "type": [
-            "dcat:Distribution"
-          ],
-          "title": "CDC Diabetes Health Indicators synthetic data (ctgan_fast, parquet)",
-          "access_url": "https://w3id.org/semsynth/demo#/output/CDC Diabetes Health Indicators/models/ctgan_fast/synthetic.semmap.parquet",
-          "download_url": "https://w3id.org/semsynth/demo#/output/CDC Diabetes Health Indicators/models/ctgan_fast/synthetic.semmap.parquet",
-          "format": "PARQUET",
-          "byte_size": 29827,
-          "modified": "2026-03-13T08:29:02.645787+00:00",
-          "issued": "2026-03-13T08:29:02.645787+00:00"
+          "byte_size": 94321,
+          "modified": "2026-03-20T15:17:53.263151+00:00",
+          "issued": "2026-03-20T15:17:53.263151+00:00"
         },
         {
           "id": "urn:distribution:cdc-diabetes-health-indicators-cdc-diabetes-health-indicators-models-metasyn-synthetic-semmap-parquet",
@@ -464,22 +217,23 @@
           "access_url": "https://w3id.org/semsynth/demo#/output/CDC Diabetes Health Indicators/models/metasyn/synthetic.semmap.parquet",
           "download_url": "https://w3id.org/semsynth/demo#/output/CDC Diabetes Health Indicators/models/metasyn/synthetic.semmap.parquet",
           "format": "PARQUET",
-          "byte_size": 56903,
-          "modified": "2026-03-13T08:28:38.406619+00:00",
-          "issued": "2026-03-13T08:28:38.406619+00:00"
+          "byte_size": 80684,
+          "modified": "2026-03-20T15:17:53.425310+00:00",
+          "issued": "2026-03-20T15:17:53.425310+00:00"
         },
         {
-          "id": "urn:distribution:cdc-diabetes-health-indicators-cdc-diabetes-health-indicators-models-metasyn-synthetic-metasyn-semmap-parquet",
+          "id": "urn:distribution:cdc-diabetes-health-indicators-cdc-diabetes-health-indicators-models-metasyn-provenance-json",
           "type": [
             "dcat:Distribution"
           ],
-          "title": "CDC Diabetes Health Indicators synthetic data (metasyn, parquet)",
-          "access_url": "https://w3id.org/semsynth/demo#/output/CDC Diabetes Health Indicators/models/metasyn/synthetic_metasyn.semmap.parquet",
-          "download_url": "https://w3id.org/semsynth/demo#/output/CDC Diabetes Health Indicators/models/metasyn/synthetic_metasyn.semmap.parquet",
-          "format": "PARQUET",
-          "byte_size": 72338,
-          "modified": "2026-03-11T16:36:34.508109+00:00",
-          "issued": "2026-03-11T16:36:34.508109+00:00"
+          "title": "CDC Diabetes Health Indicators provenance (JSON-LD)",
+          "access_url": "https://w3id.org/semsynth/demo#/output/CDC Diabetes Health Indicators/models/metasyn/provenance.json",
+          "download_url": "https://w3id.org/semsynth/demo#/output/CDC Diabetes Health Indicators/models/metasyn/provenance.json",
+          "media_type": "application/ld+json",
+          "format": "JSON-LD",
+          "byte_size": 4588,
+          "modified": "2026-03-20T15:17:58.033240+00:00",
+          "issued": "2026-03-20T15:17:58.033240+00:00"
         }
       ]
     },
@@ -498,44 +252,20 @@
         "SemSynth"
       ],
       "landing_page": "https://w3id.org/semsynth/demo#/output/Chronic Kidney Disease/index.html",
-      "modified": "2026-03-13T07:43:24.659817+00:00",
-      "issued": "2026-03-13T07:43:24.659817+00:00",
+      "modified": "2026-03-20T15:17:22.090577+00:00",
+      "issued": "2026-03-20T15:17:22.090577+00:00",
       "wasDerivedFrom": [
         {
           "id": "https://w3id.org/semsynth/demo#/output/Chronic Kidney Disease/dataset.semmap.json"
         },
         {
-          "id": "https://w3id.org/semsynth/demo#/output/Chronic Kidney Disease/models/clg_mi2/synthetic.csv"
-        },
-        {
-          "id": "https://w3id.org/semsynth/demo#/output/Chronic Kidney Disease/models/clg_mi2/synthetic.semmap.parquet"
-        },
-        {
-          "id": "https://w3id.org/semsynth/demo#/output/Chronic Kidney Disease/models/ctgan_fast/synthetic.csv"
-        },
-        {
-          "id": "https://w3id.org/semsynth/demo#/output/Chronic Kidney Disease/models/ctgan_fast/synthetic.semmap.parquet"
+          "id": "https://w3id.org/semsynth/demo#/output/Chronic Kidney Disease/models/metasyn/provenance.json"
         },
         {
           "id": "https://w3id.org/semsynth/demo#/output/Chronic Kidney Disease/models/metasyn/synthetic.csv"
         },
         {
           "id": "https://w3id.org/semsynth/demo#/output/Chronic Kidney Disease/models/metasyn/synthetic.semmap.parquet"
-        },
-        {
-          "id": "https://w3id.org/semsynth/demo#/output/Chronic Kidney Disease/models/semi_mi5/synthetic.csv"
-        },
-        {
-          "id": "https://w3id.org/semsynth/demo#/output/Chronic Kidney Disease/models/semi_mi5/synthetic.semmap.parquet"
-        },
-        {
-          "id": "https://w3id.org/semsynth/demo#/output/Chronic Kidney Disease/models/tvae_quick/synthetic.csv"
-        },
-        {
-          "id": "https://w3id.org/semsynth/demo#/output/Chronic Kidney Disease/models/tvae_quick/synthetic.semmap.parquet"
-        },
-        {
-          "id": "https://w3id.org/semsynth/demo#/output/Chronic Kidney Disease/synthetic_metasyn.semmap.parquet"
         }
       ],
       "distributions": [
@@ -549,65 +279,9 @@
           "download_url": "https://w3id.org/semsynth/demo#/output/Chronic Kidney Disease/dataset.semmap.json",
           "media_type": "application/ld+json",
           "format": "JSON-LD",
-          "byte_size": 8373,
-          "modified": "2026-03-13T07:43:24.659817+00:00",
-          "issued": "2026-03-13T07:43:24.659817+00:00"
-        },
-        {
-          "id": "urn:distribution:chronic-kidney-disease-chronic-kidney-disease-models-semi-mi5-synthetic-csv",
-          "type": [
-            "dcat:Distribution"
-          ],
-          "title": "Chronic Kidney Disease synthetic data (semi_mi5, csv)",
-          "access_url": "https://w3id.org/semsynth/demo#/output/Chronic Kidney Disease/models/semi_mi5/synthetic.csv",
-          "download_url": "https://w3id.org/semsynth/demo#/output/Chronic Kidney Disease/models/semi_mi5/synthetic.csv",
-          "media_type": "text/csv",
-          "format": "CSV",
-          "byte_size": 67142,
-          "modified": "2026-03-13T07:42:41.326455+00:00",
-          "issued": "2026-03-13T07:42:41.326455+00:00"
-        },
-        {
-          "id": "urn:distribution:chronic-kidney-disease-chronic-kidney-disease-models-clg-mi2-synthetic-csv",
-          "type": [
-            "dcat:Distribution"
-          ],
-          "title": "Chronic Kidney Disease synthetic data (clg_mi2, csv)",
-          "access_url": "https://w3id.org/semsynth/demo#/output/Chronic Kidney Disease/models/clg_mi2/synthetic.csv",
-          "download_url": "https://w3id.org/semsynth/demo#/output/Chronic Kidney Disease/models/clg_mi2/synthetic.csv",
-          "media_type": "text/csv",
-          "format": "CSV",
-          "byte_size": 67142,
-          "modified": "2026-03-13T07:42:40.934455+00:00",
-          "issued": "2026-03-13T07:42:40.934455+00:00"
-        },
-        {
-          "id": "urn:distribution:chronic-kidney-disease-chronic-kidney-disease-models-tvae-quick-synthetic-csv",
-          "type": [
-            "dcat:Distribution"
-          ],
-          "title": "Chronic Kidney Disease synthetic data (tvae_quick, csv)",
-          "access_url": "https://w3id.org/semsynth/demo#/output/Chronic Kidney Disease/models/tvae_quick/synthetic.csv",
-          "download_url": "https://w3id.org/semsynth/demo#/output/Chronic Kidney Disease/models/tvae_quick/synthetic.csv",
-          "media_type": "text/csv",
-          "format": "CSV",
-          "byte_size": 46373,
-          "modified": "2026-03-13T07:43:23.518458+00:00",
-          "issued": "2026-03-13T07:43:23.518458+00:00"
-        },
-        {
-          "id": "urn:distribution:chronic-kidney-disease-chronic-kidney-disease-models-ctgan-fast-synthetic-csv",
-          "type": [
-            "dcat:Distribution"
-          ],
-          "title": "Chronic Kidney Disease synthetic data (ctgan_fast, csv)",
-          "access_url": "https://w3id.org/semsynth/demo#/output/Chronic Kidney Disease/models/ctgan_fast/synthetic.csv",
-          "download_url": "https://w3id.org/semsynth/demo#/output/Chronic Kidney Disease/models/ctgan_fast/synthetic.csv",
-          "media_type": "text/csv",
-          "format": "CSV",
-          "byte_size": 41543,
-          "modified": "2026-03-13T07:42:43.110455+00:00",
-          "issued": "2026-03-13T07:42:43.110455+00:00"
+          "byte_size": 19803,
+          "modified": "2026-03-20T15:17:22.090577+00:00",
+          "issued": "2026-03-20T15:17:22.090577+00:00"
         },
         {
           "id": "urn:distribution:chronic-kidney-disease-chronic-kidney-disease-models-metasyn-synthetic-csv",
@@ -619,74 +293,9 @@
           "download_url": "https://w3id.org/semsynth/demo#/output/Chronic Kidney Disease/models/metasyn/synthetic.csv",
           "media_type": "text/csv",
           "format": "CSV",
-          "byte_size": 51621,
-          "modified": "2026-03-13T07:42:36.558455+00:00",
-          "issued": "2026-03-13T07:42:36.558455+00:00"
-        },
-        {
-          "id": "urn:distribution:chronic-kidney-disease-chronic-kidney-disease-synthetic-metasyn-semmap-parquet",
-          "type": [
-            "dcat:Distribution"
-          ],
-          "title": "Chronic Kidney Disease synthetic data (metasyn, parquet)",
-          "access_url": "https://w3id.org/semsynth/demo#/output/Chronic Kidney Disease/synthetic_metasyn.semmap.parquet",
-          "download_url": "https://w3id.org/semsynth/demo#/output/Chronic Kidney Disease/synthetic_metasyn.semmap.parquet",
-          "format": "PARQUET",
-          "byte_size": 144494,
-          "modified": "2026-03-11T16:36:34.530532+00:00",
-          "issued": "2026-03-11T16:36:34.530532+00:00"
-        },
-        {
-          "id": "urn:distribution:chronic-kidney-disease-chronic-kidney-disease-models-semi-mi5-synthetic-semmap-parquet",
-          "type": [
-            "dcat:Distribution"
-          ],
-          "title": "Chronic Kidney Disease synthetic data (semi_mi5, parquet)",
-          "access_url": "https://w3id.org/semsynth/demo#/output/Chronic Kidney Disease/models/semi_mi5/synthetic.semmap.parquet",
-          "download_url": "https://w3id.org/semsynth/demo#/output/Chronic Kidney Disease/models/semi_mi5/synthetic.semmap.parquet",
-          "format": "PARQUET",
-          "byte_size": 44914,
-          "modified": "2026-03-13T07:42:41.366455+00:00",
-          "issued": "2026-03-13T07:42:41.366455+00:00"
-        },
-        {
-          "id": "urn:distribution:chronic-kidney-disease-chronic-kidney-disease-models-clg-mi2-synthetic-semmap-parquet",
-          "type": [
-            "dcat:Distribution"
-          ],
-          "title": "Chronic Kidney Disease synthetic data (clg_mi2, parquet)",
-          "access_url": "https://w3id.org/semsynth/demo#/output/Chronic Kidney Disease/models/clg_mi2/synthetic.semmap.parquet",
-          "download_url": "https://w3id.org/semsynth/demo#/output/Chronic Kidney Disease/models/clg_mi2/synthetic.semmap.parquet",
-          "format": "PARQUET",
-          "byte_size": 44914,
-          "modified": "2026-03-13T07:42:40.974455+00:00",
-          "issued": "2026-03-13T07:42:40.974455+00:00"
-        },
-        {
-          "id": "urn:distribution:chronic-kidney-disease-chronic-kidney-disease-models-tvae-quick-synthetic-semmap-parquet",
-          "type": [
-            "dcat:Distribution"
-          ],
-          "title": "Chronic Kidney Disease synthetic data (tvae_quick, parquet)",
-          "access_url": "https://w3id.org/semsynth/demo#/output/Chronic Kidney Disease/models/tvae_quick/synthetic.semmap.parquet",
-          "download_url": "https://w3id.org/semsynth/demo#/output/Chronic Kidney Disease/models/tvae_quick/synthetic.semmap.parquet",
-          "format": "PARQUET",
-          "byte_size": 34582,
-          "modified": "2026-03-13T07:43:23.555658+00:00",
-          "issued": "2026-03-13T07:43:23.555658+00:00"
-        },
-        {
-          "id": "urn:distribution:chronic-kidney-disease-chronic-kidney-disease-models-ctgan-fast-synthetic-semmap-parquet",
-          "type": [
-            "dcat:Distribution"
-          ],
-          "title": "Chronic Kidney Disease synthetic data (ctgan_fast, parquet)",
-          "access_url": "https://w3id.org/semsynth/demo#/output/Chronic Kidney Disease/models/ctgan_fast/synthetic.semmap.parquet",
-          "download_url": "https://w3id.org/semsynth/demo#/output/Chronic Kidney Disease/models/ctgan_fast/synthetic.semmap.parquet",
-          "format": "PARQUET",
-          "byte_size": 30258,
-          "modified": "2026-03-13T07:42:43.150455+00:00",
-          "issued": "2026-03-13T07:42:43.150455+00:00"
+          "byte_size": 114969,
+          "modified": "2026-03-20T15:17:19.189703+00:00",
+          "issued": "2026-03-20T15:17:19.189703+00:00"
         },
         {
           "id": "urn:distribution:chronic-kidney-disease-chronic-kidney-disease-models-metasyn-synthetic-semmap-parquet",
@@ -697,9 +306,23 @@
           "access_url": "https://w3id.org/semsynth/demo#/output/Chronic Kidney Disease/models/metasyn/synthetic.semmap.parquet",
           "download_url": "https://w3id.org/semsynth/demo#/output/Chronic Kidney Disease/models/metasyn/synthetic.semmap.parquet",
           "format": "PARQUET",
-          "byte_size": 41387,
-          "modified": "2026-03-13T07:42:36.606455+00:00",
-          "issued": "2026-03-13T07:42:36.606455+00:00"
+          "byte_size": 93339,
+          "modified": "2026-03-20T15:17:19.348628+00:00",
+          "issued": "2026-03-20T15:17:19.348628+00:00"
+        },
+        {
+          "id": "urn:distribution:chronic-kidney-disease-chronic-kidney-disease-models-metasyn-provenance-json",
+          "type": [
+            "dcat:Distribution"
+          ],
+          "title": "Chronic Kidney Disease provenance (JSON-LD)",
+          "access_url": "https://w3id.org/semsynth/demo#/output/Chronic Kidney Disease/models/metasyn/provenance.json",
+          "download_url": "https://w3id.org/semsynth/demo#/output/Chronic Kidney Disease/models/metasyn/provenance.json",
+          "media_type": "application/ld+json",
+          "format": "JSON-LD",
+          "byte_size": 4564,
+          "modified": "2026-03-20T15:17:20.128316+00:00",
+          "issued": "2026-03-20T15:17:20.128316+00:00"
         }
       ]
     },
@@ -718,41 +341,20 @@
         "SemSynth"
       ],
       "landing_page": "https://w3id.org/semsynth/demo#/output/Diabetes 130-US Hospitals for Years 1999-2008/index.html",
-      "modified": "2026-03-13T09:18:32.536610+00:00",
-      "issued": "2026-03-13T09:18:32.536610+00:00",
+      "modified": "2026-03-20T15:17:14.682606+00:00",
+      "issued": "2026-03-20T15:17:14.682606+00:00",
       "wasDerivedFrom": [
         {
           "id": "https://w3id.org/semsynth/demo#/output/Diabetes 130-US Hospitals for Years 1999-2008/dataset.semmap.json"
         },
         {
-          "id": "https://w3id.org/semsynth/demo#/output/Diabetes 130-US Hospitals for Years 1999-2008/models/clg_mi2/synthetic.csv"
-        },
-        {
-          "id": "https://w3id.org/semsynth/demo#/output/Diabetes 130-US Hospitals for Years 1999-2008/models/clg_mi2/synthetic.semmap.parquet"
-        },
-        {
-          "id": "https://w3id.org/semsynth/demo#/output/Diabetes 130-US Hospitals for Years 1999-2008/models/ctgan_fast/synthetic.csv"
-        },
-        {
-          "id": "https://w3id.org/semsynth/demo#/output/Diabetes 130-US Hospitals for Years 1999-2008/models/ctgan_fast/synthetic.semmap.parquet"
+          "id": "https://w3id.org/semsynth/demo#/output/Diabetes 130-US Hospitals for Years 1999-2008/models/metasyn/provenance.json"
         },
         {
           "id": "https://w3id.org/semsynth/demo#/output/Diabetes 130-US Hospitals for Years 1999-2008/models/metasyn/synthetic.csv"
         },
         {
           "id": "https://w3id.org/semsynth/demo#/output/Diabetes 130-US Hospitals for Years 1999-2008/models/metasyn/synthetic.semmap.parquet"
-        },
-        {
-          "id": "https://w3id.org/semsynth/demo#/output/Diabetes 130-US Hospitals for Years 1999-2008/models/semi_mi5/synthetic.csv"
-        },
-        {
-          "id": "https://w3id.org/semsynth/demo#/output/Diabetes 130-US Hospitals for Years 1999-2008/models/semi_mi5/synthetic.semmap.parquet"
-        },
-        {
-          "id": "https://w3id.org/semsynth/demo#/output/Diabetes 130-US Hospitals for Years 1999-2008/models/tvae_quick/synthetic.csv"
-        },
-        {
-          "id": "https://w3id.org/semsynth/demo#/output/Diabetes 130-US Hospitals for Years 1999-2008/models/tvae_quick/synthetic.semmap.parquet"
         }
       ],
       "distributions": [
@@ -766,65 +368,9 @@
           "download_url": "https://w3id.org/semsynth/demo#/output/Diabetes 130-US Hospitals for Years 1999-2008/dataset.semmap.json",
           "media_type": "application/ld+json",
           "format": "JSON-LD",
-          "byte_size": 13818,
-          "modified": "2026-03-13T09:18:32.536610+00:00",
-          "issued": "2026-03-13T09:18:32.536610+00:00"
-        },
-        {
-          "id": "urn:distribution:diabetes-130-us-hospitals-for-years-1999-2008-diabetes-130-us-hospitals-for-years-1999-2008-models-semi-mi5-synthetic-csv",
-          "type": [
-            "dcat:Distribution"
-          ],
-          "title": "Diabetes 130-US Hospitals for Years 1999-2008 synthetic data (semi_mi5, csv)",
-          "access_url": "https://w3id.org/semsynth/demo#/output/Diabetes 130-US Hospitals for Years 1999-2008/models/semi_mi5/synthetic.csv",
-          "download_url": "https://w3id.org/semsynth/demo#/output/Diabetes 130-US Hospitals for Years 1999-2008/models/semi_mi5/synthetic.csv",
-          "media_type": "text/csv",
-          "format": "CSV",
-          "byte_size": 282938,
-          "modified": "2026-03-13T08:28:40.522619+00:00",
-          "issued": "2026-03-13T08:28:40.522619+00:00"
-        },
-        {
-          "id": "urn:distribution:diabetes-130-us-hospitals-for-years-1999-2008-diabetes-130-us-hospitals-for-years-1999-2008-models-clg-mi2-synthetic-csv",
-          "type": [
-            "dcat:Distribution"
-          ],
-          "title": "Diabetes 130-US Hospitals for Years 1999-2008 synthetic data (clg_mi2, csv)",
-          "access_url": "https://w3id.org/semsynth/demo#/output/Diabetes 130-US Hospitals for Years 1999-2008/models/clg_mi2/synthetic.csv",
-          "download_url": "https://w3id.org/semsynth/demo#/output/Diabetes 130-US Hospitals for Years 1999-2008/models/clg_mi2/synthetic.csv",
-          "media_type": "text/csv",
-          "format": "CSV",
-          "byte_size": 282938,
-          "modified": "2026-03-13T08:28:40.038619+00:00",
-          "issued": "2026-03-13T08:28:40.038619+00:00"
-        },
-        {
-          "id": "urn:distribution:diabetes-130-us-hospitals-for-years-1999-2008-diabetes-130-us-hospitals-for-years-1999-2008-models-tvae-quick-synthetic-csv",
-          "type": [
-            "dcat:Distribution"
-          ],
-          "title": "Diabetes 130-US Hospitals for Years 1999-2008 synthetic data (tvae_quick, csv)",
-          "access_url": "https://w3id.org/semsynth/demo#/output/Diabetes 130-US Hospitals for Years 1999-2008/models/tvae_quick/synthetic.csv",
-          "download_url": "https://w3id.org/semsynth/demo#/output/Diabetes 130-US Hospitals for Years 1999-2008/models/tvae_quick/synthetic.csv",
-          "media_type": "text/csv",
-          "format": "CSV",
-          "byte_size": 231205,
-          "modified": "2026-03-13T09:18:29.782797+00:00",
-          "issued": "2026-03-13T09:18:29.782797+00:00"
-        },
-        {
-          "id": "urn:distribution:diabetes-130-us-hospitals-for-years-1999-2008-diabetes-130-us-hospitals-for-years-1999-2008-models-ctgan-fast-synthetic-csv",
-          "type": [
-            "dcat:Distribution"
-          ],
-          "title": "Diabetes 130-US Hospitals for Years 1999-2008 synthetic data (ctgan_fast, csv)",
-          "access_url": "https://w3id.org/semsynth/demo#/output/Diabetes 130-US Hospitals for Years 1999-2008/models/ctgan_fast/synthetic.csv",
-          "download_url": "https://w3id.org/semsynth/demo#/output/Diabetes 130-US Hospitals for Years 1999-2008/models/ctgan_fast/synthetic.csv",
-          "media_type": "text/csv",
-          "format": "CSV",
-          "byte_size": 214011,
-          "modified": "2026-03-13T08:29:21.286622+00:00",
-          "issued": "2026-03-13T08:29:21.286622+00:00"
+          "byte_size": 6930,
+          "modified": "2026-03-20T15:17:14.682606+00:00",
+          "issued": "2026-03-20T15:17:14.682606+00:00"
         },
         {
           "id": "urn:distribution:diabetes-130-us-hospitals-for-years-1999-2008-diabetes-130-us-hospitals-for-years-1999-2008-models-metasyn-synthetic-csv",
@@ -836,61 +382,9 @@
           "download_url": "https://w3id.org/semsynth/demo#/output/Diabetes 130-US Hospitals for Years 1999-2008/models/metasyn/synthetic.csv",
           "media_type": "text/csv",
           "format": "CSV",
-          "byte_size": 282776,
-          "modified": "2026-03-13T08:28:39.462619+00:00",
-          "issued": "2026-03-13T08:28:39.462619+00:00"
-        },
-        {
-          "id": "urn:distribution:diabetes-130-us-hospitals-for-years-1999-2008-diabetes-130-us-hospitals-for-years-1999-2008-models-semi-mi5-synthetic-semmap-parquet",
-          "type": [
-            "dcat:Distribution"
-          ],
-          "title": "Diabetes 130-US Hospitals for Years 1999-2008 synthetic data (semi_mi5, parquet)",
-          "access_url": "https://w3id.org/semsynth/demo#/output/Diabetes 130-US Hospitals for Years 1999-2008/models/semi_mi5/synthetic.semmap.parquet",
-          "download_url": "https://w3id.org/semsynth/demo#/output/Diabetes 130-US Hospitals for Years 1999-2008/models/semi_mi5/synthetic.semmap.parquet",
-          "format": "PARQUET",
-          "byte_size": 127995,
-          "modified": "2026-03-13T08:28:40.614619+00:00",
-          "issued": "2026-03-13T08:28:40.614619+00:00"
-        },
-        {
-          "id": "urn:distribution:diabetes-130-us-hospitals-for-years-1999-2008-diabetes-130-us-hospitals-for-years-1999-2008-models-clg-mi2-synthetic-semmap-parquet",
-          "type": [
-            "dcat:Distribution"
-          ],
-          "title": "Diabetes 130-US Hospitals for Years 1999-2008 synthetic data (clg_mi2, parquet)",
-          "access_url": "https://w3id.org/semsynth/demo#/output/Diabetes 130-US Hospitals for Years 1999-2008/models/clg_mi2/synthetic.semmap.parquet",
-          "download_url": "https://w3id.org/semsynth/demo#/output/Diabetes 130-US Hospitals for Years 1999-2008/models/clg_mi2/synthetic.semmap.parquet",
-          "format": "PARQUET",
-          "byte_size": 127995,
-          "modified": "2026-03-13T08:28:40.126619+00:00",
-          "issued": "2026-03-13T08:28:40.126619+00:00"
-        },
-        {
-          "id": "urn:distribution:diabetes-130-us-hospitals-for-years-1999-2008-diabetes-130-us-hospitals-for-years-1999-2008-models-tvae-quick-synthetic-semmap-parquet",
-          "type": [
-            "dcat:Distribution"
-          ],
-          "title": "Diabetes 130-US Hospitals for Years 1999-2008 synthetic data (tvae_quick, parquet)",
-          "access_url": "https://w3id.org/semsynth/demo#/output/Diabetes 130-US Hospitals for Years 1999-2008/models/tvae_quick/synthetic.semmap.parquet",
-          "download_url": "https://w3id.org/semsynth/demo#/output/Diabetes 130-US Hospitals for Years 1999-2008/models/tvae_quick/synthetic.semmap.parquet",
-          "format": "PARQUET",
-          "byte_size": 88367,
-          "modified": "2026-03-13T09:18:29.879463+00:00",
-          "issued": "2026-03-13T09:18:29.879463+00:00"
-        },
-        {
-          "id": "urn:distribution:diabetes-130-us-hospitals-for-years-1999-2008-diabetes-130-us-hospitals-for-years-1999-2008-models-ctgan-fast-synthetic-semmap-parquet",
-          "type": [
-            "dcat:Distribution"
-          ],
-          "title": "Diabetes 130-US Hospitals for Years 1999-2008 synthetic data (ctgan_fast, parquet)",
-          "access_url": "https://w3id.org/semsynth/demo#/output/Diabetes 130-US Hospitals for Years 1999-2008/models/ctgan_fast/synthetic.semmap.parquet",
-          "download_url": "https://w3id.org/semsynth/demo#/output/Diabetes 130-US Hospitals for Years 1999-2008/models/ctgan_fast/synthetic.semmap.parquet",
-          "format": "PARQUET",
-          "byte_size": 68519,
-          "modified": "2026-03-13T08:29:21.386621+00:00",
-          "issued": "2026-03-13T08:29:21.386621+00:00"
+          "byte_size": 282568,
+          "modified": "2026-03-20T15:17:08.806643+00:00",
+          "issued": "2026-03-20T15:17:08.806643+00:00"
         },
         {
           "id": "urn:distribution:diabetes-130-us-hospitals-for-years-1999-2008-diabetes-130-us-hospitals-for-years-1999-2008-models-metasyn-synthetic-semmap-parquet",
@@ -901,9 +395,23 @@
           "access_url": "https://w3id.org/semsynth/demo#/output/Diabetes 130-US Hospitals for Years 1999-2008/models/metasyn/synthetic.semmap.parquet",
           "download_url": "https://w3id.org/semsynth/demo#/output/Diabetes 130-US Hospitals for Years 1999-2008/models/metasyn/synthetic.semmap.parquet",
           "format": "PARQUET",
-          "byte_size": 127930,
-          "modified": "2026-03-13T08:28:39.627770+00:00",
-          "issued": "2026-03-13T08:28:39.627770+00:00"
+          "byte_size": 128139,
+          "modified": "2026-03-20T15:17:08.889703+00:00",
+          "issued": "2026-03-20T15:17:08.889703+00:00"
+        },
+        {
+          "id": "urn:distribution:diabetes-130-us-hospitals-for-years-1999-2008-diabetes-130-us-hospitals-for-years-1999-2008-models-metasyn-provenance-json",
+          "type": [
+            "dcat:Distribution"
+          ],
+          "title": "Diabetes 130-US Hospitals for Years 1999-2008 provenance (JSON-LD)",
+          "access_url": "https://w3id.org/semsynth/demo#/output/Diabetes 130-US Hospitals for Years 1999-2008/models/metasyn/provenance.json",
+          "download_url": "https://w3id.org/semsynth/demo#/output/Diabetes 130-US Hospitals for Years 1999-2008/models/metasyn/provenance.json",
+          "media_type": "application/ld+json",
+          "format": "JSON-LD",
+          "byte_size": 4633,
+          "modified": "2026-03-20T15:17:09.806420+00:00",
+          "issued": "2026-03-20T15:17:09.806420+00:00"
         }
       ]
     },
@@ -914,7 +422,7 @@
       ],
       "identifier": "fertility",
       "title": "Fertility",
-      "description": "Source: UCI dataset 244 \u2014 synthetic assets curated by SemSynth.",
+      "description": "Documentation: Season in which the analysis was performed. \t1) winter, 2) spring, 3) Summer, 4) fall. \t(-1, -0.33, 0.33, 1) \u2014 synthetic assets curated by SemSynth.",
       "keywords": [
         "Fertility",
         "synthetic data",
@@ -922,41 +430,20 @@
         "SemSynth"
       ],
       "landing_page": "https://w3id.org/semsynth/demo#/output/Fertility/index.html",
-      "modified": "2026-03-13T09:14:17.385288+00:00",
-      "issued": "2026-03-13T09:14:17.385288+00:00",
+      "modified": "2026-03-20T15:17:01.593296+00:00",
+      "issued": "2026-03-20T15:17:01.593296+00:00",
       "wasDerivedFrom": [
         {
           "id": "https://w3id.org/semsynth/demo#/output/Fertility/dataset.semmap.json"
         },
         {
-          "id": "https://w3id.org/semsynth/demo#/output/Fertility/models/clg_mi2/synthetic.csv"
-        },
-        {
-          "id": "https://w3id.org/semsynth/demo#/output/Fertility/models/clg_mi2/synthetic.semmap.parquet"
-        },
-        {
-          "id": "https://w3id.org/semsynth/demo#/output/Fertility/models/ctgan_fast/synthetic.csv"
-        },
-        {
-          "id": "https://w3id.org/semsynth/demo#/output/Fertility/models/ctgan_fast/synthetic.semmap.parquet"
+          "id": "https://w3id.org/semsynth/demo#/output/Fertility/models/metasyn/provenance.json"
         },
         {
           "id": "https://w3id.org/semsynth/demo#/output/Fertility/models/metasyn/synthetic.csv"
         },
         {
           "id": "https://w3id.org/semsynth/demo#/output/Fertility/models/metasyn/synthetic.semmap.parquet"
-        },
-        {
-          "id": "https://w3id.org/semsynth/demo#/output/Fertility/models/semi_mi5/synthetic.csv"
-        },
-        {
-          "id": "https://w3id.org/semsynth/demo#/output/Fertility/models/semi_mi5/synthetic.semmap.parquet"
-        },
-        {
-          "id": "https://w3id.org/semsynth/demo#/output/Fertility/models/tvae_quick/synthetic.csv"
-        },
-        {
-          "id": "https://w3id.org/semsynth/demo#/output/Fertility/models/tvae_quick/synthetic.semmap.parquet"
         }
       ],
       "distributions": [
@@ -970,65 +457,9 @@
           "download_url": "https://w3id.org/semsynth/demo#/output/Fertility/dataset.semmap.json",
           "media_type": "application/ld+json",
           "format": "JSON-LD",
-          "byte_size": 5309,
-          "modified": "2026-03-13T09:14:17.385288+00:00",
-          "issued": "2026-03-13T09:14:17.385288+00:00"
-        },
-        {
-          "id": "urn:distribution:fertility-fertility-models-semi-mi5-synthetic-csv",
-          "type": [
-            "dcat:Distribution"
-          ],
-          "title": "Fertility synthetic data (semi_mi5, csv)",
-          "access_url": "https://w3id.org/semsynth/demo#/output/Fertility/models/semi_mi5/synthetic.csv",
-          "download_url": "https://w3id.org/semsynth/demo#/output/Fertility/models/semi_mi5/synthetic.csv",
-          "media_type": "text/csv",
-          "format": "CSV",
-          "byte_size": 9068,
-          "modified": "2026-03-13T09:08:56.851701+00:00",
-          "issued": "2026-03-13T09:08:56.851701+00:00"
-        },
-        {
-          "id": "urn:distribution:fertility-fertility-models-clg-mi2-synthetic-csv",
-          "type": [
-            "dcat:Distribution"
-          ],
-          "title": "Fertility synthetic data (clg_mi2, csv)",
-          "access_url": "https://w3id.org/semsynth/demo#/output/Fertility/models/clg_mi2/synthetic.csv",
-          "download_url": "https://w3id.org/semsynth/demo#/output/Fertility/models/clg_mi2/synthetic.csv",
-          "media_type": "text/csv",
-          "format": "CSV",
-          "byte_size": 9068,
-          "modified": "2026-03-13T09:08:56.758139+00:00",
-          "issued": "2026-03-13T09:08:56.758139+00:00"
-        },
-        {
-          "id": "urn:distribution:fertility-fertility-models-tvae-quick-synthetic-csv",
-          "type": [
-            "dcat:Distribution"
-          ],
-          "title": "Fertility synthetic data (tvae_quick, csv)",
-          "access_url": "https://w3id.org/semsynth/demo#/output/Fertility/models/tvae_quick/synthetic.csv",
-          "download_url": "https://w3id.org/semsynth/demo#/output/Fertility/models/tvae_quick/synthetic.csv",
-          "media_type": "text/csv",
-          "format": "CSV",
-          "byte_size": 4670,
-          "modified": "2026-03-13T09:14:16.551828+00:00",
-          "issued": "2026-03-13T09:14:16.551828+00:00"
-        },
-        {
-          "id": "urn:distribution:fertility-fertility-models-ctgan-fast-synthetic-csv",
-          "type": [
-            "dcat:Distribution"
-          ],
-          "title": "Fertility synthetic data (ctgan_fast, csv)",
-          "access_url": "https://w3id.org/semsynth/demo#/output/Fertility/models/ctgan_fast/synthetic.csv",
-          "download_url": "https://w3id.org/semsynth/demo#/output/Fertility/models/ctgan_fast/synthetic.csv",
-          "media_type": "text/csv",
-          "format": "CSV",
-          "byte_size": 4340,
-          "modified": "2026-03-13T09:09:10.462591+00:00",
-          "issued": "2026-03-13T09:09:10.462591+00:00"
+          "byte_size": 8901,
+          "modified": "2026-03-20T15:17:01.593296+00:00",
+          "issued": "2026-03-20T15:17:01.593296+00:00"
         },
         {
           "id": "urn:distribution:fertility-fertility-models-metasyn-synthetic-csv",
@@ -1040,61 +471,9 @@
           "download_url": "https://w3id.org/semsynth/demo#/output/Fertility/models/metasyn/synthetic.csv",
           "media_type": "text/csv",
           "format": "CSV",
-          "byte_size": 9037,
-          "modified": "2026-03-13T09:08:56.638763+00:00",
-          "issued": "2026-03-13T09:08:56.638763+00:00"
-        },
-        {
-          "id": "urn:distribution:fertility-fertility-models-semi-mi5-synthetic-semmap-parquet",
-          "type": [
-            "dcat:Distribution"
-          ],
-          "title": "Fertility synthetic data (semi_mi5, parquet)",
-          "access_url": "https://w3id.org/semsynth/demo#/output/Fertility/models/semi_mi5/synthetic.semmap.parquet",
-          "download_url": "https://w3id.org/semsynth/demo#/output/Fertility/models/semi_mi5/synthetic.semmap.parquet",
-          "format": "PARQUET",
-          "byte_size": 18628,
-          "modified": "2026-03-13T09:08:56.866185+00:00",
-          "issued": "2026-03-13T09:08:56.866185+00:00"
-        },
-        {
-          "id": "urn:distribution:fertility-fertility-models-clg-mi2-synthetic-semmap-parquet",
-          "type": [
-            "dcat:Distribution"
-          ],
-          "title": "Fertility synthetic data (clg_mi2, parquet)",
-          "access_url": "https://w3id.org/semsynth/demo#/output/Fertility/models/clg_mi2/synthetic.semmap.parquet",
-          "download_url": "https://w3id.org/semsynth/demo#/output/Fertility/models/clg_mi2/synthetic.semmap.parquet",
-          "format": "PARQUET",
-          "byte_size": 18628,
-          "modified": "2026-03-13T09:08:56.774137+00:00",
-          "issued": "2026-03-13T09:08:56.774137+00:00"
-        },
-        {
-          "id": "urn:distribution:fertility-fertility-models-tvae-quick-synthetic-semmap-parquet",
-          "type": [
-            "dcat:Distribution"
-          ],
-          "title": "Fertility synthetic data (tvae_quick, parquet)",
-          "access_url": "https://w3id.org/semsynth/demo#/output/Fertility/models/tvae_quick/synthetic.semmap.parquet",
-          "download_url": "https://w3id.org/semsynth/demo#/output/Fertility/models/tvae_quick/synthetic.semmap.parquet",
-          "format": "PARQUET",
-          "byte_size": 16152,
-          "modified": "2026-03-13T09:14:16.580218+00:00",
-          "issued": "2026-03-13T09:14:16.580218+00:00"
-        },
-        {
-          "id": "urn:distribution:fertility-fertility-models-ctgan-fast-synthetic-semmap-parquet",
-          "type": [
-            "dcat:Distribution"
-          ],
-          "title": "Fertility synthetic data (ctgan_fast, parquet)",
-          "access_url": "https://w3id.org/semsynth/demo#/output/Fertility/models/ctgan_fast/synthetic.semmap.parquet",
-          "download_url": "https://w3id.org/semsynth/demo#/output/Fertility/models/ctgan_fast/synthetic.semmap.parquet",
-          "format": "PARQUET",
-          "byte_size": 16004,
-          "modified": "2026-03-13T09:09:10.478000+00:00",
-          "issued": "2026-03-13T09:09:10.478000+00:00"
+          "byte_size": 7570,
+          "modified": "2026-03-20T15:16:58.800386+00:00",
+          "issued": "2026-03-20T15:16:58.800386+00:00"
         },
         {
           "id": "urn:distribution:fertility-fertility-models-metasyn-synthetic-semmap-parquet",
@@ -1105,9 +484,23 @@
           "access_url": "https://w3id.org/semsynth/demo#/output/Fertility/models/metasyn/synthetic.semmap.parquet",
           "download_url": "https://w3id.org/semsynth/demo#/output/Fertility/models/metasyn/synthetic.semmap.parquet",
           "format": "PARQUET",
-          "byte_size": 18635,
-          "modified": "2026-03-13T09:08:56.657516+00:00",
-          "issued": "2026-03-13T09:08:56.657516+00:00"
+          "byte_size": 20057,
+          "modified": "2026-03-20T15:16:58.828012+00:00",
+          "issued": "2026-03-20T15:16:58.828012+00:00"
+        },
+        {
+          "id": "urn:distribution:fertility-fertility-models-metasyn-provenance-json",
+          "type": [
+            "dcat:Distribution"
+          ],
+          "title": "Fertility provenance (JSON-LD)",
+          "access_url": "https://w3id.org/semsynth/demo#/output/Fertility/models/metasyn/provenance.json",
+          "download_url": "https://w3id.org/semsynth/demo#/output/Fertility/models/metasyn/provenance.json",
+          "media_type": "application/ld+json",
+          "format": "JSON-LD",
+          "byte_size": 4525,
+          "modified": "2026-03-20T15:16:59.402692+00:00",
+          "issued": "2026-03-20T15:16:59.402692+00:00"
         }
       ]
     },
@@ -1118,7 +511,7 @@
       ],
       "identifier": "heart-disease",
       "title": "Heart Disease",
-      "description": "Source: UCI dataset 45 \u2014 synthetic assets curated by SemSynth.",
+      "description": "4 databases: Cleveland, Hungary, Switzerland, and the VA Long Beach \u2014 synthetic assets curated by SemSynth.",
       "keywords": [
         "Heart Disease",
         "synthetic data",
@@ -1126,44 +519,20 @@
         "SemSynth"
       ],
       "landing_page": "https://w3id.org/semsynth/demo#/output/Heart Disease/index.html",
-      "modified": "2026-03-13T07:44:29.063032+00:00",
-      "issued": "2026-03-13T07:30:20.590858+00:00",
+      "modified": "2026-03-20T15:17:33.073202+00:00",
+      "issued": "2026-03-20T15:17:33.073202+00:00",
       "wasDerivedFrom": [
         {
           "id": "https://w3id.org/semsynth/demo#/output/Heart Disease/dataset.semmap.json"
         },
         {
-          "id": "https://w3id.org/semsynth/demo#/output/Heart Disease/models/clg_mi2/synthetic.csv"
-        },
-        {
-          "id": "https://w3id.org/semsynth/demo#/output/Heart Disease/models/clg_mi2/synthetic.semmap.parquet"
-        },
-        {
-          "id": "https://w3id.org/semsynth/demo#/output/Heart Disease/models/ctgan_fast/synthetic.csv"
-        },
-        {
-          "id": "https://w3id.org/semsynth/demo#/output/Heart Disease/models/ctgan_fast/synthetic.semmap.parquet"
+          "id": "https://w3id.org/semsynth/demo#/output/Heart Disease/models/metasyn/provenance.json"
         },
         {
           "id": "https://w3id.org/semsynth/demo#/output/Heart Disease/models/metasyn/synthetic.csv"
         },
         {
           "id": "https://w3id.org/semsynth/demo#/output/Heart Disease/models/metasyn/synthetic.semmap.parquet"
-        },
-        {
-          "id": "https://w3id.org/semsynth/demo#/output/Heart Disease/models/metasyn/synthetic_metasyn.semmap.parquet"
-        },
-        {
-          "id": "https://w3id.org/semsynth/demo#/output/Heart Disease/models/semi_mi5/synthetic.csv"
-        },
-        {
-          "id": "https://w3id.org/semsynth/demo#/output/Heart Disease/models/semi_mi5/synthetic.semmap.parquet"
-        },
-        {
-          "id": "https://w3id.org/semsynth/demo#/output/Heart Disease/models/tvae_quick/synthetic.csv"
-        },
-        {
-          "id": "https://w3id.org/semsynth/demo#/output/Heart Disease/models/tvae_quick/synthetic.semmap.parquet"
         }
       ],
       "distributions": [
@@ -1177,65 +546,9 @@
           "download_url": "https://w3id.org/semsynth/demo#/output/Heart Disease/dataset.semmap.json",
           "media_type": "application/ld+json",
           "format": "JSON-LD",
-          "byte_size": 6132,
-          "modified": "2026-03-13T07:30:20.590858+00:00",
-          "issued": "2026-03-13T07:30:20.590858+00:00"
-        },
-        {
-          "id": "urn:distribution:heart-disease-heart-disease-models-semi-mi5-synthetic-csv",
-          "type": [
-            "dcat:Distribution"
-          ],
-          "title": "Heart Disease synthetic data (semi_mi5, csv)",
-          "access_url": "https://w3id.org/semsynth/demo#/output/Heart Disease/models/semi_mi5/synthetic.csv",
-          "download_url": "https://w3id.org/semsynth/demo#/output/Heart Disease/models/semi_mi5/synthetic.csv",
-          "media_type": "text/csv",
-          "format": "CSV",
-          "byte_size": 33814,
-          "modified": "2026-03-11T16:36:34.543897+00:00",
-          "issued": "2026-03-11T16:36:34.543897+00:00"
-        },
-        {
-          "id": "urn:distribution:heart-disease-heart-disease-models-clg-mi2-synthetic-csv",
-          "type": [
-            "dcat:Distribution"
-          ],
-          "title": "Heart Disease synthetic data (clg_mi2, csv)",
-          "access_url": "https://w3id.org/semsynth/demo#/output/Heart Disease/models/clg_mi2/synthetic.csv",
-          "download_url": "https://w3id.org/semsynth/demo#/output/Heart Disease/models/clg_mi2/synthetic.csv",
-          "media_type": "text/csv",
-          "format": "CSV",
-          "byte_size": 33814,
-          "modified": "2026-03-11T16:36:34.536774+00:00",
-          "issued": "2026-03-11T16:36:34.536774+00:00"
-        },
-        {
-          "id": "urn:distribution:heart-disease-heart-disease-models-tvae-quick-synthetic-csv",
-          "type": [
-            "dcat:Distribution"
-          ],
-          "title": "Heart Disease synthetic data (tvae_quick, csv)",
-          "access_url": "https://w3id.org/semsynth/demo#/output/Heart Disease/models/tvae_quick/synthetic.csv",
-          "download_url": "https://w3id.org/semsynth/demo#/output/Heart Disease/models/tvae_quick/synthetic.csv",
-          "media_type": "text/csv",
-          "format": "CSV",
-          "byte_size": 114622,
-          "modified": "2026-03-11T16:36:34.546164+00:00",
-          "issued": "2026-03-11T16:36:34.546164+00:00"
-        },
-        {
-          "id": "urn:distribution:heart-disease-heart-disease-models-ctgan-fast-synthetic-csv",
-          "type": [
-            "dcat:Distribution"
-          ],
-          "title": "Heart Disease synthetic data (ctgan_fast, csv)",
-          "access_url": "https://w3id.org/semsynth/demo#/output/Heart Disease/models/ctgan_fast/synthetic.csv",
-          "download_url": "https://w3id.org/semsynth/demo#/output/Heart Disease/models/ctgan_fast/synthetic.csv",
-          "media_type": "text/csv",
-          "format": "CSV",
-          "byte_size": 73038,
-          "modified": "2026-03-11T16:36:34.539123+00:00",
-          "issued": "2026-03-11T16:36:34.539123+00:00"
+          "byte_size": 13930,
+          "modified": "2026-03-20T15:17:33.073202+00:00",
+          "issued": "2026-03-20T15:17:33.073202+00:00"
         },
         {
           "id": "urn:distribution:heart-disease-heart-disease-models-metasyn-synthetic-csv",
@@ -1247,61 +560,9 @@
           "download_url": "https://w3id.org/semsynth/demo#/output/Heart Disease/models/metasyn/synthetic.csv",
           "media_type": "text/csv",
           "format": "CSV",
-          "byte_size": 15140,
-          "modified": "2026-03-13T07:44:29.042462+00:00",
-          "issued": "2026-03-13T07:44:29.042462+00:00"
-        },
-        {
-          "id": "urn:distribution:heart-disease-heart-disease-models-semi-mi5-synthetic-semmap-parquet",
-          "type": [
-            "dcat:Distribution"
-          ],
-          "title": "Heart Disease synthetic data (semi_mi5, parquet)",
-          "access_url": "https://w3id.org/semsynth/demo#/output/Heart Disease/models/semi_mi5/synthetic.semmap.parquet",
-          "download_url": "https://w3id.org/semsynth/demo#/output/Heart Disease/models/semi_mi5/synthetic.semmap.parquet",
-          "format": "PARQUET",
-          "byte_size": 27723,
-          "modified": "2026-03-11T16:36:34.543897+00:00",
-          "issued": "2026-03-11T16:36:34.543897+00:00"
-        },
-        {
-          "id": "urn:distribution:heart-disease-heart-disease-models-clg-mi2-synthetic-semmap-parquet",
-          "type": [
-            "dcat:Distribution"
-          ],
-          "title": "Heart Disease synthetic data (clg_mi2, parquet)",
-          "access_url": "https://w3id.org/semsynth/demo#/output/Heart Disease/models/clg_mi2/synthetic.semmap.parquet",
-          "download_url": "https://w3id.org/semsynth/demo#/output/Heart Disease/models/clg_mi2/synthetic.semmap.parquet",
-          "format": "PARQUET",
-          "byte_size": 27723,
-          "modified": "2026-03-11T16:36:34.536774+00:00",
-          "issued": "2026-03-11T16:36:34.536774+00:00"
-        },
-        {
-          "id": "urn:distribution:heart-disease-heart-disease-models-tvae-quick-synthetic-semmap-parquet",
-          "type": [
-            "dcat:Distribution"
-          ],
-          "title": "Heart Disease synthetic data (tvae_quick, parquet)",
-          "access_url": "https://w3id.org/semsynth/demo#/output/Heart Disease/models/tvae_quick/synthetic.semmap.parquet",
-          "download_url": "https://w3id.org/semsynth/demo#/output/Heart Disease/models/tvae_quick/synthetic.semmap.parquet",
-          "format": "PARQUET",
-          "byte_size": 60282,
-          "modified": "2026-03-11T16:36:34.546532+00:00",
-          "issued": "2026-03-11T16:36:34.546532+00:00"
-        },
-        {
-          "id": "urn:distribution:heart-disease-heart-disease-models-ctgan-fast-synthetic-semmap-parquet",
-          "type": [
-            "dcat:Distribution"
-          ],
-          "title": "Heart Disease synthetic data (ctgan_fast, parquet)",
-          "access_url": "https://w3id.org/semsynth/demo#/output/Heart Disease/models/ctgan_fast/synthetic.semmap.parquet",
-          "download_url": "https://w3id.org/semsynth/demo#/output/Heart Disease/models/ctgan_fast/synthetic.semmap.parquet",
-          "format": "PARQUET",
-          "byte_size": 19851,
-          "modified": "2026-03-11T16:36:34.539123+00:00",
-          "issued": "2026-03-11T16:36:34.539123+00:00"
+          "byte_size": 33781,
+          "modified": "2026-03-20T15:17:30.752672+00:00",
+          "issued": "2026-03-20T15:17:30.752672+00:00"
         },
         {
           "id": "urn:distribution:heart-disease-heart-disease-models-metasyn-synthetic-semmap-parquet",
@@ -1312,22 +573,23 @@
           "access_url": "https://w3id.org/semsynth/demo#/output/Heart Disease/models/metasyn/synthetic.semmap.parquet",
           "download_url": "https://w3id.org/semsynth/demo#/output/Heart Disease/models/metasyn/synthetic.semmap.parquet",
           "format": "PARQUET",
-          "byte_size": 24267,
-          "modified": "2026-03-13T07:44:29.063032+00:00",
-          "issued": "2026-03-13T07:44:29.063032+00:00"
+          "byte_size": 45280,
+          "modified": "2026-03-20T15:17:30.847839+00:00",
+          "issued": "2026-03-20T15:17:30.847839+00:00"
         },
         {
-          "id": "urn:distribution:heart-disease-heart-disease-models-metasyn-synthetic-metasyn-semmap-parquet",
+          "id": "urn:distribution:heart-disease-heart-disease-models-metasyn-provenance-json",
           "type": [
             "dcat:Distribution"
           ],
-          "title": "Heart Disease synthetic data (metasyn, parquet)",
-          "access_url": "https://w3id.org/semsynth/demo#/output/Heart Disease/models/metasyn/synthetic_metasyn.semmap.parquet",
-          "download_url": "https://w3id.org/semsynth/demo#/output/Heart Disease/models/metasyn/synthetic_metasyn.semmap.parquet",
-          "format": "PARQUET",
-          "byte_size": 78759,
-          "modified": "2026-03-11T16:36:34.540930+00:00",
-          "issued": "2026-03-11T16:36:34.540930+00:00"
+          "title": "Heart Disease provenance (JSON-LD)",
+          "access_url": "https://w3id.org/semsynth/demo#/output/Heart Disease/models/metasyn/provenance.json",
+          "download_url": "https://w3id.org/semsynth/demo#/output/Heart Disease/models/metasyn/provenance.json",
+          "media_type": "application/ld+json",
+          "format": "JSON-LD",
+          "byte_size": 4537,
+          "modified": "2026-03-20T15:17:31.395950+00:00",
+          "issued": "2026-03-20T15:17:31.395950+00:00"
         }
       ]
     },
@@ -1346,41 +608,20 @@
         "SemSynth"
       ],
       "landing_page": "https://w3id.org/semsynth/demo#/output/Hepatitis/index.html",
-      "modified": "2026-03-13T07:55:27.076384+00:00",
-      "issued": "2026-03-13T07:55:27.076384+00:00",
+      "modified": "2026-03-20T15:17:38.713961+00:00",
+      "issued": "2026-03-20T15:17:38.713961+00:00",
       "wasDerivedFrom": [
         {
           "id": "https://w3id.org/semsynth/demo#/output/Hepatitis/dataset.semmap.json"
         },
         {
-          "id": "https://w3id.org/semsynth/demo#/output/Hepatitis/models/clg_mi2/synthetic.csv"
-        },
-        {
-          "id": "https://w3id.org/semsynth/demo#/output/Hepatitis/models/clg_mi2/synthetic.semmap.parquet"
-        },
-        {
-          "id": "https://w3id.org/semsynth/demo#/output/Hepatitis/models/ctgan_fast/synthetic.csv"
-        },
-        {
-          "id": "https://w3id.org/semsynth/demo#/output/Hepatitis/models/ctgan_fast/synthetic.semmap.parquet"
+          "id": "https://w3id.org/semsynth/demo#/output/Hepatitis/models/metasyn/provenance.json"
         },
         {
           "id": "https://w3id.org/semsynth/demo#/output/Hepatitis/models/metasyn/synthetic.csv"
         },
         {
           "id": "https://w3id.org/semsynth/demo#/output/Hepatitis/models/metasyn/synthetic.semmap.parquet"
-        },
-        {
-          "id": "https://w3id.org/semsynth/demo#/output/Hepatitis/models/semi_mi5/synthetic.csv"
-        },
-        {
-          "id": "https://w3id.org/semsynth/demo#/output/Hepatitis/models/semi_mi5/synthetic.semmap.parquet"
-        },
-        {
-          "id": "https://w3id.org/semsynth/demo#/output/Hepatitis/models/tvae_quick/synthetic.csv"
-        },
-        {
-          "id": "https://w3id.org/semsynth/demo#/output/Hepatitis/models/tvae_quick/synthetic.semmap.parquet"
         }
       ],
       "distributions": [
@@ -1394,65 +635,9 @@
           "download_url": "https://w3id.org/semsynth/demo#/output/Hepatitis/dataset.semmap.json",
           "media_type": "application/ld+json",
           "format": "JSON-LD",
-          "byte_size": 7396,
-          "modified": "2026-03-13T07:55:27.076384+00:00",
-          "issued": "2026-03-13T07:55:27.076384+00:00"
-        },
-        {
-          "id": "urn:distribution:hepatitis-hepatitis-models-semi-mi5-synthetic-csv",
-          "type": [
-            "dcat:Distribution"
-          ],
-          "title": "Hepatitis synthetic data (semi_mi5, csv)",
-          "access_url": "https://w3id.org/semsynth/demo#/output/Hepatitis/models/semi_mi5/synthetic.csv",
-          "download_url": "https://w3id.org/semsynth/demo#/output/Hepatitis/models/semi_mi5/synthetic.csv",
-          "media_type": "text/csv",
-          "format": "CSV",
-          "byte_size": 9012,
-          "modified": "2026-03-13T07:52:45.950491+00:00",
-          "issued": "2026-03-13T07:52:45.950491+00:00"
-        },
-        {
-          "id": "urn:distribution:hepatitis-hepatitis-models-clg-mi2-synthetic-csv",
-          "type": [
-            "dcat:Distribution"
-          ],
-          "title": "Hepatitis synthetic data (clg_mi2, csv)",
-          "access_url": "https://w3id.org/semsynth/demo#/output/Hepatitis/models/clg_mi2/synthetic.csv",
-          "download_url": "https://w3id.org/semsynth/demo#/output/Hepatitis/models/clg_mi2/synthetic.csv",
-          "media_type": "text/csv",
-          "format": "CSV",
-          "byte_size": 9012,
-          "modified": "2026-03-13T07:52:45.750491+00:00",
-          "issued": "2026-03-13T07:52:45.750491+00:00"
-        },
-        {
-          "id": "urn:distribution:hepatitis-hepatitis-models-tvae-quick-synthetic-csv",
-          "type": [
-            "dcat:Distribution"
-          ],
-          "title": "Hepatitis synthetic data (tvae_quick, csv)",
-          "access_url": "https://w3id.org/semsynth/demo#/output/Hepatitis/models/tvae_quick/synthetic.csv",
-          "download_url": "https://w3id.org/semsynth/demo#/output/Hepatitis/models/tvae_quick/synthetic.csv",
-          "media_type": "text/csv",
-          "format": "CSV",
-          "byte_size": 3274,
-          "modified": "2026-03-13T07:55:23.957167+00:00",
-          "issued": "2026-03-13T07:55:23.957167+00:00"
-        },
-        {
-          "id": "urn:distribution:hepatitis-hepatitis-models-ctgan-fast-synthetic-csv",
-          "type": [
-            "dcat:Distribution"
-          ],
-          "title": "Hepatitis synthetic data (ctgan_fast, csv)",
-          "access_url": "https://w3id.org/semsynth/demo#/output/Hepatitis/models/ctgan_fast/synthetic.csv",
-          "download_url": "https://w3id.org/semsynth/demo#/output/Hepatitis/models/ctgan_fast/synthetic.csv",
-          "media_type": "text/csv",
-          "format": "CSV",
-          "byte_size": 3274,
-          "modified": "2026-03-13T07:52:57.296323+00:00",
-          "issued": "2026-03-13T07:52:57.296323+00:00"
+          "byte_size": 16215,
+          "modified": "2026-03-20T15:17:38.713961+00:00",
+          "issued": "2026-03-20T15:17:38.713961+00:00"
         },
         {
           "id": "urn:distribution:hepatitis-hepatitis-models-metasyn-synthetic-csv",
@@ -1464,61 +649,9 @@
           "download_url": "https://w3id.org/semsynth/demo#/output/Hepatitis/models/metasyn/synthetic.csv",
           "media_type": "text/csv",
           "format": "CSV",
-          "byte_size": 3274,
-          "modified": "2026-03-13T07:52:45.520450+00:00",
-          "issued": "2026-03-13T07:52:45.520450+00:00"
-        },
-        {
-          "id": "urn:distribution:hepatitis-hepatitis-models-semi-mi5-synthetic-semmap-parquet",
-          "type": [
-            "dcat:Distribution"
-          ],
-          "title": "Hepatitis synthetic data (semi_mi5, parquet)",
-          "access_url": "https://w3id.org/semsynth/demo#/output/Hepatitis/models/semi_mi5/synthetic.semmap.parquet",
-          "download_url": "https://w3id.org/semsynth/demo#/output/Hepatitis/models/semi_mi5/synthetic.semmap.parquet",
-          "format": "PARQUET",
-          "byte_size": 25682,
-          "modified": "2026-03-13T07:52:45.980918+00:00",
-          "issued": "2026-03-13T07:52:45.980918+00:00"
-        },
-        {
-          "id": "urn:distribution:hepatitis-hepatitis-models-clg-mi2-synthetic-semmap-parquet",
-          "type": [
-            "dcat:Distribution"
-          ],
-          "title": "Hepatitis synthetic data (clg_mi2, parquet)",
-          "access_url": "https://w3id.org/semsynth/demo#/output/Hepatitis/models/clg_mi2/synthetic.semmap.parquet",
-          "download_url": "https://w3id.org/semsynth/demo#/output/Hepatitis/models/clg_mi2/synthetic.semmap.parquet",
-          "format": "PARQUET",
-          "byte_size": 25682,
-          "modified": "2026-03-13T07:52:45.779501+00:00",
-          "issued": "2026-03-13T07:52:45.779501+00:00"
-        },
-        {
-          "id": "urn:distribution:hepatitis-hepatitis-models-tvae-quick-synthetic-semmap-parquet",
-          "type": [
-            "dcat:Distribution"
-          ],
-          "title": "Hepatitis synthetic data (tvae_quick, parquet)",
-          "access_url": "https://w3id.org/semsynth/demo#/output/Hepatitis/models/tvae_quick/synthetic.semmap.parquet",
-          "download_url": "https://w3id.org/semsynth/demo#/output/Hepatitis/models/tvae_quick/synthetic.semmap.parquet",
-          "format": "PARQUET",
-          "byte_size": 22414,
-          "modified": "2026-03-13T07:55:23.986501+00:00",
-          "issued": "2026-03-13T07:55:23.986501+00:00"
-        },
-        {
-          "id": "urn:distribution:hepatitis-hepatitis-models-ctgan-fast-synthetic-semmap-parquet",
-          "type": [
-            "dcat:Distribution"
-          ],
-          "title": "Hepatitis synthetic data (ctgan_fast, parquet)",
-          "access_url": "https://w3id.org/semsynth/demo#/output/Hepatitis/models/ctgan_fast/synthetic.semmap.parquet",
-          "download_url": "https://w3id.org/semsynth/demo#/output/Hepatitis/models/ctgan_fast/synthetic.semmap.parquet",
-          "format": "PARQUET",
-          "byte_size": 22414,
-          "modified": "2026-03-13T07:52:57.325109+00:00",
-          "issued": "2026-03-13T07:52:57.325109+00:00"
+          "byte_size": 21597,
+          "modified": "2026-03-20T15:17:36.009606+00:00",
+          "issued": "2026-03-20T15:17:36.009606+00:00"
         },
         {
           "id": "urn:distribution:hepatitis-hepatitis-models-metasyn-synthetic-semmap-parquet",
@@ -1529,9 +662,23 @@
           "access_url": "https://w3id.org/semsynth/demo#/output/Hepatitis/models/metasyn/synthetic.semmap.parquet",
           "download_url": "https://w3id.org/semsynth/demo#/output/Hepatitis/models/metasyn/synthetic.semmap.parquet",
           "format": "PARQUET",
-          "byte_size": 24213,
-          "modified": "2026-03-13T07:52:45.548623+00:00",
-          "issued": "2026-03-13T07:52:45.548623+00:00"
+          "byte_size": 46574,
+          "modified": "2026-03-20T15:17:36.132000+00:00",
+          "issued": "2026-03-20T15:17:36.132000+00:00"
+        },
+        {
+          "id": "urn:distribution:hepatitis-hepatitis-models-metasyn-provenance-json",
+          "type": [
+            "dcat:Distribution"
+          ],
+          "title": "Hepatitis provenance (JSON-LD)",
+          "access_url": "https://w3id.org/semsynth/demo#/output/Hepatitis/models/metasyn/provenance.json",
+          "download_url": "https://w3id.org/semsynth/demo#/output/Hepatitis/models/metasyn/provenance.json",
+          "media_type": "application/ld+json",
+          "format": "JSON-LD",
+          "byte_size": 4525,
+          "modified": "2026-03-20T15:17:36.763331+00:00",
+          "issued": "2026-03-20T15:17:36.763331+00:00"
         }
       ]
     },
@@ -1542,7 +689,7 @@
       ],
       "identifier": "statlog-heart",
       "title": "Statlog (Heart)",
-      "description": "Source: UCI dataset 145 \u2014 synthetic assets curated by SemSynth.",
+      "description": "Cost Matrix \u2014 synthetic assets curated by SemSynth.",
       "keywords": [
         "Statlog (Heart)",
         "synthetic data",
@@ -1550,47 +697,20 @@
         "SemSynth"
       ],
       "landing_page": "https://w3id.org/semsynth/demo#/output/Statlog (Heart)/index.html",
-      "modified": "2026-03-13T08:23:58.619891+00:00",
-      "issued": "2026-03-13T08:23:58.619891+00:00",
+      "modified": "2026-03-20T15:16:55.915994+00:00",
+      "issued": "2026-03-20T15:16:55.915994+00:00",
       "wasDerivedFrom": [
         {
           "id": "https://w3id.org/semsynth/demo#/output/Statlog (Heart)/dataset.semmap.json"
         },
         {
-          "id": "https://w3id.org/semsynth/demo#/output/Statlog (Heart)/models/clg_mi2/synthetic.csv"
-        },
-        {
-          "id": "https://w3id.org/semsynth/demo#/output/Statlog (Heart)/models/clg_mi2/synthetic.semmap.parquet"
-        },
-        {
-          "id": "https://w3id.org/semsynth/demo#/output/Statlog (Heart)/models/ctgan_fast/synthetic.csv"
-        },
-        {
-          "id": "https://w3id.org/semsynth/demo#/output/Statlog (Heart)/models/ctgan_fast/synthetic.semmap.parquet"
+          "id": "https://w3id.org/semsynth/demo#/output/Statlog (Heart)/models/metasyn/provenance.json"
         },
         {
           "id": "https://w3id.org/semsynth/demo#/output/Statlog (Heart)/models/metasyn/synthetic.csv"
         },
         {
           "id": "https://w3id.org/semsynth/demo#/output/Statlog (Heart)/models/metasyn/synthetic.semmap.parquet"
-        },
-        {
-          "id": "https://w3id.org/semsynth/demo#/output/Statlog (Heart)/models/metasyn_full/synthetic.csv"
-        },
-        {
-          "id": "https://w3id.org/semsynth/demo#/output/Statlog (Heart)/models/metasyn_full/synthetic.semmap.parquet"
-        },
-        {
-          "id": "https://w3id.org/semsynth/demo#/output/Statlog (Heart)/models/semi_mi5/synthetic.csv"
-        },
-        {
-          "id": "https://w3id.org/semsynth/demo#/output/Statlog (Heart)/models/semi_mi5/synthetic.semmap.parquet"
-        },
-        {
-          "id": "https://w3id.org/semsynth/demo#/output/Statlog (Heart)/models/tvae_quick/synthetic.csv"
-        },
-        {
-          "id": "https://w3id.org/semsynth/demo#/output/Statlog (Heart)/models/tvae_quick/synthetic.semmap.parquet"
         }
       ],
       "distributions": [
@@ -1604,79 +724,9 @@
           "download_url": "https://w3id.org/semsynth/demo#/output/Statlog (Heart)/dataset.semmap.json",
           "media_type": "application/ld+json",
           "format": "JSON-LD",
-          "byte_size": 6158,
-          "modified": "2026-03-13T08:23:58.619891+00:00",
-          "issued": "2026-03-13T08:23:58.619891+00:00"
-        },
-        {
-          "id": "urn:distribution:statlog-heart-statlog-heart-models-semi-mi5-synthetic-csv",
-          "type": [
-            "dcat:Distribution"
-          ],
-          "title": "Statlog (Heart) synthetic data (semi_mi5, csv)",
-          "access_url": "https://w3id.org/semsynth/demo#/output/Statlog (Heart)/models/semi_mi5/synthetic.csv",
-          "download_url": "https://w3id.org/semsynth/demo#/output/Statlog (Heart)/models/semi_mi5/synthetic.csv",
-          "media_type": "text/csv",
-          "format": "CSV",
-          "byte_size": 30210,
-          "modified": "2026-03-13T08:23:20.786600+00:00",
-          "issued": "2026-03-13T08:23:20.786600+00:00"
-        },
-        {
-          "id": "urn:distribution:statlog-heart-statlog-heart-models-metasyn-full-synthetic-csv",
-          "type": [
-            "dcat:Distribution"
-          ],
-          "title": "Statlog (Heart) synthetic data (metasyn_full, csv)",
-          "access_url": "https://w3id.org/semsynth/demo#/output/Statlog (Heart)/models/metasyn_full/synthetic.csv",
-          "download_url": "https://w3id.org/semsynth/demo#/output/Statlog (Heart)/models/metasyn_full/synthetic.csv",
-          "media_type": "text/csv",
-          "format": "CSV",
-          "byte_size": 30141,
-          "modified": "2026-03-11T16:36:34.560710+00:00",
-          "issued": "2026-03-11T16:36:34.560710+00:00"
-        },
-        {
-          "id": "urn:distribution:statlog-heart-statlog-heart-models-clg-mi2-synthetic-csv",
-          "type": [
-            "dcat:Distribution"
-          ],
-          "title": "Statlog (Heart) synthetic data (clg_mi2, csv)",
-          "access_url": "https://w3id.org/semsynth/demo#/output/Statlog (Heart)/models/clg_mi2/synthetic.csv",
-          "download_url": "https://w3id.org/semsynth/demo#/output/Statlog (Heart)/models/clg_mi2/synthetic.csv",
-          "media_type": "text/csv",
-          "format": "CSV",
-          "byte_size": 30176,
-          "modified": "2026-03-13T08:23:20.561669+00:00",
-          "issued": "2026-03-13T08:23:20.561669+00:00"
-        },
-        {
-          "id": "urn:distribution:statlog-heart-statlog-heart-models-tvae-quick-synthetic-csv",
-          "type": [
-            "dcat:Distribution"
-          ],
-          "title": "Statlog (Heart) synthetic data (tvae_quick, csv)",
-          "access_url": "https://w3id.org/semsynth/demo#/output/Statlog (Heart)/models/tvae_quick/synthetic.csv",
-          "download_url": "https://w3id.org/semsynth/demo#/output/Statlog (Heart)/models/tvae_quick/synthetic.csv",
-          "media_type": "text/csv",
-          "format": "CSV",
-          "byte_size": 29915,
-          "modified": "2026-03-13T08:23:55.435238+00:00",
-          "issued": "2026-03-13T08:23:55.435238+00:00"
-        },
-        {
-          "id": "urn:distribution:statlog-heart-statlog-heart-models-ctgan-fast-synthetic-csv",
-          "type": [
-            "dcat:Distribution"
-          ],
-          "title": "Statlog (Heart) synthetic data (ctgan_fast, csv)",
-          "access_url": "https://w3id.org/semsynth/demo#/output/Statlog (Heart)/models/ctgan_fast/synthetic.csv",
-          "download_url": "https://w3id.org/semsynth/demo#/output/Statlog (Heart)/models/ctgan_fast/synthetic.csv",
-          "media_type": "text/csv",
-          "format": "CSV",
-          "byte_size": 18429,
-          "modified": "2026-03-13T08:23:28.047686+00:00",
-          "issued": "2026-03-13T08:23:28.047686+00:00"
+          "byte_size": 10305,
+          "modified": "2026-03-20T15:16:55.915994+00:00",
+          "issued": "2026-03-20T15:16:55.915994+00:00"
         },
         {
           "id": "urn:distribution:statlog-heart-statlog-heart-models-metasyn-synthetic-csv",
@@ -1688,74 +738,9 @@
           "download_url": "https://w3id.org/semsynth/demo#/output/Statlog (Heart)/models/metasyn/synthetic.csv",
           "media_type": "text/csv",
           "format": "CSV",
-          "byte_size": 30202,
-          "modified": "2026-03-13T08:23:20.390600+00:00",
-          "issued": "2026-03-13T08:23:20.390600+00:00"
-        },
-        {
-          "id": "urn:distribution:statlog-heart-statlog-heart-models-semi-mi5-synthetic-semmap-parquet",
-          "type": [
-            "dcat:Distribution"
-          ],
-          "title": "Statlog (Heart) synthetic data (semi_mi5, parquet)",
-          "access_url": "https://w3id.org/semsynth/demo#/output/Statlog (Heart)/models/semi_mi5/synthetic.semmap.parquet",
-          "download_url": "https://w3id.org/semsynth/demo#/output/Statlog (Heart)/models/semi_mi5/synthetic.semmap.parquet",
-          "format": "PARQUET",
-          "byte_size": 31311,
-          "modified": "2026-03-13T08:23:20.817350+00:00",
-          "issued": "2026-03-13T08:23:20.817350+00:00"
-        },
-        {
-          "id": "urn:distribution:statlog-heart-statlog-heart-models-metasyn-full-synthetic-semmap-parquet",
-          "type": [
-            "dcat:Distribution"
-          ],
-          "title": "Statlog (Heart) synthetic data (metasyn_full, parquet)",
-          "access_url": "https://w3id.org/semsynth/demo#/output/Statlog (Heart)/models/metasyn_full/synthetic.semmap.parquet",
-          "download_url": "https://w3id.org/semsynth/demo#/output/Statlog (Heart)/models/metasyn_full/synthetic.semmap.parquet",
-          "format": "PARQUET",
-          "byte_size": 40603,
-          "modified": "2026-03-11T16:36:34.560710+00:00",
-          "issued": "2026-03-11T16:36:34.560710+00:00"
-        },
-        {
-          "id": "urn:distribution:statlog-heart-statlog-heart-models-clg-mi2-synthetic-semmap-parquet",
-          "type": [
-            "dcat:Distribution"
-          ],
-          "title": "Statlog (Heart) synthetic data (clg_mi2, parquet)",
-          "access_url": "https://w3id.org/semsynth/demo#/output/Statlog (Heart)/models/clg_mi2/synthetic.semmap.parquet",
-          "download_url": "https://w3id.org/semsynth/demo#/output/Statlog (Heart)/models/clg_mi2/synthetic.semmap.parquet",
-          "format": "PARQUET",
-          "byte_size": 31311,
-          "modified": "2026-03-13T08:23:20.583170+00:00",
-          "issued": "2026-03-13T08:23:20.583170+00:00"
-        },
-        {
-          "id": "urn:distribution:statlog-heart-statlog-heart-models-tvae-quick-synthetic-semmap-parquet",
-          "type": [
-            "dcat:Distribution"
-          ],
-          "title": "Statlog (Heart) synthetic data (tvae_quick, parquet)",
-          "access_url": "https://w3id.org/semsynth/demo#/output/Statlog (Heart)/models/tvae_quick/synthetic.semmap.parquet",
-          "download_url": "https://w3id.org/semsynth/demo#/output/Statlog (Heart)/models/tvae_quick/synthetic.semmap.parquet",
-          "format": "PARQUET",
-          "byte_size": 31078,
-          "modified": "2026-03-13T08:23:55.456619+00:00",
-          "issued": "2026-03-13T08:23:55.456619+00:00"
-        },
-        {
-          "id": "urn:distribution:statlog-heart-statlog-heart-models-ctgan-fast-synthetic-semmap-parquet",
-          "type": [
-            "dcat:Distribution"
-          ],
-          "title": "Statlog (Heart) synthetic data (ctgan_fast, parquet)",
-          "access_url": "https://w3id.org/semsynth/demo#/output/Statlog (Heart)/models/ctgan_fast/synthetic.semmap.parquet",
-          "download_url": "https://w3id.org/semsynth/demo#/output/Statlog (Heart)/models/ctgan_fast/synthetic.semmap.parquet",
-          "format": "PARQUET",
-          "byte_size": 23222,
-          "modified": "2026-03-13T08:23:28.074600+00:00",
-          "issued": "2026-03-13T08:23:28.074600+00:00"
+          "byte_size": 30218,
+          "modified": "2026-03-20T15:16:53.334795+00:00",
+          "issued": "2026-03-20T15:16:53.334795+00:00"
         },
         {
           "id": "urn:distribution:statlog-heart-statlog-heart-models-metasyn-synthetic-semmap-parquet",
@@ -1766,9 +751,112 @@
           "access_url": "https://w3id.org/semsynth/demo#/output/Statlog (Heart)/models/metasyn/synthetic.semmap.parquet",
           "download_url": "https://w3id.org/semsynth/demo#/output/Statlog (Heart)/models/metasyn/synthetic.semmap.parquet",
           "format": "PARQUET",
-          "byte_size": 31317,
-          "modified": "2026-03-13T08:23:20.415408+00:00",
-          "issued": "2026-03-13T08:23:20.415408+00:00"
+          "byte_size": 35770,
+          "modified": "2026-03-20T15:16:53.384167+00:00",
+          "issued": "2026-03-20T15:16:53.384167+00:00"
+        },
+        {
+          "id": "urn:distribution:statlog-heart-statlog-heart-models-metasyn-provenance-json",
+          "type": [
+            "dcat:Distribution"
+          ],
+          "title": "Statlog (Heart) provenance (JSON-LD)",
+          "access_url": "https://w3id.org/semsynth/demo#/output/Statlog (Heart)/models/metasyn/provenance.json",
+          "download_url": "https://w3id.org/semsynth/demo#/output/Statlog (Heart)/models/metasyn/provenance.json",
+          "media_type": "application/ld+json",
+          "format": "JSON-LD",
+          "byte_size": 4543,
+          "modified": "2026-03-20T15:16:54.038414+00:00",
+          "issued": "2026-03-20T15:16:54.038414+00:00"
+        }
+      ]
+    },
+    {
+      "id": "urn:dataset:uci-1150",
+      "type": [
+        "dcat:Dataset"
+      ],
+      "identifier": "uci-1150",
+      "title": "UCI_1150",
+      "description": "Source: UCI dataset 1150 \u2014 synthetic assets curated by SemSynth.",
+      "keywords": [
+        "UCI_1150",
+        "synthetic data",
+        "SemMap",
+        "SemSynth"
+      ],
+      "landing_page": "https://w3id.org/semsynth/demo#/output/UCI_1150/index.html",
+      "modified": "2026-03-20T15:16:49.499904+00:00",
+      "issued": "2026-03-20T15:16:49.499904+00:00",
+      "wasDerivedFrom": [
+        {
+          "id": "https://w3id.org/semsynth/demo#/output/UCI_1150/dataset.semmap.json"
+        },
+        {
+          "id": "https://w3id.org/semsynth/demo#/output/UCI_1150/models/metasyn/provenance.json"
+        },
+        {
+          "id": "https://w3id.org/semsynth/demo#/output/UCI_1150/models/metasyn/synthetic.csv"
+        },
+        {
+          "id": "https://w3id.org/semsynth/demo#/output/UCI_1150/models/metasyn/synthetic.semmap.parquet"
+        }
+      ],
+      "distributions": [
+        {
+          "id": "urn:distribution:uci-1150:semmap-json",
+          "type": [
+            "dcat:Distribution"
+          ],
+          "title": "UCI_1150 SemMap JSON-LD",
+          "access_url": "https://w3id.org/semsynth/demo#/output/UCI_1150/dataset.semmap.json",
+          "download_url": "https://w3id.org/semsynth/demo#/output/UCI_1150/dataset.semmap.json",
+          "media_type": "application/ld+json",
+          "format": "JSON-LD",
+          "byte_size": 6168,
+          "modified": "2026-03-20T15:16:49.499904+00:00",
+          "issued": "2026-03-20T15:16:49.499904+00:00"
+        },
+        {
+          "id": "urn:distribution:uci-1150-uci-1150-models-metasyn-synthetic-csv",
+          "type": [
+            "dcat:Distribution"
+          ],
+          "title": "UCI_1150 synthetic data (metasyn, csv)",
+          "access_url": "https://w3id.org/semsynth/demo#/output/UCI_1150/models/metasyn/synthetic.csv",
+          "download_url": "https://w3id.org/semsynth/demo#/output/UCI_1150/models/metasyn/synthetic.csv",
+          "media_type": "text/csv",
+          "format": "CSV",
+          "byte_size": 188296,
+          "modified": "2026-03-20T15:16:29.391268+00:00",
+          "issued": "2026-03-20T15:16:29.391268+00:00"
+        },
+        {
+          "id": "urn:distribution:uci-1150-uci-1150-models-metasyn-synthetic-semmap-parquet",
+          "type": [
+            "dcat:Distribution"
+          ],
+          "title": "UCI_1150 synthetic data (metasyn, parquet)",
+          "access_url": "https://w3id.org/semsynth/demo#/output/UCI_1150/models/metasyn/synthetic.semmap.parquet",
+          "download_url": "https://w3id.org/semsynth/demo#/output/UCI_1150/models/metasyn/synthetic.semmap.parquet",
+          "format": "PARQUET",
+          "byte_size": 132710,
+          "modified": "2026-03-20T15:16:29.501372+00:00",
+          "issued": "2026-03-20T15:16:29.501372+00:00"
+        },
+        {
+          "id": "urn:distribution:uci-1150-uci-1150-models-metasyn-provenance-json",
+          "type": [
+            "dcat:Distribution"
+          ],
+          "title": "UCI_1150 provenance (JSON-LD)",
+          "access_url": "https://w3id.org/semsynth/demo#/output/UCI_1150/models/metasyn/provenance.json",
+          "download_url": "https://w3id.org/semsynth/demo#/output/UCI_1150/models/metasyn/provenance.json",
+          "media_type": "application/ld+json",
+          "format": "JSON-LD",
+          "byte_size": 4522,
+          "modified": "2026-03-20T15:16:48.454105+00:00",
+          "issued": "2026-03-20T15:16:48.454105+00:00"
         }
       ]
     }
@@ -1784,9 +872,9 @@
       "download_url": "https://w3id.org/semsynth/demo#/output/sparql/query-semmap-coverage.rq",
       "media_type": "application/sparql-query",
       "format": "RQ",
-      "byte_size": 444,
-      "modified": "2026-03-13T09:19:50.060836+00:00",
-      "issued": "2026-03-13T09:19:50.060836+00:00"
+      "byte_size": 633,
+      "modified": "2026-03-20T15:18:02.612541+00:00",
+      "issued": "2026-03-20T15:18:02.612541+00:00"
     },
     {
       "id": "urn:distribution:sparql:query-provenance-artifacts",
@@ -1798,9 +886,9 @@
       "download_url": "https://w3id.org/semsynth/demo#/output/sparql/query-provenance-artifacts.rq",
       "media_type": "application/sparql-query",
       "format": "RQ",
-      "byte_size": 575,
-      "modified": "2026-03-13T09:19:50.060836+00:00",
-      "issued": "2026-03-13T09:19:50.060836+00:00"
+      "byte_size": 554,
+      "modified": "2026-03-20T15:18:02.612541+00:00",
+      "issued": "2026-03-20T15:18:02.612541+00:00"
     },
     {
       "id": "urn:distribution:sparql:query-semmap-and-provenance-artifacts",
@@ -1812,9 +900,9 @@
       "download_url": "https://w3id.org/semsynth/demo#/output/sparql/query-semmap-and-provenance-artifacts.rq",
       "media_type": "application/sparql-query",
       "format": "RQ",
-      "byte_size": 744,
-      "modified": "2026-03-13T09:19:50.060836+00:00",
-      "issued": "2026-03-13T09:19:50.060836+00:00"
+      "byte_size": 1068,
+      "modified": "2026-03-20T15:18:02.612541+00:00",
+      "issued": "2026-03-20T15:18:02.612541+00:00"
     }
   ]
 }

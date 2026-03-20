@@ -14,14 +14,14 @@
 | Discrete    | 42                                                                            |
 | Continuous  | 6                                                                             |
 | SemMap      | [SemMap JSON-LD](dataset.semmap.json)<br />[SemMap HTML](dataset.semmap.html) |
-| Missingness | modeled 9 of 48 (seed 42)                                                     |
+| Missingness | Not modeled                                                                   |
 
 ## Variables and summary
 
 | variable                 | inferred   | dist                                                                                                                                                                                                                                                                                                                                                                            |
 |:-------------------------|:-----------|:--------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|
-| race                     | discrete   | Caucasian: 77840 (76.49%)<br />AfricanAmerican: 19622 (19.28%)<br />Hispanic: 2094 (2.06%)<br />Other: 1542 (1.52%)<br />Asian: 668 (0.66%)                                                                                                                                                                                                                                     |
-| gender                   | discrete   | Female: 54708 (53.76%)<br />Male: 47055 (46.24%)<br />Unknown/Invalid: 3 (0.00%)                                                                                                                                                                                                                                                                                                |
+| race                     | discrete   | Caucasian [Caucasian]: 77840 (76.49%)<br />African American [AfricanAmerican]: 19622 (19.28%)<br />Hispanic [Hispanic]: 2094 (2.06%)<br />Other [Other]: 1542 (1.52%)<br />Asian [Asian]: 668 (0.66%)                                                                                                                                                                           |
+| gender                   | discrete   | Female [Female]: 54708 (53.76%)<br />Male [Male]: 47055 (46.24%)<br />Unknown/Invalid [Unknown/Invalid]: 3 (0.00%)                                                                                                                                                                                                                                                              |
 | age                      | discrete   | [70-80): 26068 (25.62%)<br />[60-70): 22483 (22.09%)<br />[50-60): 17256 (16.96%)<br />[80-90): 17197 (16.90%)<br />[40-50): 9685 (9.52%)<br />[30-40): 3775 (3.71%)<br />[90-100): 2793 (2.74%)<br />[20-30): 1657 (1.63%)<br />[10-20): 691 (0.68%)<br />[0-10): 161 (0.16%)                                                                                                  |
 | weight                   | discrete   | [75-100): 44067 (43.30%)<br />[50-75): 28250 (27.76%)<br />[100-125): 18437 (18.12%)<br />[125-150): 4899 (4.81%)<br />[25-50): 2915 (2.86%)<br />[0-25): 1828 (1.80%)<br />[150-175): 937 (0.92%)<br />[175-200): 366 (0.36%)<br />>200: 67 (0.07%)                                                                                                                            |
 | admission_type_id        | discrete   | 1: 53990 (53.05%)<br />3: 18869 (18.54%)<br />2: 18480 (18.16%)<br />6: 5291 (5.20%)<br />5: 4785 (4.70%)<br />8: 320 (0.31%)<br />7: 21 (0.02%)<br />4: 10 (0.01%)                                                                                                                                                                                                             |
@@ -69,35 +69,25 @@
 | diabetesMed              | discrete   | Yes: 78363 (77.00%)                                                                                                                                                                                                                                                                                                                                                             |
 | readmitted               | discrete   | NO: 54864 (53.91%)<br />>30: 35545 (34.93%)<br /><30: 11357 (11.16%)                                                                                                                                                                                                                                                                                                            |
 
-## Missingness model
-
-- Columns with learned missingness: 9 of 48
-- Columns without missingness: 39| Column            |   Missing rate |   Missing % |
-|:------------------|---------------:|------------:|
-| weight            |         0.9686 |       96.86 |
-| max_glu_serum     |         0.9475 |       94.75 |
-| A1Cresult         |         0.8328 |       83.28 |
-| medical_specialty |         0.4908 |       49.08 |
-| payer_code        |         0.3956 |       39.56 |
-| race              |         0.0223 |        2.23 |
-| diag_3            |         0.014  |        1.4  |
-| diag_2            |         0.0035 |        0.35 |
-| diag_1            |         0.0002 |        0.02 |
 ## Fidelity summary
 
-| model      | backend   |   disc_jsd_mean |   disc_jsd_median |   cont_ks_mean |   cont_w1_mean | privacy_overlap   | downstream_sign_match   |
-|:-----------|:----------|----------------:|------------------:|---------------:|---------------:|:------------------|:------------------------|
-| metasyn    | metasyn   |          0.0821 |            0.0479 |         0.5345 |         1.1167 |                   |                         |
-| clg_mi2    | pybnesian |          0.0824 |            0.0466 |         0.3162 |         1.4456 |                   |                         |
-| semi_mi5   | pybnesian |          0.0824 |            0.0466 |         0.3162 |         1.4456 |                   |                         |
-| ctgan_fast | synthcity |          0.2643 |            0.1706 |         0.3728 |         7.7862 |                   |                         |
-| tvae_quick | synthcity |          0.1297 |            0.0668 |         0.1253 |         1.3886 |                   |                         |
+| model   | backend   |   disc jsd mean |   disc jsd median |   cont ks mean |   cont w1 mean | downstream sign match   |
+|:--------|:----------|----------------:|------------------:|---------------:|---------------:|:------------------------|
+| metasyn | metasyn   |          0.0793 |            0.0446 |         0.5363 |         1.2006 |                         |
+
+## Privacy summary
+
+| model   | backend   |   n real |   n synth |   exact overlap rate |   near duplicate rate eps |   nn distance mean |   k min |   k pct lt5 |   k map |   rare qi reproduction rate |   identifiability score |   delta presence |
+|:--------|:----------|---------:|----------:|---------------------:|--------------------------:|-------------------:|--------:|------------:|--------:|----------------------------:|------------------------:|-----------------:|
+| metasyn | metasyn   |   101766 |      1000 |                0.046 |                     0.987 |              0.013 |       1 |        0.11 |       9 |                      0.5256 |                   0.006 |             1.48 |
 
 ## Models
 
 <table>
 <tr><th>UMAP</th><th>Details</th><th>Structure</th></tr>
-<tr><td></td><td>
+<tr><td><img src='umap_real.png' width='280'/></td><td>
+<h3>Real data</h3></td><td></td></tr>
+<tr><td><img src='models/metasyn/umap.png' width='280'/></td><td>
 
 <h3>Model: metasyn (metasyn)</h3>
 <ul>
@@ -105,61 +95,370 @@
 <li> <a href="models/metasyn/synthetic.csv">Synthetic CSV</a></li>
 <li> <a href="models/metasyn/per_variable_metrics.csv">Per-variable metrics</a></li>
 <li> <a href="models/metasyn/metrics.json">Metrics JSON</a></li>
+<li> <a href="models/metasyn/metrics.privacy.json">Privacy metrics</a></li>
+<li> <a href="models/metasyn/metrics.downstream.json">Downstream metrics</a></li>
 </ul>
-
+<details class="model-subtable"><summary><strong>Per-variable fidelity</strong></summary>
+<table class="dataframe">
+  <thead>
+    <tr style="text-align: right;">
+      <th>variable</th>
+      <th>type</th>
+      <th>KS</th>
+      <th>W1</th>
+      <th>JSD</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td>race</td>
+      <td>discrete</td>
+      <td></td>
+      <td></td>
+      <td>0.0728</td>
+    </tr>
+    <tr>
+      <td>gender</td>
+      <td>discrete</td>
+      <td></td>
+      <td></td>
+      <td>0.0703</td>
+    </tr>
+    <tr>
+      <td>age</td>
+      <td>discrete</td>
+      <td></td>
+      <td></td>
+      <td>0.0662</td>
+    </tr>
+    <tr>
+      <td>weight</td>
+      <td>discrete</td>
+      <td></td>
+      <td></td>
+      <td>0.1024</td>
+    </tr>
+    <tr>
+      <td>admission_type_id</td>
+      <td>discrete</td>
+      <td></td>
+      <td></td>
+      <td>0.0916</td>
+    </tr>
+    <tr>
+      <td>discharge_disposition_id</td>
+      <td>continuous</td>
+      <td>0.615</td>
+      <td>1.6249</td>
+      <td></td>
+    </tr>
+    <tr>
+      <td>admission_source_id</td>
+      <td>discrete</td>
+      <td></td>
+      <td></td>
+      <td>0.1389</td>
+    </tr>
+    <tr>
+      <td>time_in_hospital</td>
+      <td>discrete</td>
+      <td></td>
+      <td></td>
+      <td>0.0655</td>
+    </tr>
+    <tr>
+      <td>payer_code</td>
+      <td>discrete</td>
+      <td></td>
+      <td></td>
+      <td>0.1445</td>
+    </tr>
+    <tr>
+      <td>medical_specialty</td>
+      <td>discrete</td>
+      <td></td>
+      <td></td>
+      <td>0.1993</td>
+    </tr>
+  </tbody>
+</table>
+</details><details class="model-subtable"><summary><strong>Downstream metrics</strong></summary>
+<table class="dataframe">
+  <thead>
+    <tr style="text-align: right;">
+      <th>metric</th>
+      <th>value</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td>sign_match_rate</td>
+      <td></td>
+    </tr>
+    <tr>
+      <td>formula</td>
+      <td></td>
+    </tr>
+  </tbody>
+</table>
+</details><details class="model-subtable"><summary><strong>Privacy metrics</strong></summary>
+<table class="dataframe">
+  <thead>
+    <tr style="text-align: right;">
+      <th>metric</th>
+      <th>value</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td>n_real</td>
+      <td>101766</td>
+    </tr>
+    <tr>
+      <td>n_synth</td>
+      <td>1000</td>
+    </tr>
+    <tr>
+      <td>exact_overlap_rate</td>
+      <td>0.046</td>
+    </tr>
+    <tr>
+      <td>near_duplicate_rate_eps</td>
+      <td>0.987</td>
+    </tr>
+    <tr>
+      <td>nn_distance_mean</td>
+      <td>0.013</td>
+    </tr>
+    <tr>
+      <td>k_min</td>
+      <td>1</td>
+    </tr>
+    <tr>
+      <td>k_pct_lt5</td>
+      <td>0.11</td>
+    </tr>
+    <tr>
+      <td>k_map</td>
+      <td>9</td>
+    </tr>
+    <tr>
+      <td>rare_qi_reproduction_rate</td>
+      <td>0.5256</td>
+    </tr>
+    <tr>
+      <td>identifiability_score</td>
+      <td>0.006</td>
+    </tr>
+    <tr>
+      <td>delta_presence</td>
+      <td>1.48</td>
+    </tr>
+  </tbody>
+</table>
+</details>
 </td><td>
-</td></tr>
-
-<tr><td></td><td>
-
-<h3>Model: clg_mi2 (pybnesian)</h3>
-<ul>
-<li>Seed: 42, rows: 1000</li>
-<li> Params: <tt>{"max_indegree": 2, "operators": ["arcs"], "score": "bic", "type": "clg"}</tt></li><li> <a href="models/clg_mi2/synthetic.csv">Synthetic CSV</a></li>
-<li> <a href="models/clg_mi2/per_variable_metrics.csv">Per-variable metrics</a></li>
-<li> <a href="models/clg_mi2/metrics.json">Metrics JSON</a></li>
-</ul>
-
-</td><td>
-</td></tr>
-
-<tr><td></td><td>
-
-<h3>Model: semi_mi5 (pybnesian)</h3>
-<ul>
-<li>Seed: 42, rows: 1000</li>
-<li> Params: <tt>{"max_indegree": 5, "operators": ["arcs"], "score": "bic", "type": "semiparametric"}</tt></li><li> <a href="models/semi_mi5/synthetic.csv">Synthetic CSV</a></li>
-<li> <a href="models/semi_mi5/per_variable_metrics.csv">Per-variable metrics</a></li>
-<li> <a href="models/semi_mi5/metrics.json">Metrics JSON</a></li>
-</ul>
-
-</td><td>
-</td></tr>
-
-<tr><td></td><td>
-
-<h3>Model: ctgan_fast (synthcity)</h3>
-<ul>
-<li>Seed: 42, rows: 1000</li>
-<li> Params: <tt>{"batch_size": 256, "n_iter": 5}</tt></li><li> <a href="models/ctgan_fast/synthetic.csv">Synthetic CSV</a></li>
-<li> <a href="models/ctgan_fast/per_variable_metrics.csv">Per-variable metrics</a></li>
-<li> <a href="models/ctgan_fast/metrics.json">Metrics JSON</a></li>
-</ul>
-
-</td><td>
-</td></tr>
-
-<tr><td></td><td>
-
-<h3>Model: tvae_quick (synthcity)</h3>
-<ul>
-<li>Seed: 42, rows: 1000</li>
-<li> Params: <tt>{"batch_size": 256}</tt></li><li> <a href="models/tvae_quick/synthetic.csv">Synthetic CSV</a></li>
-<li> <a href="models/tvae_quick/per_variable_metrics.csv">Per-variable metrics</a></li>
-<li> <a href="models/tvae_quick/metrics.json">Metrics JSON</a></li>
-</ul>
-
-</td><td>
-</td></tr>
+<table class="dataframe">
+  <thead>
+    <tr style="text-align: right;">
+      <th>variable</th>
+      <th>distribution</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td>race</td>
+      <td>core.multinoulli</td>
+    </tr>
+    <tr>
+      <td>gender</td>
+      <td>core.multinoulli</td>
+    </tr>
+    <tr>
+      <td>age</td>
+      <td>core.multinoulli</td>
+    </tr>
+    <tr>
+      <td>weight</td>
+      <td>core.multinoulli</td>
+    </tr>
+    <tr>
+      <td>admission_type_id</td>
+      <td>core.multinoulli</td>
+    </tr>
+    <tr>
+      <td>discharge_disposition_id</td>
+      <td>core.truncated_normal</td>
+    </tr>
+    <tr>
+      <td>admission_source_id</td>
+      <td>core.multinoulli</td>
+    </tr>
+    <tr>
+      <td>time_in_hospital</td>
+      <td>core.multinoulli</td>
+    </tr>
+    <tr>
+      <td>payer_code</td>
+      <td>core.multinoulli</td>
+    </tr>
+    <tr>
+      <td>medical_specialty</td>
+      <td>core.multinoulli</td>
+    </tr>
+    <tr>
+      <td>num_lab_procedures</td>
+      <td>core.truncated_normal</td>
+    </tr>
+    <tr>
+      <td>num_procedures</td>
+      <td>core.multinoulli</td>
+    </tr>
+    <tr>
+      <td>num_medications</td>
+      <td>core.truncated_normal</td>
+    </tr>
+    <tr>
+      <td>number_outpatient</td>
+      <td>core.truncated_normal</td>
+    </tr>
+    <tr>
+      <td>number_emergency</td>
+      <td>core.truncated_normal</td>
+    </tr>
+    <tr>
+      <td>number_inpatient</td>
+      <td>core.truncated_normal</td>
+    </tr>
+    <tr>
+      <td>diag_1</td>
+      <td>core.multinoulli</td>
+    </tr>
+    <tr>
+      <td>diag_2</td>
+      <td>core.multinoulli</td>
+    </tr>
+    <tr>
+      <td>diag_3</td>
+      <td>core.multinoulli</td>
+    </tr>
+    <tr>
+      <td>number_diagnoses</td>
+      <td>core.multinoulli</td>
+    </tr>
+    <tr>
+      <td>max_glu_serum</td>
+      <td>core.multinoulli</td>
+    </tr>
+    <tr>
+      <td>A1Cresult</td>
+      <td>core.multinoulli</td>
+    </tr>
+    <tr>
+      <td>metformin</td>
+      <td>core.multinoulli</td>
+    </tr>
+    <tr>
+      <td>repaglinide</td>
+      <td>core.multinoulli</td>
+    </tr>
+    <tr>
+      <td>nateglinide</td>
+      <td>core.multinoulli</td>
+    </tr>
+    <tr>
+      <td>chlorpropamide</td>
+      <td>core.multinoulli</td>
+    </tr>
+    <tr>
+      <td>glimepiride</td>
+      <td>core.multinoulli</td>
+    </tr>
+    <tr>
+      <td>acetohexamide</td>
+      <td>core.multinoulli</td>
+    </tr>
+    <tr>
+      <td>glipizide</td>
+      <td>core.multinoulli</td>
+    </tr>
+    <tr>
+      <td>glyburide</td>
+      <td>core.multinoulli</td>
+    </tr>
+    <tr>
+      <td>tolbutamide</td>
+      <td>core.multinoulli</td>
+    </tr>
+    <tr>
+      <td>pioglitazone</td>
+      <td>core.multinoulli</td>
+    </tr>
+    <tr>
+      <td>rosiglitazone</td>
+      <td>core.multinoulli</td>
+    </tr>
+    <tr>
+      <td>acarbose</td>
+      <td>core.multinoulli</td>
+    </tr>
+    <tr>
+      <td>miglitol</td>
+      <td>core.multinoulli</td>
+    </tr>
+    <tr>
+      <td>troglitazone</td>
+      <td>core.multinoulli</td>
+    </tr>
+    <tr>
+      <td>tolazamide</td>
+      <td>core.multinoulli</td>
+    </tr>
+    <tr>
+      <td>examide</td>
+      <td>core.multinoulli</td>
+    </tr>
+    <tr>
+      <td>citoglipton</td>
+      <td>core.multinoulli</td>
+    </tr>
+    <tr>
+      <td>insulin</td>
+      <td>core.multinoulli</td>
+    </tr>
+    <tr>
+      <td>glyburide-metformin</td>
+      <td>core.multinoulli</td>
+    </tr>
+    <tr>
+      <td>glipizide-metformin</td>
+      <td>core.multinoulli</td>
+    </tr>
+    <tr>
+      <td>glimepiride-pioglitazone</td>
+      <td>core.multinoulli</td>
+    </tr>
+    <tr>
+      <td>metformin-rosiglitazone</td>
+      <td>core.multinoulli</td>
+    </tr>
+    <tr>
+      <td>metformin-pioglitazone</td>
+      <td>core.multinoulli</td>
+    </tr>
+    <tr>
+      <td>change</td>
+      <td>core.multinoulli</td>
+    </tr>
+    <tr>
+      <td>diabetesMed</td>
+      <td>core.multinoulli</td>
+    </tr>
+    <tr>
+      <td>readmitted</td>
+      <td>core.multinoulli</td>
+    </tr>
+  </tbody>
+</table></td></tr>
 
 </table>

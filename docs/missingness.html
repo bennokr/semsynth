@@ -8,14 +8,15 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Missingness handling &mdash; semsynth  documentation</title>
       <link rel="stylesheet" type="text/css" href="_static/pygments.css?v=b86133f3" />
-      <link rel="stylesheet" type="text/css" href="_static/css/theme.css?v=e59714d7" />
+      <link rel="stylesheet" type="text/css" href="_static/css/theme.css?v=9edc463e" />
+      <link rel="stylesheet" type="text/css" href="_static/mystnb.11b39860a7a0cbfd473a3ad8a317855267ff0bd372690045ca344a6b62be495e.css?v=8cd3d715" />
 
   
       <script src="_static/jquery.js?v=5d32c60e"></script>
       <script src="_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
       <script src="_static/documentation_options.js?v=5929fcd5"></script>
-      <script src="_static/doctools.js?v=9bcbadda"></script>
-      <script src="_static/sphinx_highlight.js?v=dc90522c"></script>
+      <script src="_static/doctools.js?v=fd6eb6e6"></script>
+      <script src="_static/sphinx_highlight.js?v=6ffebe34"></script>
     <script src="_static/js/theme.js"></script>
     <link rel="index" title="Index" href="genindex.html" />
     <link rel="search" title="Search" href="search.html" />
@@ -48,7 +49,7 @@
 <li class="toctree-l1"><a class="reference internal" href="getting-started.html">Getting started</a></li>
 <li class="toctree-l1"><a class="reference internal" href="schema.html">SemMap metadata schema</a></li>
 <li class="toctree-l1"><a class="reference internal" href="map_columns.html">Column terminology mapping</a></li>
-<li class="toctree-l1"><a class="reference internal" href="provenance.html">Provenance workflow guide</a></li>
+<li class="toctree-l1"><a class="reference internal" href="provenance.html">Provenance</a></li>
 <li class="toctree-l1"><a class="reference internal" href="backends.html">Backends overview</a></li>
 <li class="toctree-l1 current"><a class="current reference internal" href="#">Missingness handling</a><ul>
 <li class="toctree-l2"><a class="reference internal" href="#column-level-modeling">Column-level modeling</a></li>
@@ -87,7 +88,26 @@
              
   <section id="missingness-handling">
 <h1>Missingness handling<a class="headerlink" href="#missingness-handling" title="Link to this heading"></a></h1>
-<p>SemSynth provides utilities for learning realistic missingness patterns from real datasets and applying them to synthetic samples. The design pairs per-column logistic models with a dataframe-level wrapper so generators can emit data that mirrors conditional dropout rates observed in the source data.</p>
+<p>SemSynth provides utilities for learning realistic missingness patterns from real datasets and applying them to synthetic samples. The design pairs per-column logistic models with a dataframe-level wrapper so generators can emit data that mirrors conditional dropout rates observed in the source data. The chart below highlights which Heart Disease variables drop out most often before we fit the wrapper.</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># Plot observed missingness to see which columns drive the model.</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">pandas</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">pd</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">matplotlib.pyplot</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">plt</span>
+
+<span class="n">heart</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">read_csv</span><span class="p">(</span><span class="s2">&quot;../downloads-cache/uciml/45.csv.gz&quot;</span><span class="p">)</span>
+<span class="n">na_rates</span> <span class="o">=</span> <span class="n">heart</span><span class="o">.</span><span class="n">isna</span><span class="p">()</span><span class="o">.</span><span class="n">mean</span><span class="p">()</span><span class="o">.</span><span class="n">sort_values</span><span class="p">(</span><span class="n">ascending</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
+<span class="n">ax</span> <span class="o">=</span> <span class="n">na_rates</span><span class="o">.</span><span class="n">plot</span><span class="o">.</span><span class="n">bar</span><span class="p">(</span><span class="n">figsize</span><span class="o">=</span><span class="p">(</span><span class="mi">8</span><span class="p">,</span> <span class="mi">3</span><span class="p">),</span> <span class="n">color</span><span class="o">=</span><span class="s2">&quot;steelblue&quot;</span><span class="p">)</span>
+<span class="n">ax</span><span class="o">.</span><span class="n">set_ylabel</span><span class="p">(</span><span class="s2">&quot;missing rate&quot;</span><span class="p">)</span>
+<span class="n">ax</span><span class="o">.</span><span class="n">set_title</span><span class="p">(</span><span class="s2">&quot;Heart Disease missingness by column&quot;</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">tight_layout</span><span class="p">()</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<img alt="_images/7aa84fe60fcc87d44fda21e52bfabce16a6a318347dbb61755b1848e11e87090.png" src="_images/7aa84fe60fcc87d44fda21e52bfabce16a6a318347dbb61755b1848e11e87090.png" />
+</div>
+</div>
 <section id="column-level-modeling">
 <h2>Column-level modeling<a class="headerlink" href="#column-level-modeling" title="Link to this heading"></a></h2>
 <ul class="simple">
@@ -101,6 +121,57 @@
 <li><p><code class="docutils literal notranslate"><span class="pre">DataFrameMissingnessModel</span></code> fits a <code class="docutils literal notranslate"><span class="pre">ColumnMissingnessModel</span></code> for each column in the real dataset and stores them in a mapping. When applied to a synthetic dataframe, it iterates over the learned masks to inject <code class="docutils literal notranslate"><span class="pre">NaN</span></code> values column by column, respecting the fitted conditional patterns.</p></li>
 <li><p><code class="docutils literal notranslate"><span class="pre">MissingnessWrappedGenerator</span></code> wraps any base generator callable and first fits missingness on the real data. Subsequent calls to <code class="docutils literal notranslate"><span class="pre">.sample(n)</span></code> produce synthetic rows with the learned missingness applied, enabling drop-in realism without modifying the underlying generator implementation.</p></li>
 </ul>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># Fit and apply the wrapper to a small sample.</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">semsynth.missingness</span><span class="w"> </span><span class="kn">import</span> <span class="n">DataFrameMissingnessModel</span>
+
+<span class="n">model</span> <span class="o">=</span> <span class="n">DataFrameMissingnessModel</span><span class="p">(</span><span class="n">random_state</span><span class="o">=</span><span class="mi">7</span><span class="p">)</span><span class="o">.</span><span class="n">fit</span><span class="p">(</span><span class="n">heart</span><span class="p">)</span>
+<span class="n">sampled</span> <span class="o">=</span> <span class="n">model</span><span class="o">.</span><span class="n">apply</span><span class="p">(</span><span class="n">heart</span><span class="o">.</span><span class="n">head</span><span class="p">(</span><span class="mi">20</span><span class="p">)</span><span class="o">.</span><span class="n">copy</span><span class="p">())</span>
+<span class="n">sampled</span><span class="o">.</span><span class="n">isna</span><span class="p">()</span><span class="o">.</span><span class="n">mean</span><span class="p">()</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>/Users/benno/Documents/ud/projects/generative-metadata/semsynth/.venv/lib/python3.11/site-packages/sklearn/linear_model/_logistic.py:406: ConvergenceWarning: lbfgs failed to converge after 200 iteration(s) (status=1):
+STOP: TOTAL NO. OF ITERATIONS REACHED LIMIT
+
+Increase the number of iterations to improve the convergence (max_iter=200).
+You might also want to scale the data as shown in:
+    https://scikit-learn.org/stable/modules/preprocessing.html
+Please also refer to the documentation for alternative solver options:
+    https://scikit-learn.org/stable/modules/linear_model.html#logistic-regression
+  n_iter_i = _check_optimize_result(
+/Users/benno/Documents/ud/projects/generative-metadata/semsynth/.venv/lib/python3.11/site-packages/sklearn/linear_model/_logistic.py:406: ConvergenceWarning: lbfgs failed to converge after 200 iteration(s) (status=1):
+STOP: TOTAL NO. OF ITERATIONS REACHED LIMIT
+
+Increase the number of iterations to improve the convergence (max_iter=200).
+You might also want to scale the data as shown in:
+    https://scikit-learn.org/stable/modules/preprocessing.html
+Please also refer to the documentation for alternative solver options:
+    https://scikit-learn.org/stable/modules/linear_model.html#logistic-regression
+  n_iter_i = _check_optimize_result(
+</pre></div>
+</div>
+<div class="output text_plain highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>age         0.00
+sex         0.00
+cp          0.00
+trestbps    0.00
+chol        0.00
+fbs         0.00
+restecg     0.00
+thalach     0.00
+exang       0.00
+oldpeak     0.00
+slope       0.00
+ca          0.00
+thal        0.05
+num         0.00
+dtype: float64
+</pre></div>
+</div>
+</div>
+</div>
 </section>
 <section id="references">
 <h2>References<a class="headerlink" href="#references" title="Link to this heading"></a></h2>

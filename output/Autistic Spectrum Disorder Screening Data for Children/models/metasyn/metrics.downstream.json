@@ -1,0 +1,5 @@
+{
+  "formula": "col_class ~ Q('A1_Score') + Q('A2_Score') + Q('A3_Score') + Q('A4_Score') + Q('A5_Score') + Q('A6_Score') + Q('A7_Score') + Q('A8_Score') + Q('A9_Score') + Q('A10_Score') + Q('age') + Q('result') + Q('A1_Score'):Q('A2_Score') + Q('A2_Score'):Q('A3_Score') + Q('A3_Score'):Q('A4_Score') + Q('A4_Score'):Q('A5_Score') + Q('A5_Score'):Q('A6_Score')",
+  "sign_match_rate": 0.6111111111111112,
+  "skipped_reason": null
+}

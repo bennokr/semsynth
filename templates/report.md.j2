@@ -30,6 +30,10 @@
 
 {{ fidelity_table }}
 
+{% endif %}{% if privacy_table %}## Privacy summary
+
+{{ privacy_table }}
+
 {% endif %}## Models
 
 <table>
@@ -46,10 +50,19 @@
 {% for link in model.links %}<li> <a href="{{ link.href }}">{{ link.label }}</a></li>
 {% endfor %}
 </ul>
+{% if model.per_variable_table %}<details class="model-subtable"><summary><strong>Per-variable fidelity</strong></summary>
+{{ model.per_variable_table }}
+</details>{% endif %}
+{% if model.downstream_table %}<details class="model-subtable"><summary><strong>Downstream metrics</strong></summary>
+{{ model.downstream_table }}
+</details>{% endif %}
+{% if model.privacy_table %}<details class="model-subtable"><summary><strong>Privacy metrics</strong></summary>
+{{ model.privacy_table }}
+</details>{% endif %}
 
 </td><td>
 {% if model.structure_rel %}<a href='{{ model.structure_rel }}'><img src='{{ model.structure_rel }}' width='280'/></a>{% endif %}
+{% if model.structure_table %}{{ model.structure_table }}{% endif %}
 </td></tr>
 
 {% endfor %}</table>
-

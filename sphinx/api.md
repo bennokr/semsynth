@@ -16,7 +16,7 @@ kernelspec:
 ```{code-cell} python
 from semsynth.datasets import DatasetSpec, load_dataset
 
-spec = DatasetSpec(provider="uciml", id="45", area="Health and Medicine")
+spec = DatasetSpec(provider="uciml", id=45)
 payload = load_dataset(spec)
 payload.frame.head(3)
 ```

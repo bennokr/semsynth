@@ -5,7 +5,7 @@
 - [x] **Broken console entry point**
   - Updated `pyproject.toml` script target to `semsynth.__main__:main`.
 - [x] **Templates and curated mappings are not packaged**
-  - Copied runtime assets into `semsynth/templates/` and `semsynth/mapping_data/`.
+  - Copied runtime assets into `semsynth/templates/`.
   - Switched template and mapping loading to packaged resources.
   - Declared package data in `pyproject.toml` and package discovery via `find`.
 - [x] **Flask app is advertised but not declared as a dependency**

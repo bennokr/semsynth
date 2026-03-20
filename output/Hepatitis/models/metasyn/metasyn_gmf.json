@@ -1,333 +1,681 @@
 {
     "gmf_version": "1.1",
-    "n_rows": 124,
+    "n_rows": 64,
     "n_columns": 20,
     "provenance": {
         "created by": {
             "name": "metasyn",
             "version": "2.0.0"
         },
-        "creation time": "2026-03-13T07:52:45.386346"
+        "creation time": "2026-03-20T16:17:35.633734"
     },
     "vars": [
         {
             "name": "Age",
-            "type": "categorical",
-            "dtype": "Categorical",
-            "prop_missing": 1.0,
+            "type": "continuous",
+            "dtype": "Float64",
+            "prop_missing": 0.0,
             "distribution": {
-                "name": "core.na",
+                "name": "core.lognormal",
                 "version": "1.0",
-                "class_name": "NADistribution",
+                "class_name": "LogNormalDistribution",
                 "unique": false,
-                "parameters": {}
+                "parameters": {
+                    "mean": 3.6686048341795825,
+                    "sd": 0.2662996267485118
+                }
             },
             "creation_method": {
-                "created_by": "metasyn"
+                "created_by": "metasyn",
+                "fitter": {
+                    "name": "LogNormalFitter",
+                    "privacy": {
+                        "name": "none",
+                        "parameters": {}
+                    },
+                    "version": "1.0",
+                    "plugin": "builtin",
+                    "plugin_version": "2.0.0"
+                }
             }
         },
         {
             "name": "Sex",
             "type": "categorical",
             "dtype": "Categorical",
-            "prop_missing": 1.0,
+            "prop_missing": 0.0,
             "distribution": {
-                "name": "core.na",
+                "name": "core.multinoulli",
                 "version": "1.0",
-                "class_name": "NADistribution",
+                "class_name": "MultinoulliDistribution",
                 "unique": false,
-                "parameters": {}
+                "parameters": {
+                    "labels": [
+                        "1",
+                        "2"
+                    ],
+                    "probs": [
+                        0.84375,
+                        0.15625
+                    ]
+                }
             },
             "creation_method": {
-                "created_by": "metasyn"
+                "created_by": "metasyn",
+                "fitter": {
+                    "name": "MultinoulliFitter",
+                    "privacy": {
+                        "name": "none",
+                        "parameters": {}
+                    },
+                    "version": "1.0",
+                    "plugin": "builtin",
+                    "plugin_version": "2.0.0"
+                }
             }
         },
         {
             "name": "Steroid",
             "type": "categorical",
             "dtype": "Categorical",
-            "prop_missing": 1.0,
+            "prop_missing": 0.0,
             "distribution": {
-                "name": "core.na",
+                "name": "core.multinoulli",
                 "version": "1.0",
-                "class_name": "NADistribution",
+                "class_name": "MultinoulliDistribution",
                 "unique": false,
-                "parameters": {}
+                "parameters": {
+                    "labels": [
+                        "1",
+                        "2"
+                    ],
+                    "probs": [
+                        0.53125,
+                        0.46875
+                    ]
+                }
             },
             "creation_method": {
-                "created_by": "metasyn"
+                "created_by": "metasyn",
+                "fitter": {
+                    "name": "MultinoulliFitter",
+                    "privacy": {
+                        "name": "none",
+                        "parameters": {}
+                    },
+                    "version": "1.0",
+                    "plugin": "builtin",
+                    "plugin_version": "2.0.0"
+                }
             }
         },
         {
             "name": "Antivirals",
             "type": "categorical",
             "dtype": "Categorical",
-            "prop_missing": 1.0,
+            "prop_missing": 0.0,
             "distribution": {
-                "name": "core.na",
+                "name": "core.multinoulli",
                 "version": "1.0",
-                "class_name": "NADistribution",
+                "class_name": "MultinoulliDistribution",
                 "unique": false,
-                "parameters": {}
+                "parameters": {
+                    "labels": [
+                        "1",
+                        "2"
+                    ],
+                    "probs": [
+                        0.265625,
+                        0.734375
+                    ]
+                }
             },
             "creation_method": {
-                "created_by": "metasyn"
+                "created_by": "metasyn",
+                "fitter": {
+                    "name": "MultinoulliFitter",
+                    "privacy": {
+                        "name": "none",
+                        "parameters": {}
+                    },
+                    "version": "1.0",
+                    "plugin": "builtin",
+                    "plugin_version": "2.0.0"
+                }
             }
         },
         {
             "name": "Fatigue",
             "type": "categorical",
             "dtype": "Categorical",
-            "prop_missing": 1.0,
+            "prop_missing": 0.0,
             "distribution": {
-                "name": "core.na",
+                "name": "core.multinoulli",
                 "version": "1.0",
-                "class_name": "NADistribution",
+                "class_name": "MultinoulliDistribution",
                 "unique": false,
-                "parameters": {}
+                "parameters": {
+                    "labels": [
+                        "1",
+                        "2"
+                    ],
+                    "probs": [
+                        0.625,
+                        0.375
+                    ]
+                }
             },
             "creation_method": {
-                "created_by": "metasyn"
+                "created_by": "metasyn",
+                "fitter": {
+                    "name": "MultinoulliFitter",
+                    "privacy": {
+                        "name": "none",
+                        "parameters": {}
+                    },
+                    "version": "1.0",
+                    "plugin": "builtin",
+                    "plugin_version": "2.0.0"
+                }
             }
         },
         {
             "name": "Malaise",
             "type": "categorical",
             "dtype": "Categorical",
-            "prop_missing": 1.0,
+            "prop_missing": 0.0,
             "distribution": {
-                "name": "core.na",
+                "name": "core.multinoulli",
                 "version": "1.0",
-                "class_name": "NADistribution",
+                "class_name": "MultinoulliDistribution",
                 "unique": false,
-                "parameters": {}
+                "parameters": {
+                    "labels": [
+                        "1",
+                        "2"
+                    ],
+                    "probs": [
+                        0.34375,
+                        0.65625
+                    ]
+                }
             },
             "creation_method": {
-                "created_by": "metasyn"
+                "created_by": "metasyn",
+                "fitter": {
+                    "name": "MultinoulliFitter",
+                    "privacy": {
+                        "name": "none",
+                        "parameters": {}
+                    },
+                    "version": "1.0",
+                    "plugin": "builtin",
+                    "plugin_version": "2.0.0"
+                }
             }
         },
         {
             "name": "Anorexia",
             "type": "categorical",
             "dtype": "Categorical",
-            "prop_missing": 1.0,
+            "prop_missing": 0.0,
             "distribution": {
-                "name": "core.na",
+                "name": "core.multinoulli",
                 "version": "1.0",
-                "class_name": "NADistribution",
+                "class_name": "MultinoulliDistribution",
                 "unique": false,
-                "parameters": {}
+                "parameters": {
+                    "labels": [
+                        "1",
+                        "2"
+                    ],
+                    "probs": [
+                        0.125,
+                        0.875
+                    ]
+                }
             },
             "creation_method": {
-                "created_by": "metasyn"
+                "created_by": "metasyn",
+                "fitter": {
+                    "name": "MultinoulliFitter",
+                    "privacy": {
+                        "name": "none",
+                        "parameters": {}
+                    },
+                    "version": "1.0",
+                    "plugin": "builtin",
+                    "plugin_version": "2.0.0"
+                }
             }
         },
         {
             "name": "Liver Big",
             "type": "categorical",
             "dtype": "Categorical",
-            "prop_missing": 1.0,
+            "prop_missing": 0.0,
             "distribution": {
-                "name": "core.na",
+                "name": "core.multinoulli",
                 "version": "1.0",
-                "class_name": "NADistribution",
+                "class_name": "MultinoulliDistribution",
                 "unique": false,
-                "parameters": {}
+                "parameters": {
+                    "labels": [
+                        "1",
+                        "2"
+                    ],
+                    "probs": [
+                        0.15625,
+                        0.84375
+                    ]
+                }
             },
             "creation_method": {
-                "created_by": "metasyn"
+                "created_by": "metasyn",
+                "fitter": {
+                    "name": "MultinoulliFitter",
+                    "privacy": {
+                        "name": "none",
+                        "parameters": {}
+                    },
+                    "version": "1.0",
+                    "plugin": "builtin",
+                    "plugin_version": "2.0.0"
+                }
             }
         },
         {
             "name": "Liver Firm",
             "type": "categorical",
             "dtype": "Categorical",
-            "prop_missing": 1.0,
+            "prop_missing": 0.0,
             "distribution": {
-                "name": "core.na",
+                "name": "core.multinoulli",
                 "version": "1.0",
-                "class_name": "NADistribution",
+                "class_name": "MultinoulliDistribution",
                 "unique": false,
-                "parameters": {}
+                "parameters": {
+                    "labels": [
+                        "1",
+                        "2"
+                    ],
+                    "probs": [
+                        0.484375,
+                        0.515625
+                    ]
+                }
             },
             "creation_method": {
-                "created_by": "metasyn"
+                "created_by": "metasyn",
+                "fitter": {
+                    "name": "MultinoulliFitter",
+                    "privacy": {
+                        "name": "none",
+                        "parameters": {}
+                    },
+                    "version": "1.0",
+                    "plugin": "builtin",
+                    "plugin_version": "2.0.0"
+                }
             }
         },
         {
             "name": "Spleen Palpable",
             "type": "categorical",
             "dtype": "Categorical",
-            "prop_missing": 1.0,
+            "prop_missing": 0.0,
             "distribution": {
-                "name": "core.na",
+                "name": "core.multinoulli",
                 "version": "1.0",
-                "class_name": "NADistribution",
+                "class_name": "MultinoulliDistribution",
                 "unique": false,
-                "parameters": {}
+                "parameters": {
+                    "labels": [
+                        "1",
+                        "2"
+                    ],
+                    "probs": [
+                        0.203125,
+                        0.796875
+                    ]
+                }
             },
             "creation_method": {
-                "created_by": "metasyn"
+                "created_by": "metasyn",
+                "fitter": {
+                    "name": "MultinoulliFitter",
+                    "privacy": {
+                        "name": "none",
+                        "parameters": {}
+                    },
+                    "version": "1.0",
+                    "plugin": "builtin",
+                    "plugin_version": "2.0.0"
+                }
             }
         },
         {
             "name": "Spiders",
             "type": "categorical",
             "dtype": "Categorical",
-            "prop_missing": 1.0,
+            "prop_missing": 0.0,
             "distribution": {
-                "name": "core.na",
+                "name": "core.multinoulli",
                 "version": "1.0",
-                "class_name": "NADistribution",
+                "class_name": "MultinoulliDistribution",
                 "unique": false,
-                "parameters": {}
+                "parameters": {
+                    "labels": [
+                        "1",
+                        "2"
+                    ],
+                    "probs": [
+                        0.34375,
+                        0.65625
+                    ]
+                }
             },
             "creation_method": {
-                "created_by": "metasyn"
+                "created_by": "metasyn",
+                "fitter": {
+                    "name": "MultinoulliFitter",
+                    "privacy": {
+                        "name": "none",
+                        "parameters": {}
+                    },
+                    "version": "1.0",
+                    "plugin": "builtin",
+                    "plugin_version": "2.0.0"
+                }
             }
         },
         {
             "name": "Ascites",
             "type": "categorical",
             "dtype": "Categorical",
-            "prop_missing": 1.0,
+            "prop_missing": 0.0,
             "distribution": {
-                "name": "core.na",
+                "name": "core.multinoulli",
                 "version": "1.0",
-                "class_name": "NADistribution",
+                "class_name": "MultinoulliDistribution",
                 "unique": false,
-                "parameters": {}
+                "parameters": {
+                    "labels": [
+                        "1",
+                        "2"
+                    ],
+                    "probs": [
+                        0.15625,
+                        0.84375
+                    ]
+                }
             },
             "creation_method": {
-                "created_by": "metasyn"
+                "created_by": "metasyn",
+                "fitter": {
+                    "name": "MultinoulliFitter",
+                    "privacy": {
+                        "name": "none",
+                        "parameters": {}
+                    },
+                    "version": "1.0",
+                    "plugin": "builtin",
+                    "plugin_version": "2.0.0"
+                }
             }
         },
         {
             "name": "Varices",
             "type": "categorical",
             "dtype": "Categorical",
-            "prop_missing": 1.0,
+            "prop_missing": 0.0,
             "distribution": {
-                "name": "core.na",
+                "name": "core.multinoulli",
                 "version": "1.0",
-                "class_name": "NADistribution",
+                "class_name": "MultinoulliDistribution",
                 "unique": false,
-                "parameters": {}
+                "parameters": {
+                    "labels": [
+                        "1",
+                        "2"
+                    ],
+                    "probs": [
+                        0.15625,
+                        0.84375
+                    ]
+                }
             },
             "creation_method": {
-                "created_by": "metasyn"
+                "created_by": "metasyn",
+                "fitter": {
+                    "name": "MultinoulliFitter",
+                    "privacy": {
+                        "name": "none",
+                        "parameters": {}
+                    },
+                    "version": "1.0",
+                    "plugin": "builtin",
+                    "plugin_version": "2.0.0"
+                }
             }
         },
         {
             "name": "Bilirubin",
-            "type": "categorical",
-            "dtype": "Categorical",
-            "prop_missing": 1.0,
+            "type": "continuous",
+            "dtype": "Float64",
+            "prop_missing": 0.0,
             "distribution": {
-                "name": "core.na",
+                "name": "core.lognormal",
                 "version": "1.0",
-                "class_name": "NADistribution",
+                "class_name": "LogNormalDistribution",
                 "unique": false,
-                "parameters": {}
+                "parameters": {
+                    "mean": 0.014104262525716888,
+                    "sd": 0.522893090129639
+                }
             },
             "creation_method": {
-                "created_by": "metasyn"
+                "created_by": "metasyn",
+                "fitter": {
+                    "name": "LogNormalFitter",
+                    "privacy": {
+                        "name": "none",
+                        "parameters": {}
+                    },
+                    "version": "1.0",
+                    "plugin": "builtin",
+                    "plugin_version": "2.0.0"
+                }
             }
         },
         {
             "name": "Alk Phosphate",
-            "type": "categorical",
-            "dtype": "Categorical",
-            "prop_missing": 1.0,
+            "type": "continuous",
+            "dtype": "Float64",
+            "prop_missing": 0.0,
             "distribution": {
-                "name": "core.na",
+                "name": "core.lognormal",
                 "version": "1.0",
-                "class_name": "NADistribution",
+                "class_name": "LogNormalDistribution",
                 "unique": false,
-                "parameters": {}
+                "parameters": {
+                    "mean": 4.486550233101733,
+                    "sd": 0.5033583152638264
+                }
             },
             "creation_method": {
-                "created_by": "metasyn"
+                "created_by": "metasyn",
+                "fitter": {
+                    "name": "LogNormalFitter",
+                    "privacy": {
+                        "name": "none",
+                        "parameters": {}
+                    },
+                    "version": "1.0",
+                    "plugin": "builtin",
+                    "plugin_version": "2.0.0"
+                }
             }
         },
         {
             "name": "Sgot",
-            "type": "categorical",
-            "dtype": "Categorical",
-            "prop_missing": 1.0,
+            "type": "continuous",
+            "dtype": "Float64",
+            "prop_missing": 0.0,
             "distribution": {
-                "name": "core.na",
+                "name": "core.truncated_normal",
                 "version": "1.0",
-                "class_name": "NADistribution",
+                "class_name": "ContinuousTruncatedNormalDistribution",
                 "unique": false,
-                "parameters": {}
+                "parameters": {
+                    "lower": 13.99999999,
+                    "upper": 269.00000001,
+                    "mean": -4556.224369234658,
+                    "sd": 555.9386829090398
+                }
             },
             "creation_method": {
-                "created_by": "metasyn"
+                "created_by": "metasyn",
+                "fitter": {
+                    "name": "ContinuousTruncatedNormalFitter",
+                    "privacy": {
+                        "name": "none",
+                        "parameters": {}
+                    },
+                    "version": "1.0",
+                    "plugin": "builtin",
+                    "plugin_version": "2.0.0"
+                }
             }
         },
         {
             "name": "Albumin",
-            "type": "categorical",
-            "dtype": "Categorical",
-            "prop_missing": 1.0,
+            "type": "continuous",
+            "dtype": "Float64",
+            "prop_missing": 0.0,
             "distribution": {
-                "name": "core.na",
+                "name": "core.normal",
                 "version": "1.0",
-                "class_name": "NADistribution",
+                "class_name": "ContinuousNormalDistribution",
                 "unique": false,
-                "parameters": {}
+                "parameters": {
+                    "mean": 3.7984375000000004,
+                    "sd": 0.5802726157537937
+                }
             },
             "creation_method": {
-                "created_by": "metasyn"
+                "created_by": "metasyn",
+                "fitter": {
+                    "name": "ContinuousNormalFitter",
+                    "privacy": {
+                        "name": "none",
+                        "parameters": {}
+                    },
+                    "version": "1.0",
+                    "plugin": "builtin",
+                    "plugin_version": "2.0.0"
+                }
             }
         },
         {
             "name": "Protime",
-            "type": "categorical",
-            "dtype": "Categorical",
-            "prop_missing": 1.0,
+            "type": "continuous",
+            "dtype": "Float64",
+            "prop_missing": 0.0,
             "distribution": {
-                "name": "core.na",
+                "name": "core.truncated_normal",
                 "version": "1.0",
-                "class_name": "NADistribution",
+                "class_name": "ContinuousTruncatedNormalDistribution",
                 "unique": false,
-                "parameters": {}
+                "parameters": {
+                    "lower": -1e-08,
+                    "upper": 100.00000001,
+                    "mean": 75.12552429596434,
+                    "sd": 36.199004912483566
+                }
             },
             "creation_method": {
-                "created_by": "metasyn"
+                "created_by": "metasyn",
+                "fitter": {
+                    "name": "ContinuousTruncatedNormalFitter",
+                    "privacy": {
+                        "name": "none",
+                        "parameters": {}
+                    },
+                    "version": "1.0",
+                    "plugin": "builtin",
+                    "plugin_version": "2.0.0"
+                }
             }
         },
         {
             "name": "Histology",
             "type": "categorical",
             "dtype": "Categorical",
-            "prop_missing": 1.0,
+            "prop_missing": 0.0,
             "distribution": {
-                "name": "core.na",
+                "name": "core.multinoulli",
                 "version": "1.0",
-                "class_name": "NADistribution",
+                "class_name": "MultinoulliDistribution",
                 "unique": false,
-                "parameters": {}
+                "parameters": {
+                    "labels": [
+                        "1",
+                        "2"
+                    ],
+                    "probs": [
+                        0.546875,
+                        0.453125
+                    ]
+                }
             },
             "creation_method": {
-                "created_by": "metasyn"
+                "created_by": "metasyn",
+                "fitter": {
+                    "name": "MultinoulliFitter",
+                    "privacy": {
+                        "name": "none",
+                        "parameters": {}
+                    },
+                    "version": "1.0",
+                    "plugin": "builtin",
+                    "plugin_version": "2.0.0"
+                }
             }
         },
         {
             "name": "Class",
             "type": "categorical",
             "dtype": "Categorical",
-            "prop_missing": 1.0,
+            "prop_missing": 0.0,
             "distribution": {
-                "name": "core.na",
+                "name": "core.multinoulli",
                 "version": "1.0",
-                "class_name": "NADistribution",
+                "class_name": "MultinoulliDistribution",
                 "unique": false,
-                "parameters": {}
+                "parameters": {
+                    "labels": [
+                        "1",
+                        "2"
+                    ],
+                    "probs": [
+                        0.171875,
+                        0.828125
+                    ]
+                }
             },
             "creation_method": {
-                "created_by": "metasyn"
+                "created_by": "metasyn",
+                "fitter": {
+                    "name": "MultinoulliFitter",
+                    "privacy": {
+                        "name": "none",
+                        "parameters": {}
+                    },
+                    "version": "1.0",
+                    "plugin": "builtin",
+                    "plugin_version": "2.0.0"
+                }
             }
         }
     ]

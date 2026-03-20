@@ -1,0 +1,5 @@
+{
+  "formula": "Diabetes_binary ~ Q('HighBP') + Q('HighChol') + Q('CholCheck') + Q('BMI') + Q('Smoker') + Q('Stroke') + Q('HeartDiseaseorAttack') + Q('PhysActivity') + Q('Fruits') + Q('Veggies') + Q('HvyAlcoholConsump') + Q('AnyHealthcare') + Q('NoDocbcCost') + Q('GenHlth') + Q('MentHlth') + Q('PhysHlth') + Q('DiffWalk') + Q('Sex') + Q('Age') + Q('Education') + Q('Income') + Q('HighBP'):Q('HighChol') + Q('HighChol'):Q('CholCheck') + Q('CholCheck'):Q('BMI') + Q('BMI'):Q('Smoker') + Q('Smoker'):Q('Stroke')",
+  "sign_match_rate": 0.5185185185185185,
+  "skipped_reason": null
+}

@@ -8,14 +8,15 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Downstream fidelity &mdash; semsynth  documentation</title>
       <link rel="stylesheet" type="text/css" href="_static/pygments.css?v=b86133f3" />
-      <link rel="stylesheet" type="text/css" href="_static/css/theme.css?v=e59714d7" />
+      <link rel="stylesheet" type="text/css" href="_static/css/theme.css?v=9edc463e" />
+      <link rel="stylesheet" type="text/css" href="_static/mystnb.11b39860a7a0cbfd473a3ad8a317855267ff0bd372690045ca344a6b62be495e.css?v=8cd3d715" />
 
   
       <script src="_static/jquery.js?v=5d32c60e"></script>
       <script src="_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
       <script src="_static/documentation_options.js?v=5929fcd5"></script>
-      <script src="_static/doctools.js?v=9bcbadda"></script>
-      <script src="_static/sphinx_highlight.js?v=dc90522c"></script>
+      <script src="_static/doctools.js?v=fd6eb6e6"></script>
+      <script src="_static/sphinx_highlight.js?v=6ffebe34"></script>
     <script src="_static/js/theme.js"></script>
     <link rel="index" title="Index" href="genindex.html" />
     <link rel="search" title="Search" href="search.html" />
@@ -48,7 +49,7 @@
 <li class="toctree-l1"><a class="reference internal" href="getting-started.html">Getting started</a></li>
 <li class="toctree-l1"><a class="reference internal" href="schema.html">SemMap metadata schema</a></li>
 <li class="toctree-l1"><a class="reference internal" href="map_columns.html">Column terminology mapping</a></li>
-<li class="toctree-l1"><a class="reference internal" href="provenance.html">Provenance workflow guide</a></li>
+<li class="toctree-l1"><a class="reference internal" href="provenance.html">Provenance</a></li>
 <li class="toctree-l1"><a class="reference internal" href="backends.html">Backends overview</a></li>
 <li class="toctree-l1"><a class="reference internal" href="missingness.html">Missingness handling</a></li>
 <li class="toctree-l1"><a class="reference internal" href="privacy-metrics.html">Privacy metrics</a></li>
@@ -88,12 +89,60 @@
              
   <section id="downstream-fidelity">
 <h1>Downstream fidelity<a class="headerlink" href="#downstream-fidelity" title="Link to this heading"></a></h1>
-<p>The downstream-fidelity module compares real and synthetic datasets by fitting equivalent predictive models and inspecting how coefficients, directions of effect, and uncertainty translate between them. It automatically derives a modeling formula from metadata, performs multiple imputation for missing data, and reports side-by-side parameter estimates to highlight agreement or drift.</p>
+<p>The downstream-fidelity module compares real and synthetic datasets by fitting equivalent predictive models and inspecting how coefficients, directions of effect, and uncertainty translate between them. It automatically derives a modeling formula from metadata, performs multiple imputation for missing data, and reports side-by-side parameter estimates to highlight agreement or drift. The example below uses the curated SemMap metadata (which marks <code class="docutils literal notranslate"><span class="pre">num</span></code> as the target).</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># Visualize correlations to motivate downstream modeling choices.</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">pandas</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">pd</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">matplotlib.pyplot</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">plt</span>
+
+<span class="n">heart</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">read_csv</span><span class="p">(</span><span class="s2">&quot;../downloads-cache/uciml/45.csv.gz&quot;</span><span class="p">)</span>
+<span class="n">corr</span> <span class="o">=</span> <span class="n">heart</span><span class="o">.</span><span class="n">corr</span><span class="p">(</span><span class="n">numeric_only</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+<span class="n">fig</span><span class="p">,</span> <span class="n">ax</span> <span class="o">=</span> <span class="n">plt</span><span class="o">.</span><span class="n">subplots</span><span class="p">(</span><span class="n">figsize</span><span class="o">=</span><span class="p">(</span><span class="mi">6</span><span class="p">,</span> <span class="mi">5</span><span class="p">))</span>
+<span class="n">im</span> <span class="o">=</span> <span class="n">ax</span><span class="o">.</span><span class="n">imshow</span><span class="p">(</span><span class="n">corr</span><span class="p">,</span> <span class="n">cmap</span><span class="o">=</span><span class="s2">&quot;RdBu_r&quot;</span><span class="p">,</span> <span class="n">vmin</span><span class="o">=-</span><span class="mi">1</span><span class="p">,</span> <span class="n">vmax</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>
+<span class="n">ax</span><span class="o">.</span><span class="n">set_xticks</span><span class="p">(</span><span class="nb">range</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">corr</span><span class="o">.</span><span class="n">columns</span><span class="p">)))</span>
+<span class="n">ax</span><span class="o">.</span><span class="n">set_xticklabels</span><span class="p">(</span><span class="n">corr</span><span class="o">.</span><span class="n">columns</span><span class="p">,</span> <span class="n">rotation</span><span class="o">=</span><span class="mi">90</span><span class="p">)</span>
+<span class="n">ax</span><span class="o">.</span><span class="n">set_yticks</span><span class="p">(</span><span class="nb">range</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">corr</span><span class="o">.</span><span class="n">index</span><span class="p">)))</span>
+<span class="n">ax</span><span class="o">.</span><span class="n">set_yticklabels</span><span class="p">(</span><span class="n">corr</span><span class="o">.</span><span class="n">index</span><span class="p">)</span>
+<span class="n">ax</span><span class="o">.</span><span class="n">set_title</span><span class="p">(</span><span class="s2">&quot;Numeric correlation (Heart Disease)&quot;</span><span class="p">)</span>
+<span class="n">fig</span><span class="o">.</span><span class="n">colorbar</span><span class="p">(</span><span class="n">im</span><span class="p">,</span> <span class="n">ax</span><span class="o">=</span><span class="n">ax</span><span class="p">,</span> <span class="n">fraction</span><span class="o">=</span><span class="mf">0.046</span><span class="p">,</span> <span class="n">pad</span><span class="o">=</span><span class="mf">0.04</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">tight_layout</span><span class="p">()</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<img alt="_images/1b724f6ec40b97536ef019e917f8f9a991ccb83e83b64493dc429d632dde4130.png" src="_images/1b724f6ec40b97536ef019e917f8f9a991ccb83e83b64493dc429d632dde4130.png" />
+</div>
+</div>
 <section id="formula-discovery">
 <h2>Formula discovery<a class="headerlink" href="#formula-discovery" title="Link to this heading"></a></h2>
 <ul class="simple">
 <li><p><code class="docutils literal notranslate"><span class="pre">auto_formula</span></code> builds a Patsy formula by inferring target roles from the dataset schema, coercing dtypes (including categorical levels from codebooks), and generating main effects plus interaction candidates. Cross-validated feature screening enforces strong heredity, keeping parents of any retained interactions to stabilize the model.</p></li>
 </ul>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># Create a target-aware formula straight from the SemMap metadata.</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">json</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">sys</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">pathlib</span><span class="w"> </span><span class="kn">import</span> <span class="n">Path</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">importlib</span><span class="w"> </span><span class="kn">import</span> <span class="n">reload</span>
+<span class="n">sys</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">insert</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="nb">str</span><span class="p">(</span><span class="n">Path</span><span class="p">(</span><span class="s2">&quot;..&quot;</span><span class="p">)</span><span class="o">.</span><span class="n">resolve</span><span class="p">()))</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">semsynth.downstream_fidelity</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">dfid</span>
+<span class="n">dfid</span> <span class="o">=</span> <span class="n">reload</span><span class="p">(</span><span class="n">dfid</span><span class="p">)</span>
+
+<span class="n">meta</span> <span class="o">=</span> <span class="n">json</span><span class="o">.</span><span class="n">load</span><span class="p">(</span><span class="nb">open</span><span class="p">(</span><span class="s2">&quot;../mappings/uciml-45.metadata.json&quot;</span><span class="p">))</span>
+<span class="n">formula</span> <span class="o">=</span> <span class="n">dfid</span><span class="o">.</span><span class="n">auto_formula</span><span class="p">(</span><span class="n">heart</span><span class="p">,</span> <span class="n">meta</span><span class="p">,</span> <span class="n">dfid</span><span class="o">.</span><span class="n">DownstreamConfig</span><span class="p">())</span>
+<span class="n">formula</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output text_plain highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>&quot;num ~ Q(&#39;age&#39;) + Q(&#39;sex&#39;) + Q(&#39;cp&#39;) + Q(&#39;fbs&#39;) + Q(&#39;trestbps&#39;) + Q(&#39;chol&#39;) + Q(&#39;restecg&#39;) + Q(&#39;thalach&#39;) + Q(&#39;exang&#39;) + Q(&#39;oldpeak&#39;) + Q(&#39;slope&#39;) + Q(&#39;ca&#39;) + Q(&#39;thal&#39;) + Q(&#39;age&#39;):Q(&#39;sex&#39;) + Q(&#39;sex&#39;):Q(&#39;cp&#39;) + Q(&#39;cp&#39;):Q(&#39;fbs&#39;) + Q(&#39;fbs&#39;):Q(&#39;trestbps&#39;) + Q(&#39;trestbps&#39;):Q(&#39;chol&#39;)&quot;
+</pre></div>
+</div>
+</div>
+</div>
+<p>The curated metadata already declares the <code class="docutils literal notranslate"><span class="pre">num</span></code> diagnosis column as the target, so <code class="docutils literal notranslate"><span class="pre">auto_formula</span></code> discovers the correct prediction task without manual overrides.</p>
 </section>
 <section id="multiple-imputation-and-estimation">
 <h2>Multiple imputation and estimation<a class="headerlink" href="#multiple-imputation-and-estimation" title="Link to this heading"></a></h2>

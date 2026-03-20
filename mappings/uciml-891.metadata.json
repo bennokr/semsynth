@@ -13,6 +13,7 @@
       {
         "name": "Diabetes_binary",
         "titles": "Diabetes status (0 = no diabetes, 1 = prediabetes or diabetes)",
+        "hadRole": "target",
         "columnProperty": {
           "hasCodeBook": {
             "hasTopConcept": [

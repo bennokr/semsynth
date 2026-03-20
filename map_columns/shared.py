@@ -9,8 +9,7 @@ from dataclasses import dataclass, field
 from pathlib import Path
 from typing import Any, Dict, FrozenSet, Iterable, List, Mapping, Optional, Sequence, Tuple
 
-from semsynth.semmap import Column, Metadata
-from semsynth.utils import get_column_name
+from semsynth.semmap import Column, Metadata, get_column_name, raw_role
 
 logger = logging.getLogger(__name__)
 
@@ -176,7 +175,7 @@ def _parse_columns_direct(data: Mapping[str, Any]) -> Tuple[List[ColumnInfo], Da
                 description=_coerce_optional_str(raw_col.get("dcterms:description") or raw_col.get("description")),
                 about=_coerce_optional_str(raw_col.get("schema:about") or raw_col.get("about")),
                 unit=_coerce_optional_str(raw_col.get("schema:unitText") or raw_col.get("unitText")),
-                role=_coerce_optional_str(raw_col.get("prov:hadRole") or raw_col.get("hadRole")),
+                role=_coerce_optional_str(raw_role(raw_col)),
                 statistical_data_type=statistical_data_type,
                 summary_statistics=summary_stats,
                 source=_coerce_optional_str(raw_col.get("dct:source") or raw_col.get("source")),

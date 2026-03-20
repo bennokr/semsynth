@@ -1,0 +1,2791 @@
+{
+  "@context": {
+    "prov": "http://www.w3.org/ns/prov#",
+    "dct": "http://purl.org/dc/terms/",
+    "rdfs": "http://www.w3.org/2000/01/rdf-schema#",
+    "xsd": "http://www.w3.org/2001/XMLSchema#",
+    "rdf": "http://www.w3.org/1999/02/22-rdf-syntax-ns#",
+    "schema": "https://schema.org/",
+    "id": "@id",
+    "type": "@type",
+    "provenance": "@graph",
+    "startedAtTime": {
+      "@id": "prov:startedAtTime",
+      "@type": "xsd:dateTime"
+    },
+    "endedAtTime": {
+      "@id": "prov:endedAtTime",
+      "@type": "xsd:dateTime"
+    },
+    "wasAssociatedWith": {
+      "@id": "prov:wasAssociatedWith",
+      "@type": "@id",
+      "@container": "@set"
+    },
+    "used": {
+      "@id": "prov:used",
+      "@type": "@id",
+      "@container": "@set"
+    },
+    "wasGeneratedBy": {
+      "@id": "prov:wasGeneratedBy",
+      "@type": "@id"
+    },
+    "wasAttributedTo": {
+      "@id": "prov:wasAttributedTo",
+      "@type": "@id",
+      "@container": "@set"
+    },
+    "generatedAtTime": {
+      "@id": "prov:generatedAtTime",
+      "@type": "xsd:dateTime"
+    },
+    "format": "dct:format",
+    "extent": "dct:extent",
+    "modified": {
+      "@id": "dct:modified",
+      "@type": "xsd:dateTime"
+    },
+    "identifier": "dct:identifier",
+    "label": "rdfs:label",
+    "title": "dct:title",
+    "hasVersion": "dct:hasVersion",
+    "source": {
+      "@id": "dct:source",
+      "@type": "@id"
+    },
+    "requires": {
+      "@id": "dct:requires",
+      "@type": "@id",
+      "@container": "@set"
+    },
+    "comment": "rdfs:comment"
+  },
+  "provenance": [
+    {
+      "id": "https://w3id.org/semsynth/demo#output/Chronic Kidney Disease",
+      "type": "prov:Entity",
+      "format": "application/octet-stream",
+      "extent": 288,
+      "modified": "2026-03-17T13:41:08.533265+00:00",
+      "wasGeneratedBy": "https://w3id.org/semsynth/demo#__main__.py#preprocess-20260320T1517"
+    },
+    {
+      "id": "https://w3id.org/semsynth/demo#output/Statlog (Heart)",
+      "type": "prov:Entity",
+      "format": "application/octet-stream",
+      "extent": 256,
+      "modified": "2026-03-16T15:49:44.918420+00:00",
+      "wasGeneratedBy": "https://w3id.org/semsynth/demo#__main__.py#model_run_root-20260320T1516"
+    },
+    {
+      "id": "https://w3id.org/semsynth/demo#__main__.py#specs_from_input-20260320T1516",
+      "type": "prov:Activity",
+      "startedAtTime": "2026-03-20T15:16:56.523132+00:00",
+      "endedAtTime": "2026-03-20T15:16:56.523236+00:00",
+      "wasAssociatedWith": "https://w3id.org/semsynth/demo#__main__.py",
+      "used": [
+        "https://w3id.org/semsynth/demo#env-b7b3b6f74caf"
+      ]
+    },
+    {
+      "id": "https://w3id.org/semsynth/demo#output/Heart Disease",
+      "type": "prov:Entity",
+      "format": "application/octet-stream",
+      "extent": 320,
+      "modified": "2026-03-18T16:28:07.986860+00:00",
+      "wasGeneratedBy": "https://w3id.org/semsynth/demo#__main__.py#preprocess-20260320T1517"
+    },
+    {
+      "id": "https://w3id.org/semsynth/demo#__main__.py#discover_model_runs-20260320T1517",
+      "type": "prov:Activity",
+      "startedAtTime": "2026-03-20T15:17:01.330022+00:00",
+      "endedAtTime": "2026-03-20T15:17:01.331504+00:00",
+      "wasAssociatedWith": "https://w3id.org/semsynth/demo#__main__.py",
+      "used": [
+        "https://w3id.org/semsynth/demo#env-b7b3b6f74caf"
+      ]
+    },
+    {
+      "id": "https://w3id.org/semsynth/demo#output/Heart Disease/models/metasyn/manifest.json",
+      "type": "prov:Entity",
+      "format": "application/json",
+      "extent": 191,
+      "modified": "2026-03-20T15:17:30.894758+00:00",
+      "wasGeneratedBy": "https://w3id.org/semsynth/demo#__main__.py#run_models-20260320T1517"
+    },
+    {
+      "id": "https://w3id.org/semsynth/demo#__main__.py#preprocess-20260320T1517",
+      "type": "prov:Activity",
+      "startedAtTime": "2026-03-20T15:17:40.264589+00:00",
+      "endedAtTime": "2026-03-20T15:17:51.385396+00:00",
+      "wasAssociatedWith": "https://w3id.org/semsynth/demo#__main__.py",
+      "used": [
+        "https://w3id.org/semsynth/demo#env-b7b3b6f74caf"
+      ]
+    },
+    {
+      "id": "https://w3id.org/semsynth/demo#__main__.py#discover_model_runs-20260320T1516",
+      "type": "prov:Activity",
+      "startedAtTime": "2026-03-20T15:16:49.202715+00:00",
+      "endedAtTime": "2026-03-20T15:16:49.204151+00:00",
+      "wasAssociatedWith": "https://w3id.org/semsynth/demo#__main__.py",
+      "used": [
+        "https://w3id.org/semsynth/demo#env-b7b3b6f74caf"
+      ]
+    },
+    {
+      "id": "https://w3id.org/semsynth/demo#__main__.py#write_report-20260320T1518",
+      "type": "prov:Activity",
+      "startedAtTime": "2026-03-20T15:18:01.848564+00:00",
+      "endedAtTime": "2026-03-20T15:18:02.183712+00:00",
+      "wasAssociatedWith": "https://w3id.org/semsynth/demo#__main__.py",
+      "used": [
+        "https://w3id.org/semsynth/demo#env-b7b3b6f74caf"
+      ]
+    },
+    {
+      "id": "https://w3id.org/semsynth/demo#output/CDC Diabetes Health Indicators/models/metasyn/per_variable_metrics.csv",
+      "type": "prov:Entity",
+      "format": "text/csv",
+      "extent": 947,
+      "modified": "2026-03-20T15:17:53.519604+00:00",
+      "wasGeneratedBy": "https://w3id.org/semsynth/demo#__main__.py#run_models-20260320T1517"
+    },
+    {
+      "id": "https://w3id.org/semsynth/demo#output/UCI_1150/models/metasyn/metrics.downstream.json",
+      "type": "prov:Entity",
+      "format": "application/json",
+      "extent": 177,
+      "modified": "2026-03-20T13:53:35.683700+00:00",
+      "wasGeneratedBy": "https://w3id.org/semsynth/demo#__main__.py#run_models-20260320T1516"
+    },
+    {
+      "id": "https://w3id.org/semsynth/demo#downloads-cache/uciml",
+      "type": "prov:Entity",
+      "format": "application/octet-stream",
+      "extent": 608,
+      "modified": "2026-03-16T15:29:07.246053+00:00",
+      "wasGeneratedBy": "https://w3id.org/semsynth/demo#__main__.py#specs_from_input-20260320T1516"
+    },
+    {
+      "id": "https://w3id.org/semsynth/demo#output/Statlog (Heart)/models/metasyn/manifest.json",
+      "type": "prov:Entity",
+      "format": "application/json",
+      "extent": 194,
+      "modified": "2026-03-20T15:16:53.440909+00:00",
+      "wasGeneratedBy": "https://w3id.org/semsynth/demo#__main__.py#run_models-20260320T1516"
+    },
+    {
+      "id": "https://w3id.org/semsynth/demo#output/Fertility",
+      "type": "prov:Entity",
+      "format": "application/octet-stream",
+      "extent": 288,
+      "modified": "2026-03-16T15:49:52.535058+00:00",
+      "wasGeneratedBy": "https://w3id.org/semsynth/demo#__main__.py#preprocess-20260320T1516"
+    },
+    {
+      "id": "https://w3id.org/semsynth/demo#downloads-cache/openml",
+      "type": "prov:Entity",
+      "format": "application/octet-stream",
+      "extent": 64,
+      "modified": "2026-03-13T15:30:49.710604+00:00",
+      "wasGeneratedBy": "https://w3id.org/semsynth/demo#__main__.py#specs_from_input-20260320T1517"
+    },
+    {
+      "id": "https://w3id.org/semsynth/demo#__main__.py#run_models-20260320T1517",
+      "type": "prov:Activity",
+      "startedAtTime": "2026-03-20T15:17:05.666498+00:00",
+      "endedAtTime": "2026-03-20T15:17:09.807429+00:00",
+      "wasAssociatedWith": "https://w3id.org/semsynth/demo#__main__.py",
+      "used": [
+        "https://w3id.org/semsynth/demo#env-b7b3b6f74caf"
+      ]
+    },
+    {
+      "id": "https://w3id.org/semsynth/demo#output/Diabetes 130-US Hospitals for Years 1999-2008/models/metasyn/provenance.json",
+      "type": "prov:Entity",
+      "format": "application/json",
+      "extent": 4633,
+      "modified": "2026-03-20T15:17:09.806420+00:00",
+      "wasGeneratedBy": "https://w3id.org/semsynth/demo#__main__.py#run_models-20260320T1517"
+    },
+    {
+      "id": "https://w3id.org/semsynth/demo#output/Statlog (Heart)/models/metasyn",
+      "type": "prov:Entity",
+      "format": "application/octet-stream",
+      "extent": 384,
+      "modified": "2026-03-20T09:27:10.696159+00:00",
+      "wasGeneratedBy": "https://w3id.org/semsynth/demo#__main__.py#write_privacy-20260320T1516"
+    },
+    {
+      "id": "https://w3id.org/semsynth/demo#__main__.py#discover_model_runs-20260320T1518",
+      "type": "prov:Activity",
+      "startedAtTime": "2026-03-20T15:18:01.590472+00:00",
+      "endedAtTime": "2026-03-20T15:18:01.591413+00:00",
+      "wasAssociatedWith": "https://w3id.org/semsynth/demo#__main__.py",
+      "used": [
+        "https://w3id.org/semsynth/demo#env-b7b3b6f74caf"
+      ]
+    },
+    {
+      "id": "https://w3id.org/semsynth/demo#output/Statlog (Heart)/models/metasyn/metrics.privacy.json",
+      "type": "prov:Entity",
+      "format": "application/json",
+      "extent": 993,
+      "modified": "2026-03-20T15:16:53.877854+00:00",
+      "wasGeneratedBy": "https://w3id.org/semsynth/demo#__main__.py#run_models-20260320T1516"
+    },
+    {
+      "id": "https://w3id.org/semsynth/demo#output/UCI_1150/models/metasyn/synthetic.semmap.parquet",
+      "type": "prov:Entity",
+      "format": "application/octet-stream",
+      "extent": 132710,
+      "modified": "2026-03-20T15:16:29.501372+00:00",
+      "wasGeneratedBy": "https://w3id.org/semsynth/demo#__main__.py#run_models-20260320T1516"
+    },
+    {
+      "id": "https://w3id.org/semsynth/demo#__main__.py#write_manifest-20260320T1517",
+      "type": "prov:Activity",
+      "startedAtTime": "2026-03-20T15:17:36.203856+00:00",
+      "endedAtTime": "2026-03-20T15:17:36.204235+00:00",
+      "wasAssociatedWith": "https://w3id.org/semsynth/demo#__main__.py",
+      "used": [
+        "https://w3id.org/semsynth/demo#env-b7b3b6f74caf"
+      ]
+    },
+    {
+      "id": "https://w3id.org/semsynth/demo#output/Fertility",
+      "type": "prov:Entity",
+      "format": "application/octet-stream",
+      "extent": 288,
+      "modified": "2026-03-16T15:49:52.535058+00:00",
+      "wasGeneratedBy": "https://w3id.org/semsynth/demo#__main__.py#run_models-20260320T1516"
+    },
+    {
+      "id": "https://w3id.org/semsynth/demo#output/Diabetes 130-US Hospitals for Years 1999-2008",
+      "type": "prov:Entity",
+      "format": "application/octet-stream",
+      "extent": 256,
+      "modified": "2026-03-16T15:50:05.209100+00:00",
+      "wasGeneratedBy": "https://w3id.org/semsynth/demo#__main__.py#run_models-20260320T1517"
+    },
+    {
+      "id": "https://w3id.org/semsynth/demo#output/Fertility/models/metasyn",
+      "type": "prov:Entity",
+      "format": "application/octet-stream",
+      "extent": 384,
+      "modified": "2026-03-20T09:27:16.585894+00:00",
+      "wasGeneratedBy": "https://w3id.org/semsynth/demo#__main__.py#write_manifest-20260320T1516"
+    },
+    {
+      "id": "https://w3id.org/semsynth/demo#__main__.py#write_report_md-20260320T1517",
+      "type": "prov:Activity",
+      "startedAtTime": "2026-03-20T15:17:01.592420+00:00",
+      "endedAtTime": "2026-03-20T15:17:01.658530+00:00",
+      "wasAssociatedWith": "https://w3id.org/semsynth/demo#__main__.py",
+      "used": [
+        "https://w3id.org/semsynth/demo#env-b7b3b6f74caf"
+      ]
+    },
+    {
+      "id": "https://w3id.org/semsynth/demo#output/Hepatitis/models/metasyn",
+      "type": "prov:Entity",
+      "format": "application/octet-stream",
+      "extent": 384,
+      "modified": "2026-03-20T09:14:50.738512+00:00",
+      "wasGeneratedBy": "https://w3id.org/semsynth/demo#__main__.py#write_privacy-20260320T1517"
+    },
+    {
+      "id": "https://w3id.org/semsynth/demo#output/Heart Disease/models/metasyn",
+      "type": "prov:Entity",
+      "format": "application/octet-stream",
+      "extent": 384,
+      "modified": "2026-03-20T08:17:54.940466+00:00",
+      "wasGeneratedBy": "https://w3id.org/semsynth/demo#__main__.py#write_privacy-20260320T1517"
+    },
+    {
+      "id": "https://w3id.org/semsynth/demo#output/CDC Diabetes Health Indicators",
+      "type": "prov:Entity",
+      "format": "application/octet-stream",
+      "extent": 288,
+      "modified": "2026-03-16T15:51:05.860321+00:00",
+      "wasGeneratedBy": "https://w3id.org/semsynth/demo#__main__.py#run_models-20260320T1517"
+    },
+    {
+      "id": "https://w3id.org/semsynth/demo#__main__.py#write_manifest-20260320T1516",
+      "type": "prov:Activity",
+      "startedAtTime": "2026-03-20T15:16:53.440597+00:00",
+      "endedAtTime": "2026-03-20T15:16:53.441006+00:00",
+      "wasAssociatedWith": "https://w3id.org/semsynth/demo#__main__.py",
+      "used": [
+        "https://w3id.org/semsynth/demo#env-b7b3b6f74caf"
+      ]
+    },
+    {
+      "id": "https://w3id.org/semsynth/demo#output/Chronic Kidney Disease",
+      "type": "prov:Entity",
+      "format": "application/octet-stream",
+      "extent": 288,
+      "modified": "2026-03-17T13:41:08.533265+00:00",
+      "wasGeneratedBy": "https://w3id.org/semsynth/demo#__main__.py#write_report_md-20260320T1517"
+    },
+    {
+      "id": "https://w3id.org/semsynth/demo#__main__.py#load_uciml_by_id-20260320T1517",
+      "type": "prov:Activity",
+      "startedAtTime": "2026-03-20T15:17:15.627403+00:00",
+      "endedAtTime": "2026-03-20T15:17:15.641853+00:00",
+      "wasAssociatedWith": "https://w3id.org/semsynth/demo#__main__.py",
+      "used": [
+        "https://w3id.org/semsynth/demo#env-b7b3b6f74caf"
+      ]
+    },
+    {
+      "id": "https://w3id.org/semsynth/demo#output/Heart Disease",
+      "type": "prov:Entity",
+      "format": "application/octet-stream",
+      "extent": 320,
+      "modified": "2026-03-18T16:28:07.986860+00:00",
+      "wasGeneratedBy": "https://w3id.org/semsynth/demo#__main__.py#write_report_md-20260320T1517"
+    },
+    {
+      "id": "https://w3id.org/semsynth/demo#__main__.py#write_manifest-20260320T1517",
+      "type": "prov:Activity",
+      "startedAtTime": "2026-03-20T15:17:30.894445+00:00",
+      "endedAtTime": "2026-03-20T15:17:30.894872+00:00",
+      "wasAssociatedWith": "https://w3id.org/semsynth/demo#__main__.py",
+      "used": [
+        "https://w3id.org/semsynth/demo#env-b7b3b6f74caf"
+      ]
+    },
+    {
+      "id": "https://w3id.org/semsynth/demo#__main__.py#load_uciml_by_id-20260320T1516",
+      "type": "prov:Activity",
+      "startedAtTime": "2026-03-20T15:16:56.777436+00:00",
+      "endedAtTime": "2026-03-20T15:16:56.786144+00:00",
+      "wasAssociatedWith": "https://w3id.org/semsynth/demo#__main__.py",
+      "used": [
+        "https://w3id.org/semsynth/demo#env-b7b3b6f74caf"
+      ]
+    },
+    {
+      "id": "https://w3id.org/semsynth/demo#__main__.py#write_manifest-20260320T1516",
+      "type": "prov:Activity",
+      "startedAtTime": "2026-03-20T15:16:58.858495+00:00",
+      "endedAtTime": "2026-03-20T15:16:58.858854+00:00",
+      "wasAssociatedWith": "https://w3id.org/semsynth/demo#__main__.py",
+      "used": [
+        "https://w3id.org/semsynth/demo#env-b7b3b6f74caf"
+      ]
+    },
+    {
+      "id": "https://w3id.org/semsynth/demo#__main__.py#write_manifest-20260320T1517",
+      "type": "prov:Activity",
+      "startedAtTime": "2026-03-20T15:17:19.430802+00:00",
+      "endedAtTime": "2026-03-20T15:17:19.431189+00:00",
+      "wasAssociatedWith": "https://w3id.org/semsynth/demo#__main__.py",
+      "used": [
+        "https://w3id.org/semsynth/demo#env-b7b3b6f74caf"
+      ]
+    },
+    {
+      "id": "https://w3id.org/semsynth/demo#output/Statlog (Heart)/models/metasyn/per_variable_metrics.csv",
+      "type": "prov:Entity",
+      "format": "text/csv",
+      "extent": 705,
+      "modified": "2026-03-20T15:16:53.437545+00:00",
+      "wasGeneratedBy": "https://w3id.org/semsynth/demo#__main__.py#run_models-20260320T1516"
+    },
+    {
+      "id": "https://w3id.org/semsynth/demo#__main__.py#load_model_configs-20260320T1517",
+      "type": "prov:Activity",
+      "startedAtTime": "2026-03-20T15:17:15.502476+00:00",
+      "endedAtTime": "2026-03-20T15:17:15.502742+00:00",
+      "wasAssociatedWith": "https://w3id.org/semsynth/demo#__main__.py",
+      "used": [
+        "https://w3id.org/semsynth/demo#env-b7b3b6f74caf"
+      ]
+    },
+    {
+      "id": "https://w3id.org/semsynth/demo#output/Heart Disease/models/metasyn/metrics.json",
+      "type": "prov:Entity",
+      "format": "application/json",
+      "extent": 319,
+      "modified": "2026-03-20T15:17:30.894269+00:00",
+      "wasGeneratedBy": "https://w3id.org/semsynth/demo#__main__.py#run_models-20260320T1517"
+    },
+    {
+      "id": "https://w3id.org/semsynth/demo#__main__.py#process_dataset-20260320T1517",
+      "type": "prov:Activity",
+      "startedAtTime": "2026-03-20T15:17:40.264178+00:00",
+      "endedAtTime": "2026-03-20T15:18:02.312988+00:00",
+      "wasAssociatedWith": "https://w3id.org/semsynth/demo#__main__.py",
+      "used": [
+        "https://w3id.org/semsynth/demo#env-b7b3b6f74caf"
+      ]
+    },
+    {
+      "id": "https://w3id.org/semsynth/demo#output/Fertility",
+      "type": "prov:Entity",
+      "format": "application/octet-stream",
+      "extent": 288,
+      "modified": "2026-03-16T15:49:52.535058+00:00",
+      "wasGeneratedBy": "https://w3id.org/semsynth/demo#__main__.py#write_report_md-20260320T1517"
+    },
+    {
+      "id": "https://w3id.org/semsynth/demo#output/Fertility/models/metasyn",
+      "type": "prov:Entity",
+      "format": "application/octet-stream",
+      "extent": 384,
+      "modified": "2026-03-20T09:27:16.585894+00:00",
+      "wasGeneratedBy": "https://w3id.org/semsynth/demo#__main__.py#write_privacy-20260320T1516"
+    },
+    {
+      "id": "https://w3id.org/semsynth/demo#output/Fertility/models/metasyn/metrics.downstream.json",
+      "type": "prov:Entity",
+      "format": "application/json",
+      "extent": 371,
+      "modified": "2026-03-20T13:46:51.589785+00:00",
+      "wasGeneratedBy": "https://w3id.org/semsynth/demo#__main__.py#run_models-20260320T1516"
+    },
+    {
+      "id": "https://w3id.org/semsynth/demo#__main__.py#load_model_configs-20260320T1517",
+      "type": "prov:Activity",
+      "startedAtTime": "2026-03-20T15:17:02.280333+00:00",
+      "endedAtTime": "2026-03-20T15:17:02.280600+00:00",
+      "wasAssociatedWith": "https://w3id.org/semsynth/demo#__main__.py",
+      "used": [
+        "https://w3id.org/semsynth/demo#env-b7b3b6f74caf"
+      ]
+    },
+    {
+      "id": "https://w3id.org/semsynth/demo#__main__.py#write_report_md-20260320T1516",
+      "type": "prov:Activity",
+      "startedAtTime": "2026-03-20T15:16:49.476683+00:00",
+      "endedAtTime": "2026-03-20T15:16:49.687929+00:00",
+      "wasAssociatedWith": "https://w3id.org/semsynth/demo#__main__.py",
+      "used": [
+        "https://w3id.org/semsynth/demo#env-b7b3b6f74caf"
+      ]
+    },
+    {
+      "id": "https://w3id.org/semsynth/demo#output/Hepatitis/models/metasyn/metrics.downstream.json",
+      "type": "prov:Entity",
+      "format": "application/json",
+      "extent": 341,
+      "modified": "2026-03-20T12:42:20.563641+00:00",
+      "wasGeneratedBy": "https://w3id.org/semsynth/demo#__main__.py#run_models-20260320T1517"
+    },
+    {
+      "id": "https://w3id.org/semsynth/demo#output/Autistic Spectrum Disorder Screening Data for Children/models/metasyn/synthetic.csv",
+      "type": "prov:Entity",
+      "format": "text/csv",
+      "extent": 25017,
+      "modified": "2026-03-20T15:17:25.110666+00:00",
+      "wasGeneratedBy": "https://w3id.org/semsynth/demo#__main__.py#run_models-20260320T1517"
+    },
+    {
+      "id": "https://w3id.org/semsynth/demo#__main__.py#specs_from_input-20260320T1517",
+      "type": "prov:Activity",
+      "startedAtTime": "2026-03-20T15:17:15.378252+00:00",
+      "endedAtTime": "2026-03-20T15:17:15.378369+00:00",
+      "wasAssociatedWith": "https://w3id.org/semsynth/demo#__main__.py",
+      "used": [
+        "https://w3id.org/semsynth/demo#env-b7b3b6f74caf"
+      ]
+    },
+    {
+      "id": "https://w3id.org/semsynth/demo#__main__.py#write_report-20260320T1516",
+      "type": "prov:Activity",
+      "startedAtTime": "2026-03-20T15:16:55.914064+00:00",
+      "endedAtTime": "2026-03-20T15:16:56.144363+00:00",
+      "wasAssociatedWith": "https://w3id.org/semsynth/demo#__main__.py",
+      "used": [
+        "https://w3id.org/semsynth/demo#env-b7b3b6f74caf"
+      ]
+    },
+    {
+      "id": "https://w3id.org/semsynth/demo#__main__.py#write_report-20260320T1517",
+      "type": "prov:Activity",
+      "startedAtTime": "2026-03-20T15:17:33.071729+00:00",
+      "endedAtTime": "2026-03-20T15:17:33.278260+00:00",
+      "wasAssociatedWith": "https://w3id.org/semsynth/demo#__main__.py",
+      "used": [
+        "https://w3id.org/semsynth/demo#env-b7b3b6f74caf"
+      ]
+    },
+    {
+      "id": "https://w3id.org/semsynth/demo#env-b7b3b6f74caf",
+      "type": [
+        "prov:Entity",
+        "prov:Collection"
+      ],
+      "label": "Python environment",
+      "title": "makeprov",
+      "hasVersion": "0.4.6",
+      "requires": [
+        {
+          "id": "https://pypi.org/project/parse/",
+          "type": "schema:SoftwareSourceCode",
+          "label": "parse>=1.20"
+        }
+      ]
+    },
+    {
+      "id": "https://w3id.org/semsynth/demo#__main__.py#report-20260320T1517",
+      "type": "prov:Activity",
+      "startedAtTime": "2026-03-20T15:17:39.299986+00:00",
+      "endedAtTime": "2026-03-20T15:18:02.439528+00:00",
+      "wasAssociatedWith": "https://w3id.org/semsynth/demo#__main__.py",
+      "used": [
+        "https://w3id.org/semsynth/demo#env-b7b3b6f74caf"
+      ]
+    },
+    {
+      "id": "https://w3id.org/semsynth/demo#output/UCI_1150/models/metasyn",
+      "type": "prov:Entity",
+      "format": "application/octet-stream",
+      "extent": 384,
+      "modified": "2026-03-20T13:52:33.371682+00:00",
+      "wasGeneratedBy": "https://w3id.org/semsynth/demo#__main__.py#write_privacy-20260320T1516"
+    },
+    {
+      "id": "https://w3id.org/semsynth/demo#output/Statlog (Heart)/models/metasyn/metrics.json",
+      "type": "prov:Entity",
+      "format": "application/json",
+      "extent": 316,
+      "modified": "2026-03-20T15:16:53.440376+00:00",
+      "wasGeneratedBy": "https://w3id.org/semsynth/demo#__main__.py#run_models-20260320T1516"
+    },
+    {
+      "id": "https://w3id.org/semsynth/demo#__main__.py#build_catalog-20260320T1518",
+      "type": "prov:Activity",
+      "startedAtTime": "2026-03-20T15:18:02.564300+00:00",
+      "endedAtTime": "2026-03-20T15:18:02.620705+00:00",
+      "wasAssociatedWith": "https://w3id.org/semsynth/demo#__main__.py",
+      "used": [
+        {
+          "id": "https://w3id.org/semsynth/demo#output",
+          "type": "prov:Entity",
+          "format": "application/octet-stream",
+          "extent": 608,
+          "modified": "2026-03-18T18:39:58.037347+00:00"
+        },
+        "https://w3id.org/semsynth/demo#env-b7b3b6f74caf"
+      ]
+    },
+    {
+      "id": "https://w3id.org/semsynth/demo#output/Chronic Kidney Disease",
+      "type": "prov:Entity",
+      "format": "application/octet-stream",
+      "extent": 288,
+      "modified": "2026-03-17T13:41:08.533265+00:00",
+      "wasGeneratedBy": "https://w3id.org/semsynth/demo#__main__.py#write_report-20260320T1517"
+    },
+    {
+      "id": "https://w3id.org/semsynth/demo#output/Autistic Spectrum Disorder Screening Data for Children/models/metasyn/per_variable_metrics.csv",
+      "type": "prov:Entity",
+      "format": "text/csv",
+      "extent": 804,
+      "modified": "2026-03-20T15:17:25.240764+00:00",
+      "wasGeneratedBy": "https://w3id.org/semsynth/demo#__main__.py#run_models-20260320T1517"
+    },
+    {
+      "id": "https://w3id.org/semsynth/demo#__main__.py#model_run_root-20260320T1516",
+      "type": "prov:Activity",
+      "startedAtTime": "2026-03-20T15:16:25.889563+00:00",
+      "endedAtTime": "2026-03-20T15:16:25.889654+00:00",
+      "wasAssociatedWith": "https://w3id.org/semsynth/demo#__main__.py",
+      "used": [
+        "https://w3id.org/semsynth/demo#env-b7b3b6f74caf"
+      ]
+    },
+    {
+      "id": "https://w3id.org/semsynth/demo#__main__.py#load_dataset-20260320T1517",
+      "type": "prov:Activity",
+      "startedAtTime": "2026-03-20T15:17:15.627214+00:00",
+      "endedAtTime": "2026-03-20T15:17:15.765172+00:00",
+      "wasAssociatedWith": "https://w3id.org/semsynth/demo#__main__.py",
+      "used": [
+        "https://w3id.org/semsynth/demo#env-b7b3b6f74caf"
+      ]
+    },
+    {
+      "id": "https://w3id.org/semsynth/demo#output/Heart Disease",
+      "type": "prov:Entity",
+      "format": "application/octet-stream",
+      "extent": 320,
+      "modified": "2026-03-18T16:28:07.986860+00:00",
+      "wasGeneratedBy": "https://w3id.org/semsynth/demo#__main__.py#write_report-20260320T1517"
+    },
+    {
+      "id": "https://w3id.org/semsynth/demo#output/CDC Diabetes Health Indicators/models/metasyn/metrics.json",
+      "type": "prov:Entity",
+      "format": "application/json",
+      "extent": 322,
+      "modified": "2026-03-20T15:17:53.522022+00:00",
+      "wasGeneratedBy": "https://w3id.org/semsynth/demo#__main__.py#run_models-20260320T1517"
+    },
+    {
+      "id": "https://w3id.org/semsynth/demo#output/Chronic Kidney Disease/models/metasyn",
+      "type": "prov:Entity",
+      "format": "application/octet-stream",
+      "extent": 384,
+      "modified": "2026-03-20T09:14:24.817773+00:00",
+      "wasGeneratedBy": "https://w3id.org/semsynth/demo#__main__.py#write_manifest-20260320T1517"
+    },
+    {
+      "id": "https://w3id.org/semsynth/demo#__main__.py#report-20260320T1517",
+      "type": "prov:Activity",
+      "startedAtTime": "2026-03-20T15:17:02.156883+00:00",
+      "endedAtTime": "2026-03-20T15:17:15.255544+00:00",
+      "wasAssociatedWith": "https://w3id.org/semsynth/demo#__main__.py",
+      "used": [
+        "https://w3id.org/semsynth/demo#env-b7b3b6f74caf"
+      ]
+    },
+    {
+      "id": "https://w3id.org/semsynth/demo#__main__.py#preprocess-20260320T1516",
+      "type": "prov:Activity",
+      "startedAtTime": "2026-03-20T15:16:50.979308+00:00",
+      "endedAtTime": "2026-03-20T15:16:52.074439+00:00",
+      "wasAssociatedWith": "https://w3id.org/semsynth/demo#__main__.py",
+      "used": [
+        "https://w3id.org/semsynth/demo#env-b7b3b6f74caf"
+      ]
+    },
+    {
+      "id": "https://w3id.org/semsynth/demo#__main__.py#generate_synthetic_umaps-20260320T1516",
+      "type": "prov:Activity",
+      "startedAtTime": "2026-03-20T15:16:55.770738+00:00",
+      "endedAtTime": "2026-03-20T15:16:55.770829+00:00",
+      "wasAssociatedWith": "https://w3id.org/semsynth/demo#__main__.py",
+      "used": [
+        "https://w3id.org/semsynth/demo#env-b7b3b6f74caf"
+      ]
+    },
+    {
+      "id": "https://w3id.org/semsynth/demo#output/Hepatitis/models/metasyn/metrics.json",
+      "type": "prov:Entity",
+      "format": "application/json",
+      "extent": 318,
+      "modified": "2026-03-20T15:17:36.203684+00:00",
+      "wasGeneratedBy": "https://w3id.org/semsynth/demo#__main__.py#run_models-20260320T1517"
+    },
+    {
+      "id": "https://w3id.org/semsynth/demo#output/UCI_1150/models/metasyn/synthetic.csv",
+      "type": "prov:Entity",
+      "format": "text/csv",
+      "extent": 188296,
+      "modified": "2026-03-20T15:16:29.391268+00:00",
+      "wasGeneratedBy": "https://w3id.org/semsynth/demo#__main__.py#run_models-20260320T1516"
+    },
+    {
+      "id": "https://w3id.org/semsynth/demo#output/Fertility",
+      "type": "prov:Entity",
+      "format": "application/octet-stream",
+      "extent": 288,
+      "modified": "2026-03-16T15:49:52.535058+00:00",
+      "wasGeneratedBy": "https://w3id.org/semsynth/demo#__main__.py#write_report-20260320T1517"
+    },
+    {
+      "id": "https://w3id.org/semsynth/demo#__main__.py#load_uciml_by_id-20260320T1517",
+      "type": "prov:Activity",
+      "startedAtTime": "2026-03-20T15:17:02.403556+00:00",
+      "endedAtTime": "2026-03-20T15:17:03.331399+00:00",
+      "wasAssociatedWith": "https://w3id.org/semsynth/demo#__main__.py",
+      "used": [
+        "https://w3id.org/semsynth/demo#env-b7b3b6f74caf"
+      ]
+    },
+    {
+      "id": "https://w3id.org/semsynth/demo#output/Diabetes 130-US Hospitals for Years 1999-2008/models/metasyn/metrics.privacy.json",
+      "type": "prov:Entity",
+      "format": "application/json",
+      "extent": 642,
+      "modified": "2026-03-20T15:17:09.671433+00:00",
+      "wasGeneratedBy": "https://w3id.org/semsynth/demo#__main__.py#run_models-20260320T1517"
+    },
+    {
+      "id": "https://w3id.org/semsynth/demo#__main__.py#load_uciml_by_id-20260320T1516",
+      "type": "prov:Activity",
+      "startedAtTime": "2026-03-20T15:16:50.705140+00:00",
+      "endedAtTime": "2026-03-20T15:16:50.718454+00:00",
+      "wasAssociatedWith": "https://w3id.org/semsynth/demo#__main__.py",
+      "used": [
+        "https://w3id.org/semsynth/demo#env-b7b3b6f74caf"
+      ]
+    },
+    {
+      "id": "https://w3id.org/semsynth/demo#output/Statlog (Heart)",
+      "type": "prov:Entity",
+      "format": "application/octet-stream",
+      "extent": 256,
+      "modified": "2026-03-16T15:49:44.918420+00:00",
+      "wasGeneratedBy": "https://w3id.org/semsynth/demo#__main__.py#write_report-20260320T1516"
+    },
+    {
+      "id": "https://w3id.org/semsynth/demo#output/Statlog (Heart)/models/metasyn/metrics.downstream.json",
+      "type": "prov:Entity",
+      "format": "application/json",
+      "extent": 390,
+      "modified": "2026-03-20T12:42:20.221946+00:00",
+      "wasGeneratedBy": "https://w3id.org/semsynth/demo#__main__.py#run_models-20260320T1516"
+    },
+    {
+      "id": "https://w3id.org/semsynth/demo#output",
+      "type": "prov:Entity",
+      "format": "application/octet-stream",
+      "extent": 608,
+      "modified": "2026-03-18T18:39:58.037347+00:00",
+      "wasGeneratedBy": "https://w3id.org/semsynth/demo#__main__.py#process_dataset-20260320T1516"
+    },
+    {
+      "id": "https://w3id.org/semsynth/demo#__main__.py#write_manifest-20260320T1517",
+      "type": "prov:Activity",
+      "startedAtTime": "2026-03-20T15:17:09.047210+00:00",
+      "endedAtTime": "2026-03-20T15:17:09.047592+00:00",
+      "wasAssociatedWith": "https://w3id.org/semsynth/demo#__main__.py",
+      "used": [
+        "https://w3id.org/semsynth/demo#env-b7b3b6f74caf"
+      ]
+    },
+    {
+      "id": "https://w3id.org/semsynth/demo#output/Fertility/models/metasyn/per_variable_metrics.csv",
+      "type": "prov:Entity",
+      "format": "text/csv",
+      "extent": 457,
+      "modified": "2026-03-20T15:16:58.856086+00:00",
+      "wasGeneratedBy": "https://w3id.org/semsynth/demo#__main__.py#run_models-20260320T1516"
+    },
+    {
+      "id": "https://w3id.org/semsynth/demo#__main__.py#run_models-20260320T1517",
+      "type": "prov:Activity",
+      "startedAtTime": "2026-03-20T15:17:51.619891+00:00",
+      "endedAtTime": "2026-03-20T15:17:58.033916+00:00",
+      "wasAssociatedWith": "https://w3id.org/semsynth/demo#__main__.py",
+      "used": [
+        "https://w3id.org/semsynth/demo#env-b7b3b6f74caf"
+      ]
+    },
+    {
+      "id": "https://w3id.org/semsynth/demo#__main__.py#load_dataset-20260320T1516",
+      "type": "prov:Activity",
+      "startedAtTime": "2026-03-20T15:16:50.704801+00:00",
+      "endedAtTime": "2026-03-20T15:16:50.852824+00:00",
+      "wasAssociatedWith": "https://w3id.org/semsynth/demo#__main__.py",
+      "used": [
+        "https://w3id.org/semsynth/demo#env-b7b3b6f74caf"
+      ]
+    },
+    {
+      "id": "https://w3id.org/semsynth/demo#__main__.py#run_models-20260320T1516",
+      "type": "prov:Activity",
+      "startedAtTime": "2026-03-20T15:16:52.207171+00:00",
+      "endedAtTime": "2026-03-20T15:16:54.038883+00:00",
+      "wasAssociatedWith": "https://w3id.org/semsynth/demo#__main__.py",
+      "used": [
+        "https://w3id.org/semsynth/demo#env-b7b3b6f74caf"
+      ]
+    },
+    {
+      "id": "https://w3id.org/semsynth/demo#output/Statlog (Heart)",
+      "type": "prov:Entity",
+      "format": "application/octet-stream",
+      "extent": 256,
+      "modified": "2026-03-16T15:49:44.918420+00:00",
+      "wasGeneratedBy": "https://w3id.org/semsynth/demo#__main__.py#preprocess-20260320T1516"
+    },
+    {
+      "id": "https://w3id.org/semsynth/demo#__main__.py#write_report_md-20260320T1517",
+      "type": "prov:Activity",
+      "startedAtTime": "2026-03-20T15:17:14.681782+00:00",
+      "endedAtTime": "2026-03-20T15:17:14.882061+00:00",
+      "wasAssociatedWith": "https://w3id.org/semsynth/demo#__main__.py",
+      "used": [
+        "https://w3id.org/semsynth/demo#env-b7b3b6f74caf"
+      ]
+    },
+    {
+      "id": "https://w3id.org/semsynth/demo#__main__.py#preprocess-20260320T1517",
+      "type": "prov:Activity",
+      "startedAtTime": "2026-03-20T15:17:23.209231+00:00",
+      "endedAtTime": "2026-03-20T15:17:24.052493+00:00",
+      "wasAssociatedWith": "https://w3id.org/semsynth/demo#__main__.py",
+      "used": [
+        "https://w3id.org/semsynth/demo#env-b7b3b6f74caf"
+      ]
+    },
+    {
+      "id": "https://w3id.org/semsynth/demo#output/Autistic Spectrum Disorder Screening Data for Children/models/metasyn/umap.png",
+      "type": "prov:Entity",
+      "format": "image/png",
+      "extent": 17339,
+      "modified": "2026-03-16T15:50:37.545861+00:00",
+      "wasGeneratedBy": "https://w3id.org/semsynth/demo#__main__.py#run_models-20260320T1517"
+    },
+    {
+      "id": "https://w3id.org/semsynth/demo#__main__.py#discover_model_runs-20260320T1517",
+      "type": "prov:Activity",
+      "startedAtTime": "2026-03-20T15:17:32.790712+00:00",
+      "endedAtTime": "2026-03-20T15:17:32.792275+00:00",
+      "wasAssociatedWith": "https://w3id.org/semsynth/demo#__main__.py",
+      "used": [
+        "https://w3id.org/semsynth/demo#env-b7b3b6f74caf"
+      ]
+    },
+    {
+      "id": "https://w3id.org/semsynth/demo#output/Diabetes 130-US Hospitals for Years 1999-2008",
+      "type": "prov:Entity",
+      "format": "application/octet-stream",
+      "extent": 256,
+      "modified": "2026-03-16T15:50:05.209100+00:00",
+      "wasGeneratedBy": "https://w3id.org/semsynth/demo#__main__.py#preprocess-20260320T1517"
+    },
+    {
+      "id": "https://w3id.org/semsynth/demo#output/Autistic Spectrum Disorder Screening Data for Children",
+      "type": "prov:Entity",
+      "format": "application/octet-stream",
+      "extent": 256,
+      "modified": "2026-03-16T15:50:34.008723+00:00",
+      "wasGeneratedBy": "https://w3id.org/semsynth/demo#__main__.py#run_models-20260320T1517"
+    },
+    {
+      "id": "https://w3id.org/semsynth/demo#output/Hepatitis",
+      "type": "prov:Entity",
+      "format": "application/octet-stream",
+      "extent": 256,
+      "modified": "2026-03-16T15:50:45.896313+00:00",
+      "wasGeneratedBy": "https://w3id.org/semsynth/demo#__main__.py#model_run_root-20260320T1517"
+    },
+    {
+      "id": "https://w3id.org/semsynth/demo#__main__.py#discover_model_runs-20260320T1517",
+      "type": "prov:Activity",
+      "startedAtTime": "2026-03-20T15:17:38.450647+00:00",
+      "endedAtTime": "2026-03-20T15:17:38.452095+00:00",
+      "wasAssociatedWith": "https://w3id.org/semsynth/demo#__main__.py",
+      "used": [
+        "https://w3id.org/semsynth/demo#env-b7b3b6f74caf"
+      ]
+    },
+    {
+      "id": "https://w3id.org/semsynth/demo#output/CDC Diabetes Health Indicators",
+      "type": "prov:Entity",
+      "format": "application/octet-stream",
+      "extent": 288,
+      "modified": "2026-03-16T15:51:05.860321+00:00",
+      "wasGeneratedBy": "https://w3id.org/semsynth/demo#__main__.py#preprocess-20260320T1517"
+    },
+    {
+      "id": "https://w3id.org/semsynth/demo#__main__.py#preprocess-20260320T1517",
+      "type": "prov:Activity",
+      "startedAtTime": "2026-03-20T15:17:03.769258+00:00",
+      "endedAtTime": "2026-03-20T15:17:05.538406+00:00",
+      "wasAssociatedWith": "https://w3id.org/semsynth/demo#__main__.py",
+      "used": [
+        "https://w3id.org/semsynth/demo#env-b7b3b6f74caf"
+      ]
+    },
+    {
+      "id": "https://w3id.org/semsynth/demo#output/CDC Diabetes Health Indicators",
+      "type": "prov:Entity",
+      "format": "application/octet-stream",
+      "extent": 288,
+      "modified": "2026-03-16T15:51:05.860321+00:00",
+      "wasGeneratedBy": "https://w3id.org/semsynth/demo#__main__.py#write_report-20260320T1518"
+    },
+    {
+      "id": "https://w3id.org/semsynth/demo#__main__.py#model_run_root-20260320T1516",
+      "type": "prov:Activity",
+      "startedAtTime": "2026-03-20T15:16:57.607478+00:00",
+      "endedAtTime": "2026-03-20T15:16:57.607591+00:00",
+      "wasAssociatedWith": "https://w3id.org/semsynth/demo#__main__.py",
+      "used": [
+        "https://w3id.org/semsynth/demo#env-b7b3b6f74caf"
+      ]
+    },
+    {
+      "id": "https://w3id.org/semsynth/demo#output/UCI_1150/models/metasyn/umap.png",
+      "type": "prov:Entity",
+      "format": "image/png",
+      "extent": 15128,
+      "modified": "2026-03-16T15:49:41.212832+00:00",
+      "wasGeneratedBy": "https://w3id.org/semsynth/demo#__main__.py#run_models-20260320T1516"
+    },
+    {
+      "id": "https://w3id.org/semsynth/demo#output/UCI_1150/models/metasyn/manifest.json",
+      "type": "prov:Entity",
+      "format": "application/json",
+      "extent": 188,
+      "modified": "2026-03-20T15:16:29.608371+00:00",
+      "wasGeneratedBy": "https://w3id.org/semsynth/demo#__main__.py#run_models-20260320T1516"
+    },
+    {
+      "id": "https://w3id.org/semsynth/demo#output/Statlog (Heart)",
+      "type": "prov:Entity",
+      "format": "application/octet-stream",
+      "extent": 256,
+      "modified": "2026-03-16T15:49:44.918420+00:00",
+      "wasGeneratedBy": "https://w3id.org/semsynth/demo#__main__.py#run_models-20260320T1516"
+    },
+    {
+      "id": "https://w3id.org/semsynth/demo#output/Diabetes 130-US Hospitals for Years 1999-2008/models/metasyn/synthetic.semmap.parquet",
+      "type": "prov:Entity",
+      "format": "application/octet-stream",
+      "extent": 128139,
+      "modified": "2026-03-20T15:17:08.889703+00:00",
+      "wasGeneratedBy": "https://w3id.org/semsynth/demo#__main__.py#run_models-20260320T1517"
+    },
+    {
+      "id": "https://w3id.org/semsynth/demo#__main__.py#preprocess-20260320T1517",
+      "type": "prov:Activity",
+      "startedAtTime": "2026-03-20T15:17:28.722121+00:00",
+      "endedAtTime": "2026-03-20T15:17:29.530853+00:00",
+      "wasAssociatedWith": "https://w3id.org/semsynth/demo#__main__.py",
+      "used": [
+        "https://w3id.org/semsynth/demo#env-b7b3b6f74caf"
+      ]
+    },
+    {
+      "id": "https://w3id.org/semsynth/demo#__main__.py#process_dataset-20260320T1517",
+      "type": "prov:Activity",
+      "startedAtTime": "2026-03-20T15:17:28.721691+00:00",
+      "endedAtTime": "2026-03-20T15:17:33.404465+00:00",
+      "wasAssociatedWith": "https://w3id.org/semsynth/demo#__main__.py",
+      "used": [
+        "https://w3id.org/semsynth/demo#env-b7b3b6f74caf"
+      ]
+    },
+    {
+      "id": "https://w3id.org/semsynth/demo#output/CDC Diabetes Health Indicators/models/metasyn/umap.png",
+      "type": "prov:Entity",
+      "format": "image/png",
+      "extent": 24164,
+      "modified": "2026-03-16T15:51:16.378173+00:00",
+      "wasGeneratedBy": "https://w3id.org/semsynth/demo#__main__.py#run_models-20260320T1517"
+    },
+    {
+      "id": "https://w3id.org/semsynth/demo#__main__.py#write_privacy-20260320T1517",
+      "type": "prov:Activity",
+      "startedAtTime": "2026-03-20T15:17:09.194095+00:00",
+      "endedAtTime": "2026-03-20T15:17:09.671567+00:00",
+      "wasAssociatedWith": "https://w3id.org/semsynth/demo#__main__.py",
+      "used": [
+        "https://w3id.org/semsynth/demo#env-b7b3b6f74caf"
+      ]
+    },
+    {
+      "id": "https://w3id.org/semsynth/demo#output/Fertility/models/metasyn/metrics.json",
+      "type": "prov:Entity",
+      "format": "application/json",
+      "extent": 318,
+      "modified": "2026-03-20T15:16:58.858314+00:00",
+      "wasGeneratedBy": "https://w3id.org/semsynth/demo#__main__.py#run_models-20260320T1516"
+    },
+    {
+      "id": "https://w3id.org/semsynth/demo#output/Hepatitis/models/metasyn/manifest.json",
+      "type": "prov:Entity",
+      "format": "application/json",
+      "extent": 187,
+      "modified": "2026-03-20T15:17:36.204155+00:00",
+      "wasGeneratedBy": "https://w3id.org/semsynth/demo#__main__.py#run_models-20260320T1517"
+    },
+    {
+      "id": "https://w3id.org/semsynth/demo#__main__.py#write_report-20260320T1517",
+      "type": "prov:Activity",
+      "startedAtTime": "2026-03-20T15:17:01.592255+00:00",
+      "endedAtTime": "2026-03-20T15:17:01.787567+00:00",
+      "wasAssociatedWith": "https://w3id.org/semsynth/demo#__main__.py",
+      "used": [
+        "https://w3id.org/semsynth/demo#env-b7b3b6f74caf"
+      ]
+    },
+    {
+      "id": "https://w3id.org/semsynth/demo#__main__.py#generate_synthetic_umaps-20260320T1517",
+      "type": "prov:Activity",
+      "startedAtTime": "2026-03-20T15:17:32.947717+00:00",
+      "endedAtTime": "2026-03-20T15:17:32.947796+00:00",
+      "wasAssociatedWith": "https://w3id.org/semsynth/demo#__main__.py",
+      "used": [
+        "https://w3id.org/semsynth/demo#env-b7b3b6f74caf"
+      ]
+    },
+    {
+      "id": "https://w3id.org/semsynth/demo#__main__.py#write_privacy-20260320T1517",
+      "type": "prov:Activity",
+      "startedAtTime": "2026-03-20T15:17:53.661961+00:00",
+      "endedAtTime": "2026-03-20T15:17:57.900655+00:00",
+      "wasAssociatedWith": "https://w3id.org/semsynth/demo#__main__.py",
+      "used": [
+        "https://w3id.org/semsynth/demo#env-b7b3b6f74caf"
+      ]
+    },
+    {
+      "id": "https://w3id.org/semsynth/demo#__main__.py#load_model_configs-20260320T1517",
+      "type": "prov:Activity",
+      "startedAtTime": "2026-03-20T15:17:22.820778+00:00",
+      "endedAtTime": "2026-03-20T15:17:22.821038+00:00",
+      "wasAssociatedWith": "https://w3id.org/semsynth/demo#__main__.py",
+      "used": [
+        "https://w3id.org/semsynth/demo#env-b7b3b6f74caf"
+      ]
+    },
+    {
+      "id": "https://w3id.org/semsynth/demo#__main__.py#generate_synthetic_umaps-20260320T1516",
+      "type": "prov:Activity",
+      "startedAtTime": "2026-03-20T15:16:49.347833+00:00",
+      "endedAtTime": "2026-03-20T15:16:49.347941+00:00",
+      "wasAssociatedWith": "https://w3id.org/semsynth/demo#__main__.py",
+      "used": [
+        "https://w3id.org/semsynth/demo#env-b7b3b6f74caf"
+      ]
+    },
+    {
+      "id": "https://w3id.org/semsynth/demo#output",
+      "type": "prov:Entity",
+      "format": "application/octet-stream",
+      "extent": 608,
+      "modified": "2026-03-18T18:39:58.037347+00:00",
+      "wasGeneratedBy": "https://w3id.org/semsynth/demo#__main__.py#process_dataset-20260320T1517"
+    },
+    {
+      "id": "https://w3id.org/semsynth/demo#__main__.py#load_model_configs-20260320T1517",
+      "type": "prov:Activity",
+      "startedAtTime": "2026-03-20T15:17:33.779828+00:00",
+      "endedAtTime": "2026-03-20T15:17:33.780098+00:00",
+      "wasAssociatedWith": "https://w3id.org/semsynth/demo#__main__.py",
+      "used": [
+        "https://w3id.org/semsynth/demo#env-b7b3b6f74caf"
+      ]
+    },
+    {
+      "id": "https://w3id.org/semsynth/demo#output/Fertility/models/metasyn/manifest.json",
+      "type": "prov:Entity",
+      "format": "application/json",
+      "extent": 188,
+      "modified": "2026-03-20T15:16:58.858770+00:00",
+      "wasGeneratedBy": "https://w3id.org/semsynth/demo#__main__.py#run_models-20260320T1516"
+    },
+    {
+      "id": "https://w3id.org/semsynth/demo#output/Fertility/models/metasyn/umap.png",
+      "type": "prov:Entity",
+      "format": "image/png",
+      "extent": 9434,
+      "modified": "2026-03-16T15:49:57.418281+00:00",
+      "wasGeneratedBy": "https://w3id.org/semsynth/demo#__main__.py#run_models-20260320T1516"
+    },
+    {
+      "id": "https://w3id.org/semsynth/demo#output/Diabetes 130-US Hospitals for Years 1999-2008",
+      "type": "prov:Entity",
+      "format": "application/octet-stream",
+      "extent": 256,
+      "modified": "2026-03-16T15:50:05.209100+00:00",
+      "wasGeneratedBy": "https://w3id.org/semsynth/demo#__main__.py#write_report_md-20260320T1517"
+    },
+    {
+      "id": "https://w3id.org/semsynth/demo#output/Statlog (Heart)/models/metasyn/provenance.json",
+      "type": "prov:Entity",
+      "format": "application/json",
+      "extent": 4543,
+      "modified": "2026-03-20T15:16:54.038414+00:00",
+      "wasGeneratedBy": "https://w3id.org/semsynth/demo#__main__.py#run_models-20260320T1516"
+    },
+    {
+      "id": "https://w3id.org/semsynth/demo#output/Heart Disease/models/metasyn/metrics.privacy.json",
+      "type": "prov:Entity",
+      "format": "application/json",
+      "extent": 871,
+      "modified": "2026-03-20T15:17:31.258504+00:00",
+      "wasGeneratedBy": "https://w3id.org/semsynth/demo#__main__.py#run_models-20260320T1517"
+    },
+    {
+      "id": "https://w3id.org/semsynth/demo#__main__.py#write_report_md-20260320T1518",
+      "type": "prov:Activity",
+      "startedAtTime": "2026-03-20T15:18:01.848739+00:00",
+      "endedAtTime": "2026-03-20T15:18:02.055910+00:00",
+      "wasAssociatedWith": "https://w3id.org/semsynth/demo#__main__.py",
+      "used": [
+        "https://w3id.org/semsynth/demo#env-b7b3b6f74caf"
+      ]
+    },
+    {
+      "id": "https://w3id.org/semsynth/demo#output/UCI_1150/models/metasyn/metrics.privacy.json",
+      "type": "prov:Entity",
+      "format": "application/json",
+      "extent": 620,
+      "modified": "2026-03-20T15:16:47.617186+00:00",
+      "wasGeneratedBy": "https://w3id.org/semsynth/demo#__main__.py#run_models-20260320T1516"
+    },
+    {
+      "id": "https://w3id.org/semsynth/demo#__main__.py#load_dataset-20260320T1517",
+      "type": "prov:Activity",
+      "startedAtTime": "2026-03-20T15:17:33.905114+00:00",
+      "endedAtTime": "2026-03-20T15:17:34.039689+00:00",
+      "wasAssociatedWith": "https://w3id.org/semsynth/demo#__main__.py",
+      "used": [
+        "https://w3id.org/semsynth/demo#env-b7b3b6f74caf"
+      ]
+    },
+    {
+      "id": "https://w3id.org/semsynth/demo#__main__.py#discover_model_runs-20260320T1516",
+      "type": "prov:Activity",
+      "startedAtTime": "2026-03-20T15:16:55.632310+00:00",
+      "endedAtTime": "2026-03-20T15:16:55.633492+00:00",
+      "wasAssociatedWith": "https://w3id.org/semsynth/demo#__main__.py",
+      "used": [
+        "https://w3id.org/semsynth/demo#env-b7b3b6f74caf"
+      ]
+    },
+    {
+      "id": "https://w3id.org/semsynth/demo#output/Chronic Kidney Disease/models/metasyn/metrics.json",
+      "type": "prov:Entity",
+      "format": "application/json",
+      "extent": 320,
+      "modified": "2026-03-20T15:17:19.430611+00:00",
+      "wasGeneratedBy": "https://w3id.org/semsynth/demo#__main__.py#run_models-20260320T1517"
+    },
+    {
+      "id": "https://w3id.org/semsynth/demo#output/Fertility/models/metasyn/synthetic.semmap.parquet",
+      "type": "prov:Entity",
+      "format": "application/octet-stream",
+      "extent": 20057,
+      "modified": "2026-03-20T15:16:58.828012+00:00",
+      "wasGeneratedBy": "https://w3id.org/semsynth/demo#__main__.py#run_models-20260320T1516"
+    },
+    {
+      "id": "https://w3id.org/semsynth/demo#__main__.py#specs_from_input-20260320T1517",
+      "type": "prov:Activity",
+      "startedAtTime": "2026-03-20T15:17:33.650190+00:00",
+      "endedAtTime": "2026-03-20T15:17:33.650280+00:00",
+      "wasAssociatedWith": "https://w3id.org/semsynth/demo#__main__.py",
+      "used": [
+        "https://w3id.org/semsynth/demo#env-b7b3b6f74caf"
+      ]
+    },
+    {
+      "id": "https://w3id.org/semsynth/demo#__main__.py#preprocess-20260320T1516",
+      "type": "prov:Activity",
+      "startedAtTime": "2026-03-20T15:16:01.537917+00:00",
+      "endedAtTime": "2026-03-20T15:16:24.784597+00:00",
+      "wasAssociatedWith": "https://w3id.org/semsynth/demo#__main__.py",
+      "used": [
+        "https://w3id.org/semsynth/demo#env-b7b3b6f74caf"
+      ]
+    },
+    {
+      "id": "https://w3id.org/semsynth/demo#__main__.py#write_report-20260320T1517",
+      "type": "prov:Activity",
+      "startedAtTime": "2026-03-20T15:17:38.712198+00:00",
+      "endedAtTime": "2026-03-20T15:17:38.927248+00:00",
+      "wasAssociatedWith": "https://w3id.org/semsynth/demo#__main__.py",
+      "used": [
+        "https://w3id.org/semsynth/demo#env-b7b3b6f74caf"
+      ]
+    },
+    {
+      "id": "https://w3id.org/semsynth/demo#__main__.py#discover_model_runs-20260320T1517",
+      "type": "prov:Activity",
+      "startedAtTime": "2026-03-20T15:17:14.431154+00:00",
+      "endedAtTime": "2026-03-20T15:17:14.432111+00:00",
+      "wasAssociatedWith": "https://w3id.org/semsynth/demo#__main__.py",
+      "used": [
+        "https://w3id.org/semsynth/demo#env-b7b3b6f74caf"
+      ]
+    },
+    {
+      "id": "https://w3id.org/semsynth/demo#__main__.py#specs_from_input-20260320T1516",
+      "type": "prov:Activity",
+      "startedAtTime": "2026-03-20T15:16:00.802198+00:00",
+      "endedAtTime": "2026-03-20T15:16:00.802310+00:00",
+      "wasAssociatedWith": "https://w3id.org/semsynth/demo#__main__.py",
+      "used": [
+        "https://w3id.org/semsynth/demo#env-b7b3b6f74caf"
+      ]
+    },
+    {
+      "id": "https://w3id.org/semsynth/demo#__main__.py#write_report_md-20260320T1517",
+      "type": "prov:Activity",
+      "startedAtTime": "2026-03-20T15:17:22.088753+00:00",
+      "endedAtTime": "2026-03-20T15:17:22.198544+00:00",
+      "wasAssociatedWith": "https://w3id.org/semsynth/demo#__main__.py",
+      "used": [
+        "https://w3id.org/semsynth/demo#env-b7b3b6f74caf"
+      ]
+    },
+    {
+      "id": "https://w3id.org/semsynth/demo#__main__.py#load_model_configs-20260320T1516",
+      "type": "prov:Activity",
+      "startedAtTime": "2026-03-20T15:16:01.257775+00:00",
+      "endedAtTime": "2026-03-20T15:16:01.258320+00:00",
+      "wasAssociatedWith": "https://w3id.org/semsynth/demo#__main__.py",
+      "used": [
+        "https://w3id.org/semsynth/demo#env-b7b3b6f74caf"
+      ]
+    },
+    {
+      "id": "https://w3id.org/semsynth/demo#output/Chronic Kidney Disease/models/metasyn/synthetic.semmap.parquet",
+      "type": "prov:Entity",
+      "format": "application/octet-stream",
+      "extent": 93339,
+      "modified": "2026-03-20T15:17:19.348628+00:00",
+      "wasGeneratedBy": "https://w3id.org/semsynth/demo#__main__.py#run_models-20260320T1517"
+    },
+    {
+      "id": "https://w3id.org/semsynth/demo#output/UCI_1150",
+      "type": "prov:Entity",
+      "format": "application/octet-stream",
+      "extent": 320,
+      "modified": "2026-03-19T20:26:49.818830+00:00",
+      "wasGeneratedBy": "https://w3id.org/semsynth/demo#__main__.py#write_report_md-20260320T1516"
+    },
+    {
+      "id": "https://w3id.org/semsynth/demo#__main__.py#write_report_md-20260320T1516",
+      "type": "prov:Activity",
+      "startedAtTime": "2026-03-20T15:16:55.914356+00:00",
+      "endedAtTime": "2026-03-20T15:16:56.010296+00:00",
+      "wasAssociatedWith": "https://w3id.org/semsynth/demo#__main__.py",
+      "used": [
+        "https://w3id.org/semsynth/demo#env-b7b3b6f74caf"
+      ]
+    },
+    {
+      "id": "https://w3id.org/semsynth/demo#__main__.py#model_run_root-20260320T1517",
+      "type": "prov:Activity",
+      "startedAtTime": "2026-03-20T15:17:34.802103+00:00",
+      "endedAtTime": "2026-03-20T15:17:34.802217+00:00",
+      "wasAssociatedWith": "https://w3id.org/semsynth/demo#__main__.py",
+      "used": [
+        "https://w3id.org/semsynth/demo#env-b7b3b6f74caf"
+      ]
+    },
+    {
+      "id": "https://w3id.org/semsynth/demo#__main__.py#generate_synthetic_umaps-20260320T1517",
+      "type": "prov:Activity",
+      "startedAtTime": "2026-03-20T15:17:38.589189+00:00",
+      "endedAtTime": "2026-03-20T15:17:38.589271+00:00",
+      "wasAssociatedWith": "https://w3id.org/semsynth/demo#__main__.py",
+      "used": [
+        "https://w3id.org/semsynth/demo#env-b7b3b6f74caf"
+      ]
+    },
+    {
+      "id": "https://w3id.org/semsynth/demo#output/Autistic Spectrum Disorder Screening Data for Children/models/metasyn/synthetic.semmap.parquet",
+      "type": "prov:Entity",
+      "format": "application/octet-stream",
+      "extent": 28612,
+      "modified": "2026-03-20T15:17:25.168609+00:00",
+      "wasGeneratedBy": "https://w3id.org/semsynth/demo#__main__.py#run_models-20260320T1517"
+    },
+    {
+      "id": "https://w3id.org/semsynth/demo#output/CDC Diabetes Health Indicators/models/metasyn",
+      "type": "prov:Entity",
+      "format": "application/octet-stream",
+      "extent": 384,
+      "modified": "2026-03-20T09:28:56.647265+00:00",
+      "wasGeneratedBy": "https://w3id.org/semsynth/demo#__main__.py#write_manifest-20260320T1517"
+    },
+    {
+      "id": "https://w3id.org/semsynth/demo#__main__.py#model_run_root-20260320T1517",
+      "type": "prov:Activity",
+      "startedAtTime": "2026-03-20T15:17:29.668865+00:00",
+      "endedAtTime": "2026-03-20T15:17:29.668958+00:00",
+      "wasAssociatedWith": "https://w3id.org/semsynth/demo#__main__.py",
+      "used": [
+        "https://w3id.org/semsynth/demo#env-b7b3b6f74caf"
+      ]
+    },
+    {
+      "id": "https://w3id.org/semsynth/demo#output/UCI_1150",
+      "type": "prov:Entity",
+      "format": "application/octet-stream",
+      "extent": 320,
+      "modified": "2026-03-19T20:26:49.818830+00:00",
+      "wasGeneratedBy": "https://w3id.org/semsynth/demo#__main__.py#model_run_root-20260320T1516"
+    },
+    {
+      "id": "https://w3id.org/semsynth/demo#__main__.py#load_model_configs-20260320T1517",
+      "type": "prov:Activity",
+      "startedAtTime": "2026-03-20T15:17:39.423458+00:00",
+      "endedAtTime": "2026-03-20T15:17:39.423689+00:00",
+      "wasAssociatedWith": "https://w3id.org/semsynth/demo#__main__.py",
+      "used": [
+        "https://w3id.org/semsynth/demo#env-b7b3b6f74caf"
+      ]
+    },
+    {
+      "id": "https://w3id.org/semsynth/demo#__main__.py#load_uciml_by_id-20260320T1517",
+      "type": "prov:Activity",
+      "startedAtTime": "2026-03-20T15:17:39.547512+00:00",
+      "endedAtTime": "2026-03-20T15:17:40.008245+00:00",
+      "wasAssociatedWith": "https://w3id.org/semsynth/demo#__main__.py",
+      "used": [
+        "https://w3id.org/semsynth/demo#env-b7b3b6f74caf"
+      ]
+    },
+    {
+      "id": "https://w3id.org/semsynth/demo#downloads-cache/uciml",
+      "type": "prov:Entity",
+      "format": "application/octet-stream",
+      "extent": 608,
+      "modified": "2026-03-16T15:29:07.246053+00:00",
+      "wasGeneratedBy": "https://w3id.org/semsynth/demo#__main__.py#load_uciml_by_id-20260320T1517"
+    },
+    {
+      "id": "https://w3id.org/semsynth/demo#output/Diabetes 130-US Hospitals for Years 1999-2008",
+      "type": "prov:Entity",
+      "format": "application/octet-stream",
+      "extent": 256,
+      "modified": "2026-03-16T15:50:05.209100+00:00",
+      "wasGeneratedBy": "https://w3id.org/semsynth/demo#__main__.py#write_report-20260320T1517"
+    },
+    {
+      "id": "https://w3id.org/semsynth/demo#__main__.py#write_report-20260320T1517",
+      "type": "prov:Activity",
+      "startedAtTime": "2026-03-20T15:17:27.597078+00:00",
+      "endedAtTime": "2026-03-20T15:17:27.809142+00:00",
+      "wasAssociatedWith": "https://w3id.org/semsynth/demo#__main__.py",
+      "used": [
+        "https://w3id.org/semsynth/demo#env-b7b3b6f74caf"
+      ]
+    },
+    {
+      "id": "https://w3id.org/semsynth/demo#output/Autistic Spectrum Disorder Screening Data for Children",
+      "type": "prov:Entity",
+      "format": "application/octet-stream",
+      "extent": 256,
+      "modified": "2026-03-16T15:50:34.008723+00:00",
+      "wasGeneratedBy": "https://w3id.org/semsynth/demo#__main__.py#preprocess-20260320T1517"
+    },
+    {
+      "id": "https://w3id.org/semsynth/demo#__main__.py#generate_synthetic_umaps-20260320T1517",
+      "type": "prov:Activity",
+      "startedAtTime": "2026-03-20T15:17:14.557584+00:00",
+      "endedAtTime": "2026-03-20T15:17:14.557679+00:00",
+      "wasAssociatedWith": "https://w3id.org/semsynth/demo#__main__.py",
+      "used": [
+        "https://w3id.org/semsynth/demo#env-b7b3b6f74caf"
+      ]
+    },
+    {
+      "id": "https://w3id.org/semsynth/demo#__main__.py#model_run_root-20260320T1516",
+      "type": "prov:Activity",
+      "startedAtTime": "2026-03-20T15:16:52.215137+00:00",
+      "endedAtTime": "2026-03-20T15:16:52.215234+00:00",
+      "wasAssociatedWith": "https://w3id.org/semsynth/demo#__main__.py",
+      "used": [
+        "https://w3id.org/semsynth/demo#env-b7b3b6f74caf"
+      ]
+    },
+    {
+      "id": "https://w3id.org/semsynth/demo#__main__.py#write_privacy-20260320T1516",
+      "type": "prov:Activity",
+      "startedAtTime": "2026-03-20T15:16:53.579963+00:00",
+      "endedAtTime": "2026-03-20T15:16:53.878052+00:00",
+      "wasAssociatedWith": "https://w3id.org/semsynth/demo#__main__.py",
+      "used": [
+        "https://w3id.org/semsynth/demo#env-b7b3b6f74caf"
+      ]
+    },
+    {
+      "id": "https://w3id.org/semsynth/demo#__main__.py#preprocess-20260320T1517",
+      "type": "prov:Activity",
+      "startedAtTime": "2026-03-20T15:17:15.887231+00:00",
+      "endedAtTime": "2026-03-20T15:17:16.631617+00:00",
+      "wasAssociatedWith": "https://w3id.org/semsynth/demo#__main__.py",
+      "used": [
+        "https://w3id.org/semsynth/demo#env-b7b3b6f74caf"
+      ]
+    },
+    {
+      "id": "https://w3id.org/semsynth/demo#__main__.py#load_model_configs-20260320T1516",
+      "type": "prov:Activity",
+      "startedAtTime": "2026-03-20T15:16:56.649508+00:00",
+      "endedAtTime": "2026-03-20T15:16:56.649785+00:00",
+      "wasAssociatedWith": "https://w3id.org/semsynth/demo#__main__.py",
+      "used": [
+        "https://w3id.org/semsynth/demo#env-b7b3b6f74caf"
+      ]
+    },
+    {
+      "id": "https://w3id.org/semsynth/demo#__main__.py#preprocess-20260320T1517",
+      "type": "prov:Activity",
+      "startedAtTime": "2026-03-20T15:17:34.162762+00:00",
+      "endedAtTime": "2026-03-20T15:17:34.661744+00:00",
+      "wasAssociatedWith": "https://w3id.org/semsynth/demo#__main__.py",
+      "used": [
+        "https://w3id.org/semsynth/demo#env-b7b3b6f74caf"
+      ]
+    },
+    {
+      "id": "https://w3id.org/semsynth/demo#__main__.py#load_model_configs-20260320T1517",
+      "type": "prov:Activity",
+      "startedAtTime": "2026-03-20T15:17:28.309460+00:00",
+      "endedAtTime": "2026-03-20T15:17:28.309723+00:00",
+      "wasAssociatedWith": "https://w3id.org/semsynth/demo#__main__.py",
+      "used": [
+        "https://w3id.org/semsynth/demo#env-b7b3b6f74caf"
+      ]
+    },
+    {
+      "id": "https://w3id.org/semsynth/demo#__main__.py#report-20260320T1516",
+      "type": "prov:Activity",
+      "startedAtTime": "2026-03-20T15:16:00.659232+00:00",
+      "endedAtTime": "2026-03-20T15:16:50.239736+00:00",
+      "wasAssociatedWith": "https://w3id.org/semsynth/demo#__main__.py",
+      "used": [
+        "https://w3id.org/semsynth/demo#env-b7b3b6f74caf"
+      ]
+    },
+    {
+      "id": "https://w3id.org/semsynth/demo#__main__.py#load_uciml_by_id-20260320T1517",
+      "type": "prov:Activity",
+      "startedAtTime": "2026-03-20T15:17:22.950176+00:00",
+      "endedAtTime": "2026-03-20T15:17:22.960626+00:00",
+      "wasAssociatedWith": "https://w3id.org/semsynth/demo#__main__.py",
+      "used": [
+        "https://w3id.org/semsynth/demo#env-b7b3b6f74caf"
+      ]
+    },
+    {
+      "id": "https://w3id.org/semsynth/demo#downloads-cache/openml",
+      "type": "prov:Entity",
+      "format": "application/octet-stream",
+      "extent": 64,
+      "modified": "2026-03-13T15:30:49.710604+00:00",
+      "wasGeneratedBy": "https://w3id.org/semsynth/demo#__main__.py#specs_from_input-20260320T1516"
+    },
+    {
+      "id": "https://w3id.org/semsynth/demo#output/Hepatitis/models/metasyn/provenance.json",
+      "type": "prov:Entity",
+      "format": "application/json",
+      "extent": 4525,
+      "modified": "2026-03-20T15:17:36.763331+00:00",
+      "wasGeneratedBy": "https://w3id.org/semsynth/demo#__main__.py#run_models-20260320T1517"
+    },
+    {
+      "id": "https://w3id.org/semsynth/demo#output/CDC Diabetes Health Indicators/models/metasyn/synthetic.semmap.parquet",
+      "type": "prov:Entity",
+      "format": "application/octet-stream",
+      "extent": 80684,
+      "modified": "2026-03-20T15:17:53.425310+00:00",
+      "wasGeneratedBy": "https://w3id.org/semsynth/demo#__main__.py#run_models-20260320T1517"
+    },
+    {
+      "id": "https://w3id.org/semsynth/demo#output/Diabetes 130-US Hospitals for Years 1999-2008/models/metasyn/umap.png",
+      "type": "prov:Entity",
+      "format": "image/png",
+      "extent": 29730,
+      "modified": "2026-03-16T15:50:19.747848+00:00",
+      "wasGeneratedBy": "https://w3id.org/semsynth/demo#__main__.py#run_models-20260320T1517"
+    },
+    {
+      "id": "https://w3id.org/semsynth/demo#__main__.py#write_privacy-20260320T1517",
+      "type": "prov:Activity",
+      "startedAtTime": "2026-03-20T15:17:36.338427+00:00",
+      "endedAtTime": "2026-03-20T15:17:36.619681+00:00",
+      "wasAssociatedWith": "https://w3id.org/semsynth/demo#__main__.py",
+      "used": [
+        "https://w3id.org/semsynth/demo#env-b7b3b6f74caf"
+      ]
+    },
+    {
+      "id": "https://w3id.org/semsynth/demo#output/Diabetes 130-US Hospitals for Years 1999-2008",
+      "type": "prov:Entity",
+      "format": "application/octet-stream",
+      "extent": 256,
+      "modified": "2026-03-16T15:50:05.209100+00:00",
+      "wasGeneratedBy": "https://w3id.org/semsynth/demo#__main__.py#model_run_root-20260320T1517"
+    },
+    {
+      "id": "https://w3id.org/semsynth/demo#output/Chronic Kidney Disease",
+      "type": "prov:Entity",
+      "format": "application/octet-stream",
+      "extent": 288,
+      "modified": "2026-03-17T13:41:08.533265+00:00",
+      "wasGeneratedBy": "https://w3id.org/semsynth/demo#__main__.py#model_run_root-20260320T1517"
+    },
+    {
+      "id": "https://w3id.org/semsynth/demo#output/Heart Disease",
+      "type": "prov:Entity",
+      "format": "application/octet-stream",
+      "extent": 320,
+      "modified": "2026-03-18T16:28:07.986860+00:00",
+      "wasGeneratedBy": "https://w3id.org/semsynth/demo#__main__.py#model_run_root-20260320T1517"
+    },
+    {
+      "id": "https://w3id.org/semsynth/demo#__main__.py#load_uciml_by_id-20260320T1517",
+      "type": "prov:Activity",
+      "startedAtTime": "2026-03-20T15:17:33.905309+00:00",
+      "endedAtTime": "2026-03-20T15:17:33.915805+00:00",
+      "wasAssociatedWith": "https://w3id.org/semsynth/demo#__main__.py",
+      "used": [
+        "https://w3id.org/semsynth/demo#env-b7b3b6f74caf"
+      ]
+    },
+    {
+      "id": "https://w3id.org/semsynth/demo#output/Autistic Spectrum Disorder Screening Data for Children/models/metasyn/metrics.downstream.json",
+      "type": "prov:Entity",
+      "format": "application/json",
+      "extent": 431,
+      "modified": "2026-03-20T13:46:59.480038+00:00",
+      "wasGeneratedBy": "https://w3id.org/semsynth/demo#__main__.py#run_models-20260320T1517"
+    },
+    {
+      "id": "https://w3id.org/semsynth/demo#output/Hepatitis/models/metasyn/metrics.privacy.json",
+      "type": "prov:Entity",
+      "format": "application/json",
+      "extent": 1131,
+      "modified": "2026-03-20T15:17:36.619454+00:00",
+      "wasGeneratedBy": "https://w3id.org/semsynth/demo#__main__.py#run_models-20260320T1517"
+    },
+    {
+      "id": "https://w3id.org/semsynth/demo#output/Statlog (Heart)/models/metasyn/umap.png",
+      "type": "prov:Entity",
+      "format": "image/png",
+      "extent": 14933,
+      "modified": "2026-03-16T15:49:50.477563+00:00",
+      "wasGeneratedBy": "https://w3id.org/semsynth/demo#__main__.py#run_models-20260320T1516"
+    },
+    {
+      "id": "https://w3id.org/semsynth/demo#__main__.py#generate_synthetic_umaps-20260320T1517",
+      "type": "prov:Activity",
+      "startedAtTime": "2026-03-20T15:17:27.412833+00:00",
+      "endedAtTime": "2026-03-20T15:17:27.412923+00:00",
+      "wasAssociatedWith": "https://w3id.org/semsynth/demo#__main__.py",
+      "used": [
+        "https://w3id.org/semsynth/demo#env-b7b3b6f74caf"
+      ]
+    },
+    {
+      "id": "https://w3id.org/semsynth/demo#__main__.py",
+      "type": [
+        "prov:Agent",
+        "prov:SoftwareAgent",
+        "schema:SoftwareSourceCode"
+      ],
+      "label": "__main__.py",
+      "hasVersion": "eb05c8f1ddd8dc85cb1bd200cd2a41543c25a0bf",
+      "source": "https://github.com/bennokr/semsynth.git"
+    },
+    {
+      "id": "https://w3id.org/semsynth/demo#__main__.py#write_manifest-20260320T1516",
+      "type": "prov:Activity",
+      "startedAtTime": "2026-03-20T15:16:29.608074+00:00",
+      "endedAtTime": "2026-03-20T15:16:29.608456+00:00",
+      "wasAssociatedWith": "https://w3id.org/semsynth/demo#__main__.py",
+      "used": [
+        "https://w3id.org/semsynth/demo#env-b7b3b6f74caf"
+      ]
+    },
+    {
+      "id": "https://w3id.org/semsynth/demo#output/Hepatitis/models/metasyn/umap.png",
+      "type": "prov:Entity",
+      "format": "image/png",
+      "extent": 11278,
+      "modified": "2026-03-16T15:50:50.009764+00:00",
+      "wasGeneratedBy": "https://w3id.org/semsynth/demo#__main__.py#run_models-20260320T1517"
+    },
+    {
+      "id": "https://w3id.org/semsynth/demo#output/Fertility",
+      "type": "prov:Entity",
+      "format": "application/octet-stream",
+      "extent": 288,
+      "modified": "2026-03-16T15:49:52.535058+00:00",
+      "wasGeneratedBy": "https://w3id.org/semsynth/demo#__main__.py#model_run_root-20260320T1516"
+    },
+    {
+      "id": "https://w3id.org/semsynth/demo#output/Hepatitis/models/metasyn/metasyn_gmf.json",
+      "type": "prov:Entity",
+      "format": "application/json",
+      "extent": 21525,
+      "modified": "2026-03-20T15:17:35.805178+00:00",
+      "wasGeneratedBy": "https://w3id.org/semsynth/demo#__main__.py#run_models-20260320T1517"
+    },
+    {
+      "id": "https://w3id.org/semsynth/demo#output",
+      "type": "prov:Entity",
+      "format": "application/octet-stream",
+      "extent": 608,
+      "modified": "2026-03-18T18:39:58.037347+00:00",
+      "wasGeneratedBy": "https://w3id.org/semsynth/demo#__main__.py#report-20260320T1517"
+    },
+    {
+      "id": "https://w3id.org/semsynth/demo#output/CDC Diabetes Health Indicators/models/metasyn",
+      "type": "prov:Entity",
+      "format": "application/octet-stream",
+      "extent": 384,
+      "modified": "2026-03-20T09:28:56.647265+00:00",
+      "wasGeneratedBy": "https://w3id.org/semsynth/demo#__main__.py#write_privacy-20260320T1517"
+    },
+    {
+      "id": "https://w3id.org/semsynth/demo#__main__.py#write_report-20260320T1517",
+      "type": "prov:Activity",
+      "startedAtTime": "2026-03-20T15:17:22.088567+00:00",
+      "endedAtTime": "2026-03-20T15:17:22.320774+00:00",
+      "wasAssociatedWith": "https://w3id.org/semsynth/demo#__main__.py",
+      "used": [
+        "https://w3id.org/semsynth/demo#env-b7b3b6f74caf"
+      ]
+    },
+    {
+      "id": "https://w3id.org/semsynth/demo#__main__.py#report-20260320T1517",
+      "type": "prov:Activity",
+      "startedAtTime": "2026-03-20T15:17:28.186273+00:00",
+      "endedAtTime": "2026-03-20T15:17:33.526278+00:00",
+      "wasAssociatedWith": "https://w3id.org/semsynth/demo#__main__.py",
+      "used": [
+        "https://w3id.org/semsynth/demo#env-b7b3b6f74caf"
+      ]
+    },
+    {
+      "id": "https://w3id.org/semsynth/demo#__main__.py#load_dataset-20260320T1517",
+      "type": "prov:Activity",
+      "startedAtTime": "2026-03-20T15:17:28.467334+00:00",
+      "endedAtTime": "2026-03-20T15:17:28.599335+00:00",
+      "wasAssociatedWith": "https://w3id.org/semsynth/demo#__main__.py",
+      "used": [
+        "https://w3id.org/semsynth/demo#env-b7b3b6f74caf"
+      ]
+    },
+    {
+      "id": "https://w3id.org/semsynth/demo#__main__.py#write_manifest-20260320T1517",
+      "type": "prov:Activity",
+      "startedAtTime": "2026-03-20T15:17:25.242781+00:00",
+      "endedAtTime": "2026-03-20T15:17:25.243124+00:00",
+      "wasAssociatedWith": "https://w3id.org/semsynth/demo#__main__.py",
+      "used": [
+        "https://w3id.org/semsynth/demo#env-b7b3b6f74caf"
+      ]
+    },
+    {
+      "id": "https://w3id.org/semsynth/demo#__main__.py#preprocess-20260320T1516",
+      "type": "prov:Activity",
+      "startedAtTime": "2026-03-20T15:16:57.047106+00:00",
+      "endedAtTime": "2026-03-20T15:16:57.468390+00:00",
+      "wasAssociatedWith": "https://w3id.org/semsynth/demo#__main__.py",
+      "used": [
+        "https://w3id.org/semsynth/demo#env-b7b3b6f74caf"
+      ]
+    },
+    {
+      "id": "https://w3id.org/semsynth/demo#output/Chronic Kidney Disease/models/metasyn/metasyn_gmf.json",
+      "type": "prov:Entity",
+      "format": "application/json",
+      "extent": 27284,
+      "modified": "2026-03-20T15:17:18.718694+00:00",
+      "wasGeneratedBy": "https://w3id.org/semsynth/demo#__main__.py#run_models-20260320T1517"
+    },
+    {
+      "id": "https://w3id.org/semsynth/demo#output/Autistic Spectrum Disorder Screening Data for Children/models/metasyn",
+      "type": "prov:Entity",
+      "format": "application/octet-stream",
+      "extent": 384,
+      "modified": "2026-03-20T09:28:05.997891+00:00",
+      "wasGeneratedBy": "https://w3id.org/semsynth/demo#__main__.py#write_manifest-20260320T1517"
+    },
+    {
+      "id": "https://w3id.org/semsynth/demo#output/Autistic Spectrum Disorder Screening Data for Children",
+      "type": "prov:Entity",
+      "format": "application/octet-stream",
+      "extent": 256,
+      "modified": "2026-03-16T15:50:34.008723+00:00",
+      "wasGeneratedBy": "https://w3id.org/semsynth/demo#__main__.py#write_report_md-20260320T1517"
+    },
+    {
+      "id": "https://w3id.org/semsynth/demo#output/Hepatitis/models/metasyn/synthetic.csv",
+      "type": "prov:Entity",
+      "format": "text/csv",
+      "extent": 21597,
+      "modified": "2026-03-20T15:17:36.009606+00:00",
+      "wasGeneratedBy": "https://w3id.org/semsynth/demo#__main__.py#run_models-20260320T1517"
+    },
+    {
+      "id": "https://w3id.org/semsynth/demo#__main__.py#write_manifest-20260320T1517",
+      "type": "prov:Activity",
+      "startedAtTime": "2026-03-20T15:17:53.522198+00:00",
+      "endedAtTime": "2026-03-20T15:17:53.522546+00:00",
+      "wasAssociatedWith": "https://w3id.org/semsynth/demo#__main__.py",
+      "used": [
+        "https://w3id.org/semsynth/demo#env-b7b3b6f74caf"
+      ]
+    },
+    {
+      "id": "https://w3id.org/semsynth/demo#output/Chronic Kidney Disease/models/metasyn",
+      "type": "prov:Entity",
+      "format": "application/octet-stream",
+      "extent": 384,
+      "modified": "2026-03-20T09:14:24.817773+00:00",
+      "wasGeneratedBy": "https://w3id.org/semsynth/demo#__main__.py#write_privacy-20260320T1517"
+    },
+    {
+      "id": "https://w3id.org/semsynth/demo#output/UCI_1150/models/metasyn/metrics.json",
+      "type": "prov:Entity",
+      "format": "application/json",
+      "extent": 319,
+      "modified": "2026-03-20T15:16:29.607867+00:00",
+      "wasGeneratedBy": "https://w3id.org/semsynth/demo#__main__.py#run_models-20260320T1516"
+    },
+    {
+      "id": "https://w3id.org/semsynth/demo#__main__.py#run_models-20260320T1517",
+      "type": "prov:Activity",
+      "startedAtTime": "2026-03-20T15:17:29.657803+00:00",
+      "endedAtTime": "2026-03-20T15:17:31.396869+00:00",
+      "wasAssociatedWith": "https://w3id.org/semsynth/demo#__main__.py",
+      "used": [
+        "https://w3id.org/semsynth/demo#env-b7b3b6f74caf"
+      ]
+    },
+    {
+      "id": "https://w3id.org/semsynth/demo#__main__.py#model_run_root-20260320T1517",
+      "type": "prov:Activity",
+      "startedAtTime": "2026-03-20T15:17:05.680242+00:00",
+      "endedAtTime": "2026-03-20T15:17:05.680348+00:00",
+      "wasAssociatedWith": "https://w3id.org/semsynth/demo#__main__.py",
+      "used": [
+        "https://w3id.org/semsynth/demo#env-b7b3b6f74caf"
+      ]
+    },
+    {
+      "id": "https://w3id.org/semsynth/demo#__main__.py#report-20260320T1517",
+      "type": "prov:Activity",
+      "startedAtTime": "2026-03-20T15:17:33.650000+00:00",
+      "endedAtTime": "2026-03-20T15:17:39.176383+00:00",
+      "wasAssociatedWith": "https://w3id.org/semsynth/demo#__main__.py",
+      "used": [
+        "https://w3id.org/semsynth/demo#env-b7b3b6f74caf"
+      ]
+    },
+    {
+      "id": "https://w3id.org/semsynth/demo#__main__.py#process_dataset-20260320T1517",
+      "type": "prov:Activity",
+      "startedAtTime": "2026-03-20T15:17:03.768500+00:00",
+      "endedAtTime": "2026-03-20T15:17:15.132452+00:00",
+      "wasAssociatedWith": "https://w3id.org/semsynth/demo#__main__.py",
+      "used": [
+        "https://w3id.org/semsynth/demo#env-b7b3b6f74caf"
+      ]
+    },
+    {
+      "id": "https://w3id.org/semsynth/demo#output/Diabetes 130-US Hospitals for Years 1999-2008/models/metasyn/metrics.json",
+      "type": "prov:Entity",
+      "format": "application/json",
+      "extent": 321,
+      "modified": "2026-03-20T15:17:09.047000+00:00",
+      "wasGeneratedBy": "https://w3id.org/semsynth/demo#__main__.py#run_models-20260320T1517"
+    },
+    {
+      "id": "https://w3id.org/semsynth/demo#downloads-cache/uciml",
+      "type": "prov:Entity",
+      "format": "application/octet-stream",
+      "extent": 608,
+      "modified": "2026-03-16T15:29:07.246053+00:00",
+      "wasGeneratedBy": "https://w3id.org/semsynth/demo#__main__.py#specs_from_input-20260320T1517"
+    },
+    {
+      "id": "https://w3id.org/semsynth/demo#output/Diabetes 130-US Hospitals for Years 1999-2008/models/metasyn/manifest.json",
+      "type": "prov:Entity",
+      "format": "application/json",
+      "extent": 225,
+      "modified": "2026-03-20T15:17:09.047509+00:00",
+      "wasGeneratedBy": "https://w3id.org/semsynth/demo#__main__.py#run_models-20260320T1517"
+    },
+    {
+      "id": "https://w3id.org/semsynth/demo#output/Hepatitis",
+      "type": "prov:Entity",
+      "format": "application/octet-stream",
+      "extent": 256,
+      "modified": "2026-03-16T15:50:45.896313+00:00",
+      "wasGeneratedBy": "https://w3id.org/semsynth/demo#__main__.py#run_models-20260320T1517"
+    },
+    {
+      "id": "https://w3id.org/semsynth/demo#__main__.py#process_dataset-20260320T1516",
+      "type": "prov:Activity",
+      "startedAtTime": "2026-03-20T15:16:50.978848+00:00",
+      "endedAtTime": "2026-03-20T15:16:56.268908+00:00",
+      "wasAssociatedWith": "https://w3id.org/semsynth/demo#__main__.py",
+      "used": [
+        "https://w3id.org/semsynth/demo#env-b7b3b6f74caf"
+      ]
+    },
+    {
+      "id": "https://w3id.org/semsynth/demo#__main__.py#generate_synthetic_umaps-20260320T1518",
+      "type": "prov:Activity",
+      "startedAtTime": "2026-03-20T15:18:01.719280+00:00",
+      "endedAtTime": "2026-03-20T15:18:01.719361+00:00",
+      "wasAssociatedWith": "https://w3id.org/semsynth/demo#__main__.py",
+      "used": [
+        "https://w3id.org/semsynth/demo#env-b7b3b6f74caf"
+      ]
+    },
+    {
+      "id": "https://w3id.org/semsynth/demo#output/Autistic Spectrum Disorder Screening Data for Children",
+      "type": "prov:Entity",
+      "format": "application/octet-stream",
+      "extent": 256,
+      "modified": "2026-03-16T15:50:34.008723+00:00",
+      "wasGeneratedBy": "https://w3id.org/semsynth/demo#__main__.py#write_report-20260320T1517"
+    },
+    {
+      "id": "https://w3id.org/semsynth/demo#output/UCI_1150/models/metasyn/per_variable_metrics.csv",
+      "type": "prov:Entity",
+      "format": "text/csv",
+      "extent": 2672,
+      "modified": "2026-03-20T15:16:29.604331+00:00",
+      "wasGeneratedBy": "https://w3id.org/semsynth/demo#__main__.py#run_models-20260320T1516"
+    },
+    {
+      "id": "https://w3id.org/semsynth/demo#__main__.py#discover_model_runs-20260320T1517",
+      "type": "prov:Activity",
+      "startedAtTime": "2026-03-20T15:17:21.805501+00:00",
+      "endedAtTime": "2026-03-20T15:17:21.807059+00:00",
+      "wasAssociatedWith": "https://w3id.org/semsynth/demo#__main__.py",
+      "used": [
+        "https://w3id.org/semsynth/demo#env-b7b3b6f74caf"
+      ]
+    },
+    {
+      "id": "https://w3id.org/semsynth/demo#__main__.py#process_dataset-20260320T1516",
+      "type": "prov:Activity",
+      "startedAtTime": "2026-03-20T15:16:01.498981+00:00",
+      "endedAtTime": "2026-03-20T15:16:50.084646+00:00",
+      "wasAssociatedWith": "https://w3id.org/semsynth/demo#__main__.py",
+      "used": [
+        "https://w3id.org/semsynth/demo#env-b7b3b6f74caf"
+      ]
+    },
+    {
+      "id": "https://w3id.org/semsynth/demo#output/Statlog (Heart)/models/metasyn/synthetic.semmap.parquet",
+      "type": "prov:Entity",
+      "format": "application/octet-stream",
+      "extent": 35770,
+      "modified": "2026-03-20T15:16:53.384167+00:00",
+      "wasGeneratedBy": "https://w3id.org/semsynth/demo#__main__.py#run_models-20260320T1516"
+    },
+    {
+      "id": "https://w3id.org/semsynth/demo#output/Heart Disease/models/metasyn/synthetic.csv",
+      "type": "prov:Entity",
+      "format": "text/csv",
+      "extent": 33781,
+      "modified": "2026-03-20T15:17:30.752672+00:00",
+      "wasGeneratedBy": "https://w3id.org/semsynth/demo#__main__.py#run_models-20260320T1517"
+    },
+    {
+      "id": "https://w3id.org/semsynth/demo#downloads-cache/uciml",
+      "type": "prov:Entity",
+      "format": "application/octet-stream",
+      "extent": 608,
+      "modified": "2026-03-16T15:29:07.246053+00:00",
+      "wasGeneratedBy": "https://w3id.org/semsynth/demo#__main__.py#load_uciml_by_id-20260320T1516"
+    },
+    {
+      "id": "https://w3id.org/semsynth/demo#__main__.py#load_dataset-20260320T1517",
+      "type": "prov:Activity",
+      "startedAtTime": "2026-03-20T15:17:02.403349+00:00",
+      "endedAtTime": "2026-03-20T15:17:03.494217+00:00",
+      "wasAssociatedWith": "https://w3id.org/semsynth/demo#__main__.py",
+      "used": [
+        "https://w3id.org/semsynth/demo#env-b7b3b6f74caf"
+      ]
+    },
+    {
+      "id": "https://w3id.org/semsynth/demo#output/CDC Diabetes Health Indicators/models/metasyn/synthetic.csv",
+      "type": "prov:Entity",
+      "format": "text/csv",
+      "extent": 94321,
+      "modified": "2026-03-20T15:17:53.263151+00:00",
+      "wasGeneratedBy": "https://w3id.org/semsynth/demo#__main__.py#run_models-20260320T1517"
+    },
+    {
+      "id": "https://w3id.org/semsynth/demo#__main__.py#process_dataset-20260320T1517",
+      "type": "prov:Activity",
+      "startedAtTime": "2026-03-20T15:17:15.886804+00:00",
+      "endedAtTime": "2026-03-20T15:17:22.448687+00:00",
+      "wasAssociatedWith": "https://w3id.org/semsynth/demo#__main__.py",
+      "used": [
+        "https://w3id.org/semsynth/demo#env-b7b3b6f74caf"
+      ]
+    },
+    {
+      "id": "https://w3id.org/semsynth/demo#output/Diabetes 130-US Hospitals for Years 1999-2008/models/metasyn/metasyn_gmf.json",
+      "type": "prov:Entity",
+      "format": "application/json",
+      "extent": 95973,
+      "modified": "2026-03-20T15:17:07.469143+00:00",
+      "wasGeneratedBy": "https://w3id.org/semsynth/demo#__main__.py#run_models-20260320T1517"
+    },
+    {
+      "id": "https://w3id.org/semsynth/demo#output/Autistic Spectrum Disorder Screening Data for Children/models/metasyn",
+      "type": "prov:Entity",
+      "format": "application/octet-stream",
+      "extent": 384,
+      "modified": "2026-03-20T09:28:05.997891+00:00",
+      "wasGeneratedBy": "https://w3id.org/semsynth/demo#__main__.py#write_privacy-20260320T1517"
+    },
+    {
+      "id": "https://w3id.org/semsynth/demo#output/Heart Disease/models/metasyn/provenance.json",
+      "type": "prov:Entity",
+      "format": "application/json",
+      "extent": 4537,
+      "modified": "2026-03-20T15:17:31.395950+00:00",
+      "wasGeneratedBy": "https://w3id.org/semsynth/demo#__main__.py#run_models-20260320T1517"
+    },
+    {
+      "id": "https://w3id.org/semsynth/demo#__main__.py#model_run_root-20260320T1517",
+      "type": "prov:Activity",
+      "startedAtTime": "2026-03-20T15:17:16.784006+00:00",
+      "endedAtTime": "2026-03-20T15:17:16.784107+00:00",
+      "wasAssociatedWith": "https://w3id.org/semsynth/demo#__main__.py",
+      "used": [
+        "https://w3id.org/semsynth/demo#env-b7b3b6f74caf"
+      ]
+    },
+    {
+      "id": "https://w3id.org/semsynth/demo#output/UCI_1150",
+      "type": "prov:Entity",
+      "format": "application/octet-stream",
+      "extent": 320,
+      "modified": "2026-03-19T20:26:49.818830+00:00",
+      "wasGeneratedBy": "https://w3id.org/semsynth/demo#__main__.py#write_report-20260320T1516"
+    },
+    {
+      "id": "https://w3id.org/semsynth/demo#output/Statlog (Heart)/models/metasyn/metasyn_gmf.json",
+      "type": "prov:Entity",
+      "format": "application/json",
+      "extent": 15723,
+      "modified": "2026-03-20T15:16:53.243452+00:00",
+      "wasGeneratedBy": "https://w3id.org/semsynth/demo#__main__.py#run_models-20260320T1516"
+    },
+    {
+      "id": "https://w3id.org/semsynth/demo#output/Hepatitis/models/metasyn/per_variable_metrics.csv",
+      "type": "prov:Entity",
+      "format": "text/csv",
+      "extent": 932,
+      "modified": "2026-03-20T15:17:36.201387+00:00",
+      "wasGeneratedBy": "https://w3id.org/semsynth/demo#__main__.py#run_models-20260320T1517"
+    },
+    {
+      "id": "https://w3id.org/semsynth/demo#output/Autistic Spectrum Disorder Screening Data for Children/models/metasyn/metasyn_gmf.json",
+      "type": "prov:Entity",
+      "format": "application/json",
+      "extent": 28608,
+      "modified": "2026-03-20T15:17:24.615387+00:00",
+      "wasGeneratedBy": "https://w3id.org/semsynth/demo#__main__.py#run_models-20260320T1517"
+    },
+    {
+      "id": "https://w3id.org/semsynth/demo#output/UCI_1150",
+      "type": "prov:Entity",
+      "format": "application/octet-stream",
+      "extent": 320,
+      "modified": "2026-03-19T20:26:49.818830+00:00",
+      "wasGeneratedBy": "https://w3id.org/semsynth/demo#__main__.py#preprocess-20260320T1516"
+    },
+    {
+      "id": "https://w3id.org/semsynth/demo#output/Fertility/models/metasyn/provenance.json",
+      "type": "prov:Entity",
+      "format": "application/json",
+      "extent": 4525,
+      "modified": "2026-03-20T15:16:59.402692+00:00",
+      "wasGeneratedBy": "https://w3id.org/semsynth/demo#__main__.py#run_models-20260320T1516"
+    },
+    {
+      "id": "https://w3id.org/semsynth/demo#output/Diabetes 130-US Hospitals for Years 1999-2008/models/metasyn",
+      "type": "prov:Entity",
+      "format": "application/octet-stream",
+      "extent": 384,
+      "modified": "2026-03-20T08:17:13.966377+00:00",
+      "wasGeneratedBy": "https://w3id.org/semsynth/demo#__main__.py#write_manifest-20260320T1517"
+    },
+    {
+      "id": "https://w3id.org/semsynth/demo#output/Statlog (Heart)/models/metasyn/synthetic.csv",
+      "type": "prov:Entity",
+      "format": "text/csv",
+      "extent": 30218,
+      "modified": "2026-03-20T15:16:53.334795+00:00",
+      "wasGeneratedBy": "https://w3id.org/semsynth/demo#__main__.py#run_models-20260320T1516"
+    },
+    {
+      "id": "https://w3id.org/semsynth/demo#__main__.py#run_models-20260320T1516",
+      "type": "prov:Activity",
+      "startedAtTime": "2026-03-20T15:16:57.601293+00:00",
+      "endedAtTime": "2026-03-20T15:16:59.403258+00:00",
+      "wasAssociatedWith": "https://w3id.org/semsynth/demo#__main__.py",
+      "used": [
+        "https://w3id.org/semsynth/demo#env-b7b3b6f74caf"
+      ]
+    },
+    {
+      "id": "https://w3id.org/semsynth/demo#__main__.py#model_run_root-20260320T1517",
+      "type": "prov:Activity",
+      "startedAtTime": "2026-03-20T15:17:51.643860+00:00",
+      "endedAtTime": "2026-03-20T15:17:51.643965+00:00",
+      "wasAssociatedWith": "https://w3id.org/semsynth/demo#__main__.py",
+      "used": [
+        "https://w3id.org/semsynth/demo#env-b7b3b6f74caf"
+      ]
+    },
+    {
+      "id": "https://w3id.org/semsynth/demo#__main__.py#mappings-20260320T1516",
+      "type": "prov:Activity",
+      "startedAtTime": "2026-03-20T15:16:00.658732+00:00",
+      "endedAtTime": "2026-03-20T15:18:02.750474+00:00",
+      "wasAssociatedWith": "https://w3id.org/semsynth/demo#__main__.py",
+      "used": [
+        "https://w3id.org/semsynth/demo#env-b7b3b6f74caf"
+      ]
+    },
+    {
+      "id": "https://w3id.org/semsynth/demo#__main__.py#specs_from_input-20260320T1517",
+      "type": "prov:Activity",
+      "startedAtTime": "2026-03-20T15:17:22.697081+00:00",
+      "endedAtTime": "2026-03-20T15:17:22.697173+00:00",
+      "wasAssociatedWith": "https://w3id.org/semsynth/demo#__main__.py",
+      "used": [
+        "https://w3id.org/semsynth/demo#env-b7b3b6f74caf"
+      ]
+    },
+    {
+      "id": "https://w3id.org/semsynth/demo#__main__.py#report-20260320T1517",
+      "type": "prov:Activity",
+      "startedAtTime": "2026-03-20T15:17:15.378041+00:00",
+      "endedAtTime": "2026-03-20T15:17:22.572778+00:00",
+      "wasAssociatedWith": "https://w3id.org/semsynth/demo#__main__.py",
+      "used": [
+        "https://w3id.org/semsynth/demo#env-b7b3b6f74caf"
+      ]
+    },
+    {
+      "id": "https://w3id.org/semsynth/demo#output/Autistic Spectrum Disorder Screening Data for Children/models/metasyn/metrics.json",
+      "type": "prov:Entity",
+      "format": "application/json",
+      "extent": 289,
+      "modified": "2026-03-20T15:17:25.242620+00:00",
+      "wasGeneratedBy": "https://w3id.org/semsynth/demo#__main__.py#run_models-20260320T1517"
+    },
+    {
+      "id": "https://w3id.org/semsynth/demo#output/UCI_1150",
+      "type": "prov:Entity",
+      "format": "application/octet-stream",
+      "extent": 320,
+      "modified": "2026-03-19T20:26:49.818830+00:00",
+      "wasGeneratedBy": "https://w3id.org/semsynth/demo#__main__.py#run_models-20260320T1516"
+    },
+    {
+      "id": "https://w3id.org/semsynth/demo#output/Statlog (Heart)/models/metasyn",
+      "type": "prov:Entity",
+      "format": "application/octet-stream",
+      "extent": 384,
+      "modified": "2026-03-20T09:27:10.696159+00:00",
+      "wasGeneratedBy": "https://w3id.org/semsynth/demo#__main__.py#write_manifest-20260320T1516"
+    },
+    {
+      "id": "https://w3id.org/semsynth/demo#__main__.py#load_dataset-20260320T1517",
+      "type": "prov:Activity",
+      "startedAtTime": "2026-03-20T15:17:22.949959+00:00",
+      "endedAtTime": "2026-03-20T15:17:23.085549+00:00",
+      "wasAssociatedWith": "https://w3id.org/semsynth/demo#__main__.py",
+      "used": [
+        "https://w3id.org/semsynth/demo#env-b7b3b6f74caf"
+      ]
+    },
+    {
+      "id": "https://w3id.org/semsynth/demo#__main__.py#load_dataset-20260320T1517",
+      "type": "prov:Activity",
+      "startedAtTime": "2026-03-20T15:17:39.547299+00:00",
+      "endedAtTime": "2026-03-20T15:17:40.134982+00:00",
+      "wasAssociatedWith": "https://w3id.org/semsynth/demo#__main__.py",
+      "used": [
+        "https://w3id.org/semsynth/demo#env-b7b3b6f74caf"
+      ]
+    },
+    {
+      "id": "https://w3id.org/semsynth/demo#output/Heart Disease/models/metasyn/per_variable_metrics.csv",
+      "type": "prov:Entity",
+      "format": "text/csv",
+      "extent": 630,
+      "modified": "2026-03-20T15:17:30.892011+00:00",
+      "wasGeneratedBy": "https://w3id.org/semsynth/demo#__main__.py#run_models-20260320T1517"
+    },
+    {
+      "id": "https://w3id.org/semsynth/demo#output",
+      "type": "prov:Entity",
+      "format": "application/octet-stream",
+      "extent": 608,
+      "modified": "2026-03-18T18:39:58.037347+00:00",
+      "wasGeneratedBy": "https://w3id.org/semsynth/demo#__main__.py#report-20260320T1516"
+    },
+    {
+      "id": "https://w3id.org/semsynth/demo#output/Chronic Kidney Disease/models/metasyn/per_variable_metrics.csv",
+      "type": "prov:Entity",
+      "format": "text/csv",
+      "extent": 985,
+      "modified": "2026-03-20T15:17:19.428179+00:00",
+      "wasGeneratedBy": "https://w3id.org/semsynth/demo#__main__.py#run_models-20260320T1517"
+    },
+    {
+      "id": "https://w3id.org/semsynth/demo#__main__.py#write_report_md-20260320T1517",
+      "type": "prov:Activity",
+      "startedAtTime": "2026-03-20T15:17:27.597251+00:00",
+      "endedAtTime": "2026-03-20T15:17:27.673752+00:00",
+      "wasAssociatedWith": "https://w3id.org/semsynth/demo#__main__.py",
+      "used": [
+        "https://w3id.org/semsynth/demo#env-b7b3b6f74caf"
+      ]
+    },
+    {
+      "id": "https://w3id.org/semsynth/demo#__main__.py#model_run_root-20260320T1517",
+      "type": "prov:Activity",
+      "startedAtTime": "2026-03-20T15:17:24.190425+00:00",
+      "endedAtTime": "2026-03-20T15:17:24.190534+00:00",
+      "wasAssociatedWith": "https://w3id.org/semsynth/demo#__main__.py",
+      "used": [
+        "https://w3id.org/semsynth/demo#env-b7b3b6f74caf"
+      ]
+    },
+    {
+      "id": "https://w3id.org/semsynth/demo#__main__.py#write_report_md-20260320T1517",
+      "type": "prov:Activity",
+      "startedAtTime": "2026-03-20T15:17:33.071902+00:00",
+      "endedAtTime": "2026-03-20T15:17:33.148173+00:00",
+      "wasAssociatedWith": "https://w3id.org/semsynth/demo#__main__.py",
+      "used": [
+        "https://w3id.org/semsynth/demo#env-b7b3b6f74caf"
+      ]
+    },
+    {
+      "id": "https://w3id.org/semsynth/demo#__main__.py#write_report-20260320T1516",
+      "type": "prov:Activity",
+      "startedAtTime": "2026-03-20T15:16:49.473377+00:00",
+      "endedAtTime": "2026-03-20T15:16:49.889813+00:00",
+      "wasAssociatedWith": "https://w3id.org/semsynth/demo#__main__.py",
+      "used": [
+        "https://w3id.org/semsynth/demo#env-b7b3b6f74caf"
+      ]
+    },
+    {
+      "id": "https://w3id.org/semsynth/demo#output/Hepatitis/models/metasyn/synthetic.semmap.parquet",
+      "type": "prov:Entity",
+      "format": "application/octet-stream",
+      "extent": 46574,
+      "modified": "2026-03-20T15:17:36.132000+00:00",
+      "wasGeneratedBy": "https://w3id.org/semsynth/demo#__main__.py#run_models-20260320T1517"
+    },
+    {
+      "id": "https://w3id.org/semsynth/demo#output/CDC Diabetes Health Indicators",
+      "type": "prov:Entity",
+      "format": "application/octet-stream",
+      "extent": 288,
+      "modified": "2026-03-16T15:51:05.860321+00:00",
+      "wasGeneratedBy": "https://w3id.org/semsynth/demo#__main__.py#model_run_root-20260320T1517"
+    },
+    {
+      "id": "https://w3id.org/semsynth/demo#output/CDC Diabetes Health Indicators",
+      "type": "prov:Entity",
+      "format": "application/octet-stream",
+      "extent": 288,
+      "modified": "2026-03-16T15:51:05.860321+00:00",
+      "wasGeneratedBy": "https://w3id.org/semsynth/demo#__main__.py#write_report_md-20260320T1518"
+    },
+    {
+      "id": "https://w3id.org/semsynth/demo#output/catalog.json",
+      "type": "prov:Entity",
+      "format": "application/json",
+      "extent": 39977,
+      "modified": "2026-03-20T15:18:02.620281+00:00",
+      "wasGeneratedBy": "https://w3id.org/semsynth/demo#__main__.py#build_catalog-20260320T1518"
+    },
+    {
+      "id": "https://w3id.org/semsynth/demo#__main__.py#write_privacy-20260320T1517",
+      "type": "prov:Activity",
+      "startedAtTime": "2026-03-20T15:17:19.581301+00:00",
+      "endedAtTime": "2026-03-20T15:17:19.990191+00:00",
+      "wasAssociatedWith": "https://w3id.org/semsynth/demo#__main__.py",
+      "used": [
+        "https://w3id.org/semsynth/demo#env-b7b3b6f74caf"
+      ]
+    },
+    {
+      "id": "https://w3id.org/semsynth/demo#output/Autistic Spectrum Disorder Screening Data for Children/models/metasyn/metrics.privacy.json",
+      "type": "prov:Entity",
+      "format": "application/json",
+      "extent": 1188,
+      "modified": "2026-03-20T15:17:25.658360+00:00",
+      "wasGeneratedBy": "https://w3id.org/semsynth/demo#__main__.py#run_models-20260320T1517"
+    },
+    {
+      "id": "https://w3id.org/semsynth/demo#__main__.py#process_dataset-20260320T1517",
+      "type": "prov:Activity",
+      "startedAtTime": "2026-03-20T15:17:34.162326+00:00",
+      "endedAtTime": "2026-03-20T15:17:39.052445+00:00",
+      "wasAssociatedWith": "https://w3id.org/semsynth/demo#__main__.py",
+      "used": [
+        "https://w3id.org/semsynth/demo#env-b7b3b6f74caf"
+      ]
+    },
+    {
+      "id": "https://w3id.org/semsynth/demo#output/Heart Disease/models/metasyn/metrics.downstream.json",
+      "type": "prov:Entity",
+      "format": "application/json",
+      "extent": 361,
+      "modified": "2026-03-20T13:53:50.564037+00:00",
+      "wasGeneratedBy": "https://w3id.org/semsynth/demo#__main__.py#run_models-20260320T1517"
+    },
+    {
+      "id": "https://w3id.org/semsynth/demo#output/CDC Diabetes Health Indicators/models/metasyn/metrics.downstream.json",
+      "type": "prov:Entity",
+      "format": "application/json",
+      "extent": 579,
+      "modified": "2026-03-20T13:54:04.971758+00:00",
+      "wasGeneratedBy": "https://w3id.org/semsynth/demo#__main__.py#run_models-20260320T1517"
+    },
+    {
+      "id": "https://w3id.org/semsynth/demo#__main__.py#generate_synthetic_umaps-20260320T1517",
+      "type": "prov:Activity",
+      "startedAtTime": "2026-03-20T15:17:01.469050+00:00",
+      "endedAtTime": "2026-03-20T15:17:01.469142+00:00",
+      "wasAssociatedWith": "https://w3id.org/semsynth/demo#__main__.py",
+      "used": [
+        "https://w3id.org/semsynth/demo#env-b7b3b6f74caf"
+      ]
+    },
+    {
+      "id": "https://w3id.org/semsynth/demo#output/Hepatitis",
+      "type": "prov:Entity",
+      "format": "application/octet-stream",
+      "extent": 256,
+      "modified": "2026-03-16T15:50:45.896313+00:00",
+      "wasGeneratedBy": "https://w3id.org/semsynth/demo#__main__.py#preprocess-20260320T1517"
+    },
+    {
+      "id": "https://w3id.org/semsynth/demo#__main__.py#specs_from_input-20260320T1517",
+      "type": "prov:Activity",
+      "startedAtTime": "2026-03-20T15:17:02.157091+00:00",
+      "endedAtTime": "2026-03-20T15:17:02.157194+00:00",
+      "wasAssociatedWith": "https://w3id.org/semsynth/demo#__main__.py",
+      "used": [
+        "https://w3id.org/semsynth/demo#env-b7b3b6f74caf"
+      ]
+    },
+    {
+      "id": "https://w3id.org/semsynth/demo#output/UCI_1150/models/metasyn/metasyn_gmf.json",
+      "type": "prov:Entity",
+      "format": "application/json",
+      "extent": 40212,
+      "modified": "2026-03-20T15:16:29.230621+00:00",
+      "wasGeneratedBy": "https://w3id.org/semsynth/demo#__main__.py#run_models-20260320T1516"
+    },
+    {
+      "id": "https://w3id.org/semsynth/demo#output/Chronic Kidney Disease/models/metasyn/manifest.json",
+      "type": "prov:Entity",
+      "format": "application/json",
+      "extent": 201,
+      "modified": "2026-03-20T15:17:19.431100+00:00",
+      "wasGeneratedBy": "https://w3id.org/semsynth/demo#__main__.py#run_models-20260320T1517"
+    },
+    {
+      "id": "https://w3id.org/semsynth/demo#output/Chronic Kidney Disease/models/metasyn/umap.png",
+      "type": "prov:Entity",
+      "format": "image/png",
+      "extent": 17437,
+      "modified": "2026-03-16T15:50:31.443881+00:00",
+      "wasGeneratedBy": "https://w3id.org/semsynth/demo#__main__.py#run_models-20260320T1517"
+    },
+    {
+      "id": "https://w3id.org/semsynth/demo#output/Diabetes 130-US Hospitals for Years 1999-2008/models/metasyn",
+      "type": "prov:Entity",
+      "format": "application/octet-stream",
+      "extent": 384,
+      "modified": "2026-03-20T08:17:13.966377+00:00",
+      "wasGeneratedBy": "https://w3id.org/semsynth/demo#__main__.py#write_privacy-20260320T1517"
+    },
+    {
+      "id": "https://w3id.org/semsynth/demo#output/Heart Disease/models/metasyn/umap.png",
+      "type": "prov:Entity",
+      "format": "image/png",
+      "extent": 16097,
+      "modified": "2026-03-16T15:50:44.096385+00:00",
+      "wasGeneratedBy": "https://w3id.org/semsynth/demo#__main__.py#run_models-20260320T1517"
+    },
+    {
+      "id": "https://w3id.org/semsynth/demo#__main__.py#write_privacy-20260320T1516",
+      "type": "prov:Activity",
+      "startedAtTime": "2026-03-20T15:16:58.999478+00:00",
+      "endedAtTime": "2026-03-20T15:16:59.214265+00:00",
+      "wasAssociatedWith": "https://w3id.org/semsynth/demo#__main__.py",
+      "used": [
+        "https://w3id.org/semsynth/demo#env-b7b3b6f74caf"
+      ]
+    },
+    {
+      "id": "https://w3id.org/semsynth/demo#output/Autistic Spectrum Disorder Screening Data for Children/models/metasyn/manifest.json",
+      "type": "prov:Entity",
+      "format": "application/json",
+      "extent": 233,
+      "modified": "2026-03-20T15:17:25.243046+00:00",
+      "wasGeneratedBy": "https://w3id.org/semsynth/demo#__main__.py#run_models-20260320T1517"
+    },
+    {
+      "id": "https://w3id.org/semsynth/demo#output/Diabetes 130-US Hospitals for Years 1999-2008/models/metasyn/synthetic.csv",
+      "type": "prov:Entity",
+      "format": "text/csv",
+      "extent": 282568,
+      "modified": "2026-03-20T15:17:08.806643+00:00",
+      "wasGeneratedBy": "https://w3id.org/semsynth/demo#__main__.py#run_models-20260320T1517"
+    },
+    {
+      "id": "https://w3id.org/semsynth/demo#__main__.py#run_models-20260320T1517",
+      "type": "prov:Activity",
+      "startedAtTime": "2026-03-20T15:17:24.179543+00:00",
+      "endedAtTime": "2026-03-20T15:17:25.808141+00:00",
+      "wasAssociatedWith": "https://w3id.org/semsynth/demo#__main__.py",
+      "used": [
+        "https://w3id.org/semsynth/demo#env-b7b3b6f74caf"
+      ]
+    },
+    {
+      "id": "https://w3id.org/semsynth/demo#output/Chronic Kidney Disease/models/metasyn/metrics.downstream.json",
+      "type": "prov:Entity",
+      "format": "application/json",
+      "extent": 749,
+      "modified": "2026-03-20T13:45:51.109237+00:00",
+      "wasGeneratedBy": "https://w3id.org/semsynth/demo#__main__.py#run_models-20260320T1517"
+    },
+    {
+      "id": "https://w3id.org/semsynth/demo#__main__.py#write_privacy-20260320T1517",
+      "type": "prov:Activity",
+      "startedAtTime": "2026-03-20T15:17:31.027178+00:00",
+      "endedAtTime": "2026-03-20T15:17:31.258674+00:00",
+      "wasAssociatedWith": "https://w3id.org/semsynth/demo#__main__.py",
+      "used": [
+        "https://w3id.org/semsynth/demo#env-b7b3b6f74caf"
+      ]
+    },
+    {
+      "id": "https://w3id.org/semsynth/demo#output/Chronic Kidney Disease",
+      "type": "prov:Entity",
+      "format": "application/octet-stream",
+      "extent": 288,
+      "modified": "2026-03-17T13:41:08.533265+00:00",
+      "wasGeneratedBy": "https://w3id.org/semsynth/demo#__main__.py#run_models-20260320T1517"
+    },
+    {
+      "id": "https://w3id.org/semsynth/demo#__main__.py#run_models-20260320T1517",
+      "type": "prov:Activity",
+      "startedAtTime": "2026-03-20T15:17:16.759704+00:00",
+      "endedAtTime": "2026-03-20T15:17:20.129064+00:00",
+      "wasAssociatedWith": "https://w3id.org/semsynth/demo#__main__.py",
+      "used": [
+        "https://w3id.org/semsynth/demo#env-b7b3b6f74caf"
+      ]
+    },
+    {
+      "id": "https://w3id.org/semsynth/demo#__main__.py#report-20260320T1516",
+      "type": "prov:Activity",
+      "startedAtTime": "2026-03-20T15:16:56.522889+00:00",
+      "endedAtTime": "2026-03-20T15:17:02.033755+00:00",
+      "wasAssociatedWith": "https://w3id.org/semsynth/demo#__main__.py",
+      "used": [
+        "https://w3id.org/semsynth/demo#env-b7b3b6f74caf"
+      ]
+    },
+    {
+      "id": "https://w3id.org/semsynth/demo#output/Diabetes 130-US Hospitals for Years 1999-2008/models/metasyn/per_variable_metrics.csv",
+      "type": "prov:Entity",
+      "format": "text/csv",
+      "extent": 2020,
+      "modified": "2026-03-20T15:17:09.044661+00:00",
+      "wasGeneratedBy": "https://w3id.org/semsynth/demo#__main__.py#run_models-20260320T1517"
+    },
+    {
+      "id": "https://w3id.org/semsynth/demo#output/Chronic Kidney Disease/models/metasyn/provenance.json",
+      "type": "prov:Entity",
+      "format": "application/json",
+      "extent": 4564,
+      "modified": "2026-03-20T15:17:20.128316+00:00",
+      "wasGeneratedBy": "https://w3id.org/semsynth/demo#__main__.py#run_models-20260320T1517"
+    },
+    {
+      "id": "https://w3id.org/semsynth/demo#output/Heart Disease",
+      "type": "prov:Entity",
+      "format": "application/octet-stream",
+      "extent": 320,
+      "modified": "2026-03-18T16:28:07.986860+00:00",
+      "wasGeneratedBy": "https://w3id.org/semsynth/demo#__main__.py#run_models-20260320T1517"
+    },
+    {
+      "id": "https://w3id.org/semsynth/demo#__main__.py#specs_from_input-20260320T1516",
+      "type": "prov:Activity",
+      "startedAtTime": "2026-03-20T15:16:50.417629+00:00",
+      "endedAtTime": "2026-03-20T15:16:50.417785+00:00",
+      "wasAssociatedWith": "https://w3id.org/semsynth/demo#__main__.py",
+      "used": [
+        "https://w3id.org/semsynth/demo#env-b7b3b6f74caf"
+      ]
+    },
+    {
+      "id": "https://w3id.org/semsynth/demo#__main__.py#generate_synthetic_umaps-20260320T1517",
+      "type": "prov:Activity",
+      "startedAtTime": "2026-03-20T15:17:21.961281+00:00",
+      "endedAtTime": "2026-03-20T15:17:21.961369+00:00",
+      "wasAssociatedWith": "https://w3id.org/semsynth/demo#__main__.py",
+      "used": [
+        "https://w3id.org/semsynth/demo#env-b7b3b6f74caf"
+      ]
+    },
+    {
+      "id": "https://w3id.org/semsynth/demo#__main__.py#report-20260320T1517",
+      "type": "prov:Activity",
+      "startedAtTime": "2026-03-20T15:17:22.696878+00:00",
+      "endedAtTime": "2026-03-20T15:17:28.062468+00:00",
+      "wasAssociatedWith": "https://w3id.org/semsynth/demo#__main__.py",
+      "used": [
+        "https://w3id.org/semsynth/demo#env-b7b3b6f74caf"
+      ]
+    },
+    {
+      "id": "https://w3id.org/semsynth/demo#__main__.py#load_dataset-20260320T1516",
+      "type": "prov:Activity",
+      "startedAtTime": "2026-03-20T15:16:56.777206+00:00",
+      "endedAtTime": "2026-03-20T15:16:56.918631+00:00",
+      "wasAssociatedWith": "https://w3id.org/semsynth/demo#__main__.py",
+      "used": [
+        "https://w3id.org/semsynth/demo#env-b7b3b6f74caf"
+      ]
+    },
+    {
+      "id": "https://w3id.org/semsynth/demo#output/UCI_1150/models/metasyn",
+      "type": "prov:Entity",
+      "format": "application/octet-stream",
+      "extent": 384,
+      "modified": "2026-03-20T13:52:33.371682+00:00",
+      "wasGeneratedBy": "https://w3id.org/semsynth/demo#__main__.py#write_manifest-20260320T1516"
+    },
+    {
+      "id": "https://w3id.org/semsynth/demo#output/Diabetes 130-US Hospitals for Years 1999-2008/models/metasyn/metrics.downstream.json",
+      "type": "prov:Entity",
+      "format": "application/json",
+      "extent": 47,
+      "modified": "2026-03-20T13:05:29.312915+00:00",
+      "wasGeneratedBy": "https://w3id.org/semsynth/demo#__main__.py#run_models-20260320T1517"
+    },
+    {
+      "id": "https://w3id.org/semsynth/demo#__main__.py#specs_from_input-20260320T1517",
+      "type": "prov:Activity",
+      "startedAtTime": "2026-03-20T15:17:39.300193+00:00",
+      "endedAtTime": "2026-03-20T15:17:39.300285+00:00",
+      "wasAssociatedWith": "https://w3id.org/semsynth/demo#__main__.py",
+      "used": [
+        "https://w3id.org/semsynth/demo#env-b7b3b6f74caf"
+      ]
+    },
+    {
+      "id": "https://w3id.org/semsynth/demo#__main__.py#specs_from_input-20260320T1517",
+      "type": "prov:Activity",
+      "startedAtTime": "2026-03-20T15:17:28.186476+00:00",
+      "endedAtTime": "2026-03-20T15:17:28.186587+00:00",
+      "wasAssociatedWith": "https://w3id.org/semsynth/demo#__main__.py",
+      "used": [
+        "https://w3id.org/semsynth/demo#env-b7b3b6f74caf"
+      ]
+    },
+    {
+      "id": "https://w3id.org/semsynth/demo#output/Fertility/models/metasyn/synthetic.csv",
+      "type": "prov:Entity",
+      "format": "text/csv",
+      "extent": 7570,
+      "modified": "2026-03-20T15:16:58.800386+00:00",
+      "wasGeneratedBy": "https://w3id.org/semsynth/demo#__main__.py#run_models-20260320T1516"
+    },
+    {
+      "id": "https://w3id.org/semsynth/demo#output/Fertility/models/metasyn/metasyn_gmf.json",
+      "type": "prov:Entity",
+      "format": "application/json",
+      "extent": 11185,
+      "modified": "2026-03-20T15:16:58.761976+00:00",
+      "wasGeneratedBy": "https://w3id.org/semsynth/demo#__main__.py#run_models-20260320T1516"
+    },
+    {
+      "id": "https://w3id.org/semsynth/demo#output/Heart Disease/models/metasyn/metasyn_gmf.json",
+      "type": "prov:Entity",
+      "format": "application/json",
+      "extent": 15882,
+      "modified": "2026-03-20T15:17:30.447059+00:00",
+      "wasGeneratedBy": "https://w3id.org/semsynth/demo#__main__.py#run_models-20260320T1517"
+    },
+    {
+      "id": "https://w3id.org/semsynth/demo#__main__.py#write_report_md-20260320T1517",
+      "type": "prov:Activity",
+      "startedAtTime": "2026-03-20T15:17:38.712403+00:00",
+      "endedAtTime": "2026-03-20T15:17:38.798132+00:00",
+      "wasAssociatedWith": "https://w3id.org/semsynth/demo#__main__.py",
+      "used": [
+        "https://w3id.org/semsynth/demo#env-b7b3b6f74caf"
+      ]
+    },
+    {
+      "id": "https://w3id.org/semsynth/demo#output/Hepatitis",
+      "type": "prov:Entity",
+      "format": "application/octet-stream",
+      "extent": 256,
+      "modified": "2026-03-16T15:50:45.896313+00:00",
+      "wasGeneratedBy": "https://w3id.org/semsynth/demo#__main__.py#write_report_md-20260320T1517"
+    },
+    {
+      "id": "https://w3id.org/semsynth/demo#output/UCI_1150/models/metasyn/provenance.json",
+      "type": "prov:Entity",
+      "format": "application/json",
+      "extent": 4522,
+      "modified": "2026-03-20T15:16:48.454105+00:00",
+      "wasGeneratedBy": "https://w3id.org/semsynth/demo#__main__.py#run_models-20260320T1516"
+    },
+    {
+      "id": "https://w3id.org/semsynth/demo#output/CDC Diabetes Health Indicators/models/metasyn/metrics.privacy.json",
+      "type": "prov:Entity",
+      "format": "application/json",
+      "extent": 1236,
+      "modified": "2026-03-20T15:17:57.900501+00:00",
+      "wasGeneratedBy": "https://w3id.org/semsynth/demo#__main__.py#run_models-20260320T1517"
+    },
+    {
+      "id": "https://w3id.org/semsynth/demo#__main__.py#write_privacy-20260320T1517",
+      "type": "prov:Activity",
+      "startedAtTime": "2026-03-20T15:17:25.377423+00:00",
+      "endedAtTime": "2026-03-20T15:17:25.658505+00:00",
+      "wasAssociatedWith": "https://w3id.org/semsynth/demo#__main__.py",
+      "used": [
+        "https://w3id.org/semsynth/demo#env-b7b3b6f74caf"
+      ]
+    },
+    {
+      "id": "https://w3id.org/semsynth/demo#__main__.py#load_dataset-20260320T1516",
+      "type": "prov:Activity",
+      "startedAtTime": "2026-03-20T15:16:01.340613+00:00",
+      "endedAtTime": "2026-03-20T15:16:01.427760+00:00",
+      "wasAssociatedWith": "https://w3id.org/semsynth/demo#__main__.py",
+      "used": [
+        "https://w3id.org/semsynth/demo#env-b7b3b6f74caf"
+      ]
+    },
+    {
+      "id": "https://w3id.org/semsynth/demo#__main__.py#write_privacy-20260320T1516",
+      "type": "prov:Activity",
+      "startedAtTime": "2026-03-20T15:16:29.723201+00:00",
+      "endedAtTime": "2026-03-20T15:16:47.617457+00:00",
+      "wasAssociatedWith": "https://w3id.org/semsynth/demo#__main__.py",
+      "used": [
+        "https://w3id.org/semsynth/demo#env-b7b3b6f74caf"
+      ]
+    },
+    {
+      "id": "https://w3id.org/semsynth/demo#__main__.py#run_models-20260320T1517",
+      "type": "prov:Activity",
+      "startedAtTime": "2026-03-20T15:17:34.785812+00:00",
+      "endedAtTime": "2026-03-20T15:17:36.764001+00:00",
+      "wasAssociatedWith": "https://w3id.org/semsynth/demo#__main__.py",
+      "used": [
+        "https://w3id.org/semsynth/demo#env-b7b3b6f74caf"
+      ]
+    },
+    {
+      "id": "https://w3id.org/semsynth/demo#output/Heart Disease/models/metasyn/synthetic.semmap.parquet",
+      "type": "prov:Entity",
+      "format": "application/octet-stream",
+      "extent": 45280,
+      "modified": "2026-03-20T15:17:30.847839+00:00",
+      "wasGeneratedBy": "https://w3id.org/semsynth/demo#__main__.py#run_models-20260320T1517"
+    },
+    {
+      "id": "https://w3id.org/semsynth/demo#output/Autistic Spectrum Disorder Screening Data for Children/models/metasyn/provenance.json",
+      "type": "prov:Entity",
+      "format": "application/json",
+      "extent": 4660,
+      "modified": "2026-03-20T15:17:25.807492+00:00",
+      "wasGeneratedBy": "https://w3id.org/semsynth/demo#__main__.py#run_models-20260320T1517"
+    },
+    {
+      "id": "https://w3id.org/semsynth/demo#output/Autistic Spectrum Disorder Screening Data for Children",
+      "type": "prov:Entity",
+      "format": "application/octet-stream",
+      "extent": 256,
+      "modified": "2026-03-16T15:50:34.008723+00:00",
+      "wasGeneratedBy": "https://w3id.org/semsynth/demo#__main__.py#model_run_root-20260320T1517"
+    },
+    {
+      "id": "https://w3id.org/semsynth/demo#__main__.py#load_uciml_by_id-20260320T1516",
+      "type": "prov:Activity",
+      "startedAtTime": "2026-03-20T15:16:01.340842+00:00",
+      "endedAtTime": "2026-03-20T15:16:01.353204+00:00",
+      "wasAssociatedWith": "https://w3id.org/semsynth/demo#__main__.py",
+      "used": [
+        "https://w3id.org/semsynth/demo#env-b7b3b6f74caf"
+      ]
+    },
+    {
+      "id": "https://w3id.org/semsynth/demo#__main__.py#load_model_configs-20260320T1516",
+      "type": "prov:Activity",
+      "startedAtTime": "2026-03-20T15:16:50.558743+00:00",
+      "endedAtTime": "2026-03-20T15:16:50.559090+00:00",
+      "wasAssociatedWith": "https://w3id.org/semsynth/demo#__main__.py",
+      "used": [
+        "https://w3id.org/semsynth/demo#env-b7b3b6f74caf"
+      ]
+    },
+    {
+      "id": "https://w3id.org/semsynth/demo#__main__.py#write_report-20260320T1517",
+      "type": "prov:Activity",
+      "startedAtTime": "2026-03-20T15:17:14.681606+00:00",
+      "endedAtTime": "2026-03-20T15:17:15.008070+00:00",
+      "wasAssociatedWith": "https://w3id.org/semsynth/demo#__main__.py",
+      "used": [
+        "https://w3id.org/semsynth/demo#env-b7b3b6f74caf"
+      ]
+    },
+    {
+      "id": "https://w3id.org/semsynth/demo#__main__.py#process_dataset-20260320T1516",
+      "type": "prov:Activity",
+      "startedAtTime": "2026-03-20T15:16:57.046623+00:00",
+      "endedAtTime": "2026-03-20T15:17:01.911099+00:00",
+      "wasAssociatedWith": "https://w3id.org/semsynth/demo#__main__.py",
+      "used": [
+        "https://w3id.org/semsynth/demo#env-b7b3b6f74caf"
+      ]
+    },
+    {
+      "id": "https://w3id.org/semsynth/demo#output/CDC Diabetes Health Indicators/models/metasyn/provenance.json",
+      "type": "prov:Entity",
+      "format": "application/json",
+      "extent": 4588,
+      "modified": "2026-03-20T15:17:58.033240+00:00",
+      "wasGeneratedBy": "https://w3id.org/semsynth/demo#__main__.py#run_models-20260320T1517"
+    },
+    {
+      "id": "https://w3id.org/semsynth/demo#output/CDC Diabetes Health Indicators/models/metasyn/manifest.json",
+      "type": "prov:Entity",
+      "format": "application/json",
+      "extent": 210,
+      "modified": "2026-03-20T15:17:53.522470+00:00",
+      "wasGeneratedBy": "https://w3id.org/semsynth/demo#__main__.py#run_models-20260320T1517"
+    },
+    {
+      "id": "https://w3id.org/semsynth/demo#output/Fertility/models/metasyn/metrics.privacy.json",
+      "type": "prov:Entity",
+      "format": "application/json",
+      "extent": 849,
+      "modified": "2026-03-20T15:16:59.214021+00:00",
+      "wasGeneratedBy": "https://w3id.org/semsynth/demo#__main__.py#run_models-20260320T1516"
+    },
+    {
+      "id": "https://w3id.org/semsynth/demo#__main__.py#load_uciml_by_id-20260320T1517",
+      "type": "prov:Activity",
+      "startedAtTime": "2026-03-20T15:17:28.467534+00:00",
+      "endedAtTime": "2026-03-20T15:17:28.476123+00:00",
+      "wasAssociatedWith": "https://w3id.org/semsynth/demo#__main__.py",
+      "used": [
+        "https://w3id.org/semsynth/demo#env-b7b3b6f74caf"
+      ]
+    },
+    {
+      "id": "https://w3id.org/semsynth/demo#output/CDC Diabetes Health Indicators/models/metasyn/metasyn_gmf.json",
+      "type": "prov:Entity",
+      "format": "application/json",
+      "extent": 25765,
+      "modified": "2026-03-20T15:17:52.687288+00:00",
+      "wasGeneratedBy": "https://w3id.org/semsynth/demo#__main__.py#run_models-20260320T1517"
+    },
+    {
+      "id": "https://w3id.org/semsynth/demo#output/index.html",
+      "type": "prov:Entity",
+      "format": "text/html",
+      "extent": 14133,
+      "modified": "2026-03-20T15:18:02.617004+00:00",
+      "wasGeneratedBy": "https://w3id.org/semsynth/demo#__main__.py#build_catalog-20260320T1518"
+    },
+    {
+      "id": "https://w3id.org/semsynth/demo#__main__.py#discover_model_runs-20260320T1517",
+      "type": "prov:Activity",
+      "startedAtTime": "2026-03-20T15:17:27.281735+00:00",
+      "endedAtTime": "2026-03-20T15:17:27.282750+00:00",
+      "wasAssociatedWith": "https://w3id.org/semsynth/demo#__main__.py",
+      "used": [
+        "https://w3id.org/semsynth/demo#env-b7b3b6f74caf"
+      ]
+    },
+    {
+      "id": "https://w3id.org/semsynth/demo#output/Chronic Kidney Disease/models/metasyn/synthetic.csv",
+      "type": "prov:Entity",
+      "format": "text/csv",
+      "extent": 114969,
+      "modified": "2026-03-20T15:17:19.189703+00:00",
+      "wasGeneratedBy": "https://w3id.org/semsynth/demo#__main__.py#run_models-20260320T1517"
+    },
+    {
+      "id": "https://w3id.org/semsynth/demo#output/Hepatitis",
+      "type": "prov:Entity",
+      "format": "application/octet-stream",
+      "extent": 256,
+      "modified": "2026-03-16T15:50:45.896313+00:00",
+      "wasGeneratedBy": "https://w3id.org/semsynth/demo#__main__.py#write_report-20260320T1517"
+    },
+    {
+      "id": "https://w3id.org/semsynth/demo#__main__.py#process_dataset-20260320T1517",
+      "type": "prov:Activity",
+      "startedAtTime": "2026-03-20T15:17:23.208794+00:00",
+      "endedAtTime": "2026-03-20T15:17:27.939081+00:00",
+      "wasAssociatedWith": "https://w3id.org/semsynth/demo#__main__.py",
+      "used": [
+        "https://w3id.org/semsynth/demo#env-b7b3b6f74caf"
+      ]
+    },
+    {
+      "id": "https://w3id.org/semsynth/demo#__main__.py#report-20260320T1516",
+      "type": "prov:Activity",
+      "startedAtTime": "2026-03-20T15:16:50.417365+00:00",
+      "endedAtTime": "2026-03-20T15:16:56.396524+00:00",
+      "wasAssociatedWith": "https://w3id.org/semsynth/demo#__main__.py",
+      "used": [
+        "https://w3id.org/semsynth/demo#env-b7b3b6f74caf"
+      ]
+    },
+    {
+      "id": "https://w3id.org/semsynth/demo#output/Chronic Kidney Disease/models/metasyn/metrics.privacy.json",
+      "type": "prov:Entity",
+      "format": "application/json",
+      "extent": 1064,
+      "modified": "2026-03-20T15:17:19.990031+00:00",
+      "wasGeneratedBy": "https://w3id.org/semsynth/demo#__main__.py#run_models-20260320T1517"
+    },
+    {
+      "id": "https://w3id.org/semsynth/demo#output/Statlog (Heart)",
+      "type": "prov:Entity",
+      "format": "application/octet-stream",
+      "extent": 256,
+      "modified": "2026-03-16T15:49:44.918420+00:00",
+      "wasGeneratedBy": "https://w3id.org/semsynth/demo#__main__.py#write_report_md-20260320T1516"
+    },
+    {
+      "id": "https://w3id.org/semsynth/demo#__main__.py#run_models-20260320T1516",
+      "type": "prov:Activity",
+      "startedAtTime": "2026-03-20T15:16:24.957009+00:00",
+      "endedAtTime": "2026-03-20T15:16:48.454292+00:00",
+      "wasAssociatedWith": "https://w3id.org/semsynth/demo#__main__.py",
+      "used": [
+        "https://w3id.org/semsynth/demo#env-b7b3b6f74caf"
+      ]
+    },
+    {
+      "id": "https://w3id.org/semsynth/demo#output/Hepatitis/models/metasyn",
+      "type": "prov:Entity",
+      "format": "application/octet-stream",
+      "extent": 384,
+      "modified": "2026-03-20T09:14:50.738512+00:00",
+      "wasGeneratedBy": "https://w3id.org/semsynth/demo#__main__.py#write_manifest-20260320T1517"
+    },
+    {
+      "id": "https://w3id.org/semsynth/demo#output/Heart Disease/models/metasyn",
+      "type": "prov:Entity",
+      "format": "application/octet-stream",
+      "extent": 384,
+      "modified": "2026-03-20T08:17:54.940466+00:00",
+      "wasGeneratedBy": "https://w3id.org/semsynth/demo#__main__.py#write_manifest-20260320T1517"
+    }
+  ]
+}

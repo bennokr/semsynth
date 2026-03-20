@@ -1,0 +1,457 @@
+@prefix dcat: <http://www.w3.org/ns/dcat#> .
+@prefix dct: <http://purl.org/dc/terms/> .
+@prefix prov: <http://www.w3.org/ns/prov#> .
+@prefix xsd: <http://www.w3.org/2001/XMLSchema#> .
+
+<urn:catalog:semsynth-demo> a dcat:Catalog ;
+    dct:description "DCAT catalog of SemSynth reports and synthetic datasets." ;
+    dct:modified "2026-03-17T13:28:37.217337+00:00"^^xsd:dateTime ;
+    dct:title "SemSynth Synthetic Data Catalog" ;
+    dcat:dataset <urn:dataset:autistic-spectrum-disorder-screening-data-for-children>,
+        <urn:dataset:cdc-diabetes-health-indicators>,
+        <urn:dataset:chronic-kidney-disease>,
+        <urn:dataset:diabetes-130-us-hospitals-for-years-1999-2008>,
+        <urn:dataset:fertility>,
+        <urn:dataset:heart-disease>,
+        <urn:dataset:hepatitis>,
+        <urn:dataset:statlog-heart>,
+        <urn:dataset:uci-1150> ;
+    dcat:distribution <urn:distribution:sparql:query-provenance-artifacts>,
+        <urn:distribution:sparql:query-semmap-and-provenance-artifacts>,
+        <urn:distribution:sparql:query-semmap-coverage> .
+
+<urn:dataset:autistic-spectrum-disorder-screening-data-for-children> a dcat:Dataset ;
+    dct:description "see attached file for variables' description — synthetic assets curated by SemSynth." ;
+    dct:identifier "autistic-spectrum-disorder-screening-data-for-children" ;
+    dct:issued "2026-03-16T15:50:37.700599+00:00"^^xsd:dateTime ;
+    dct:modified "2026-03-16T15:50:37.700599+00:00"^^xsd:dateTime ;
+    dct:title "Autistic Spectrum Disorder Screening Data for Children" ;
+    dcat:distribution <urn:distribution:autistic-spectrum-disorder-screening-data-for-children-autistic-spectrum-disorder-screening-data-for-children-models-metasyn-synthetic-csv>,
+        <urn:distribution:autistic-spectrum-disorder-screening-data-for-children-autistic-spectrum-disorder-screening-data-for-children-models-metasyn-synthetic-semmap-parquet>,
+        <urn:distribution:autistic-spectrum-disorder-screening-data-for-children:semmap-json> ;
+    dcat:keyword "Autistic Spectrum Disorder Screening Data for Children",
+        "SemMap",
+        "SemSynth",
+        "synthetic data" ;
+    dcat:landingPage <file:///Users/benno/Documents/ud/projects/generative-metadata/semsynth/> .
+
+<urn:dataset:cdc-diabetes-health-indicators> a dcat:Dataset ;
+    dct:description "Source: UCI dataset 891 — synthetic assets curated by SemSynth." ;
+    dct:identifier "cdc-diabetes-health-indicators" ;
+    dct:issued "2026-03-16T15:51:16.547807+00:00"^^xsd:dateTime ;
+    dct:modified "2026-03-16T15:51:16.547807+00:00"^^xsd:dateTime ;
+    dct:title "CDC Diabetes Health Indicators" ;
+    dcat:distribution <urn:distribution:cdc-diabetes-health-indicators-cdc-diabetes-health-indicators-models-metasyn-synthetic-csv>,
+        <urn:distribution:cdc-diabetes-health-indicators-cdc-diabetes-health-indicators-models-metasyn-synthetic-semmap-parquet>,
+        <urn:distribution:cdc-diabetes-health-indicators:semmap-json> ;
+    dcat:keyword "CDC Diabetes Health Indicators",
+        "SemMap",
+        "SemSynth",
+        "synthetic data" ;
+    dcat:landingPage <file:///Users/benno/Documents/ud/projects/generative-metadata/semsynth/> .
+
+<urn:dataset:chronic-kidney-disease> a dcat:Dataset ;
+    dct:description "Source: UCI dataset 336 — synthetic assets curated by SemSynth." ;
+    dct:identifier "chronic-kidney-disease" ;
+    dct:issued "2026-03-16T15:50:31.599909+00:00"^^xsd:dateTime ;
+    dct:modified "2026-03-16T15:50:31.599909+00:00"^^xsd:dateTime ;
+    dct:title "Chronic Kidney Disease" ;
+    dcat:distribution <urn:distribution:chronic-kidney-disease-chronic-kidney-disease-models-metasyn-synthetic-csv>,
+        <urn:distribution:chronic-kidney-disease-chronic-kidney-disease-models-metasyn-synthetic-semmap-parquet>,
+        <urn:distribution:chronic-kidney-disease:semmap-json> ;
+    dcat:keyword "Chronic Kidney Disease",
+        "SemMap",
+        "SemSynth",
+        "synthetic data" ;
+    dcat:landingPage <file:///Users/benno/Documents/ud/projects/generative-metadata/semsynth/> .
+
+<urn:dataset:diabetes-130-us-hospitals-for-years-1999-2008> a dcat:Dataset ;
+    dct:description "Source: UCI dataset 296 — synthetic assets curated by SemSynth." ;
+    dct:identifier "diabetes-130-us-hospitals-for-years-1999-2008" ;
+    dct:issued "2026-03-16T15:50:19.931259+00:00"^^xsd:dateTime ;
+    dct:modified "2026-03-16T15:50:19.931259+00:00"^^xsd:dateTime ;
+    dct:title "Diabetes 130-US Hospitals for Years 1999-2008" ;
+    dcat:distribution <urn:distribution:diabetes-130-us-hospitals-for-years-1999-2008-diabetes-130-us-hospitals-for-years-1999-2008-models-metasyn-synthetic-csv>,
+        <urn:distribution:diabetes-130-us-hospitals-for-years-1999-2008-diabetes-130-us-hospitals-for-years-1999-2008-models-metasyn-synthetic-semmap-parquet>,
+        <urn:distribution:diabetes-130-us-hospitals-for-years-1999-2008:semmap-json> ;
+    dcat:keyword "Diabetes 130-US Hospitals for Years 1999-2008",
+        "SemMap",
+        "SemSynth",
+        "synthetic data" ;
+    dcat:landingPage <file:///Users/benno/Documents/ud/projects/generative-metadata/semsynth/> .
+
+<urn:dataset:fertility> a dcat:Dataset ;
+    dct:description "Documentation: Season in which the analysis was performed. 	1) winter, 2) spring, 3) Summer, 4) fall. 	(-1, -0.33, 0.33, 1) — synthetic assets curated by SemSynth." ;
+    dct:identifier "fertility" ;
+    dct:issued "2026-03-16T15:49:57.681334+00:00"^^xsd:dateTime ;
+    dct:modified "2026-03-16T15:49:57.681334+00:00"^^xsd:dateTime ;
+    dct:title "Fertility" ;
+    dcat:distribution <urn:distribution:fertility-fertility-models-metasyn-synthetic-csv>,
+        <urn:distribution:fertility-fertility-models-metasyn-synthetic-semmap-parquet>,
+        <urn:distribution:fertility:semmap-json> ;
+    dcat:keyword "Fertility",
+        "SemMap",
+        "SemSynth",
+        "synthetic data" ;
+    dcat:landingPage <https://w3id.org/semsynth/demo#/output/Fertility/index.html> ;
+    prov:wasDerivedFrom <https://w3id.org/semsynth/demo#/output/Fertility/dataset.semmap.json>,
+        <https://w3id.org/semsynth/demo#/output/Fertility/models/metasyn/synthetic.csv>,
+        <https://w3id.org/semsynth/demo#/output/Fertility/models/metasyn/synthetic.semmap.parquet> .
+
+<urn:dataset:heart-disease> a dcat:Dataset ;
+    dct:description "4 databases: Cleveland, Hungary, Switzerland, and the VA Long Beach — synthetic assets curated by SemSynth." ;
+    dct:identifier "heart-disease" ;
+    dct:issued "2026-03-16T15:50:44.247302+00:00"^^xsd:dateTime ;
+    dct:modified "2026-03-16T15:50:44.247302+00:00"^^xsd:dateTime ;
+    dct:title "Heart Disease" ;
+    dcat:distribution <urn:distribution:heart-disease-heart-disease-models-metasyn-synthetic-csv>,
+        <urn:distribution:heart-disease-heart-disease-models-metasyn-synthetic-semmap-parquet>,
+        <urn:distribution:heart-disease:semmap-json> ;
+    dcat:keyword "Heart Disease",
+        "SemMap",
+        "SemSynth",
+        "synthetic data" ;
+    dcat:landingPage <file:///Users/benno/Documents/ud/projects/generative-metadata/semsynth/> .
+
+<urn:dataset:hepatitis> a dcat:Dataset ;
+    dct:description "Source: UCI dataset 46 — synthetic assets curated by SemSynth." ;
+    dct:identifier "hepatitis" ;
+    dct:issued "2026-03-16T15:50:50.130369+00:00"^^xsd:dateTime ;
+    dct:modified "2026-03-16T15:50:50.130369+00:00"^^xsd:dateTime ;
+    dct:title "Hepatitis" ;
+    dcat:distribution <urn:distribution:hepatitis-hepatitis-models-metasyn-synthetic-csv>,
+        <urn:distribution:hepatitis-hepatitis-models-metasyn-synthetic-semmap-parquet>,
+        <urn:distribution:hepatitis:semmap-json> ;
+    dcat:keyword "Hepatitis",
+        "SemMap",
+        "SemSynth",
+        "synthetic data" ;
+    dcat:landingPage <https://w3id.org/semsynth/demo#/output/Hepatitis/index.html> ;
+    prov:wasDerivedFrom <https://w3id.org/semsynth/demo#/output/Hepatitis/dataset.semmap.json>,
+        <https://w3id.org/semsynth/demo#/output/Hepatitis/models/metasyn/synthetic.csv>,
+        <https://w3id.org/semsynth/demo#/output/Hepatitis/models/metasyn/synthetic.semmap.parquet> .
+
+<urn:dataset:statlog-heart> a dcat:Dataset ;
+    dct:description "Cost Matrix — synthetic assets curated by SemSynth." ;
+    dct:identifier "statlog-heart" ;
+    dct:issued "2026-03-16T15:49:50.677498+00:00"^^xsd:dateTime ;
+    dct:modified "2026-03-16T15:49:50.677498+00:00"^^xsd:dateTime ;
+    dct:title "Statlog (Heart)" ;
+    dcat:distribution <urn:distribution:statlog-heart-statlog-heart-models-metasyn-synthetic-csv>,
+        <urn:distribution:statlog-heart-statlog-heart-models-metasyn-synthetic-semmap-parquet>,
+        <urn:distribution:statlog-heart:semmap-json> ;
+    dcat:keyword "SemMap",
+        "SemSynth",
+        "Statlog (Heart)",
+        "synthetic data" ;
+    dcat:landingPage <file:///Users/benno/Documents/ud/projects/generative-metadata/semsynth/> .
+
+<urn:dataset:uci-1150> a dcat:Dataset ;
+    dct:description "Source: UCI dataset 1150 — synthetic assets curated by SemSynth." ;
+    dct:identifier "uci-1150" ;
+    dct:issued "2026-03-16T15:49:41.478378+00:00"^^xsd:dateTime ;
+    dct:modified "2026-03-16T15:49:41.478378+00:00"^^xsd:dateTime ;
+    dct:title "UCI_1150" ;
+    dcat:distribution <urn:distribution:uci-1150-uci-1150-models-metasyn-synthetic-csv>,
+        <urn:distribution:uci-1150-uci-1150-models-metasyn-synthetic-semmap-parquet>,
+        <urn:distribution:uci-1150:semmap-json> ;
+    dcat:keyword "SemMap",
+        "SemSynth",
+        "UCI_1150",
+        "synthetic data" ;
+    dcat:landingPage <https://w3id.org/semsynth/demo#/output/UCI_1150/index.html> ;
+    prov:wasDerivedFrom <https://w3id.org/semsynth/demo#/output/UCI_1150/dataset.semmap.json>,
+        <https://w3id.org/semsynth/demo#/output/UCI_1150/models/metasyn/synthetic.csv>,
+        <https://w3id.org/semsynth/demo#/output/UCI_1150/models/metasyn/synthetic.semmap.parquet> .
+
+<urn:distribution:autistic-spectrum-disorder-screening-data-for-children-autistic-spectrum-disorder-screening-data-for-children-models-metasyn-synthetic-csv> a dcat:Distribution ;
+    dct:format "CSV" ;
+    dct:issued "2026-03-16T15:50:35.063906+00:00"^^xsd:dateTime ;
+    dct:modified "2026-03-16T15:50:35.063906+00:00"^^xsd:dateTime ;
+    dct:title "Autistic Spectrum Disorder Screening Data for Children synthetic data (metasyn, csv)" ;
+    dcat:accessURL <file:///Users/benno/Documents/ud/projects/generative-metadata/semsynth/> ;
+    dcat:byteSize 24879 ;
+    dcat:downloadURL <file:///Users/benno/Documents/ud/projects/generative-metadata/semsynth/> ;
+    dcat:mediaType "text/csv" .
+
+<urn:distribution:autistic-spectrum-disorder-screening-data-for-children-autistic-spectrum-disorder-screening-data-for-children-models-metasyn-synthetic-semmap-parquet> a dcat:Distribution ;
+    dct:format "PARQUET" ;
+    dct:issued "2026-03-16T15:50:35.119489+00:00"^^xsd:dateTime ;
+    dct:modified "2026-03-16T15:50:35.119489+00:00"^^xsd:dateTime ;
+    dct:title "Autistic Spectrum Disorder Screening Data for Children synthetic data (metasyn, parquet)" ;
+    dcat:accessURL <file:///Users/benno/Documents/ud/projects/generative-metadata/semsynth/> ;
+    dcat:byteSize 28285 ;
+    dcat:downloadURL <file:///Users/benno/Documents/ud/projects/generative-metadata/semsynth/> .
+
+<urn:distribution:autistic-spectrum-disorder-screening-data-for-children:semmap-json> a dcat:Distribution ;
+    dct:format "JSON-LD" ;
+    dct:issued "2026-03-16T15:50:37.700599+00:00"^^xsd:dateTime ;
+    dct:modified "2026-03-16T15:50:37.700599+00:00"^^xsd:dateTime ;
+    dct:title "Autistic Spectrum Disorder Screening Data for Children SemMap JSON-LD" ;
+    dcat:accessURL <file:///Users/benno/Documents/ud/projects/generative-metadata/semsynth/> ;
+    dcat:byteSize 7977 ;
+    dcat:downloadURL <file:///Users/benno/Documents/ud/projects/generative-metadata/semsynth/> ;
+    dcat:mediaType "application/ld+json" .
+
+<urn:distribution:cdc-diabetes-health-indicators-cdc-diabetes-health-indicators-models-metasyn-synthetic-csv> a dcat:Distribution ;
+    dct:format "CSV" ;
+    dct:issued "2026-03-16T15:51:08.710848+00:00"^^xsd:dateTime ;
+    dct:modified "2026-03-16T15:51:08.710848+00:00"^^xsd:dateTime ;
+    dct:title "CDC Diabetes Health Indicators synthetic data (metasyn, csv)" ;
+    dcat:accessURL <file:///Users/benno/Documents/ud/projects/generative-metadata/semsynth/> ;
+    dcat:byteSize 94308 ;
+    dcat:downloadURL <file:///Users/benno/Documents/ud/projects/generative-metadata/semsynth/> ;
+    dcat:mediaType "text/csv" .
+
+<urn:distribution:cdc-diabetes-health-indicators-cdc-diabetes-health-indicators-models-metasyn-synthetic-semmap-parquet> a dcat:Distribution ;
+    dct:format "PARQUET" ;
+    dct:issued "2026-03-16T15:51:08.896038+00:00"^^xsd:dateTime ;
+    dct:modified "2026-03-16T15:51:08.896038+00:00"^^xsd:dateTime ;
+    dct:title "CDC Diabetes Health Indicators synthetic data (metasyn, parquet)" ;
+    dcat:accessURL <file:///Users/benno/Documents/ud/projects/generative-metadata/semsynth/> ;
+    dcat:byteSize 80419 ;
+    dcat:downloadURL <file:///Users/benno/Documents/ud/projects/generative-metadata/semsynth/> .
+
+<urn:distribution:cdc-diabetes-health-indicators:semmap-json> a dcat:Distribution ;
+    dct:format "JSON-LD" ;
+    dct:issued "2026-03-16T15:51:16.547807+00:00"^^xsd:dateTime ;
+    dct:modified "2026-03-16T15:51:16.547807+00:00"^^xsd:dateTime ;
+    dct:title "CDC Diabetes Health Indicators SemMap JSON-LD" ;
+    dcat:accessURL <file:///Users/benno/Documents/ud/projects/generative-metadata/semsynth/> ;
+    dcat:byteSize 18437 ;
+    dcat:downloadURL <file:///Users/benno/Documents/ud/projects/generative-metadata/semsynth/> ;
+    dcat:mediaType "application/ld+json" .
+
+<urn:distribution:chronic-kidney-disease-chronic-kidney-disease-models-metasyn-synthetic-csv> a dcat:Distribution ;
+    dct:format "CSV" ;
+    dct:issued "2026-03-16T15:50:28.476520+00:00"^^xsd:dateTime ;
+    dct:modified "2026-03-16T15:50:28.476520+00:00"^^xsd:dateTime ;
+    dct:title "Chronic Kidney Disease synthetic data (metasyn, csv)" ;
+    dcat:accessURL <file:///Users/benno/Documents/ud/projects/generative-metadata/semsynth/> ;
+    dcat:byteSize 114981 ;
+    dcat:downloadURL <file:///Users/benno/Documents/ud/projects/generative-metadata/semsynth/> ;
+    dcat:mediaType "text/csv" .
+
+<urn:distribution:chronic-kidney-disease-chronic-kidney-disease-models-metasyn-synthetic-semmap-parquet> a dcat:Distribution ;
+    dct:format "PARQUET" ;
+    dct:issued "2026-03-16T15:50:28.671098+00:00"^^xsd:dateTime ;
+    dct:modified "2026-03-16T15:50:28.671098+00:00"^^xsd:dateTime ;
+    dct:title "Chronic Kidney Disease synthetic data (metasyn, parquet)" ;
+    dcat:accessURL <file:///Users/benno/Documents/ud/projects/generative-metadata/semsynth/> ;
+    dcat:byteSize 93088 ;
+    dcat:downloadURL <file:///Users/benno/Documents/ud/projects/generative-metadata/semsynth/> .
+
+<urn:distribution:chronic-kidney-disease:semmap-json> a dcat:Distribution ;
+    dct:format "JSON-LD" ;
+    dct:issued "2026-03-16T15:50:31.599909+00:00"^^xsd:dateTime ;
+    dct:modified "2026-03-16T15:50:31.599909+00:00"^^xsd:dateTime ;
+    dct:title "Chronic Kidney Disease SemMap JSON-LD" ;
+    dcat:accessURL <file:///Users/benno/Documents/ud/projects/generative-metadata/semsynth/> ;
+    dcat:byteSize 16706 ;
+    dcat:downloadURL <file:///Users/benno/Documents/ud/projects/generative-metadata/semsynth/> ;
+    dcat:mediaType "application/ld+json" .
+
+<urn:distribution:diabetes-130-us-hospitals-for-years-1999-2008-diabetes-130-us-hospitals-for-years-1999-2008-models-metasyn-synthetic-csv> a dcat:Distribution ;
+    dct:format "CSV" ;
+    dct:issued "2026-03-16T15:50:09.396525+00:00"^^xsd:dateTime ;
+    dct:modified "2026-03-16T15:50:09.396525+00:00"^^xsd:dateTime ;
+    dct:title "Diabetes 130-US Hospitals for Years 1999-2008 synthetic data (metasyn, csv)" ;
+    dcat:accessURL <file:///Users/benno/Documents/ud/projects/generative-metadata/semsynth/> ;
+    dcat:byteSize 282854 ;
+    dcat:downloadURL <file:///Users/benno/Documents/ud/projects/generative-metadata/semsynth/> ;
+    dcat:mediaType "text/csv" .
+
+<urn:distribution:diabetes-130-us-hospitals-for-years-1999-2008-diabetes-130-us-hospitals-for-years-1999-2008-models-metasyn-synthetic-semmap-parquet> a dcat:Distribution ;
+    dct:format "PARQUET" ;
+    dct:issued "2026-03-16T15:50:09.696146+00:00"^^xsd:dateTime ;
+    dct:modified "2026-03-16T15:50:09.696146+00:00"^^xsd:dateTime ;
+    dct:title "Diabetes 130-US Hospitals for Years 1999-2008 synthetic data (metasyn, parquet)" ;
+    dcat:accessURL <file:///Users/benno/Documents/ud/projects/generative-metadata/semsynth/> ;
+    dcat:byteSize 127740 ;
+    dcat:downloadURL <file:///Users/benno/Documents/ud/projects/generative-metadata/semsynth/> .
+
+<urn:distribution:diabetes-130-us-hospitals-for-years-1999-2008:semmap-json> a dcat:Distribution ;
+    dct:format "JSON-LD" ;
+    dct:issued "2026-03-16T15:50:19.931259+00:00"^^xsd:dateTime ;
+    dct:modified "2026-03-16T15:50:19.931259+00:00"^^xsd:dateTime ;
+    dct:title "Diabetes 130-US Hospitals for Years 1999-2008 SemMap JSON-LD" ;
+    dcat:accessURL <file:///Users/benno/Documents/ud/projects/generative-metadata/semsynth/> ;
+    dcat:byteSize 3787 ;
+    dcat:downloadURL <file:///Users/benno/Documents/ud/projects/generative-metadata/semsynth/> ;
+    dcat:mediaType "application/ld+json" .
+
+<urn:distribution:fertility-fertility-models-metasyn-synthetic-csv> a dcat:Distribution ;
+    dct:format "CSV" ;
+    dct:issued "2026-03-16T15:49:54.008577+00:00"^^xsd:dateTime ;
+    dct:modified "2026-03-16T15:49:54.008577+00:00"^^xsd:dateTime ;
+    dct:title "Fertility synthetic data (metasyn, csv)" ;
+    dcat:accessURL <https://w3id.org/semsynth/demo#/output/Fertility/models/metasyn/synthetic.csv> ;
+    dcat:byteSize 7566 ;
+    dcat:downloadURL <https://w3id.org/semsynth/demo#/output/Fertility/models/metasyn/synthetic.csv> ;
+    dcat:mediaType "text/csv" .
+
+<urn:distribution:fertility-fertility-models-metasyn-synthetic-semmap-parquet> a dcat:Distribution ;
+    dct:format "PARQUET" ;
+    dct:issued "2026-03-16T15:49:54.044657+00:00"^^xsd:dateTime ;
+    dct:modified "2026-03-16T15:49:54.044657+00:00"^^xsd:dateTime ;
+    dct:title "Fertility synthetic data (metasyn, parquet)" ;
+    dcat:accessURL <https://w3id.org/semsynth/demo#/output/Fertility/models/metasyn/synthetic.semmap.parquet> ;
+    dcat:byteSize 19981 ;
+    dcat:downloadURL <https://w3id.org/semsynth/demo#/output/Fertility/models/metasyn/synthetic.semmap.parquet> .
+
+<urn:distribution:fertility:semmap-json> a dcat:Distribution ;
+    dct:format "JSON-LD" ;
+    dct:issued "2026-03-16T15:49:57.681334+00:00"^^xsd:dateTime ;
+    dct:modified "2026-03-16T15:49:57.681334+00:00"^^xsd:dateTime ;
+    dct:title "Fertility SemMap JSON-LD" ;
+    dcat:accessURL <https://w3id.org/semsynth/demo#/output/Fertility/dataset.semmap.json> ;
+    dcat:byteSize 5857 ;
+    dcat:downloadURL <https://w3id.org/semsynth/demo#/output/Fertility/dataset.semmap.json> ;
+    dcat:mediaType "application/ld+json" .
+
+<urn:distribution:heart-disease-heart-disease-models-metasyn-synthetic-csv> a dcat:Distribution ;
+    dct:format "CSV" ;
+    dct:issued "2026-03-16T15:50:41.447875+00:00"^^xsd:dateTime ;
+    dct:modified "2026-03-16T15:50:41.447875+00:00"^^xsd:dateTime ;
+    dct:title "Heart Disease synthetic data (metasyn, csv)" ;
+    dcat:accessURL <file:///Users/benno/Documents/ud/projects/generative-metadata/semsynth/> ;
+    dcat:byteSize 33766 ;
+    dcat:downloadURL <file:///Users/benno/Documents/ud/projects/generative-metadata/semsynth/> ;
+    dcat:mediaType "text/csv" .
+
+<urn:distribution:heart-disease-heart-disease-models-metasyn-synthetic-semmap-parquet> a dcat:Distribution ;
+    dct:format "PARQUET" ;
+    dct:issued "2026-03-16T15:50:41.576876+00:00"^^xsd:dateTime ;
+    dct:modified "2026-03-16T15:50:41.576876+00:00"^^xsd:dateTime ;
+    dct:title "Heart Disease synthetic data (metasyn, parquet)" ;
+    dcat:accessURL <file:///Users/benno/Documents/ud/projects/generative-metadata/semsynth/> ;
+    dcat:byteSize 45202 ;
+    dcat:downloadURL <file:///Users/benno/Documents/ud/projects/generative-metadata/semsynth/> .
+
+<urn:distribution:heart-disease:semmap-json> a dcat:Distribution ;
+    dct:format "JSON-LD" ;
+    dct:issued "2026-03-16T15:50:44.247302+00:00"^^xsd:dateTime ;
+    dct:modified "2026-03-16T15:50:44.247302+00:00"^^xsd:dateTime ;
+    dct:title "Heart Disease SemMap JSON-LD" ;
+    dcat:accessURL <file:///Users/benno/Documents/ud/projects/generative-metadata/semsynth/> ;
+    dcat:byteSize 10907 ;
+    dcat:downloadURL <file:///Users/benno/Documents/ud/projects/generative-metadata/semsynth/> ;
+    dcat:mediaType "application/ld+json" .
+
+<urn:distribution:hepatitis-hepatitis-models-metasyn-synthetic-csv> a dcat:Distribution ;
+    dct:format "CSV" ;
+    dct:issued "2026-03-16T15:50:48.016731+00:00"^^xsd:dateTime ;
+    dct:modified "2026-03-16T15:50:48.016731+00:00"^^xsd:dateTime ;
+    dct:title "Hepatitis synthetic data (metasyn, csv)" ;
+    dcat:accessURL <https://w3id.org/semsynth/demo#/output/Hepatitis/models/metasyn/synthetic.csv> ;
+    dcat:byteSize 21603 ;
+    dcat:downloadURL <https://w3id.org/semsynth/demo#/output/Hepatitis/models/metasyn/synthetic.csv> ;
+    dcat:mediaType "text/csv" .
+
+<urn:distribution:hepatitis-hepatitis-models-metasyn-synthetic-semmap-parquet> a dcat:Distribution ;
+    dct:format "PARQUET" ;
+    dct:issued "2026-03-16T15:50:48.146345+00:00"^^xsd:dateTime ;
+    dct:modified "2026-03-16T15:50:48.146345+00:00"^^xsd:dateTime ;
+    dct:title "Hepatitis synthetic data (metasyn, parquet)" ;
+    dcat:accessURL <https://w3id.org/semsynth/demo#/output/Hepatitis/models/metasyn/synthetic.semmap.parquet> ;
+    dcat:byteSize 46439 ;
+    dcat:downloadURL <https://w3id.org/semsynth/demo#/output/Hepatitis/models/metasyn/synthetic.semmap.parquet> .
+
+<urn:distribution:hepatitis:semmap-json> a dcat:Distribution ;
+    dct:format "JSON-LD" ;
+    dct:issued "2026-03-16T15:50:50.130369+00:00"^^xsd:dateTime ;
+    dct:modified "2026-03-16T15:50:50.130369+00:00"^^xsd:dateTime ;
+    dct:title "Hepatitis SemMap JSON-LD" ;
+    dcat:accessURL <https://w3id.org/semsynth/demo#/output/Hepatitis/dataset.semmap.json> ;
+    dcat:byteSize 13144 ;
+    dcat:downloadURL <https://w3id.org/semsynth/demo#/output/Hepatitis/dataset.semmap.json> ;
+    dcat:mediaType "application/ld+json" .
+
+<urn:distribution:sparql:query-provenance-artifacts> a dcat:Distribution ;
+    dct:format "RQ" ;
+    dct:issued "2026-03-17T13:28:37.215073+00:00"^^xsd:dateTime ;
+    dct:modified "2026-03-17T13:28:37.215073+00:00"^^xsd:dateTime ;
+    dct:title "SPARQL example: Provenance sources driving synthetic artifacts" ;
+    dcat:accessURL <https://w3id.org/semsynth/demo#/output/sparql/query-provenance-artifacts.rq> ;
+    dcat:byteSize 575 ;
+    dcat:downloadURL <https://w3id.org/semsynth/demo#/output/sparql/query-provenance-artifacts.rq> ;
+    dcat:mediaType "application/sparql-query" .
+
+<urn:distribution:sparql:query-semmap-and-provenance-artifacts> a dcat:Distribution ;
+    dct:format "RQ" ;
+    dct:issued "2026-03-17T13:28:37.215073+00:00"^^xsd:dateTime ;
+    dct:modified "2026-03-17T13:28:37.215073+00:00"^^xsd:dateTime ;
+    dct:title "SPARQL example: Datasets with SemMap + provenance synthetic outputs" ;
+    dcat:accessURL <https://w3id.org/semsynth/demo#/output/sparql/query-semmap-and-provenance-artifacts.rq> ;
+    dcat:byteSize 851 ;
+    dcat:downloadURL <https://w3id.org/semsynth/demo#/output/sparql/query-semmap-and-provenance-artifacts.rq> ;
+    dcat:mediaType "application/sparql-query" .
+
+<urn:distribution:sparql:query-semmap-coverage> a dcat:Distribution ;
+    dct:format "RQ" ;
+    dct:issued "2026-03-17T13:28:37.215073+00:00"^^xsd:dateTime ;
+    dct:modified "2026-03-17T13:28:37.215073+00:00"^^xsd:dateTime ;
+    dct:title "SPARQL example: SemMap coverage per dataset" ;
+    dcat:accessURL <https://w3id.org/semsynth/demo#/output/sparql/query-semmap-coverage.rq> ;
+    dcat:byteSize 598 ;
+    dcat:downloadURL <https://w3id.org/semsynth/demo#/output/sparql/query-semmap-coverage.rq> ;
+    dcat:mediaType "application/sparql-query" .
+
+<urn:distribution:statlog-heart-statlog-heart-models-metasyn-synthetic-csv> a dcat:Distribution ;
+    dct:format "CSV" ;
+    dct:issued "2026-03-16T15:49:47.493440+00:00"^^xsd:dateTime ;
+    dct:modified "2026-03-16T15:49:47.493440+00:00"^^xsd:dateTime ;
+    dct:title "Statlog (Heart) synthetic data (metasyn, csv)" ;
+    dcat:accessURL <file:///Users/benno/Documents/ud/projects/generative-metadata/semsynth/> ;
+    dcat:byteSize 30144 ;
+    dcat:downloadURL <file:///Users/benno/Documents/ud/projects/generative-metadata/semsynth/> ;
+    dcat:mediaType "text/csv" .
+
+<urn:distribution:statlog-heart-statlog-heart-models-metasyn-synthetic-semmap-parquet> a dcat:Distribution ;
+    dct:format "PARQUET" ;
+    dct:issued "2026-03-16T15:49:47.565802+00:00"^^xsd:dateTime ;
+    dct:modified "2026-03-16T15:49:47.565802+00:00"^^xsd:dateTime ;
+    dct:title "Statlog (Heart) synthetic data (metasyn, parquet)" ;
+    dcat:accessURL <file:///Users/benno/Documents/ud/projects/generative-metadata/semsynth/> ;
+    dcat:byteSize 35599 ;
+    dcat:downloadURL <file:///Users/benno/Documents/ud/projects/generative-metadata/semsynth/> .
+
+<urn:distribution:statlog-heart:semmap-json> a dcat:Distribution ;
+    dct:format "JSON-LD" ;
+    dct:issued "2026-03-16T15:49:50.677498+00:00"^^xsd:dateTime ;
+    dct:modified "2026-03-16T15:49:50.677498+00:00"^^xsd:dateTime ;
+    dct:title "Statlog (Heart) SemMap JSON-LD" ;
+    dcat:accessURL <file:///Users/benno/Documents/ud/projects/generative-metadata/semsynth/> ;
+    dcat:byteSize 7226 ;
+    dcat:downloadURL <file:///Users/benno/Documents/ud/projects/generative-metadata/semsynth/> ;
+    dcat:mediaType "application/ld+json" .
+
+<urn:distribution:uci-1150-uci-1150-models-metasyn-synthetic-csv> a dcat:Distribution ;
+    dct:format "CSV" ;
+    dct:issued "2026-03-16T15:49:27.213149+00:00"^^xsd:dateTime ;
+    dct:modified "2026-03-16T15:49:27.213149+00:00"^^xsd:dateTime ;
+    dct:title "UCI_1150 synthetic data (metasyn, csv)" ;
+    dcat:accessURL <https://w3id.org/semsynth/demo#/output/UCI_1150/models/metasyn/synthetic.csv> ;
+    dcat:byteSize 188244 ;
+    dcat:downloadURL <https://w3id.org/semsynth/demo#/output/UCI_1150/models/metasyn/synthetic.csv> ;
+    dcat:mediaType "text/csv" .
+
+<urn:distribution:uci-1150-uci-1150-models-metasyn-synthetic-semmap-parquet> a dcat:Distribution ;
+    dct:format "PARQUET" ;
+    dct:issued "2026-03-16T15:49:27.365377+00:00"^^xsd:dateTime ;
+    dct:modified "2026-03-16T15:49:27.365377+00:00"^^xsd:dateTime ;
+    dct:title "UCI_1150 synthetic data (metasyn, parquet)" ;
+    dcat:accessURL <https://w3id.org/semsynth/demo#/output/UCI_1150/models/metasyn/synthetic.semmap.parquet> ;
+    dcat:byteSize 131511 ;
+    dcat:downloadURL <https://w3id.org/semsynth/demo#/output/UCI_1150/models/metasyn/synthetic.semmap.parquet> .
+
+<urn:distribution:uci-1150:semmap-json> a dcat:Distribution ;
+    dct:format "JSON-LD" ;
+    dct:issued "2026-03-16T15:49:41.478378+00:00"^^xsd:dateTime ;
+    dct:modified "2026-03-16T15:49:41.478378+00:00"^^xsd:dateTime ;
+    dct:title "UCI_1150 SemMap JSON-LD" ;
+    dcat:accessURL <https://w3id.org/semsynth/demo#/output/UCI_1150/dataset.semmap.json> ;
+    dcat:byteSize 3069 ;
+    dcat:downloadURL <https://w3id.org/semsynth/demo#/output/UCI_1150/dataset.semmap.json> ;
+    dcat:mediaType "application/ld+json" .
+

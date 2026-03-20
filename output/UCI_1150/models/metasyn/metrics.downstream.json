@@ -1,0 +1,5 @@
+{
+  "formula": "Gallstone_Status ~ Q('Age') + Q('Gender') + Q('Glucose') + Q('Age'):Q('Gender') + Q('Gender'):Q('Glucose')",
+  "sign_match_rate": 1.0,
+  "skipped_reason": null
+}

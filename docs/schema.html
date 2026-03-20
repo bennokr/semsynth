@@ -8,14 +8,15 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>SemMap metadata schema &mdash; semsynth  documentation</title>
       <link rel="stylesheet" type="text/css" href="_static/pygments.css?v=b86133f3" />
-      <link rel="stylesheet" type="text/css" href="_static/css/theme.css?v=e59714d7" />
+      <link rel="stylesheet" type="text/css" href="_static/css/theme.css?v=9edc463e" />
+      <link rel="stylesheet" type="text/css" href="_static/mystnb.11b39860a7a0cbfd473a3ad8a317855267ff0bd372690045ca344a6b62be495e.css?v=8cd3d715" />
 
   
       <script src="_static/jquery.js?v=5d32c60e"></script>
       <script src="_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
       <script src="_static/documentation_options.js?v=5929fcd5"></script>
-      <script src="_static/doctools.js?v=9bcbadda"></script>
-      <script src="_static/sphinx_highlight.js?v=dc90522c"></script>
+      <script src="_static/doctools.js?v=fd6eb6e6"></script>
+      <script src="_static/sphinx_highlight.js?v=6ffebe34"></script>
     <script src="_static/js/theme.js"></script>
     <link rel="index" title="Index" href="genindex.html" />
     <link rel="search" title="Search" href="search.html" />
@@ -55,7 +56,7 @@
 </ul>
 </li>
 <li class="toctree-l1"><a class="reference internal" href="map_columns.html">Column terminology mapping</a></li>
-<li class="toctree-l1"><a class="reference internal" href="provenance.html">Provenance workflow guide</a></li>
+<li class="toctree-l1"><a class="reference internal" href="provenance.html">Provenance</a></li>
 <li class="toctree-l1"><a class="reference internal" href="backends.html">Backends overview</a></li>
 <li class="toctree-l1"><a class="reference internal" href="missingness.html">Missingness handling</a></li>
 <li class="toctree-l1"><a class="reference internal" href="privacy-metrics.html">Privacy metrics</a></li>
@@ -124,6 +125,23 @@ categorical type for privacy metadata.</p></li>
 <p>Every dataclass inherits <code class="docutils literal notranslate"><span class="pre">RDFMixin</span></code>, enabling round-trips via
 <code class="docutils literal notranslate"><span class="pre">to_jsonld()/from_jsonld</span></code> and storage inside parquet files through the
 pandas <code class="docutils literal notranslate"><span class="pre">semmap</span></code> accessor.</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># Inspect the first few columns and their statistical data types.</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">json</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">semsynth.semmap</span><span class="w"> </span><span class="kn">import</span> <span class="n">Metadata</span>
+
+<span class="n">meta</span> <span class="o">=</span> <span class="n">Metadata</span><span class="o">.</span><span class="n">from_dcat_dsv</span><span class="p">(</span><span class="n">json</span><span class="o">.</span><span class="n">load</span><span class="p">(</span><span class="nb">open</span><span class="p">(</span><span class="s2">&quot;../mappings/uciml-45.metadata.json&quot;</span><span class="p">)))</span>
+<span class="p">[(</span><span class="n">c</span><span class="o">.</span><span class="n">name</span><span class="p">,</span> <span class="nb">getattr</span><span class="p">(</span><span class="n">c</span><span class="o">.</span><span class="n">summaryStatistics</span><span class="p">,</span> <span class="s2">&quot;statisticalDataType&quot;</span><span class="p">,</span> <span class="kc">None</span><span class="p">))</span> <span class="k">for</span> <span class="n">c</span> <span class="ow">in</span> <span class="n">meta</span><span class="o">.</span><span class="n">datasetSchema</span><span class="o">.</span><span class="n">columns</span><span class="p">[:</span><span class="mi">5</span><span class="p">]]</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output text_plain highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>[(&#39;age&#39;, None), (&#39;sex&#39;, None), (&#39;cp&#39;, None), (&#39;fbs&#39;, None), (&#39;trestbps&#39;, None)]
+</pre></div>
+</div>
+</div>
+</div>
 </section>
 <section id="creation-and-ingestion">
 <h2>Creation and ingestion<a class="headerlink" href="#creation-and-ingestion" title="Link to this heading"></a></h2>

@@ -13,7 +13,7 @@ kernelspec:
 
 # Downstream fidelity
 
-The downstream-fidelity module compares real and synthetic datasets by fitting equivalent predictive models and inspecting how coefficients, directions of effect, and uncertainty translate between them. It automatically derives a modeling formula from metadata, performs multiple imputation for missing data, and reports side-by-side parameter estimates to highlight agreement or drift. The example below promotes `num` to the target role for demonstration because the curated metadata omits an explicit target.
+The downstream-fidelity module compares real and synthetic datasets by fitting equivalent predictive models and inspecting how coefficients, directions of effect, and uncertainty translate between them. It automatically derives a modeling formula from metadata, performs multiple imputation for missing data, and reports side-by-side parameter estimates to highlight agreement or drift. The example below uses the curated SemMap metadata (which marks `num` as the target).
 
 ```{code-cell} python
 # Visualize correlations to motivate downstream modeling choices.
@@ -37,33 +37,21 @@ plt.tight_layout()
 - `auto_formula` builds a Patsy formula by inferring target roles from the dataset schema, coercing dtypes (including categorical levels from codebooks), and generating main effects plus interaction candidates. Cross-validated feature screening enforces strong heredity, keeping parents of any retained interactions to stabilize the model.
 
 ```{code-cell} python
-# Create a target-aware formula (the curated metadata doesn't mark one).
+# Create a target-aware formula straight from the SemMap metadata.
 import json
-from semsynth.semmap import Metadata
-from semsynth.utils import infer_types
-from semsynth.downstream_fidelity import auto_formula
+import sys
+from pathlib import Path
+from importlib import reload
+sys.path.insert(0, str(Path("..").resolve()))
+import semsynth.downstream_fidelity as dfid
+dfid = reload(dfid)
 
-disc, cont = infer_types(heart)
-inferred = {c: ("discrete" if c in disc else "continuous") for c in heart.columns}
-meta = Metadata.from_dcat_dsv(json.load(open("../mappings/uciml-45.metadata.json")))
-
-# Explicitly mark the diagnosis column as the target for this demo.
-for col in meta.datasetSchema.columns:
-    if col.name == "num":
-        col.hadRole = "target"
-    else:
-        col.hadRole = col.hadRole or "qi"
-
-privacy_frame = meta.to_privacy_frame(inferred)
-privacy_frame.loc[privacy_frame.variable == "num", "role"] = "target"
-privacy_frame.loc[privacy_frame.role.isna(), "role"] = "qi"
-
-# Pass the enriched SemMap JSON-LD (with roles set) to auto_formula
-formula = auto_formula(heart, meta.to_jsonld())
+meta = json.load(open("../mappings/uciml-45.metadata.json"))
+formula = dfid.auto_formula(heart, meta, dfid.DownstreamConfig())
 formula
 ```
 
-This small role override mirrors what the pipeline would do when a target is declared in curated SemMap metadata, so the resulting formula reflects the intended prediction task.
+The curated metadata already declares the `num` diagnosis column as the target, so `auto_formula` discovers the correct prediction task without manual overrides.
 
 ## Multiple imputation and estimation
 - `fit_with_mi` recodes categorical variables, replaces missing codes, and runs MICE (`statsmodels.imputation.mice`) to produce pooled estimates for generalized linear models appropriate to the target type (binomial, Poisson, or OLS).
