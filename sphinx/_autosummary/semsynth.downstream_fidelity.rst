@@ -1,4 +1,4 @@
-semsynth.downstream\_fidelity
+﻿semsynth.downstream\_fidelity
 =============================
 
 .. automodule:: semsynth.downstream_fidelity
@@ -13,6 +13,10 @@ semsynth.downstream\_fidelity
       fit_with_mi
       formula_from_selected
       generate_candidates
+      get_column_name
+      modeling_role
+      recompute_downstream
+      rule
       screen_terms
    
    .. rubric:: Classes
@@ -21,9 +25,12 @@ semsynth.downstream\_fidelity
    
       Any
       GridSearchCV
+      InPath
       LassoCV
       LogisticRegression
       LogisticRegressionCV
+      OutPath
+      Path
       PoissonRegressor
       SimpleImputer
       StandardScaler

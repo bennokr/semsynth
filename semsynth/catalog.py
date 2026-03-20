@@ -13,7 +13,8 @@ from hashlib import sha256
 from pathlib import Path
 from typing import Dict, List, Optional, Sequence, Set, Tuple
 
-from makeprov import GLOBAL_CONFIG, InPath, RDFMixin, OutPath, main, rule
+from makeprov import InPath, RDFMixin, OutPath, main, rule
+from makeprov.config import ProvenanceConfig
 
 from .mappings import normalize_jsonld_payload
 
@@ -301,6 +302,36 @@ def collect_distributions(
             )
             inputs.add(path)
 
+    for prov_path in dataset_dir.rglob("provenance.json"):
+        if not prov_path.is_file():
+            continue
+        try:
+            modified = datetime.fromtimestamp(prov_path.stat().st_mtime, tz=timezone.utc)
+            created = datetime.fromtimestamp(prov_path.stat().st_ctime, tz=timezone.utc)
+            size = prov_path.stat().st_size
+        except OSError:
+            continue
+        try:
+            relative_id = prov_path.relative_to(dataset_dir.parent)
+        except ValueError:
+            relative_id = prov_path.name
+        dist_id = slugify(f"{dataset_name}-{relative_id}")
+        url = mapper.for_path(prov_path)
+        distributions.append(
+            CatalogDistribution(
+                id=f"urn:distribution:{dist_id}",
+                title=f"{dataset_name} provenance (JSON-LD)",
+                access_url=url,
+                download_url=url,
+                media_type="application/ld+json",
+                format="JSON-LD",
+                byte_size=size,
+                modified=to_iso(modified),
+                issued=to_iso(created),
+            )
+        )
+        inputs.add(prov_path)
+
     return distributions, inputs
 
 
@@ -431,150 +462,19 @@ def write_index(
                 "description": query["description"],
             }
             for query in query_examples
-        ]
+        ],
+        indent=2,
     )
 
-    html = f"""<!doctype html>
-<html lang="en">
-<head>
-  <meta charset="utf-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <title>SemSynth demo reports</title>
-  <link rel="stylesheet" href="{css_href}" />
-  <link rel="stylesheet" href="../templates/yasgui.min.css" />
-  <style>
-    .endpoint-pill {{ display: inline-block; font-family: monospace; background: #f4f4f4; padding: 0.35rem 0.55rem; border-radius: 0.35rem; }}
-    #sparql-app {{ height: 70vh; min-height: 520px; border: 1px solid #ddd; border-radius: 0.5rem; overflow: hidden; }}
-    .semsynth-query-result {{ margin: 0.75rem; padding: 0.75rem; max-height: 16rem; overflow: auto; border-radius: 0.35rem; background: #fafafa; border: 1px solid #ddd; font-family: monospace; white-space: pre-wrap; }}
-  </style>
-</head>
-<body>
-<main class="report-container">
-  <h1>Data Reports</h1>
-  <ul>
-{dataset_items}
-  </ul>
-
-  <section>
-    <h2>Static SPARQL endpoint playground</h2>
-    <p>
-      Endpoint identifier: <span class="endpoint-pill">{SPARQL_ENDPOINT_ID}</span>.
-      This page embeds YASGUI + the browser Comunica SPARQL engine (no server-side SPARQL service).
-    </p>
-    <p>
-      The engine queries <code>output/catalog.jsonld</code> and loads query tabs from <code>output/sparql/*.rq</code> files.
-      Use the tabs below to select and run each example query.
-    </p>
-    <div id="sparql-app"></div>
-  </section>
-</main>
-
-<script src="../templates/comunica-browser.js"></script>
-<script src="../templates/yasgui.min.js"></script>
-<script>
-  const endpointId = {json.dumps(SPARQL_ENDPOINT_ID)};
-  const exampleQueries = {query_json};
-
-  function streamToString(stream) {{
-    return new Promise((resolve, reject) => {{
-      const chunks = [];
-      stream.on("data", (chunk) => chunks.push(typeof chunk === "string" ? chunk : new TextDecoder().decode(chunk)));
-      stream.on("end", () => resolve(chunks.join("")));
-      stream.on("error", reject);
-    }});
-  }}
-
-  async function initStaticSparql() {{
-    const yasgui = new Yasgui(document.getElementById("sparql-app"), {{
-      requestConfig: {{ endpoint: endpointId }},
-      copyEndpointOnNewTab: false,
-    }});
-
-    const engine = new Comunica.QueryEngine();
-    const catalogUrl = new URL("catalog.jsonld", location.href).toString();
-    const catalogText = await fetch(catalogUrl).then(r => r.text());
-    const sources = [{{
-      type: "string",
-      value: catalogText,
-      mediaType: "application/ld+json",
-      baseIRI: catalogUrl,
-    }}];
-
-    const renderPayload = (yasr, payload, mediaType) => {{
-      const host = yasr.rootEl.parentElement;
-      let pre = host.querySelector(".semsynth-query-result");
-      if (!pre) {{
-        pre = document.createElement("pre");
-        pre.className = "semsynth-query-result";
-        host.appendChild(pre);
-      }}
-      pre.dataset.mediaType = mediaType;
-      pre.textContent = payload;
-    }};
-
-    const runWithComunica = async (tab) => {{
-      tab.show();
-      const yasqe = tab.getYasqe();
-      const yasr = tab.getYasr();
-      const queryText = yasqe.getValue();
-      try {{
-        const result = await engine.query(queryText, {{ sources }});
-        const media = result.resultType === "bindings"
-          ? "application/sparql-results+json"
-          : (result.resultType === "boolean" ? "application/sparql-results+json" : "application/trig");
-        const serialized = await engine.resultToString(result, media);
-        const payload = await streamToString(serialized.data);
-        renderPayload(yasr, payload, media);
-      }} catch (error) {{
-        renderPayload(yasr, JSON.stringify({{ error: String(error) }}, null, 2), "application/json");
-      }}
-    }};
-
-    const wireTab = (tab) => {{
-      const yasqe = tab.getYasqe();
-      yasqe.query = () => runWithComunica(tab);
-      const keys = yasqe.getOption("extraKeys") || {{}};
-      yasqe.setOption("extraKeys", Object.assign({{}}, keys, {{
-        "Cmd-Enter": () => {{ runWithComunica(tab); return false; }},
-        "Ctrl-Enter": () => {{ runWithComunica(tab); return false; }},
-      }}));
-    }};
-
-    const loadQueryText = async (queryInfo) => {{
-      const queryUrl = new URL(`sparql/${{queryInfo.filename}}`, location.href).toString();
-      const response = await fetch(queryUrl);
-      if (!response.ok) {{
-        throw new Error(`Unable to load query file ${{queryInfo.filename}} (${{response.status}})`);
-      }}
-      return response.text();
-    }};
-
-    const firstTab = yasgui.getTab();
-    wireTab(firstTab);
-
-    if (exampleQueries.length) {{
-      const firstQuery = exampleQueries[0];
-      firstTab.setName(firstQuery.name);
-      firstTab.getYasqe().setValue(await loadQueryText(firstQuery));
-      for (const queryInfo of exampleQueries.slice(1)) {{
-        const tab = yasgui.addTab(true);
-        tab.setName(queryInfo.name);
-        tab.show();
-        tab.getYasqe().setValue(await loadQueryText(queryInfo));
-        wireTab(tab);
-      }}
-      firstTab.show();
-    }}
-  }}
-
-  initStaticSparql().catch((error) => {{
-    const container = document.getElementById("sparql-app");
-    container.innerHTML = `<pre>Failed to initialize static SPARQL UI: ${{String(error)}}</pre>`;
-  }});
-</script>
-</body>
-</html>
-"""
+    template_path = resources.files("semsynth.templates") / "catalog_index.html"
+    template = template_path.read_text(encoding="utf-8")
+    html = (
+        template.replace("{{CSS_HREF}}", css_href)
+        .replace("{{DATASET_ITEMS}}", dataset_items)
+        .replace("{{ENDPOINT_ID}}", SPARQL_ENDPOINT_ID)
+        .replace("{{ENDPOINT_ID_JSON}}", json.dumps(SPARQL_ENDPOINT_ID))
+        .replace("{{QUERY_JSON}}", query_json)
+    )
 
     index_path.write_text(html + "\n", encoding="utf-8")
     LOGGER.info("Updated %s", index_path)
@@ -596,7 +496,7 @@ def build_catalog(
         index_path: Output path for the HTML index file.
     """
 
-    GLOBAL_CONFIG.prov_dir = out_path.parent
+    ProvenanceConfig.get().prov_dir = out_path.parent
 
     mapper = PathURLMapper(root_dir=base_dir.parent, base_url=base_url)
 

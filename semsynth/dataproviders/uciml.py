@@ -24,6 +24,7 @@ from ._helpers import (
 
 
 EMPTY = (None, "", [], {},)
+_SPACE_CLEANUP = str.strip
 
 
 def _present(value: Any) -> bool:
@@ -358,7 +359,7 @@ def load_uciml_by_id(dataset_id: int, cache_dir: pathlib.Path | OutPath) -> Data
             df_cached, target=spec.target, metadata=meta_cached
         )
         spec.target = spec.target or detected_target
-        spec.name = str(meta_cached.get("name") or f"UCI_{dataset_id}")
+        spec.name = _SPACE_CLEANUP(str(meta_cached.get("name") or f"UCI_{dataset_id}"))
         spec.meta = meta_cached.get("dcat_dsv") or meta_cached
         return DatasetPayload(
             spec=spec,
@@ -402,7 +403,7 @@ def load_uciml_by_id(dataset_id: int, cache_dir: pathlib.Path | OutPath) -> Data
     raw_metadata.setdefault("uci_id", dataset_id)
     dcat_dsv_meta = _uciml_metadata_to_dcat_dsv(raw_metadata, dataset.variables, dataset_id)
     spec.meta = dcat_dsv_meta
-    spec.name = getattr(dataset.metadata, "name", f"UCI_{dataset_id}")
+    spec.name = _SPACE_CLEANUP(getattr(dataset.metadata, "name", f"UCI_{dataset_id}"))
 
     meta_payload: Dict[str, Any] = {
         "id": dataset_id,

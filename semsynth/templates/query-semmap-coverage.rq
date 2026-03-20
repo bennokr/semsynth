@@ -1,14 +1,18 @@
-PREFIX dcat: <http://www.w3.org/ns/dcat#>
 PREFIX dct: <http://purl.org/dc/terms/>
+PREFIX dsv: <https://w3id.org/dsv-ontology#>
+PREFIX csvw: <http://www.w3.org/ns/csvw#>
+PREFIX dcat: <http://www.w3.org/ns/dcat#>
 
-SELECT ?dataset ?title (COUNT(DISTINCT ?semmap) AS ?semmapCount)
+SELECT ?datasetLabel (COUNT(?col) AS ?columns)
 WHERE {
-  ?dataset a dcat:Dataset ;
-           dct:title ?title ;
-           dcat:distribution ?dist .
-  ?dist dcat:downloadURL ?semmap .
-  FILTER(CONTAINS(LCASE(STR(?semmap)), "dataset.semmap"))
+  ?dataset a dcat:Dataset .
+  OPTIONAL { ?dataset dct:title ?datasetTitle }
+  BIND(COALESCE(?datasetTitle, STR(?dataset)) AS ?datasetLabel)
+
+  OPTIONAL {
+    ?dataset (dsv:datasetSchema|csvw:tableSchema|<https://schema.org/datasetSchema>|<http://schema.org/datasetSchema>) ?schema .
+    ?schema (dsv:column|csvw:column|<https://schema.org/column>) ?col .
+  }
 }
-GROUP BY ?dataset ?title
-HAVING (COUNT(DISTINCT ?semmap) >= 1)
-ORDER BY DESC(?semmapCount) ?title
+GROUP BY ?datasetLabel
+ORDER BY DESC(?columns)

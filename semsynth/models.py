@@ -7,8 +7,10 @@ import json
 import logging
 from pathlib import Path
 from typing import Any, Dict, List, Optional, Tuple
+import tomllib
 
 from makeprov import OutPath, rule
+from makeprov.config import Config
 
 if False:  # pragma: no cover - imported for type checking only
     from typing import TypedDict  # noqa: F401  # pylint: disable=unused-import
@@ -28,7 +30,7 @@ class ModelSpec:
 
 
 @dataclass
-class ModelConfigBundle:
+class ModelConfigBundle(Config):
     """Container bundling model specs together with global run flags."""
 
     specs: List[ModelSpec]
@@ -59,20 +61,13 @@ class ModelRun:
 
 def _as_list(data: Any) -> List[Dict[str, Any]]:
     if isinstance(data, dict):
-        if isinstance(data.get("configs"), list):
-            return list(data["configs"])
-        if isinstance(data.get("generators"), list):
-            return list(data["generators"])
-        return [
-            {
-                k: v
-                for k, v in data.items()
-                if k not in {"generate_umap", "compute_privacy", "compute_downstream", "enable_missingness_wrapping"}
-            }
-        ]
+        for key in ("models", "configs", "generators"):
+            if isinstance(data.get(key), list):
+                return list(data[key])
+        return []
     if isinstance(data, list):
         return list(data)
-    raise ValueError("Model config YAML must be a list or mapping with 'configs'.")
+    return []
 
 
 def _coerce_optional_bool(value: Any) -> Optional[bool]:
@@ -89,45 +84,48 @@ def _coerce_optional_bool(value: Any) -> Optional[bool]:
     raise ValueError(f"Cannot coerce value {value!r} to boolean")
 
 
+def parse_toml_config(config_input: Optional[str]) -> Dict[str, Any]:
+    """Parse a TOML configuration from a file (prefixed with ``@``) or inline snippet."""
+
+    if not config_input:
+        return {}
+    text = ""
+    candidate = config_input.strip()
+    if candidate.startswith("@"):
+        path = Path(candidate[1:]).expanduser()
+        text = path.read_text(encoding="utf-8")
+    else:
+        maybe_path = Path(candidate).expanduser()
+        if maybe_path.exists():
+            text = maybe_path.read_text(encoding="utf-8")
+        else:
+            text = candidate
+    data = tomllib.loads(text)
+    return data or {}
+
+
 def _extract_globals(data: Any) -> Tuple[List[Dict[str, Any]], Dict[str, Optional[bool]]]:
-    if isinstance(data, dict):
-        items = _as_list(data)
-        globals_map = {
-            key: _coerce_optional_bool(data.get(key))
-            for key in ("generate_umap", "compute_privacy", "compute_downstream", "enable_missingness_wrapping")
-            if key in data
-        }
-        return items, globals_map
     items = _as_list(data)
-    return items, {}
+    globals_src: Dict[str, Any] = {}
+    if isinstance(data, dict):
+        globals_src.update({k: data.get(k) for k in ("generate_umap", "compute_privacy", "compute_downstream", "enable_missingness_wrapping")})
+        nested = data.get("globals")
+        if isinstance(nested, dict):
+            globals_src.update({k: nested.get(k) for k in ("generate_umap", "compute_privacy", "compute_downstream", "enable_missingness_wrapping")})
+    globals_map = {
+        key: _coerce_optional_bool(value)
+        for key, value in globals_src.items()
+        if value is not None
+    }
+    return items, globals_map
 
 
 @rule(merge=True, phony=True)
-def load_model_configs(yaml_path: Optional[str]) -> ModelConfigBundle:
-    """Load model specifications and global flags from YAML.
+def load_model_configs(config_input: Optional[str] = None, *, config_data: Optional[Dict[str, Any]] = None) -> ModelConfigBundle:
+    """Load model specifications and global flags from TOML."""
 
-    If yaml_path is None, return an empty bundle (do not load package default).
-    """
-
-    if yaml_path is None:
-        return ModelConfigBundle(specs=[])
-
-    try:
-        import yaml  # type: ignore
-    except Exception as exc:  # pragma: no cover - optional dependency
-        raise RuntimeError("PyYAML is required to load configuration files") from exc
-
-    resolved_path = Path(yaml_path).expanduser().resolve()
-    if not resolved_path.exists():
-        raise FileNotFoundError(f"Config file not found: {resolved_path}")
-
-    text = resolved_path.read_text(encoding="utf-8")
-    data: Any = yaml.safe_load(text)
-    if data is None:
-        data = {}
-
+    data: Any = config_data if config_data is not None else parse_toml_config(config_input)
     items, globals_map = _extract_globals(data)
-    logging.info("Loading model configs from %s", resolved_path)
     specs: List[ModelSpec] = []
     for idx, item in enumerate(items):
         if not isinstance(item, dict):

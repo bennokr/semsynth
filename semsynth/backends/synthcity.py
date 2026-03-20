@@ -10,6 +10,7 @@ if TYPE_CHECKING:  # pragma: no cover - typing only
     import numpy as np
     import pandas as pd
 
+from makeprov import OutDir
 from ..metrics import per_variable_distances, summarize_distance_metrics
 from ..models import model_run_root, write_manifest
 from ..torch_compat import ensure_torch_rmsnorm, ensure_trapz_compat, ensure_npsum_compat
@@ -180,10 +181,11 @@ def run_experiment(
     synth_df = coerce_continuous_to_float(synth_df, cont_cols)
 
     run_root = model_run_root(Path(outdir))
-    run_dir = run_root / label
+    run_dir = OutDir(run_root / label)
     ensure_dir(str(run_dir))
-    synth_df.to_csv(run_dir / "synthetic.csv", index=False)
-    logging.info("Wrote synthetic CSV: %s", run_dir / "synthetic.csv")
+    synth_csv = run_dir.file("synthetic.csv")
+    synth_df.to_csv(synth_csv, index=False)
+    logging.info("Wrote synthetic CSV: %s", synth_csv)
     if semmap_export:
         try:
             import copy
@@ -193,15 +195,13 @@ def run_experiment(
             sdf.semmap.from_jsonld(
                 copy.deepcopy(semmap_export), convert_pint=False
             )
-            sdf.semmap.to_parquet(
-                str(run_dir / "synthetic.semmap.parquet"), index=False
-            )
+            sdf.semmap.to_parquet(str(run_dir.file("synthetic.semmap.parquet")), index=False)
         except Exception as e:
             logging.warning("SemMap parquet failed: %s", e)
 
     # Per-variable distances and summary
     dist_df = per_variable_distances(test_df, synth_df, disc_cols, cont_cols)
-    dist_df.to_csv(run_dir / "per_variable_metrics.csv", index=False)
+    dist_df.to_csv(run_dir.file("per_variable_metrics.csv"), index=False)
     metrics = {
         "backend": "synthcity",
         "summary": summarize_distance_metrics(dist_df),
@@ -212,9 +212,7 @@ def run_experiment(
         "continuous_cols": len(cont_cols),
         "umap_png": None,
     }
-    (run_dir / "metrics.json").write_text(
-        json.dumps(metrics, indent=2), encoding="utf-8"
-    )
+    run_dir.file("metrics.json").write_text(json.dumps(metrics, indent=2), encoding="utf-8")
     manifest = {
         "backend": "synthcity",
         "name": label,

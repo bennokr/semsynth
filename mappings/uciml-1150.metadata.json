@@ -1,67 +1,98 @@
 {
   "@context": "https://w3id.org/semmap/context/v1",
-  "dataset": {
-    "@type": ["disco:LogicalDataSet", "dsv:Dataset", "dcat:Dataset"],
-    "dct:title": "Gallstone-1 (UCI ML Repository, ID 1150)"
-  },
   "datasetSchema": {
     "columns": [
       {
         "name": "GallstoneStatus",
         "titles": "0=Yes (gallstones present), 1=No",
         "columnProperty": {
-          "statisticalDataType": "dsv:NominalDataType",
           "hasCodeBook": {
             "hasTopConcept": [
-              { "notation": "0", "prefLabel": "Gallstones present", "exactMatch": ["sct:235919008"] },
-              { "notation": "1", "prefLabel": "Gallstones absent" }
+              {
+                "notation": "0",
+                "prefLabel": "Gallstones present",
+                "exactMatch": [
+                  "sct:235919008"
+                ]
+              },
+              {
+                "notation": "1",
+                "prefLabel": "Gallstones absent"
+              }
             ]
-          }
+          },
+          "statisticalDataType": "dsv:NominalDataType"
         }
       },
       {
         "name": "Age",
         "titles": "Age",
         "columnProperty": {
+          "hasUnit": {
+            "exactMatch": ["unit:YR"]
+          },
           "statisticalDataType": "dsv:QuantitativeDataType",
-          "valueType": "xsd:integer",
-          "hasUnit": "unit:YR"
+          "valueType": "xsd:integer"
         }
       },
       {
         "name": "Gender",
         "titles": "Gender",
         "columnProperty": {
-          "statisticalDataType": "dsv:NominalDataType",
           "hasCodeBook": {
             "hasTopConcept": [
-              { "notation": "0", "prefLabel": "Male",   "exactMatch": ["sct:248153007"] },
-              { "notation": "1", "prefLabel": "Female", "exactMatch": ["sct:248152002"] }
+              {
+                "notation": "0",
+                "prefLabel": "Male",
+                "exactMatch": [
+                  "sct:248153007"
+                ]
+              },
+              {
+                "notation": "1",
+                "prefLabel": "Female",
+                "exactMatch": [
+                  "sct:248152002"
+                ]
+              }
             ]
-          }
+          },
+          "statisticalDataType": "dsv:NominalDataType"
         }
       },
       {
         "name": "BMI",
         "titles": "BMI",
         "columnProperty": {
+          "hasUnit": {
+            "exactMatch": ["unit:KiloGM-PER-M2"]
+          },
+          "source": "https://loinc.org/39156-5",
           "statisticalDataType": "dsv:QuantitativeDataType",
-          "valueType": "xsd:decimal",
-          "hasUnit": "unit:KiloGM-PER-M2",
-          "source": "https://loinc.org/39156-5"
+          "valueType": "xsd:decimal"
         }
       },
       {
         "name": "Glucose",
         "titles": "Glucose",
         "columnProperty": {
+          "hasUnit": {
+            "exactMatch": ["unit:MilliGM-PER-DeciL"]
+          },
+          "source": "https://loinc.org/2345-7",
           "statisticalDataType": "dsv:QuantitativeDataType",
           "valueType": "xsd:decimal",
-          "hasUnit": "unit:MilliGM-PER-DeciL",
-          "ucumCode": "mg/dL",
-          "source": "https://loinc.org/2345-7"
+          "ucumCode": "mg/dL"
         }
       }
     ]
+  },
+  "dataset": {
+    "@type": [
+      "disco:LogicalDataSet",
+      "dsv:Dataset",
+      "dcat:Dataset"
+    ],
+    "title": "Gallstone-1 (UCI ML Repository, ID 1150)"
   }
 }

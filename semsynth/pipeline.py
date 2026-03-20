@@ -7,13 +7,13 @@ import json
 import logging
 from pathlib import Path
 from collections.abc import Mapping
-from dataclasses import asdict, dataclass, field, is_dataclass
+from dataclasses import asdict, dataclass, field, fields, is_dataclass
+import re
 from typing import TYPE_CHECKING, Any, Dict, Iterable, List, Optional, Set
 
 import pandas as pd
-import makeprov.core as prov_core
-from makeprov import GLOBAL_CONFIG, OutPath, rule
-from makeprov.prov import Prov
+from makeprov import OutDir, OutPath, rule, span
+from makeprov.config import Config
 
 from .backends.base import BackendModule, ensure_backend_contract
 from .mappings import load_mapping_json, resolve_mapping_json
@@ -22,7 +22,8 @@ from .models import ModelConfigBundle, discover_model_runs, load_model_configs
 from .runtime import DEPENDENCIES
 from .specs import DatasetSpec
 from .semmap import Metadata
-from .utils import normalize_role
+from . import semmap as semmap_module
+from .semmap import normalize_role
 
 LOGGER = logging.getLogger(__name__)
 
@@ -37,7 +38,7 @@ _BACKEND_MODULE_PATHS = {
 }
 
 @dataclass
-class UmapConfig:
+class UmapConfig(Config):
     """UMAP geometry parameters."""
 
     n_neighbors: int = 30
@@ -46,10 +47,12 @@ class UmapConfig:
 
 
 @dataclass
-class PipelineConfig:
+class PipelineConfig(Config):
     """Configuration values controlling the reporting pipeline."""
 
     random_state: int = 42
+    semmap_context: bool = False
+    semmap_context_url: str = "https://w3id.org/semmap/context"
     max_umap_sample: int = 1000
     fit_on_sample: Optional[int] = 1000
     synthetic_sample: int = 1000
@@ -61,6 +64,26 @@ class PipelineConfig:
     overwrite_umap: bool = False
     enable_missingness_wrapping: bool = False
     missingness_random_state: Optional[int] = None
+
+    def apply_mapping(self, params: Mapping[str, Any]) -> "PipelineConfig":
+        """Apply a mapping of overrides onto this config, recursing into nested dataclasses."""
+
+        if not isinstance(params, Mapping):
+            return self
+
+        def set_conf(dc: Any, mapping: Mapping[str, Any]) -> None:
+            field_names = {f.name for f in fields(dc)}
+            for key, value in mapping.items():
+                if key not in field_names:
+                    continue
+                current = getattr(dc, key)
+                if is_dataclass(current) and isinstance(value, Mapping):
+                    set_conf(current, value)
+                else:
+                    setattr(dc, key, value)
+
+        set_conf(self, params)
+        return self
 
 
 def _load_backend_module(name: str) -> BackendModule:
@@ -254,6 +277,8 @@ class DatasetPreprocessor:
         import pandas as pd
 
         self._utils.ensure_dir(str(outdir))
+
+        logging.info(str(cfg))
 
         semmap_metadata: Optional[Metadata] = None
         mapping_path = self._resolve_mapping(dataset_spec)
@@ -455,7 +480,35 @@ class DatasetPreprocessor:
             semmap_metadata.update_completeness_from_missingness(
                 df_processed, missingness_model
             )
-            semmap_export = semmap_metadata.to_jsonld()
+            semmap_export = semmap_metadata.to_jsonld(
+                with_context=cfg.semmap_context
+            )
+            if cfg.semmap_context:
+                if not isinstance(semmap_export.get("@context"), dict):
+                    semmap_export["@context"] = semmap_module.CONTEXT
+            elif cfg.semmap_context_url:
+                semmap_export["@context"] = cfg.semmap_context_url
+            dataset_label = dataset_spec.name or str(dataset_spec.id)
+            slug = re.sub(r"[^a-z0-9]+", "-", str(dataset_label).lower()).strip("-") or "dataset"
+            dataset_iri = f"urn:dataset:{slug}"
+            schema = semmap_export.get("datasetSchema")
+            if isinstance(schema, dict):
+                schema.setdefault("@id", f"{dataset_iri}#schema")
+            semmap_export.setdefault("@id", dataset_iri)
+            types = semmap_export.get("@type") or semmap_export.get("type") or []
+            type_list = list(types) if isinstance(types, list) else [types] if types else []
+            for needed in ("dcat:Dataset", "dsv:Dataset"):
+                if needed not in type_list:
+                    type_list.append(needed)
+            semmap_export["@type"] = type_list
+            if semmap_metadata.title:
+                semmap_export["title"] = semmap_metadata.title
+            if semmap_metadata.description:
+                semmap_export["description"] = semmap_metadata.description
+            if semmap_metadata.landingPage:
+                semmap_export["landingPage"] = semmap_metadata.landingPage
+            if schema:
+                semmap_export["datasetSchema"] = schema
 
         return PreprocessingResult(
             df_processed=df_processed,
@@ -575,24 +628,6 @@ class MetricWriter:
             hint="Install downstream fidelity extras: `pip install semsynth[statsmodels]`.",
         )
 
-        unique_targets: Optional[int] = None
-        if target_series is not None:
-            unique_targets = int(target_series.dropna().nunique())
-        if unique_targets is not None and unique_targets > 2:
-            LOGGER.info(
-                "Skipping downstream metrics: multiclass target",
-                extra={"run_dir": str(run_dir), "unique_targets": unique_targets},
-            )
-            payload = {
-                "formula": None,
-                "sign_match_rate": None,
-                "skipped_reason": "multiclass_target",
-            }
-            (run_dir / "metrics.downstream.json").write_text(
-                json.dumps(payload, indent=2), encoding="utf-8"
-            )
-            return payload
-
         meta_jsonld = metadata.to_jsonld() if isinstance(metadata, Metadata) else None
         if meta_jsonld is None:
             meta_jsonld = _build_downstream_meta(
@@ -641,7 +676,7 @@ class BackendExecutor:
         dataset_spec: "DatasetSpec",
         bundle: ModelConfigBundle,
         preprocessed: PreprocessingResult,
-        outdir: Path | OutPath,
+        outdir: OutDir,
     ) -> None:
         """Execute each model specification and compute metrics if requested.
 
@@ -650,69 +685,14 @@ class BackendExecutor:
             bundle: Bundle of backend model configurations.
             preprocessed: Preprocessed dataset artefacts.
             outdir: Output directory for backend artefacts.
+            semmap_context: Cached SemMap context used as a provenance-bearing input.
         """
 
         import pandas as pd
 
+        outdir = outdir if isinstance(outdir, OutDir) else OutDir(outdir)
         outdir_path = Path(outdir)
         bundle_specs = bundle.specs if bundle.specs else []
-
-        def _current_buffer() -> Optional[List[Any]]:
-            buffer = getattr(prov_core, "PROV_BUFFER", None)
-            if buffer is None and hasattr(prov_core, "_current_prov_buffer"):
-                buffer = prov_core._current_prov_buffer()
-            return buffer
-
-        shared_prov: List[Any] = []
-        prov_buffer = _current_buffer()
-        if prov_buffer:
-            LOGGER.info(
-                "PROV buffer entries available before model runs",
-                extra={"entry_count": len(prov_buffer)},
-            )
-            shared_prov = list(prov_buffer)
-
-        def _write_model_provenance(
-            label: str, run_dir_path: Path, model_prov_start: Optional[int]
-        ) -> None:
-            prov_buffer = _current_buffer()
-            if prov_buffer is None:
-                return
-
-            new_entries: List[Any] = []
-            if model_prov_start is not None:
-                new_entries = list(prov_buffer[model_prov_start:])
-            model_entries = list(shared_prov) + new_entries
-            LOGGER.info(
-                "Aggregating model provenance",
-                extra={
-                    "label": label,
-                    "shared_entries": len(shared_prov),
-                    "new_entries": len(new_entries),
-                },
-            )
-            if not model_entries:
-                LOGGER.info(
-                    "Skipping provenance write (no entries)",
-                    extra={"label": label},
-                )
-                return
-
-            prov_path = run_dir_path / "provenance"
-            LOGGER.info(
-                "Writing combined provenance bundle",
-                extra={
-                    "label": label,
-                    "prov_path": str(prov_path.with_suffix(".json")),
-                    "entry_count": len(model_entries),
-                },
-            )
-            merged = Prov.merge(model_entries)
-            merged.write(
-                prov_path=prov_path,
-                fmt=GLOBAL_CONFIG.out_fmt,
-                context=GLOBAL_CONFIG.context,
-            )
 
         for idx, spec in enumerate(bundle_specs):
             label = spec.name or f"model_{idx + 1}"
@@ -726,154 +706,170 @@ class BackendExecutor:
                     "Failed to load backend module",
                     extra={"backend": backend_name},
                 )
-                _write_model_provenance(label, run_dir_path, None)
                 continue
-
-            model_prov_start: Optional[int] = None
-            prov_buffer = _current_buffer()
-            if prov_buffer is not None:
-                model_prov_start = len(prov_buffer)
 
             rows = spec.rows if spec.rows is not None else self._cfg.synthetic_sample
-            try:
-                run_dir = backend_module.run_experiment(
-                    df=preprocessed.df_fit_sample,
-                    provider=dataset_spec.provider,
-                    dataset_name=dataset_spec.name,
-                    provider_id=dataset_spec.id,
-                    outdir=str(outdir_path),
-                    label=label,
-                    model_info=dict(spec.model or {}),
-                    rows=min(rows, len(preprocessed.df_processed)),
-                    seed=seed,
-                    test_size=self._cfg.test_size,
-                    semmap_export=preprocessed.semmap_export,
-                )
-            except Exception:
-                LOGGER.exception(
-                    "Backend run failed",
-                    extra={"backend": backend_name, "label": label},
-                )
-                _write_model_provenance(label, run_dir_path, model_prov_start)
-                continue
-
-            run_dir_path = Path(run_dir)
-            synth_path = run_dir_path / "synthetic.csv"
-            synth_df = pd.read_csv(synth_path).convert_dtypes()
-
-            missingness_applied = False
-            if preprocessed.missingness_model is not None:
+            with span(label, prov_path=run_dir_path / "provenance"):
                 try:
-                    from . import missingness as missingness_module
-                except ImportError:
-                    LOGGER.warning(
-                        "Missingness wrapping requested but dependencies are unavailable",
-                        extra={"label": label},
+                    run_dir = backend_module.run_experiment(
+                        df=preprocessed.df_fit_sample,
+                        provider=dataset_spec.provider,
+                        dataset_name=dataset_spec.name,
+                        provider_id=dataset_spec.id,
+                        outdir=str(outdir_path),
+                        label=label,
+                        model_info=dict(spec.model or {}),
+                        rows=min(rows, len(preprocessed.df_processed)),
+                        seed=seed,
+                        test_size=self._cfg.test_size,
+                        semmap_export=preprocessed.semmap_export,
                     )
-                else:
-                    synth_df, missingness_applied = (
-                        missingness_module.apply_missingness_to_outputs(
-                            run_dir=run_dir_path,
-                            synth_df=synth_df,
-                            missingness_model=preprocessed.missingness_model,
-                            real_df=preprocessed.df_no_na,
-                            disc_cols=preprocessed.disc_cols,
-                            cont_cols=preprocessed.cont_cols,
-                            backend_name=backend_name,
+                except Exception:
+                    LOGGER.exception(
+                        "Backend run failed",
+                        extra={"backend": backend_name, "label": label},
+                    )
+                    continue
+
+                run_dir_path = Path(run_dir)
+                synth_path = run_dir_path / "synthetic.csv"
+                synth_df = pd.read_csv(synth_path).convert_dtypes()
+
+                missingness_applied = False
+                if preprocessed.missingness_model is not None:
+                    try:
+                        from . import missingness as missingness_module
+                    except ImportError:
+                        LOGGER.warning(
+                            "Missingness wrapping requested but dependencies are unavailable",
+                            extra={"label": label},
                         )
-                    )
+                    else:
+                        synth_df, missingness_applied = (
+                            missingness_module.apply_missingness_to_outputs(
+                                run_dir=run_dir_path,
+                                synth_df=synth_df,
+                                missingness_model=preprocessed.missingness_model,
+                                real_df=preprocessed.df_no_na,
+                                disc_cols=preprocessed.disc_cols,
+                                cont_cols=preprocessed.cont_cols,
+                                backend_name=backend_name,
+                            )
+                        )
 
-            compute_privacy_flag = self._cfg.compute_privacy
-            if (
-                bundle.compute_privacy is not None
-                and bundle.compute_privacy != compute_privacy_flag
-            ):
-                LOGGER.info(
-                    "Ignoring bundle privacy flag in favour of pipeline configuration",
-                    extra={
-                        "label": label,
-                        "bundle_value": bundle.compute_privacy,
-                        "pipeline_value": compute_privacy_flag,
-                    },
-                )
-            if spec.compute_privacy is not None:
-                compute_privacy_flag = spec.compute_privacy
-
-            compute_downstream_flag = self._cfg.compute_downstream
-            if (
-                bundle.compute_downstream is not None
-                and bundle.compute_downstream != compute_downstream_flag
-            ):
-                LOGGER.info(
-                    "Ignoring bundle downstream flag in favour of pipeline configuration",
-                    extra={
-                        "label": label,
-                        "bundle_value": bundle.compute_downstream,
-                        "pipeline_value": compute_downstream_flag,
-                    },
-                )
-            if spec.compute_downstream is not None:
-                compute_downstream_flag = spec.compute_downstream
-
-            if compute_privacy_flag:
-                try:
-                    self._metric_writer.write_privacy(
-                        run_dir_path,
-                        preprocessed.df_no_na,
-                        preprocessed.inferred_types,
-                        synth_df,
-                        preprocessed.semmap_metadata,
-                        target=dataset_spec.target,
-                    )
+                compute_privacy_flag = self._cfg.compute_privacy
+                if (
+                    bundle.compute_privacy is not None
+                    and bundle.compute_privacy != compute_privacy_flag
+                ):
                     LOGGER.info(
-                        "Wrote privacy metrics",
-                        extra={"label": label},
+                        "Ignoring bundle privacy flag in favour of pipeline configuration",
+                        extra={
+                            "label": label,
+                            "bundle_value": bundle.compute_privacy,
+                            "pipeline_value": compute_privacy_flag,
+                        },
                     )
-                except RuntimeError as exc:
-                    LOGGER.warning(
-                        "Privacy metrics unavailable; skipping: %s",
-                        exc,
-                        extra={"label": label},
-                    )
-                except Exception:
-                    LOGGER.exception(
-                        "Failed to compute privacy metrics",
-                        extra={"label": label},
-                    )
+                if spec.compute_privacy is not None:
+                    compute_privacy_flag = spec.compute_privacy
 
-            target_series = preprocessed.color_series
-            has_target_series = (
-                isinstance(target_series, pd.Series)
-                and target_series.attrs.get("prov:hadRole") == "target"
-            )
-            if compute_downstream_flag and has_target_series:
-                try:
-                    self._metric_writer.write_downstream(
-                        run_dir_path,
-                        preprocessed.df_no_na,
-                        synth_df,
-                        preprocessed.inferred_types,
-                        target_series,
-                        metadata=preprocessed.semmap_metadata,
-                        target=dataset_spec.target,
-                    )
+                compute_downstream_flag = self._cfg.compute_downstream
+                if (
+                    bundle.compute_downstream is not None
+                    and bundle.compute_downstream != compute_downstream_flag
+                ):
                     LOGGER.info(
-                        "Wrote downstream metrics",
-                        extra={"label": label},
+                        "Ignoring bundle downstream flag in favour of pipeline configuration",
+                        extra={
+                            "label": label,
+                            "bundle_value": bundle.compute_downstream,
+                            "pipeline_value": compute_downstream_flag,
+                        },
                     )
-                except RuntimeError as exc:
-                    LOGGER.warning(
-                        "Downstream metrics unavailable; skipping: %s",
-                        exc,
-                        extra={"label": label},
-                    )
-                except Exception:
-                    LOGGER.exception(
-                        "Failed to compute downstream metrics",
-                        extra={"label": label},
-                    )
+                if spec.compute_downstream is not None:
+                    compute_downstream_flag = spec.compute_downstream
 
-            _write_model_provenance(label, run_dir_path, model_prov_start)
+                if compute_privacy_flag:
+                    try:
+                        self._metric_writer.write_privacy(
+                            run_dir_path,
+                            preprocessed.df_no_na,
+                            preprocessed.inferred_types,
+                            synth_df,
+                            preprocessed.semmap_metadata,
+                            target=dataset_spec.target,
+                        )
+                        LOGGER.info(
+                            "Wrote privacy metrics",
+                            extra={"label": label},
+                        )
+                    except RuntimeError as exc:
+                        LOGGER.warning(
+                            "Privacy metrics unavailable; skipping: %s",
+                            exc,
+                            extra={"label": label},
+                        )
+                    except Exception:
+                        LOGGER.exception(
+                            "Failed to compute privacy metrics",
+                            extra={"label": label},
+                        )
+
+                target_series = preprocessed.color_series
+                has_target_series = (
+                    isinstance(target_series, pd.Series)
+                    and target_series.attrs.get("prov:hadRole") == "target"
+                )
+                if compute_downstream_flag and has_target_series:
+                    try:
+                        self._metric_writer.write_downstream(
+                            run_dir_path,
+                            preprocessed.df_no_na,
+                            synth_df,
+                            preprocessed.inferred_types,
+                            target_series,
+                            metadata=preprocessed.semmap_metadata,
+                            target=dataset_spec.target,
+                        )
+                        LOGGER.info(
+                            "Wrote downstream metrics",
+                            extra={"label": label},
+                        )
+                    except RuntimeError as exc:
+                        LOGGER.warning(
+                            "Downstream metrics unavailable; skipping: %s",
+                            exc,
+                            extra={"label": label},
+                        )
+                    except Exception:
+                        LOGGER.exception(
+                            "Failed to compute downstream metrics",
+                            extra={"label": label},
+                        )
+
+                try:
+                    rel_root = run_dir_path.relative_to(outdir_path)
+                except ValueError:
+                    rel_root = Path("models") / label
+                artifact_names = (
+                    "synthetic.csv",
+                    "per_variable_metrics.csv",
+                    "metrics.json",
+                    "metrics.privacy.json",
+                    "metrics.downstream.json",
+                    "umap.png",
+                    "manifest.json",
+                    "synthetic.semmap.parquet",
+                    "metasyn_gmf.json",
+                    "model.pickle",
+                    "structure.graphml",
+                    "structure.png",
+                    "provenance.json",
+                )
+                for fname in artifact_names:
+                    candidate = run_dir_path / fname
+                    if candidate.exists():
+                        outdir.file(rel_root / fname)
 
 
 class ReportWriter:
@@ -1011,7 +1007,7 @@ def process_dataset(
     cfg = pipeline_config or PipelineConfig()
 
     base_path = Path(base_outdir)
-    outdir = base_path / dataset_spec.name.replace("/", "_")
+    outdir = OutDir(base_path / dataset_spec.name.replace("/", "_"))
     rng = utils.seed_all(cfg.random_state)
 
     generate_umap_flag = cfg.generate_umap

@@ -9,7 +9,11 @@ semsynth.semmap
    .. autosummary::
    
       dataclass
+      get_column_name
+      modeling_role
+      normalize_role
       normalize_variable_descriptors
+      raw_role
    
    .. rubric:: Classes
 
@@ -31,4 +35,5 @@ semsynth.semmap
       StatisticalDataType
       SummaryStatistics
       Unit
+      VariableDescriptor
    

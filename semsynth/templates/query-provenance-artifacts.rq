@@ -1,16 +1,16 @@
-PREFIX dcat: <http://www.w3.org/ns/dcat#>
 PREFIX dct: <http://purl.org/dc/terms/>
-PREFIX prov: <http://www.w3.org/ns/prov#>
+PREFIX dcat: <http://www.w3.org/ns/dcat#>
 
-SELECT ?source (COUNT(DISTINCT ?dataset) AS ?datasetCount) (COUNT(DISTINCT ?artifact) AS ?artifactCount)
+SELECT ?datasetTitle ?model (COUNT(?provDist) AS ?provenanceFiles)
 WHERE {
   ?dataset a dcat:Dataset ;
-           dct:title ?title ;
-           prov:wasDerivedFrom ?source ;
-           dcat:distribution ?dist .
-  ?dist dcat:downloadURL ?artifact .
-  FILTER(CONTAINS(LCASE(STR(?artifact)), "synthetic"))
+           dct:title ?datasetTitle ;
+           dcat:distribution ?provDist .
+  ?provDist dct:title ?distTitle ;
+            dcat:downloadURL ?download .
+  FILTER(CONTAINS(LCASE(STR(?distTitle)), "provenance"))
+
+  BIND(STRBEFORE(STRAFTER(STR(?download), "/models/"), "/") AS ?model)
 }
-GROUP BY ?source
-HAVING (COUNT(DISTINCT ?artifact) >= 2)
-ORDER BY DESC(?artifactCount) DESC(?datasetCount)
+GROUP BY ?datasetTitle ?model
+ORDER BY DESC(?provenanceFiles) ?datasetTitle ?model

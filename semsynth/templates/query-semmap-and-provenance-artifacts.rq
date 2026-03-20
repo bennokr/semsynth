@@ -1,20 +1,27 @@
-PREFIX dcat: <http://www.w3.org/ns/dcat#>
-PREFIX dct: <http://purl.org/dc/terms/>
 PREFIX prov: <http://www.w3.org/ns/prov#>
+PREFIX prov: <http://www.w3.org/ns/prov#>
+PREFIX dct: <http://purl.org/dc/terms/>
+PREFIX dsv: <https://w3id.org/dsv-ontology#>
+PREFIX csvw: <http://www.w3.org/ns/csvw#>
+PREFIX dcat: <http://www.w3.org/ns/dcat#>
 
-SELECT ?dataset ?title ?source
-       (COUNT(DISTINCT ?semmap) AS ?semmapFiles)
-       (COUNT(DISTINCT ?artifact) AS ?syntheticArtifacts)
+SELECT ?datasetTitle (COUNT(DISTINCT ?col) AS ?columns) (COUNT(DISTINCT ?artifact) AS ?artifacts)
 WHERE {
-  ?dataset a dcat:Dataset ;
-           dct:title ?title ;
-           prov:wasDerivedFrom ?source ;
-           dcat:distribution ?semmapDist, ?artifactDist .
-  ?semmapDist dcat:downloadURL ?semmap .
-  ?artifactDist dcat:downloadURL ?artifact .
-  FILTER(CONTAINS(LCASE(STR(?semmap)), "dataset.semmap"))
-  FILTER(CONTAINS(LCASE(STR(?artifact)), "synthetic"))
+  ?dataset a dcat:Dataset .
+  OPTIONAL { ?dataset dct:title ?datasetTitleRaw }
+  BIND(COALESCE(?datasetTitleRaw, STR(?dataset)) AS ?datasetTitle)
+  BIND(REPLACE(LCASE(?datasetTitle), "[^a-z0-9]+", "-") AS ?datasetSlug)
+
+  OPTIONAL {
+    ?dataset (dsv:datasetSchema|csvw:tableSchema|<https://schema.org/datasetSchema>|<http://schema.org/datasetSchema>) ?schema .
+    ?schema (dsv:column|csvw:column|<https://schema.org/column>) ?col .
+  }
+
+  OPTIONAL {
+    ?artifact prov:wasGeneratedBy ?activity .
+    BIND(STRBEFORE(STRAFTER(STR(?artifact), "output/"), "/") AS ?artifactDataset)
+    FILTER(?artifactDataset = ?datasetSlug)
+  }
 }
-GROUP BY ?dataset ?title ?source
-HAVING (COUNT(DISTINCT ?artifact) >= 2)
-ORDER BY DESC(?syntheticArtifacts) ?title
+GROUP BY ?datasetTitle
+ORDER BY DESC(?artifacts) DESC(?columns) ?datasetTitle

@@ -3,18 +3,18 @@ from __future__ import annotations
 import json
 import re
 from pathlib import Path
-from importlib import resources
 from typing import Any, Dict, Optional
 
 from .specs import DatasetSpec
 
-JSONLD_CONTEXT_URL = "https://w3id.org/semmap/context/v1"
+JSONLD_CONTEXT_URL = "https://w3id.org/semmap/context"
 
 
 def _mappings_dir() -> Path:
-    """Return directory containing packaged curated mapping files."""
+    """Return directory containing curated mapping files."""
 
-    return Path(str(resources.files("semsynth.mapping_data")))
+    repo_root = Path(__file__).resolve().parent.parent
+    return repo_root / "mappings"
 
 
 def _slugify(value: str) -> str:

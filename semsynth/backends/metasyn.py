@@ -8,6 +8,7 @@ import logging
 from pathlib import Path
 from typing import Any, Dict, Optional, TYPE_CHECKING
 
+from makeprov import OutDir
 from ..metrics import per_variable_distances, summarize_distance_metrics
 from ..models import model_run_root, write_manifest
 from ..utils import coerce_continuous_to_float, ensure_dir, infer_types
@@ -59,12 +60,12 @@ def run_experiment(
     test_df = test_df.reset_index(drop=True)
 
     run_root = model_run_root(Path(outdir))
-    run_dir = run_root / label
+    run_dir = OutDir(run_root / label)
     ensure_dir(str(run_dir))
 
     logging.info("Fitting MetaSyn MetaFrame on train for %s", label)
     mf = MetaFrame.fit_dataframe(train_df)
-    gmf_path = run_dir / "metasyn_gmf.json"
+    gmf_path = run_dir.file("metasyn_gmf.json")
     try:
         mf.save(str(gmf_path))
     except Exception:
@@ -91,7 +92,7 @@ def run_experiment(
                 )
     synth_df = coerce_continuous_to_float(synth_df, cont_cols)
 
-    synth_csv = run_dir / "synthetic.csv"
+    synth_csv = run_dir.file("synthetic.csv")
     synth_df.to_csv(synth_csv, index=False)
 
     if semmap_export:
@@ -99,14 +100,12 @@ def run_experiment(
             synth_df.semmap.from_jsonld(
                 copy.deepcopy(semmap_export), convert_pint=False
             )
-            synth_df.semmap.to_parquet(
-                str(run_dir / "synthetic.semmap.parquet"), index=False
-            )
+            synth_df.semmap.to_parquet(str(run_dir.file("synthetic.semmap.parquet")), index=False)
         except Exception:
             logging.exception("Failed to serialize SemMap parquet for MetaSyn synthetic")
 
     dist_df = per_variable_distances(test_df, synth_df, disc_cols, cont_cols)
-    dist_df.to_csv(run_dir / "per_variable_metrics.csv", index=False)
+    dist_df.to_csv(run_dir.file("per_variable_metrics.csv"), index=False)
     metrics = {
         "backend": "metasyn",
         "summary": summarize_distance_metrics(dist_df),
@@ -116,7 +115,7 @@ def run_experiment(
         "discrete_cols": len(disc_cols),
         "continuous_cols": len(cont_cols),
     }
-    (run_dir / "metrics.json").write_text(json.dumps(metrics, indent=2), encoding="utf-8")
+    run_dir.file("metrics.json").write_text(json.dumps(metrics, indent=2), encoding="utf-8")
 
     manifest = {
         "backend": "metasyn",
@@ -132,4 +131,3 @@ def run_experiment(
     write_manifest(run_dir, manifest)
     logging.info("Finished MetaSyn run: %s", label)
     return run_dir
-

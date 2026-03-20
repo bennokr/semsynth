@@ -34,6 +34,7 @@
    runtime
    semmap
    specs
+   templates
    torch_compat
    umap_utils
    utils

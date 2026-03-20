@@ -1,3 +1,16 @@
+---
+filetype: mystnb
+jupytext:
+  text_representation:
+    extension: .md
+    format_name: myst
+    format_version: 0.13
+    jupytext_version: 1.16.3
+kernelspec:
+  name: python3
+  display_name: Python 3
+---
+
 # Getting started
 
 This guide summarises the minimum commands required to fetch a dataset,
@@ -67,3 +80,18 @@ SemSynth merges the curated mappings during preprocessing. Discrete versus
 continuous inference now honours the statistical data type hints stored in
 the SemMap metadata, so integer-coded categoricals remain categorical in the
 downstream analysis.
+
+After installation, confirm the cache and curated metadata are available.
+
+```{code-cell} python
+# Preview the cached dataset and verify metadata loads cleanly.
+import pandas as pd
+import json
+from semsynth.semmap import Metadata
+
+heart = pd.read_csv("../downloads-cache/uciml/45.csv.gz")
+meta = json.load(open("../mappings/uciml-45.metadata.json"))
+meta_obj = Metadata.from_dcat_dsv(meta)
+
+heart.head()
+```

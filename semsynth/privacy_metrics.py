@@ -9,6 +9,8 @@ if TYPE_CHECKING:  # pragma: no cover - typing only
 
 from .torch_compat import ensure_torch_rmsnorm
 
+LOGGER = logging.getLogger(__name__)
+
 @dataclass
 class DatasetPrivacySummary:
     n_real: int
@@ -28,54 +30,6 @@ class DatasetPrivacySummary:
     delta_presence: Optional[float] = None
 
 
-def _load_synthcity_modules():
-    ensure_torch_rmsnorm()
-    try:
-        from synthcity.plugins.core.dataloader import GenericDataLoader
-        from synthcity.metrics.eval_sanity import (
-            CommonRowsProportion,
-            NearestSyntheticNeighborDistance,
-            CloseValuesProbability,
-        )
-        from synthcity.metrics.eval_privacy import (
-            kMap,
-            IdentifiabilityScore,
-            DeltaPresence,
-        )
-    except ImportError as exc:  # pragma: no cover - optional dependency
-        raise RuntimeError(
-            "Privacy metrics require 'synthcity'; install with pip install semsynth[synthcity]"
-        ) from exc
-    return (
-        GenericDataLoader,
-        CommonRowsProportion,
-        NearestSyntheticNeighborDistance,
-        CloseValuesProbability,
-        kMap,
-        IdentifiabilityScore,
-        DeltaPresence,
-    )
-
-def _prep(df: "pd.DataFrame", meta: "pd.DataFrame") -> "pd.DataFrame":
-    import pandas as pd
-
-    """Small, deterministic typing + NA handling."""
-    t = dict(zip(meta.variable, meta.type))
-    out = df.copy()
-    for c in out.columns:
-        kind = t.get(c, "categorical")
-        if kind == "numeric":
-            out[c] = pd.to_numeric(out[c], errors="coerce")
-            out[c] = out[c].fillna(out[c].median())
-        elif kind == "datetime":
-            x = pd.to_datetime(out[c], errors="coerce")
-            timestamps = x.view("int64").where(x.notna())
-            med = timestamps.dropna().median() if x.notna().any() else 0
-            out[c] = timestamps.fillna(med)
-        else:
-            out[c] = out[c].astype("object").where(out[c].notna(), "__MISSING__")
-    return out
-
 def _tv(p, q) -> float:
     import numpy as np
 
@@ -92,23 +46,72 @@ def _w1(x, y) -> float:
     q = (np.arange(n) + 0.5) / n
     return float(np.mean(np.abs(np.quantile(x, q) - np.quantile(y, q))))
 
+def _metric_value(scores, name: str, field: str = "mean") -> Optional[float]:
+    """Pull a metric cell from a Metrics.evaluate dataframe."""
+    try:
+        val = scores.loc[name, field]
+    except (KeyError, TypeError):
+        return None
+    try:
+        return float(val)
+    except Exception:  # pragma: no cover - float conversion edge cases
+        return None
+
+
+def _normalize_frames(df: "pd.DataFrame",
+                      meta: "pd.DataFrame",
+                      use_cols: List[str]) -> "pd.DataFrame":
+    """Ensure consistent dtypes and missing handling before SynthCity Metrics."""
+    import pandas as pd
+
+    tmap = dict(zip(meta.variable, meta.type))
+    cat_cols = [c for c in use_cols if tmap.get(c) not in ("numeric", "datetime")]
+    num_cols = [c for c in use_cols if tmap.get(c) == "numeric"]
+    dt_cols = [c for c in use_cols if tmap.get(c) == "datetime"]
+
+    out = df.copy()
+    for c in cat_cols:
+        out[c] = out[c].astype("string")
+        out[c] = out[c].fillna("<MISSING>")
+    for c in num_cols:
+        out[c] = pd.to_numeric(out[c], errors="raise")
+        if out[c].isna().any():
+            out[c] = out[c].fillna(out[c].median())
+    for c in dt_cols:
+        x = pd.to_datetime(out[c], errors="coerce")
+        med = x.view("int64").dropna().median() if x.notna().any() else 0
+        out[c] = x.view("int64").fillna(med)
+    return out
+
+
 def summarize_privacy_synthcity(df_real: "pd.DataFrame",
                                 df_synth: "pd.DataFrame",
                                 meta: "pd.DataFrame",
                                 *,
                                 eps: float = 0.1) -> DatasetPrivacySummary:
+    """Summarize privacy metrics using SynthCity on aligned real/synthetic dataframes.
+
+    Args:
+        df_real: Real dataframe.
+        df_synth: Synthetic dataframe.
+        meta: Metadata with variable roles and types.
+        eps: Unused hook for future custom thresholds; kept for API stability.
+
+    Returns:
+        DatasetPrivacySummary with overlap, neighbor, k-map, t-closeness, and
+        optional identifiability/delta-presence scores.
+    """
     import numpy as np
     import pandas as pd
 
-    (
-        GenericDataLoader,
-        CommonRowsProportion,
-        NearestSyntheticNeighborDistance,
-        CloseValuesProbability,
-        kMap,
-        IdentifiabilityScore,
-        DeltaPresence,
-    ) = _load_synthcity_modules()
+    ensure_torch_rmsnorm()
+    try:
+        from synthcity.metrics import Metrics
+    except ImportError as exc:  # pragma: no cover - optional dependency
+        raise RuntimeError(
+            "Privacy metrics require 'synthcity'; install with pip install semsynth[synthcity]"
+        ) from exc
+
     # select columns
     assert {'variable','role','type'}.issubset(meta.columns)
     use_meta = meta[~meta.role.isin(['ignore', 'id', 'target'])].copy()
@@ -117,49 +120,58 @@ def summarize_privacy_synthcity(df_real: "pd.DataFrame",
     qi = [c for c in use_meta.loc[use_meta.role=='qi','variable'] if c in use_cols]
     sens = [c for c in use_meta.loc[use_meta.role=='sensitive','variable'] if c in use_cols]
 
-    # preprocess
-    df_r = _prep(df_real[use_cols], use_meta.set_index('variable').loc[use_cols].reset_index())
-    df_s = _prep(df_synth[use_cols], use_meta.set_index('variable').loc[use_cols].reset_index())
-    Xr = GenericDataLoader(df_r, sensitive_features=sens or [])
-    Xs = GenericDataLoader(df_s, sensitive_features=sens or [])
+    # preprocess with explicit dtype normalization
+    df_r = _normalize_frames(df_real[use_cols], use_meta, use_cols)
+    df_s = _normalize_frames(df_synth[use_cols], use_meta, use_cols)
 
-    # synthcity metrics (documented interfaces)
-    exact_overlap = float(CommonRowsProportion().evaluate_default(Xr, Xs))
-    close_prob = float(CloseValuesProbability().evaluate_default(Xr, Xs))  # uses internal 0.2 threshold
-    nn_eval = NearestSyntheticNeighborDistance()
-    nn_raw = nn_eval.evaluate(Xr, Xs)  # dict with stats
-    if isinstance(nn_raw, dict):
-        nn_stats = {
-            'mean': float(nn_raw.get('mean', np.nan)),
-            'median': float(nn_raw.get('median', np.nan)),
-            'p95': float(nn_raw.get('p95', np.nan)),
-            'min': float(nn_raw.get('min', np.nan)),
-            'max': float(nn_raw.get('max', np.nan)),
-        }
-    else:
-        nn_stats = {'mean': float(nn_eval.evaluate_default(Xr, Xs)),
-                    'median': np.nan, 'p95': np.nan, 'min': np.nan, 'max': np.nan}
+    # synthcity metrics using shared encoders across real/synth
+    metrics_spec = {
+        "sanity": ["common_rows_proportion", "close_values_probability", "nearest_syn_neighbor_distance"],
+        "privacy": ["k-map", "delta-presence", "identifiability_score"],
+    }
+    try:
+        scores = Metrics.evaluate(X_gt=df_r, X_syn=df_s, metrics=metrics_spec)
+    except Exception as exc:  # pragma: no cover - depends on optional deps
+        LOGGER.warning("SynthCity Metrics.evaluate failed: %s", exc)
+        scores = None
+
+    exact_overlap_val = _metric_value(scores, "sanity.common_rows_proportion.score") if scores is not None else None
+    exact_overlap = float(exact_overlap_val) if exact_overlap_val is not None else float("nan")
+    close_prob_val = _metric_value(scores, "sanity.close_values_probability.score") if scores is not None else None
+    close_prob = float(close_prob_val) if close_prob_val is not None else float("nan")
+    nn_mean = _metric_value(scores, "sanity.nearest_syn_neighbor_distance.mean") if scores is not None else None
+    nn_median = _metric_value(scores, "sanity.nearest_syn_neighbor_distance.mean", "median") if scores is not None else None
+    nn_min = _metric_value(scores, "sanity.nearest_syn_neighbor_distance.mean", "min") if scores is not None else None
+    nn_max = _metric_value(scores, "sanity.nearest_syn_neighbor_distance.mean", "max") if scores is not None else None
+    nn_stats = {
+        'mean': float(nn_mean) if nn_mean is not None else float("nan"),
+        'median': float(nn_median) if nn_median is not None else float("nan"),
+        'p95': np.nan,
+        'min': float(nn_min) if nn_min is not None else float("nan"),
+        'max': float(nn_max) if nn_max is not None else float("nan"),
+    }
 
     # k-anon on real QIs and k-map on QIs
     if qi:
         eq_sizes = df_r.groupby(qi, dropna=False).size().to_numpy()
         k_min = int(eq_sizes.min()) if eq_sizes.size else None
         k_pct_lt5 = float((eq_sizes < 5).mean()) if eq_sizes.size else None
-        k_map_val = int(kMap().evaluate_default(GenericDataLoader(df_r[qi]), GenericDataLoader(df_s[qi])))
+        k_map_val = _metric_value(scores, "privacy.k-map.score") if scores is not None else None
+        if k_map_val is not None and not np.isnan(k_map_val):
+            k_map_val = int(k_map_val)
+        else:
+            k_map_val = None
     else:
         k_min = k_pct_lt5 = k_map_val = None
 
-    ident = None
-    try:
-        ident = float(IdentifiabilityScore().evaluate_default(Xr, Xs))
-    except Exception as exc:  # pragma: no cover - depends on optional deps
-        logging.warning("Identifiability metric failed: %s", exc)
-
-    delta = None
-    try:
-        delta = float(DeltaPresence().evaluate_default(Xr, Xs))
-    except Exception as exc:  # pragma: no cover - depends on optional deps
-        logging.warning("Delta presence metric failed: %s", exc)
+    ident = _metric_value(scores, "privacy.identifiability_score.score") if scores is not None else None
+    if ident is not None and np.isnan(ident):
+        ident = None
+    delta = _metric_value(scores, "privacy.delta-presence.score") if scores is not None else None
+    if delta is not None and np.isnan(delta):
+        delta = None
+    if scores is not None and delta is None:
+        LOGGER.info("Delta presence not returned by SynthCity; leaving unset.")
 
     # rare QI reproduction (real count<=5 or freq<=1%)
     if qi:

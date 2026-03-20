@@ -3,11 +3,13 @@
 from __future__ import annotations
 
 import logging
+from dataclasses import fields
 from dataclasses import dataclass
 from pathlib import Path
 from typing import Optional
 
-from makeprov import rule, GLOBAL_CONFIG
+from makeprov import rule
+from makeprov.config import ProvenanceConfig
 
 LOGGER = logging.getLogger(__name__)
 
@@ -59,7 +61,7 @@ def _run_search(
 def _run_report(
     provider: str,
     datasets: Optional[list[str]] = None,
-    configs_yaml: str = "",
+    pipeline_configs: str = "",
     area: str = "Health and Medicine",
     outdir = Path('outputs'),
 ) -> str:
@@ -68,14 +70,14 @@ def _run_report(
     Args:
         provider: Dataset provider.
         datasets: Dataset identifiers supplied by the user.
-        configs_yaml: Path to a configuration file for models.
+        pipeline_configs: Path to a configuration file for models.
         area: Topic area filter for UCI ML datasets.
 
     Returns:
         Status text summarizing the invocation.
     """
     from .datasets import DatasetSpec, load_dataset, specs_from_input
-    from .models import ModelConfigBundle, load_model_configs
+    from .models import ModelConfigBundle, load_model_configs, parse_toml_config
     from .pipeline import PipelineConfig, process_dataset
     from .utils import ensure_dir
 
@@ -83,8 +85,19 @@ def _run_report(
     ensure_dir(str(outdir_path))
     
     dataset_specs = specs_from_input(provider=provider, datasets=datasets, area=area)
-    bundle = load_model_configs(configs_yaml.strip() or None)
+    config_text = pipeline_configs.strip()
+    config_data = parse_toml_config(config_text or None)
+    bundle = load_model_configs(config_data=config_data)
     cfg = PipelineConfig()
+    if isinstance(config_data, dict):
+        section = config_data.get("pipeline") if isinstance(config_data.get("pipeline"), dict) else config_data
+        if isinstance(section, dict):
+            cfg.apply_mapping(section)
+    for field_def in fields(cfg):
+        if hasattr(bundle, field_def.name):
+            value = getattr(bundle, field_def.name)
+            if value is not None:
+                setattr(cfg, field_def.name, value)
 
     for dataset_spec in dataset_specs:
         logging.info("Loading dataset %s", dataset_spec)
@@ -92,7 +105,7 @@ def _run_report(
         resolved_spec = payload.spec
         dataset_label = resolved_spec.name or str(resolved_spec.id)
         dataset_outdir = outdir_path / str(dataset_label).replace("/", "_")
-        GLOBAL_CONFIG.prov_dir = str(dataset_outdir / "prov")
+        ProvenanceConfig.get().prov_dir = str(dataset_outdir / "prov")
         process_dataset(
             resolved_spec,
             payload.frame,
@@ -135,7 +148,7 @@ def create_app() -> Flask:
                 status_message = _run_report(
                     form_state.get("provider", "openml"),
                     datasets=datasets or None,
-                    configs_yaml=form_state.get("configs_yaml", ""),
+                    configs_toml=form_state.get("configs_toml", ""),
                     area=form_state.get("area", "Health and Medicine"),
                 )
 
@@ -175,7 +188,7 @@ def create_app() -> Flask:
                         </select>
                     </label>
                     <label>Datasets (comma-separated)<input name="datasets" value="{{ form_state.get('datasets', '') }}"></label>
-                    <label>Configs YAML <input name="configs_yaml" value="{{ form_state.get('configs_yaml', '') }}"></label>
+                    <label>Configs TOML <input name="configs_toml" value="{{ form_state.get('configs_toml', '') }}"></label>
                     <label>Area <input name="area" value="{{ form_state.get('area', 'Health and Medicine') }}"></label>
                 <button type="submit">Run report</button>
                 </form>

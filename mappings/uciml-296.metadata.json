@@ -1,64 +1,125 @@
 {
   "@context": "https://w3id.org/semmap/context/v1",
-  "dataset": {
-    "@type": ["disco:LogicalDataSet", "dsv:Dataset", "dcat:Dataset"],
-    "dct:title": "UCI Diabetes 130-US hospitals (1999–2008)",
-    "dct:source": "https://archive.ics.uci.edu/dataset/296/diabetes+130-us+hospitals+for+years+1999-2008"
-  },
   "datasetSchema": {
     "columns": [
       {
         "name": "age",
         "titles": "Age (10-year bins)",
         "columnProperty": {
-          "statisticalDataType": "dsv:NominalDataType",
           "hasCodeBook": {
             "hasTopConcept": [
-              { "notation": "[0,10)",   "prefLabel": "[0–10) years" },
-              { "notation": "[10,20)",  "prefLabel": "[10–20) years" },
-              { "notation": "[20,30)",  "prefLabel": "[20–30) years" },
-              { "notation": "[30,40)",  "prefLabel": "[30–40) years" },
-              { "notation": "[40,50)",  "prefLabel": "[40–50) years" },
-              { "notation": "[50,60)",  "prefLabel": "[50–60) years" },
-              { "notation": "[60,70)",  "prefLabel": "[60–70) years" },
-              { "notation": "[70,80)",  "prefLabel": "[70–80) years" },
-              { "notation": "[80,90)",  "prefLabel": "[80–90) years" },
-              { "notation": "[90,100)", "prefLabel": "[90–100) years" }
+              {
+                "notation": "[0,10)",
+                "prefLabel": "[0\u201310) years"
+              },
+              {
+                "notation": "[10,20)",
+                "prefLabel": "[10\u201320) years"
+              },
+              {
+                "notation": "[20,30)",
+                "prefLabel": "[20\u201330) years"
+              },
+              {
+                "notation": "[30,40)",
+                "prefLabel": "[30\u201340) years"
+              },
+              {
+                "notation": "[40,50)",
+                "prefLabel": "[40\u201350) years"
+              },
+              {
+                "notation": "[50,60)",
+                "prefLabel": "[50\u201360) years"
+              },
+              {
+                "notation": "[60,70)",
+                "prefLabel": "[60\u201370) years"
+              },
+              {
+                "notation": "[70,80)",
+                "prefLabel": "[70\u201380) years"
+              },
+              {
+                "notation": "[80,90)",
+                "prefLabel": "[80\u201390) years"
+              },
+              {
+                "notation": "[90,100)",
+                "prefLabel": "[90\u2013100) years"
+              }
             ]
-          }
+          },
+          "statisticalDataType": "dsv:NominalDataType"
         }
       },
       {
         "name": "race",
         "titles": "Race",
         "columnProperty": {
-          "statisticalDataType": "dsv:NominalDataType",
           "hasCodeBook": {
             "hasTopConcept": [
-              { "notation": "Caucasian",       "prefLabel": "Caucasian" },
-              { "notation": "AfricanAmerican", "prefLabel": "African American" },
-              { "notation": "Asian",           "prefLabel": "Asian" },
-              { "notation": "Hispanic",        "prefLabel": "Hispanic" },
-              { "notation": "Other",           "prefLabel": "Other" },
-              { "notation": "Unknown/Invalid", "prefLabel": "Unknown/Invalid" }
+              {
+                "notation": "Caucasian",
+                "prefLabel": "Caucasian"
+              },
+              {
+                "notation": "AfricanAmerican",
+                "prefLabel": "African American"
+              },
+              {
+                "notation": "Asian",
+                "prefLabel": "Asian"
+              },
+              {
+                "notation": "Hispanic",
+                "prefLabel": "Hispanic"
+              },
+              {
+                "notation": "Other",
+                "prefLabel": "Other"
+              },
+              {
+                "notation": "Unknown/Invalid",
+                "prefLabel": "Unknown/Invalid"
+              }
             ]
-          }
+          },
+          "statisticalDataType": "dsv:NominalDataType"
         }
       },
       {
         "name": "gender",
         "titles": "Administrative sex/gender",
         "columnProperty": {
-          "statisticalDataType": "dsv:NominalDataType",
           "hasCodeBook": {
             "hasTopConcept": [
-              { "notation": "Male",   "prefLabel": "Male" },
-              { "notation": "Female", "prefLabel": "Female" },
-              { "notation": "Unknown/Invalid", "prefLabel": "Unknown/Invalid" }
+              {
+                "notation": "Male",
+                "prefLabel": "Male"
+              },
+              {
+                "notation": "Female",
+                "prefLabel": "Female"
+              },
+              {
+                "notation": "Unknown/Invalid",
+                "prefLabel": "Unknown/Invalid"
+              }
             ]
-          }
+          },
+          "statisticalDataType": "dsv:NominalDataType"
         }
       }
     ]
+  },
+  "dataset": {
+    "@type": [
+      "disco:LogicalDataSet",
+      "dsv:Dataset",
+      "dcat:Dataset"
+    ],
+    "title": "UCI Diabetes 130-US hospitals (1999\u20132008)",
+    "source": "https://archive.ics.uci.edu/dataset/296/diabetes+130-us+hospitals+for+years+1999-2008"
   }
 }

@@ -1,0 +1,371 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>SemSynth demo reports</title>
+  <link rel="stylesheet" href="{{CSS_HREF}}" />
+  <link rel="stylesheet" href="../templates/yasgui.min.css" />
+  <style>
+    .endpoint-pill { display: inline-block; font-family: monospace; background: #f4f4f4; padding: 0.35rem 0.55rem; border-radius: 0.35rem; }
+    #sparql-app { height: 70vh; min-height: 520px; border: 1px solid #ddd; border-radius: 0.5rem; overflow: hidden; }
+    .semsynth-query-result { margin: 0.75rem; padding: 0.75rem; max-height: 16rem; overflow: auto; border-radius: 0.35rem; background: #fafafa; border: 1px solid #ddd; font-family: monospace; white-space: pre-wrap; }
+    .semsynth-query-meta { font-size: 0.9rem; color: #333; margin: 0.5rem 0 0.25rem; }
+  </style>
+</head>
+<body>
+<main class="report-container">
+  <h1>Data Reports</h1>
+  <ul>
+{{DATASET_ITEMS}}
+  </ul>
+
+  <section>
+    <h2>Static SPARQL endpoint playground</h2>
+    <p>
+      Endpoint identifier: <span class="endpoint-pill">{{ENDPOINT_ID}}</span>.
+      This page embeds YASGUI + the browser Comunica SPARQL engine (no server-side SPARQL service).
+    </p>
+    <p>
+      The engine queries <code>output/catalog.jsonld</code> and loads query tabs from <code>output/sparql/*.rq</code> files.
+      Use the tabs below to select and run each example query.
+    </p>
+    <div id="sparql-app"></div>
+  </section>
+</main>
+
+<script src="../templates/comunica-browser.js"></script>
+<script src="../templates/yasgui.min.js"></script>
+<script>
+  const endpointId = {{ENDPOINT_ID_JSON}};
+  const exampleQueries = {{QUERY_JSON}};
+
+  const streamToArray = (stream) => new Promise((resolve, reject) => {
+    const items = [];
+    stream.on("data", (item) => items.push(item));
+    stream.on("end", () => resolve(items));
+    stream.on("error", reject);
+  });
+
+  const termToSparqlBinding = (term) => {
+    if (!term) {
+      return null;
+    }
+    if (term.termType === "Literal") {
+      const value = { type: "literal", value: term.value };
+      if (term.language) {
+        value["xml:lang"] = term.language;
+      }
+      if (term.datatype && term.datatype.value && term.datatype.value !== "http://www.w3.org/2001/XMLSchema#string") {
+        value.datatype = term.datatype.value;
+      }
+      return value;
+    }
+    if (term.termType === "BlankNode") {
+      return { type: "bnode", value: term.value };
+    }
+    return { type: "uri", value: term.value };
+  };
+
+  const bindingsToSparqlJson = (bindings) => {
+    const headVars = new Set();
+    const rows = bindings.map((binding) => {
+      const row = {};
+      binding.forEach((term, key) => {
+        const name = typeof key === "string" ? key : key?.value || String(key);
+        headVars.add(name);
+        row[name] = termToSparqlBinding(term);
+      });
+      return row;
+    });
+    return {
+      head: { vars: Array.from(headVars) },
+      results: { bindings: rows },
+    };
+  };
+
+  const toArray = (value) => (Array.isArray(value) ? value : (value ? [value] : []));
+
+  function extractDatasets(doc) {
+    if (Array.isArray(doc?.["@graph"])) {
+      return doc["@graph"].filter((node) => {
+        const types = toArray(node?.["@type"] || node?.type);
+        return types.includes("dcat:Dataset") || types.includes("Dataset") || types.includes("dcat:dataset");
+      });
+    }
+    const types = toArray(doc?.["@type"] || doc?.type);
+    if (types.includes("dcat:Dataset") || types.includes("Dataset")) {
+      return [doc];
+    }
+    return [];
+  }
+
+  function collectDistributionUrls(dataset) {
+    const urls = [];
+    for (const dist of toArray(dataset?.distribution || dataset?.distributions)) {
+      const download =
+        dist?.downloadURL || dist?.download_url || dist?.access_url || dist?.accessURL || dist?.contentUrl || dist?.contentURL || dist?.url;
+      if (download) {
+        urls.push(download);
+      }
+    }
+    return urls;
+  }
+
+  const resolveLocalUrl = (value) => {
+    if (!value) {
+      return null;
+    }
+    try {
+      const parsed = new URL(String(value), window.location.href);
+      if (parsed.hash && parsed.hash.startsWith("#/")) {
+        return new URL(parsed.hash.slice(1), window.location.href).toString();
+      }
+      if (parsed.protocol === "file:") {
+        const idx = parsed.pathname.indexOf("/output/");
+        if (idx !== -1) {
+          const relativePath = parsed.pathname.slice(idx + 1);
+          return new URL(relativePath, window.location.href).toString();
+        }
+      }
+      return parsed.toString();
+    } catch (_) {
+      return String(value);
+    }
+  };
+
+  async function buildInlineSources(catalogDoc) {
+    const sources = [];
+    const datasets = [
+      ...extractDatasets(catalogDoc),
+      ...(Array.isArray(catalogDoc?.datasets) ? catalogDoc.datasets : []),
+    ];
+
+    const loadSerialized = async (url) => {
+      const resolved = resolveLocalUrl(url);
+      const response = await fetch(resolved, { headers: { Accept: "application/ld+json, application/json" } });
+      if (!response.ok) {
+        throw new Error(`Failed to fetch ${resolved} (${response.status})`);
+      }
+      const json = await response.json();
+      return {
+        type: "serialized",
+        value: JSON.stringify(json),
+        mediaType: "application/ld+json",
+        baseIRI: resolved,
+      };
+    };
+
+    for (const dataset of datasets) {
+      const distUrls = collectDistributionUrls(dataset);
+      const semmapUrls = distUrls.filter((u) => String(u).toLowerCase().includes("dataset.semmap.json"));
+      const provUrls = distUrls.filter((u) => String(u).toLowerCase().includes("provenance.json"));
+
+      for (const url of semmapUrls) {
+        try {
+          sources.push(await loadSerialized(url));
+        } catch (error) {
+          console.warn("Failed to load SemMap", url, error);
+        }
+      }
+
+      for (const url of provUrls) {
+        try {
+          sources.push(await loadSerialized(url));
+        } catch (error) {
+          console.warn("Failed to load provenance", url, error);
+        }
+      }
+    }
+
+    return sources;
+  }
+
+  async function loadCatalogSource() {
+    const candidates = [
+      { url: new URL("catalog.jsonld", location.href).toString(), mediaType: "application/ld+json" },
+      { url: new URL("catalog.json", location.href).toString(), mediaType: "application/ld+json" },
+    ];
+    for (const url of candidates) {
+      const response = await fetch(url.url, { headers: { Accept: "application/ld+json, application/json" } });
+      if (!response.ok) {
+        continue;
+      }
+      const text = await response.text();
+      const responseType = response.headers.get("content-type");
+      const mediaType = url.mediaType || responseType || "application/ld+json";
+      let jsonDoc = null;
+      try {
+        jsonDoc = JSON.parse(text);
+      } catch (_) {
+        // not JSON, ok
+      }
+      const finalText = jsonDoc ? JSON.stringify(jsonDoc) : text;
+      return { sourceUrl: url.url, mediaType, text: finalText, originalUrl: url.url, jsonDoc };
+    }
+    throw new Error("Unable to load catalog.jsonld or catalog.json");
+  }
+
+  async function initStaticSparql() {
+    try {
+      localStorage.clear();
+      sessionStorage.clear();
+    } catch (error) {
+      console.warn("Unable to clear YASGUI storage", error);
+    }
+
+    const yasgui = new Yasgui(document.getElementById("sparql-app"), {
+      requestConfig: { endpoint: endpointId },
+      copyEndpointOnNewTab: false,
+      persistenceId: null,
+    });
+
+    const existingTabs = Object.keys(yasgui._tabs || {});
+    existingTabs.slice(1).forEach((tabId) => yasgui.removeTab(tabId));
+
+    const engine = new Comunica.QueryEngine();
+    const catalogSource = await loadCatalogSource();
+    const inlineSources = catalogSource.jsonDoc ? await buildInlineSources(catalogSource.jsonDoc) : [];
+    const sources = [
+      {
+        type: "serialized",
+        value: catalogSource.text,
+        mediaType: catalogSource.mediaType || "application/ld+json",
+        baseIRI: catalogSource.sourceUrl,
+      },
+      ...inlineSources,
+    ];
+    window.semsynthInlineSources = inlineSources;
+    window.semsynthSources = sources;
+    window.semsynthEngine = engine;
+
+    const renderPayload = (tab, payload, mediaType, rowCount, errorText) => {
+      const yasr = tab.getYasr();
+      const host = yasr.rootEl.parentElement;
+      let meta = host.querySelector(".semsynth-query-meta");
+      if (!meta) {
+        meta = document.createElement("div");
+        meta.className = "semsynth-query-meta";
+        host.prepend(meta);
+      }
+      const status = errorText ? `Error: ${errorText}` : `Rows: ${rowCount ?? "n/a"}`;
+      meta.textContent = `Last run (${mediaType}): ${status}`;
+
+      let pre = host.querySelector(".semsynth-query-result");
+      if (!pre) {
+        pre = document.createElement("pre");
+        pre.className = "semsynth-query-result";
+        host.appendChild(pre);
+      }
+      pre.dataset.mediaType = mediaType;
+      pre.dataset.rowCount = rowCount == null ? "" : String(rowCount);
+      if (errorText) {
+        pre.dataset.error = errorText;
+      } else {
+        delete pre.dataset.error;
+      }
+      pre.textContent = payload;
+    };
+
+    const wireTab = (tab) => {
+      const yasqe = tab.getYasqe();
+      yasqe.query = () => runWithComunica(tab);
+      const keys = yasqe.getOption("extraKeys") || {};
+      yasqe.setOption("extraKeys", Object.assign({}, keys, {
+        "Cmd-Enter": () => { runWithComunica(tab); return false; },
+        "Ctrl-Enter": () => { runWithComunica(tab); return false; },
+      }));
+    };
+
+    const loadQueryText = async (queryInfo) => {
+      const queryUrl = new URL(`sparql/${queryInfo.filename}`, window.location.href).toString();
+      const response = await fetch(queryUrl);
+      if (!response.ok) {
+        throw new Error(`Unable to load query file ${queryInfo.filename} (${response.status})`);
+      }
+      return response.text();
+    };
+
+    const runWithComunica = async (tab) => {
+      tab.show();
+      const yasqe = tab.getYasqe();
+      const yasr = tab.getYasr();
+      const queryText = yasqe.getValue();
+      try {
+        const bindingsStream = await engine.queryBindings(queryText, { sources, lenient: true });
+        const bindings = bindingsStream.toArray
+          ? await bindingsStream.toArray()
+          : await streamToArray(bindingsStream);
+        const sparqlJson = bindingsToSparqlJson(bindings);
+        const payload = JSON.stringify(sparqlJson, null, 2);
+        yasr.setResponse({ data: payload, contentType: "application/sparql-results+json" });
+        renderPayload(tab, payload, "application/sparql-results+json", bindings.length);
+        return { rowCount: bindings.length, mediaType: "application/sparql-results+json", payload };
+      } catch (error) {
+        const message = String(error);
+        renderPayload(tab, JSON.stringify({ error: message }, null, 2), "application/json", null, message);
+        return { rowCount: null, mediaType: "application/json", error: message, payload: JSON.stringify({ error: message }, null, 2) };
+      }
+    };
+
+    const firstTab = yasgui.getTab();
+    wireTab(firstTab);
+
+    if (exampleQueries.length) {
+      const firstQuery = exampleQueries[0];
+      firstTab.setName(firstQuery.name);
+      firstTab.getYasqe().setValue(await loadQueryText(firstQuery));
+      for (const queryInfo of exampleQueries.slice(1)) {
+        const tab = yasgui.addTab(true);
+        tab.setName(queryInfo.name);
+        tab.show();
+        tab.getYasqe().setValue(await loadQueryText(queryInfo));
+        wireTab(tab);
+      }
+      firstTab.show();
+    }
+
+    const runAllTabs = async () => {
+      const tabs = Object.values(yasgui._tabs || {});
+      const results = [];
+      for (const tab of tabs) {
+        try {
+          const result = await runWithComunica(tab);
+          results.push({
+            name: tab.getName(),
+            rowCount: result?.rowCount ?? null,
+            mediaType: result?.mediaType ?? null,
+            error: result?.error ?? null,
+            payload: result?.payload ?? null,
+          });
+        } catch (error) {
+          results.push({
+            name: tab.getName(),
+            rowCount: null,
+            mediaType: null,
+            error: String(error),
+            payload: null,
+          });
+        }
+      }
+      return results;
+    };
+
+    window.semsynthApp = {
+      endpointId,
+      catalogSource,
+      runAllTabs,
+      runWithComunica,
+      engine,
+      sources,
+      yasgui,
+    };
+  }
+
+  initStaticSparql().catch((error) => {
+    const container = document.getElementById("sparql-app");
+    container.innerHTML = `<pre>Failed to initialize static SPARQL UI: ${String(error)}</pre>`;
+  });
+</script>
+</body>
+</html>

@@ -1,10 +1,5 @@
 {
   "@context": "https://w3id.org/semmap/context/v1",
-  "dataset": {
-    "@type": ["disco:LogicalDataSet", "Dataset", "dcat:Dataset"],
-    "title": "Chronic Kidney Disease (UCI id 336)",
-    "description": "Clinical records for early detection of CKD (subset of variables ped)."
-  },
   "datasetSchema": {
     "columns": [
       {
@@ -14,13 +9,13 @@
           "summaryStatistics": {
             "statisticalDataType": "dsv:ContinuousDataType"
           },
-          "valueType": "xsd:float",
-          "hasQuantityKind": "quantitykind:Time",
-          "ucumCode": "a",
           "unitText": "years",
           "exactMatch": [
             "https://loinc.org/30525-0/"
-          ]
+          ],
+          "valueType": "xsd:float",
+          "hasQuantityKind": "quantitykind:Time",
+          "ucumCode": "a"
         }
       },
       {
@@ -30,13 +25,13 @@
           "summaryStatistics": {
             "statisticalDataType": "dsv:ContinuousDataType"
           },
-          "valueType": "xsd:float",
-          "hasQuantityKind": "quantitykind:Pressure",
-          "ucumCode": "mm[Hg]",
           "unitText": "mmHg",
           "closeMatch": [
             "https://loinc.org/8462-4/"
-          ]
+          ],
+          "valueType": "xsd:float",
+          "hasQuantityKind": "quantitykind:Pressure",
+          "ucumCode": "mm[Hg]"
         }
       },
       {
@@ -46,10 +41,10 @@
           "summaryStatistics": {
             "statisticalDataType": "dsv:ContinuousDataType"
           },
-          "valueType": "xsd:decimal",
           "exactMatch": [
             "https://loinc.org/2965-2/"
-          ]
+          ],
+          "valueType": "xsd:decimal"
         }
       },
       {
@@ -59,20 +54,38 @@
           "summaryStatistics": {
             "statisticalDataType": "dsv:OrdinalDataType"
           },
-          "valueType": "xsd:integer",
+          "hasCodeBook": {
+            "hasTopConcept": [
+              {
+                "notation": "0",
+                "prefLabel": "Albumin negative"
+              },
+              {
+                "notation": "1",
+                "prefLabel": "Trace albumin"
+              },
+              {
+                "notation": "2",
+                "prefLabel": "Albumin 1+"
+              },
+              {
+                "notation": "3",
+                "prefLabel": "Albumin 2+"
+              },
+              {
+                "notation": "4",
+                "prefLabel": "Albumin 3+"
+              },
+              {
+                "notation": "5",
+                "prefLabel": "Albumin 4+"
+              }
+            ]
+          },
           "closeMatch": [
             "http://snomed.info/id/274769005"
           ],
-          "hasCodeBook": {
-            "hasTopConcept": [
-              {"notation": "0", "prefLabel": "Albumin negative"},
-              {"notation": "1", "prefLabel": "Trace albumin"},
-              {"notation": "2", "prefLabel": "Albumin 1+"},
-              {"notation": "3", "prefLabel": "Albumin 2+"},
-              {"notation": "4", "prefLabel": "Albumin 3+"},
-              {"notation": "5", "prefLabel": "Albumin 4+"}
-            ]
-          }
+          "valueType": "xsd:integer"
         }
       },
       {
@@ -82,20 +95,38 @@
           "summaryStatistics": {
             "statisticalDataType": "dsv:OrdinalDataType"
           },
-          "valueType": "xsd:integer",
+          "hasCodeBook": {
+            "hasTopConcept": [
+              {
+                "notation": "0",
+                "prefLabel": "Sugar negative"
+              },
+              {
+                "notation": "1",
+                "prefLabel": "Trace sugar"
+              },
+              {
+                "notation": "2",
+                "prefLabel": "Sugar 1+"
+              },
+              {
+                "notation": "3",
+                "prefLabel": "Sugar 2+"
+              },
+              {
+                "notation": "4",
+                "prefLabel": "Sugar 3+"
+              },
+              {
+                "notation": "5",
+                "prefLabel": "Sugar 4+"
+              }
+            ]
+          },
           "closeMatch": [
             "http://snomed.info/id/45154002"
           ],
-          "hasCodeBook": {
-            "hasTopConcept": [
-              {"notation": "0", "prefLabel": "Sugar negative"},
-              {"notation": "1", "prefLabel": "Trace sugar"},
-              {"notation": "2", "prefLabel": "Sugar 1+"},
-              {"notation": "3", "prefLabel": "Sugar 2+"},
-              {"notation": "4", "prefLabel": "Sugar 3+"},
-              {"notation": "5", "prefLabel": "Sugar 4+"}
-            ]
-          }
+          "valueType": "xsd:integer"
         }
       },
       {
@@ -105,16 +136,22 @@
           "summaryStatistics": {
             "statisticalDataType": "dsv:NominalDataType"
           },
-          "valueType": "xsd:string",
+          "hasCodeBook": {
+            "hasTopConcept": [
+              {
+                "notation": "normal",
+                "prefLabel": "Normal"
+              },
+              {
+                "notation": "abnormal",
+                "prefLabel": "Abnormal"
+              }
+            ]
+          },
           "closeMatch": [
             "http://snomed.info/id/34436003"
           ],
-          "hasCodeBook": {
-            "hasTopConcept": [
-              {"notation": "normal", "prefLabel": "Normal"},
-              {"notation": "abnormal", "prefLabel": "Abnormal"}
-            ]
-          }
+          "valueType": "xsd:string"
         }
       },
       {
@@ -124,16 +161,22 @@
           "summaryStatistics": {
             "statisticalDataType": "dsv:NominalDataType"
           },
-          "valueType": "xsd:string",
+          "hasCodeBook": {
+            "hasTopConcept": [
+              {
+                "notation": "normal",
+                "prefLabel": "Normal"
+              },
+              {
+                "notation": "abnormal",
+                "prefLabel": "Abnormal"
+              }
+            ]
+          },
           "closeMatch": [
             "http://snomed.info/id/275741008"
           ],
-          "hasCodeBook": {
-            "hasTopConcept": [
-              {"notation": "normal", "prefLabel": "Normal"},
-              {"notation": "abnormal", "prefLabel": "Abnormal"}
-            ]
-          }
+          "valueType": "xsd:string"
         }
       },
       {
@@ -143,16 +186,22 @@
           "summaryStatistics": {
             "statisticalDataType": "dsv:NominalDataType"
           },
-          "valueType": "xsd:string",
+          "hasCodeBook": {
+            "hasTopConcept": [
+              {
+                "notation": "present",
+                "prefLabel": "Present"
+              },
+              {
+                "notation": "notpresent",
+                "prefLabel": "Not present"
+              }
+            ]
+          },
           "exactMatch": [
             "https://loinc.org/67848-2/"
           ],
-          "hasCodeBook": {
-            "hasTopConcept": [
-              {"notation": "present", "prefLabel": "Present"},
-              {"notation": "notpresent", "prefLabel": "Not present"}
-            ]
-          }
+          "valueType": "xsd:string"
         }
       },
       {
@@ -162,16 +211,22 @@
           "summaryStatistics": {
             "statisticalDataType": "dsv:NominalDataType"
           },
-          "valueType": "xsd:string",
+          "hasCodeBook": {
+            "hasTopConcept": [
+              {
+                "notation": "present",
+                "prefLabel": "Present"
+              },
+              {
+                "notation": "notpresent",
+                "prefLabel": "Not present"
+              }
+            ]
+          },
           "closeMatch": [
             "http://snomed.info/id/61373006"
           ],
-          "hasCodeBook": {
-            "hasTopConcept": [
-              {"notation": "present", "prefLabel": "Present"},
-              {"notation": "notpresent", "prefLabel": "Not present"}
-            ]
-          }
+          "valueType": "xsd:string"
         }
       },
       {
@@ -181,12 +236,12 @@
           "summaryStatistics": {
             "statisticalDataType": "dsv:ContinuousDataType"
           },
-          "valueType": "xsd:float",
-          "ucumCode": "mg/dL",
           "unitText": "mg/dL",
           "exactMatch": [
             "https://loinc.org/2345-7/"
-          ]
+          ],
+          "valueType": "xsd:float",
+          "ucumCode": "mg/dL"
         }
       },
       {
@@ -196,12 +251,12 @@
           "summaryStatistics": {
             "statisticalDataType": "dsv:ContinuousDataType"
           },
-          "valueType": "xsd:float",
-          "ucumCode": "mg/dL",
           "unitText": "mg/dL",
           "exactMatch": [
             "https://loinc.org/6299-2/"
-          ]
+          ],
+          "valueType": "xsd:float",
+          "ucumCode": "mg/dL"
         }
       },
       {
@@ -211,12 +266,12 @@
           "summaryStatistics": {
             "statisticalDataType": "dsv:ContinuousDataType"
           },
-          "valueType": "xsd:float",
-          "ucumCode": "mg/dL",
           "unitText": "mg/dL",
           "exactMatch": [
             "https://loinc.org/2160-0/"
-          ]
+          ],
+          "valueType": "xsd:float",
+          "ucumCode": "mg/dL"
         }
       },
       {
@@ -226,12 +281,12 @@
           "summaryStatistics": {
             "statisticalDataType": "dsv:ContinuousDataType"
           },
-          "valueType": "xsd:float",
-          "ucumCode": "mmol/L",
           "unitText": "mmol/L",
           "exactMatch": [
             "https://loinc.org/2951-2/"
-          ]
+          ],
+          "valueType": "xsd:float",
+          "ucumCode": "mmol/L"
         }
       },
       {
@@ -241,12 +296,12 @@
           "summaryStatistics": {
             "statisticalDataType": "dsv:ContinuousDataType"
           },
-          "valueType": "xsd:float",
-          "ucumCode": "mmol/L",
           "unitText": "mmol/L",
           "exactMatch": [
             "https://loinc.org/2823-3/"
-          ]
+          ],
+          "valueType": "xsd:float",
+          "ucumCode": "mmol/L"
         }
       },
       {
@@ -256,12 +311,12 @@
           "summaryStatistics": {
             "statisticalDataType": "dsv:ContinuousDataType"
           },
-          "valueType": "xsd:float",
-          "ucumCode": "g/dL",
           "unitText": "g/dL",
           "exactMatch": [
             "https://loinc.org/718-7/"
-          ]
+          ],
+          "valueType": "xsd:float",
+          "ucumCode": "g/dL"
         }
       },
       {
@@ -271,12 +326,12 @@
           "summaryStatistics": {
             "statisticalDataType": "dsv:ContinuousDataType"
           },
-          "valueType": "xsd:float",
-          "ucumCode": "%",
           "unitText": "percent",
           "exactMatch": [
             "https://loinc.org/20570-8/"
-          ]
+          ],
+          "valueType": "xsd:float",
+          "ucumCode": "%"
         }
       },
       {
@@ -286,12 +341,12 @@
           "summaryStatistics": {
             "statisticalDataType": "dsv:ContinuousDataType"
           },
-          "valueType": "xsd:float",
-          "ucumCode": "10*3/uL",
-          "unitText": "10^3 cells/µL",
+          "unitText": "10^3 cells/\u00b5L",
           "exactMatch": [
             "https://loinc.org/6690-2/"
-          ]
+          ],
+          "valueType": "xsd:float",
+          "ucumCode": "10*3/uL"
         }
       },
       {
@@ -301,12 +356,12 @@
           "summaryStatistics": {
             "statisticalDataType": "dsv:ContinuousDataType"
           },
-          "valueType": "xsd:float",
-          "ucumCode": "10*6/uL",
-          "unitText": "10^6 cells/µL",
+          "unitText": "10^6 cells/\u00b5L",
           "exactMatch": [
             "https://loinc.org/789-8/"
-          ]
+          ],
+          "valueType": "xsd:float",
+          "ucumCode": "10*6/uL"
         }
       },
       {
@@ -316,16 +371,22 @@
           "summaryStatistics": {
             "statisticalDataType": "dsv:NominalDataType"
           },
-          "valueType": "xsd:string",
+          "hasCodeBook": {
+            "hasTopConcept": [
+              {
+                "notation": "yes",
+                "prefLabel": "Yes"
+              },
+              {
+                "notation": "no",
+                "prefLabel": "No"
+              }
+            ]
+          },
           "closeMatch": [
             "http://snomed.info/id/38341003"
           ],
-          "hasCodeBook": {
-            "hasTopConcept": [
-              {"notation": "yes", "prefLabel": "Yes"},
-              {"notation": "no", "prefLabel": "No"}
-            ]
-          }
+          "valueType": "xsd:string"
         }
       },
       {
@@ -335,16 +396,22 @@
           "summaryStatistics": {
             "statisticalDataType": "dsv:NominalDataType"
           },
-          "valueType": "xsd:string",
+          "hasCodeBook": {
+            "hasTopConcept": [
+              {
+                "notation": "yes",
+                "prefLabel": "Yes"
+              },
+              {
+                "notation": "no",
+                "prefLabel": "No"
+              }
+            ]
+          },
           "closeMatch": [
             "http://snomed.info/id/73211009"
           ],
-          "hasCodeBook": {
-            "hasTopConcept": [
-              {"notation": "yes", "prefLabel": "Yes"},
-              {"notation": "no", "prefLabel": "No"}
-            ]
-          }
+          "valueType": "xsd:string"
         }
       },
       {
@@ -354,16 +421,22 @@
           "summaryStatistics": {
             "statisticalDataType": "dsv:NominalDataType"
           },
-          "valueType": "xsd:string",
+          "hasCodeBook": {
+            "hasTopConcept": [
+              {
+                "notation": "yes",
+                "prefLabel": "Yes"
+              },
+              {
+                "notation": "no",
+                "prefLabel": "No"
+              }
+            ]
+          },
           "closeMatch": [
             "http://snomed.info/id/53741008"
           ],
-          "hasCodeBook": {
-            "hasTopConcept": [
-              {"notation": "yes", "prefLabel": "Yes"},
-              {"notation": "no", "prefLabel": "No"}
-            ]
-          }
+          "valueType": "xsd:string"
         }
       },
       {
@@ -373,16 +446,22 @@
           "summaryStatistics": {
             "statisticalDataType": "dsv:NominalDataType"
           },
-          "valueType": "xsd:string",
+          "hasCodeBook": {
+            "hasTopConcept": [
+              {
+                "notation": "good",
+                "prefLabel": "Good appetite"
+              },
+              {
+                "notation": "poor",
+                "prefLabel": "Poor appetite"
+              }
+            ]
+          },
           "closeMatch": [
             "http://snomed.info/id/2492004"
           ],
-          "hasCodeBook": {
-            "hasTopConcept": [
-              {"notation": "good", "prefLabel": "Good appetite"},
-              {"notation": "poor", "prefLabel": "Poor appetite"}
-            ]
-          }
+          "valueType": "xsd:string"
         }
       },
       {
@@ -392,16 +471,22 @@
           "summaryStatistics": {
             "statisticalDataType": "dsv:NominalDataType"
           },
-          "valueType": "xsd:string",
+          "hasCodeBook": {
+            "hasTopConcept": [
+              {
+                "notation": "yes",
+                "prefLabel": "Yes"
+              },
+              {
+                "notation": "no",
+                "prefLabel": "No"
+              }
+            ]
+          },
           "closeMatch": [
             "http://snomed.info/id/102572006"
           ],
-          "hasCodeBook": {
-            "hasTopConcept": [
-              {"notation": "yes", "prefLabel": "Yes"},
-              {"notation": "no", "prefLabel": "No"}
-            ]
-          }
+          "valueType": "xsd:string"
         }
       },
       {
@@ -411,16 +496,22 @@
           "summaryStatistics": {
             "statisticalDataType": "dsv:NominalDataType"
           },
-          "valueType": "xsd:string",
+          "hasCodeBook": {
+            "hasTopConcept": [
+              {
+                "notation": "yes",
+                "prefLabel": "Yes"
+              },
+              {
+                "notation": "no",
+                "prefLabel": "No"
+              }
+            ]
+          },
           "closeMatch": [
             "http://snomed.info/id/271737000"
           ],
-          "hasCodeBook": {
-            "hasTopConcept": [
-              {"notation": "yes", "prefLabel": "Yes"},
-              {"notation": "no", "prefLabel": "No"}
-            ]
-          }
+          "valueType": "xsd:string"
         }
       },
       {
@@ -430,18 +521,33 @@
           "summaryStatistics": {
             "statisticalDataType": "dsv:NominalDataType"
           },
-          "valueType": "xsd:string",
+          "hasCodeBook": {
+            "hasTopConcept": [
+              {
+                "notation": "ckd",
+                "prefLabel": "Chronic kidney disease"
+              },
+              {
+                "notation": "notckd",
+                "prefLabel": "Not chronic kidney disease"
+              }
+            ]
+          },
           "closeMatch": [
             "http://snomed.info/id/709044004"
           ],
-          "hasCodeBook": {
-            "hasTopConcept": [
-              {"notation": "ckd", "prefLabel": "Chronic kidney disease"},
-              {"notation": "notckd", "prefLabel": "Not chronic kidney disease"}
-            ]
-          }
+          "valueType": "xsd:string"
         }
       }
     ]
+  },
+  "dataset": {
+    "@type": [
+      "disco:LogicalDataSet",
+      "Dataset",
+      "dcat:Dataset"
+    ],
+    "title": "Chronic Kidney Disease (UCI id 336)",
+    "description": "Clinical records for early detection of CKD (subset of variables ped)."
   }
 }

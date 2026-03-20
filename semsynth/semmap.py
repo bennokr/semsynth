@@ -1,7 +1,7 @@
 from __future__ import annotations
 import json
 from importlib import resources as _importlib_resources
-from typing import Any, Dict, List, Mapping, Optional
+from typing import Any, Dict, Iterable, List, Mapping, Optional, Sequence
 from enum import Enum
 from dataclasses import dataclass
 
@@ -12,11 +12,130 @@ import pyarrow as pa
 import pyarrow.parquet as pq
 from pint_pandas import PintType
 
-from .utils import normalize_variable_descriptors, normalize_role, get_column_name
+def _jsonld_first(node: Mapping[str, Any], *keys: str) -> Optional[Any]:
+    """Return the first non-empty value for the given keys in a JSON-LD mapping."""
+    if not isinstance(node, Mapping):
+        return None
+    for key in keys:
+        if key in node and node.get(key) is not None:
+            return node.get(key)
+    return None
 
+
+_COLUMN_NAME_KEYS: tuple[str, ...] = (
+    "schema:name",
+    "name",
+    "csvw:name",
+    "dcterms:title",
+    "schema:identifier",
+    "identifier",
+    "column",
+    "column_name",
+)
+
+
+def get_column_name(entry: Mapping[str, Any], *, extra_keys: Sequence[str] = ()) -> Optional[str]:
+    """Return the first non-empty column name found in a JSON-LD column entry."""
+    for key in (*_COLUMN_NAME_KEYS, *extra_keys):
+        value = entry.get(key) if isinstance(entry, Mapping) else None
+        if isinstance(value, str) and value:
+            return value
+    return None
+
+
+@dataclass
+class VariableDescriptor:
+    """Lightweight container for harmonized column metadata."""
+
+    name: str
+    description: Optional[str] = None
+    role: Optional[str] = None
+    unit: Optional[str] = None
+
+    def as_dict(self) -> Dict[str, Optional[str]]:
+        """Convert the descriptor to a plain mapping."""
+
+        return {
+            "name": self.name,
+            "description": self.description,
+            "role": self.role,
+            "unit": self.unit,
+        }
+
+
+def normalize_variable_descriptors(variables: Iterable[Mapping[str, Any]]) -> List[VariableDescriptor]:
+    """Normalize a collection of raw variable dictionaries into descriptors."""
+
+    descriptors: List[VariableDescriptor] = []
+    for entry in variables:
+        if not isinstance(entry, Mapping):
+            continue
+        raw_name = get_column_name(entry)
+        if not raw_name:
+            continue
+        description = entry.get("dcterms:description") or entry.get("description")
+        role = _jsonld_first(entry, "prov:hadRole", "hadRole", "role")
+        unit = _jsonld_first(entry, "schema:unitText", "unitText", "unit")
+        descriptors.append(
+            VariableDescriptor(
+                name=str(raw_name),
+                description=str(description) if isinstance(description, str) else None,
+                role=str(role) if isinstance(role, str) else None,
+                unit=str(unit) if isinstance(unit, str) else None,
+            )
+        )
+    return descriptors
+
+
+def normalize_role(raw: Optional[str]) -> str:
+    """Normalize a raw role string into a canonical privacy role label."""
+
+    if not raw:
+        return "qi"
+    role = raw.strip().lower()
+    if role in {"quasiidentifier", "quasi-identifier", "quasi_identifier"}:
+        return "qi"
+    if role in {"sensitive", "sensitive_attribute"}:
+        return "sensitive"
+    if role in {"identifier", "id", "primary_key"}:
+        return "id"
+    if role in {"ignore", "drop", "exclude"}:
+        return "ignore"
+    if role in {"target", "label", "outcome"}:
+        return "target"
+    if role in {"feature", "predictor"}:
+        return "qi"
+    return role
+
+
+def raw_role(node: Mapping[str, Any] | "Column" | None) -> Optional[str]:
+    """Extract a role value from a Column or JSON-LD mapping without normalization."""
+
+    if node is None:
+        return None
+    if isinstance(node, Column):
+        return node.hadRole
+    if isinstance(node, Mapping):
+        value = _jsonld_first(node, "prov:hadRole", "hadRole", "role")
+        return str(value) if isinstance(value, str) else None
+    return getattr(node, "hadRole", None)
+
+
+def modeling_role(node: Mapping[str, Any] | "Column" | None, *, default: str = "predictor") -> str:
+    """Return a simplified role label for modeling contexts."""
+
+    raw = raw_role(node)
+    if not raw:
+        return default
+    role = raw.strip().lower()
+    if role in {"target", "label", "outcome"}:
+        return "target"
+    if role in {"feature", "predictor", "qi", "quasiidentifier", "quasi-identifier"}:
+        return "predictor"
+    return role or default
 
 def _load_context() -> dict:
-    data = _importlib_resources.files("semsynth").joinpath("context.jsonld").read_text("utf-8")
+    data = _importlib_resources.files("semsynth").joinpath("semmap.jsonld").read_text("utf-8")
     return json.loads(data)
 
 
@@ -173,9 +292,7 @@ class Metadata(RDFMixin):
                 column_stats = None
             col_prop_json = col_json.get("dsv:columnProperty") or col_json.get("columnProperty")
             col_prop = ColumnProperty.from_jsonld(col_prop_json) if isinstance(col_prop_json, Mapping) else None
-            descriptor = descriptor_lookup.get(
-                get_column_name(col_json) or ""
-            )
+            descriptor = descriptor_lookup.get(get_column_name(col_json) or "")
             unit_text = (
                 descriptor.unit if descriptor and descriptor.unit else None
             ) or col_json.get("schema:unitText") or col_json.get("unitText")
@@ -188,8 +305,12 @@ class Metadata(RDFMixin):
             if not name:
                 continue
             descriptor = descriptor_lookup.get(str(name))
-            description = descriptor.description if descriptor and descriptor.description else col_json.get("dcterms:description")
-            role = descriptor.role if descriptor and descriptor.role else col_json.get("prov:hadRole")
+            description = (
+                descriptor.description
+                if descriptor and descriptor.description
+                else col_json.get("dcterms:description")
+            )
+            role = descriptor.role if descriptor and descriptor.role else raw_role(col_json)
             columns.append(
                 Column(
                     name=name,
@@ -315,8 +436,8 @@ class Metadata(RDFMixin):
                 col.summaryStatistics = SummaryStatistics()
             col.summaryStatistics.columnCompleteness = completeness_val
 
-    def to_jsonld(self) -> Optional[Dict[str, Any]]:  # type: ignore[override]
-        return super().to_jsonld()
+    def to_jsonld(self, with_context: bool = False) -> Optional[Dict[str, Any]]:  # type: ignore[override]
+        return super().to_jsonld(with_context=with_context)
 
 
 # Arrow metadata keys (bytes per Arrow requirements)
@@ -511,8 +632,8 @@ class SemMapSeriesAccessor:
         self._persist_col_semmap()
         return self
 
-    def to_jsonld(self) -> Optional[Dict[str, Any]]:
-        return self().to_jsonld()
+    def to_jsonld(self, with_context: bool = False) -> Optional[Dict[str, Any]]:
+        return self().to_jsonld(with_context=with_context)
 
     # ---- internal hook (used by DataFrame writer) ----------------------------
 
@@ -562,12 +683,12 @@ class SemMapFrameAccessor:
 
         return self.dataset_semmap
 
-    def to_jsonld(self) -> Optional[Dict[str, Any]]:
-        return self._df.semmap().to_jsonld()
+    def to_jsonld(self, with_context: bool = False) -> Optional[Dict[str, Any]]:
+        return self._df.semmap().to_jsonld(with_context=with_context)
 
     # ---- IO: Parquet with Arrow schema/field metadata ------------------------
 
-    def to_parquet(self, path: str, *, index: bool = False, **pq_kwargs) -> None:
+    def to_parquet(self, path: str, *, with_context: bool = False, index: bool = False, **pq_kwargs) -> None:
         """Write Parquet with semantics stored in Arrow schema and fields."""
         # 1) normalize columns for parquet storage
         df_store = {}
@@ -590,7 +711,7 @@ class SemMapFrameAccessor:
                 if isinstance(candidate, Mapping):
                     s_meta = dict(candidate)
             if s_meta is None:
-                s_meta = self._df[field.name].semmap.to_jsonld()
+                s_meta = self._df[field.name].semmap.to_jsonld(with_context=with_context)
             fmeta = dict(field.metadata or {})
             if s_meta is not None:
                 fmeta[_COLUMN_SEMMAP_KEY] = json.dumps(
@@ -605,7 +726,7 @@ class SemMapFrameAccessor:
 
         # 4) attach dataset semantics on Schema
         schema_meta = dict(schema.metadata or {})
-        d_meta = self.to_jsonld()
+        d_meta = self.to_jsonld(with_context=with_context)
         if d_meta is not None:
             schema_meta[_DATASET_SEMMAP_KEY] = json.dumps(
                 d_meta, ensure_ascii=False
@@ -696,6 +817,7 @@ class SemMapFrameAccessor:
         self,
         metadata: str | dict[str, Any],
         *,
+        with_context: bool = False,
         convert_pint: bool = True,
     ) -> "SemMapFrameAccessor":
         """Attach dataset metadata and column schema from a JSON object."""
@@ -707,7 +829,7 @@ class SemMapFrameAccessor:
             meta_jsonld = metadata
 
         if hasattr(meta_jsonld, "to_jsonld"):
-            meta_jsonld = meta_jsonld.to_jsonld()
+            meta_jsonld = meta_jsonld.to_jsonld(with_context=with_context)
 
         # Attach dataset semantics verbatim (round-trip equality)
         self.dataset_semmap = Metadata.from_jsonld(meta_jsonld)
@@ -719,7 +841,7 @@ class SemMapFrameAccessor:
             or {}
         )
         if hasattr(schema_json, "to_jsonld"):
-            schema_json = schema_json.to_jsonld()
+            schema_json = schema_json.to_jsonld(with_context=with_context)
         cols = []
         if isinstance(schema_json, Mapping):
             cols = (schema_json.get("columns") or schema_json.get("dsv:column") or [])

@@ -1,15 +1,15 @@
 {
+  "@context": "https://w3id.org/semmap/context/v1",
   "datasetSchema": {
     "columns": [
       {
         "name": "Class",
         "titles": "Patient outcome class (1=die, 2=live)",
-        "prov:hadRole": "target",
+        "hadRole": "target",
         "columnProperty": {
           "summaryStatistics": {
             "statisticalDataType": "dsv:NominalDataType"
           },
-          "valueType": "xsd:string",
           "hasCodeBook": {
             "hasTopConcept": [
               {
@@ -21,7 +21,8 @@
                 "prefLabel": "Outcome recorded as survival"
               }
             ]
-          }
+          },
+          "valueType": "xsd:string"
         }
       },
       {
@@ -31,13 +32,13 @@
           "summaryStatistics": {
             "statisticalDataType": "dsv:ContinuousDataType"
           },
-          "valueType": "xsd:integer",
-          "hasQuantityKind": "quantitykind:Time",
-          "ucumCode": "a",
           "unitText": "years",
           "exactMatch": [
             "https://loinc.org/30525-0/"
-          ]
+          ],
+          "valueType": "xsd:integer",
+          "hasQuantityKind": "quantitykind:Time",
+          "ucumCode": "a"
         }
       },
       {
@@ -47,10 +48,6 @@
           "summaryStatistics": {
             "statisticalDataType": "dsv:NominalDataType"
           },
-          "valueType": "xsd:string",
-          "exactMatch": [
-            "https://loinc.org/76689-9/"
-          ],
           "hasCodeBook": {
             "hasTopConcept": [
               {
@@ -62,7 +59,11 @@
                 "prefLabel": "Female"
               }
             ]
-          }
+          },
+          "exactMatch": [
+            "https://loinc.org/76689-9/"
+          ],
+          "valueType": "xsd:string"
         }
       },
       {
@@ -72,7 +73,6 @@
           "summaryStatistics": {
             "statisticalDataType": "dsv:NominalDataType"
           },
-          "valueType": "xsd:string",
           "hasCodeBook": {
             "hasTopConcept": [
               {
@@ -84,7 +84,8 @@
                 "prefLabel": "No"
               }
             ]
-          }
+          },
+          "valueType": "xsd:string"
         }
       },
       {
@@ -94,7 +95,6 @@
           "summaryStatistics": {
             "statisticalDataType": "dsv:NominalDataType"
           },
-          "valueType": "xsd:string",
           "hasCodeBook": {
             "hasTopConcept": [
               {
@@ -106,7 +106,8 @@
                 "prefLabel": "No"
               }
             ]
-          }
+          },
+          "valueType": "xsd:string"
         }
       },
       {
@@ -116,10 +117,6 @@
           "summaryStatistics": {
             "statisticalDataType": "dsv:NominalDataType"
           },
-          "valueType": "xsd:string",
-          "closeMatch": [
-            "http://snomed.info/id/84229001"
-          ],
           "hasCodeBook": {
             "hasTopConcept": [
               {
@@ -131,7 +128,11 @@
                 "prefLabel": "No"
               }
             ]
-          }
+          },
+          "closeMatch": [
+            "http://snomed.info/id/84229001"
+          ],
+          "valueType": "xsd:string"
         }
       },
       {
@@ -141,10 +142,6 @@
           "summaryStatistics": {
             "statisticalDataType": "dsv:NominalDataType"
           },
-          "valueType": "xsd:string",
-          "closeMatch": [
-            "http://snomed.info/id/367391008"
-          ],
           "hasCodeBook": {
             "hasTopConcept": [
               {
@@ -156,7 +153,11 @@
                 "prefLabel": "No"
               }
             ]
-          }
+          },
+          "closeMatch": [
+            "http://snomed.info/id/367391008"
+          ],
+          "valueType": "xsd:string"
         }
       },
       {
@@ -166,10 +167,6 @@
           "summaryStatistics": {
             "statisticalDataType": "dsv:NominalDataType"
           },
-          "valueType": "xsd:string",
-          "closeMatch": [
-            "http://snomed.info/id/79890006"
-          ],
           "hasCodeBook": {
             "hasTopConcept": [
               {
@@ -181,7 +178,11 @@
                 "prefLabel": "No"
               }
             ]
-          }
+          },
+          "closeMatch": [
+            "http://snomed.info/id/79890006"
+          ],
+          "valueType": "xsd:string"
         }
       },
       {
@@ -191,10 +192,6 @@
           "summaryStatistics": {
             "statisticalDataType": "dsv:NominalDataType"
           },
-          "valueType": "xsd:string",
-          "closeMatch": [
-            "http://snomed.info/id/80515008"
-          ],
           "hasCodeBook": {
             "hasTopConcept": [
               {
@@ -206,7 +203,11 @@
                 "prefLabel": "No"
               }
             ]
-          }
+          },
+          "closeMatch": [
+            "http://snomed.info/id/80515008"
+          ],
+          "valueType": "xsd:string"
         }
       },
       {
@@ -216,7 +217,6 @@
           "summaryStatistics": {
             "statisticalDataType": "dsv:NominalDataType"
           },
-          "valueType": "xsd:string",
           "hasCodeBook": {
             "hasTopConcept": [
               {
@@ -228,7 +228,8 @@
                 "prefLabel": "No"
               }
             ]
-          }
+          },
+          "valueType": "xsd:string"
         }
       },
       {
@@ -238,10 +239,6 @@
           "summaryStatistics": {
             "statisticalDataType": "dsv:NominalDataType"
           },
-          "valueType": "xsd:string",
-          "closeMatch": [
-            "http://snomed.info/id/249572006"
-          ],
           "hasCodeBook": {
             "hasTopConcept": [
               {
@@ -253,7 +250,11 @@
                 "prefLabel": "No"
               }
             ]
-          }
+          },
+          "closeMatch": [
+            "http://snomed.info/id/249572006"
+          ],
+          "valueType": "xsd:string"
         }
       },
       {
@@ -263,10 +264,6 @@
           "summaryStatistics": {
             "statisticalDataType": "dsv:NominalDataType"
           },
-          "valueType": "xsd:string",
-          "closeMatch": [
-            "http://snomed.info/id/195382003"
-          ],
           "hasCodeBook": {
             "hasTopConcept": [
               {
@@ -278,7 +275,11 @@
                 "prefLabel": "No"
               }
             ]
-          }
+          },
+          "closeMatch": [
+            "http://snomed.info/id/195382003"
+          ],
+          "valueType": "xsd:string"
         }
       },
       {
@@ -288,10 +289,6 @@
           "summaryStatistics": {
             "statisticalDataType": "dsv:NominalDataType"
           },
-          "valueType": "xsd:string",
-          "closeMatch": [
-            "http://snomed.info/id/389026000"
-          ],
           "hasCodeBook": {
             "hasTopConcept": [
               {
@@ -303,7 +300,11 @@
                 "prefLabel": "No"
               }
             ]
-          }
+          },
+          "closeMatch": [
+            "http://snomed.info/id/389026000"
+          ],
+          "valueType": "xsd:string"
         }
       },
       {
@@ -313,10 +314,6 @@
           "summaryStatistics": {
             "statisticalDataType": "dsv:NominalDataType"
           },
-          "valueType": "xsd:string",
-          "closeMatch": [
-            "http://snomed.info/id/28670008"
-          ],
           "hasCodeBook": {
             "hasTopConcept": [
               {
@@ -328,7 +325,11 @@
                 "prefLabel": "No"
               }
             ]
-          }
+          },
+          "closeMatch": [
+            "http://snomed.info/id/28670008"
+          ],
+          "valueType": "xsd:string"
         }
       },
       {
@@ -338,12 +339,12 @@
           "summaryStatistics": {
             "statisticalDataType": "dsv:ContinuousDataType"
           },
-          "valueType": "xsd:float",
-          "ucumCode": "mg/dL",
           "unitText": "mg/dL",
           "exactMatch": [
             "https://loinc.org/1975-2/"
-          ]
+          ],
+          "valueType": "xsd:float",
+          "ucumCode": "mg/dL"
         }
       },
       {
@@ -353,12 +354,12 @@
           "summaryStatistics": {
             "statisticalDataType": "dsv:ContinuousDataType"
           },
-          "valueType": "xsd:float",
-          "ucumCode": "U/L",
           "unitText": "U/L",
           "exactMatch": [
             "https://loinc.org/6768-6/"
-          ]
+          ],
+          "valueType": "xsd:float",
+          "ucumCode": "U/L"
         }
       },
       {
@@ -368,12 +369,12 @@
           "summaryStatistics": {
             "statisticalDataType": "dsv:ContinuousDataType"
           },
-          "valueType": "xsd:float",
-          "ucumCode": "U/L",
           "unitText": "U/L",
           "exactMatch": [
             "https://loinc.org/1920-8/"
-          ]
+          ],
+          "valueType": "xsd:float",
+          "ucumCode": "U/L"
         }
       },
       {
@@ -383,12 +384,12 @@
           "summaryStatistics": {
             "statisticalDataType": "dsv:ContinuousDataType"
           },
-          "valueType": "xsd:float",
-          "ucumCode": "g/dL",
           "unitText": "g/dL",
           "exactMatch": [
             "https://loinc.org/1751-7/"
-          ]
+          ],
+          "valueType": "xsd:float",
+          "ucumCode": "g/dL"
         }
       },
       {
@@ -398,12 +399,12 @@
           "summaryStatistics": {
             "statisticalDataType": "dsv:ContinuousDataType"
           },
-          "valueType": "xsd:float",
-          "ucumCode": "s",
           "unitText": "seconds",
           "exactMatch": [
             "https://loinc.org/5902-2/"
-          ]
+          ],
+          "valueType": "xsd:float",
+          "ucumCode": "s"
         }
       },
       {
@@ -413,7 +414,6 @@
           "summaryStatistics": {
             "statisticalDataType": "dsv:NominalDataType"
           },
-          "valueType": "xsd:string",
           "hasCodeBook": {
             "hasTopConcept": [
               {
@@ -425,7 +425,8 @@
                 "prefLabel": "No"
               }
             ]
-          }
+          },
+          "valueType": "xsd:string"
         }
       }
     ]

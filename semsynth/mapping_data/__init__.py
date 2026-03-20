@@ -1,1 +1,0 @@
-"""Packaged curated SemMap mappings."""

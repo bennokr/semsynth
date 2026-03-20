@@ -9,7 +9,7 @@ from typing import Any, Dict, List, Optional, Mapping
 
 from makeprov import RDFMixin
 
-from .utils import normalize_variable_descriptors
+from .semmap import normalize_variable_descriptors
 
 JSONLD_CONTEXT = {
     "@context": {

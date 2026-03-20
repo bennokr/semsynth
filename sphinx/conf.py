@@ -10,16 +10,17 @@ author = "SemSynth Authors"
 
 # --- extensions ---
 extensions = [
-    "myst_parser",          # Markdown + MyST
+    "myst_nb",              # MyST notebooks (includes Markdown parser)
     "sphinx.ext.autodoc",   # pull in docstrings
     "sphinx.ext.autosummary",  # generate API pages
     "sphinx.ext.napoleon", # docstrings
 ]
 
-# Parse both .rst and .md
+# Parse both .rst and .md (MyST-NB handles Markdown/nbformat)
 source_suffix = {
     ".rst": "restructuredtext",
-    ".md": "markdown",
+    ".md": "myst-nb",
+    ".ipynb": "myst-nb",
 }
 
 # Root document
@@ -30,6 +31,12 @@ master_doc = "index"        # backward compatibility
 myst_enable_extensions = [
     "linkify",
 ]
+
+# Auto-anchor headings for internal cross-references in included docs
+myst_heading_anchors = 3
+
+# Execute notebooks with caching to keep builds deterministic/offline
+nb_execution_mode = "cache"
 
 # Automatically generate autosummary stub files
 autosummary_generate = True

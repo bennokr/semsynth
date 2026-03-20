@@ -1,15 +1,5 @@
 {
   "@context": "https://w3id.org/semmap/context/v1",
-  "dataset": {
-    "@type": [
-      "disco:LogicalDataSet",
-      "dsv:Dataset",
-      "dcat:Dataset"
-    ],
-    "dct:title": "CDC Diabetes Health Indicators (UCI ML Repository ID 891)",
-    "dct:source": "https://archive.ics.uci.edu/dataset/891/cdc+diabetes+health+indicators",
-    "dcat:landingPage": "https://archive.ics.uci.edu/dataset/891/cdc+diabetes+health+indicators"
-  },
   "datasetSchema": {
     "columns": [
       {
@@ -24,7 +14,6 @@
         "name": "Diabetes_binary",
         "titles": "Diabetes status (0 = no diabetes, 1 = prediabetes or diabetes)",
         "columnProperty": {
-          "statisticalDataType": "dsv:NominalDataType",
           "hasCodeBook": {
             "hasTopConcept": [
               {
@@ -40,14 +29,14 @@
                 ]
               }
             ]
-          }
+          },
+          "statisticalDataType": "dsv:NominalDataType"
         }
       },
       {
         "name": "HighBP",
         "titles": "Ever told you have high blood pressure",
         "columnProperty": {
-          "statisticalDataType": "dsv:NominalDataType",
           "hasCodeBook": {
             "hasTopConcept": [
               {
@@ -62,14 +51,14 @@
                 ]
               }
             ]
-          }
+          },
+          "statisticalDataType": "dsv:NominalDataType"
         }
       },
       {
         "name": "HighChol",
         "titles": "Ever told you have high cholesterol",
         "columnProperty": {
-          "statisticalDataType": "dsv:NominalDataType",
           "hasCodeBook": {
             "hasTopConcept": [
               {
@@ -84,14 +73,14 @@
                 ]
               }
             ]
-          }
+          },
+          "statisticalDataType": "dsv:NominalDataType"
         }
       },
       {
         "name": "CholCheck",
         "titles": "Cholesterol checked within the past 5 years",
         "columnProperty": {
-          "statisticalDataType": "dsv:NominalDataType",
           "hasCodeBook": {
             "hasTopConcept": [
               {
@@ -106,26 +95,31 @@
                 ]
               }
             ]
-          }
+          },
+          "statisticalDataType": "dsv:NominalDataType"
         }
       },
       {
         "name": "BMI",
         "titles": "Body Mass Index",
         "columnProperty": {
-          "statisticalDataType": "dsv:QuantitativeDataType",
-          "valueType": "xsd:integer",
-          "hasUnit": "unit:KiloGM-PER-M2",
+          "hasUnit": {
+            "exactMatch": [
+              "unit:KiloGM-PER-M2"
+            ]
+          },
           "exactMatch": [
             "http://loinc.org/39156-5"
-          ]
+          ],
+          "statisticalDataType": "dsv:QuantitativeDataType",
+          "valueType": "xsd:integer",
+          "unitText": "kg/m^2"
         }
       },
       {
         "name": "Smoker",
         "titles": "Lifetime cigarette smoking (\u2265100 cigarettes)",
         "columnProperty": {
-          "statisticalDataType": "dsv:NominalDataType",
           "hasCodeBook": {
             "hasTopConcept": [
               {
@@ -143,14 +137,14 @@
                 ]
               }
             ]
-          }
+          },
+          "statisticalDataType": "dsv:NominalDataType"
         }
       },
       {
         "name": "Stroke",
         "titles": "Ever told you had a stroke",
         "columnProperty": {
-          "statisticalDataType": "dsv:NominalDataType",
           "hasCodeBook": {
             "hasTopConcept": [
               {
@@ -165,14 +159,14 @@
                 ]
               }
             ]
-          }
+          },
+          "statisticalDataType": "dsv:NominalDataType"
         }
       },
       {
         "name": "HeartDiseaseorAttack",
         "titles": "Ever told you had coronary heart disease or myocardial infarction",
         "columnProperty": {
-          "statisticalDataType": "dsv:NominalDataType",
           "hasCodeBook": {
             "hasTopConcept": [
               {
@@ -187,14 +181,14 @@
                 ]
               }
             ]
-          }
+          },
+          "statisticalDataType": "dsv:NominalDataType"
         }
       },
       {
         "name": "PhysActivity",
         "titles": "Any physical activity besides regular job in past 30 days",
         "columnProperty": {
-          "statisticalDataType": "dsv:NominalDataType",
           "hasCodeBook": {
             "hasTopConcept": [
               {
@@ -209,14 +203,14 @@
                 ]
               }
             ]
-          }
+          },
+          "statisticalDataType": "dsv:NominalDataType"
         }
       },
       {
         "name": "Fruits",
         "titles": "Consumes fruit one or more times per day",
         "columnProperty": {
-          "statisticalDataType": "dsv:NominalDataType",
           "hasCodeBook": {
             "hasTopConcept": [
               {
@@ -228,14 +222,14 @@
                 "prefLabel": "Daily fruit consumption"
               }
             ]
-          }
+          },
+          "statisticalDataType": "dsv:NominalDataType"
         }
       },
       {
         "name": "Veggies",
         "titles": "Consumes vegetables one or more times per day",
         "columnProperty": {
-          "statisticalDataType": "dsv:NominalDataType",
           "hasCodeBook": {
             "hasTopConcept": [
               {
@@ -247,14 +241,14 @@
                 "prefLabel": "Daily vegetable consumption"
               }
             ]
-          }
+          },
+          "statisticalDataType": "dsv:NominalDataType"
         }
       },
       {
         "name": "HvyAlcoholConsump",
         "titles": "Meets heavy drinking threshold",
         "columnProperty": {
-          "statisticalDataType": "dsv:NominalDataType",
           "hasCodeBook": {
             "hasTopConcept": [
               {
@@ -269,14 +263,14 @@
                 ]
               }
             ]
-          }
+          },
+          "statisticalDataType": "dsv:NominalDataType"
         }
       },
       {
         "name": "AnyHealthcare",
         "titles": "Has any form of health care coverage",
         "columnProperty": {
-          "statisticalDataType": "dsv:NominalDataType",
           "hasCodeBook": {
             "hasTopConcept": [
               {
@@ -288,14 +282,14 @@
                 "prefLabel": "Has health care coverage"
               }
             ]
-          }
+          },
+          "statisticalDataType": "dsv:NominalDataType"
         }
       },
       {
         "name": "NoDocbcCost",
         "titles": "Could not see a doctor due to cost in past 12 months",
         "columnProperty": {
-          "statisticalDataType": "dsv:NominalDataType",
           "hasCodeBook": {
             "hasTopConcept": [
               {
@@ -307,14 +301,14 @@
                 "prefLabel": "Cost prevented doctor visit"
               }
             ]
-          }
+          },
+          "statisticalDataType": "dsv:NominalDataType"
         }
       },
       {
         "name": "GenHlth",
         "titles": "Self-reported general health (1 = excellent to 5 = poor)",
         "columnProperty": {
-          "statisticalDataType": "dsv:OrdinalDataType",
           "hasCodeBook": {
             "hasTopConcept": [
               {
@@ -338,32 +332,44 @@
                 "prefLabel": "Poor health"
               }
             ]
-          }
+          },
+          "statisticalDataType": "dsv:OrdinalDataType"
         }
       },
       {
         "name": "MentHlth",
         "titles": "Number of days mental health was not good in past 30 days",
         "columnProperty": {
+          "hasUnit": {
+            "ucumCode": "d",
+            "exactMatch": [
+              "unit:D"
+            ]
+          },
           "statisticalDataType": "dsv:QuantitativeDataType",
           "valueType": "xsd:integer",
-          "hasUnit": "unit:D"
+          "unitText": "day"
         }
       },
       {
         "name": "PhysHlth",
         "titles": "Number of days physical health was not good in past 30 days",
         "columnProperty": {
+          "hasUnit": {
+            "ucumCode": "d",
+            "exactMatch": [
+              "unit:D"
+            ]
+          },
           "statisticalDataType": "dsv:QuantitativeDataType",
           "valueType": "xsd:integer",
-          "hasUnit": "unit:D"
+          "unitText": "day"
         }
       },
       {
         "name": "DiffWalk",
         "titles": "Serious difficulty walking or climbing stairs",
         "columnProperty": {
-          "statisticalDataType": "dsv:NominalDataType",
           "hasCodeBook": {
             "hasTopConcept": [
               {
@@ -378,14 +384,14 @@
                 ]
               }
             ]
-          }
+          },
+          "statisticalDataType": "dsv:NominalDataType"
         }
       },
       {
         "name": "Sex",
         "titles": "Sex assigned at birth (0 = female, 1 = male)",
         "columnProperty": {
-          "statisticalDataType": "dsv:NominalDataType",
           "hasCodeBook": {
             "hasTopConcept": [
               {
@@ -403,14 +409,14 @@
                 ]
               }
             ]
-          }
+          },
+          "statisticalDataType": "dsv:NominalDataType"
         }
       },
       {
         "name": "Age",
         "titles": "Age category (1 = 18\u201324 up to 13 = 80 or older)",
         "columnProperty": {
-          "statisticalDataType": "dsv:OrdinalDataType",
           "hasCodeBook": {
             "hasTopConcept": [
               {
@@ -466,14 +472,14 @@
                 "prefLabel": "80 years or older"
               }
             ]
-          }
+          },
+          "statisticalDataType": "dsv:OrdinalDataType"
         }
       },
       {
         "name": "Education",
         "titles": "Highest education level completed (1 = less than elementary to 6 = college graduate)",
         "columnProperty": {
-          "statisticalDataType": "dsv:OrdinalDataType",
           "hasCodeBook": {
             "hasTopConcept": [
               {
@@ -501,14 +507,14 @@
                 "prefLabel": "College 4 years or more (college graduate)"
               }
             ]
-          }
+          },
+          "statisticalDataType": "dsv:OrdinalDataType"
         }
       },
       {
         "name": "Income",
         "titles": "Household income category (1 = <$10,000 to 8 = \u2265$75,000)",
         "columnProperty": {
-          "statisticalDataType": "dsv:OrdinalDataType",
           "hasCodeBook": {
             "hasTopConcept": [
               {
@@ -544,9 +550,20 @@
                 "prefLabel": "$75,000 or more"
               }
             ]
-          }
+          },
+          "statisticalDataType": "dsv:OrdinalDataType"
         }
       }
     ]
+  },
+  "dataset": {
+    "@type": [
+      "disco:LogicalDataSet",
+      "dsv:Dataset",
+      "dcat:Dataset"
+    ],
+    "title": "CDC Diabetes Health Indicators (UCI ML Repository ID 891)",
+    "source": "https://archive.ics.uci.edu/dataset/891/cdc+diabetes+health+indicators",
+    "landingPage": "https://archive.ics.uci.edu/dataset/891/cdc+diabetes+health+indicators"
   }
 }

@@ -8,5 +8,7 @@ semsynth.torch\_compat
 
    .. autosummary::
    
+      ensure_npsum_compat
       ensure_torch_rmsnorm
+      ensure_trapz_compat
    

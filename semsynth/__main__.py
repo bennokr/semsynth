@@ -5,16 +5,26 @@ from __future__ import annotations
 import json
 import logging
 import re
+from dataclasses import fields
 from pathlib import Path
 from typing import TYPE_CHECKING, Any, Dict, List, Optional, Sequence
 
-from makeprov import GLOBAL_CONFIG, OutPath, main, rule
+from makeprov import OutPath, main, rule
+from makeprov.config import ProvenanceConfig
 
 from .app import run_app
 from .catalog import build_catalog
 
 
-__all__ = ["search", "report", "create_mapping", "run_app", "build_catalog", "main"]
+__all__ = [
+    "search",
+    "report",
+    "create_mapping",
+    "mappings",
+    "run_app",
+    "build_catalog",
+    "main",
+]
 
 if TYPE_CHECKING:  # pragma: no cover - imported for typing only
     from .models import ModelConfigBundle, ModelSpec
@@ -72,14 +82,9 @@ def report(
     *,
     datasets: List[str] | None = None,
     outdir: OutPath = OutPath("output/"),
-    configs_yaml: str = "",
+    pipeline_configs: str = "",
     area: str = "Health and Medicine",
     verbose: bool = False,
-    generate_umap: bool = False,
-    overwrite_umap: bool = False,
-    compute_privacy: bool = False,
-    compute_downstream: bool = False,
-    enable_missingness_wrapping: bool = False,
 ) -> None:
     """Run the report pipeline on a collection of datasets.
 
@@ -88,17 +93,12 @@ def report(
         datasets: Dataset identifiers. For OpenML, these are names; for UCI ML, they are
             numeric identifiers as strings. Defaults are used when omitted.
         outdir: Output directory for per-dataset reports.
-        configs_yaml: Path to a YAML file defining synthetic data model configurations.
+        pipeline_configs: Path to a TOML file (or inline TOML snippet) defining model and pipeline configurations.
         area: Default topic area for UCI datasets.
         verbose: Whether to enable informational logging during execution.
-        generate_umap: Whether to generate UMAP projections for datasets.
-        overwrite_umap: Whether to regenerate synthetic UMAP plots when files exist.
-        compute_privacy: Whether to compute privacy metrics for each model run.
-        compute_downstream: Whether to compute downstream fidelity metrics.
-        enable_missingness_wrapping: Whether to model and inject realistic missingness.
     """
     from .datasets import DatasetSpec, load_dataset, specs_from_input
-    from .models import ModelConfigBundle, load_model_configs
+    from .models import ModelConfigBundle, load_model_configs, parse_toml_config
     from .pipeline import PipelineConfig, process_dataset
     from .utils import ensure_dir
 
@@ -111,17 +111,20 @@ def report(
     dataset_specs: List[DatasetSpec]
     dataset_specs = specs_from_input(provider=provider, datasets=datasets, area=area)
 
-    bundle: ModelConfigBundle
-    bundle = load_model_configs(configs_yaml.strip() or None)
+    config_text = pipeline_configs.strip()
+    config_data = parse_toml_config(config_text or None)
+    bundle: ModelConfigBundle = load_model_configs(config_data=config_data)
 
     cfg = PipelineConfig()
-    cfg.generate_umap = generate_umap or (bundle.generate_umap is True)
-    cfg.compute_privacy = compute_privacy or (bundle.compute_privacy is True)
-    cfg.compute_downstream = compute_downstream or (bundle.compute_downstream is True)
-    cfg.overwrite_umap = overwrite_umap
-    cfg.enable_missingness_wrapping = enable_missingness_wrapping or (
-        getattr(bundle, "enable_missingness_wrapping", None) is True
-    )
+    if isinstance(config_data, dict):
+        section = config_data.get("pipeline") if isinstance(config_data.get("pipeline"), dict) else config_data
+        if isinstance(section, dict):
+            cfg.apply_mapping(section)
+    for field_def in fields(cfg):
+        if hasattr(bundle, field_def.name):
+            value = getattr(bundle, field_def.name)
+            if value is not None:
+                setattr(cfg, field_def.name, value)
 
     failures: List[str] = []
     for dataset_spec in dataset_specs:
@@ -131,7 +134,7 @@ def report(
             resolved_spec = payload.spec
             dataset_label = resolved_spec.name or str(resolved_spec.id)
             dataset_outdir = outdir_path / str(dataset_label).replace("/", "_")
-            GLOBAL_CONFIG.prov_dir = str(dataset_outdir / "prov")
+            ProvenanceConfig.get().prov_dir = str(dataset_outdir / "prov")
             process_dataset(
                 resolved_spec,
                 payload.frame,
@@ -379,6 +382,69 @@ def create_mapping(
         )
 
         logging.info("Wrote mappings for %s -> %s", slug, sssom_path)
+
+
+@rule(phony=True)
+def mappings(
+    *,
+    pipeline_configs: str = "",
+    outdir: str = "output/",
+    base_url: str = "https://w3id.org/semsynth/demo#",
+    verbose: bool = False,
+) -> None:
+    """Generate reports for all curated mapping JSON files and rebuild the catalog.
+
+    Args:
+        pipeline_configs: Optional model configuration bundle (TOML); leave empty for metadata-only runs.
+        outdir: Directory for report outputs.
+        base_url: Base IRI used when rebuilding the catalog and HTML index.
+        verbose: Whether to enable informational logging.
+    """
+    mapping_root = Path("mappings")
+
+    provider_to_ids: Dict[str, List[str]] = {}
+    for path in sorted(mapping_root.glob("*.metadata.json")):
+        stem = path.stem
+        if "-" not in stem:
+            continue
+        provider, dataset_id = stem.split("-", maxsplit=1)
+        dataset_id = dataset_id.removesuffix(".metadata")
+        provider_to_ids.setdefault(provider, []).append(dataset_id)
+
+    if not provider_to_ids:
+        logging.info("No mapping metadata files found under %s", mapping_root)
+        return
+
+    failures: List[str] = []
+    attempts = 0
+    successes = 0
+    for provider, dataset_ids in provider_to_ids.items():
+        for dataset_id in sorted(set(dataset_ids)):
+            attempts += 1
+            try:
+                report(
+                    provider=provider,
+                    datasets=[dataset_id],
+                    outdir=outdir,
+                    pipeline_configs=pipeline_configs,
+                    verbose=verbose,
+                )
+                successes += 1
+            except SystemExit as exc:
+                failures.append(f"{provider}:{dataset_id} ({exc})")
+
+    if successes:
+        build_catalog(
+            base_dir=Path(outdir),
+            base_url=base_url,
+            out_path=Path(outdir) / "catalog.json",
+            index_path=Path(outdir) / "index.html",
+        )
+
+    if failures:
+        logging.warning("Completed with skipped datasets: %s", "; ".join(failures))
+        if successes == 0:
+            raise SystemExit("; ".join(failures))
 
 if __name__ == "__main__":
     main(argparse_kwargs = dict(
