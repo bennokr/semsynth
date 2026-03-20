@@ -1,0 +1,48 @@
+[pipeline]
+generate_umap = true
+compute_privacy = true
+compute_downstream = true
+enable_missingness_wrapping = true
+
+[[models]]
+name = "metasyn"
+backend = "metasyn"
+
+[[models]]
+name = "clg_mi2"
+backend = "pybnesian"
+seed = 42
+[models.model]
+type = "clg"
+score = "bic"
+operators = ["arcs"]
+max_indegree = 2
+
+[[models]]
+name = "semi_mi5"
+backend = "pybnesian"
+seed = 42
+[models.model]
+type = "semiparametric"
+score = "bic"
+operators = ["arcs"]
+max_indegree = 5
+
+[[models]]
+name = "ctgan_fast"
+backend = "synthcity"
+rows = 1000
+seed = 42
+[models.model]
+type = "ctgan"
+epochs = 5
+batch_size = 256
+
+[[models]]
+name = "tvae_quick"
+backend = "synthcity"
+rows = 1000
+seed = 42
+[models.model]
+type = "tvae"
+batch_size = 256

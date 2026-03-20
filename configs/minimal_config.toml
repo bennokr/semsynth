@@ -1,0 +1,5 @@
+[pipeline]
+generate_umap = false
+compute_privacy = false
+compute_downstream = false
+enable_missingness_wrapping = false

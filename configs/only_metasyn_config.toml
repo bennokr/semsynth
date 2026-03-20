@@ -1,0 +1,11 @@
+[pipeline]
+generate_umap = true
+max_umap_sample = 256
+compute_privacy = true
+compute_downstream = true
+enable_missingness_wrapping = false
+semmap_context = true
+
+[[models]]
+name = "metasyn"
+backend = "metasyn"

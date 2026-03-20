@@ -1,0 +1,23 @@
+[[models]]
+name = "metasyn"
+backend = "metasyn"
+
+[[models]]
+name = "clg_mi2"
+backend = "pybnesian"
+seed = 42
+[models.model]
+type = "clg"
+score = "bic"
+operators = ["arcs"]
+max_indegree = 2
+
+[[models]]
+name = "semi_mi5"
+backend = "pybnesian"
+seed = 42
+[models.model]
+type = "semiparametric"
+score = "bic"
+operators = ["arcs"]
+max_indegree = 5

@@ -1,0 +1,69 @@
+[pipeline]
+generate_umap = true
+compute_privacy = true
+compute_downstream = true
+
+[[models]]
+name = "metasyn_full"
+backend = "metasyn"
+seed = 42
+compute_privacy = true
+compute_downstream = true
+
+[[models]]
+name = "pybnesian_clg_mi3"
+backend = "pybnesian"
+seed = 42
+compute_privacy = true
+compute_downstream = true
+[models.model]
+type = "clg"
+score = "bic"
+operators = ["arcs"]
+max_indegree = 3
+
+[[models]]
+name = "pybnesian_semiparametric_mi5"
+backend = "pybnesian"
+seed = 42
+compute_privacy = true
+compute_downstream = true
+[models.model]
+type = "semiparametric"
+score = "bic"
+operators = ["arcs"]
+max_indegree = 5
+
+[[models]]
+name = "synthcity_ctgan_full"
+backend = "synthcity"
+rows = 2000
+seed = 42
+compute_privacy = true
+compute_downstream = true
+[models.model]
+type = "ctgan"
+epochs = 30
+batch_size = 512
+
+[[models]]
+name = "synthcity_tvae_full"
+backend = "synthcity"
+rows = 2000
+seed = 42
+compute_privacy = true
+compute_downstream = true
+[models.model]
+type = "tvae"
+epochs = 30
+batch_size = 512
+
+[[models]]
+name = "synthcity_pategan_privacy"
+backend = "synthcity"
+rows = 2000
+seed = 42
+compute_privacy = true
+compute_downstream = true
+[models.model]
+type = "pategan"
