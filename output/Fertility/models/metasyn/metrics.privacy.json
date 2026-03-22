@@ -25,13 +25,13 @@
   ],
   "sensitive_columns": [],
   "exact_overlap_rate": 0.0,
-  "near_duplicate_rate_eps": 0.24,
+  "near_duplicate_rate_eps": 0.32,
   "nn_distance_stats": {
-    "mean": 0.48922672980272663,
-    "median": 0.48922672980272663,
+    "mean": 0.3503030861211107,
+    "median": 0.3503030861211107,
     "p95": NaN,
-    "min": 0.48922672980272663,
-    "max": 0.48922672980272663
+    "min": 0.3503030861211107,
+    "max": 0.3503030861211107
   },
   "k_min": 1,
   "k_pct_lt5": 1.0,

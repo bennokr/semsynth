@@ -1,8 +1,8 @@
 {
   "backend": "metasyn",
   "summary": {
-    "disc_jsd_mean": 0.10318872528254504,
-    "disc_jsd_median": 0.07144128325509412,
+    "disc_jsd_mean": 0.11611131342827956,
+    "disc_jsd_median": 0.07726585186787882,
     "cont_ks_mean": NaN,
     "cont_w1_mean": NaN
   },

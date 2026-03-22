@@ -1,0 +1,38 @@
+<?xml version='1.0' encoding='utf-8'?>
+<graphml xmlns="http://graphml.graphdrawing.org/xmlns" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://graphml.graphdrawing.org/xmlns http://graphml.graphdrawing.org/xmlns/1.0/graphml.xsd">
+  <key id="d0" for="node" attr.name="bn_type" attr.type="string" />
+  <graph edgedefault="directed">
+    <node id="season">
+      <data key="d0">LinearGaussianCPDType</data>
+    </node>
+    <node id="age">
+      <data key="d0">LinearGaussianCPDType</data>
+    </node>
+    <node id="child_diseases">
+      <data key="d0">DiscreteFactorType</data>
+    </node>
+    <node id="accident">
+      <data key="d0">DiscreteFactorType</data>
+    </node>
+    <node id="surgical_intervention">
+      <data key="d0">DiscreteFactorType</data>
+    </node>
+    <node id="high_fevers">
+      <data key="d0">DiscreteFactorType</data>
+    </node>
+    <node id="alcohol">
+      <data key="d0">DiscreteFactorType</data>
+    </node>
+    <node id="smoking">
+      <data key="d0">DiscreteFactorType</data>
+    </node>
+    <node id="hrs_sitting">
+      <data key="d0">LinearGaussianCPDType</data>
+    </node>
+    <node id="diagnosis">
+      <data key="d0">DiscreteFactorType</data>
+    </node>
+    <edge source="age" target="hrs_sitting" />
+    <edge source="surgical_intervention" target="high_fevers" />
+  </graph>
+</graphml>

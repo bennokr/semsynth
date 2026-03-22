@@ -48,15 +48,19 @@
 
 ## Fidelity summary
 
-| model   | backend   |   disc jsd mean |   disc jsd median |   cont ks mean |   cont w1 mean |   downstream sign match |
-|:--------|:----------|----------------:|------------------:|---------------:|---------------:|------------------------:|
-| metasyn | metasyn   |          0.0609 |            0.0479 |         0.2164 |         61.229 |                  0.5263 |
+| model    | backend   |   disc jsd mean |   disc jsd median |   cont ks mean |   cont w1 mean |   downstream sign match |
+|:---------|:----------|----------------:|------------------:|---------------:|---------------:|------------------------:|
+| metasyn  | metasyn   |          0.063  |            0.0552 |         0.2245 |        62.5146 |                  0.5263 |
+| clg_mi2  | pybnesian |          0.0744 |            0.0752 |         0.1996 |        62.539  |                         |
+| semi_mi5 | pybnesian |          0.0744 |            0.0752 |         0.1996 |        62.539  |                         |
 
 ## Privacy summary
 
-| model   | backend   |   n real |   n synth |   exact overlap rate |   near duplicate rate eps |   nn distance mean |   k min |   k pct lt5 |   k map |   rare qi reproduction rate | identifiability score   |   delta presence |
-|:--------|:----------|---------:|----------:|---------------------:|--------------------------:|-------------------:|--------:|------------:|--------:|----------------------------:|:------------------------|-----------------:|
-| metasyn | metasyn   |      158 |       400 |                    0 |                    0.9937 |             0.0172 |       1 |           1 |       2 |                           0 |                         |           2.4286 |
+| model    | backend   |   n real |   n synth |   exact overlap rate |   near duplicate rate eps |   nn distance mean |   k min |   k pct lt5 |   k map |   rare qi reproduction rate | identifiability score   |   delta presence |
+|:---------|:----------|---------:|----------:|---------------------:|--------------------------:|-------------------:|--------:|------------:|--------:|----------------------------:|:------------------------|-----------------:|
+| metasyn  | metasyn   |      158 |       400 |                    0 |                    0.9873 |             0.0168 |       1 |           1 |       3 |                           0 |                         |           1.6923 |
+| clg_mi2  | pybnesian |      158 |       400 |                    0 |                    0.9873 |             0.0271 |       1 |           1 |       1 |                           0 |                         |           3.5    |
+| semi_mi5 | pybnesian |      158 |       400 |                    0 |                    0.9873 |             0.0271 |       1 |           1 |       1 |                           0 |                         |           3.5    |
 
 ## Models
 
@@ -90,22 +94,22 @@
     <tr>
       <td>age</td>
       <td>continuous</td>
-      <td>0.1325</td>
-      <td>2.6479</td>
+      <td>0.1375</td>
+      <td>2.6965</td>
       <td></td>
     </tr>
     <tr>
       <td>bp</td>
       <td>continuous</td>
-      <td>0.2925</td>
-      <td>3.5696</td>
+      <td>0.3025</td>
+      <td>3.7556</td>
       <td></td>
     </tr>
     <tr>
       <td>sg</td>
       <td>continuous</td>
       <td>0.4062</td>
-      <td>0.0019</td>
+      <td>0.0018</td>
       <td></td>
     </tr>
     <tr>
@@ -113,48 +117,48 @@
       <td>discrete</td>
       <td></td>
       <td></td>
-      <td>0.0838</td>
+      <td>0.1028</td>
     </tr>
     <tr>
       <td>su</td>
       <td>discrete</td>
       <td></td>
       <td></td>
-      <td>0.2015</td>
+      <td>0.2055</td>
     </tr>
     <tr>
       <td>rbc</td>
       <td>discrete</td>
       <td></td>
       <td></td>
-      <td>0.0458</td>
+      <td>0.0552</td>
     </tr>
     <tr>
       <td>pc</td>
       <td>discrete</td>
       <td></td>
       <td></td>
-      <td>0.0921</td>
+      <td>0.1008</td>
     </tr>
     <tr>
       <td>pcc</td>
       <td>discrete</td>
       <td></td>
       <td></td>
-      <td>0.0289</td>
+      <td>0.0043</td>
     </tr>
     <tr>
       <td>ba</td>
       <td>discrete</td>
       <td></td>
       <td></td>
-      <td>0.0632</td>
+      <td>0.0876</td>
     </tr>
     <tr>
       <td>bgr</td>
       <td>continuous</td>
-      <td>0.265</td>
-      <td>19.8237</td>
+      <td>0.2725</td>
+      <td>22.0422</td>
       <td></td>
     </tr>
   </tbody>
@@ -201,11 +205,11 @@
     </tr>
     <tr>
       <td>near_duplicate_rate_eps</td>
-      <td>0.9937</td>
+      <td>0.9873</td>
     </tr>
     <tr>
       <td>nn_distance_mean</td>
-      <td>0.0172</td>
+      <td>0.0168</td>
     </tr>
     <tr>
       <td>k_min</td>
@@ -217,7 +221,7 @@
     </tr>
     <tr>
       <td>k_map</td>
-      <td>2</td>
+      <td>3</td>
     </tr>
     <tr>
       <td>rare_qi_reproduction_rate</td>
@@ -225,7 +229,7 @@
     </tr>
     <tr>
       <td>delta_presence</td>
-      <td>2.4286</td>
+      <td>1.6923</td>
     </tr>
   </tbody>
 </table>
@@ -341,5 +345,303 @@
     </tr>
   </tbody>
 </table></td></tr>
+
+<tr><td><img src='models/clg_mi2/umap.png' width='280'/></td><td>
+
+<h3>Model: clg_mi2 (pybnesian)</h3>
+<ul>
+<li>Seed: 42, rows: 400</li>
+<li> Params: <tt>{"max_indegree": 2, "operators": ["arcs"], "score": "bic", "type": "clg"}</tt></li><li> <a href="models/clg_mi2/synthetic.csv">Synthetic CSV</a></li>
+<li> <a href="models/clg_mi2/per_variable_metrics.csv">Per-variable metrics</a></li>
+<li> <a href="models/clg_mi2/metrics.json">Metrics JSON</a></li>
+<li> <a href="models/clg_mi2/metrics.privacy.json">Privacy metrics</a></li>
+</ul>
+<details class="model-subtable"><summary><strong>Per-variable fidelity</strong></summary>
+<table class="dataframe">
+  <thead>
+    <tr style="text-align: right;">
+      <th>variable</th>
+      <th>type</th>
+      <th>KS</th>
+      <th>W1</th>
+      <th>JSD</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td>age</td>
+      <td>continuous</td>
+      <td>0.1275</td>
+      <td>2.6951</td>
+      <td></td>
+    </tr>
+    <tr>
+      <td>bp</td>
+      <td>continuous</td>
+      <td>0.3025</td>
+      <td>3.9078</td>
+      <td></td>
+    </tr>
+    <tr>
+      <td>sg</td>
+      <td>continuous</td>
+      <td>0.3162</td>
+      <td>0.0019</td>
+      <td></td>
+    </tr>
+    <tr>
+      <td>al</td>
+      <td>discrete</td>
+      <td></td>
+      <td></td>
+      <td>0.0925</td>
+    </tr>
+    <tr>
+      <td>su</td>
+      <td>discrete</td>
+      <td></td>
+      <td></td>
+      <td>0.202</td>
+    </tr>
+    <tr>
+      <td>rbc</td>
+      <td>discrete</td>
+      <td></td>
+      <td></td>
+      <td>0.016</td>
+    </tr>
+    <tr>
+      <td>pc</td>
+      <td>discrete</td>
+      <td></td>
+      <td></td>
+      <td>0.095</td>
+    </tr>
+    <tr>
+      <td>pcc</td>
+      <td>discrete</td>
+      <td></td>
+      <td></td>
+      <td>0.0585</td>
+    </tr>
+    <tr>
+      <td>ba</td>
+      <td>discrete</td>
+      <td></td>
+      <td></td>
+      <td>0.0919</td>
+    </tr>
+    <tr>
+      <td>bgr</td>
+      <td>continuous</td>
+      <td>0.12</td>
+      <td>12.7667</td>
+      <td></td>
+    </tr>
+  </tbody>
+</table>
+</details><details class="model-subtable"><summary><strong>Privacy metrics</strong></summary>
+<table class="dataframe">
+  <thead>
+    <tr style="text-align: right;">
+      <th>metric</th>
+      <th>value</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td>n_real</td>
+      <td>158</td>
+    </tr>
+    <tr>
+      <td>n_synth</td>
+      <td>400</td>
+    </tr>
+    <tr>
+      <td>exact_overlap_rate</td>
+      <td>0</td>
+    </tr>
+    <tr>
+      <td>near_duplicate_rate_eps</td>
+      <td>0.9873</td>
+    </tr>
+    <tr>
+      <td>nn_distance_mean</td>
+      <td>0.0271</td>
+    </tr>
+    <tr>
+      <td>k_min</td>
+      <td>1</td>
+    </tr>
+    <tr>
+      <td>k_pct_lt5</td>
+      <td>1</td>
+    </tr>
+    <tr>
+      <td>k_map</td>
+      <td>1</td>
+    </tr>
+    <tr>
+      <td>rare_qi_reproduction_rate</td>
+      <td>0</td>
+    </tr>
+    <tr>
+      <td>delta_presence</td>
+      <td>3.5</td>
+    </tr>
+  </tbody>
+</table>
+</details>
+</td><td>
+<a href='models/clg_mi2/structure.png'><img src='models/clg_mi2/structure.png' width='280'/></a></td></tr>
+
+<tr><td><img src='models/semi_mi5/umap.png' width='280'/></td><td>
+
+<h3>Model: semi_mi5 (pybnesian)</h3>
+<ul>
+<li>Seed: 42, rows: 400</li>
+<li> Params: <tt>{"max_indegree": 5, "operators": ["arcs"], "score": "bic", "type": "semiparametric"}</tt></li><li> <a href="models/semi_mi5/synthetic.csv">Synthetic CSV</a></li>
+<li> <a href="models/semi_mi5/per_variable_metrics.csv">Per-variable metrics</a></li>
+<li> <a href="models/semi_mi5/metrics.json">Metrics JSON</a></li>
+<li> <a href="models/semi_mi5/metrics.privacy.json">Privacy metrics</a></li>
+</ul>
+<details class="model-subtable"><summary><strong>Per-variable fidelity</strong></summary>
+<table class="dataframe">
+  <thead>
+    <tr style="text-align: right;">
+      <th>variable</th>
+      <th>type</th>
+      <th>KS</th>
+      <th>W1</th>
+      <th>JSD</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td>age</td>
+      <td>continuous</td>
+      <td>0.1275</td>
+      <td>2.6951</td>
+      <td></td>
+    </tr>
+    <tr>
+      <td>bp</td>
+      <td>continuous</td>
+      <td>0.3025</td>
+      <td>3.9078</td>
+      <td></td>
+    </tr>
+    <tr>
+      <td>sg</td>
+      <td>continuous</td>
+      <td>0.3162</td>
+      <td>0.0019</td>
+      <td></td>
+    </tr>
+    <tr>
+      <td>al</td>
+      <td>discrete</td>
+      <td></td>
+      <td></td>
+      <td>0.0925</td>
+    </tr>
+    <tr>
+      <td>su</td>
+      <td>discrete</td>
+      <td></td>
+      <td></td>
+      <td>0.202</td>
+    </tr>
+    <tr>
+      <td>rbc</td>
+      <td>discrete</td>
+      <td></td>
+      <td></td>
+      <td>0.016</td>
+    </tr>
+    <tr>
+      <td>pc</td>
+      <td>discrete</td>
+      <td></td>
+      <td></td>
+      <td>0.095</td>
+    </tr>
+    <tr>
+      <td>pcc</td>
+      <td>discrete</td>
+      <td></td>
+      <td></td>
+      <td>0.0585</td>
+    </tr>
+    <tr>
+      <td>ba</td>
+      <td>discrete</td>
+      <td></td>
+      <td></td>
+      <td>0.0919</td>
+    </tr>
+    <tr>
+      <td>bgr</td>
+      <td>continuous</td>
+      <td>0.12</td>
+      <td>12.7667</td>
+      <td></td>
+    </tr>
+  </tbody>
+</table>
+</details><details class="model-subtable"><summary><strong>Privacy metrics</strong></summary>
+<table class="dataframe">
+  <thead>
+    <tr style="text-align: right;">
+      <th>metric</th>
+      <th>value</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td>n_real</td>
+      <td>158</td>
+    </tr>
+    <tr>
+      <td>n_synth</td>
+      <td>400</td>
+    </tr>
+    <tr>
+      <td>exact_overlap_rate</td>
+      <td>0</td>
+    </tr>
+    <tr>
+      <td>near_duplicate_rate_eps</td>
+      <td>0.9873</td>
+    </tr>
+    <tr>
+      <td>nn_distance_mean</td>
+      <td>0.0271</td>
+    </tr>
+    <tr>
+      <td>k_min</td>
+      <td>1</td>
+    </tr>
+    <tr>
+      <td>k_pct_lt5</td>
+      <td>1</td>
+    </tr>
+    <tr>
+      <td>k_map</td>
+      <td>1</td>
+    </tr>
+    <tr>
+      <td>rare_qi_reproduction_rate</td>
+      <td>0</td>
+    </tr>
+    <tr>
+      <td>delta_presence</td>
+      <td>3.5</td>
+    </tr>
+  </tbody>
+</table>
+</details>
+</td><td>
+<a href='models/semi_mi5/structure.png'><img src='models/semi_mi5/structure.png' width='280'/></a></td></tr>
 
 </table>

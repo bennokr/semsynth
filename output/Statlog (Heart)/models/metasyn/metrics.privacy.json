@@ -35,17 +35,17 @@
   "exact_overlap_rate": 0.0,
   "near_duplicate_rate_eps": 0.9814814814814815,
   "nn_distance_stats": {
-    "mean": 0.06782281571591876,
-    "median": 0.06782281571591876,
+    "mean": 0.07095967011749431,
+    "median": 0.07095967011749431,
     "p95": NaN,
-    "min": 0.06782281571591876,
-    "max": 0.06782281571591876
+    "min": 0.07095967011749431,
+    "max": 0.07095967011749431
   },
   "k_min": 1,
   "k_pct_lt5": 1.0,
-  "k_map": 5,
+  "k_map": 2,
   "rare_qi_reproduction_rate": 0.0,
   "t_closeness": {},
   "identifiability_score": null,
-  "delta_presence": 1.7142857134693876
+  "delta_presence": 2.4999999875000003
 }

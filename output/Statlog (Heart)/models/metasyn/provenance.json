@@ -63,32 +63,69 @@
   },
   "provenance": [
     {
+      "id": "https://w3id.org/semsynth/demo#__main__.py#write_manifest-20260322T0718",
+      "type": "prov:Activity",
+      "startedAtTime": "2026-03-22T07:18:39.014640+00:00",
+      "endedAtTime": "2026-03-22T07:18:39.015002+00:00",
+      "wasAssociatedWith": "https://w3id.org/semsynth/demo#__main__.py",
+      "used": [
+        "https://w3id.org/semsynth/demo#env-b7b3b6f74caf"
+      ]
+    },
+    {
+      "id": "https://w3id.org/semsynth/demo#__main__.py#write_privacy-20260322T0718",
+      "type": "prov:Activity",
+      "startedAtTime": "2026-03-22T07:18:39.154029+00:00",
+      "endedAtTime": "2026-03-22T07:18:39.381567+00:00",
+      "wasAssociatedWith": "https://w3id.org/semsynth/demo#__main__.py",
+      "used": [
+        "https://w3id.org/semsynth/demo#env-b7b3b6f74caf"
+      ]
+    },
+    {
+      "id": "https://w3id.org/semsynth/demo#output/Statlog (Heart)/models/metasyn",
+      "type": "prov:Entity",
+      "format": "application/octet-stream",
+      "extent": 384,
+      "modified": "2026-03-20T09:27:10.696159+00:00",
+      "wasGeneratedBy": "https://w3id.org/semsynth/demo#__main__.py#write_manifest-20260322T0718"
+    },
+    {
+      "id": "https://w3id.org/semsynth/demo#__main__.py",
+      "type": [
+        "prov:Agent",
+        "prov:SoftwareAgent",
+        "schema:SoftwareSourceCode"
+      ],
+      "label": "__main__.py",
+      "hasVersion": "3fb66ee72f33c19cce8090e6fd02be9729aac7c8",
+      "source": "https://github.com/bennokr/semsynth.git"
+    },
+    {
       "id": "https://w3id.org/semsynth/demo#output/Statlog (Heart)",
       "type": "prov:Entity",
       "format": "application/octet-stream",
       "extent": 256,
       "modified": "2026-03-16T15:49:44.918420+00:00",
-      "wasGeneratedBy": "https://w3id.org/semsynth/demo#__main__.py#model_run_root-20260320T1516"
+      "wasGeneratedBy": "https://w3id.org/semsynth/demo#__main__.py#model_run_root-20260322T0718"
     },
     {
-      "id": "https://w3id.org/semsynth/demo#__main__.py#model_run_root-20260320T1516",
+      "id": "https://w3id.org/semsynth/demo#__main__.py#model_run_root-20260322T0718",
       "type": "prov:Activity",
-      "startedAtTime": "2026-03-20T15:16:52.215137+00:00",
-      "endedAtTime": "2026-03-20T15:16:52.215234+00:00",
+      "startedAtTime": "2026-03-22T07:18:37.737606+00:00",
+      "endedAtTime": "2026-03-22T07:18:37.737709+00:00",
       "wasAssociatedWith": "https://w3id.org/semsynth/demo#__main__.py",
       "used": [
         "https://w3id.org/semsynth/demo#env-b7b3b6f74caf"
       ]
     },
     {
-      "id": "https://w3id.org/semsynth/demo#__main__.py#write_privacy-20260320T1516",
-      "type": "prov:Activity",
-      "startedAtTime": "2026-03-20T15:16:53.579963+00:00",
-      "endedAtTime": "2026-03-20T15:16:53.878052+00:00",
-      "wasAssociatedWith": "https://w3id.org/semsynth/demo#__main__.py",
-      "used": [
-        "https://w3id.org/semsynth/demo#env-b7b3b6f74caf"
-      ]
+      "id": "https://w3id.org/semsynth/demo#output/Statlog (Heart)/models/metasyn",
+      "type": "prov:Entity",
+      "format": "application/octet-stream",
+      "extent": 384,
+      "modified": "2026-03-20T09:27:10.696159+00:00",
+      "wasGeneratedBy": "https://w3id.org/semsynth/demo#__main__.py#write_privacy-20260322T0718"
     },
     {
       "id": "https://w3id.org/semsynth/demo#env-b7b3b6f74caf",
@@ -106,43 +143,6 @@
           "label": "parse>=1.20"
         }
       ]
-    },
-    {
-      "id": "https://w3id.org/semsynth/demo#__main__.py#write_manifest-20260320T1516",
-      "type": "prov:Activity",
-      "startedAtTime": "2026-03-20T15:16:53.440597+00:00",
-      "endedAtTime": "2026-03-20T15:16:53.441006+00:00",
-      "wasAssociatedWith": "https://w3id.org/semsynth/demo#__main__.py",
-      "used": [
-        "https://w3id.org/semsynth/demo#env-b7b3b6f74caf"
-      ]
-    },
-    {
-      "id": "https://w3id.org/semsynth/demo#output/Statlog (Heart)/models/metasyn",
-      "type": "prov:Entity",
-      "format": "application/octet-stream",
-      "extent": 384,
-      "modified": "2026-03-20T09:27:10.696159+00:00",
-      "wasGeneratedBy": "https://w3id.org/semsynth/demo#__main__.py#write_manifest-20260320T1516"
-    },
-    {
-      "id": "https://w3id.org/semsynth/demo#output/Statlog (Heart)/models/metasyn",
-      "type": "prov:Entity",
-      "format": "application/octet-stream",
-      "extent": 384,
-      "modified": "2026-03-20T09:27:10.696159+00:00",
-      "wasGeneratedBy": "https://w3id.org/semsynth/demo#__main__.py#write_privacy-20260320T1516"
-    },
-    {
-      "id": "https://w3id.org/semsynth/demo#__main__.py",
-      "type": [
-        "prov:Agent",
-        "prov:SoftwareAgent",
-        "schema:SoftwareSourceCode"
-      ],
-      "label": "__main__.py",
-      "hasVersion": "eb05c8f1ddd8dc85cb1bd200cd2a41543c25a0bf",
-      "source": "https://github.com/bennokr/semsynth.git"
     }
   ]
 }

@@ -1,0 +1,82 @@
+<?xml version='1.0' encoding='utf-8'?>
+<graphml xmlns="http://graphml.graphdrawing.org/xmlns" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://graphml.graphdrawing.org/xmlns http://graphml.graphdrawing.org/xmlns/1.0/graphml.xsd">
+  <key id="d0" for="node" attr.name="bn_type" attr.type="string" />
+  <graph edgedefault="directed">
+    <node id="A1_Score">
+      <data key="d0">DiscreteFactorType</data>
+    </node>
+    <node id="A2_Score">
+      <data key="d0">DiscreteFactorType</data>
+    </node>
+    <node id="A3_Score">
+      <data key="d0">DiscreteFactorType</data>
+    </node>
+    <node id="A4_Score">
+      <data key="d0">DiscreteFactorType</data>
+    </node>
+    <node id="A5_Score">
+      <data key="d0">DiscreteFactorType</data>
+    </node>
+    <node id="A6_Score">
+      <data key="d0">DiscreteFactorType</data>
+    </node>
+    <node id="A7_Score">
+      <data key="d0">DiscreteFactorType</data>
+    </node>
+    <node id="A8_Score">
+      <data key="d0">DiscreteFactorType</data>
+    </node>
+    <node id="A9_Score">
+      <data key="d0">DiscreteFactorType</data>
+    </node>
+    <node id="A10_Score">
+      <data key="d0">DiscreteFactorType</data>
+    </node>
+    <node id="age">
+      <data key="d0">DiscreteFactorType</data>
+    </node>
+    <node id="gender">
+      <data key="d0">DiscreteFactorType</data>
+    </node>
+    <node id="ethnicity">
+      <data key="d0">DiscreteFactorType</data>
+    </node>
+    <node id="jaundice">
+      <data key="d0">DiscreteFactorType</data>
+    </node>
+    <node id="autism">
+      <data key="d0">DiscreteFactorType</data>
+    </node>
+    <node id="country_of_res">
+      <data key="d0">DiscreteFactorType</data>
+    </node>
+    <node id="used_app_before">
+      <data key="d0">DiscreteFactorType</data>
+    </node>
+    <node id="result">
+      <data key="d0">DiscreteFactorType</data>
+    </node>
+    <node id="age_desc">
+      <data key="d0">DiscreteFactorType</data>
+    </node>
+    <node id="relation">
+      <data key="d0">DiscreteFactorType</data>
+    </node>
+    <node id="class">
+      <data key="d0">DiscreteFactorType</data>
+    </node>
+    <edge source="A8_Score" target="gender" />
+    <edge source="A8_Score" target="A1_Score" />
+    <edge source="A9_Score" target="A7_Score" />
+    <edge source="result" target="class" />
+    <edge source="result" target="A6_Score" />
+    <edge source="class" target="A9_Score" />
+    <edge source="class" target="A2_Score" />
+    <edge source="class" target="A5_Score" />
+    <edge source="class" target="A10_Score" />
+    <edge source="class" target="A3_Score" />
+    <edge source="class" target="A4_Score" />
+    <edge source="class" target="A8_Score" />
+    <edge source="class" target="A1_Score" />
+  </graph>
+</graphml>

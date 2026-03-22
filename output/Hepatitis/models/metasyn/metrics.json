@@ -1,10 +1,10 @@
 {
   "backend": "metasyn",
   "summary": {
-    "disc_jsd_mean": 0.13106325380137354,
-    "disc_jsd_median": 0.1330298142398959,
-    "cont_ks_mean": 0.20584677419354838,
-    "cont_w1_mean": 11.145870830077016
+    "disc_jsd_mean": 0.12876872394762653,
+    "disc_jsd_median": 0.13358950081536183,
+    "cont_ks_mean": 0.19791666666666666,
+    "cont_w1_mean": 9.723117054015699
   },
   "train_rows": 64,
   "test_rows": 16,

@@ -12,20 +12,20 @@
     "gender"
   ],
   "sensitive_columns": [],
-  "exact_overlap_rate": 0.04599999999954,
-  "near_duplicate_rate_eps": 0.987,
+  "exact_overlap_rate": 0.04799999999952,
+  "near_duplicate_rate_eps": 0.99,
   "nn_distance_stats": {
-    "mean": 0.012999999870000004,
-    "median": 0.012999999870000004,
+    "mean": 0.009999999900000002,
+    "median": 0.009999999900000002,
     "p95": NaN,
-    "min": 0.012999999870000004,
-    "max": 0.012999999870000004
+    "min": 0.009999999900000002,
+    "max": 0.009999999900000002
   },
   "k_min": 1,
   "k_pct_lt5": 0.11,
-  "k_map": 9,
-  "rare_qi_reproduction_rate": 0.5256410256410257,
+  "k_map": 13,
+  "rare_qi_reproduction_rate": 0.5641025641025641,
   "t_closeness": {},
-  "identifiability_score": 0.006,
-  "delta_presence": 1.4799999997039999
+  "identifiability_score": 0.008,
+  "delta_presence": 1.716981131751513
 }

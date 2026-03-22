@@ -62,15 +62,19 @@
 
 ## Fidelity summary
 
-| model   | backend   |   disc jsd mean |   disc jsd median |   cont ks mean |   cont w1 mean |   downstream sign match |
-|:--------|:----------|----------------:|------------------:|---------------:|---------------:|------------------------:|
-| metasyn | metasyn   |          0.0637 |            0.0717 |         0.1279 |         3.5703 |                       1 |
+| model    | backend   |   disc jsd mean |   disc jsd median |   cont ks mean |   cont w1 mean |   downstream sign match |
+|:---------|:----------|----------------:|------------------:|---------------:|---------------:|------------------------:|
+| metasyn  | metasyn   |          0.0662 |            0.0543 |         0.1365 |         3.4865 |                       1 |
+| clg_mi2  | pybnesian |          0.0634 |            0.0448 |         0.146  |         5.1668 |                         |
+| semi_mi5 | pybnesian |          0.0514 |            0.0459 |         0.1329 |         4.3754 |                         |
 
 ## Privacy summary
 
-| model   | backend   |   n real |   n synth |   exact overlap rate |   near duplicate rate eps |   nn distance mean |   k min |   k pct lt5 |   k map |   rare qi reproduction rate | identifiability score   |   delta presence |
-|:--------|:----------|---------:|----------:|---------------------:|--------------------------:|-------------------:|--------:|------------:|--------:|----------------------------:|:------------------------|-----------------:|
-| metasyn | metasyn   |      319 |       319 |                    0 |                    0.9969 |             0.0135 |       1 |           1 |       1 |                           0 |                         |                3 |
+| model    | backend   |   n real |   n synth |   exact overlap rate |   near duplicate rate eps |   nn distance mean |   k min |   k pct lt5 |   k map |   rare qi reproduction rate | identifiability score   |   delta presence |
+|:---------|:----------|---------:|----------:|---------------------:|--------------------------:|-------------------:|--------:|------------:|--------:|----------------------------:|:------------------------|-----------------:|
+| metasyn  | metasyn   |      319 |       319 |                    0 |                    0.9969 |             0.0131 |       1 |           1 |       1 |                           0 |                         |           3      |
+| clg_mi2  | pybnesian |      319 |       319 |                    0 |                    0.9906 |             0.0123 |       1 |           1 |       1 |                           0 |                         |           2.9375 |
+| semi_mi5 | pybnesian |      319 |       319 |                    0 |                    0.9969 |             0.0129 |       1 |           1 |       1 |                           0 |                         |           3      |
 
 ## Models
 
@@ -106,13 +110,13 @@
       <td>discrete</td>
       <td></td>
       <td></td>
-      <td>0.0546</td>
+      <td>0.0306</td>
     </tr>
     <tr>
       <td>Age</td>
       <td>continuous</td>
-      <td>0.1122</td>
-      <td>2.0198</td>
+      <td>0.1039</td>
+      <td>2.1308</td>
       <td></td>
     </tr>
     <tr>
@@ -120,55 +124,55 @@
       <td>discrete</td>
       <td></td>
       <td></td>
-      <td>0.0014</td>
+      <td>0.0385</td>
     </tr>
     <tr>
       <td>Comorbidity</td>
       <td>discrete</td>
       <td></td>
       <td></td>
-      <td>0.1052</td>
+      <td>0.0827</td>
     </tr>
     <tr>
       <td>Coronary Artery Disease (CAD)</td>
       <td>discrete</td>
       <td></td>
       <td></td>
-      <td>0.0408</td>
+      <td>0.0347</td>
     </tr>
     <tr>
       <td>Hypothyroidism</td>
       <td>discrete</td>
       <td></td>
       <td></td>
-      <td>0.0148</td>
+      <td>0.0283</td>
     </tr>
     <tr>
       <td>Hyperlipidemia</td>
       <td>discrete</td>
       <td></td>
       <td></td>
-      <td>0.0888</td>
+      <td>0.1381</td>
     </tr>
     <tr>
       <td>Diabetes Mellitus (DM)</td>
       <td>discrete</td>
       <td></td>
       <td></td>
-      <td>0.1025</td>
+      <td>0.0701</td>
     </tr>
     <tr>
       <td>Height</td>
       <td>continuous</td>
-      <td>0.1486</td>
-      <td>2.3495</td>
+      <td>0.1616</td>
+      <td>2.9278</td>
       <td></td>
     </tr>
     <tr>
       <td>Weight</td>
       <td>continuous</td>
-      <td>0.0932</td>
-      <td>2.4176</td>
+      <td>0.1242</td>
+      <td>2.0866</td>
       <td></td>
     </tr>
   </tbody>
@@ -223,7 +227,7 @@
     </tr>
     <tr>
       <td>nn_distance_mean</td>
-      <td>0.0135</td>
+      <td>0.0131</td>
     </tr>
     <tr>
       <td>k_min</td>
@@ -415,5 +419,303 @@
     </tr>
   </tbody>
 </table></td></tr>
+
+<tr><td><img src='models/clg_mi2/umap.png' width='280'/></td><td>
+
+<h3>Model: clg_mi2 (pybnesian)</h3>
+<ul>
+<li>Seed: 42, rows: 319</li>
+<li> Params: <tt>{"max_indegree": 2, "operators": ["arcs"], "score": "bic", "type": "clg"}</tt></li><li> <a href="models/clg_mi2/synthetic.csv">Synthetic CSV</a></li>
+<li> <a href="models/clg_mi2/per_variable_metrics.csv">Per-variable metrics</a></li>
+<li> <a href="models/clg_mi2/metrics.json">Metrics JSON</a></li>
+<li> <a href="models/clg_mi2/metrics.privacy.json">Privacy metrics</a></li>
+</ul>
+<details class="model-subtable"><summary><strong>Per-variable fidelity</strong></summary>
+<table class="dataframe">
+  <thead>
+    <tr style="text-align: right;">
+      <th>variable</th>
+      <th>type</th>
+      <th>KS</th>
+      <th>W1</th>
+      <th>JSD</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td>Gallstone Status</td>
+      <td>discrete</td>
+      <td></td>
+      <td></td>
+      <td>0.0226</td>
+    </tr>
+    <tr>
+      <td>Age</td>
+      <td>continuous</td>
+      <td>0.1101</td>
+      <td>2.2968</td>
+      <td></td>
+    </tr>
+    <tr>
+      <td>Gender</td>
+      <td>discrete</td>
+      <td></td>
+      <td></td>
+      <td>0.0305</td>
+    </tr>
+    <tr>
+      <td>Comorbidity</td>
+      <td>discrete</td>
+      <td></td>
+      <td></td>
+      <td>0.1109</td>
+    </tr>
+    <tr>
+      <td>Coronary Artery Disease (CAD)</td>
+      <td>discrete</td>
+      <td></td>
+      <td></td>
+      <td>0.0347</td>
+    </tr>
+    <tr>
+      <td>Hypothyroidism</td>
+      <td>discrete</td>
+      <td></td>
+      <td></td>
+      <td>0.034</td>
+    </tr>
+    <tr>
+      <td>Hyperlipidemia</td>
+      <td>discrete</td>
+      <td></td>
+      <td></td>
+      <td>0.1125</td>
+    </tr>
+    <tr>
+      <td>Diabetes Mellitus (DM)</td>
+      <td>discrete</td>
+      <td></td>
+      <td></td>
+      <td>0.0549</td>
+    </tr>
+    <tr>
+      <td>Height</td>
+      <td>continuous</td>
+      <td>0.183</td>
+      <td>3.8727</td>
+      <td></td>
+    </tr>
+    <tr>
+      <td>Weight</td>
+      <td>continuous</td>
+      <td>0.1305</td>
+      <td>2.1665</td>
+      <td></td>
+    </tr>
+  </tbody>
+</table>
+</details><details class="model-subtable"><summary><strong>Privacy metrics</strong></summary>
+<table class="dataframe">
+  <thead>
+    <tr style="text-align: right;">
+      <th>metric</th>
+      <th>value</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td>n_real</td>
+      <td>319</td>
+    </tr>
+    <tr>
+      <td>n_synth</td>
+      <td>319</td>
+    </tr>
+    <tr>
+      <td>exact_overlap_rate</td>
+      <td>0</td>
+    </tr>
+    <tr>
+      <td>near_duplicate_rate_eps</td>
+      <td>0.9906</td>
+    </tr>
+    <tr>
+      <td>nn_distance_mean</td>
+      <td>0.0123</td>
+    </tr>
+    <tr>
+      <td>k_min</td>
+      <td>1</td>
+    </tr>
+    <tr>
+      <td>k_pct_lt5</td>
+      <td>1</td>
+    </tr>
+    <tr>
+      <td>k_map</td>
+      <td>1</td>
+    </tr>
+    <tr>
+      <td>rare_qi_reproduction_rate</td>
+      <td>0</td>
+    </tr>
+    <tr>
+      <td>delta_presence</td>
+      <td>2.9375</td>
+    </tr>
+  </tbody>
+</table>
+</details>
+</td><td>
+<a href='models/clg_mi2/structure.png'><img src='models/clg_mi2/structure.png' width='280'/></a></td></tr>
+
+<tr><td><img src='models/semi_mi5/umap.png' width='280'/></td><td>
+
+<h3>Model: semi_mi5 (pybnesian)</h3>
+<ul>
+<li>Seed: 42, rows: 319</li>
+<li> Params: <tt>{"max_indegree": 5, "operators": ["arcs"], "score": "bic", "type": "semiparametric"}</tt></li><li> <a href="models/semi_mi5/synthetic.csv">Synthetic CSV</a></li>
+<li> <a href="models/semi_mi5/per_variable_metrics.csv">Per-variable metrics</a></li>
+<li> <a href="models/semi_mi5/metrics.json">Metrics JSON</a></li>
+<li> <a href="models/semi_mi5/metrics.privacy.json">Privacy metrics</a></li>
+</ul>
+<details class="model-subtable"><summary><strong>Per-variable fidelity</strong></summary>
+<table class="dataframe">
+  <thead>
+    <tr style="text-align: right;">
+      <th>variable</th>
+      <th>type</th>
+      <th>KS</th>
+      <th>W1</th>
+      <th>JSD</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td>Gallstone Status</td>
+      <td>discrete</td>
+      <td></td>
+      <td></td>
+      <td>0.0146</td>
+    </tr>
+    <tr>
+      <td>Age</td>
+      <td>continuous</td>
+      <td>0.0871</td>
+      <td>1.776</td>
+      <td></td>
+    </tr>
+    <tr>
+      <td>Gender</td>
+      <td>discrete</td>
+      <td></td>
+      <td></td>
+      <td>0.0332</td>
+    </tr>
+    <tr>
+      <td>Comorbidity</td>
+      <td>discrete</td>
+      <td></td>
+      <td></td>
+      <td>0.0587</td>
+    </tr>
+    <tr>
+      <td>Coronary Artery Disease (CAD)</td>
+      <td>discrete</td>
+      <td></td>
+      <td></td>
+      <td>0.0076</td>
+    </tr>
+    <tr>
+      <td>Hypothyroidism</td>
+      <td>discrete</td>
+      <td></td>
+      <td></td>
+      <td>0.0077</td>
+    </tr>
+    <tr>
+      <td>Hyperlipidemia</td>
+      <td>discrete</td>
+      <td></td>
+      <td></td>
+      <td>0.1052</td>
+    </tr>
+    <tr>
+      <td>Diabetes Mellitus (DM)</td>
+      <td>discrete</td>
+      <td></td>
+      <td></td>
+      <td>0.0775</td>
+    </tr>
+    <tr>
+      <td>Height</td>
+      <td>continuous</td>
+      <td>0.1367</td>
+      <td>3.0758</td>
+      <td></td>
+    </tr>
+    <tr>
+      <td>Weight</td>
+      <td>continuous</td>
+      <td>0.1368</td>
+      <td>1.8589</td>
+      <td></td>
+    </tr>
+  </tbody>
+</table>
+</details><details class="model-subtable"><summary><strong>Privacy metrics</strong></summary>
+<table class="dataframe">
+  <thead>
+    <tr style="text-align: right;">
+      <th>metric</th>
+      <th>value</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td>n_real</td>
+      <td>319</td>
+    </tr>
+    <tr>
+      <td>n_synth</td>
+      <td>319</td>
+    </tr>
+    <tr>
+      <td>exact_overlap_rate</td>
+      <td>0</td>
+    </tr>
+    <tr>
+      <td>near_duplicate_rate_eps</td>
+      <td>0.9969</td>
+    </tr>
+    <tr>
+      <td>nn_distance_mean</td>
+      <td>0.0129</td>
+    </tr>
+    <tr>
+      <td>k_min</td>
+      <td>1</td>
+    </tr>
+    <tr>
+      <td>k_pct_lt5</td>
+      <td>1</td>
+    </tr>
+    <tr>
+      <td>k_map</td>
+      <td>1</td>
+    </tr>
+    <tr>
+      <td>rare_qi_reproduction_rate</td>
+      <td>0</td>
+    </tr>
+    <tr>
+      <td>delta_presence</td>
+      <td>3</td>
+    </tr>
+  </tbody>
+</table>
+</details>
+</td><td>
+<a href='models/semi_mi5/structure.png'><img src='models/semi_mi5/structure.png' width='280'/></a></td></tr>
 
 </table>

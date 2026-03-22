@@ -63,28 +63,57 @@
   },
   "provenance": [
     {
-      "id": "https://w3id.org/semsynth/demo#output/CDC Diabetes Health Indicators",
-      "type": "prov:Entity",
-      "format": "application/octet-stream",
-      "extent": 288,
-      "modified": "2026-03-16T15:51:05.860321+00:00",
-      "wasGeneratedBy": "https://w3id.org/semsynth/demo#__main__.py#model_run_root-20260320T1517"
+      "id": "https://w3id.org/semsynth/demo#__main__.py",
+      "type": [
+        "prov:Agent",
+        "prov:SoftwareAgent",
+        "schema:SoftwareSourceCode"
+      ],
+      "label": "__main__.py",
+      "hasVersion": "3fb66ee72f33c19cce8090e6fd02be9729aac7c8",
+      "source": "https://github.com/bennokr/semsynth.git"
     },
     {
-      "id": "https://w3id.org/semsynth/demo#__main__.py#model_run_root-20260320T1517",
+      "id": "https://w3id.org/semsynth/demo#output/CDC Diabetes Health Indicators/models/metasyn",
+      "type": "prov:Entity",
+      "format": "application/octet-stream",
+      "extent": 384,
+      "modified": "2026-03-20T09:28:56.647265+00:00",
+      "wasGeneratedBy": "https://w3id.org/semsynth/demo#__main__.py#write_privacy-20260322T0720"
+    },
+    {
+      "id": "https://w3id.org/semsynth/demo#__main__.py#write_privacy-20260322T0720",
       "type": "prov:Activity",
-      "startedAtTime": "2026-03-20T15:17:51.643860+00:00",
-      "endedAtTime": "2026-03-20T15:17:51.643965+00:00",
+      "startedAtTime": "2026-03-22T07:20:14.303729+00:00",
+      "endedAtTime": "2026-03-22T07:20:19.675147+00:00",
       "wasAssociatedWith": "https://w3id.org/semsynth/demo#__main__.py",
       "used": [
         "https://w3id.org/semsynth/demo#env-b7b3b6f74caf"
       ]
     },
     {
-      "id": "https://w3id.org/semsynth/demo#__main__.py#write_privacy-20260320T1517",
+      "id": "https://w3id.org/semsynth/demo#output/CDC Diabetes Health Indicators",
+      "type": "prov:Entity",
+      "format": "application/octet-stream",
+      "extent": 288,
+      "modified": "2026-03-16T15:51:05.860321+00:00",
+      "wasGeneratedBy": "https://w3id.org/semsynth/demo#__main__.py#model_run_root-20260322T0720"
+    },
+    {
+      "id": "https://w3id.org/semsynth/demo#__main__.py#model_run_root-20260322T0720",
       "type": "prov:Activity",
-      "startedAtTime": "2026-03-20T15:17:53.661961+00:00",
-      "endedAtTime": "2026-03-20T15:17:57.900655+00:00",
+      "startedAtTime": "2026-03-22T07:20:11.664535+00:00",
+      "endedAtTime": "2026-03-22T07:20:11.664639+00:00",
+      "wasAssociatedWith": "https://w3id.org/semsynth/demo#__main__.py",
+      "used": [
+        "https://w3id.org/semsynth/demo#env-b7b3b6f74caf"
+      ]
+    },
+    {
+      "id": "https://w3id.org/semsynth/demo#__main__.py#write_manifest-20260322T0720",
+      "type": "prov:Activity",
+      "startedAtTime": "2026-03-22T07:20:14.145844+00:00",
+      "endedAtTime": "2026-03-22T07:20:14.146175+00:00",
       "wasAssociatedWith": "https://w3id.org/semsynth/demo#__main__.py",
       "used": [
         "https://w3id.org/semsynth/demo#env-b7b3b6f74caf"
@@ -96,7 +125,7 @@
       "format": "application/octet-stream",
       "extent": 384,
       "modified": "2026-03-20T09:28:56.647265+00:00",
-      "wasGeneratedBy": "https://w3id.org/semsynth/demo#__main__.py#write_privacy-20260320T1517"
+      "wasGeneratedBy": "https://w3id.org/semsynth/demo#__main__.py#write_manifest-20260322T0720"
     },
     {
       "id": "https://w3id.org/semsynth/demo#env-b7b3b6f74caf",
@@ -114,35 +143,6 @@
           "label": "parse>=1.20"
         }
       ]
-    },
-    {
-      "id": "https://w3id.org/semsynth/demo#output/CDC Diabetes Health Indicators/models/metasyn",
-      "type": "prov:Entity",
-      "format": "application/octet-stream",
-      "extent": 384,
-      "modified": "2026-03-20T09:28:56.647265+00:00",
-      "wasGeneratedBy": "https://w3id.org/semsynth/demo#__main__.py#write_manifest-20260320T1517"
-    },
-    {
-      "id": "https://w3id.org/semsynth/demo#__main__.py#write_manifest-20260320T1517",
-      "type": "prov:Activity",
-      "startedAtTime": "2026-03-20T15:17:53.522198+00:00",
-      "endedAtTime": "2026-03-20T15:17:53.522546+00:00",
-      "wasAssociatedWith": "https://w3id.org/semsynth/demo#__main__.py",
-      "used": [
-        "https://w3id.org/semsynth/demo#env-b7b3b6f74caf"
-      ]
-    },
-    {
-      "id": "https://w3id.org/semsynth/demo#__main__.py",
-      "type": [
-        "prov:Agent",
-        "prov:SoftwareAgent",
-        "schema:SoftwareSourceCode"
-      ],
-      "label": "__main__.py",
-      "hasVersion": "eb05c8f1ddd8dc85cb1bd200cd2a41543c25a0bf",
-      "source": "https://github.com/bennokr/semsynth.git"
     }
   ]
 }

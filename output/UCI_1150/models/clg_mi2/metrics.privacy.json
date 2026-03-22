@@ -1,0 +1,31 @@
+{
+  "n_real": 319,
+  "n_synth": 319,
+  "used_columns": [
+    "Age",
+    "Gender",
+    "Glucose"
+  ],
+  "qi_columns": [
+    "Age",
+    "Gender",
+    "Glucose"
+  ],
+  "sensitive_columns": [],
+  "exact_overlap_rate": 0.0,
+  "near_duplicate_rate_eps": 0.9905956112852664,
+  "nn_distance_stats": {
+    "mean": 0.01232704902234548,
+    "median": 0.01232704902234548,
+    "p95": NaN,
+    "min": 0.01232704902234548,
+    "max": 0.01232704902234548
+  },
+  "k_min": 1,
+  "k_pct_lt5": 1.0,
+  "k_map": 1,
+  "rare_qi_reproduction_rate": 0.0,
+  "t_closeness": {},
+  "identifiability_score": null,
+  "delta_presence": 2.9374999981640624
+}

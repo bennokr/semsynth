@@ -1,0 +1,31 @@
+{
+  "n_real": 101766,
+  "n_synth": 1000,
+  "used_columns": [
+    "age",
+    "race",
+    "gender"
+  ],
+  "qi_columns": [
+    "age",
+    "race",
+    "gender"
+  ],
+  "sensitive_columns": [],
+  "exact_overlap_rate": 0.04199999999958,
+  "near_duplicate_rate_eps": 0.981,
+  "nn_distance_stats": {
+    "mean": 0.014313708397771557,
+    "median": 0.014313708397771557,
+    "p95": NaN,
+    "min": 0.014313708397771557,
+    "max": 0.014313708397771557
+  },
+  "k_min": 1,
+  "k_pct_lt5": 0.11,
+  "k_map": 8,
+  "rare_qi_reproduction_rate": 0.47435897435897434,
+  "t_closeness": {},
+  "identifiability_score": 0.004,
+  "delta_presence": 1.9361702123540063
+}

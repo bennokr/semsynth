@@ -1,0 +1,63 @@
+<?xml version='1.0' encoding='utf-8'?>
+<graphml xmlns="http://graphml.graphdrawing.org/xmlns" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://graphml.graphdrawing.org/xmlns http://graphml.graphdrawing.org/xmlns/1.0/graphml.xsd">
+  <key id="d0" for="node" attr.name="bn_type" attr.type="string" />
+  <graph edgedefault="directed">
+    <node id="age">
+      <data key="d0">LinearGaussianCPDType</data>
+    </node>
+    <node id="sex">
+      <data key="d0">DiscreteFactorType</data>
+    </node>
+    <node id="chest-pain">
+      <data key="d0">DiscreteFactorType</data>
+    </node>
+    <node id="rest-bp">
+      <data key="d0">LinearGaussianCPDType</data>
+    </node>
+    <node id="serum-chol">
+      <data key="d0">LinearGaussianCPDType</data>
+    </node>
+    <node id="fasting-blood-sugar">
+      <data key="d0">DiscreteFactorType</data>
+    </node>
+    <node id="electrocardiographic">
+      <data key="d0">DiscreteFactorType</data>
+    </node>
+    <node id="max-heart-rate">
+      <data key="d0">LinearGaussianCPDType</data>
+    </node>
+    <node id="angina">
+      <data key="d0">DiscreteFactorType</data>
+    </node>
+    <node id="oldpeak">
+      <data key="d0">LinearGaussianCPDType</data>
+    </node>
+    <node id="slope">
+      <data key="d0">DiscreteFactorType</data>
+    </node>
+    <node id="major-vessels">
+      <data key="d0">DiscreteFactorType</data>
+    </node>
+    <node id="thal">
+      <data key="d0">DiscreteFactorType</data>
+    </node>
+    <node id="heart-disease">
+      <data key="d0">DiscreteFactorType</data>
+    </node>
+    <edge source="age" target="serum-chol" />
+    <edge source="age" target="rest-bp" />
+    <edge source="age" target="max-heart-rate" />
+    <edge source="sex" target="serum-chol" />
+    <edge source="sex" target="heart-disease" />
+    <edge source="sex" target="thal" />
+    <edge source="chest-pain" target="angina" />
+    <edge source="rest-bp" target="oldpeak" />
+    <edge source="angina" target="max-heart-rate" />
+    <edge source="slope" target="oldpeak" />
+    <edge source="heart-disease" target="oldpeak" />
+    <edge source="heart-disease" target="slope" />
+    <edge source="heart-disease" target="major-vessels" />
+    <edge source="heart-disease" target="thal" />
+    <edge source="heart-disease" target="chest-pain" />
+  </graph>
+</graphml>

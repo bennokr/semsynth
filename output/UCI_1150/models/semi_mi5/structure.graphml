@@ -1,0 +1,239 @@
+<?xml version='1.0' encoding='utf-8'?>
+<graphml xmlns="http://graphml.graphdrawing.org/xmlns" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://graphml.graphdrawing.org/xmlns http://graphml.graphdrawing.org/xmlns/1.0/graphml.xsd">
+  <key id="d0" for="node" attr.name="bn_type" attr.type="string" />
+  <graph edgedefault="directed">
+    <node id="Gallstone Status">
+      <data key="d0">DiscreteFactorType</data>
+    </node>
+    <node id="Age">
+      <data key="d0">LinearGaussianCPDType</data>
+    </node>
+    <node id="Gender">
+      <data key="d0">DiscreteFactorType</data>
+    </node>
+    <node id="Comorbidity">
+      <data key="d0">DiscreteFactorType</data>
+    </node>
+    <node id="Coronary Artery Disease (CAD)">
+      <data key="d0">DiscreteFactorType</data>
+    </node>
+    <node id="Hypothyroidism">
+      <data key="d0">DiscreteFactorType</data>
+    </node>
+    <node id="Hyperlipidemia">
+      <data key="d0">DiscreteFactorType</data>
+    </node>
+    <node id="Diabetes Mellitus (DM)">
+      <data key="d0">DiscreteFactorType</data>
+    </node>
+    <node id="Height">
+      <data key="d0">LinearGaussianCPDType</data>
+    </node>
+    <node id="Weight">
+      <data key="d0">LinearGaussianCPDType</data>
+    </node>
+    <node id="Body Mass Index (BMI)">
+      <data key="d0">LinearGaussianCPDType</data>
+    </node>
+    <node id="Total Body Water (TBW)">
+      <data key="d0">LinearGaussianCPDType</data>
+    </node>
+    <node id="Extracellular Water (ECW)">
+      <data key="d0">LinearGaussianCPDType</data>
+    </node>
+    <node id="Intracellular Water (ICW)">
+      <data key="d0">LinearGaussianCPDType</data>
+    </node>
+    <node id="Extracellular Fluid/Total Body Water (ECF/TBW)">
+      <data key="d0">LinearGaussianCPDType</data>
+    </node>
+    <node id="Total Body Fat Ratio (TBFR) (%)">
+      <data key="d0">LinearGaussianCPDType</data>
+    </node>
+    <node id="Lean Mass (LM) (%)">
+      <data key="d0">LinearGaussianCPDType</data>
+    </node>
+    <node id="Body Protein Content (Protein) (%)">
+      <data key="d0">LinearGaussianCPDType</data>
+    </node>
+    <node id="Visceral Fat Rating (VFR)">
+      <data key="d0">LinearGaussianCPDType</data>
+    </node>
+    <node id="Bone Mass (BM)">
+      <data key="d0">LinearGaussianCPDType</data>
+    </node>
+    <node id="Muscle Mass (MM)">
+      <data key="d0">LinearGaussianCPDType</data>
+    </node>
+    <node id="Obesity (%)">
+      <data key="d0">LinearGaussianCPDType</data>
+    </node>
+    <node id="Total Fat Content (TFC)">
+      <data key="d0">LinearGaussianCPDType</data>
+    </node>
+    <node id="Visceral Fat Area (VFA)">
+      <data key="d0">LinearGaussianCPDType</data>
+    </node>
+    <node id="Visceral Muscle Area (VMA) (Kg)">
+      <data key="d0">LinearGaussianCPDType</data>
+    </node>
+    <node id="Hepatic Fat Accumulation (HFA)">
+      <data key="d0">DiscreteFactorType</data>
+    </node>
+    <node id="Glucose">
+      <data key="d0">LinearGaussianCPDType</data>
+    </node>
+    <node id="Total Cholesterol (TC)">
+      <data key="d0">LinearGaussianCPDType</data>
+    </node>
+    <node id="Low Density Lipoprotein (LDL)">
+      <data key="d0">LinearGaussianCPDType</data>
+    </node>
+    <node id="High Density Lipoprotein (HDL)">
+      <data key="d0">LinearGaussianCPDType</data>
+    </node>
+    <node id="Triglyceride">
+      <data key="d0">LinearGaussianCPDType</data>
+    </node>
+    <node id="Aspartat Aminotransferaz (AST)">
+      <data key="d0">LinearGaussianCPDType</data>
+    </node>
+    <node id="Alanin Aminotransferaz (ALT)">
+      <data key="d0">LinearGaussianCPDType</data>
+    </node>
+    <node id="Alkaline Phosphatase (ALP)">
+      <data key="d0">LinearGaussianCPDType</data>
+    </node>
+    <node id="Creatinine">
+      <data key="d0">LinearGaussianCPDType</data>
+    </node>
+    <node id="Glomerular Filtration Rate (GFR)">
+      <data key="d0">LinearGaussianCPDType</data>
+    </node>
+    <node id="C-Reactive Protein (CRP)">
+      <data key="d0">LinearGaussianCPDType</data>
+    </node>
+    <node id="Hemoglobin (HGB)">
+      <data key="d0">LinearGaussianCPDType</data>
+    </node>
+    <node id="Vitamin D">
+      <data key="d0">LinearGaussianCPDType</data>
+    </node>
+    <edge source="Gallstone Status" target="Hyperlipidemia" />
+    <edge source="Gallstone Status" target="Visceral Fat Area (VFA)" />
+    <edge source="Gallstone Status" target="Alanin Aminotransferaz (ALT)" />
+    <edge source="Gallstone Status" target="High Density Lipoprotein (HDL)" />
+    <edge source="Gallstone Status" target="Creatinine" />
+    <edge source="Gallstone Status" target="Extracellular Water (ECW)" />
+    <edge source="Gallstone Status" target="Visceral Muscle Area (VMA) (Kg)" />
+    <edge source="Gallstone Status" target="Glucose" />
+    <edge source="Gallstone Status" target="C-Reactive Protein (CRP)" />
+    <edge source="Gallstone Status" target="Extracellular Fluid/Total Body Water (ECF/TBW)" />
+    <edge source="Gallstone Status" target="Obesity (%)" />
+    <edge source="Gallstone Status" target="Muscle Mass (MM)" />
+    <edge source="Gallstone Status" target="Aspartat Aminotransferaz (AST)" />
+    <edge source="Gallstone Status" target="Bone Mass (BM)" />
+    <edge source="Gallstone Status" target="Total Body Water (TBW)" />
+    <edge source="Gallstone Status" target="Lean Mass (LM) (%)" />
+    <edge source="Gallstone Status" target="Intracellular Water (ICW)" />
+    <edge source="Gallstone Status" target="Vitamin D" />
+    <edge source="Age" target="Hemoglobin (HGB)" />
+    <edge source="Age" target="Body Protein Content (Protein) (%)" />
+    <edge source="Age" target="Visceral Fat Rating (VFR)" />
+    <edge source="Age" target="Extracellular Fluid/Total Body Water (ECF/TBW)" />
+    <edge source="Age" target="Creatinine" />
+    <edge source="Age" target="Glomerular Filtration Rate (GFR)" />
+    <edge source="Age" target="Extracellular Water (ECW)" />
+    <edge source="Gender" target="Body Mass Index (BMI)" />
+    <edge source="Gender" target="Extracellular Water (ECW)" />
+    <edge source="Gender" target="Visceral Fat Area (VFA)" />
+    <edge source="Gender" target="Visceral Muscle Area (VMA) (Kg)" />
+    <edge source="Gender" target="Total Body Fat Ratio (TBFR) (%)" />
+    <edge source="Gender" target="Intracellular Water (ICW)" />
+    <edge source="Gender" target="Muscle Mass (MM)" />
+    <edge source="Gender" target="Extracellular Fluid/Total Body Water (ECF/TBW)" />
+    <edge source="Gender" target="Glucose" />
+    <edge source="Gender" target="Height" />
+    <edge source="Gender" target="Obesity (%)" />
+    <edge source="Gender" target="Total Body Water (TBW)" />
+    <edge source="Gender" target="High Density Lipoprotein (HDL)" />
+    <edge source="Gender" target="C-Reactive Protein (CRP)" />
+    <edge source="Gender" target="Visceral Fat Rating (VFR)" />
+    <edge source="Gender" target="Hemoglobin (HGB)" />
+    <edge source="Gender" target="Alanin Aminotransferaz (ALT)" />
+    <edge source="Gender" target="Body Protein Content (Protein) (%)" />
+    <edge source="Gender" target="Creatinine" />
+    <edge source="Comorbidity" target="Coronary Artery Disease (CAD)" />
+    <edge source="Coronary Artery Disease (CAD)" target="Lean Mass (LM) (%)" />
+    <edge source="Hyperlipidemia" target="Gender" />
+    <edge source="Hyperlipidemia" target="Low Density Lipoprotein (LDL)" />
+    <edge source="Diabetes Mellitus (DM)" target="Total Body Water (TBW)" />
+    <edge source="Diabetes Mellitus (DM)" target="Comorbidity" />
+    <edge source="Diabetes Mellitus (DM)" target="Glucose" />
+    <edge source="Diabetes Mellitus (DM)" target="Visceral Fat Rating (VFR)" />
+    <edge source="Diabetes Mellitus (DM)" target="Obesity (%)" />
+    <edge source="Height" target="Bone Mass (BM)" />
+    <edge source="Height" target="Body Protein Content (Protein) (%)" />
+    <edge source="Weight" target="Total Fat Content (TFC)" />
+    <edge source="Weight" target="Body Mass Index (BMI)" />
+    <edge source="Weight" target="Total Body Fat Ratio (TBFR) (%)" />
+    <edge source="Weight" target="Visceral Fat Area (VFA)" />
+    <edge source="Weight" target="Extracellular Water (ECW)" />
+    <edge source="Weight" target="Height" />
+    <edge source="Body Mass Index (BMI)" target="Alkaline Phosphatase (ALP)" />
+    <edge source="Body Mass Index (BMI)" target="Visceral Fat Rating (VFR)" />
+    <edge source="Body Mass Index (BMI)" target="Obesity (%)" />
+    <edge source="Body Mass Index (BMI)" target="Height" />
+    <edge source="Total Body Water (TBW)" target="Visceral Muscle Area (VMA) (Kg)" />
+    <edge source="Total Body Water (TBW)" target="Intracellular Water (ICW)" />
+    <edge source="Total Body Water (TBW)" target="Muscle Mass (MM)" />
+    <edge source="Extracellular Water (ECW)" target="Body Mass Index (BMI)" />
+    <edge source="Extracellular Water (ECW)" target="Alkaline Phosphatase (ALP)" />
+    <edge source="Extracellular Water (ECW)" target="Bone Mass (BM)" />
+    <edge source="Extracellular Water (ECW)" target="Muscle Mass (MM)" />
+    <edge source="Extracellular Water (ECW)" target="Intracellular Water (ICW)" />
+    <edge source="Extracellular Water (ECW)" target="Total Body Water (TBW)" />
+    <edge source="Intracellular Water (ICW)" target="Hemoglobin (HGB)" />
+    <edge source="Intracellular Water (ICW)" target="Muscle Mass (MM)" />
+    <edge source="Intracellular Water (ICW)" target="Total Body Fat Ratio (TBFR) (%)" />
+    <edge source="Extracellular Fluid/Total Body Water (ECF/TBW)" target="Body Protein Content (Protein) (%)" />
+    <edge source="Extracellular Fluid/Total Body Water (ECF/TBW)" target="Extracellular Water (ECW)" />
+    <edge source="Extracellular Fluid/Total Body Water (ECF/TBW)" target="Total Body Water (TBW)" />
+    <edge source="Extracellular Fluid/Total Body Water (ECF/TBW)" target="Intracellular Water (ICW)" />
+    <edge source="Total Body Fat Ratio (TBFR) (%)" target="Total Fat Content (TFC)" />
+    <edge source="Total Body Fat Ratio (TBFR) (%)" target="Lean Mass (LM) (%)" />
+    <edge source="Lean Mass (LM) (%)" target="Body Mass Index (BMI)" />
+    <edge source="Lean Mass (LM) (%)" target="Visceral Fat Area (VFA)" />
+    <edge source="Bone Mass (BM)" target="Total Cholesterol (TC)" />
+    <edge source="Muscle Mass (MM)" target="Visceral Fat Area (VFA)" />
+    <edge source="Muscle Mass (MM)" target="Total Fat Content (TFC)" />
+    <edge source="Muscle Mass (MM)" target="Total Body Fat Ratio (TBFR) (%)" />
+    <edge source="Muscle Mass (MM)" target="Bone Mass (BM)" />
+    <edge source="Muscle Mass (MM)" target="Visceral Muscle Area (VMA) (Kg)" />
+    <edge source="Visceral Fat Area (VFA)" target="Body Mass Index (BMI)" />
+    <edge source="Visceral Fat Area (VFA)" target="Body Protein Content (Protein) (%)" />
+    <edge source="Visceral Fat Area (VFA)" target="Bone Mass (BM)" />
+    <edge source="Visceral Fat Area (VFA)" target="Visceral Muscle Area (VMA) (Kg)" />
+    <edge source="Visceral Fat Area (VFA)" target="Visceral Fat Rating (VFR)" />
+    <edge source="Hepatic Fat Accumulation (HFA)" target="Gallstone Status" />
+    <edge source="Hepatic Fat Accumulation (HFA)" target="Weight" />
+    <edge source="Hepatic Fat Accumulation (HFA)" target="Total Fat Content (TFC)" />
+    <edge source="Hepatic Fat Accumulation (HFA)" target="Aspartat Aminotransferaz (AST)" />
+    <edge source="Hepatic Fat Accumulation (HFA)" target="Total Body Fat Ratio (TBFR) (%)" />
+    <edge source="Hepatic Fat Accumulation (HFA)" target="C-Reactive Protein (CRP)" />
+    <edge source="Hepatic Fat Accumulation (HFA)" target="Height" />
+    <edge source="Hepatic Fat Accumulation (HFA)" target="Triglyceride" />
+    <edge source="Glucose" target="Alkaline Phosphatase (ALP)" />
+    <edge source="Low Density Lipoprotein (LDL)" target="Total Cholesterol (TC)" />
+    <edge source="High Density Lipoprotein (HDL)" target="Alanin Aminotransferaz (ALT)" />
+    <edge source="High Density Lipoprotein (HDL)" target="Total Cholesterol (TC)" />
+    <edge source="Triglyceride" target="Total Cholesterol (TC)" />
+    <edge source="Triglyceride" target="High Density Lipoprotein (HDL)" />
+    <edge source="Alanin Aminotransferaz (ALT)" target="Alkaline Phosphatase (ALP)" />
+    <edge source="Alanin Aminotransferaz (ALT)" target="Aspartat Aminotransferaz (AST)" />
+    <edge source="Creatinine" target="Hemoglobin (HGB)" />
+    <edge source="Glomerular Filtration Rate (GFR)" target="Creatinine" />
+    <edge source="C-Reactive Protein (CRP)" target="Glomerular Filtration Rate (GFR)" />
+    <edge source="Hemoglobin (HGB)" target="Triglyceride" />
+  </graph>
+</graphml>

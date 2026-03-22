@@ -63,10 +63,57 @@
   },
   "provenance": [
     {
-      "id": "https://w3id.org/semsynth/demo#__main__.py#write_manifest-20260320T1517",
+      "id": "https://w3id.org/semsynth/demo#__main__.py#model_run_root-20260322T0719",
       "type": "prov:Activity",
-      "startedAtTime": "2026-03-20T15:17:19.430802+00:00",
-      "endedAtTime": "2026-03-20T15:17:19.431189+00:00",
+      "startedAtTime": "2026-03-22T07:19:14.475621+00:00",
+      "endedAtTime": "2026-03-22T07:19:14.475737+00:00",
+      "wasAssociatedWith": "https://w3id.org/semsynth/demo#__main__.py",
+      "used": [
+        "https://w3id.org/semsynth/demo#env-b7b3b6f74caf"
+      ]
+    },
+    {
+      "id": "https://w3id.org/semsynth/demo#output/Chronic Kidney Disease",
+      "type": "prov:Entity",
+      "format": "application/octet-stream",
+      "extent": 288,
+      "modified": "2026-03-17T13:41:08.533265+00:00",
+      "wasGeneratedBy": "https://w3id.org/semsynth/demo#__main__.py#model_run_root-20260322T0719"
+    },
+    {
+      "id": "https://w3id.org/semsynth/demo#output/Chronic Kidney Disease/models/metasyn",
+      "type": "prov:Entity",
+      "format": "application/octet-stream",
+      "extent": 384,
+      "modified": "2026-03-20T09:14:24.817773+00:00",
+      "wasGeneratedBy": "https://w3id.org/semsynth/demo#__main__.py#write_privacy-20260322T0719"
+    },
+    {
+      "id": "https://w3id.org/semsynth/demo#__main__.py#write_privacy-20260322T0719",
+      "type": "prov:Activity",
+      "startedAtTime": "2026-03-22T07:19:17.273517+00:00",
+      "endedAtTime": "2026-03-22T07:19:17.774344+00:00",
+      "wasAssociatedWith": "https://w3id.org/semsynth/demo#__main__.py",
+      "used": [
+        "https://w3id.org/semsynth/demo#env-b7b3b6f74caf"
+      ]
+    },
+    {
+      "id": "https://w3id.org/semsynth/demo#__main__.py",
+      "type": [
+        "prov:Agent",
+        "prov:SoftwareAgent",
+        "schema:SoftwareSourceCode"
+      ],
+      "label": "__main__.py",
+      "hasVersion": "3fb66ee72f33c19cce8090e6fd02be9729aac7c8",
+      "source": "https://github.com/bennokr/semsynth.git"
+    },
+    {
+      "id": "https://w3id.org/semsynth/demo#__main__.py#write_manifest-20260322T0719",
+      "type": "prov:Activity",
+      "startedAtTime": "2026-03-22T07:19:17.116936+00:00",
+      "endedAtTime": "2026-03-22T07:19:17.117295+00:00",
       "wasAssociatedWith": "https://w3id.org/semsynth/demo#__main__.py",
       "used": [
         "https://w3id.org/semsynth/demo#env-b7b3b6f74caf"
@@ -78,35 +125,7 @@
       "format": "application/octet-stream",
       "extent": 384,
       "modified": "2026-03-20T09:14:24.817773+00:00",
-      "wasGeneratedBy": "https://w3id.org/semsynth/demo#__main__.py#write_privacy-20260320T1517"
-    },
-    {
-      "id": "https://w3id.org/semsynth/demo#output/Chronic Kidney Disease/models/metasyn",
-      "type": "prov:Entity",
-      "format": "application/octet-stream",
-      "extent": 384,
-      "modified": "2026-03-20T09:14:24.817773+00:00",
-      "wasGeneratedBy": "https://w3id.org/semsynth/demo#__main__.py#write_manifest-20260320T1517"
-    },
-    {
-      "id": "https://w3id.org/semsynth/demo#__main__.py#write_privacy-20260320T1517",
-      "type": "prov:Activity",
-      "startedAtTime": "2026-03-20T15:17:19.581301+00:00",
-      "endedAtTime": "2026-03-20T15:17:19.990191+00:00",
-      "wasAssociatedWith": "https://w3id.org/semsynth/demo#__main__.py",
-      "used": [
-        "https://w3id.org/semsynth/demo#env-b7b3b6f74caf"
-      ]
-    },
-    {
-      "id": "https://w3id.org/semsynth/demo#__main__.py#model_run_root-20260320T1517",
-      "type": "prov:Activity",
-      "startedAtTime": "2026-03-20T15:17:16.784006+00:00",
-      "endedAtTime": "2026-03-20T15:17:16.784107+00:00",
-      "wasAssociatedWith": "https://w3id.org/semsynth/demo#__main__.py",
-      "used": [
-        "https://w3id.org/semsynth/demo#env-b7b3b6f74caf"
-      ]
+      "wasGeneratedBy": "https://w3id.org/semsynth/demo#__main__.py#write_manifest-20260322T0719"
     },
     {
       "id": "https://w3id.org/semsynth/demo#env-b7b3b6f74caf",
@@ -124,25 +143,6 @@
           "label": "parse>=1.20"
         }
       ]
-    },
-    {
-      "id": "https://w3id.org/semsynth/demo#output/Chronic Kidney Disease",
-      "type": "prov:Entity",
-      "format": "application/octet-stream",
-      "extent": 288,
-      "modified": "2026-03-17T13:41:08.533265+00:00",
-      "wasGeneratedBy": "https://w3id.org/semsynth/demo#__main__.py#model_run_root-20260320T1517"
-    },
-    {
-      "id": "https://w3id.org/semsynth/demo#__main__.py",
-      "type": [
-        "prov:Agent",
-        "prov:SoftwareAgent",
-        "schema:SoftwareSourceCode"
-      ],
-      "label": "__main__.py",
-      "hasVersion": "eb05c8f1ddd8dc85cb1bd200cd2a41543c25a0bf",
-      "source": "https://github.com/bennokr/semsynth.git"
     }
   ]
 }
