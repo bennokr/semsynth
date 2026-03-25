@@ -26,6 +26,7 @@ img { border-radius: 12px; box-shadow: 0 4px 28px rgba(15, 23, 42, 0.12); }
 blockquote { border-left: 4px solid #cbd5f5; margin: 1.5rem 0; padding: 0.75rem 1.25rem; background: #f8fafc; color: #1e293b; }
 table.per-var-dist { margin-top: 2.25rem; }
 table.per-var-dist thead th { text-align: center; }
+td:has(img) { padding: 0; }
 
   </style>
 </head>
@@ -154,6 +155,7 @@ table.per-var-dist thead th { text-align: center; }
     <table>
     <thead>
     <tr>
+    <th style="text-align: left;">umap</th>
     <th style="text-align: left;">model</th>
     <th style="text-align: left;">backend</th>
     <th style="text-align: right;">disc jsd mean</th>
@@ -165,30 +167,53 @@ table.per-var-dist thead th { text-align: center; }
     </thead>
     <tbody>
     <tr>
+    <td style="text-align: left;"><img src='models/metasyn/umap.png' height='48' /></td>
     <td style="text-align: left;">metasyn</td>
     <td style="text-align: left;">metasyn</td>
-    <td style="text-align: right;">0.1986</td>
-    <td style="text-align: right;">0.1445</td>
-    <td style="text-align: right;">0.2733</td>
-    <td style="text-align: right;">0.1319</td>
+    <td style="text-align: right;">0.058</td>
+    <td style="text-align: right;">0.0683</td>
+    <td style="text-align: right;">0.2033</td>
+    <td style="text-align: right;">0.1181</td>
     <td style="text-align: right;">0.25</td>
     </tr>
     <tr>
+    <td style="text-align: left;"><img src='models/clg_mi2/umap.png' height='48' /></td>
     <td style="text-align: left;">clg_mi2</td>
     <td style="text-align: left;">pybnesian</td>
-    <td style="text-align: right;">0.1824</td>
-    <td style="text-align: right;">0.1559</td>
-    <td style="text-align: right;">0.1967</td>
-    <td style="text-align: right;">0.1348</td>
+    <td style="text-align: right;">0.0647</td>
+    <td style="text-align: right;">0.0362</td>
+    <td style="text-align: right;">0.1833</td>
+    <td style="text-align: right;">0.1201</td>
     <td style="text-align: right;"></td>
     </tr>
     <tr>
+    <td style="text-align: left;"><img src='models/semi_mi5/umap.png' height='48' /></td>
     <td style="text-align: left;">semi_mi5</td>
     <td style="text-align: left;">pybnesian</td>
-    <td style="text-align: right;">0.1824</td>
-    <td style="text-align: right;">0.1559</td>
-    <td style="text-align: right;">0.1967</td>
-    <td style="text-align: right;">0.1348</td>
+    <td style="text-align: right;">0.0647</td>
+    <td style="text-align: right;">0.0362</td>
+    <td style="text-align: right;">0.1833</td>
+    <td style="text-align: right;">0.1201</td>
+    <td style="text-align: right;"></td>
+    </tr>
+    <tr>
+    <td style="text-align: left;"><img src='models/ctgan_fast/umap.png' height='48' /></td>
+    <td style="text-align: left;">ctgan_fast</td>
+    <td style="text-align: left;">synthcity</td>
+    <td style="text-align: right;">0.3398</td>
+    <td style="text-align: right;">0.3911</td>
+    <td style="text-align: right;">0.6367</td>
+    <td style="text-align: right;">0.2003</td>
+    <td style="text-align: right;"></td>
+    </tr>
+    <tr>
+    <td style="text-align: left;"><img src='models/tvae_quick/umap.png' height='48' /></td>
+    <td style="text-align: left;">tvae_quick</td>
+    <td style="text-align: left;">synthcity</td>
+    <td style="text-align: right;">0.1168</td>
+    <td style="text-align: right;">0.1052</td>
+    <td style="text-align: right;">0.2933</td>
+    <td style="text-align: right;">0.1255</td>
     <td style="text-align: right;"></td>
     </tr>
     </tbody>
@@ -219,14 +244,14 @@ table.per-var-dist thead th { text-align: center; }
     <td style="text-align: right;">100</td>
     <td style="text-align: right;">100</td>
     <td style="text-align: right;">0</td>
-    <td style="text-align: right;">0.32</td>
-    <td style="text-align: right;">0.3503</td>
+    <td style="text-align: right;">0.21</td>
+    <td style="text-align: right;">0.4309</td>
     <td style="text-align: right;">1</td>
     <td style="text-align: right;">1</td>
     <td style="text-align: right;">3</td>
     <td style="text-align: right;">0</td>
     <td style="text-align: left;"></td>
-    <td style="text-align: right;">2</td>
+    <td style="text-align: right;">2.6667</td>
     </tr>
     <tr>
     <td style="text-align: left;">clg_mi2</td>
@@ -258,6 +283,36 @@ table.per-var-dist thead th { text-align: center; }
     <td style="text-align: left;"></td>
     <td style="text-align: right;">2.5</td>
     </tr>
+    <tr>
+    <td style="text-align: left;">ctgan_fast</td>
+    <td style="text-align: left;">synthcity</td>
+    <td style="text-align: right;">100</td>
+    <td style="text-align: right;">100</td>
+    <td style="text-align: right;">0</td>
+    <td style="text-align: right;">0.12</td>
+    <td style="text-align: right;">0.3655</td>
+    <td style="text-align: right;">1</td>
+    <td style="text-align: right;">1</td>
+    <td style="text-align: right;">1</td>
+    <td style="text-align: right;">0</td>
+    <td style="text-align: left;"></td>
+    <td style="text-align: right;">36</td>
+    </tr>
+    <tr>
+    <td style="text-align: left;">tvae_quick</td>
+    <td style="text-align: left;">synthcity</td>
+    <td style="text-align: right;">100</td>
+    <td style="text-align: right;">100</td>
+    <td style="text-align: right;">0</td>
+    <td style="text-align: right;">0.08</td>
+    <td style="text-align: right;">0.3762</td>
+    <td style="text-align: right;">1</td>
+    <td style="text-align: right;">1</td>
+    <td style="text-align: right;">1</td>
+    <td style="text-align: right;">0</td>
+    <td style="text-align: left;"></td>
+    <td style="text-align: right;">7</td>
+    </tr>
     </tbody>
     </table>
     <h2>Models</h2>
@@ -270,7 +325,7 @@ table.per-var-dist thead th { text-align: center; }
     <h3>Model: metasyn (metasyn)</h3>
     <ul>
     <li>Seed: 42, rows: 100</li>
-    <li> <a href="models/metasyn/synthetic.csv">Synthetic CSV</a></li>
+    <li> Missingness: wrapped (random state 42) via pipeline</li><li> <a href="models/metasyn/synthetic.csv">Synthetic CSV</a></li>
     <li> <a href="models/metasyn/per_variable_metrics.csv">Per-variable metrics</a></li>
     <li> <a href="models/metasyn/metrics.json">Metrics JSON</a></li>
     <li> <a href="models/metasyn/metrics.privacy.json">Privacy metrics</a></li>
@@ -291,15 +346,15 @@ table.per-var-dist thead th { text-align: center; }
         <tr>
           <td>season</td>
           <td>continuous</td>
-          <td>0.35</td>
-          <td>0.3104</td>
+          <td>0.31</td>
+          <td>0.2876</td>
           <td></td>
         </tr>
         <tr>
           <td>age</td>
           <td>continuous</td>
-          <td>0.25</td>
-          <td>0.0246</td>
+          <td>0.15</td>
+          <td>0.0261</td>
           <td></td>
         </tr>
         <tr>
@@ -307,48 +362,48 @@ table.per-var-dist thead th { text-align: center; }
           <td>discrete</td>
           <td></td>
           <td></td>
-          <td>0.1445</td>
+          <td>0.0245</td>
         </tr>
         <tr>
           <td>accident</td>
           <td>discrete</td>
           <td></td>
           <td></td>
-          <td>0.3534</td>
+          <td>0.0694</td>
         </tr>
         <tr>
           <td>surgical_intervention</td>
           <td>discrete</td>
           <td></td>
           <td></td>
-          <td>0.0682</td>
+          <td>0.0683</td>
         </tr>
         <tr>
           <td>high_fevers</td>
           <td>discrete</td>
           <td></td>
           <td></td>
-          <td>0.1225</td>
+          <td>0.069</td>
         </tr>
         <tr>
           <td>alcohol</td>
           <td>discrete</td>
           <td></td>
           <td></td>
-          <td>0.3872</td>
+          <td>0.0812</td>
         </tr>
         <tr>
           <td>smoking</td>
           <td>discrete</td>
           <td></td>
           <td></td>
-          <td>0.3003</td>
+          <td>0.0523</td>
         </tr>
         <tr>
           <td>hrs_sitting</td>
           <td>continuous</td>
-          <td>0.22</td>
-          <td>0.0607</td>
+          <td>0.15</td>
+          <td>0.0405</td>
           <td></td>
         </tr>
         <tr>
@@ -356,7 +411,7 @@ table.per-var-dist thead th { text-align: center; }
           <td>discrete</td>
           <td></td>
           <td></td>
-          <td>0.0139</td>
+          <td>0.0416</td>
         </tr>
       </tbody>
     </table>
@@ -406,11 +461,11 @@ table.per-var-dist thead th { text-align: center; }
         </tr>
         <tr>
           <td>near_duplicate_rate_eps</td>
-          <td>0.32</td>
+          <td>0.21</td>
         </tr>
         <tr>
           <td>nn_distance_mean</td>
-          <td>0.3503</td>
+          <td>0.4309</td>
         </tr>
         <tr>
           <td>k_min</td>
@@ -430,7 +485,7 @@ table.per-var-dist thead th { text-align: center; }
         </tr>
         <tr>
           <td>delta_presence</td>
-          <td>2</td>
+          <td>2.6667</td>
         </tr>
       </tbody>
     </table>
@@ -492,7 +547,7 @@ table.per-var-dist thead th { text-align: center; }
     <h3>Model: clg_mi2 (pybnesian)</h3>
     <ul>
     <li>Seed: 42, rows: 100</li>
-    <li> Params: <tt>{"max_indegree": 2, "operators": ["arcs"], "score": "bic", "type": "clg"}</tt></li><li> <a href="models/clg_mi2/synthetic.csv">Synthetic CSV</a></li>
+    <li> Params: <tt>{"max_indegree": 2, "operators": ["arcs"], "score": "bic", "type": "clg"}</tt></li><li> Missingness: wrapped (random state 42) via pipeline</li><li> <a href="models/clg_mi2/synthetic.csv">Synthetic CSV</a></li>
     <li> <a href="models/clg_mi2/per_variable_metrics.csv">Per-variable metrics</a></li>
     <li> <a href="models/clg_mi2/metrics.json">Metrics JSON</a></li>
     <li> <a href="models/clg_mi2/metrics.privacy.json">Privacy metrics</a></li>
@@ -512,15 +567,15 @@ table.per-var-dist thead th { text-align: center; }
         <tr>
           <td>season</td>
           <td>continuous</td>
-          <td>0.3</td>
-          <td>0.336</td>
+          <td>0.27</td>
+          <td>0.3014</td>
           <td></td>
         </tr>
         <tr>
           <td>age</td>
           <td>continuous</td>
           <td>0.15</td>
-          <td>0.0232</td>
+          <td>0.026</td>
           <td></td>
         </tr>
         <tr>
@@ -528,48 +583,48 @@ table.per-var-dist thead th { text-align: center; }
           <td>discrete</td>
           <td></td>
           <td></td>
-          <td>0.1559</td>
+          <td>0.0362</td>
         </tr>
         <tr>
           <td>accident</td>
           <td>discrete</td>
           <td></td>
           <td></td>
-          <td>0.2244</td>
+          <td>0</td>
         </tr>
         <tr>
           <td>surgical_intervention</td>
           <td>discrete</td>
           <td></td>
           <td></td>
-          <td>0.0682</td>
+          <td>0.0597</td>
         </tr>
         <tr>
           <td>high_fevers</td>
           <td>discrete</td>
           <td></td>
           <td></td>
-          <td>0.1455</td>
+          <td>0.0286</td>
         </tr>
         <tr>
           <td>alcohol</td>
           <td>discrete</td>
           <td></td>
           <td></td>
-          <td>0.3699</td>
+          <td>0.1875</td>
         </tr>
         <tr>
           <td>smoking</td>
           <td>discrete</td>
           <td></td>
           <td></td>
-          <td>0.2991</td>
+          <td>0.1279</td>
         </tr>
         <tr>
           <td>hrs_sitting</td>
           <td>continuous</td>
-          <td>0.14</td>
-          <td>0.0453</td>
+          <td>0.13</td>
+          <td>0.0329</td>
           <td></td>
         </tr>
         <tr>
@@ -577,7 +632,7 @@ table.per-var-dist thead th { text-align: center; }
           <td>discrete</td>
           <td></td>
           <td></td>
-          <td>0.0139</td>
+          <td>0.0133</td>
         </tr>
       </tbody>
     </table>
@@ -641,7 +696,7 @@ table.per-var-dist thead th { text-align: center; }
     <h3>Model: semi_mi5 (pybnesian)</h3>
     <ul>
     <li>Seed: 42, rows: 100</li>
-    <li> Params: <tt>{"max_indegree": 5, "operators": ["arcs"], "score": "bic", "type": "semiparametric"}</tt></li><li> <a href="models/semi_mi5/synthetic.csv">Synthetic CSV</a></li>
+    <li> Params: <tt>{"max_indegree": 5, "operators": ["arcs"], "score": "bic", "type": "semiparametric"}</tt></li><li> Missingness: wrapped (random state 42) via pipeline</li><li> <a href="models/semi_mi5/synthetic.csv">Synthetic CSV</a></li>
     <li> <a href="models/semi_mi5/per_variable_metrics.csv">Per-variable metrics</a></li>
     <li> <a href="models/semi_mi5/metrics.json">Metrics JSON</a></li>
     <li> <a href="models/semi_mi5/metrics.privacy.json">Privacy metrics</a></li>
@@ -661,15 +716,15 @@ table.per-var-dist thead th { text-align: center; }
         <tr>
           <td>season</td>
           <td>continuous</td>
-          <td>0.3</td>
-          <td>0.336</td>
+          <td>0.27</td>
+          <td>0.3014</td>
           <td></td>
         </tr>
         <tr>
           <td>age</td>
           <td>continuous</td>
           <td>0.15</td>
-          <td>0.0232</td>
+          <td>0.026</td>
           <td></td>
         </tr>
         <tr>
@@ -677,48 +732,48 @@ table.per-var-dist thead th { text-align: center; }
           <td>discrete</td>
           <td></td>
           <td></td>
-          <td>0.1559</td>
+          <td>0.0362</td>
         </tr>
         <tr>
           <td>accident</td>
           <td>discrete</td>
           <td></td>
           <td></td>
-          <td>0.2244</td>
+          <td>0</td>
         </tr>
         <tr>
           <td>surgical_intervention</td>
           <td>discrete</td>
           <td></td>
           <td></td>
-          <td>0.0682</td>
+          <td>0.0597</td>
         </tr>
         <tr>
           <td>high_fevers</td>
           <td>discrete</td>
           <td></td>
           <td></td>
-          <td>0.1455</td>
+          <td>0.0286</td>
         </tr>
         <tr>
           <td>alcohol</td>
           <td>discrete</td>
           <td></td>
           <td></td>
-          <td>0.3699</td>
+          <td>0.1875</td>
         </tr>
         <tr>
           <td>smoking</td>
           <td>discrete</td>
           <td></td>
           <td></td>
-          <td>0.2991</td>
+          <td>0.1279</td>
         </tr>
         <tr>
           <td>hrs_sitting</td>
           <td>continuous</td>
-          <td>0.14</td>
-          <td>0.0453</td>
+          <td>0.13</td>
+          <td>0.0329</td>
           <td></td>
         </tr>
         <tr>
@@ -726,7 +781,7 @@ table.per-var-dist thead th { text-align: center; }
           <td>discrete</td>
           <td></td>
           <td></td>
-          <td>0.0139</td>
+          <td>0.0133</td>
         </tr>
       </tbody>
     </table>
@@ -784,6 +839,304 @@ table.per-var-dist thead th { text-align: center; }
     </details>
     </td><td>
     <a href='models/semi_mi5/structure.png'><img src='models/semi_mi5/structure.png' width='280'/></a></td></tr>
+
+    <tr><td><img src='models/ctgan_fast/umap.png' width='280'/></td><td>
+
+    <h3>Model: ctgan_fast (synthcity)</h3>
+    <ul>
+    <li>Seed: 42, rows: 100</li>
+    <li> Params: <tt>{"batch_size": 256, "n_iter": 5}</tt></li><li> Missingness: wrapped (random state 42) via pipeline</li><li> <a href="models/ctgan_fast/synthetic.csv">Synthetic CSV</a></li>
+    <li> <a href="models/ctgan_fast/per_variable_metrics.csv">Per-variable metrics</a></li>
+    <li> <a href="models/ctgan_fast/metrics.json">Metrics JSON</a></li>
+    <li> <a href="models/ctgan_fast/metrics.privacy.json">Privacy metrics</a></li>
+    </ul>
+    <details class="model-subtable"><summary><strong>Per-variable fidelity</strong></summary>
+    <table class="dataframe">
+      <thead>
+        <tr style="text-align: right;">
+          <th>variable</th>
+          <th>type</th>
+          <th>KS</th>
+          <th>W1</th>
+          <th>JSD</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td>season</td>
+          <td>continuous</td>
+          <td>0.12</td>
+          <td>0.1127</td>
+          <td></td>
+        </tr>
+        <tr>
+          <td>age</td>
+          <td>continuous</td>
+          <td>0.93</td>
+          <td>0.169</td>
+          <td></td>
+        </tr>
+        <tr>
+          <td>child_diseases</td>
+          <td>discrete</td>
+          <td></td>
+          <td></td>
+          <td>0.1621</td>
+        </tr>
+        <tr>
+          <td>accident</td>
+          <td>discrete</td>
+          <td></td>
+          <td></td>
+          <td>0.4065</td>
+        </tr>
+        <tr>
+          <td>surgical_intervention</td>
+          <td>discrete</td>
+          <td></td>
+          <td></td>
+          <td>0.3911</td>
+        </tr>
+        <tr>
+          <td>high_fevers</td>
+          <td>discrete</td>
+          <td></td>
+          <td></td>
+          <td>0.4932</td>
+        </tr>
+        <tr>
+          <td>alcohol</td>
+          <td>discrete</td>
+          <td></td>
+          <td></td>
+          <td>0.266</td>
+        </tr>
+        <tr>
+          <td>smoking</td>
+          <td>discrete</td>
+          <td></td>
+          <td></td>
+          <td>0.4694</td>
+        </tr>
+        <tr>
+          <td>hrs_sitting</td>
+          <td>continuous</td>
+          <td>0.86</td>
+          <td>0.3192</td>
+          <td></td>
+        </tr>
+        <tr>
+          <td>diagnosis</td>
+          <td>discrete</td>
+          <td></td>
+          <td></td>
+          <td>0.1901</td>
+        </tr>
+      </tbody>
+    </table>
+    </details><details class="model-subtable"><summary><strong>Privacy metrics</strong></summary>
+    <table class="dataframe">
+      <thead>
+        <tr style="text-align: right;">
+          <th>metric</th>
+          <th>value</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td>n_real</td>
+          <td>100</td>
+        </tr>
+        <tr>
+          <td>n_synth</td>
+          <td>100</td>
+        </tr>
+        <tr>
+          <td>exact_overlap_rate</td>
+          <td>0</td>
+        </tr>
+        <tr>
+          <td>near_duplicate_rate_eps</td>
+          <td>0.12</td>
+        </tr>
+        <tr>
+          <td>nn_distance_mean</td>
+          <td>0.3655</td>
+        </tr>
+        <tr>
+          <td>k_min</td>
+          <td>1</td>
+        </tr>
+        <tr>
+          <td>k_pct_lt5</td>
+          <td>1</td>
+        </tr>
+        <tr>
+          <td>k_map</td>
+          <td>1</td>
+        </tr>
+        <tr>
+          <td>rare_qi_reproduction_rate</td>
+          <td>0</td>
+        </tr>
+        <tr>
+          <td>delta_presence</td>
+          <td>36</td>
+        </tr>
+      </tbody>
+    </table>
+    </details>
+    </td><td>
+    <img src="box.svg" width="120" /></td></tr>
+
+    <tr><td><img src='models/tvae_quick/umap.png' width='280'/></td><td>
+
+    <h3>Model: tvae_quick (synthcity)</h3>
+    <ul>
+    <li>Seed: 42, rows: 100</li>
+    <li> Params: <tt>{"batch_size": 256}</tt></li><li> Missingness: wrapped (random state 42) via pipeline</li><li> <a href="models/tvae_quick/synthetic.csv">Synthetic CSV</a></li>
+    <li> <a href="models/tvae_quick/per_variable_metrics.csv">Per-variable metrics</a></li>
+    <li> <a href="models/tvae_quick/metrics.json">Metrics JSON</a></li>
+    <li> <a href="models/tvae_quick/metrics.privacy.json">Privacy metrics</a></li>
+    </ul>
+    <details class="model-subtable"><summary><strong>Per-variable fidelity</strong></summary>
+    <table class="dataframe">
+      <thead>
+        <tr style="text-align: right;">
+          <th>variable</th>
+          <th>type</th>
+          <th>KS</th>
+          <th>W1</th>
+          <th>JSD</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td>season</td>
+          <td>continuous</td>
+          <td>0.21</td>
+          <td>0.2272</td>
+          <td></td>
+        </tr>
+        <tr>
+          <td>age</td>
+          <td>continuous</td>
+          <td>0.29</td>
+          <td>0.0491</td>
+          <td></td>
+        </tr>
+        <tr>
+          <td>child_diseases</td>
+          <td>discrete</td>
+          <td></td>
+          <td></td>
+          <td>0.1867</td>
+        </tr>
+        <tr>
+          <td>accident</td>
+          <td>discrete</td>
+          <td></td>
+          <td></td>
+          <td>0.1052</td>
+        </tr>
+        <tr>
+          <td>surgical_intervention</td>
+          <td>discrete</td>
+          <td></td>
+          <td></td>
+          <td>0.0856</td>
+        </tr>
+        <tr>
+          <td>high_fevers</td>
+          <td>discrete</td>
+          <td></td>
+          <td></td>
+          <td>0.1405</td>
+        </tr>
+        <tr>
+          <td>alcohol</td>
+          <td>discrete</td>
+          <td></td>
+          <td></td>
+          <td>0.138</td>
+        </tr>
+        <tr>
+          <td>smoking</td>
+          <td>discrete</td>
+          <td></td>
+          <td></td>
+          <td>0.072</td>
+        </tr>
+        <tr>
+          <td>hrs_sitting</td>
+          <td>continuous</td>
+          <td>0.38</td>
+          <td>0.1002</td>
+          <td></td>
+        </tr>
+        <tr>
+          <td>diagnosis</td>
+          <td>discrete</td>
+          <td></td>
+          <td></td>
+          <td>0.0898</td>
+        </tr>
+      </tbody>
+    </table>
+    </details><details class="model-subtable"><summary><strong>Privacy metrics</strong></summary>
+    <table class="dataframe">
+      <thead>
+        <tr style="text-align: right;">
+          <th>metric</th>
+          <th>value</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td>n_real</td>
+          <td>100</td>
+        </tr>
+        <tr>
+          <td>n_synth</td>
+          <td>100</td>
+        </tr>
+        <tr>
+          <td>exact_overlap_rate</td>
+          <td>0</td>
+        </tr>
+        <tr>
+          <td>near_duplicate_rate_eps</td>
+          <td>0.08</td>
+        </tr>
+        <tr>
+          <td>nn_distance_mean</td>
+          <td>0.3762</td>
+        </tr>
+        <tr>
+          <td>k_min</td>
+          <td>1</td>
+        </tr>
+        <tr>
+          <td>k_pct_lt5</td>
+          <td>1</td>
+        </tr>
+        <tr>
+          <td>k_map</td>
+          <td>1</td>
+        </tr>
+        <tr>
+          <td>rare_qi_reproduction_rate</td>
+          <td>0</td>
+        </tr>
+        <tr>
+          <td>delta_presence</td>
+          <td>7</td>
+        </tr>
+      </tbody>
+    </table>
+    </details>
+    </td><td>
+    <img src="box.svg" width="120" /></td></tr>
 
     </table>
   </main>

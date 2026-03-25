@@ -1,0 +1,42 @@
+{
+  "backend": "synthcity",
+  "name": "tvae_quick",
+  "provider": "uciml",
+  "dataset_name": "Statlog (Heart)",
+  "provider_id": 145,
+  "generator": "tvae",
+  "params": {
+    "batch_size": 256
+  },
+  "seed": 42,
+  "rows": 256,
+  "test_size": 0.2,
+  "missingness": {
+    "wrapped": true,
+    "random_state": 42,
+    "source": "pipeline"
+  },
+  "signature": "5e3331069227ca508a2f32969095b4b096b9294b163b63c6b747ca37977adf7a",
+  "signature_inputs": {
+    "label": "tvae_quick",
+    "backend": "synthcity",
+    "model_params": {
+      "type": "tvae",
+      "batch_size": 256
+    },
+    "rows": 256,
+    "seed": 42,
+    "test_size": 0.2,
+    "compute_privacy": true,
+    "compute_downstream": false,
+    "missingness_wrapped": true,
+    "missingness_random_state": 42,
+    "data_fingerprint": {
+      "shape": [
+        270,
+        14
+      ],
+      "hash": "17335708352173154026"
+    }
+  }
+}

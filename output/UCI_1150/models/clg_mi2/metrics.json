@@ -1,10 +1,10 @@
 {
   "backend": "pybnesian",
   "summary": {
-    "disc_jsd_mean": 0.06338691738083699,
-    "disc_jsd_median": 0.044787092328957924,
-    "cont_ks_mean": 0.14598923045808476,
-    "cont_w1_mean": 5.166825357942377
+    "disc_jsd_mean": 0.023772550387896066,
+    "disc_jsd_median": 0.01919857892272605,
+    "cont_ks_mean": 0.10466174537364749,
+    "cont_w1_mean": 4.266889055407499
   },
   "train_rows": 255,
   "test_rows": 64,
@@ -12,10 +12,11 @@
   "discrete_cols": 8,
   "continuous_cols": 31,
   "heldout_loglik": {
-    "mean_loglik": -1467.420024370797,
-    "std_loglik": 10802.442661323747,
-    "sum_loglik": -92447.4615353602,
+    "mean_loglik": -1467.962695635963,
+    "std_loglik": 10802.450533822452,
+    "sum_loglik": -92481.64982506567,
     "n_rows": 63
   },
-  "umap_png": null
+  "umap_png": null,
+  "missingness_wrapped": true
 }

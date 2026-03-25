@@ -47,19 +47,19 @@
   ],
   "sensitive_columns": [],
   "exact_overlap_rate": 0.0,
-  "near_duplicate_rate_eps": 0.2661290322580645,
+  "near_duplicate_rate_eps": 0.6048387096774194,
   "nn_distance_stats": {
-    "mean": 0.2967268735010578,
-    "median": 0.2967268735010578,
+    "mean": 0.2013297296992754,
+    "median": 0.2013297296992754,
     "p95": NaN,
-    "min": 0.2967268735010578,
-    "max": 0.2967268735010578
+    "min": 0.2013297296992754,
+    "max": 0.2013297296992754
   },
   "k_min": 1,
   "k_pct_lt5": 1.0,
-  "k_map": 7,
+  "k_map": 4,
   "rare_qi_reproduction_rate": 0.0,
   "t_closeness": {},
   "identifiability_score": null,
-  "delta_presence": 2.428571425102041
+  "delta_presence": 4.2499999893750005
 }

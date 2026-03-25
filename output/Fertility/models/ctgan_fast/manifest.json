@@ -1,0 +1,44 @@
+{
+  "backend": "synthcity",
+  "name": "ctgan_fast",
+  "provider": "uciml",
+  "dataset_name": "Fertility",
+  "provider_id": 244,
+  "generator": "ctgan",
+  "params": {
+    "batch_size": 256,
+    "n_iter": 5
+  },
+  "seed": 42,
+  "rows": 100,
+  "test_size": 0.2,
+  "missingness": {
+    "wrapped": true,
+    "random_state": 42,
+    "source": "pipeline"
+  },
+  "signature": "fa9f214e8cbe789a551abd4667fc713fae09ee368eec4d50e9889924959a519d",
+  "signature_inputs": {
+    "label": "ctgan_fast",
+    "backend": "synthcity",
+    "model_params": {
+      "type": "ctgan",
+      "epochs": 5,
+      "batch_size": 256
+    },
+    "rows": 256,
+    "seed": 42,
+    "test_size": 0.2,
+    "compute_privacy": true,
+    "compute_downstream": false,
+    "missingness_wrapped": true,
+    "missingness_random_state": 42,
+    "data_fingerprint": {
+      "shape": [
+        100,
+        10
+      ],
+      "hash": "7822766801648349290"
+    }
+  }
+}

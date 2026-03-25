@@ -1,0 +1,51 @@
+{
+  "n_real": 270,
+  "n_synth": 270,
+  "used_columns": [
+    "age",
+    "sex",
+    "chest-pain",
+    "rest-bp",
+    "serum-chol",
+    "fasting-blood-sugar",
+    "electrocardiographic",
+    "max-heart-rate",
+    "angina",
+    "oldpeak",
+    "slope",
+    "major-vessels",
+    "thal"
+  ],
+  "qi_columns": [
+    "age",
+    "sex",
+    "chest-pain",
+    "rest-bp",
+    "serum-chol",
+    "fasting-blood-sugar",
+    "electrocardiographic",
+    "max-heart-rate",
+    "angina",
+    "oldpeak",
+    "slope",
+    "major-vessels",
+    "thal"
+  ],
+  "sensitive_columns": [],
+  "exact_overlap_rate": 0.0,
+  "near_duplicate_rate_eps": 0.4222222222222222,
+  "nn_distance_stats": {
+    "mean": 0.2387464173916486,
+    "median": 0.2387464173916486,
+    "p95": NaN,
+    "min": 0.2387464173916486,
+    "max": 0.2387464173916486
+  },
+  "k_min": 1,
+  "k_pct_lt5": 1.0,
+  "k_map": 270,
+  "rare_qi_reproduction_rate": 0.0,
+  "t_closeness": {},
+  "identifiability_score": null,
+  "delta_presence": 0.6111111110884774
+}

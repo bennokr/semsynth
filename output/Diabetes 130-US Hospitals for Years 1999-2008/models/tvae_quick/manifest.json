@@ -1,0 +1,37 @@
+{
+  "backend": "synthcity",
+  "name": "tvae_quick",
+  "provider": "uciml",
+  "dataset_name": "Diabetes 130-US Hospitals for Years 1999-2008",
+  "provider_id": 296,
+  "generator": "tvae",
+  "params": {
+    "batch_size": 256
+  },
+  "seed": 42,
+  "rows": 256,
+  "test_size": 0.2,
+  "signature": "60a49eadaf7af97d896cb12928f55cc72b677b70bbd1b678e7bb925a6071dc14",
+  "signature_inputs": {
+    "label": "tvae_quick",
+    "backend": "synthcity",
+    "model_params": {
+      "type": "tvae",
+      "batch_size": 256
+    },
+    "rows": 256,
+    "seed": 42,
+    "test_size": 0.2,
+    "compute_privacy": true,
+    "compute_downstream": false,
+    "missingness_wrapped": false,
+    "missingness_random_state": 42,
+    "data_fingerprint": {
+      "shape": [
+        101766,
+        48
+      ],
+      "hash": "16985796119783556540"
+    }
+  }
+}

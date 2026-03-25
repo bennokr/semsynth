@@ -1,0 +1,44 @@
+{
+  "backend": "synthcity",
+  "name": "ctgan_fast",
+  "provider": "uciml",
+  "dataset_name": "Statlog (Heart)",
+  "provider_id": 145,
+  "generator": "ctgan",
+  "params": {
+    "batch_size": 256,
+    "n_iter": 5
+  },
+  "seed": 42,
+  "rows": 256,
+  "test_size": 0.2,
+  "missingness": {
+    "wrapped": true,
+    "random_state": 42,
+    "source": "pipeline"
+  },
+  "signature": "74b9234fea4ba667a64092dc310e5058e4a842c3170e0b98eea4af9017279cbe",
+  "signature_inputs": {
+    "label": "ctgan_fast",
+    "backend": "synthcity",
+    "model_params": {
+      "type": "ctgan",
+      "epochs": 5,
+      "batch_size": 256
+    },
+    "rows": 256,
+    "seed": 42,
+    "test_size": 0.2,
+    "compute_privacy": true,
+    "compute_downstream": false,
+    "missingness_wrapped": true,
+    "missingness_random_state": 42,
+    "data_fingerprint": {
+      "shape": [
+        270,
+        14
+      ],
+      "hash": "17335708352173154026"
+    }
+  }
+}

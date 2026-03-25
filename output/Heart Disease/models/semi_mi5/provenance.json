@@ -63,10 +63,10 @@
   },
   "provenance": [
     {
-      "id": "https://w3id.org/semsynth/demo#__main__.py#write_privacy-20260322T0719",
+      "id": "https://w3id.org/semsynth/demo#__main__.py#write_manifest-20260323T1001",
       "type": "prov:Activity",
-      "startedAtTime": "2026-03-22T07:19:44.408601+00:00",
-      "endedAtTime": "2026-03-22T07:19:44.554664+00:00",
+      "startedAtTime": "2026-03-23T10:01:42.166689+00:00",
+      "endedAtTime": "2026-03-23T10:01:42.167490+00:00",
       "wasAssociatedWith": "https://w3id.org/semsynth/demo#__main__.py",
       "used": [
         "https://w3id.org/semsynth/demo#env-b7b3b6f74caf"
@@ -80,52 +80,8 @@
         "schema:SoftwareSourceCode"
       ],
       "label": "__main__.py",
-      "hasVersion": "3fb66ee72f33c19cce8090e6fd02be9729aac7c8",
+      "hasVersion": "6525c5a65850315ea83d572447dbec7b9f3d99e1",
       "source": "https://github.com/bennokr/semsynth.git"
-    },
-    {
-      "id": "https://w3id.org/semsynth/demo#output/Heart Disease/models/semi_mi5",
-      "type": "prov:Entity",
-      "format": "application/octet-stream",
-      "extent": 320,
-      "modified": "2026-03-22T07:19:44.262292+00:00",
-      "wasGeneratedBy": "https://w3id.org/semsynth/demo#__main__.py#write_manifest-20260322T0719"
-    },
-    {
-      "id": "https://w3id.org/semsynth/demo#__main__.py#write_manifest-20260322T0719",
-      "type": "prov:Activity",
-      "startedAtTime": "2026-03-22T07:19:44.261949+00:00",
-      "endedAtTime": "2026-03-22T07:19:44.262467+00:00",
-      "wasAssociatedWith": "https://w3id.org/semsynth/demo#__main__.py",
-      "used": [
-        "https://w3id.org/semsynth/demo#env-b7b3b6f74caf"
-      ]
-    },
-    {
-      "id": "https://w3id.org/semsynth/demo#output/Heart Disease",
-      "type": "prov:Entity",
-      "format": "application/octet-stream",
-      "extent": 320,
-      "modified": "2026-03-18T16:28:07.986860+00:00",
-      "wasGeneratedBy": "https://w3id.org/semsynth/demo#__main__.py#model_run_root-20260322T0719"
-    },
-    {
-      "id": "https://w3id.org/semsynth/demo#__main__.py#model_run_root-20260322T0719",
-      "type": "prov:Activity",
-      "startedAtTime": "2026-03-22T07:19:43.556641+00:00",
-      "endedAtTime": "2026-03-22T07:19:43.556758+00:00",
-      "wasAssociatedWith": "https://w3id.org/semsynth/demo#__main__.py",
-      "used": [
-        "https://w3id.org/semsynth/demo#env-b7b3b6f74caf"
-      ]
-    },
-    {
-      "id": "https://w3id.org/semsynth/demo#output/Heart Disease/models/semi_mi5",
-      "type": "prov:Entity",
-      "format": "application/octet-stream",
-      "extent": 352,
-      "modified": "2026-03-22T07:19:44.554407+00:00",
-      "wasGeneratedBy": "https://w3id.org/semsynth/demo#__main__.py#write_privacy-20260322T0719"
     },
     {
       "id": "https://w3id.org/semsynth/demo#env-b7b3b6f74caf",
@@ -142,6 +98,50 @@
           "type": "schema:SoftwareSourceCode",
           "label": "parse>=1.20"
         }
+      ]
+    },
+    {
+      "id": "https://w3id.org/semsynth/demo#output/Heart Disease/models/semi_mi5",
+      "type": "prov:Entity",
+      "format": "application/octet-stream",
+      "extent": 448,
+      "modified": "2026-03-23T10:01:42.162365+00:00",
+      "wasGeneratedBy": "https://w3id.org/semsynth/demo#__main__.py#write_manifest-20260323T1001"
+    },
+    {
+      "id": "https://w3id.org/semsynth/demo#output/Heart Disease/models/semi_mi5",
+      "type": "prov:Entity",
+      "format": "application/octet-stream",
+      "extent": 448,
+      "modified": "2026-03-23T10:01:42.162365+00:00",
+      "wasGeneratedBy": "https://w3id.org/semsynth/demo#__main__.py#write_privacy-20260323T1001"
+    },
+    {
+      "id": "https://w3id.org/semsynth/demo#output/Heart Disease",
+      "type": "prov:Entity",
+      "format": "application/octet-stream",
+      "extent": 320,
+      "modified": "2026-03-18T16:28:07.986860+00:00",
+      "wasGeneratedBy": "https://w3id.org/semsynth/demo#__main__.py#model_run_root-20260323T1001"
+    },
+    {
+      "id": "https://w3id.org/semsynth/demo#__main__.py#write_privacy-20260323T1001",
+      "type": "prov:Activity",
+      "startedAtTime": "2026-03-23T10:01:42.407765+00:00",
+      "endedAtTime": "2026-03-23T10:01:42.637587+00:00",
+      "wasAssociatedWith": "https://w3id.org/semsynth/demo#__main__.py",
+      "used": [
+        "https://w3id.org/semsynth/demo#env-b7b3b6f74caf"
+      ]
+    },
+    {
+      "id": "https://w3id.org/semsynth/demo#__main__.py#model_run_root-20260323T1001",
+      "type": "prov:Activity",
+      "startedAtTime": "2026-03-23T10:01:41.347848+00:00",
+      "endedAtTime": "2026-03-23T10:01:41.347942+00:00",
+      "wasAssociatedWith": "https://w3id.org/semsynth/demo#__main__.py",
+      "used": [
+        "https://w3id.org/semsynth/demo#env-b7b3b6f74caf"
       ]
     }
   ]

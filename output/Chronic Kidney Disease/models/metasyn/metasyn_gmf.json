@@ -7,7 +7,7 @@
             "name": "metasyn",
             "version": "2.0.0"
         },
-        "creation time": "2026-03-22T08:19:16.253665"
+        "creation time": "2026-03-23T10:58:21.342870"
     },
     "vars": [
         {
@@ -546,7 +546,7 @@
                 "unique": false,
                 "parameters": {
                     "mean": 8.996913419344926,
-                    "sd": 0.3224084170009657
+                    "sd": 0.3224084170009658
                 }
             },
             "creation_method": {

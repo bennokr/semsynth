@@ -1,0 +1,42 @@
+{
+  "backend": "synthcity",
+  "name": "tvae_quick",
+  "provider": "uciml",
+  "dataset_name": "CDC Diabetes Health Indicators",
+  "provider_id": 891,
+  "generator": "tvae",
+  "params": {
+    "batch_size": 256
+  },
+  "seed": 42,
+  "rows": 256,
+  "test_size": 0.2,
+  "missingness": {
+    "wrapped": true,
+    "random_state": 42,
+    "source": "pipeline"
+  },
+  "signature": "e284d62ab5600eb21f5d3195573216edef99d7ff5dd6909e7a15959620afc1b3",
+  "signature_inputs": {
+    "label": "tvae_quick",
+    "backend": "synthcity",
+    "model_params": {
+      "type": "tvae",
+      "batch_size": 256
+    },
+    "rows": 256,
+    "seed": 42,
+    "test_size": 0.2,
+    "compute_privacy": true,
+    "compute_downstream": false,
+    "missingness_wrapped": true,
+    "missingness_random_state": 42,
+    "data_fingerprint": {
+      "shape": [
+        253680,
+        22
+      ],
+      "hash": "11933961627238296409"
+    }
+  }
+}

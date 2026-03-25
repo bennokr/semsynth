@@ -45,19 +45,23 @@
 
 ## Fidelity summary
 
-| model    | backend   |   disc jsd mean |   disc jsd median |   cont ks mean |   cont w1 mean |   downstream sign match |
-|:---------|:----------|----------------:|------------------:|---------------:|---------------:|------------------------:|
-| metasyn  | metasyn   |          0.0494 |            0.0376 |         0.4717 |         2.41   |                  0.5185 |
-| clg_mi2  | pybnesian |          0.0425 |            0.0361 |         0.2613 |         2.9649 |                         |
-| semi_mi5 | pybnesian |          0.042  |            0.0348 |         0.2647 |         2.9852 |                         |
+| umap                                                 | model      | backend   |   disc jsd mean |   disc jsd median |   cont ks mean |   cont w1 mean |   downstream sign match |
+|:-----------------------------------------------------|:-----------|:----------|----------------:|------------------:|---------------:|---------------:|------------------------:|
+| <img src='models/metasyn/umap.png' height='48' />    | metasyn    | metasyn   |          0.0288 |            0.0209 |         0.4691 |         2.2955 |                  0.5185 |
+| <img src='models/clg_mi2/umap.png' height='48' />    | clg_mi2    | pybnesian |          0.0229 |            0.0186 |         0.2691 |         2.9528 |                         |
+| <img src='models/semi_mi5/umap.png' height='48' />   | semi_mi5   | pybnesian |          0.0239 |            0.0157 |         0.2634 |         2.9669 |                         |
+| <img src='models/ctgan_fast/umap.png' height='48' /> | ctgan_fast | synthcity |          0.2127 |            0.1539 |         0.802  |         7.7665 |                         |
+| <img src='models/tvae_quick/umap.png' height='48' /> | tvae_quick | synthcity |          0.0864 |            0.0658 |         0.3607 |         1.8369 |                         |
 
 ## Privacy summary
 
-| model    | backend   |   n real |   n synth |   exact overlap rate |   near duplicate rate eps |   nn distance mean |   k min |   k pct lt5 |   k map |   rare qi reproduction rate | identifiability score   |   delta presence |
-|:---------|:----------|---------:|----------:|---------------------:|--------------------------:|-------------------:|--------:|------------:|--------:|----------------------------:|:------------------------|-----------------:|
-| metasyn  | metasyn   |   253680 |      1000 |                    0 |                     0.875 |             0.1007 |       1 |      0.9939 |       1 |                           0 |                         |          17      |
-| clg_mi2  | pybnesian |   253680 |      1000 |                    0 |                     0.894 |             0.1129 |       1 |      0.9939 |       3 |                           0 |                         |           9.6667 |
-| semi_mi5 | pybnesian |   253680 |      1000 |                    0 |                     0.899 |             0.0977 |       1 |      0.9939 |      12 |                           0 |                         |           1.9333 |
+| model      | backend   |   n real |   n synth |   exact overlap rate |   near duplicate rate eps |   nn distance mean |   k min |   k pct lt5 |   k map |   rare qi reproduction rate | identifiability score   |   delta presence |
+|:-----------|:----------|---------:|----------:|---------------------:|--------------------------:|-------------------:|--------:|------------:|--------:|----------------------------:|:------------------------|-----------------:|
+| metasyn    | metasyn   |   253680 |      1000 |                    0 |                    0.876  |             0.1199 |       1 |      0.9939 |       1 |                           0 |                         |          79      |
+| clg_mi2    | pybnesian |   253680 |      1000 |                    0 |                    0.945  |             0.074  |       1 |      0.9939 |       2 |                           0 |                         |          14.5    |
+| semi_mi5   | pybnesian |   253680 |      1000 |                    0 |                    0.899  |             0.0977 |       1 |      0.9939 |      12 |                           0 |                         |           1.9333 |
+| ctgan_fast | synthcity |   253680 |       256 |                    0 |                    0.1367 |             0.3833 |       1 |      0.9939 |       5 |                           0 |                         |           3.8    |
+| tvae_quick | synthcity |   253680 |       256 |                    0 |                    0.9258 |             0.0772 |       1 |      0.9939 |       2 |                           0 |                         |           4      |
 
 ## Models
 
@@ -70,7 +74,7 @@
 <h3>Model: metasyn (metasyn)</h3>
 <ul>
 <li>Seed: 42, rows: 1000</li>
-<li> <a href="models/metasyn/synthetic.csv">Synthetic CSV</a></li>
+<li> Missingness: wrapped (random state 42) via pipeline</li><li> <a href="models/metasyn/synthetic.csv">Synthetic CSV</a></li>
 <li> <a href="models/metasyn/per_variable_metrics.csv">Per-variable metrics</a></li>
 <li> <a href="models/metasyn/metrics.json">Metrics JSON</a></li>
 <li> <a href="models/metasyn/metrics.privacy.json">Privacy metrics</a></li>
@@ -93,27 +97,27 @@
       <td>discrete</td>
       <td></td>
       <td></td>
-      <td>0.0317</td>
+      <td>0.0346</td>
     </tr>
     <tr>
       <td>HighChol</td>
       <td>discrete</td>
       <td></td>
       <td></td>
-      <td>0.026</td>
+      <td>0.0356</td>
     </tr>
     <tr>
       <td>CholCheck</td>
       <td>discrete</td>
       <td></td>
       <td></td>
-      <td>0.0231</td>
+      <td>0.0302</td>
     </tr>
     <tr>
       <td>BMI</td>
       <td>continuous</td>
-      <td>0.11</td>
-      <td>0.9052</td>
+      <td>0.084</td>
+      <td>0.7286</td>
       <td></td>
     </tr>
     <tr>
@@ -121,42 +125,42 @@
       <td>discrete</td>
       <td></td>
       <td></td>
-      <td>0.068</td>
+      <td>0.0053</td>
     </tr>
     <tr>
       <td>Stroke</td>
       <td>discrete</td>
       <td></td>
       <td></td>
-      <td>0.0171</td>
+      <td>0.032</td>
     </tr>
     <tr>
       <td>HeartDiseaseorAttack</td>
       <td>discrete</td>
       <td></td>
       <td></td>
-      <td>0.0387</td>
+      <td>0.0198</td>
     </tr>
     <tr>
       <td>PhysActivity</td>
       <td>discrete</td>
       <td></td>
       <td></td>
-      <td>0.0273</td>
+      <td>0.0094</td>
     </tr>
     <tr>
       <td>Fruits</td>
       <td>discrete</td>
       <td></td>
       <td></td>
-      <td>0.037</td>
+      <td>0.0212</td>
     </tr>
     <tr>
       <td>Veggies</td>
       <td>discrete</td>
       <td></td>
       <td></td>
-      <td>0.0381</td>
+      <td>0.0017</td>
     </tr>
   </tbody>
 </table>
@@ -206,11 +210,11 @@
     </tr>
     <tr>
       <td>near_duplicate_rate_eps</td>
-      <td>0.875</td>
+      <td>0.876</td>
     </tr>
     <tr>
       <td>nn_distance_mean</td>
-      <td>0.1007</td>
+      <td>0.1199</td>
     </tr>
     <tr>
       <td>k_min</td>
@@ -230,7 +234,7 @@
     </tr>
     <tr>
       <td>delta_presence</td>
-      <td>17</td>
+      <td>79</td>
     </tr>
   </tbody>
 </table>
@@ -340,7 +344,7 @@
 <h3>Model: clg_mi2 (pybnesian)</h3>
 <ul>
 <li>Seed: 42, rows: 1000</li>
-<li> Params: <tt>{"max_indegree": 2, "operators": ["arcs"], "score": "bic", "type": "clg"}</tt></li><li> <a href="models/clg_mi2/synthetic.csv">Synthetic CSV</a></li>
+<li> Params: <tt>{"max_indegree": 2, "operators": ["arcs"], "score": "bic", "type": "clg"}</tt></li><li> Missingness: wrapped (random state 42) via pipeline</li><li> <a href="models/clg_mi2/synthetic.csv">Synthetic CSV</a></li>
 <li> <a href="models/clg_mi2/per_variable_metrics.csv">Per-variable metrics</a></li>
 <li> <a href="models/clg_mi2/metrics.json">Metrics JSON</a></li>
 <li> <a href="models/clg_mi2/metrics.privacy.json">Privacy metrics</a></li>
@@ -362,27 +366,27 @@
       <td>discrete</td>
       <td></td>
       <td></td>
-      <td>0.0274</td>
+      <td>0.0233</td>
     </tr>
     <tr>
       <td>HighChol</td>
       <td>discrete</td>
       <td></td>
       <td></td>
-      <td>0.0348</td>
+      <td>0.0199</td>
     </tr>
     <tr>
       <td>CholCheck</td>
       <td>discrete</td>
       <td></td>
       <td></td>
-      <td>0.012</td>
+      <td>0.0037</td>
     </tr>
     <tr>
       <td>BMI</td>
       <td>continuous</td>
-      <td>0.106</td>
-      <td>1.1534</td>
+      <td>0.1348</td>
+      <td>1.2745</td>
       <td></td>
     </tr>
     <tr>
@@ -390,42 +394,42 @@
       <td>discrete</td>
       <td></td>
       <td></td>
-      <td>0.0663</td>
+      <td>0.0169</td>
     </tr>
     <tr>
       <td>Stroke</td>
       <td>discrete</td>
       <td></td>
       <td></td>
-      <td>0.0361</td>
+      <td>0.0373</td>
     </tr>
     <tr>
       <td>HeartDiseaseorAttack</td>
       <td>discrete</td>
       <td></td>
       <td></td>
-      <td>0.0305</td>
+      <td>0.0229</td>
     </tr>
     <tr>
       <td>PhysActivity</td>
       <td>discrete</td>
       <td></td>
       <td></td>
-      <td>0.0313</td>
+      <td>0.0165</td>
     </tr>
     <tr>
       <td>Fruits</td>
       <td>discrete</td>
       <td></td>
       <td></td>
-      <td>0.0045</td>
+      <td>0.0186</td>
     </tr>
     <tr>
       <td>Veggies</td>
       <td>discrete</td>
       <td></td>
       <td></td>
-      <td>0.0484</td>
+      <td>0.0072</td>
     </tr>
   </tbody>
 </table>
@@ -452,11 +456,11 @@
     </tr>
     <tr>
       <td>near_duplicate_rate_eps</td>
-      <td>0.894</td>
+      <td>0.945</td>
     </tr>
     <tr>
       <td>nn_distance_mean</td>
-      <td>0.1129</td>
+      <td>0.074</td>
     </tr>
     <tr>
       <td>k_min</td>
@@ -468,7 +472,7 @@
     </tr>
     <tr>
       <td>k_map</td>
-      <td>3</td>
+      <td>2</td>
     </tr>
     <tr>
       <td>rare_qi_reproduction_rate</td>
@@ -476,7 +480,7 @@
     </tr>
     <tr>
       <td>delta_presence</td>
-      <td>9.6667</td>
+      <td>14.5</td>
     </tr>
   </tbody>
 </table>
@@ -489,7 +493,7 @@
 <h3>Model: semi_mi5 (pybnesian)</h3>
 <ul>
 <li>Seed: 42, rows: 1000</li>
-<li> Params: <tt>{"max_indegree": 5, "operators": ["arcs"], "score": "bic", "type": "semiparametric"}</tt></li><li> <a href="models/semi_mi5/synthetic.csv">Synthetic CSV</a></li>
+<li> Params: <tt>{"max_indegree": 5, "operators": ["arcs"], "score": "bic", "type": "semiparametric"}</tt></li><li> Missingness: wrapped (random state 42) via pipeline</li><li> <a href="models/semi_mi5/synthetic.csv">Synthetic CSV</a></li>
 <li> <a href="models/semi_mi5/per_variable_metrics.csv">Per-variable metrics</a></li>
 <li> <a href="models/semi_mi5/metrics.json">Metrics JSON</a></li>
 <li> <a href="models/semi_mi5/metrics.privacy.json">Privacy metrics</a></li>
@@ -511,27 +515,27 @@
       <td>discrete</td>
       <td></td>
       <td></td>
-      <td>0.0274</td>
+      <td>0.0095</td>
     </tr>
     <tr>
       <td>HighChol</td>
       <td>discrete</td>
       <td></td>
       <td></td>
-      <td>0.0348</td>
+      <td>0.0426</td>
     </tr>
     <tr>
       <td>CholCheck</td>
       <td>discrete</td>
       <td></td>
       <td></td>
-      <td>0.012</td>
+      <td>0.0053</td>
     </tr>
     <tr>
       <td>BMI</td>
       <td>continuous</td>
-      <td>0.106</td>
-      <td>1.1534</td>
+      <td>0.0958</td>
+      <td>1.066</td>
       <td></td>
     </tr>
     <tr>
@@ -539,42 +543,42 @@
       <td>discrete</td>
       <td></td>
       <td></td>
-      <td>0.0697</td>
+      <td>0.0044</td>
     </tr>
     <tr>
       <td>Stroke</td>
       <td>discrete</td>
       <td></td>
       <td></td>
-      <td>0.0312</td>
+      <td>0.0219</td>
     </tr>
     <tr>
       <td>HeartDiseaseorAttack</td>
       <td>discrete</td>
       <td></td>
       <td></td>
-      <td>0.0241</td>
+      <td>0.0229</td>
     </tr>
     <tr>
       <td>PhysActivity</td>
       <td>discrete</td>
       <td></td>
       <td></td>
-      <td>0.0313</td>
+      <td>0.0025</td>
     </tr>
     <tr>
       <td>Fruits</td>
       <td>discrete</td>
       <td></td>
       <td></td>
-      <td>0.0045</td>
+      <td>0.0139</td>
     </tr>
     <tr>
       <td>Veggies</td>
       <td>discrete</td>
       <td></td>
       <td></td>
-      <td>0.0484</td>
+      <td>0.0309</td>
     </tr>
   </tbody>
 </table>
@@ -632,5 +636,303 @@
 </details>
 </td><td>
 <a href='models/semi_mi5/structure.png'><img src='models/semi_mi5/structure.png' width='280'/></a></td></tr>
+
+<tr><td><img src='models/ctgan_fast/umap.png' width='280'/></td><td>
+
+<h3>Model: ctgan_fast (synthcity)</h3>
+<ul>
+<li>Seed: 42, rows: 256</li>
+<li> Params: <tt>{"batch_size": 256, "n_iter": 5}</tt></li><li> Missingness: wrapped (random state 42) via pipeline</li><li> <a href="models/ctgan_fast/synthetic.csv">Synthetic CSV</a></li>
+<li> <a href="models/ctgan_fast/per_variable_metrics.csv">Per-variable metrics</a></li>
+<li> <a href="models/ctgan_fast/metrics.json">Metrics JSON</a></li>
+<li> <a href="models/ctgan_fast/metrics.privacy.json">Privacy metrics</a></li>
+</ul>
+<details class="model-subtable"><summary><strong>Per-variable fidelity</strong></summary>
+<table class="dataframe">
+  <thead>
+    <tr style="text-align: right;">
+      <th>variable</th>
+      <th>type</th>
+      <th>KS</th>
+      <th>W1</th>
+      <th>JSD</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td>HighBP</td>
+      <td>discrete</td>
+      <td></td>
+      <td></td>
+      <td>0.2</td>
+    </tr>
+    <tr>
+      <td>HighChol</td>
+      <td>discrete</td>
+      <td></td>
+      <td></td>
+      <td>0.1011</td>
+    </tr>
+    <tr>
+      <td>CholCheck</td>
+      <td>discrete</td>
+      <td></td>
+      <td></td>
+      <td>0.0582</td>
+    </tr>
+    <tr>
+      <td>BMI</td>
+      <td>continuous</td>
+      <td>0.9613</td>
+      <td>15.7567</td>
+      <td></td>
+    </tr>
+    <tr>
+      <td>Smoker</td>
+      <td>discrete</td>
+      <td></td>
+      <td></td>
+      <td>0.083</td>
+    </tr>
+    <tr>
+      <td>Stroke</td>
+      <td>discrete</td>
+      <td></td>
+      <td></td>
+      <td>0.0789</td>
+    </tr>
+    <tr>
+      <td>HeartDiseaseorAttack</td>
+      <td>discrete</td>
+      <td></td>
+      <td></td>
+      <td>0.1539</td>
+    </tr>
+    <tr>
+      <td>PhysActivity</td>
+      <td>discrete</td>
+      <td></td>
+      <td></td>
+      <td>0.3231</td>
+    </tr>
+    <tr>
+      <td>Fruits</td>
+      <td>discrete</td>
+      <td></td>
+      <td></td>
+      <td>0.0336</td>
+    </tr>
+    <tr>
+      <td>Veggies</td>
+      <td>discrete</td>
+      <td></td>
+      <td></td>
+      <td>0.0846</td>
+    </tr>
+  </tbody>
+</table>
+</details><details class="model-subtable"><summary><strong>Privacy metrics</strong></summary>
+<table class="dataframe">
+  <thead>
+    <tr style="text-align: right;">
+      <th>metric</th>
+      <th>value</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td>n_real</td>
+      <td>253680</td>
+    </tr>
+    <tr>
+      <td>n_synth</td>
+      <td>256</td>
+    </tr>
+    <tr>
+      <td>exact_overlap_rate</td>
+      <td>0</td>
+    </tr>
+    <tr>
+      <td>near_duplicate_rate_eps</td>
+      <td>0.1367</td>
+    </tr>
+    <tr>
+      <td>nn_distance_mean</td>
+      <td>0.3833</td>
+    </tr>
+    <tr>
+      <td>k_min</td>
+      <td>1</td>
+    </tr>
+    <tr>
+      <td>k_pct_lt5</td>
+      <td>0.9939</td>
+    </tr>
+    <tr>
+      <td>k_map</td>
+      <td>5</td>
+    </tr>
+    <tr>
+      <td>rare_qi_reproduction_rate</td>
+      <td>0</td>
+    </tr>
+    <tr>
+      <td>delta_presence</td>
+      <td>3.8</td>
+    </tr>
+  </tbody>
+</table>
+</details>
+</td><td>
+<img src="box.svg" width="120" /></td></tr>
+
+<tr><td><img src='models/tvae_quick/umap.png' width='280'/></td><td>
+
+<h3>Model: tvae_quick (synthcity)</h3>
+<ul>
+<li>Seed: 42, rows: 256</li>
+<li> Params: <tt>{"batch_size": 256}</tt></li><li> Missingness: wrapped (random state 42) via pipeline</li><li> <a href="models/tvae_quick/synthetic.csv">Synthetic CSV</a></li>
+<li> <a href="models/tvae_quick/per_variable_metrics.csv">Per-variable metrics</a></li>
+<li> <a href="models/tvae_quick/metrics.json">Metrics JSON</a></li>
+<li> <a href="models/tvae_quick/metrics.privacy.json">Privacy metrics</a></li>
+</ul>
+<details class="model-subtable"><summary><strong>Per-variable fidelity</strong></summary>
+<table class="dataframe">
+  <thead>
+    <tr style="text-align: right;">
+      <th>variable</th>
+      <th>type</th>
+      <th>KS</th>
+      <th>W1</th>
+      <th>JSD</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td>HighBP</td>
+      <td>discrete</td>
+      <td></td>
+      <td></td>
+      <td>0.0605</td>
+    </tr>
+    <tr>
+      <td>HighChol</td>
+      <td>discrete</td>
+      <td></td>
+      <td></td>
+      <td>0.0984</td>
+    </tr>
+    <tr>
+      <td>CholCheck</td>
+      <td>discrete</td>
+      <td></td>
+      <td></td>
+      <td>0.0122</td>
+    </tr>
+    <tr>
+      <td>BMI</td>
+      <td>continuous</td>
+      <td>0.2469</td>
+      <td>2.4764</td>
+      <td></td>
+    </tr>
+    <tr>
+      <td>Smoker</td>
+      <td>discrete</td>
+      <td></td>
+      <td></td>
+      <td>0.0149</td>
+    </tr>
+    <tr>
+      <td>Stroke</td>
+      <td>discrete</td>
+      <td></td>
+      <td></td>
+      <td>0.0529</td>
+    </tr>
+    <tr>
+      <td>HeartDiseaseorAttack</td>
+      <td>discrete</td>
+      <td></td>
+      <td></td>
+      <td>0.0571</td>
+    </tr>
+    <tr>
+      <td>PhysActivity</td>
+      <td>discrete</td>
+      <td></td>
+      <td></td>
+      <td>0.0839</td>
+    </tr>
+    <tr>
+      <td>Fruits</td>
+      <td>discrete</td>
+      <td></td>
+      <td></td>
+      <td>0.0658</td>
+    </tr>
+    <tr>
+      <td>Veggies</td>
+      <td>discrete</td>
+      <td></td>
+      <td></td>
+      <td>0.1223</td>
+    </tr>
+  </tbody>
+</table>
+</details><details class="model-subtable"><summary><strong>Privacy metrics</strong></summary>
+<table class="dataframe">
+  <thead>
+    <tr style="text-align: right;">
+      <th>metric</th>
+      <th>value</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td>n_real</td>
+      <td>253680</td>
+    </tr>
+    <tr>
+      <td>n_synth</td>
+      <td>256</td>
+    </tr>
+    <tr>
+      <td>exact_overlap_rate</td>
+      <td>0</td>
+    </tr>
+    <tr>
+      <td>near_duplicate_rate_eps</td>
+      <td>0.9258</td>
+    </tr>
+    <tr>
+      <td>nn_distance_mean</td>
+      <td>0.0772</td>
+    </tr>
+    <tr>
+      <td>k_min</td>
+      <td>1</td>
+    </tr>
+    <tr>
+      <td>k_pct_lt5</td>
+      <td>0.9939</td>
+    </tr>
+    <tr>
+      <td>k_map</td>
+      <td>2</td>
+    </tr>
+    <tr>
+      <td>rare_qi_reproduction_rate</td>
+      <td>0</td>
+    </tr>
+    <tr>
+      <td>delta_presence</td>
+      <td>4</td>
+    </tr>
+  </tbody>
+</table>
+</details>
+</td><td>
+<img src="box.svg" width="120" /></td></tr>
 
 </table>

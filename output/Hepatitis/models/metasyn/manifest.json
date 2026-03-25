@@ -7,5 +7,25 @@
   "params": {},
   "seed": 42,
   "rows": 155,
-  "test_size": 0.2
+  "test_size": 0.2,
+  "signature": "6aa80a85b1addb1304e86521cf319d137e92fa9a9d6e2d2ed26bc6717091667d",
+  "signature_inputs": {
+    "label": "metasyn",
+    "backend": "metasyn",
+    "model_params": {},
+    "rows": 1000,
+    "seed": 42,
+    "test_size": 0.2,
+    "compute_privacy": true,
+    "compute_downstream": false,
+    "missingness_wrapped": false,
+    "missingness_random_state": 42,
+    "data_fingerprint": {
+      "shape": [
+        80,
+        20
+      ],
+      "hash": "16969173780467276478"
+    }
+  }
 }

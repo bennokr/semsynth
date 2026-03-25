@@ -1,0 +1,15 @@
+{
+  "backend": "synthcity",
+  "summary": {
+    "disc_jsd_mean": 0.2610380583143414,
+    "disc_jsd_median": 0.20496949420743266,
+    "cont_ks_mean": 0.8877016129032258,
+    "cont_w1_mean": 46.32853813827955
+  },
+  "train_rows": 64,
+  "test_rows": 16,
+  "synth_rows": 155,
+  "discrete_cols": 14,
+  "continuous_cols": 6,
+  "umap_png": null
+}

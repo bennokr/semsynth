@@ -15,5 +15,37 @@
   },
   "seed": 42,
   "rows": 100,
-  "test_size": 0.2
+  "test_size": 0.2,
+  "missingness": {
+    "wrapped": true,
+    "random_state": 42,
+    "source": "pipeline"
+  },
+  "signature": "76cb4c17f6aeb6125ee38d2f154407432b40b04438dae2b1cbac555405cfcaa3",
+  "signature_inputs": {
+    "label": "clg_mi2",
+    "backend": "pybnesian",
+    "model_params": {
+      "type": "clg",
+      "score": "bic",
+      "operators": [
+        "arcs"
+      ],
+      "max_indegree": 2
+    },
+    "rows": 1000,
+    "seed": 42,
+    "test_size": 0.2,
+    "compute_privacy": true,
+    "compute_downstream": false,
+    "missingness_wrapped": true,
+    "missingness_random_state": 42,
+    "data_fingerprint": {
+      "shape": [
+        100,
+        10
+      ],
+      "hash": "7822766801648349290"
+    }
+  }
 }

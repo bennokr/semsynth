@@ -1,0 +1,37 @@
+{
+  "backend": "synthcity",
+  "name": "tvae_quick",
+  "provider": "uciml",
+  "dataset_name": "Heart Disease",
+  "provider_id": 45,
+  "generator": "tvae",
+  "params": {
+    "batch_size": 256
+  },
+  "seed": 42,
+  "rows": 256,
+  "test_size": 0.2,
+  "signature": "9430c37df6e6651e6971aa7416703dbeb5f3cd118a02a5dd25cb42ddaf6b702d",
+  "signature_inputs": {
+    "label": "tvae_quick",
+    "backend": "synthcity",
+    "model_params": {
+      "type": "tvae",
+      "batch_size": 256
+    },
+    "rows": 256,
+    "seed": 42,
+    "test_size": 0.2,
+    "compute_privacy": true,
+    "compute_downstream": false,
+    "missingness_wrapped": false,
+    "missingness_random_state": 42,
+    "data_fingerprint": {
+      "shape": [
+        297,
+        14
+      ],
+      "hash": "14462674874739745288"
+    }
+  }
+}

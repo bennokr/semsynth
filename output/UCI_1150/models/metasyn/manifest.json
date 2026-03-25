@@ -7,5 +7,30 @@
   "params": {},
   "seed": 42,
   "rows": 319,
-  "test_size": 0.2
+  "test_size": 0.2,
+  "missingness": {
+    "wrapped": true,
+    "random_state": 42,
+    "source": "pipeline"
+  },
+  "signature": "023f89ff46a45104b751a9c0c1b0699964b69a1ac704cadadf7ca792893e4eda",
+  "signature_inputs": {
+    "label": "metasyn",
+    "backend": "metasyn",
+    "model_params": {},
+    "rows": 1000,
+    "seed": 42,
+    "test_size": 0.2,
+    "compute_privacy": true,
+    "compute_downstream": false,
+    "missingness_wrapped": true,
+    "missingness_random_state": 42,
+    "data_fingerprint": {
+      "shape": [
+        319,
+        39
+      ],
+      "hash": "9528851783382316526"
+    }
+  }
 }

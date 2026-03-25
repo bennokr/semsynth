@@ -1,0 +1,39 @@
+{
+  "backend": "synthcity",
+  "name": "ctgan_fast",
+  "provider": "uciml",
+  "dataset_name": "Hepatitis",
+  "provider_id": 46,
+  "generator": "ctgan",
+  "params": {
+    "batch_size": 256,
+    "n_iter": 5
+  },
+  "seed": 42,
+  "rows": 155,
+  "test_size": 0.2,
+  "signature": "d50cc9e101d75bec70c91371ffe1884d8cd215326cc4920e5aa1505f422d8dd4",
+  "signature_inputs": {
+    "label": "ctgan_fast",
+    "backend": "synthcity",
+    "model_params": {
+      "type": "ctgan",
+      "epochs": 5,
+      "batch_size": 256
+    },
+    "rows": 256,
+    "seed": 42,
+    "test_size": 0.2,
+    "compute_privacy": true,
+    "compute_downstream": false,
+    "missingness_wrapped": false,
+    "missingness_random_state": 42,
+    "data_fingerprint": {
+      "shape": [
+        80,
+        20
+      ],
+      "hash": "16969173780467276478"
+    }
+  }
+}

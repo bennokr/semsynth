@@ -63,10 +63,10 @@
   },
   "provenance": [
     {
-      "id": "https://w3id.org/semsynth/demo#__main__.py#write_manifest-20260322T0720",
+      "id": "https://w3id.org/semsynth/demo#__main__.py#write_privacy-20260323T1005",
       "type": "prov:Activity",
-      "startedAtTime": "2026-03-22T07:20:21.086086+00:00",
-      "endedAtTime": "2026-03-22T07:20:21.086847+00:00",
+      "startedAtTime": "2026-03-23T10:05:10.280673+00:00",
+      "endedAtTime": "2026-03-23T10:05:16.328426+00:00",
       "wasAssociatedWith": "https://w3id.org/semsynth/demo#__main__.py",
       "used": [
         "https://w3id.org/semsynth/demo#env-b7b3b6f74caf"
@@ -80,24 +80,8 @@
         "schema:SoftwareSourceCode"
       ],
       "label": "__main__.py",
-      "hasVersion": "3fb66ee72f33c19cce8090e6fd02be9729aac7c8",
+      "hasVersion": "6525c5a65850315ea83d572447dbec7b9f3d99e1",
       "source": "https://github.com/bennokr/semsynth.git"
-    },
-    {
-      "id": "https://w3id.org/semsynth/demo#output/CDC Diabetes Health Indicators/models/clg_mi2",
-      "type": "prov:Entity",
-      "format": "application/octet-stream",
-      "extent": 352,
-      "modified": "2026-03-22T07:20:25.623639+00:00",
-      "wasGeneratedBy": "https://w3id.org/semsynth/demo#__main__.py#write_privacy-20260322T0720"
-    },
-    {
-      "id": "https://w3id.org/semsynth/demo#output/CDC Diabetes Health Indicators/models/clg_mi2",
-      "type": "prov:Entity",
-      "format": "application/octet-stream",
-      "extent": 320,
-      "modified": "2026-03-22T07:20:21.086566+00:00",
-      "wasGeneratedBy": "https://w3id.org/semsynth/demo#__main__.py#write_manifest-20260322T0720"
     },
     {
       "id": "https://w3id.org/semsynth/demo#output/CDC Diabetes Health Indicators",
@@ -105,27 +89,25 @@
       "format": "application/octet-stream",
       "extent": 288,
       "modified": "2026-03-16T15:51:05.860321+00:00",
-      "wasGeneratedBy": "https://w3id.org/semsynth/demo#__main__.py#model_run_root-20260322T0720"
+      "wasGeneratedBy": "https://w3id.org/semsynth/demo#__main__.py#model_run_root-20260323T1005"
     },
     {
-      "id": "https://w3id.org/semsynth/demo#__main__.py#write_privacy-20260322T0720",
+      "id": "https://w3id.org/semsynth/demo#__main__.py#model_run_root-20260323T1005",
       "type": "prov:Activity",
-      "startedAtTime": "2026-03-22T07:20:21.240188+00:00",
-      "endedAtTime": "2026-03-22T07:20:25.623914+00:00",
+      "startedAtTime": "2026-03-23T10:05:07.738878+00:00",
+      "endedAtTime": "2026-03-23T10:05:07.739008+00:00",
       "wasAssociatedWith": "https://w3id.org/semsynth/demo#__main__.py",
       "used": [
         "https://w3id.org/semsynth/demo#env-b7b3b6f74caf"
       ]
     },
     {
-      "id": "https://w3id.org/semsynth/demo#__main__.py#model_run_root-20260322T0720",
-      "type": "prov:Activity",
-      "startedAtTime": "2026-03-22T07:20:20.016953+00:00",
-      "endedAtTime": "2026-03-22T07:20:20.017076+00:00",
-      "wasAssociatedWith": "https://w3id.org/semsynth/demo#__main__.py",
-      "used": [
-        "https://w3id.org/semsynth/demo#env-b7b3b6f74caf"
-      ]
+      "id": "https://w3id.org/semsynth/demo#output/CDC Diabetes Health Indicators/models/clg_mi2",
+      "type": "prov:Entity",
+      "format": "application/octet-stream",
+      "extent": 448,
+      "modified": "2026-03-23T10:05:09.110313+00:00",
+      "wasGeneratedBy": "https://w3id.org/semsynth/demo#__main__.py#write_privacy-20260323T1005"
     },
     {
       "id": "https://w3id.org/semsynth/demo#env-b7b3b6f74caf",
@@ -143,6 +125,24 @@
           "label": "parse>=1.20"
         }
       ]
+    },
+    {
+      "id": "https://w3id.org/semsynth/demo#__main__.py#write_manifest-20260323T1005",
+      "type": "prov:Activity",
+      "startedAtTime": "2026-03-23T10:05:09.115309+00:00",
+      "endedAtTime": "2026-03-23T10:05:09.116602+00:00",
+      "wasAssociatedWith": "https://w3id.org/semsynth/demo#__main__.py",
+      "used": [
+        "https://w3id.org/semsynth/demo#env-b7b3b6f74caf"
+      ]
+    },
+    {
+      "id": "https://w3id.org/semsynth/demo#output/CDC Diabetes Health Indicators/models/clg_mi2",
+      "type": "prov:Entity",
+      "format": "application/octet-stream",
+      "extent": 448,
+      "modified": "2026-03-23T10:05:09.110313+00:00",
+      "wasGeneratedBy": "https://w3id.org/semsynth/demo#__main__.py#write_manifest-20260323T1005"
     }
   ]
 }

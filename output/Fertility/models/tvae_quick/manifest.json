@@ -1,0 +1,42 @@
+{
+  "backend": "synthcity",
+  "name": "tvae_quick",
+  "provider": "uciml",
+  "dataset_name": "Fertility",
+  "provider_id": 244,
+  "generator": "tvae",
+  "params": {
+    "batch_size": 256
+  },
+  "seed": 42,
+  "rows": 100,
+  "test_size": 0.2,
+  "missingness": {
+    "wrapped": true,
+    "random_state": 42,
+    "source": "pipeline"
+  },
+  "signature": "5b73979306d5981cdaf65c8834cc4e13dda5534c5e8feb316bf85975b1642755",
+  "signature_inputs": {
+    "label": "tvae_quick",
+    "backend": "synthcity",
+    "model_params": {
+      "type": "tvae",
+      "batch_size": 256
+    },
+    "rows": 256,
+    "seed": 42,
+    "test_size": 0.2,
+    "compute_privacy": true,
+    "compute_downstream": false,
+    "missingness_wrapped": true,
+    "missingness_random_state": 42,
+    "data_fingerprint": {
+      "shape": [
+        100,
+        10
+      ],
+      "hash": "7822766801648349290"
+    }
+  }
+}

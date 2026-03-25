@@ -68,33 +68,7 @@
       "format": "application/octet-stream",
       "extent": 288,
       "modified": "2026-03-17T13:41:08.533265+00:00",
-      "wasGeneratedBy": "https://w3id.org/semsynth/demo#__main__.py#model_run_root-20260322T0719"
-    },
-    {
-      "id": "https://w3id.org/semsynth/demo#__main__.py#write_privacy-20260322T0719",
-      "type": "prov:Activity",
-      "startedAtTime": "2026-03-22T07:19:19.230619+00:00",
-      "endedAtTime": "2026-03-22T07:19:19.694928+00:00",
-      "wasAssociatedWith": "https://w3id.org/semsynth/demo#__main__.py",
-      "used": [
-        "https://w3id.org/semsynth/demo#env-b7b3b6f74caf"
-      ]
-    },
-    {
-      "id": "https://w3id.org/semsynth/demo#output/Chronic Kidney Disease/models/clg_mi2",
-      "type": "prov:Entity",
-      "format": "application/octet-stream",
-      "extent": 320,
-      "modified": "2026-03-22T07:19:19.068238+00:00",
-      "wasGeneratedBy": "https://w3id.org/semsynth/demo#__main__.py#write_manifest-20260322T0719"
-    },
-    {
-      "id": "https://w3id.org/semsynth/demo#output/Chronic Kidney Disease/models/clg_mi2",
-      "type": "prov:Entity",
-      "format": "application/octet-stream",
-      "extent": 352,
-      "modified": "2026-03-22T07:19:19.694573+00:00",
-      "wasGeneratedBy": "https://w3id.org/semsynth/demo#__main__.py#write_privacy-20260322T0719"
+      "wasGeneratedBy": "https://w3id.org/semsynth/demo#__main__.py#model_run_root-20260323T0958"
     },
     {
       "id": "https://w3id.org/semsynth/demo#__main__.py",
@@ -104,28 +78,24 @@
         "schema:SoftwareSourceCode"
       ],
       "label": "__main__.py",
-      "hasVersion": "3fb66ee72f33c19cce8090e6fd02be9729aac7c8",
+      "hasVersion": "6525c5a65850315ea83d572447dbec7b9f3d99e1",
       "source": "https://github.com/bennokr/semsynth.git"
     },
     {
-      "id": "https://w3id.org/semsynth/demo#__main__.py#model_run_root-20260322T0719",
-      "type": "prov:Activity",
-      "startedAtTime": "2026-03-22T07:19:18.104499+00:00",
-      "endedAtTime": "2026-03-22T07:19:18.104596+00:00",
-      "wasAssociatedWith": "https://w3id.org/semsynth/demo#__main__.py",
-      "used": [
-        "https://w3id.org/semsynth/demo#env-b7b3b6f74caf"
-      ]
+      "id": "https://w3id.org/semsynth/demo#output/Chronic Kidney Disease/models/clg_mi2",
+      "type": "prov:Entity",
+      "format": "application/octet-stream",
+      "extent": 448,
+      "modified": "2026-03-23T09:58:24.087534+00:00",
+      "wasGeneratedBy": "https://w3id.org/semsynth/demo#__main__.py#write_manifest-20260323T0958"
     },
     {
-      "id": "https://w3id.org/semsynth/demo#__main__.py#write_manifest-20260322T0719",
-      "type": "prov:Activity",
-      "startedAtTime": "2026-03-22T07:19:19.067619+00:00",
-      "endedAtTime": "2026-03-22T07:19:19.068535+00:00",
-      "wasAssociatedWith": "https://w3id.org/semsynth/demo#__main__.py",
-      "used": [
-        "https://w3id.org/semsynth/demo#env-b7b3b6f74caf"
-      ]
+      "id": "https://w3id.org/semsynth/demo#output/Chronic Kidney Disease/models/clg_mi2",
+      "type": "prov:Entity",
+      "format": "application/octet-stream",
+      "extent": 448,
+      "modified": "2026-03-23T09:58:24.087534+00:00",
+      "wasGeneratedBy": "https://w3id.org/semsynth/demo#__main__.py#write_privacy-20260323T0958"
     },
     {
       "id": "https://w3id.org/semsynth/demo#env-b7b3b6f74caf",
@@ -142,6 +112,36 @@
           "type": "schema:SoftwareSourceCode",
           "label": "parse>=1.20"
         }
+      ]
+    },
+    {
+      "id": "https://w3id.org/semsynth/demo#__main__.py#write_privacy-20260323T0958",
+      "type": "prov:Activity",
+      "startedAtTime": "2026-03-23T09:58:24.319533+00:00",
+      "endedAtTime": "2026-03-23T09:58:24.723025+00:00",
+      "wasAssociatedWith": "https://w3id.org/semsynth/demo#__main__.py",
+      "used": [
+        "https://w3id.org/semsynth/demo#env-b7b3b6f74caf"
+      ]
+    },
+    {
+      "id": "https://w3id.org/semsynth/demo#__main__.py#model_run_root-20260323T0958",
+      "type": "prov:Activity",
+      "startedAtTime": "2026-03-23T09:58:23.089396+00:00",
+      "endedAtTime": "2026-03-23T09:58:23.089502+00:00",
+      "wasAssociatedWith": "https://w3id.org/semsynth/demo#__main__.py",
+      "used": [
+        "https://w3id.org/semsynth/demo#env-b7b3b6f74caf"
+      ]
+    },
+    {
+      "id": "https://w3id.org/semsynth/demo#__main__.py#write_manifest-20260323T0958",
+      "type": "prov:Activity",
+      "startedAtTime": "2026-03-23T09:58:24.092209+00:00",
+      "endedAtTime": "2026-03-23T09:58:24.092832+00:00",
+      "wasAssociatedWith": "https://w3id.org/semsynth/demo#__main__.py",
+      "used": [
+        "https://w3id.org/semsynth/demo#env-b7b3b6f74caf"
       ]
     }
   ]

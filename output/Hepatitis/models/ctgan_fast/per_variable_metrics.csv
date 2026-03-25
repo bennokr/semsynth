@@ -1,0 +1,21 @@
+variable,type,KS,W1,JSD
+Age,continuous,0.8556451612903225,22.766813308609176,
+Sex,discrete,,,0.0609581280251956
+Steroid,discrete,,,0.16553750050292032
+Antivirals,discrete,,,0.24415372709190952
+Fatigue,discrete,,,0.014103013283885872
+Malaise,discrete,,,0.08329497122003936
+Anorexia,discrete,,,0.2806291306838515
+Liver Big,discrete,,,0.23490321241046283
+Liver Firm,discrete,,,0.4987905282779211
+Spleen Palpable,discrete,,,0.1750357760044025
+Spiders,discrete,,,0.6238197265116673
+Ascites,discrete,,,0.02892625365396827
+Varices,discrete,,,0.9384809965933586
+Bilirubin,continuous,1.0,1.05625,
+Alk Phosphate,continuous,1.0,86.1875,
+Sgot,continuous,0.7137096774193549,131.58854540625515,
+Albumin,continuous,0.8193548387096774,1.4022774638076387,
+Protime,continuous,0.9375,34.9698426510053,
+Histology,discrete,,,0.2943295489529646
+Class,discrete,,,0.011570303188232173

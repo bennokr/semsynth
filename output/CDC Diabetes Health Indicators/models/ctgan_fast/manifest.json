@@ -1,0 +1,44 @@
+{
+  "backend": "synthcity",
+  "name": "ctgan_fast",
+  "provider": "uciml",
+  "dataset_name": "CDC Diabetes Health Indicators",
+  "provider_id": 891,
+  "generator": "ctgan",
+  "params": {
+    "batch_size": 256,
+    "n_iter": 5
+  },
+  "seed": 42,
+  "rows": 256,
+  "test_size": 0.2,
+  "missingness": {
+    "wrapped": true,
+    "random_state": 42,
+    "source": "pipeline"
+  },
+  "signature": "f8ff7596cdfeb9868bfa34c35828219fcf4ffeb72132ca7c3a5c4332a67eaf81",
+  "signature_inputs": {
+    "label": "ctgan_fast",
+    "backend": "synthcity",
+    "model_params": {
+      "type": "ctgan",
+      "epochs": 5,
+      "batch_size": 256
+    },
+    "rows": 256,
+    "seed": 42,
+    "test_size": 0.2,
+    "compute_privacy": true,
+    "compute_downstream": false,
+    "missingness_wrapped": true,
+    "missingness_random_state": 42,
+    "data_fingerprint": {
+      "shape": [
+        253680,
+        22
+      ],
+      "hash": "11933961627238296409"
+    }
+  }
+}

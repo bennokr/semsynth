@@ -1,0 +1,148 @@
+{
+  "@context": {
+    "prov": "http://www.w3.org/ns/prov#",
+    "dct": "http://purl.org/dc/terms/",
+    "rdfs": "http://www.w3.org/2000/01/rdf-schema#",
+    "xsd": "http://www.w3.org/2001/XMLSchema#",
+    "rdf": "http://www.w3.org/1999/02/22-rdf-syntax-ns#",
+    "schema": "https://schema.org/",
+    "id": "@id",
+    "type": "@type",
+    "provenance": "@graph",
+    "startedAtTime": {
+      "@id": "prov:startedAtTime",
+      "@type": "xsd:dateTime"
+    },
+    "endedAtTime": {
+      "@id": "prov:endedAtTime",
+      "@type": "xsd:dateTime"
+    },
+    "wasAssociatedWith": {
+      "@id": "prov:wasAssociatedWith",
+      "@type": "@id",
+      "@container": "@set"
+    },
+    "used": {
+      "@id": "prov:used",
+      "@type": "@id",
+      "@container": "@set"
+    },
+    "wasGeneratedBy": {
+      "@id": "prov:wasGeneratedBy",
+      "@type": "@id"
+    },
+    "wasAttributedTo": {
+      "@id": "prov:wasAttributedTo",
+      "@type": "@id",
+      "@container": "@set"
+    },
+    "generatedAtTime": {
+      "@id": "prov:generatedAtTime",
+      "@type": "xsd:dateTime"
+    },
+    "format": "dct:format",
+    "extent": "dct:extent",
+    "modified": {
+      "@id": "dct:modified",
+      "@type": "xsd:dateTime"
+    },
+    "identifier": "dct:identifier",
+    "label": "rdfs:label",
+    "title": "dct:title",
+    "hasVersion": "dct:hasVersion",
+    "source": {
+      "@id": "dct:source",
+      "@type": "@id"
+    },
+    "requires": {
+      "@id": "dct:requires",
+      "@type": "@id",
+      "@container": "@set"
+    },
+    "comment": "rdfs:comment"
+  },
+  "provenance": [
+    {
+      "id": "https://w3id.org/semsynth/demo#output/Statlog (Heart)",
+      "type": "prov:Entity",
+      "format": "application/octet-stream",
+      "extent": 256,
+      "modified": "2026-03-16T15:49:44.918420+00:00",
+      "wasGeneratedBy": "https://w3id.org/semsynth/demo#__main__.py#model_run_root-20260323T0940"
+    },
+    {
+      "id": "https://w3id.org/semsynth/demo#__main__.py#write_privacy-20260323T0940",
+      "type": "prov:Activity",
+      "startedAtTime": "2026-03-23T09:40:31.503828+00:00",
+      "endedAtTime": "2026-03-23T09:40:31.905097+00:00",
+      "wasAssociatedWith": "https://w3id.org/semsynth/demo#__main__.py",
+      "used": [
+        "https://w3id.org/semsynth/demo#env-b7b3b6f74caf"
+      ]
+    },
+    {
+      "id": "https://w3id.org/semsynth/demo#__main__.py",
+      "type": [
+        "prov:Agent",
+        "prov:SoftwareAgent",
+        "schema:SoftwareSourceCode"
+      ],
+      "label": "__main__.py",
+      "hasVersion": "6525c5a65850315ea83d572447dbec7b9f3d99e1",
+      "source": "https://github.com/bennokr/semsynth.git"
+    },
+    {
+      "id": "https://w3id.org/semsynth/demo#__main__.py#model_run_root-20260323T0940",
+      "type": "prov:Activity",
+      "startedAtTime": "2026-03-23T09:40:30.602217+00:00",
+      "endedAtTime": "2026-03-23T09:40:30.602389+00:00",
+      "wasAssociatedWith": "https://w3id.org/semsynth/demo#__main__.py",
+      "used": [
+        "https://w3id.org/semsynth/demo#env-b7b3b6f74caf"
+      ]
+    },
+    {
+      "id": "https://w3id.org/semsynth/demo#output/Statlog (Heart)/models/ctgan_fast",
+      "type": "prov:Entity",
+      "format": "application/octet-stream",
+      "extent": 352,
+      "modified": "2026-03-22T20:29:24.322238+00:00",
+      "wasGeneratedBy": "https://w3id.org/semsynth/demo#__main__.py#write_privacy-20260323T0940"
+    },
+    {
+      "id": "https://w3id.org/semsynth/demo#env-b7b3b6f74caf",
+      "type": [
+        "prov:Entity",
+        "prov:Collection"
+      ],
+      "label": "Python environment",
+      "title": "makeprov",
+      "hasVersion": "0.4.6",
+      "requires": [
+        {
+          "id": "https://pypi.org/project/parse/",
+          "type": "schema:SoftwareSourceCode",
+          "label": "parse>=1.20"
+        }
+      ]
+    },
+    {
+      "id": "https://w3id.org/semsynth/demo#output/Statlog (Heart)/models/ctgan_fast",
+      "type": "prov:Entity",
+      "format": "application/octet-stream",
+      "extent": 352,
+      "modified": "2026-03-22T20:29:24.322238+00:00",
+      "wasGeneratedBy": "https://w3id.org/semsynth/demo#__main__.py#write_manifest-20260323T0940"
+    },
+    {
+      "id": "https://w3id.org/semsynth/demo#__main__.py#write_manifest-20260323T0940",
+      "type": "prov:Activity",
+      "startedAtTime": "2026-03-23T09:40:31.064765+00:00",
+      "endedAtTime": "2026-03-23T09:40:31.065463+00:00",
+      "wasAssociatedWith": "https://w3id.org/semsynth/demo#__main__.py",
+      "used": [
+        "https://w3id.org/semsynth/demo#env-b7b3b6f74caf"
+      ]
+    }
+  ]
+}

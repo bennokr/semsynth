@@ -15,5 +15,32 @@
   },
   "seed": 42,
   "rows": 1000,
-  "test_size": 0.2
+  "test_size": 0.2,
+  "signature": "ca88b3d7a76e346484f6ede21f203c8af10c2a7bdddf19ccf03bb48218cd3d48",
+  "signature_inputs": {
+    "label": "semi_mi5",
+    "backend": "pybnesian",
+    "model_params": {
+      "type": "semiparametric",
+      "score": "bic",
+      "operators": [
+        "arcs"
+      ],
+      "max_indegree": 5
+    },
+    "rows": 1000,
+    "seed": 42,
+    "test_size": 0.2,
+    "compute_privacy": true,
+    "compute_downstream": false,
+    "missingness_wrapped": false,
+    "missingness_random_state": 42,
+    "data_fingerprint": {
+      "shape": [
+        101766,
+        48
+      ],
+      "hash": "16985796119783556540"
+    }
+  }
 }

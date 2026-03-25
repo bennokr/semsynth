@@ -63,20 +63,30 @@
   },
   "provenance": [
     {
-      "id": "https://w3id.org/semsynth/demo#output/UCI_1150",
+      "id": "https://w3id.org/semsynth/demo#output/UCI_1150/models/semi_mi5",
       "type": "prov:Entity",
       "format": "application/octet-stream",
-      "extent": 320,
-      "modified": "2026-03-19T20:26:49.818830+00:00",
-      "wasGeneratedBy": "https://w3id.org/semsynth/demo#__main__.py#model_run_root-20260322T0718"
+      "extent": 448,
+      "modified": "2026-03-23T09:36:52.940608+00:00",
+      "wasGeneratedBy": "https://w3id.org/semsynth/demo#__main__.py#write_privacy-20260323T0936"
     },
     {
       "id": "https://w3id.org/semsynth/demo#output/UCI_1150/models/semi_mi5",
       "type": "prov:Entity",
       "format": "application/octet-stream",
-      "extent": 352,
-      "modified": "2026-03-22T07:18:28.753646+00:00",
-      "wasGeneratedBy": "https://w3id.org/semsynth/demo#__main__.py#write_privacy-20260322T0718"
+      "extent": 448,
+      "modified": "2026-03-23T09:36:52.940608+00:00",
+      "wasGeneratedBy": "https://w3id.org/semsynth/demo#__main__.py#write_manifest-20260323T0936"
+    },
+    {
+      "id": "https://w3id.org/semsynth/demo#__main__.py#write_privacy-20260323T0936",
+      "type": "prov:Activity",
+      "startedAtTime": "2026-03-23T09:36:53.215365+00:00",
+      "endedAtTime": "2026-03-23T09:36:53.287793+00:00",
+      "wasAssociatedWith": "https://w3id.org/semsynth/demo#__main__.py",
+      "used": [
+        "https://w3id.org/semsynth/demo#env-b7b3b6f74caf"
+      ]
     },
     {
       "id": "https://w3id.org/semsynth/demo#__main__.py",
@@ -86,42 +96,14 @@
         "schema:SoftwareSourceCode"
       ],
       "label": "__main__.py",
-      "hasVersion": "3fb66ee72f33c19cce8090e6fd02be9729aac7c8",
+      "hasVersion": "6525c5a65850315ea83d572447dbec7b9f3d99e1",
       "source": "https://github.com/bennokr/semsynth.git"
     },
     {
-      "id": "https://w3id.org/semsynth/demo#__main__.py#write_privacy-20260322T0718",
+      "id": "https://w3id.org/semsynth/demo#__main__.py#model_run_root-20260323T0936",
       "type": "prov:Activity",
-      "startedAtTime": "2026-03-22T07:18:28.572585+00:00",
-      "endedAtTime": "2026-03-22T07:18:28.754140+00:00",
-      "wasAssociatedWith": "https://w3id.org/semsynth/demo#__main__.py",
-      "used": [
-        "https://w3id.org/semsynth/demo#env-b7b3b6f74caf"
-      ]
-    },
-    {
-      "id": "https://w3id.org/semsynth/demo#__main__.py#write_manifest-20260322T0718",
-      "type": "prov:Activity",
-      "startedAtTime": "2026-03-22T07:18:28.427694+00:00",
-      "endedAtTime": "2026-03-22T07:18:28.428188+00:00",
-      "wasAssociatedWith": "https://w3id.org/semsynth/demo#__main__.py",
-      "used": [
-        "https://w3id.org/semsynth/demo#env-b7b3b6f74caf"
-      ]
-    },
-    {
-      "id": "https://w3id.org/semsynth/demo#output/UCI_1150/models/semi_mi5",
-      "type": "prov:Entity",
-      "format": "application/octet-stream",
-      "extent": 320,
-      "modified": "2026-03-22T07:18:28.428000+00:00",
-      "wasGeneratedBy": "https://w3id.org/semsynth/demo#__main__.py#write_manifest-20260322T0718"
-    },
-    {
-      "id": "https://w3id.org/semsynth/demo#__main__.py#model_run_root-20260322T0718",
-      "type": "prov:Activity",
-      "startedAtTime": "2026-03-22T07:18:26.157985+00:00",
-      "endedAtTime": "2026-03-22T07:18:26.158105+00:00",
+      "startedAtTime": "2026-03-23T09:36:50.658009+00:00",
+      "endedAtTime": "2026-03-23T09:36:50.658107+00:00",
       "wasAssociatedWith": "https://w3id.org/semsynth/demo#__main__.py",
       "used": [
         "https://w3id.org/semsynth/demo#env-b7b3b6f74caf"
@@ -143,6 +125,24 @@
           "label": "parse>=1.20"
         }
       ]
+    },
+    {
+      "id": "https://w3id.org/semsynth/demo#__main__.py#write_manifest-20260323T0936",
+      "type": "prov:Activity",
+      "startedAtTime": "2026-03-23T09:36:52.947262+00:00",
+      "endedAtTime": "2026-03-23T09:36:52.947792+00:00",
+      "wasAssociatedWith": "https://w3id.org/semsynth/demo#__main__.py",
+      "used": [
+        "https://w3id.org/semsynth/demo#env-b7b3b6f74caf"
+      ]
+    },
+    {
+      "id": "https://w3id.org/semsynth/demo#output/UCI_1150",
+      "type": "prov:Entity",
+      "format": "application/octet-stream",
+      "extent": 320,
+      "modified": "2026-03-19T20:26:49.818830+00:00",
+      "wasGeneratedBy": "https://w3id.org/semsynth/demo#__main__.py#model_run_root-20260323T0936"
     }
   ]
 }

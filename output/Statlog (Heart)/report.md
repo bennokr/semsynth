@@ -76,19 +76,23 @@ Absence (1) or presence (2) of heart disease
 
 ## Fidelity summary
 
-| model    | backend   |   disc jsd mean |   disc jsd median |   cont ks mean |   cont w1 mean | downstream sign match   |
-|:---------|:----------|----------------:|------------------:|---------------:|---------------:|:------------------------|
-| metasyn  | metasyn   |          0.0958 |            0.1037 |         0.183  |         3.1721 |                         |
-| clg_mi2  | pybnesian |          0.0928 |            0.078  |         0.1563 |         3.5533 |                         |
-| semi_mi5 | pybnesian |          0.0928 |            0.078  |         0.1504 |         3.0953 |                         |
+| umap                                                 | model      | backend   |   disc jsd mean |   disc jsd median |   cont ks mean |   cont w1 mean | downstream sign match   |
+|:-----------------------------------------------------|:-----------|:----------|----------------:|------------------:|---------------:|---------------:|:------------------------|
+| <img src='models/metasyn/umap.png' height='48' />    | metasyn    | metasyn   |          0.0355 |            0.0378 |         0.1415 |         2.4032 |                         |
+| <img src='models/clg_mi2/umap.png' height='48' />    | clg_mi2    | pybnesian |          0.0293 |            0.0199 |         0.1126 |         3.0859 |                         |
+| <img src='models/semi_mi5/umap.png' height='48' />   | semi_mi5   | pybnesian |          0.0293 |            0.0199 |         0.1015 |         2.6707 |                         |
+| <img src='models/ctgan_fast/umap.png' height='48' /> | ctgan_fast | synthcity |          0.3115 |            0.237  |         0.8556 |        45.6654 |                         |
+| <img src='models/tvae_quick/umap.png' height='48' /> | tvae_quick | synthcity |          0.0727 |            0.0685 |         0.2156 |         6.9723 |                         |
 
 ## Privacy summary
 
-| model    | backend   |   n real |   n synth |   exact overlap rate |   near duplicate rate eps |   nn distance mean |   k min |   k pct lt5 |   k map |   rare qi reproduction rate | identifiability score   |   delta presence |
-|:---------|:----------|---------:|----------:|---------------------:|--------------------------:|-------------------:|--------:|------------:|--------:|----------------------------:|:------------------------|-----------------:|
-| metasyn  | metasyn   |      270 |       270 |                    0 |                    0.9815 |             0.071  |       1 |           1 |       2 |                           0 |                         |              2.5 |
-| clg_mi2  | pybnesian |      270 |       270 |                    0 |                    0.9889 |             0.0494 |       1 |           1 |       1 |                           0 |                         |              5   |
-| semi_mi5 | pybnesian |      270 |       270 |                    0 |                    0.9926 |             0.0573 |       1 |           1 |       3 |                           0 |                         |              1.8 |
+| model      | backend   |   n real |   n synth |   exact overlap rate |   near duplicate rate eps |   nn distance mean |   k min |   k pct lt5 |   k map |   rare qi reproduction rate | identifiability score   |   delta presence |
+|:-----------|:----------|---------:|----------:|---------------------:|--------------------------:|-------------------:|--------:|------------:|--------:|----------------------------:|:------------------------|-----------------:|
+| metasyn    | metasyn   |      270 |       270 |                    0 |                    0.9741 |             0.0822 |       1 |           1 |       7 |                           0 |                         |           2.25   |
+| clg_mi2    | pybnesian |      270 |       270 |                    0 |                    0.9889 |             0.0494 |       1 |           1 |       1 |                           0 |                         |           5      |
+| semi_mi5   | pybnesian |      270 |       270 |                    0 |                    0.9926 |             0.0573 |       1 |           1 |       3 |                           0 |                         |           1.8    |
+| ctgan_fast | synthcity |      270 |       270 |                    0 |                    0.4222 |             0.2387 |       1 |           1 |     270 |                           0 |                         |           0.6111 |
+| tvae_quick | synthcity |      270 |       270 |                    0 |                    0.9667 |             0.0652 |       1 |           1 |       1 |                           0 |                         |          13      |
 
 ## Models
 
@@ -101,7 +105,7 @@ Absence (1) or presence (2) of heart disease
 <h3>Model: metasyn (metasyn)</h3>
 <ul>
 <li>Seed: 42, rows: 270</li>
-<li> <a href="models/metasyn/synthetic.csv">Synthetic CSV</a></li>
+<li> Missingness: wrapped (random state 42) via pipeline</li><li> <a href="models/metasyn/synthetic.csv">Synthetic CSV</a></li>
 <li> <a href="models/metasyn/per_variable_metrics.csv">Per-variable metrics</a></li>
 <li> <a href="models/metasyn/metrics.json">Metrics JSON</a></li>
 <li> <a href="models/metasyn/metrics.privacy.json">Privacy metrics</a></li>
@@ -122,8 +126,8 @@ Absence (1) or presence (2) of heart disease
     <tr>
       <td>age</td>
       <td>continuous</td>
-      <td>0.1889</td>
-      <td>2.4354</td>
+      <td>0.1037</td>
+      <td>1.3029</td>
       <td></td>
     </tr>
     <tr>
@@ -131,27 +135,27 @@ Absence (1) or presence (2) of heart disease
       <td>discrete</td>
       <td></td>
       <td></td>
-      <td>0.1198</td>
+      <td>0.0273</td>
     </tr>
     <tr>
       <td>chest-pain</td>
       <td>discrete</td>
       <td></td>
       <td></td>
-      <td>0.1382</td>
+      <td>0.0508</td>
     </tr>
     <tr>
       <td>rest-bp</td>
       <td>continuous</td>
-      <td>0.1519</td>
-      <td>3.1388</td>
+      <td>0.1185</td>
+      <td>2.6446</td>
       <td></td>
     </tr>
     <tr>
       <td>serum-chol</td>
       <td>continuous</td>
-      <td>0.0926</td>
-      <td>6.0966</td>
+      <td>0.0593</td>
+      <td>4.524</td>
       <td></td>
     </tr>
     <tr>
@@ -159,20 +163,20 @@ Absence (1) or presence (2) of heart disease
       <td>discrete</td>
       <td></td>
       <td></td>
-      <td>0.1037</td>
+      <td>0.0088</td>
     </tr>
     <tr>
       <td>electrocardiographic</td>
       <td>discrete</td>
       <td></td>
       <td></td>
-      <td>0.0433</td>
+      <td>0.0487</td>
     </tr>
     <tr>
       <td>max-heart-rate</td>
       <td>continuous</td>
-      <td>0.1296</td>
-      <td>3.9375</td>
+      <td>0.1111</td>
+      <td>3.3496</td>
       <td></td>
     </tr>
     <tr>
@@ -180,13 +184,13 @@ Absence (1) or presence (2) of heart disease
       <td>discrete</td>
       <td></td>
       <td></td>
-      <td>0.1423</td>
+      <td>0.0169</td>
     </tr>
     <tr>
       <td>oldpeak</td>
       <td>continuous</td>
-      <td>0.3519</td>
-      <td>0.2524</td>
+      <td>0.3148</td>
+      <td>0.1948</td>
       <td></td>
     </tr>
   </tbody>
@@ -233,11 +237,11 @@ Absence (1) or presence (2) of heart disease
     </tr>
     <tr>
       <td>near_duplicate_rate_eps</td>
-      <td>0.9815</td>
+      <td>0.9741</td>
     </tr>
     <tr>
       <td>nn_distance_mean</td>
-      <td>0.071</td>
+      <td>0.0822</td>
     </tr>
     <tr>
       <td>k_min</td>
@@ -249,7 +253,7 @@ Absence (1) or presence (2) of heart disease
     </tr>
     <tr>
       <td>k_map</td>
-      <td>2</td>
+      <td>7</td>
     </tr>
     <tr>
       <td>rare_qi_reproduction_rate</td>
@@ -257,7 +261,7 @@ Absence (1) or presence (2) of heart disease
     </tr>
     <tr>
       <td>delta_presence</td>
-      <td>2.5</td>
+      <td>2.25</td>
     </tr>
   </tbody>
 </table>
@@ -335,7 +339,7 @@ Absence (1) or presence (2) of heart disease
 <h3>Model: clg_mi2 (pybnesian)</h3>
 <ul>
 <li>Seed: 42, rows: 270</li>
-<li> Params: <tt>{"max_indegree": 2, "operators": ["arcs"], "score": "bic", "type": "clg"}</tt></li><li> <a href="models/clg_mi2/synthetic.csv">Synthetic CSV</a></li>
+<li> Params: <tt>{"max_indegree": 2, "operators": ["arcs"], "score": "bic", "type": "clg"}</tt></li><li> Missingness: wrapped (random state 42) via pipeline</li><li> <a href="models/clg_mi2/synthetic.csv">Synthetic CSV</a></li>
 <li> <a href="models/clg_mi2/per_variable_metrics.csv">Per-variable metrics</a></li>
 <li> <a href="models/clg_mi2/metrics.json">Metrics JSON</a></li>
 <li> <a href="models/clg_mi2/metrics.privacy.json">Privacy metrics</a></li>
@@ -355,8 +359,8 @@ Absence (1) or presence (2) of heart disease
     <tr>
       <td>age</td>
       <td>continuous</td>
-      <td>0.1259</td>
-      <td>1.9895</td>
+      <td>0.0667</td>
+      <td>1.0148</td>
       <td></td>
     </tr>
     <tr>
@@ -364,27 +368,27 @@ Absence (1) or presence (2) of heart disease
       <td>discrete</td>
       <td></td>
       <td></td>
-      <td>0.0519</td>
+      <td>0.0233</td>
     </tr>
     <tr>
       <td>chest-pain</td>
       <td>discrete</td>
       <td></td>
       <td></td>
-      <td>0.1547</td>
+      <td>0.0672</td>
     </tr>
     <tr>
       <td>rest-bp</td>
       <td>continuous</td>
-      <td>0.2111</td>
-      <td>5.2581</td>
+      <td>0.1593</td>
+      <td>3.5411</td>
       <td></td>
     </tr>
     <tr>
       <td>serum-chol</td>
       <td>continuous</td>
-      <td>0.0889</td>
-      <td>6.2472</td>
+      <td>0.0704</td>
+      <td>7.5924</td>
       <td></td>
     </tr>
     <tr>
@@ -392,20 +396,20 @@ Absence (1) or presence (2) of heart disease
       <td>discrete</td>
       <td></td>
       <td></td>
-      <td>0.071</td>
+      <td>0.0089</td>
     </tr>
     <tr>
       <td>electrocardiographic</td>
       <td>discrete</td>
       <td></td>
       <td></td>
-      <td>0.0793</td>
+      <td>0.0166</td>
     </tr>
     <tr>
       <td>max-heart-rate</td>
       <td>continuous</td>
-      <td>0.1296</td>
-      <td>3.8483</td>
+      <td>0.0778</td>
+      <td>3.0444</td>
       <td></td>
     </tr>
     <tr>
@@ -413,13 +417,13 @@ Absence (1) or presence (2) of heart disease
       <td>discrete</td>
       <td></td>
       <td></td>
-      <td>0.1036</td>
+      <td>0.0199</td>
     </tr>
     <tr>
       <td>oldpeak</td>
       <td>continuous</td>
-      <td>0.2259</td>
-      <td>0.4232</td>
+      <td>0.1889</td>
+      <td>0.2368</td>
       <td></td>
     </tr>
   </tbody>
@@ -484,7 +488,7 @@ Absence (1) or presence (2) of heart disease
 <h3>Model: semi_mi5 (pybnesian)</h3>
 <ul>
 <li>Seed: 42, rows: 270</li>
-<li> Params: <tt>{"max_indegree": 5, "operators": ["arcs"], "score": "bic", "type": "semiparametric"}</tt></li><li> <a href="models/semi_mi5/synthetic.csv">Synthetic CSV</a></li>
+<li> Params: <tt>{"max_indegree": 5, "operators": ["arcs"], "score": "bic", "type": "semiparametric"}</tt></li><li> Missingness: wrapped (random state 42) via pipeline</li><li> <a href="models/semi_mi5/synthetic.csv">Synthetic CSV</a></li>
 <li> <a href="models/semi_mi5/per_variable_metrics.csv">Per-variable metrics</a></li>
 <li> <a href="models/semi_mi5/metrics.json">Metrics JSON</a></li>
 <li> <a href="models/semi_mi5/metrics.privacy.json">Privacy metrics</a></li>
@@ -504,8 +508,8 @@ Absence (1) or presence (2) of heart disease
     <tr>
       <td>age</td>
       <td>continuous</td>
-      <td>0.1407</td>
-      <td>1.7605</td>
+      <td>0.0667</td>
+      <td>0.9959</td>
       <td></td>
     </tr>
     <tr>
@@ -513,27 +517,27 @@ Absence (1) or presence (2) of heart disease
       <td>discrete</td>
       <td></td>
       <td></td>
-      <td>0.0519</td>
+      <td>0.0233</td>
     </tr>
     <tr>
       <td>chest-pain</td>
       <td>discrete</td>
       <td></td>
       <td></td>
-      <td>0.1547</td>
+      <td>0.0672</td>
     </tr>
     <tr>
       <td>rest-bp</td>
       <td>continuous</td>
-      <td>0.2185</td>
-      <td>4.668</td>
+      <td>0.1519</td>
+      <td>3.2886</td>
       <td></td>
     </tr>
     <tr>
       <td>serum-chol</td>
       <td>continuous</td>
-      <td>0.0778</td>
-      <td>5.4355</td>
+      <td>0.0593</td>
+      <td>6.2695</td>
       <td></td>
     </tr>
     <tr>
@@ -541,20 +545,20 @@ Absence (1) or presence (2) of heart disease
       <td>discrete</td>
       <td></td>
       <td></td>
-      <td>0.071</td>
+      <td>0.0089</td>
     </tr>
     <tr>
       <td>electrocardiographic</td>
       <td>discrete</td>
       <td></td>
       <td></td>
-      <td>0.0793</td>
+      <td>0.0166</td>
     </tr>
     <tr>
       <td>max-heart-rate</td>
       <td>continuous</td>
-      <td>0.1148</td>
-      <td>3.257</td>
+      <td>0.0667</td>
+      <td>2.6114</td>
       <td></td>
     </tr>
     <tr>
@@ -562,13 +566,13 @@ Absence (1) or presence (2) of heart disease
       <td>discrete</td>
       <td></td>
       <td></td>
-      <td>0.1036</td>
+      <td>0.0199</td>
     </tr>
     <tr>
       <td>oldpeak</td>
       <td>continuous</td>
-      <td>0.2</td>
-      <td>0.3553</td>
+      <td>0.163</td>
+      <td>0.1879</td>
       <td></td>
     </tr>
   </tbody>
@@ -627,5 +631,303 @@ Absence (1) or presence (2) of heart disease
 </details>
 </td><td>
 <a href='models/semi_mi5/structure.png'><img src='models/semi_mi5/structure.png' width='280'/></a></td></tr>
+
+<tr><td><img src='models/ctgan_fast/umap.png' width='280'/></td><td>
+
+<h3>Model: ctgan_fast (synthcity)</h3>
+<ul>
+<li>Seed: 42, rows: 256</li>
+<li> Params: <tt>{"batch_size": 256, "n_iter": 5}</tt></li><li> Missingness: wrapped (random state 42) via pipeline</li><li> <a href="models/ctgan_fast/synthetic.csv">Synthetic CSV</a></li>
+<li> <a href="models/ctgan_fast/per_variable_metrics.csv">Per-variable metrics</a></li>
+<li> <a href="models/ctgan_fast/metrics.json">Metrics JSON</a></li>
+<li> <a href="models/ctgan_fast/metrics.privacy.json">Privacy metrics</a></li>
+</ul>
+<details class="model-subtable"><summary><strong>Per-variable fidelity</strong></summary>
+<table class="dataframe">
+  <thead>
+    <tr style="text-align: right;">
+      <th>variable</th>
+      <th>type</th>
+      <th>KS</th>
+      <th>W1</th>
+      <th>JSD</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td>age</td>
+      <td>continuous</td>
+      <td>0.8037</td>
+      <td>18.5177</td>
+      <td></td>
+    </tr>
+    <tr>
+      <td>sex</td>
+      <td>discrete</td>
+      <td></td>
+      <td></td>
+      <td>0.4127</td>
+    </tr>
+    <tr>
+      <td>chest-pain</td>
+      <td>discrete</td>
+      <td></td>
+      <td></td>
+      <td>0.2243</td>
+    </tr>
+    <tr>
+      <td>rest-bp</td>
+      <td>continuous</td>
+      <td>0.8</td>
+      <td>47.6668</td>
+      <td></td>
+    </tr>
+    <tr>
+      <td>serum-chol</td>
+      <td>continuous</td>
+      <td>0.9926</td>
+      <td>108.7704</td>
+      <td></td>
+    </tr>
+    <tr>
+      <td>fasting-blood-sugar</td>
+      <td>discrete</td>
+      <td></td>
+      <td></td>
+      <td>0.2114</td>
+    </tr>
+    <tr>
+      <td>electrocardiographic</td>
+      <td>discrete</td>
+      <td></td>
+      <td></td>
+      <td>0.237</td>
+    </tr>
+    <tr>
+      <td>max-heart-rate</td>
+      <td>continuous</td>
+      <td>0.9963</td>
+      <td>52.3222</td>
+      <td></td>
+    </tr>
+    <tr>
+      <td>angina</td>
+      <td>discrete</td>
+      <td></td>
+      <td></td>
+      <td>0.2317</td>
+    </tr>
+    <tr>
+      <td>oldpeak</td>
+      <td>continuous</td>
+      <td>0.6852</td>
+      <td>1.05</td>
+      <td></td>
+    </tr>
+  </tbody>
+</table>
+</details><details class="model-subtable"><summary><strong>Privacy metrics</strong></summary>
+<table class="dataframe">
+  <thead>
+    <tr style="text-align: right;">
+      <th>metric</th>
+      <th>value</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td>n_real</td>
+      <td>270</td>
+    </tr>
+    <tr>
+      <td>n_synth</td>
+      <td>270</td>
+    </tr>
+    <tr>
+      <td>exact_overlap_rate</td>
+      <td>0</td>
+    </tr>
+    <tr>
+      <td>near_duplicate_rate_eps</td>
+      <td>0.4222</td>
+    </tr>
+    <tr>
+      <td>nn_distance_mean</td>
+      <td>0.2387</td>
+    </tr>
+    <tr>
+      <td>k_min</td>
+      <td>1</td>
+    </tr>
+    <tr>
+      <td>k_pct_lt5</td>
+      <td>1</td>
+    </tr>
+    <tr>
+      <td>k_map</td>
+      <td>270</td>
+    </tr>
+    <tr>
+      <td>rare_qi_reproduction_rate</td>
+      <td>0</td>
+    </tr>
+    <tr>
+      <td>delta_presence</td>
+      <td>0.6111</td>
+    </tr>
+  </tbody>
+</table>
+</details>
+</td><td>
+<img src="box.svg" width="120" /></td></tr>
+
+<tr><td><img src='models/tvae_quick/umap.png' width='280'/></td><td>
+
+<h3>Model: tvae_quick (synthcity)</h3>
+<ul>
+<li>Seed: 42, rows: 256</li>
+<li> Params: <tt>{"batch_size": 256}</tt></li><li> Missingness: wrapped (random state 42) via pipeline</li><li> <a href="models/tvae_quick/synthetic.csv">Synthetic CSV</a></li>
+<li> <a href="models/tvae_quick/per_variable_metrics.csv">Per-variable metrics</a></li>
+<li> <a href="models/tvae_quick/metrics.json">Metrics JSON</a></li>
+<li> <a href="models/tvae_quick/metrics.privacy.json">Privacy metrics</a></li>
+</ul>
+<details class="model-subtable"><summary><strong>Per-variable fidelity</strong></summary>
+<table class="dataframe">
+  <thead>
+    <tr style="text-align: right;">
+      <th>variable</th>
+      <th>type</th>
+      <th>KS</th>
+      <th>W1</th>
+      <th>JSD</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td>age</td>
+      <td>continuous</td>
+      <td>0.2259</td>
+      <td>3.238</td>
+      <td></td>
+    </tr>
+    <tr>
+      <td>sex</td>
+      <td>discrete</td>
+      <td></td>
+      <td></td>
+      <td>0.0518</td>
+    </tr>
+    <tr>
+      <td>chest-pain</td>
+      <td>discrete</td>
+      <td></td>
+      <td></td>
+      <td>0.0759</td>
+    </tr>
+    <tr>
+      <td>rest-bp</td>
+      <td>continuous</td>
+      <td>0.2519</td>
+      <td>6.9693</td>
+      <td></td>
+    </tr>
+    <tr>
+      <td>serum-chol</td>
+      <td>continuous</td>
+      <td>0.1519</td>
+      <td>17.1534</td>
+      <td></td>
+    </tr>
+    <tr>
+      <td>fasting-blood-sugar</td>
+      <td>discrete</td>
+      <td></td>
+      <td></td>
+      <td>0.0837</td>
+    </tr>
+    <tr>
+      <td>electrocardiographic</td>
+      <td>discrete</td>
+      <td></td>
+      <td></td>
+      <td>0.0685</td>
+    </tr>
+    <tr>
+      <td>max-heart-rate</td>
+      <td>continuous</td>
+      <td>0.1852</td>
+      <td>7.3049</td>
+      <td></td>
+    </tr>
+    <tr>
+      <td>angina</td>
+      <td>discrete</td>
+      <td></td>
+      <td></td>
+      <td>0.0585</td>
+    </tr>
+    <tr>
+      <td>oldpeak</td>
+      <td>continuous</td>
+      <td>0.263</td>
+      <td>0.196</td>
+      <td></td>
+    </tr>
+  </tbody>
+</table>
+</details><details class="model-subtable"><summary><strong>Privacy metrics</strong></summary>
+<table class="dataframe">
+  <thead>
+    <tr style="text-align: right;">
+      <th>metric</th>
+      <th>value</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td>n_real</td>
+      <td>270</td>
+    </tr>
+    <tr>
+      <td>n_synth</td>
+      <td>270</td>
+    </tr>
+    <tr>
+      <td>exact_overlap_rate</td>
+      <td>0</td>
+    </tr>
+    <tr>
+      <td>near_duplicate_rate_eps</td>
+      <td>0.9667</td>
+    </tr>
+    <tr>
+      <td>nn_distance_mean</td>
+      <td>0.0652</td>
+    </tr>
+    <tr>
+      <td>k_min</td>
+      <td>1</td>
+    </tr>
+    <tr>
+      <td>k_pct_lt5</td>
+      <td>1</td>
+    </tr>
+    <tr>
+      <td>k_map</td>
+      <td>1</td>
+    </tr>
+    <tr>
+      <td>rare_qi_reproduction_rate</td>
+      <td>0</td>
+    </tr>
+    <tr>
+      <td>delta_presence</td>
+      <td>13</td>
+    </tr>
+  </tbody>
+</table>
+</details>
+</td><td>
+<img src="box.svg" width="120" /></td></tr>
 
 </table>

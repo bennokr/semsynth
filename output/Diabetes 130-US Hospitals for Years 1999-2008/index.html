@@ -26,6 +26,7 @@ img { border-radius: 12px; box-shadow: 0 4px 28px rgba(15, 23, 42, 0.12); }
 blockquote { border-left: 4px solid #cbd5f5; margin: 1.5rem 0; padding: 0.75rem 1.25rem; background: #f8fafc; color: #1e293b; }
 table.per-var-dist { margin-top: 2.25rem; }
 table.per-var-dist thead th { text-align: center; }
+td:has(img) { padding: 0; }
 
   </style>
 </head>
@@ -333,6 +334,7 @@ table.per-var-dist thead th { text-align: center; }
     <table>
     <thead>
     <tr>
+    <th style="text-align: left;">umap</th>
     <th style="text-align: left;">model</th>
     <th style="text-align: left;">backend</th>
     <th style="text-align: right;">disc jsd mean</th>
@@ -344,15 +346,17 @@ table.per-var-dist thead th { text-align: center; }
     </thead>
     <tbody>
     <tr>
+    <td style="text-align: left;"><img src='models/metasyn/umap.png' height='48' /></td>
     <td style="text-align: left;">metasyn</td>
     <td style="text-align: left;">metasyn</td>
-    <td style="text-align: right;">0.0782</td>
+    <td style="text-align: right;">0.0793</td>
     <td style="text-align: right;">0.0434</td>
-    <td style="text-align: right;">0.5405</td>
-    <td style="text-align: right;">1.1845</td>
+    <td style="text-align: right;">0.5417</td>
+    <td style="text-align: right;">1.2278</td>
     <td style="text-align: left;"></td>
     </tr>
     <tr>
+    <td style="text-align: left;"><img src='models/clg_mi2/umap.png' height='48' /></td>
     <td style="text-align: left;">clg_mi2</td>
     <td style="text-align: left;">pybnesian</td>
     <td style="text-align: right;">0.0803</td>
@@ -362,12 +366,33 @@ table.per-var-dist thead th { text-align: center; }
     <td style="text-align: left;"></td>
     </tr>
     <tr>
+    <td style="text-align: left;"><img src='models/semi_mi5/umap.png' height='48' /></td>
     <td style="text-align: left;">semi_mi5</td>
     <td style="text-align: left;">pybnesian</td>
     <td style="text-align: right;">0.0803</td>
     <td style="text-align: right;">0.0533</td>
     <td style="text-align: right;">0.315</td>
     <td style="text-align: right;">1.5054</td>
+    <td style="text-align: left;"></td>
+    </tr>
+    <tr>
+    <td style="text-align: left;"><img src='models/ctgan_fast/umap.png' height='48' /></td>
+    <td style="text-align: left;">ctgan_fast</td>
+    <td style="text-align: left;">synthcity</td>
+    <td style="text-align: right;">0.2747</td>
+    <td style="text-align: right;">0.1882</td>
+    <td style="text-align: right;">0.3647</td>
+    <td style="text-align: right;">6.7779</td>
+    <td style="text-align: left;"></td>
+    </tr>
+    <tr>
+    <td style="text-align: left;"><img src='models/tvae_quick/umap.png' height='48' /></td>
+    <td style="text-align: left;">tvae_quick</td>
+    <td style="text-align: left;">synthcity</td>
+    <td style="text-align: right;">0.1394</td>
+    <td style="text-align: right;">0.0791</td>
+    <td style="text-align: right;">0.1614</td>
+    <td style="text-align: right;">1.3723</td>
     <td style="text-align: left;"></td>
     </tr>
     </tbody>
@@ -397,15 +422,15 @@ table.per-var-dist thead th { text-align: center; }
     <td style="text-align: left;">metasyn</td>
     <td style="text-align: right;">101766</td>
     <td style="text-align: right;">1000</td>
-    <td style="text-align: right;">0.048</td>
-    <td style="text-align: right;">0.99</td>
-    <td style="text-align: right;">0.01</td>
+    <td style="text-align: right;">0.046</td>
+    <td style="text-align: right;">0.987</td>
+    <td style="text-align: right;">0.013</td>
     <td style="text-align: right;">1</td>
     <td style="text-align: right;">0.11</td>
-    <td style="text-align: right;">13</td>
+    <td style="text-align: right;">8</td>
     <td style="text-align: right;">0.5641</td>
-    <td style="text-align: right;">0.008</td>
-    <td style="text-align: right;">1.717</td>
+    <td style="text-align: right;">0.005</td>
+    <td style="text-align: right;">1.5385</td>
     </tr>
     <tr>
     <td style="text-align: left;">clg_mi2</td>
@@ -436,6 +461,36 @@ table.per-var-dist thead th { text-align: center; }
     <td style="text-align: right;">0.4744</td>
     <td style="text-align: right;">0.004</td>
     <td style="text-align: right;">1.9362</td>
+    </tr>
+    <tr>
+    <td style="text-align: left;">ctgan_fast</td>
+    <td style="text-align: left;">synthcity</td>
+    <td style="text-align: right;">101766</td>
+    <td style="text-align: right;">256</td>
+    <td style="text-align: right;">0.0859</td>
+    <td style="text-align: right;">0.9102</td>
+    <td style="text-align: right;">0.0552</td>
+    <td style="text-align: right;">1</td>
+    <td style="text-align: right;">0.11</td>
+    <td style="text-align: right;">1</td>
+    <td style="text-align: right;">0.2564</td>
+    <td style="text-align: right;">0.0117</td>
+    <td style="text-align: right;">5</td>
+    </tr>
+    <tr>
+    <td style="text-align: left;">tvae_quick</td>
+    <td style="text-align: left;">synthcity</td>
+    <td style="text-align: right;">101766</td>
+    <td style="text-align: right;">256</td>
+    <td style="text-align: right;">0.1016</td>
+    <td style="text-align: right;">0.957</td>
+    <td style="text-align: right;">0.0309</td>
+    <td style="text-align: right;">1</td>
+    <td style="text-align: right;">0.11</td>
+    <td style="text-align: right;">2</td>
+    <td style="text-align: right;">0.1026</td>
+    <td style="text-align: right;">0.0117</td>
+    <td style="text-align: right;">2.1429</td>
     </tr>
     </tbody>
     </table>
@@ -472,41 +527,41 @@ table.per-var-dist thead th { text-align: center; }
           <td>discrete</td>
           <td></td>
           <td></td>
-          <td>0.0874</td>
+          <td>0.0689</td>
         </tr>
         <tr>
           <td>gender</td>
           <td>discrete</td>
           <td></td>
           <td></td>
-          <td>0.045</td>
+          <td>0.0655</td>
         </tr>
         <tr>
           <td>age</td>
           <td>discrete</td>
           <td></td>
           <td></td>
-          <td>0.0735</td>
+          <td>0.0818</td>
         </tr>
         <tr>
           <td>weight</td>
           <td>discrete</td>
           <td></td>
           <td></td>
-          <td>0.0896</td>
+          <td>0.1077</td>
         </tr>
         <tr>
           <td>admission_type_id</td>
           <td>discrete</td>
           <td></td>
           <td></td>
-          <td>0.1211</td>
+          <td>0.0957</td>
         </tr>
         <tr>
           <td>discharge_disposition_id</td>
           <td>continuous</td>
           <td>0.615</td>
-          <td>1.6376</td>
+          <td>1.664</td>
           <td></td>
         </tr>
         <tr>
@@ -514,28 +569,28 @@ table.per-var-dist thead th { text-align: center; }
           <td>discrete</td>
           <td></td>
           <td></td>
-          <td>0.0856</td>
+          <td>0.088</td>
         </tr>
         <tr>
           <td>time_in_hospital</td>
           <td>discrete</td>
           <td></td>
           <td></td>
-          <td>0.0799</td>
+          <td>0.0832</td>
         </tr>
         <tr>
           <td>payer_code</td>
           <td>discrete</td>
           <td></td>
           <td></td>
-          <td>0.1406</td>
+          <td>0.1178</td>
         </tr>
         <tr>
           <td>medical_specialty</td>
           <td>discrete</td>
           <td></td>
           <td></td>
-          <td>0.1987</td>
+          <td>0.2378</td>
         </tr>
       </tbody>
     </table>
@@ -577,15 +632,15 @@ table.per-var-dist thead th { text-align: center; }
         </tr>
         <tr>
           <td>exact_overlap_rate</td>
-          <td>0.048</td>
+          <td>0.046</td>
         </tr>
         <tr>
           <td>near_duplicate_rate_eps</td>
-          <td>0.99</td>
+          <td>0.987</td>
         </tr>
         <tr>
           <td>nn_distance_mean</td>
-          <td>0.01</td>
+          <td>0.013</td>
         </tr>
         <tr>
           <td>k_min</td>
@@ -597,7 +652,7 @@ table.per-var-dist thead th { text-align: center; }
         </tr>
         <tr>
           <td>k_map</td>
-          <td>13</td>
+          <td>8</td>
         </tr>
         <tr>
           <td>rare_qi_reproduction_rate</td>
@@ -605,11 +660,11 @@ table.per-var-dist thead th { text-align: center; }
         </tr>
         <tr>
           <td>identifiability_score</td>
-          <td>0.008</td>
+          <td>0.005</td>
         </tr>
         <tr>
           <td>delta_presence</td>
-          <td>1.717</td>
+          <td>1.5385</td>
         </tr>
       </tbody>
     </table>
@@ -1123,6 +1178,312 @@ table.per-var-dist thead th { text-align: center; }
     </details>
     </td><td>
     <a href='models/semi_mi5/structure.png'><img src='models/semi_mi5/structure.png' width='280'/></a></td></tr>
+
+    <tr><td><img src='models/ctgan_fast/umap.png' width='280'/></td><td>
+
+    <h3>Model: ctgan_fast (synthcity)</h3>
+    <ul>
+    <li>Seed: 42, rows: 256</li>
+    <li> Params: <tt>{"batch_size": 256, "n_iter": 5}</tt></li><li> <a href="models/ctgan_fast/synthetic.csv">Synthetic CSV</a></li>
+    <li> <a href="models/ctgan_fast/per_variable_metrics.csv">Per-variable metrics</a></li>
+    <li> <a href="models/ctgan_fast/metrics.json">Metrics JSON</a></li>
+    <li> <a href="models/ctgan_fast/metrics.privacy.json">Privacy metrics</a></li>
+    </ul>
+    <details class="model-subtable"><summary><strong>Per-variable fidelity</strong></summary>
+    <table class="dataframe">
+      <thead>
+        <tr style="text-align: right;">
+          <th>variable</th>
+          <th>type</th>
+          <th>KS</th>
+          <th>W1</th>
+          <th>JSD</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td>race</td>
+          <td>discrete</td>
+          <td></td>
+          <td></td>
+          <td>0.234</td>
+        </tr>
+        <tr>
+          <td>gender</td>
+          <td>discrete</td>
+          <td></td>
+          <td></td>
+          <td>0.0905</td>
+        </tr>
+        <tr>
+          <td>age</td>
+          <td>discrete</td>
+          <td></td>
+          <td></td>
+          <td>0.329</td>
+        </tr>
+        <tr>
+          <td>weight</td>
+          <td>discrete</td>
+          <td></td>
+          <td></td>
+          <td>0.295</td>
+        </tr>
+        <tr>
+          <td>admission_type_id</td>
+          <td>discrete</td>
+          <td></td>
+          <td></td>
+          <td>0.3584</td>
+        </tr>
+        <tr>
+          <td>discharge_disposition_id</td>
+          <td>continuous</td>
+          <td>0.245</td>
+          <td>1.8958</td>
+          <td></td>
+        </tr>
+        <tr>
+          <td>admission_source_id</td>
+          <td>discrete</td>
+          <td></td>
+          <td></td>
+          <td>0.2299</td>
+        </tr>
+        <tr>
+          <td>time_in_hospital</td>
+          <td>discrete</td>
+          <td></td>
+          <td></td>
+          <td>0.9173</td>
+        </tr>
+        <tr>
+          <td>payer_code</td>
+          <td>discrete</td>
+          <td></td>
+          <td></td>
+          <td>0.8811</td>
+        </tr>
+        <tr>
+          <td>medical_specialty</td>
+          <td>discrete</td>
+          <td></td>
+          <td></td>
+          <td>0.9886</td>
+        </tr>
+      </tbody>
+    </table>
+    </details><details class="model-subtable"><summary><strong>Privacy metrics</strong></summary>
+    <table class="dataframe">
+      <thead>
+        <tr style="text-align: right;">
+          <th>metric</th>
+          <th>value</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td>n_real</td>
+          <td>101766</td>
+        </tr>
+        <tr>
+          <td>n_synth</td>
+          <td>256</td>
+        </tr>
+        <tr>
+          <td>exact_overlap_rate</td>
+          <td>0.0859</td>
+        </tr>
+        <tr>
+          <td>near_duplicate_rate_eps</td>
+          <td>0.9102</td>
+        </tr>
+        <tr>
+          <td>nn_distance_mean</td>
+          <td>0.0552</td>
+        </tr>
+        <tr>
+          <td>k_min</td>
+          <td>1</td>
+        </tr>
+        <tr>
+          <td>k_pct_lt5</td>
+          <td>0.11</td>
+        </tr>
+        <tr>
+          <td>k_map</td>
+          <td>1</td>
+        </tr>
+        <tr>
+          <td>rare_qi_reproduction_rate</td>
+          <td>0.2564</td>
+        </tr>
+        <tr>
+          <td>identifiability_score</td>
+          <td>0.0117</td>
+        </tr>
+        <tr>
+          <td>delta_presence</td>
+          <td>5</td>
+        </tr>
+      </tbody>
+    </table>
+    </details>
+    </td><td>
+    <img src="box.svg" width="120" /></td></tr>
+
+    <tr><td><img src='models/tvae_quick/umap.png' width='280'/></td><td>
+
+    <h3>Model: tvae_quick (synthcity)</h3>
+    <ul>
+    <li>Seed: 42, rows: 256</li>
+    <li> Params: <tt>{"batch_size": 256}</tt></li><li> <a href="models/tvae_quick/synthetic.csv">Synthetic CSV</a></li>
+    <li> <a href="models/tvae_quick/per_variable_metrics.csv">Per-variable metrics</a></li>
+    <li> <a href="models/tvae_quick/metrics.json">Metrics JSON</a></li>
+    <li> <a href="models/tvae_quick/metrics.privacy.json">Privacy metrics</a></li>
+    </ul>
+    <details class="model-subtable"><summary><strong>Per-variable fidelity</strong></summary>
+    <table class="dataframe">
+      <thead>
+        <tr style="text-align: right;">
+          <th>variable</th>
+          <th>type</th>
+          <th>KS</th>
+          <th>W1</th>
+          <th>JSD</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td>race</td>
+          <td>discrete</td>
+          <td></td>
+          <td></td>
+          <td>0.1456</td>
+        </tr>
+        <tr>
+          <td>gender</td>
+          <td>discrete</td>
+          <td></td>
+          <td></td>
+          <td>0.0817</td>
+        </tr>
+        <tr>
+          <td>age</td>
+          <td>discrete</td>
+          <td></td>
+          <td></td>
+          <td>0.124</td>
+        </tr>
+        <tr>
+          <td>weight</td>
+          <td>discrete</td>
+          <td></td>
+          <td></td>
+          <td>0.2066</td>
+        </tr>
+        <tr>
+          <td>admission_type_id</td>
+          <td>discrete</td>
+          <td></td>
+          <td></td>
+          <td>0.1353</td>
+        </tr>
+        <tr>
+          <td>discharge_disposition_id</td>
+          <td>continuous</td>
+          <td>0.5095</td>
+          <td>0.4571</td>
+          <td></td>
+        </tr>
+        <tr>
+          <td>admission_source_id</td>
+          <td>discrete</td>
+          <td></td>
+          <td></td>
+          <td>0.1622</td>
+        </tr>
+        <tr>
+          <td>time_in_hospital</td>
+          <td>discrete</td>
+          <td></td>
+          <td></td>
+          <td>0.3194</td>
+        </tr>
+        <tr>
+          <td>payer_code</td>
+          <td>discrete</td>
+          <td></td>
+          <td></td>
+          <td>0.4272</td>
+        </tr>
+        <tr>
+          <td>medical_specialty</td>
+          <td>discrete</td>
+          <td></td>
+          <td></td>
+          <td>0.5594</td>
+        </tr>
+      </tbody>
+    </table>
+    </details><details class="model-subtable"><summary><strong>Privacy metrics</strong></summary>
+    <table class="dataframe">
+      <thead>
+        <tr style="text-align: right;">
+          <th>metric</th>
+          <th>value</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td>n_real</td>
+          <td>101766</td>
+        </tr>
+        <tr>
+          <td>n_synth</td>
+          <td>256</td>
+        </tr>
+        <tr>
+          <td>exact_overlap_rate</td>
+          <td>0.1016</td>
+        </tr>
+        <tr>
+          <td>near_duplicate_rate_eps</td>
+          <td>0.957</td>
+        </tr>
+        <tr>
+          <td>nn_distance_mean</td>
+          <td>0.0309</td>
+        </tr>
+        <tr>
+          <td>k_min</td>
+          <td>1</td>
+        </tr>
+        <tr>
+          <td>k_pct_lt5</td>
+          <td>0.11</td>
+        </tr>
+        <tr>
+          <td>k_map</td>
+          <td>2</td>
+        </tr>
+        <tr>
+          <td>rare_qi_reproduction_rate</td>
+          <td>0.1026</td>
+        </tr>
+        <tr>
+          <td>identifiability_score</td>
+          <td>0.0117</td>
+        </tr>
+        <tr>
+          <td>delta_presence</td>
+          <td>2.1429</td>
+        </tr>
+      </tbody>
+    </table>
+    </details>
+    </td><td>
+    <img src="box.svg" width="120" /></td></tr>
 
     </table>
   </main>

@@ -1,0 +1,51 @@
+{
+  "n_real": 297,
+  "n_synth": 256,
+  "used_columns": [
+    "age",
+    "sex",
+    "cp",
+    "fbs",
+    "trestbps",
+    "chol",
+    "restecg",
+    "thalach",
+    "exang",
+    "oldpeak",
+    "slope",
+    "ca",
+    "thal"
+  ],
+  "qi_columns": [
+    "age",
+    "sex",
+    "cp",
+    "fbs",
+    "trestbps",
+    "chol",
+    "restecg",
+    "thalach",
+    "exang",
+    "oldpeak",
+    "slope",
+    "ca",
+    "thal"
+  ],
+  "sensitive_columns": [],
+  "exact_overlap_rate": 0.0,
+  "near_duplicate_rate_eps": 0.6640625,
+  "nn_distance_stats": {
+    "mean": 0.1902272204530587,
+    "median": 0.1902272204530587,
+    "p95": NaN,
+    "min": 0.1902272204530587,
+    "max": 0.1902272204530587
+  },
+  "k_min": 1,
+  "k_pct_lt5": 1.0,
+  "k_map": 1,
+  "rare_qi_reproduction_rate": 0.0,
+  "t_closeness": {},
+  "identifiability_score": null,
+  "delta_presence": 16.999999830000004
+}

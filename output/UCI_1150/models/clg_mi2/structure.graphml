@@ -122,22 +122,22 @@
     <edge source="Gallstone Status" target="Hyperlipidemia" />
     <edge source="Gallstone Status" target="Visceral Muscle Area (VMA) (Kg)" />
     <edge source="Gallstone Status" target="C-Reactive Protein (CRP)" />
+    <edge source="Gallstone Status" target="Intracellular Water (ICW)" />
     <edge source="Gallstone Status" target="Muscle Mass (MM)" />
     <edge source="Gallstone Status" target="Vitamin D" />
     <edge source="Gallstone Status" target="Bone Mass (BM)" />
     <edge source="Gallstone Status" target="Total Body Fat Ratio (TBFR) (%)" />
-    <edge source="Gallstone Status" target="Intracellular Water (ICW)" />
     <edge source="Age" target="Glomerular Filtration Rate (GFR)" />
     <edge source="Age" target="Hemoglobin (HGB)" />
     <edge source="Age" target="Visceral Fat Rating (VFR)" />
+    <edge source="Gender" target="Body Mass Index (BMI)" />
     <edge source="Gender" target="Glucose" />
+    <edge source="Gender" target="Extracellular Water (ECW)" />
+    <edge source="Gender" target="Creatinine" />
     <edge source="Gender" target="High Density Lipoprotein (HDL)" />
     <edge source="Gender" target="Hemoglobin (HGB)" />
     <edge source="Gender" target="Alanin Aminotransferaz (ALT)" />
-    <edge source="Gender" target="Total Fat Content (TFC)" />
     <edge source="Gender" target="Extracellular Fluid/Total Body Water (ECF/TBW)" />
-    <edge source="Gender" target="Extracellular Water (ECW)" />
-    <edge source="Gender" target="Creatinine" />
     <edge source="Comorbidity" target="Coronary Artery Disease (CAD)" />
     <edge source="Hyperlipidemia" target="Gender" />
     <edge source="Hyperlipidemia" target="Low Density Lipoprotein (LDL)" />
@@ -149,6 +149,7 @@
     <edge source="Body Mass Index (BMI)" target="Alkaline Phosphatase (ALP)" />
     <edge source="Body Mass Index (BMI)" target="Height" />
     <edge source="Body Mass Index (BMI)" target="Obesity (%)" />
+    <edge source="Body Mass Index (BMI)" target="Total Fat Content (TFC)" />
     <edge source="Total Body Water (TBW)" target="Muscle Mass (MM)" />
     <edge source="Extracellular Water (ECW)" target="Extracellular Fluid/Total Body Water (ECF/TBW)" />
     <edge source="Extracellular Water (ECW)" target="Total Body Water (TBW)" />
@@ -156,21 +157,20 @@
     <edge source="Extracellular Fluid/Total Body Water (ECF/TBW)" target="Total Body Water (TBW)" />
     <edge source="Total Body Fat Ratio (TBFR) (%)" target="Body Protein Content (Protein) (%)" />
     <edge source="Lean Mass (LM) (%)" target="Total Body Fat Ratio (TBFR) (%)" />
-    <edge source="Visceral Fat Rating (VFR)" target="Body Mass Index (BMI)" />
-    <edge source="Muscle Mass (MM)" target="Bone Mass (BM)" />
     <edge source="Muscle Mass (MM)" target="Lean Mass (LM) (%)" />
-    <edge source="Muscle Mass (MM)" target="Intracellular Water (ICW)" />
+    <edge source="Muscle Mass (MM)" target="Bone Mass (BM)" />
     <edge source="Muscle Mass (MM)" target="Height" />
+    <edge source="Muscle Mass (MM)" target="Intracellular Water (ICW)" />
     <edge source="Muscle Mass (MM)" target="Visceral Muscle Area (VMA) (Kg)" />
-    <edge source="Total Fat Content (TFC)" target="Body Mass Index (BMI)" />
     <edge source="Total Fat Content (TFC)" target="Lean Mass (LM) (%)" />
-    <edge source="Visceral Fat Area (VFA)" target="Visceral Fat Rating (VFR)" />
     <edge source="Visceral Fat Area (VFA)" target="Total Fat Content (TFC)" />
+    <edge source="Visceral Fat Area (VFA)" target="Visceral Fat Rating (VFR)" />
+    <edge source="Visceral Fat Area (VFA)" target="Body Mass Index (BMI)" />
     <edge source="Visceral Muscle Area (VMA) (Kg)" target="Visceral Fat Area (VFA)" />
     <edge source="Hepatic Fat Accumulation (HFA)" target="C-Reactive Protein (CRP)" />
+    <edge source="Hepatic Fat Accumulation (HFA)" target="Aspartat Aminotransferaz (AST)" />
     <edge source="Hepatic Fat Accumulation (HFA)" target="Gallstone Status" />
     <edge source="Hepatic Fat Accumulation (HFA)" target="Weight" />
-    <edge source="Hepatic Fat Accumulation (HFA)" target="Aspartat Aminotransferaz (AST)" />
     <edge source="Hepatic Fat Accumulation (HFA)" target="Triglyceride" />
     <edge source="Glucose" target="Alkaline Phosphatase (ALP)" />
     <edge source="Low Density Lipoprotein (LDL)" target="Total Cholesterol (TC)" />

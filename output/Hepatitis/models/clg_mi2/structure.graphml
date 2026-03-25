@@ -73,8 +73,8 @@
     <edge source="Spiders" target="Spleen Palpable" />
     <edge source="Ascites" target="Varices" />
     <edge source="Ascites" target="Fatigue" />
-    <edge source="Ascites" target="Antivirals" />
     <edge source="Ascites" target="Albumin" />
+    <edge source="Varices" target="Antivirals" />
     <edge source="Varices" target="Bilirubin" />
     <edge source="Alk Phosphate" target="Albumin" />
     <edge source="Sgot" target="Bilirubin" />

@@ -1,0 +1,44 @@
+{
+  "backend": "synthcity",
+  "name": "ctgan_fast",
+  "provider": "uciml",
+  "dataset_name": "UCI_1150",
+  "provider_id": 1150,
+  "generator": "ctgan",
+  "params": {
+    "batch_size": 256,
+    "n_iter": 5
+  },
+  "seed": 42,
+  "rows": 256,
+  "test_size": 0.2,
+  "missingness": {
+    "wrapped": true,
+    "random_state": 42,
+    "source": "pipeline"
+  },
+  "signature": "f5925acff88984be1783ec2930b651ecc77a88a90d467bc4d36d2fb477c845fa",
+  "signature_inputs": {
+    "label": "ctgan_fast",
+    "backend": "synthcity",
+    "model_params": {
+      "type": "ctgan",
+      "epochs": 5,
+      "batch_size": 256
+    },
+    "rows": 256,
+    "seed": 42,
+    "test_size": 0.2,
+    "compute_privacy": true,
+    "compute_downstream": false,
+    "missingness_wrapped": true,
+    "missingness_random_state": 42,
+    "data_fingerprint": {
+      "shape": [
+        319,
+        39
+      ],
+      "hash": "9528851783382316526"
+    }
+  }
+}

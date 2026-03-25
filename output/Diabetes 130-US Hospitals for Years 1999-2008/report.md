@@ -71,19 +71,23 @@
 
 ## Fidelity summary
 
-| model    | backend   |   disc jsd mean |   disc jsd median |   cont ks mean |   cont w1 mean | downstream sign match   |
-|:---------|:----------|----------------:|------------------:|---------------:|---------------:|:------------------------|
-| metasyn  | metasyn   |          0.0782 |            0.0434 |         0.5405 |         1.1845 |                         |
-| clg_mi2  | pybnesian |          0.0803 |            0.0533 |         0.315  |         1.5054 |                         |
-| semi_mi5 | pybnesian |          0.0803 |            0.0533 |         0.315  |         1.5054 |                         |
+| umap                                                 | model      | backend   |   disc jsd mean |   disc jsd median |   cont ks mean |   cont w1 mean | downstream sign match   |
+|:-----------------------------------------------------|:-----------|:----------|----------------:|------------------:|---------------:|---------------:|:------------------------|
+| <img src='models/metasyn/umap.png' height='48' />    | metasyn    | metasyn   |          0.0793 |            0.0434 |         0.5417 |         1.2278 |                         |
+| <img src='models/clg_mi2/umap.png' height='48' />    | clg_mi2    | pybnesian |          0.0803 |            0.0533 |         0.315  |         1.5054 |                         |
+| <img src='models/semi_mi5/umap.png' height='48' />   | semi_mi5   | pybnesian |          0.0803 |            0.0533 |         0.315  |         1.5054 |                         |
+| <img src='models/ctgan_fast/umap.png' height='48' /> | ctgan_fast | synthcity |          0.2747 |            0.1882 |         0.3647 |         6.7779 |                         |
+| <img src='models/tvae_quick/umap.png' height='48' /> | tvae_quick | synthcity |          0.1394 |            0.0791 |         0.1614 |         1.3723 |                         |
 
 ## Privacy summary
 
-| model    | backend   |   n real |   n synth |   exact overlap rate |   near duplicate rate eps |   nn distance mean |   k min |   k pct lt5 |   k map |   rare qi reproduction rate |   identifiability score |   delta presence |
-|:---------|:----------|---------:|----------:|---------------------:|--------------------------:|-------------------:|--------:|------------:|--------:|----------------------------:|------------------------:|-----------------:|
-| metasyn  | metasyn   |   101766 |      1000 |                0.048 |                     0.99  |             0.01   |       1 |        0.11 |      13 |                      0.5641 |                   0.008 |           1.717  |
-| clg_mi2  | pybnesian |   101766 |      1000 |                0.042 |                     0.981 |             0.0143 |       1 |        0.11 |       8 |                      0.4744 |                   0.004 |           1.9362 |
-| semi_mi5 | pybnesian |   101766 |      1000 |                0.042 |                     0.981 |             0.0143 |       1 |        0.11 |       8 |                      0.4744 |                   0.004 |           1.9362 |
+| model      | backend   |   n real |   n synth |   exact overlap rate |   near duplicate rate eps |   nn distance mean |   k min |   k pct lt5 |   k map |   rare qi reproduction rate |   identifiability score |   delta presence |
+|:-----------|:----------|---------:|----------:|---------------------:|--------------------------:|-------------------:|--------:|------------:|--------:|----------------------------:|------------------------:|-----------------:|
+| metasyn    | metasyn   |   101766 |      1000 |               0.046  |                    0.987  |             0.013  |       1 |        0.11 |       8 |                      0.5641 |                  0.005  |           1.5385 |
+| clg_mi2    | pybnesian |   101766 |      1000 |               0.042  |                    0.981  |             0.0143 |       1 |        0.11 |       8 |                      0.4744 |                  0.004  |           1.9362 |
+| semi_mi5   | pybnesian |   101766 |      1000 |               0.042  |                    0.981  |             0.0143 |       1 |        0.11 |       8 |                      0.4744 |                  0.004  |           1.9362 |
+| ctgan_fast | synthcity |   101766 |       256 |               0.0859 |                    0.9102 |             0.0552 |       1 |        0.11 |       1 |                      0.2564 |                  0.0117 |           5      |
+| tvae_quick | synthcity |   101766 |       256 |               0.1016 |                    0.957  |             0.0309 |       1 |        0.11 |       2 |                      0.1026 |                  0.0117 |           2.1429 |
 
 ## Models
 
@@ -119,41 +123,41 @@
       <td>discrete</td>
       <td></td>
       <td></td>
-      <td>0.0874</td>
+      <td>0.0689</td>
     </tr>
     <tr>
       <td>gender</td>
       <td>discrete</td>
       <td></td>
       <td></td>
-      <td>0.045</td>
+      <td>0.0655</td>
     </tr>
     <tr>
       <td>age</td>
       <td>discrete</td>
       <td></td>
       <td></td>
-      <td>0.0735</td>
+      <td>0.0818</td>
     </tr>
     <tr>
       <td>weight</td>
       <td>discrete</td>
       <td></td>
       <td></td>
-      <td>0.0896</td>
+      <td>0.1077</td>
     </tr>
     <tr>
       <td>admission_type_id</td>
       <td>discrete</td>
       <td></td>
       <td></td>
-      <td>0.1211</td>
+      <td>0.0957</td>
     </tr>
     <tr>
       <td>discharge_disposition_id</td>
       <td>continuous</td>
       <td>0.615</td>
-      <td>1.6376</td>
+      <td>1.664</td>
       <td></td>
     </tr>
     <tr>
@@ -161,28 +165,28 @@
       <td>discrete</td>
       <td></td>
       <td></td>
-      <td>0.0856</td>
+      <td>0.088</td>
     </tr>
     <tr>
       <td>time_in_hospital</td>
       <td>discrete</td>
       <td></td>
       <td></td>
-      <td>0.0799</td>
+      <td>0.0832</td>
     </tr>
     <tr>
       <td>payer_code</td>
       <td>discrete</td>
       <td></td>
       <td></td>
-      <td>0.1406</td>
+      <td>0.1178</td>
     </tr>
     <tr>
       <td>medical_specialty</td>
       <td>discrete</td>
       <td></td>
       <td></td>
-      <td>0.1987</td>
+      <td>0.2378</td>
     </tr>
   </tbody>
 </table>
@@ -224,15 +228,15 @@
     </tr>
     <tr>
       <td>exact_overlap_rate</td>
-      <td>0.048</td>
+      <td>0.046</td>
     </tr>
     <tr>
       <td>near_duplicate_rate_eps</td>
-      <td>0.99</td>
+      <td>0.987</td>
     </tr>
     <tr>
       <td>nn_distance_mean</td>
-      <td>0.01</td>
+      <td>0.013</td>
     </tr>
     <tr>
       <td>k_min</td>
@@ -244,7 +248,7 @@
     </tr>
     <tr>
       <td>k_map</td>
-      <td>13</td>
+      <td>8</td>
     </tr>
     <tr>
       <td>rare_qi_reproduction_rate</td>
@@ -252,11 +256,11 @@
     </tr>
     <tr>
       <td>identifiability_score</td>
-      <td>0.008</td>
+      <td>0.005</td>
     </tr>
     <tr>
       <td>delta_presence</td>
-      <td>1.717</td>
+      <td>1.5385</td>
     </tr>
   </tbody>
 </table>
@@ -770,5 +774,311 @@
 </details>
 </td><td>
 <a href='models/semi_mi5/structure.png'><img src='models/semi_mi5/structure.png' width='280'/></a></td></tr>
+
+<tr><td><img src='models/ctgan_fast/umap.png' width='280'/></td><td>
+
+<h3>Model: ctgan_fast (synthcity)</h3>
+<ul>
+<li>Seed: 42, rows: 256</li>
+<li> Params: <tt>{"batch_size": 256, "n_iter": 5}</tt></li><li> <a href="models/ctgan_fast/synthetic.csv">Synthetic CSV</a></li>
+<li> <a href="models/ctgan_fast/per_variable_metrics.csv">Per-variable metrics</a></li>
+<li> <a href="models/ctgan_fast/metrics.json">Metrics JSON</a></li>
+<li> <a href="models/ctgan_fast/metrics.privacy.json">Privacy metrics</a></li>
+</ul>
+<details class="model-subtable"><summary><strong>Per-variable fidelity</strong></summary>
+<table class="dataframe">
+  <thead>
+    <tr style="text-align: right;">
+      <th>variable</th>
+      <th>type</th>
+      <th>KS</th>
+      <th>W1</th>
+      <th>JSD</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td>race</td>
+      <td>discrete</td>
+      <td></td>
+      <td></td>
+      <td>0.234</td>
+    </tr>
+    <tr>
+      <td>gender</td>
+      <td>discrete</td>
+      <td></td>
+      <td></td>
+      <td>0.0905</td>
+    </tr>
+    <tr>
+      <td>age</td>
+      <td>discrete</td>
+      <td></td>
+      <td></td>
+      <td>0.329</td>
+    </tr>
+    <tr>
+      <td>weight</td>
+      <td>discrete</td>
+      <td></td>
+      <td></td>
+      <td>0.295</td>
+    </tr>
+    <tr>
+      <td>admission_type_id</td>
+      <td>discrete</td>
+      <td></td>
+      <td></td>
+      <td>0.3584</td>
+    </tr>
+    <tr>
+      <td>discharge_disposition_id</td>
+      <td>continuous</td>
+      <td>0.245</td>
+      <td>1.8958</td>
+      <td></td>
+    </tr>
+    <tr>
+      <td>admission_source_id</td>
+      <td>discrete</td>
+      <td></td>
+      <td></td>
+      <td>0.2299</td>
+    </tr>
+    <tr>
+      <td>time_in_hospital</td>
+      <td>discrete</td>
+      <td></td>
+      <td></td>
+      <td>0.9173</td>
+    </tr>
+    <tr>
+      <td>payer_code</td>
+      <td>discrete</td>
+      <td></td>
+      <td></td>
+      <td>0.8811</td>
+    </tr>
+    <tr>
+      <td>medical_specialty</td>
+      <td>discrete</td>
+      <td></td>
+      <td></td>
+      <td>0.9886</td>
+    </tr>
+  </tbody>
+</table>
+</details><details class="model-subtable"><summary><strong>Privacy metrics</strong></summary>
+<table class="dataframe">
+  <thead>
+    <tr style="text-align: right;">
+      <th>metric</th>
+      <th>value</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td>n_real</td>
+      <td>101766</td>
+    </tr>
+    <tr>
+      <td>n_synth</td>
+      <td>256</td>
+    </tr>
+    <tr>
+      <td>exact_overlap_rate</td>
+      <td>0.0859</td>
+    </tr>
+    <tr>
+      <td>near_duplicate_rate_eps</td>
+      <td>0.9102</td>
+    </tr>
+    <tr>
+      <td>nn_distance_mean</td>
+      <td>0.0552</td>
+    </tr>
+    <tr>
+      <td>k_min</td>
+      <td>1</td>
+    </tr>
+    <tr>
+      <td>k_pct_lt5</td>
+      <td>0.11</td>
+    </tr>
+    <tr>
+      <td>k_map</td>
+      <td>1</td>
+    </tr>
+    <tr>
+      <td>rare_qi_reproduction_rate</td>
+      <td>0.2564</td>
+    </tr>
+    <tr>
+      <td>identifiability_score</td>
+      <td>0.0117</td>
+    </tr>
+    <tr>
+      <td>delta_presence</td>
+      <td>5</td>
+    </tr>
+  </tbody>
+</table>
+</details>
+</td><td>
+<img src="box.svg" width="120" /></td></tr>
+
+<tr><td><img src='models/tvae_quick/umap.png' width='280'/></td><td>
+
+<h3>Model: tvae_quick (synthcity)</h3>
+<ul>
+<li>Seed: 42, rows: 256</li>
+<li> Params: <tt>{"batch_size": 256}</tt></li><li> <a href="models/tvae_quick/synthetic.csv">Synthetic CSV</a></li>
+<li> <a href="models/tvae_quick/per_variable_metrics.csv">Per-variable metrics</a></li>
+<li> <a href="models/tvae_quick/metrics.json">Metrics JSON</a></li>
+<li> <a href="models/tvae_quick/metrics.privacy.json">Privacy metrics</a></li>
+</ul>
+<details class="model-subtable"><summary><strong>Per-variable fidelity</strong></summary>
+<table class="dataframe">
+  <thead>
+    <tr style="text-align: right;">
+      <th>variable</th>
+      <th>type</th>
+      <th>KS</th>
+      <th>W1</th>
+      <th>JSD</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td>race</td>
+      <td>discrete</td>
+      <td></td>
+      <td></td>
+      <td>0.1456</td>
+    </tr>
+    <tr>
+      <td>gender</td>
+      <td>discrete</td>
+      <td></td>
+      <td></td>
+      <td>0.0817</td>
+    </tr>
+    <tr>
+      <td>age</td>
+      <td>discrete</td>
+      <td></td>
+      <td></td>
+      <td>0.124</td>
+    </tr>
+    <tr>
+      <td>weight</td>
+      <td>discrete</td>
+      <td></td>
+      <td></td>
+      <td>0.2066</td>
+    </tr>
+    <tr>
+      <td>admission_type_id</td>
+      <td>discrete</td>
+      <td></td>
+      <td></td>
+      <td>0.1353</td>
+    </tr>
+    <tr>
+      <td>discharge_disposition_id</td>
+      <td>continuous</td>
+      <td>0.5095</td>
+      <td>0.4571</td>
+      <td></td>
+    </tr>
+    <tr>
+      <td>admission_source_id</td>
+      <td>discrete</td>
+      <td></td>
+      <td></td>
+      <td>0.1622</td>
+    </tr>
+    <tr>
+      <td>time_in_hospital</td>
+      <td>discrete</td>
+      <td></td>
+      <td></td>
+      <td>0.3194</td>
+    </tr>
+    <tr>
+      <td>payer_code</td>
+      <td>discrete</td>
+      <td></td>
+      <td></td>
+      <td>0.4272</td>
+    </tr>
+    <tr>
+      <td>medical_specialty</td>
+      <td>discrete</td>
+      <td></td>
+      <td></td>
+      <td>0.5594</td>
+    </tr>
+  </tbody>
+</table>
+</details><details class="model-subtable"><summary><strong>Privacy metrics</strong></summary>
+<table class="dataframe">
+  <thead>
+    <tr style="text-align: right;">
+      <th>metric</th>
+      <th>value</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td>n_real</td>
+      <td>101766</td>
+    </tr>
+    <tr>
+      <td>n_synth</td>
+      <td>256</td>
+    </tr>
+    <tr>
+      <td>exact_overlap_rate</td>
+      <td>0.1016</td>
+    </tr>
+    <tr>
+      <td>near_duplicate_rate_eps</td>
+      <td>0.957</td>
+    </tr>
+    <tr>
+      <td>nn_distance_mean</td>
+      <td>0.0309</td>
+    </tr>
+    <tr>
+      <td>k_min</td>
+      <td>1</td>
+    </tr>
+    <tr>
+      <td>k_pct_lt5</td>
+      <td>0.11</td>
+    </tr>
+    <tr>
+      <td>k_map</td>
+      <td>2</td>
+    </tr>
+    <tr>
+      <td>rare_qi_reproduction_rate</td>
+      <td>0.1026</td>
+    </tr>
+    <tr>
+      <td>identifiability_score</td>
+      <td>0.0117</td>
+    </tr>
+    <tr>
+      <td>delta_presence</td>
+      <td>2.1429</td>
+    </tr>
+  </tbody>
+</table>
+</details>
+</td><td>
+<img src="box.svg" width="120" /></td></tr>
 
 </table>

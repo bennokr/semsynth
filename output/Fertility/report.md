@@ -56,19 +56,23 @@ Output: Diagnosis	normal (N), altered (O)
 
 ## Fidelity summary
 
-| model    | backend   |   disc jsd mean |   disc jsd median |   cont ks mean |   cont w1 mean |   downstream sign match |
-|:---------|:----------|----------------:|------------------:|---------------:|---------------:|------------------------:|
-| metasyn  | metasyn   |          0.1986 |            0.1445 |         0.2733 |         0.1319 |                    0.25 |
-| clg_mi2  | pybnesian |          0.1824 |            0.1559 |         0.1967 |         0.1348 |                         |
-| semi_mi5 | pybnesian |          0.1824 |            0.1559 |         0.1967 |         0.1348 |                         |
+| umap                                                 | model      | backend   |   disc jsd mean |   disc jsd median |   cont ks mean |   cont w1 mean |   downstream sign match |
+|:-----------------------------------------------------|:-----------|:----------|----------------:|------------------:|---------------:|---------------:|------------------------:|
+| <img src='models/metasyn/umap.png' height='48' />    | metasyn    | metasyn   |          0.058  |            0.0683 |         0.2033 |         0.1181 |                    0.25 |
+| <img src='models/clg_mi2/umap.png' height='48' />    | clg_mi2    | pybnesian |          0.0647 |            0.0362 |         0.1833 |         0.1201 |                         |
+| <img src='models/semi_mi5/umap.png' height='48' />   | semi_mi5   | pybnesian |          0.0647 |            0.0362 |         0.1833 |         0.1201 |                         |
+| <img src='models/ctgan_fast/umap.png' height='48' /> | ctgan_fast | synthcity |          0.3398 |            0.3911 |         0.6367 |         0.2003 |                         |
+| <img src='models/tvae_quick/umap.png' height='48' /> | tvae_quick | synthcity |          0.1168 |            0.1052 |         0.2933 |         0.1255 |                         |
 
 ## Privacy summary
 
-| model    | backend   |   n real |   n synth |   exact overlap rate |   near duplicate rate eps |   nn distance mean |   k min |   k pct lt5 |   k map |   rare qi reproduction rate | identifiability score   |   delta presence |
-|:---------|:----------|---------:|----------:|---------------------:|--------------------------:|-------------------:|--------:|------------:|--------:|----------------------------:|:------------------------|-----------------:|
-| metasyn  | metasyn   |      100 |       100 |                    0 |                      0.32 |             0.3503 |       1 |           1 |       3 |                           0 |                         |              2   |
-| clg_mi2  | pybnesian |      100 |       100 |                    0 |                      0.22 |             0.4959 |       1 |           1 |       2 |                           0 |                         |              2.5 |
-| semi_mi5 | pybnesian |      100 |       100 |                    0 |                      0.22 |             0.4959 |       1 |           1 |       2 |                           0 |                         |              2.5 |
+| model      | backend   |   n real |   n synth |   exact overlap rate |   near duplicate rate eps |   nn distance mean |   k min |   k pct lt5 |   k map |   rare qi reproduction rate | identifiability score   |   delta presence |
+|:-----------|:----------|---------:|----------:|---------------------:|--------------------------:|-------------------:|--------:|------------:|--------:|----------------------------:|:------------------------|-----------------:|
+| metasyn    | metasyn   |      100 |       100 |                    0 |                      0.21 |             0.4309 |       1 |           1 |       3 |                           0 |                         |           2.6667 |
+| clg_mi2    | pybnesian |      100 |       100 |                    0 |                      0.22 |             0.4959 |       1 |           1 |       2 |                           0 |                         |           2.5    |
+| semi_mi5   | pybnesian |      100 |       100 |                    0 |                      0.22 |             0.4959 |       1 |           1 |       2 |                           0 |                         |           2.5    |
+| ctgan_fast | synthcity |      100 |       100 |                    0 |                      0.12 |             0.3655 |       1 |           1 |       1 |                           0 |                         |          36      |
+| tvae_quick | synthcity |      100 |       100 |                    0 |                      0.08 |             0.3762 |       1 |           1 |       1 |                           0 |                         |           7      |
 
 ## Models
 
@@ -81,7 +85,7 @@ Output: Diagnosis	normal (N), altered (O)
 <h3>Model: metasyn (metasyn)</h3>
 <ul>
 <li>Seed: 42, rows: 100</li>
-<li> <a href="models/metasyn/synthetic.csv">Synthetic CSV</a></li>
+<li> Missingness: wrapped (random state 42) via pipeline</li><li> <a href="models/metasyn/synthetic.csv">Synthetic CSV</a></li>
 <li> <a href="models/metasyn/per_variable_metrics.csv">Per-variable metrics</a></li>
 <li> <a href="models/metasyn/metrics.json">Metrics JSON</a></li>
 <li> <a href="models/metasyn/metrics.privacy.json">Privacy metrics</a></li>
@@ -102,15 +106,15 @@ Output: Diagnosis	normal (N), altered (O)
     <tr>
       <td>season</td>
       <td>continuous</td>
-      <td>0.35</td>
-      <td>0.3104</td>
+      <td>0.31</td>
+      <td>0.2876</td>
       <td></td>
     </tr>
     <tr>
       <td>age</td>
       <td>continuous</td>
-      <td>0.25</td>
-      <td>0.0246</td>
+      <td>0.15</td>
+      <td>0.0261</td>
       <td></td>
     </tr>
     <tr>
@@ -118,48 +122,48 @@ Output: Diagnosis	normal (N), altered (O)
       <td>discrete</td>
       <td></td>
       <td></td>
-      <td>0.1445</td>
+      <td>0.0245</td>
     </tr>
     <tr>
       <td>accident</td>
       <td>discrete</td>
       <td></td>
       <td></td>
-      <td>0.3534</td>
+      <td>0.0694</td>
     </tr>
     <tr>
       <td>surgical_intervention</td>
       <td>discrete</td>
       <td></td>
       <td></td>
-      <td>0.0682</td>
+      <td>0.0683</td>
     </tr>
     <tr>
       <td>high_fevers</td>
       <td>discrete</td>
       <td></td>
       <td></td>
-      <td>0.1225</td>
+      <td>0.069</td>
     </tr>
     <tr>
       <td>alcohol</td>
       <td>discrete</td>
       <td></td>
       <td></td>
-      <td>0.3872</td>
+      <td>0.0812</td>
     </tr>
     <tr>
       <td>smoking</td>
       <td>discrete</td>
       <td></td>
       <td></td>
-      <td>0.3003</td>
+      <td>0.0523</td>
     </tr>
     <tr>
       <td>hrs_sitting</td>
       <td>continuous</td>
-      <td>0.22</td>
-      <td>0.0607</td>
+      <td>0.15</td>
+      <td>0.0405</td>
       <td></td>
     </tr>
     <tr>
@@ -167,7 +171,7 @@ Output: Diagnosis	normal (N), altered (O)
       <td>discrete</td>
       <td></td>
       <td></td>
-      <td>0.0139</td>
+      <td>0.0416</td>
     </tr>
   </tbody>
 </table>
@@ -217,11 +221,11 @@ Output: Diagnosis	normal (N), altered (O)
     </tr>
     <tr>
       <td>near_duplicate_rate_eps</td>
-      <td>0.32</td>
+      <td>0.21</td>
     </tr>
     <tr>
       <td>nn_distance_mean</td>
-      <td>0.3503</td>
+      <td>0.4309</td>
     </tr>
     <tr>
       <td>k_min</td>
@@ -241,7 +245,7 @@ Output: Diagnosis	normal (N), altered (O)
     </tr>
     <tr>
       <td>delta_presence</td>
-      <td>2</td>
+      <td>2.6667</td>
     </tr>
   </tbody>
 </table>
@@ -303,7 +307,7 @@ Output: Diagnosis	normal (N), altered (O)
 <h3>Model: clg_mi2 (pybnesian)</h3>
 <ul>
 <li>Seed: 42, rows: 100</li>
-<li> Params: <tt>{"max_indegree": 2, "operators": ["arcs"], "score": "bic", "type": "clg"}</tt></li><li> <a href="models/clg_mi2/synthetic.csv">Synthetic CSV</a></li>
+<li> Params: <tt>{"max_indegree": 2, "operators": ["arcs"], "score": "bic", "type": "clg"}</tt></li><li> Missingness: wrapped (random state 42) via pipeline</li><li> <a href="models/clg_mi2/synthetic.csv">Synthetic CSV</a></li>
 <li> <a href="models/clg_mi2/per_variable_metrics.csv">Per-variable metrics</a></li>
 <li> <a href="models/clg_mi2/metrics.json">Metrics JSON</a></li>
 <li> <a href="models/clg_mi2/metrics.privacy.json">Privacy metrics</a></li>
@@ -323,15 +327,15 @@ Output: Diagnosis	normal (N), altered (O)
     <tr>
       <td>season</td>
       <td>continuous</td>
-      <td>0.3</td>
-      <td>0.336</td>
+      <td>0.27</td>
+      <td>0.3014</td>
       <td></td>
     </tr>
     <tr>
       <td>age</td>
       <td>continuous</td>
       <td>0.15</td>
-      <td>0.0232</td>
+      <td>0.026</td>
       <td></td>
     </tr>
     <tr>
@@ -339,48 +343,48 @@ Output: Diagnosis	normal (N), altered (O)
       <td>discrete</td>
       <td></td>
       <td></td>
-      <td>0.1559</td>
+      <td>0.0362</td>
     </tr>
     <tr>
       <td>accident</td>
       <td>discrete</td>
       <td></td>
       <td></td>
-      <td>0.2244</td>
+      <td>0</td>
     </tr>
     <tr>
       <td>surgical_intervention</td>
       <td>discrete</td>
       <td></td>
       <td></td>
-      <td>0.0682</td>
+      <td>0.0597</td>
     </tr>
     <tr>
       <td>high_fevers</td>
       <td>discrete</td>
       <td></td>
       <td></td>
-      <td>0.1455</td>
+      <td>0.0286</td>
     </tr>
     <tr>
       <td>alcohol</td>
       <td>discrete</td>
       <td></td>
       <td></td>
-      <td>0.3699</td>
+      <td>0.1875</td>
     </tr>
     <tr>
       <td>smoking</td>
       <td>discrete</td>
       <td></td>
       <td></td>
-      <td>0.2991</td>
+      <td>0.1279</td>
     </tr>
     <tr>
       <td>hrs_sitting</td>
       <td>continuous</td>
-      <td>0.14</td>
-      <td>0.0453</td>
+      <td>0.13</td>
+      <td>0.0329</td>
       <td></td>
     </tr>
     <tr>
@@ -388,7 +392,7 @@ Output: Diagnosis	normal (N), altered (O)
       <td>discrete</td>
       <td></td>
       <td></td>
-      <td>0.0139</td>
+      <td>0.0133</td>
     </tr>
   </tbody>
 </table>
@@ -452,7 +456,7 @@ Output: Diagnosis	normal (N), altered (O)
 <h3>Model: semi_mi5 (pybnesian)</h3>
 <ul>
 <li>Seed: 42, rows: 100</li>
-<li> Params: <tt>{"max_indegree": 5, "operators": ["arcs"], "score": "bic", "type": "semiparametric"}</tt></li><li> <a href="models/semi_mi5/synthetic.csv">Synthetic CSV</a></li>
+<li> Params: <tt>{"max_indegree": 5, "operators": ["arcs"], "score": "bic", "type": "semiparametric"}</tt></li><li> Missingness: wrapped (random state 42) via pipeline</li><li> <a href="models/semi_mi5/synthetic.csv">Synthetic CSV</a></li>
 <li> <a href="models/semi_mi5/per_variable_metrics.csv">Per-variable metrics</a></li>
 <li> <a href="models/semi_mi5/metrics.json">Metrics JSON</a></li>
 <li> <a href="models/semi_mi5/metrics.privacy.json">Privacy metrics</a></li>
@@ -472,15 +476,15 @@ Output: Diagnosis	normal (N), altered (O)
     <tr>
       <td>season</td>
       <td>continuous</td>
-      <td>0.3</td>
-      <td>0.336</td>
+      <td>0.27</td>
+      <td>0.3014</td>
       <td></td>
     </tr>
     <tr>
       <td>age</td>
       <td>continuous</td>
       <td>0.15</td>
-      <td>0.0232</td>
+      <td>0.026</td>
       <td></td>
     </tr>
     <tr>
@@ -488,48 +492,48 @@ Output: Diagnosis	normal (N), altered (O)
       <td>discrete</td>
       <td></td>
       <td></td>
-      <td>0.1559</td>
+      <td>0.0362</td>
     </tr>
     <tr>
       <td>accident</td>
       <td>discrete</td>
       <td></td>
       <td></td>
-      <td>0.2244</td>
+      <td>0</td>
     </tr>
     <tr>
       <td>surgical_intervention</td>
       <td>discrete</td>
       <td></td>
       <td></td>
-      <td>0.0682</td>
+      <td>0.0597</td>
     </tr>
     <tr>
       <td>high_fevers</td>
       <td>discrete</td>
       <td></td>
       <td></td>
-      <td>0.1455</td>
+      <td>0.0286</td>
     </tr>
     <tr>
       <td>alcohol</td>
       <td>discrete</td>
       <td></td>
       <td></td>
-      <td>0.3699</td>
+      <td>0.1875</td>
     </tr>
     <tr>
       <td>smoking</td>
       <td>discrete</td>
       <td></td>
       <td></td>
-      <td>0.2991</td>
+      <td>0.1279</td>
     </tr>
     <tr>
       <td>hrs_sitting</td>
       <td>continuous</td>
-      <td>0.14</td>
-      <td>0.0453</td>
+      <td>0.13</td>
+      <td>0.0329</td>
       <td></td>
     </tr>
     <tr>
@@ -537,7 +541,7 @@ Output: Diagnosis	normal (N), altered (O)
       <td>discrete</td>
       <td></td>
       <td></td>
-      <td>0.0139</td>
+      <td>0.0133</td>
     </tr>
   </tbody>
 </table>
@@ -595,5 +599,303 @@ Output: Diagnosis	normal (N), altered (O)
 </details>
 </td><td>
 <a href='models/semi_mi5/structure.png'><img src='models/semi_mi5/structure.png' width='280'/></a></td></tr>
+
+<tr><td><img src='models/ctgan_fast/umap.png' width='280'/></td><td>
+
+<h3>Model: ctgan_fast (synthcity)</h3>
+<ul>
+<li>Seed: 42, rows: 100</li>
+<li> Params: <tt>{"batch_size": 256, "n_iter": 5}</tt></li><li> Missingness: wrapped (random state 42) via pipeline</li><li> <a href="models/ctgan_fast/synthetic.csv">Synthetic CSV</a></li>
+<li> <a href="models/ctgan_fast/per_variable_metrics.csv">Per-variable metrics</a></li>
+<li> <a href="models/ctgan_fast/metrics.json">Metrics JSON</a></li>
+<li> <a href="models/ctgan_fast/metrics.privacy.json">Privacy metrics</a></li>
+</ul>
+<details class="model-subtable"><summary><strong>Per-variable fidelity</strong></summary>
+<table class="dataframe">
+  <thead>
+    <tr style="text-align: right;">
+      <th>variable</th>
+      <th>type</th>
+      <th>KS</th>
+      <th>W1</th>
+      <th>JSD</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td>season</td>
+      <td>continuous</td>
+      <td>0.12</td>
+      <td>0.1127</td>
+      <td></td>
+    </tr>
+    <tr>
+      <td>age</td>
+      <td>continuous</td>
+      <td>0.93</td>
+      <td>0.169</td>
+      <td></td>
+    </tr>
+    <tr>
+      <td>child_diseases</td>
+      <td>discrete</td>
+      <td></td>
+      <td></td>
+      <td>0.1621</td>
+    </tr>
+    <tr>
+      <td>accident</td>
+      <td>discrete</td>
+      <td></td>
+      <td></td>
+      <td>0.4065</td>
+    </tr>
+    <tr>
+      <td>surgical_intervention</td>
+      <td>discrete</td>
+      <td></td>
+      <td></td>
+      <td>0.3911</td>
+    </tr>
+    <tr>
+      <td>high_fevers</td>
+      <td>discrete</td>
+      <td></td>
+      <td></td>
+      <td>0.4932</td>
+    </tr>
+    <tr>
+      <td>alcohol</td>
+      <td>discrete</td>
+      <td></td>
+      <td></td>
+      <td>0.266</td>
+    </tr>
+    <tr>
+      <td>smoking</td>
+      <td>discrete</td>
+      <td></td>
+      <td></td>
+      <td>0.4694</td>
+    </tr>
+    <tr>
+      <td>hrs_sitting</td>
+      <td>continuous</td>
+      <td>0.86</td>
+      <td>0.3192</td>
+      <td></td>
+    </tr>
+    <tr>
+      <td>diagnosis</td>
+      <td>discrete</td>
+      <td></td>
+      <td></td>
+      <td>0.1901</td>
+    </tr>
+  </tbody>
+</table>
+</details><details class="model-subtable"><summary><strong>Privacy metrics</strong></summary>
+<table class="dataframe">
+  <thead>
+    <tr style="text-align: right;">
+      <th>metric</th>
+      <th>value</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td>n_real</td>
+      <td>100</td>
+    </tr>
+    <tr>
+      <td>n_synth</td>
+      <td>100</td>
+    </tr>
+    <tr>
+      <td>exact_overlap_rate</td>
+      <td>0</td>
+    </tr>
+    <tr>
+      <td>near_duplicate_rate_eps</td>
+      <td>0.12</td>
+    </tr>
+    <tr>
+      <td>nn_distance_mean</td>
+      <td>0.3655</td>
+    </tr>
+    <tr>
+      <td>k_min</td>
+      <td>1</td>
+    </tr>
+    <tr>
+      <td>k_pct_lt5</td>
+      <td>1</td>
+    </tr>
+    <tr>
+      <td>k_map</td>
+      <td>1</td>
+    </tr>
+    <tr>
+      <td>rare_qi_reproduction_rate</td>
+      <td>0</td>
+    </tr>
+    <tr>
+      <td>delta_presence</td>
+      <td>36</td>
+    </tr>
+  </tbody>
+</table>
+</details>
+</td><td>
+<img src="box.svg" width="120" /></td></tr>
+
+<tr><td><img src='models/tvae_quick/umap.png' width='280'/></td><td>
+
+<h3>Model: tvae_quick (synthcity)</h3>
+<ul>
+<li>Seed: 42, rows: 100</li>
+<li> Params: <tt>{"batch_size": 256}</tt></li><li> Missingness: wrapped (random state 42) via pipeline</li><li> <a href="models/tvae_quick/synthetic.csv">Synthetic CSV</a></li>
+<li> <a href="models/tvae_quick/per_variable_metrics.csv">Per-variable metrics</a></li>
+<li> <a href="models/tvae_quick/metrics.json">Metrics JSON</a></li>
+<li> <a href="models/tvae_quick/metrics.privacy.json">Privacy metrics</a></li>
+</ul>
+<details class="model-subtable"><summary><strong>Per-variable fidelity</strong></summary>
+<table class="dataframe">
+  <thead>
+    <tr style="text-align: right;">
+      <th>variable</th>
+      <th>type</th>
+      <th>KS</th>
+      <th>W1</th>
+      <th>JSD</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td>season</td>
+      <td>continuous</td>
+      <td>0.21</td>
+      <td>0.2272</td>
+      <td></td>
+    </tr>
+    <tr>
+      <td>age</td>
+      <td>continuous</td>
+      <td>0.29</td>
+      <td>0.0491</td>
+      <td></td>
+    </tr>
+    <tr>
+      <td>child_diseases</td>
+      <td>discrete</td>
+      <td></td>
+      <td></td>
+      <td>0.1867</td>
+    </tr>
+    <tr>
+      <td>accident</td>
+      <td>discrete</td>
+      <td></td>
+      <td></td>
+      <td>0.1052</td>
+    </tr>
+    <tr>
+      <td>surgical_intervention</td>
+      <td>discrete</td>
+      <td></td>
+      <td></td>
+      <td>0.0856</td>
+    </tr>
+    <tr>
+      <td>high_fevers</td>
+      <td>discrete</td>
+      <td></td>
+      <td></td>
+      <td>0.1405</td>
+    </tr>
+    <tr>
+      <td>alcohol</td>
+      <td>discrete</td>
+      <td></td>
+      <td></td>
+      <td>0.138</td>
+    </tr>
+    <tr>
+      <td>smoking</td>
+      <td>discrete</td>
+      <td></td>
+      <td></td>
+      <td>0.072</td>
+    </tr>
+    <tr>
+      <td>hrs_sitting</td>
+      <td>continuous</td>
+      <td>0.38</td>
+      <td>0.1002</td>
+      <td></td>
+    </tr>
+    <tr>
+      <td>diagnosis</td>
+      <td>discrete</td>
+      <td></td>
+      <td></td>
+      <td>0.0898</td>
+    </tr>
+  </tbody>
+</table>
+</details><details class="model-subtable"><summary><strong>Privacy metrics</strong></summary>
+<table class="dataframe">
+  <thead>
+    <tr style="text-align: right;">
+      <th>metric</th>
+      <th>value</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td>n_real</td>
+      <td>100</td>
+    </tr>
+    <tr>
+      <td>n_synth</td>
+      <td>100</td>
+    </tr>
+    <tr>
+      <td>exact_overlap_rate</td>
+      <td>0</td>
+    </tr>
+    <tr>
+      <td>near_duplicate_rate_eps</td>
+      <td>0.08</td>
+    </tr>
+    <tr>
+      <td>nn_distance_mean</td>
+      <td>0.3762</td>
+    </tr>
+    <tr>
+      <td>k_min</td>
+      <td>1</td>
+    </tr>
+    <tr>
+      <td>k_pct_lt5</td>
+      <td>1</td>
+    </tr>
+    <tr>
+      <td>k_map</td>
+      <td>1</td>
+    </tr>
+    <tr>
+      <td>rare_qi_reproduction_rate</td>
+      <td>0</td>
+    </tr>
+    <tr>
+      <td>delta_presence</td>
+      <td>7</td>
+    </tr>
+  </tbody>
+</table>
+</details>
+</td><td>
+<img src="box.svg" width="120" /></td></tr>
 
 </table>

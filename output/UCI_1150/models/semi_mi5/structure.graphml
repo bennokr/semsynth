@@ -119,7 +119,7 @@
     <node id="Vitamin D">
       <data key="d0">LinearGaussianCPDType</data>
     </node>
-    <edge source="Gallstone Status" target="Hyperlipidemia" />
+    <edge source="Gallstone Status" target="Hepatic Fat Accumulation (HFA)" />
     <edge source="Gallstone Status" target="Visceral Fat Area (VFA)" />
     <edge source="Gallstone Status" target="Alanin Aminotransferaz (ALT)" />
     <edge source="Gallstone Status" target="High Density Lipoprotein (HDL)" />
@@ -144,6 +144,7 @@
     <edge source="Age" target="Creatinine" />
     <edge source="Age" target="Glomerular Filtration Rate (GFR)" />
     <edge source="Age" target="Extracellular Water (ECW)" />
+    <edge source="Gender" target="Hyperlipidemia" />
     <edge source="Gender" target="Body Mass Index (BMI)" />
     <edge source="Gender" target="Extracellular Water (ECW)" />
     <edge source="Gender" target="Visceral Fat Area (VFA)" />
@@ -165,7 +166,7 @@
     <edge source="Gender" target="Creatinine" />
     <edge source="Comorbidity" target="Coronary Artery Disease (CAD)" />
     <edge source="Coronary Artery Disease (CAD)" target="Lean Mass (LM) (%)" />
-    <edge source="Hyperlipidemia" target="Gender" />
+    <edge source="Hyperlipidemia" target="Gallstone Status" />
     <edge source="Hyperlipidemia" target="Low Density Lipoprotein (LDL)" />
     <edge source="Diabetes Mellitus (DM)" target="Total Body Water (TBW)" />
     <edge source="Diabetes Mellitus (DM)" target="Comorbidity" />
@@ -215,7 +216,6 @@
     <edge source="Visceral Fat Area (VFA)" target="Bone Mass (BM)" />
     <edge source="Visceral Fat Area (VFA)" target="Visceral Muscle Area (VMA) (Kg)" />
     <edge source="Visceral Fat Area (VFA)" target="Visceral Fat Rating (VFR)" />
-    <edge source="Hepatic Fat Accumulation (HFA)" target="Gallstone Status" />
     <edge source="Hepatic Fat Accumulation (HFA)" target="Weight" />
     <edge source="Hepatic Fat Accumulation (HFA)" target="Total Fat Content (TFC)" />
     <edge source="Hepatic Fat Accumulation (HFA)" target="Aspartat Aminotransferaz (AST)" />
