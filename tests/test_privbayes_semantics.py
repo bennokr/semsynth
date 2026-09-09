@@ -35,3 +35,35 @@ def test_overlapping_semantic_bins_are_rejected():
 
     with pytest.raises(ValueError, match="overlap"):
         _apply_semantic_binning(frame, profile)
+
+
+def test_privbayes_returns_neutral_result():
+    pytest.importorskip("DataSynthesizer")
+    from semsynth.backends.privbayes import synthesize_privbayes_csv
+
+    rows = ["region,education,income"]
+    for index in range(120):
+        region = "north" if index % 3 else "south"
+        education = "college" if region == "north" and index % 4 else "school"
+        income = "high" if education == "college" else "low"
+        rows.append(f"{region},{education},{income}")
+
+    result = synthesize_privbayes_csv(
+        "\n".join(rows),
+        epsilon=1.0,
+        k=1,
+        synthetic_rows=40,
+        seed=7,
+        histogram_bins=5,
+    )
+
+    assert result.backend == "privbayes"
+    assert result.parameters["input_rows"] == 120
+    assert result.synthetic_data.shape == (40, 3)
+    assert len(result.learned_model["bayesian_network"]) == 3
+    assert set(result.metrics["marginal_total_variation"]) == {
+        "region",
+        "education",
+        "income",
+    }
+    assert result.privacy_report["epsilon"] == 1.0
