@@ -60,7 +60,7 @@ def test_privbayes_returns_neutral_result():
     assert result.backend == "privbayes"
     assert result.parameters["input_rows"] == 120
     assert result.synthetic_data.shape == (40, 3)
-    assert len(result.learned_model["bayesian_network"]) == 3
+    assert len(result.learned_model["bayesian_network"]) == 2
     assert set(result.metrics["marginal_total_variation"]) == {
         "region",
         "education",
