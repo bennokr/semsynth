@@ -14,7 +14,7 @@ import io
 import math
 import tempfile
 from pathlib import Path
-from typing import Any, Callable, Iterable, Mapping, Sequence
+from typing import Any, Callable, Iterable, Mapping, Optional, Sequence
 
 import numpy as np
 
@@ -26,8 +26,8 @@ class SerialPool:
 
     def __init__(
         self,
-        processes: int | None = None,
-        initializer: Callable[..., Any] | None = None,
+        processes: Optional[int] = None,
+        initializer: Optional[Callable[..., Any]] = None,
         initargs: Sequence[Any] = (),
         **_: Any,
     ) -> None:
@@ -71,7 +71,7 @@ def patch_datasynthesizer_pool() -> Any:
 def _validated_bins(column: str, profile: Mapping[str, Any]) -> list[dict[str, Any]]:
     declared = [dict(item) for item in (profile.get("bins") or [])]
     seen: set[str] = set()
-    previous_upper: float | None = None
+    previous_upper: Optional[float] = None
     previous_closed = "left"
 
     for index, semantic_bin in enumerate(declared):
@@ -210,9 +210,9 @@ def synthesize_privbayes_csv(
     seed: int = 0,
     histogram_bins: int = 10,
     category_threshold: int = 20,
-    attribute_to_datatype: Mapping[str, str] | None = None,
-    attribute_to_is_categorical: Mapping[str, bool] | None = None,
-    column_semantics: Mapping[str, Mapping[str, Any]] | None = None,
+    attribute_to_datatype: Optional[Mapping[str, str]] = None,
+    attribute_to_is_categorical: Optional[Mapping[str, bool]] = None,
+    column_semantics: Optional[Mapping[str, Mapping[str, Any]]] = None,
 ) -> SynthesisResult:
     """Run correlated-mode PrivBayes and return a neutral synthesis result."""
 
