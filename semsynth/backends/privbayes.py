@@ -13,8 +13,10 @@ import importlib.metadata
 import io
 import math
 import tempfile
+from collections.abc import Callable, Iterable, Mapping, Sequence
 from pathlib import Path
-from typing import Any, Callable, Iterable, Mapping, Optional, Sequence
+from types import TracebackType
+from typing import Any
 
 import numpy as np
 
@@ -26,8 +28,8 @@ class SerialPool:
 
     def __init__(
         self,
-        processes: Optional[int] = None,
-        initializer: Optional[Callable[..., Any]] = None,
+        processes: int | None = None,
+        initializer: Callable[..., Any] | None = None,
         initargs: Sequence[Any] = (),
         **_: Any,
     ) -> None:
@@ -35,10 +37,15 @@ class SerialPool:
         if initializer is not None:
             initializer(*initargs)
 
-    def __enter__(self) -> "SerialPool":
+    def __enter__(self):
         return self
 
-    def __exit__(self, exc_type: Any, exc_value: Any, traceback: Any) -> bool:
+    def __exit__(
+        self,
+        exc_type: type[BaseException] | None,
+        exc_value: BaseException | None,
+        traceback: TracebackType | None,
+    ) -> bool:
         return False
 
     def map(
@@ -71,7 +78,7 @@ def patch_datasynthesizer_pool() -> Any:
 def _validated_bins(column: str, profile: Mapping[str, Any]) -> list[dict[str, Any]]:
     declared = [dict(item) for item in (profile.get("bins") or [])]
     seen: set[str] = set()
-    previous_upper: Optional[float] = None
+    previous_upper: float | None = None
     previous_closed = "left"
 
     for index, semantic_bin in enumerate(declared):
@@ -125,11 +132,15 @@ def _apply_semantic_binning(
         if not declared:
             continue
 
-        def classify(raw: Any) -> Any:
-            if raw is None or (not isinstance(raw, str) and raw != raw):
+        def classify(
+            raw: Any,
+            bins: list[dict[str, Any]] = declared,
+            column_name: str = column,
+        ) -> Any:
+            if raw is None or (not isinstance(raw, str) and isna(raw)):
                 return raw
             value = float(raw)
-            for semantic_bin in declared:
+            for semantic_bin in bins:
                 lower, upper = semantic_bin.get("lower"), semantic_bin.get("upper")
                 closed = semantic_bin["closed"]
                 lower_ok = lower is None or value > float(lower) or (
@@ -141,7 +152,7 @@ def _apply_semantic_binning(
                 if lower_ok and upper_ok:
                     return str(semantic_bin["label"])
             raise ValueError(
-                f"Value {value:g} in column {column!r} is outside its semantic bins."
+                f"Value {value:g} in column {column_name!r} is outside its semantic bins."
             )
 
         frame[column] = frame[column].map(classify)
@@ -210,9 +221,9 @@ def synthesize_privbayes_csv(
     seed: int = 0,
     histogram_bins: int = 10,
     category_threshold: int = 20,
-    attribute_to_datatype: Optional[Mapping[str, str]] = None,
-    attribute_to_is_categorical: Optional[Mapping[str, bool]] = None,
-    column_semantics: Optional[Mapping[str, Mapping[str, Any]]] = None,
+    attribute_to_datatype: Mapping[str, str] | None = None,
+    attribute_to_is_categorical: Mapping[str, bool] | None = None,
+    column_semantics: Mapping[str, Mapping[str, Any]] | None = None,
 ) -> SynthesisResult:
     """Run correlated-mode PrivBayes and return a neutral synthesis result."""
 
@@ -237,9 +248,9 @@ def synthesize_privbayes_csv(
         raise ValueError("category_threshold must be between 2 and 200.")
 
     patch_datasynthesizer_pool()
-    from pandas import read_csv
     from DataSynthesizer.DataDescriber import DataDescriber
     from DataSynthesizer.DataGenerator import DataGenerator
+    from pandas import isna, read_csv
 
     frame = read_csv(io.StringIO(csv_text), skipinitialspace=True)
     semantic_profiles = dict(column_semantics or {})
@@ -291,7 +302,7 @@ def synthesize_privbayes_csv(
             )
 
     description = describer.data_description
-    root, order, parents = _network(description)
+    root, order, _parents = _network(description)
     cards = _cardinalities(description, root, order)
     marginal_tv: dict[str, float] = {}
     if describer.df_encoded is not None and generator.encoded_dataset is not None:
@@ -363,6 +374,6 @@ run_privbayes_csv = synthesize_privbayes_csv
 __all__ = [
     "SerialPool",
     "patch_datasynthesizer_pool",
-    "synthesize_privbayes_csv",
     "run_privbayes_csv",
+    "synthesize_privbayes_csv",
 ]
