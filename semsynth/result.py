@@ -2,8 +2,9 @@
 
 from __future__ import annotations
 
+from collections.abc import Mapping
 from dataclasses import dataclass, field
-from typing import Any, Dict, List, Mapping, Optional
+from typing import Any
 
 
 @dataclass
@@ -19,13 +20,13 @@ class SynthesisResult:
     backend: str
     parameters: Mapping[str, Any] = field(default_factory=dict)
     metrics: Mapping[str, Any] = field(default_factory=dict)
-    privacy_report: Optional[Mapping[str, Any]] = None
+    privacy_report: Mapping[str, Any] | None = None
     provenance: Mapping[str, Any] = field(default_factory=dict)
     learned_model: Any = None
     semantics: Mapping[str, Any] = field(default_factory=dict)
-    warnings: List[str] = field(default_factory=list)
+    warnings: list[str] = field(default_factory=list)
 
-    def summary(self) -> Dict[str, Any]:
+    def summary(self) -> dict[str, Any]:
         """Return JSON-friendly metadata without serializing data or model."""
 
         return {
