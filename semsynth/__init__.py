@@ -10,7 +10,9 @@ from __future__ import annotations
 
 from importlib import metadata
 
-__all__ = ["__version__", "get_version"]
+from semsynth.result import SynthesisResult
+
+__all__ = ["SynthesisResult", "__version__", "get_version"]
 
 
 def get_version() -> str:
