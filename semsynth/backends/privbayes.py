@@ -322,6 +322,7 @@ def synthesize_privbayes_csv(
             "seed": seed,
             "histogram_bins": histogram_bins,
             "category_threshold": category_threshold,
+            "input_rows": int(frame.shape[0]),
         },
         metrics={
             "marginal_total_variation": marginal_tv,
