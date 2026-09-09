@@ -137,7 +137,7 @@ def _apply_semantic_binning(
             bins: list[dict[str, Any]] = declared,
             column_name: str = column,
         ) -> Any:
-            if raw is None or (not isinstance(raw, str) and isna(raw)):
+            if _is_missing(raw):
                 return raw
             value = float(raw)
             for semantic_bin in bins:
@@ -163,6 +163,16 @@ def _apply_semantic_binning(
             "provenance": profile.get("provenance") or "user-declared",
         }
     return frame, actions
+
+
+
+def _is_missing(value: Any) -> bool:
+    if value is None:
+        return True
+    try:
+        return bool(np.isscalar(value) and np.isnan(value))
+    except TypeError:
+        return False
 
 
 def _marginal_tv(original: Any, synthetic: Any, cardinality: int) -> float:
@@ -250,7 +260,7 @@ def synthesize_privbayes_csv(
     patch_datasynthesizer_pool()
     from DataSynthesizer.DataDescriber import DataDescriber
     from DataSynthesizer.DataGenerator import DataGenerator
-    from pandas import isna, read_csv
+    from pandas import read_csv
 
     frame = read_csv(io.StringIO(csv_text), skipinitialspace=True)
     semantic_profiles = dict(column_semantics or {})
