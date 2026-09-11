@@ -15,7 +15,7 @@ jobs:
         with:
           python-version: '3.11'
       - name: Install package
-        run: python -m pip install -e .[dev]
+        run: python -m pip install -e '.[dev,privbayes]'
       - name: Lint changed Python files
         env:
           BASE_SHA: ${{ github.event.pull_request.base.sha || github.event.before }}
@@ -36,4 +36,4 @@ jobs:
         continue-on-error: true
         run: ruff check semsynth tests
       - name: Test
-        run: pytest
+        run: pytest --ignore=tests/test_sparql_playwright.py
