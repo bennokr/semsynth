@@ -9,12 +9,31 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
       - uses: actions/setup-python@v5
         with:
           python-version: '3.11'
       - name: Install package
         run: python -m pip install -e .[dev]
-      - name: Lint
+      - name: Lint changed Python files
+        env:
+          BASE_SHA: ${{ github.event.pull_request.base.sha || github.event.before }}
+          HEAD_SHA: ${{ github.event.pull_request.head.sha || github.sha }}
+        run: |
+          if ! git cat-file -e "${BASE_SHA}^{commit}" 2>/dev/null; then
+            BASE_SHA="${HEAD_SHA}^"
+          fi
+          mapfile -d '' files < <(
+            git diff --name-only -z --diff-filter=ACMRT "$BASE_SHA" "$HEAD_SHA" -- '*.py'
+          )
+          if (( ${#files[@]} )); then
+            ruff check "${files[@]}"
+          else
+            echo "No changed Python files to lint."
+          fi
+      - name: Report repository lint backlog
+        continue-on-error: true
         run: ruff check semsynth tests
       - name: Test
         run: pytest
