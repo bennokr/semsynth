@@ -35,7 +35,8 @@ dev = [
   "pytest-cov",
   "ruff",
   "black",
-  "mypy"
+  "mypy",
+  "statsmodels"
 ]
 app = [
   "flask"
