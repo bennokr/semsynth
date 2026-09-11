@@ -180,3 +180,22 @@ semmap_context_url = "https://w3id.org/semmap/context"
   - distribution counts per dataset.
 - This mirrors the static-browser pattern from `data-catalog-sparql-playground` (catalog + local query UI, no server-side SPARQL service required).
 - SPARQL query templates are also described as catalog distributions so tooling can discover and preload them as tabs.
+
+
+## Backend result contract
+
+Interactive synthesis backends return `semsynth.SynthesisResult`. The contract
+keeps generated data and a learned model as Python objects, alongside parameters,
+utility metrics, privacy facts, provenance, semantic actions, and warnings.
+Batch reporting can still serialize those values as artifacts.
+
+PrivBayes now lives in `semsynth.backends.privbayes` and is installed with:
+
+```bash
+pip install -e ".[privbayes]"
+```
+
+Declared semantic bins, datatypes, and categorical flags are applied before
+PrivBayes learns its network. The result records those computational actions so
+downstream tools can distinguish semantics that affected computation from
+metadata used only for display.

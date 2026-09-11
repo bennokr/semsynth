@@ -35,7 +35,8 @@ dev = [
   "pytest-cov",
   "ruff",
   "black",
-  "mypy"
+  "mypy",
+  "statsmodels"
 ]
 app = [
   "flask"
@@ -59,6 +60,10 @@ pybnesian = [
 synthcity = [
   "synthcity>=0.2",
   "torch"
+]
+privbayes = [
+  "DataSynthesizer==0.1.13",
+  "scipy"
 ]
 umap = [
   "numba<0.63",
@@ -84,6 +89,8 @@ all = [
   "pybnesian",
   "synthcity>=0.2",
   "torch",
+  "DataSynthesizer==0.1.13",
+  "scipy",
   "matplotlib",
   "umap-learn",
   "ucumvert"
