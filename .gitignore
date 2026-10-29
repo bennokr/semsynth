@@ -8,3 +8,5 @@ docs/.doctrees/
 *.egg-info/
 .eggs/
 prov/
+.DS_Store
+.buildinfo.bak
