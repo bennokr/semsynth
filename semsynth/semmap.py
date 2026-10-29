@@ -221,6 +221,27 @@ class DatasetSchema(RDFMixin):
     columns: List[Column]  # required
 
 
+def _nest_graph(payload: Mapping[str, Any]) -> Mapping[str, Any]:
+    """Return DSV JSON-LD with the dataset nested, if ``payload`` is a flat ``@graph`` of nodes.
+
+    Files such as Modlet's list the dataset, schema, columns and properties as separate nodes that refer to each
+    other by ``@id``. linked-codebook (optional, the ``mapping`` extra) resolves them, and writes them nested.
+
+    Args:
+        payload: DSV JSON-LD in any of its forms.
+
+    Returns:
+        The nested form for a flat graph, otherwise ``payload`` itself.
+    """
+    if not isinstance(payload.get("@graph"), list):
+        return payload
+    try:
+        from linked_codebook import build, parse
+    except ImportError:
+        return payload
+    return build(parse(payload, explicit=True))
+
+
 # --- Root document / Dataset --------------------------------------------------
 @dataclass
 class Metadata(RDFMixin):
@@ -257,6 +278,7 @@ class Metadata(RDFMixin):
                     return payload.get(key)
             return None
 
+        payload = _nest_graph(payload)
         ds_summary = payload.get("dsv:summaryStatistics") or {}
         ds_stats = SummaryStatistics(
             datasetCompleteness=ds_summary.get("dsv:datasetCompleteness"),

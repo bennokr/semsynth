@@ -2,6 +2,7 @@ import json
 from pathlib import Path
 
 import pandas as pd
+import pytest
 from pint_pandas import PintType
 
 from semsynth.semmap import (
@@ -154,3 +155,30 @@ def test_to_privacy_frame_normalizes_roles_and_types():
     assert types["age"] == "numeric"
     assert types["disease"] == "categorical"
     assert types["id_col"] == "categorical"
+
+def test_flat_graph_of_nodes_is_read_with_linked_codebook() -> None:
+    """Modlet writes the dataset, schema, columns and properties as separate nodes."""
+    pytest.importorskip("linked_codebook")
+    payload = {
+        "@context": {
+            "dsv": "https://w3id.org/dsv-ontology#",
+            "csvw": "http://www.w3.org/ns/csvw#",
+            "qudt": "http://qudt.org/schema/qudt/",
+            "datasetSchema": {"@id": "dsv:datasetSchema", "@type": "@id"},
+            "column": {"@id": "dsv:column", "@type": "@id"},
+            "columnProperty": {"@id": "dsv:columnProperty", "@type": "@id"},
+            "hasVariable": {"@id": "dsv:hasVariable", "@type": "@id"},
+            "unit": {"@id": "qudt:hasUnit", "@type": "@id"},
+            "name": "csvw:name",
+        },
+        "@graph": [
+            {"@id": "ex:d", "@type": ["dsv:Dataset"], "datasetSchema": {"@id": "ex:s"}},
+            {"@id": "ex:s", "@type": "dsv:DatasetSchema", "column": [{"@id": "ex:c1"}, {"@id": "ex:c2"}]},
+            {"@id": "ex:c1", "@type": "dsv:Column", "name": "age", "columnProperty": {"@id": "ex:p1"}},
+            {"@id": "ex:p1", "@type": "dsv:ColumnProperty", "hasVariable": {"@id": "ex:v1"}, "unit": {"@id": "http://qudt.org/vocab/unit/YR"}},
+            {"@id": "ex:c2", "@type": "dsv:Column", "name": "time"},
+        ],
+    }
+    metadata = Metadata.from_dcat_dsv(payload)
+    assert [column.name for column in metadata.datasetSchema.columns] == ["age", "time"]
+    assert metadata.datasetSchema.columns[0].columnProperty.hasUnit == "http://qudt.org/vocab/unit/YR"
