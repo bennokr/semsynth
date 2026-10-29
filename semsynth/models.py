@@ -12,9 +12,6 @@ import tomllib
 from makeprov import OutPath, rule
 from makeprov.config import Config
 
-if False:  # pragma: no cover - imported for type checking only
-    from typing import TypedDict  # noqa: F401  # pylint: disable=unused-import
-
 
 @dataclass
 class ModelSpec:

@@ -11,7 +11,6 @@ from typing import Any, Dict, List, Mapping, Optional, Sequence
 
 import numpy as np
 import pandas as pd
-import patsy
 from pandas.api.types import CategoricalDtype
 import statsmodels.api as sm
 from makeprov import Config, InPath, OutPath, rule
