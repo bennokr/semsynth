@@ -20,6 +20,8 @@ For extra features, run `python -m pip install -e .[EXTRA]` with `EXTRA` in (
 `statsmodels`
 `mapping`).
 
+The `mapping` extra installs [linked-codebook](https://github.com/bennokr/linked-codebook) (Python 3.11 or newer), which `map_columns/sssom_to_semmap.py` uses to read SSSOM rows. It is not on PyPI yet, so the extra points to its published wheel.
+
 ## 🔎 Quick start
 
 1. Search datasets

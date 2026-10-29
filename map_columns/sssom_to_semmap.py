@@ -5,23 +5,19 @@ from __future__ import annotations
 import csv
 import json
 import logging
+import re
 from pathlib import Path
 from typing import Dict, List, Optional
 
 import defopt
+from linked_codebook import from_sssom
 
 from semsynth.semmap import ColumnProperty, Metadata
 
 logger = logging.getLogger(__name__)
 
 
-PREDICATE_TO_FIELD = {
-    "skos:exactMatch": "exactMatch",
-    "skos:closeMatch": "closeMatch",
-    "skos:relatedMatch": "relatedMatch",
-    "skos:broadMatch": "broadMatch",
-    "skos:narrowMatch": "narrowMatch",
-}
+SSSOM_COLUMNS = ("subject_id", "subject_label", "predicate_id", "object_id", "object_label")
 
 
 def _normalise_object_id(object_id: str) -> str:
@@ -35,14 +31,6 @@ def _normalise_object_id(object_id: str) -> str:
     return object_id
 
 
-def _normalize_subject_id(subject_id: str) -> str:
-    """Extract a column identifier from an SSSOM subject id."""
-
-    token = subject_id.rsplit(":", 1)[-1]
-    token = token.rsplit("/", 1)[-1]
-    return token
-
-
 def _load_sssom(tsv_path: Path) -> List[Dict[str, str]]:
     """Load mappings from an SSSOM TSV file."""
 
@@ -50,6 +38,19 @@ def _load_sssom(tsv_path: Path) -> List[Dict[str, str]]:
         rows = [line for line in f if not line.lstrip().startswith("#")]
     reader = csv.DictReader(rows, delimiter="\t")
     return [row for row in reader]
+
+
+def _to_tsv(mappings: List[Dict[str, str]]) -> str:
+    """Write mapping rows as SSSOM TSV text, with Wikidata CURIEs expanded to URIs."""
+
+    def cell(value: Optional[str]) -> str:
+        return re.sub(r"[\t\r\n]+", " ", value or "")
+
+    lines = ["\t".join(SSSOM_COLUMNS)]
+    for row in mappings:
+        full = {**row, "object_id": _normalise_object_id(row.get("object_id") or "")}
+        lines.append("\t".join(cell(full.get(name)) for name in SSSOM_COLUMNS))
+    return "\n".join(lines) + "\n"
 
 
 def _ensure_column_property(prop: Optional[ColumnProperty]) -> ColumnProperty:
@@ -61,36 +62,25 @@ def _ensure_column_property(prop: Optional[ColumnProperty]) -> ColumnProperty:
 def integrate_sssom(
     metadata: Metadata, mappings: List[Dict[str, str]]
 ) -> Metadata:
-    """Attach SSSOM mappings to column properties in the SemMap metadata."""
+    """Attach SSSOM mappings to column properties in the SemMap metadata.
 
-    column_lookup = {col.name: col for col in metadata.datasetSchema.columns if col.name}
-    for row in mappings:
-        subj = row.get("subject_id")
-        predicate = row.get("predicate_id")
-        obj = row.get("object_id")
-        if not subj or not predicate or not obj:
-            continue
-        column_key = _normalize_subject_id(subj)
-        column = column_lookup.get(column_key)
-        if column is None:
-            continue
+    Rows are matched to columns and read by linked-codebook: a subject is a column when its IRI,
+    its label or the end of its IRI is the column name, ignoring case, spaces, hyphens and underscores.
+    Rows with another subject, or with a predicate that is not a SKOS mapping, are skipped.
+    """
 
-        field = PREDICATE_TO_FIELD.get(predicate)
-        if field is None:
-            continue
-        obj = _normalise_object_id(obj)
-        column.columnProperty = _ensure_column_property(column.columnProperty)
-        existing = getattr(column.columnProperty, field)
-        if isinstance(existing, list):
-            if obj not in existing:
-                existing.append(obj)
-            continue
-        if existing is None:
-            setattr(column.columnProperty, field, [obj])
-        else:
-            values = [existing]
-            if obj not in values:
-                values.append(obj)
+    columns = {col.name: col for col in metadata.datasetSchema.columns if col.name}
+    profile = {"columns": [{"name": name} for name in columns]}
+    found = from_sssom(_to_tsv(mappings), profile)
+    for entry in found["columns"]:
+        column = columns[entry["name"]]
+        for mapping in entry.get("mappings", []):
+            field = f"{mapping['match_type']}Match"
+            column.columnProperty = _ensure_column_property(column.columnProperty)
+            existing = getattr(column.columnProperty, field)
+            values = existing if isinstance(existing, list) else ([] if existing is None else [existing])
+            if mapping["object_id"] not in values:
+                values.append(mapping["object_id"])
             setattr(column.columnProperty, field, values)
     return metadata
 

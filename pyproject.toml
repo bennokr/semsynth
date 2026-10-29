@@ -79,7 +79,8 @@ mapping = [
   "defopt",
   "datasette",
   "sqlite-utils",
-  "sssom"
+  "sssom",
+  "linked-codebook @ https://bennokr.github.io/linked-codebook/linked_codebook-0.5.0-py3-none-any.whl"
 ]
 all = [
   "metasyn",
