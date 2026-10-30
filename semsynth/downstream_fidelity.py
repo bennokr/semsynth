@@ -17,7 +17,7 @@ from makeprov import Config, InPath, OutPath, rule
 from sklearn.impute import SimpleImputer
 from sklearn.linear_model import LogisticRegression
 
-from .semmap import get_column_name, modeling_role
+from .codebook import Codebook, modeling_role
 
 LOGGER = logging.getLogger(__name__)
 
@@ -31,46 +31,28 @@ class DownstreamConfig(Config):
 
 
 # --- metadata helpers ---------------------------------------------------------
-def _meta_obj(meta: Any) -> Mapping[str, Any]:
-    if hasattr(meta, "to_jsonld"):
-        meta = meta.to_jsonld() or {}
-    return meta or {}
+# Metadata is a :class:`Codebook`. A column is looked up as ``(codebook, name)``.
+Col = tuple
 
 
-def _infer_meta(df: pd.DataFrame, target: Optional[str]) -> Mapping[str, Any]:
-    cols = []
-    for col in df.columns:
-        role = "target" if target and col == target else "predictor"
-        cols.append(
-            {
-                "schema:name": col,
-                "prov:hadRole": role,
-                "dsv:summaryStatistics": {"dsv:statisticalDataType": "dsv:StatisticalDataType"},
-            }
-        )
-    return {"dsv:datasetSchema": {"dsv:column": cols}}
+def _infer_meta(df: pd.DataFrame, target: Optional[str]) -> Codebook:
+    roles = {str(col): "target" if target and col == target else "predictor" for col in df.columns}
+    return Codebook({"columns": [{"name": str(col)} for col in df.columns]}, roles)  # type: ignore[arg-type]
 
 
-def _columns(meta: Mapping[str, Any]) -> List[Mapping[str, Any]]:
-    schema = meta.get("dsv:datasetSchema") or meta.get("datasetSchema") or {}
-    raw = schema.get("dsv:column") or schema.get("columns") or []
-    if isinstance(raw, Mapping):
-        raw = [raw]
-    return [c for c in raw if isinstance(c, Mapping)]
+def _column_lookup(meta: Any) -> Dict[str, Col]:
+    meta = meta if isinstance(meta, Codebook) else Codebook.read(meta)
+    return {column["name"]: (meta, column["name"]) for column in meta.columns}
 
 
-def _column_lookup(meta: Mapping[str, Any]) -> Dict[str, Mapping[str, Any]]:
-    return {get_column_name(col): col for col in _columns(meta) if get_column_name(col)}
+def _role(col: Col) -> str:
+    meta, name = col
+    return modeling_role(meta.roles.get(name))
 
 
-def _stat_type(col_meta: Mapping[str, Any]) -> str:
-    summary = col_meta.get("dsv:summaryStatistics") or col_meta.get("summaryStatistics") or {}
-    dtype = summary.get("dsv:statisticalDataType") or summary.get("statisticalDataType")
-    return str(dtype or "").lower()
-
-
-def _is_cat(col_meta: Mapping[str, Any], series: Optional[pd.Series] = None) -> bool:
-    if any(tok in _stat_type(col_meta) for tok in ("nominal", "categorical", "binary", "ordinal")):
+def _is_cat(col: Col, series: Optional[pd.Series] = None) -> bool:
+    meta, name = col
+    if (meta.column(name) or {}).get("level") in {"nominal", "categorical", "ordinal"}:
         return True
     if series is not None:
         if isinstance(series.dtype, CategoricalDtype) or pd.api.types.is_bool_dtype(series):
@@ -85,26 +67,15 @@ def _is_cat(col_meta: Mapping[str, Any], series: Optional[pd.Series] = None) -> 
     return False
 
 
-def _levels(col_meta: Mapping[str, Any]) -> List[str]:
-    prop = col_meta.get("dsv:columnProperty") or col_meta.get("columnProperty") or {}
-    codebook = prop.get("dsv:hasCodeBook") or prop.get("hasCodeBook") or {}
-    concepts = codebook.get("skos:hasTopConcept") or codebook.get("hasTopConcept") or []
-    levels: List[str] = []
-    for concept in concepts:
-        if not isinstance(concept, Mapping):
-            continue
-        for key in ("skos:notation", "notation", "skos:prefLabel", "prefLabel"):
-            val = concept.get(key)
-            if isinstance(val, str):
-                levels.append(val)
-                break
-    return levels
+def _levels(col: Col) -> List[str]:
+    meta, name = col
+    return meta.codes(name)
 
 
 # --- data prep ----------------------------------------------------------------
 def _sanitize_for_formula(
-    df_real: pd.DataFrame, df_synth: pd.DataFrame, meta: Mapping[str, Any]
-) -> tuple[pd.DataFrame, pd.DataFrame, Mapping[str, Any]]:
+    df_real: pd.DataFrame, df_synth: pd.DataFrame, meta: Codebook
+) -> tuple[pd.DataFrame, pd.DataFrame, Codebook]:
     used: set[str] = set()
     rename: Dict[str, str] = {}
     for col in df_real.columns:
@@ -124,15 +95,10 @@ def _sanitize_for_formula(
     def _renamed(df: pd.DataFrame) -> pd.DataFrame:
         return df.rename(columns=rename)
 
-    meta_copy = _meta_obj(meta)
-    for col_meta in _columns(meta_copy):
-        name = get_column_name(col_meta)
-        if name and name in rename:
-            col_meta["schema:name"] = rename[name]
-    return _renamed(df_real), _renamed(df_synth), meta_copy
+    return _renamed(df_real), _renamed(df_synth), meta.rename(rename)
 
 
-def _coerce_frame(df: pd.DataFrame, meta: Mapping[str, Any]) -> pd.DataFrame:
+def _coerce_frame(df: pd.DataFrame, meta: Codebook) -> pd.DataFrame:
     df = df.copy()
     for name, col_meta in _column_lookup(meta).items():
         if name not in df.columns:
@@ -153,7 +119,7 @@ def _coerce_frame(df: pd.DataFrame, meta: Mapping[str, Any]) -> pd.DataFrame:
     return df
 
 
-def _impute(df: pd.DataFrame, meta: Mapping[str, Any]) -> pd.DataFrame:
+def _impute(df: pd.DataFrame, meta: Codebook) -> pd.DataFrame:
     df = df.copy()
     for name, col_meta in _column_lookup(meta).items():
         if name not in df.columns:
@@ -171,16 +137,16 @@ def _impute(df: pd.DataFrame, meta: Mapping[str, Any]) -> pd.DataFrame:
 
 
 # --- formula discovery --------------------------------------------------------
-def _var_term(name: str, col_meta: Mapping[str, Any], series: Optional[pd.Series] = None) -> str:
+def _var_term(name: str, col_meta: Codebook, series: Optional[pd.Series] = None) -> str:
     quoted = f"Q('{name}')"
     return f"C({quoted}, levels={_levels(col_meta)!r})" if _is_cat(col_meta, series) else quoted
 
 
-def _build_terms(df: pd.DataFrame, meta: Mapping[str, Any], max_interactions: int) -> tuple[str, str]:
+def _build_terms(df: pd.DataFrame, meta: Codebook, max_interactions: int) -> tuple[str, str]:
     lookup = _column_lookup(meta)
     preds = []
     for n, col in lookup.items():
-        if modeling_role(col) != "predictor" or n not in df.columns:
+        if _role(col) != "predictor" or n not in df.columns:
             continue
         is_cat = _is_cat(col, df[n])
         if is_cat and not _levels(col):
@@ -196,12 +162,9 @@ def _build_terms(df: pd.DataFrame, meta: Mapping[str, Any], max_interactions: in
     return mains, inters
 
 
-def _target_info(meta: Mapping[str, Any], df: pd.DataFrame) -> tuple[str, str]:
+def _target_info(meta: Codebook, df: pd.DataFrame) -> tuple[str, str]:
     for name, col_meta in _column_lookup(meta).items():
-        if modeling_role(col_meta) == "target":
-            dtype = _stat_type(col_meta)
-            if "count" in dtype:
-                return name, "count"
+        if _role(col_meta) == "target":
             if _is_cat(col_meta, df[name]):
                 levels = _levels(col_meta) or list(pd.Series(df[name]).dropna().unique())
                 return name, "binary" if len(levels) <= 2 else "multiclass"
@@ -209,7 +172,7 @@ def _target_info(meta: Mapping[str, Any], df: pd.DataFrame) -> tuple[str, str]:
     raise ValueError("metadata must define a target column")
 
 
-def auto_formula(df: pd.DataFrame, meta: Mapping[str, Any], cfg: DownstreamConfig) -> str:
+def auto_formula(df: pd.DataFrame, meta: Codebook, cfg: DownstreamConfig) -> str:
     df0 = _coerce_frame(df, meta)
     df0 = _impute(df0, meta)
     mains, inters = _build_terms(df0, meta, cfg.max_interactions)
@@ -266,13 +229,13 @@ def _coerce_series(arr_like: Any, *, index: Optional[pd.Index] = None) -> pd.Ser
 def compute_downstream(
     df_real: pd.DataFrame,
     df_synth: pd.DataFrame,
-    meta: Optional[Mapping[str, Any]] = None,
+    meta: Any = None,
     *,
     cfg: Optional[DownstreamConfig] = None,
     target: Optional[str] = None,
 ) -> Mapping[str, Any]:
     cfg = cfg or DownstreamConfig()
-    meta_obj = _meta_obj(meta) if meta is not None else _infer_meta(df_real, target)
+    meta_obj = Codebook.read(meta) if meta is not None else _infer_meta(df_real, target)
     df_real, df_synth, meta_obj = _sanitize_for_formula(df_real, df_synth, meta_obj)
     df_real = _coerce_frame(df_real, meta_obj)
     df_synth = _coerce_frame(df_synth, meta_obj)
@@ -367,7 +330,7 @@ def recompute_downstream(
     if synth is None:
         synth = model_dir / "synthetic.csv"
     if meta is None:
-        meta = dataset_dir / "dataset.semmap.json"
+        meta = dataset_dir / "dataset.codebook.jsonld"
     if real is None:
         manifest_path = model_dir / "manifest.json"
         try:

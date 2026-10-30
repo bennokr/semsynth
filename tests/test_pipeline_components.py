@@ -9,6 +9,8 @@ from types import SimpleNamespace
 from typing import Any, Dict, List, Optional
 
 import pandas as pd
+
+from semsynth.codebook import Codebook
 import pytest
 
 from semsynth.dataproviders._helpers import clean_dataset_frame
@@ -104,7 +106,7 @@ def _create_preprocessing_result(df: pd.DataFrame, tmp_path) -> PreprocessingRes
         disc_cols=["category"],
         cont_cols=["value"],
         inferred_types={"category": "discrete", "value": "continuous"},
-        semmap_export={"dummy": True},
+        codebook_jsonld={"dummy": True},
         color_series=target_series,
         umap_png_real=None,
         umap_artifacts=UmapArtifacts(transformer=None, real_png=tmp_path / "umap.png", limits=None),
@@ -184,12 +186,9 @@ def test_metric_writer_writes_metrics(tmp_path):
     def summarizer(_: pd.DataFrame, __: pd.DataFrame, ___: pd.DataFrame) -> Summary:
         return Summary(score=0.5)
 
-    def comparer(_: pd.DataFrame, __: pd.DataFrame, metadata: Dict[str, Any]) -> Dict[str, Any]:
-        schema = metadata.get("dsv:datasetSchema", {})
-        columns = schema.get("dsv:column", [])
-        assert columns and columns[0]["schema:name"] == "value"
-        stats = columns[0].get("dsv:summaryStatistics", {})
-        assert stats.get("dsv:statisticalDataType") == "dsv:QuantitativeDataType"
+    def comparer(_: pd.DataFrame, __: pd.DataFrame, metadata: Codebook) -> Dict[str, Any]:
+        assert [column["name"] for column in metadata.columns] == ["value"]
+        assert metadata.kind("value") == "numeric"
         return {
             "formula": {"metric": 1.0},
             "compare": pd.DataFrame({"sign_match": [1, 1]}),
@@ -213,7 +212,7 @@ def test_metric_writer_writes_metrics(tmp_path):
     assert (run_dir / "metrics.downstream.json").exists()
 
 
-def test_build_downstream_meta_matches_dsv_schema():
+def test_build_downstream_meta_is_a_codebook():
     df = pd.DataFrame({"feature": ["a", "b", "a"], "target": [0, 1, 1]})
     inferred = {"feature": "discrete", "target": "discrete"}
     target_series = df["target"].copy()
@@ -221,20 +220,9 @@ def test_build_downstream_meta_matches_dsv_schema():
 
     meta = _build_downstream_meta(df, inferred, target_series)
 
-    schema = meta["dsv:datasetSchema"]
-    columns = schema["dsv:column"]
-    by_name = {col["schema:name"]: col for col in columns}
-
-    assert by_name["target"]["prov:hadRole"] == "target"
-    stats = by_name["target"]["dsv:summaryStatistics"]
-    assert stats["dsv:statisticalDataType"] == "dsv:NominalDataType"
-    assert by_name["target"]["schema:defaultValue"] == "0"
-
-    codebook = (
-        by_name["target"]["dsv:columnProperty"]["dsv:hasCodeBook"]["skos:hasTopConcept"]
-    )
-    assert {concept["skos:notation"] for concept in codebook} == {"0", "1"}
-    assert by_name["feature"]["prov:hadRole"] == "predictor"
+    assert meta.roles == {"feature": "predictor", "target": "target"}
+    assert meta.column("target")["level"] == "nominal"
+    assert meta.codes("target") == ["0", "1"]
 
 
 def test_clean_dataset_frame_detects_target_hint():
@@ -253,7 +241,7 @@ def test_clean_dataset_frame_detects_target_hint():
     assert color_series.attrs.get("prov:hadRole") == "target"
 
 
-def test_clean_dataset_frame_detects_semmap_role():
+def test_clean_dataset_frame_detects_role_in_metadata():
     df = pd.DataFrame(
         {
             "feature": [0.1, 0.2],
@@ -378,7 +366,7 @@ def test_uciml_cached_uses_helper(monkeypatch: pytest.MonkeyPatch, tmp_path: Pat
     assert payload.spec.target == "target"
 
 
-def test_uciml_cached_semmap_metadata(tmp_path: Path):
+def test_uciml_cached_metadata_becomes_a_codebook(tmp_path: Path):
     dataset_id = 789
     cache_dir = tmp_path / "uciml"
     cache_dir.mkdir(parents=True, exist_ok=True)
@@ -455,19 +443,14 @@ def test_uciml_cached_semmap_metadata(tmp_path: Path):
         umap_utils=None,
     )
 
-    assert preprocessed.semmap_metadata is not None
-    assert preprocessed.semmap_metadata.datasetSchema.columns
-    assert any(
-        col.hadRole == "target" and col.name == "target"
-        for col in preprocessed.semmap_metadata.datasetSchema.columns
-    )
-    export_schema = preprocessed.semmap_export.get("dsv:datasetSchema") or preprocessed.semmap_export.get("datasetSchema")
-    assert export_schema
-    export_columns = export_schema.get("dsv:column") or export_schema.get("columns")
-    assert any(
-        col.get("prov:hadRole") == "target" or col.get("hadRole") == "target"
-        for col in export_columns
-    )
+    codebook = preprocessed.codebook
+    assert codebook is not None
+    assert [column["name"] for column in codebook.columns] == ["feature", "target"]
+    assert codebook.roles["target"] == "target"
+    assert codebook.kind("target") == "categorical"
+    export_columns = preprocessed.codebook_jsonld["datasetSchema"]["columns"]
+    assert any(col.get("prov:hadRole") == "target" and col["name"] == "target" for col in export_columns)
+    assert preprocessed.codebook_jsonld["title"] == "Demo UCI"
     assert any(
         (
             col.get("dsv:summaryStatistics", {}).get("dsv:statisticalDataType")
@@ -574,7 +557,7 @@ def test_backend_executor_runs_models(tmp_path):
 
     executor.run_models(spec, bundle, preprocessed, tmp_path)
 
-    assert calls["semmap_export"] == {"dummy": True}
+    assert calls["codebook_jsonld"] == {"dummy": True}
     assert metric_writer.privacy_calls
     assert metric_writer.downstream_calls
     downstream_call = metric_writer.downstream_calls[0]
@@ -592,7 +575,7 @@ def test_report_writer_generates_outputs(tmp_path):
         disc_cols=preprocessed.disc_cols,
         cont_cols=preprocessed.cont_cols,
         inferred_types=preprocessed.inferred_types,
-        semmap_export=preprocessed.semmap_export,
+        codebook_jsonld=preprocessed.codebook_jsonld,
         color_series=None,
         umap_png_real=tmp_path / "umap_real.png",
         umap_artifacts=UmapArtifacts(

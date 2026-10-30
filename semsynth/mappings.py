@@ -7,9 +7,6 @@ from typing import Any, Dict, Optional
 
 from .specs import DatasetSpec
 
-JSONLD_CONTEXT_URL = "https://w3id.org/semmap/context"
-
-
 def _mappings_dir() -> Path:
     """Return directory containing curated mapping files."""
 
@@ -21,14 +18,6 @@ def _slugify(value: str) -> str:
     value = value.strip().lower()
     value = re.sub(r"[^a-z0-9]+", "-", value)
     return value.strip("-")
-
-
-def normalize_jsonld_payload(payload: Dict[str, Any]) -> Dict[str, Any]:
-    """Ensure mappings carry the canonical JSON-LD context."""
-
-    if "@context" not in payload or not payload["@context"]:
-        payload["@context"] = JSONLD_CONTEXT_URL
-    return payload
 
 
 def resolve_mapping_json(dataset_spec: DatasetSpec) -> Optional[Path]:
@@ -68,7 +57,7 @@ def resolve_mapping_json(dataset_spec: DatasetSpec) -> Optional[Path]:
 
 
 def load_mapping_json(path: Path) -> Dict[str, Any]:
-    """Load and minimally validate a curated SemMap JSON-LD mapping."""
+    """Load a curated codebook: DSV JSON-LD written by linked-codebook, with roles."""
     if not path.exists():
         raise FileNotFoundError(path)
 
@@ -78,4 +67,4 @@ def load_mapping_json(path: Path) -> Dict[str, Any]:
     if not isinstance(data, dict):
         raise ValueError("Mapping JSON must be an object")
 
-    return normalize_jsonld_payload(data)
+    return data

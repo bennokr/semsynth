@@ -9,7 +9,6 @@ from typing import Any, Dict, List, Optional, Mapping
 
 from makeprov import RDFMixin
 
-from .semmap import normalize_variable_descriptors
 
 JSONLD_CONTEXT = {
     "@context": {
@@ -132,11 +131,11 @@ def get_uciml_variable_descriptions(dataset_id: int) -> Dict[str, str]:
             )
             variables = []
 
-    descriptors = normalize_variable_descriptors(
-        var if isinstance(var, Mapping) else vars(var) for var in variables
-    )
-    return {
-        descriptor.name: descriptor.description or ""
-        for descriptor in descriptors
-        if descriptor.description
-    }
+    descriptions: Dict[str, str] = {}
+    for var in variables:
+        entry = var if isinstance(var, Mapping) else vars(var)
+        name = entry.get("name")
+        description = entry.get("description")
+        if isinstance(name, str) and name and isinstance(description, str) and description:
+            descriptions[name] = description
+    return descriptions

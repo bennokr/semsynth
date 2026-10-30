@@ -11,96 +11,47 @@ kernelspec:
   display_name: Python 3
 ---
 
-# SemMap metadata schema
+# Dataset metadata
 
-This project represents dataset semantics using a SemMap-flavoured JSON-LD
-profile that blends [DCAT](https://www.w3.org/TR/vocab-dcat-3/)/[DSV](https://w3id.org/dsv-ontology),
-[CSVW](https://www.w3.org/TR/tabular-data-model/), [PROV](https://www.w3.org/TR/prov-o/),
-[QUDT](https://qudt.org/)/[UCUM](https://ucum.org/), and
-[SKOS](https://www.w3.org/TR/skos-reference/) mappings. The
-canonical definitions live in `semsynth.semmap` and power every stage of the
-pipeline, from ingestion to reporting.
+SemSynth describes each dataset with a [linked-codebook](https://bennokr.github.io/linked-codebook/) profile:
+the name, label, description, datatype, level of measurement, unit, value labels, missing codes and concept
+mappings of every column. linked-codebook reads and writes the profile as
+[DSV](https://w3id.org/dsv-ontology) JSON-LD and as [SSSOM](https://w3id.org/sssom/) TSV.
 
+`semsynth.codebook.Codebook` adds what a codebook does not cover:
 
-## Core objects
-
-- **Metadata**: Root document that carries dataset-level [DCAT](https://www.w3.org/TR/vocab-dcat-3/)
-  information
-  (title, description, purpose, landing page, citations, identifiers, funding,
-  access rights) plus `summaryStatistics` such as dataset completeness and row
-  counts. It contains a `DatasetSchema`.
-- **DatasetSchema**: Holds an ordered list of `Column` nodes.
-- **Column**: Captures [CSVW](https://www.w3.org/TR/tabular-data-model/)/[DSV](https://w3id.org/dsv-ontology)
-  fields (`name`, `titles`, descriptions,
-  `prov:hadRole`, defaults) and optional `summaryStatistics` with declared
-  `statisticalDataType`, completeness, missing-value formats, and numeric
-  aggregates. Columns may embed a `ColumnProperty`.
-- **ColumnProperty**: Encodes richer semantics including units
-  ([UCUM](https://ucum.org/)/[QUDT](https://qudt.org/)), codebooks
-  (`hasCodeBook` with [SKOS](https://www.w3.org/TR/skos-reference/) concepts),
-  links to variable definitions, provenance (`source`), and
-  [SKOS](https://www.w3.org/TR/skos-reference/) mappings
-  (`exactMatch`, `closeMatch`, etc.).
-- **CodeBook/CodeConcept**: Capture enumerations or codelists, each
-  [SKOS](https://www.w3.org/TR/skos-reference/) concept
-  supporting mappings to external ontologies. Presence of a codebook implies a
-  categorical type for privacy metadata.
-
-Every dataclass inherits `RDFMixin`, enabling round-trips via
-`to_jsonld()/from_jsonld` and storage inside parquet files through the
-pandas `semmap` accessor.
+- **Roles**: the role of each column (`target`, `Feature`, `id`, `sensitive`, ...), written as `prov:hadRole`
+  on the column nodes.
+- **Dataset properties**: properties that a profile has no slot for, such as the DCAT, Dublin Core and
+  schema.org fields that the UCI provider writes. They are kept as they are.
 
 ```{code-cell} python
-# Inspect the first few columns and their statistical data types.
-import json
-from semsynth.semmap import Metadata
+# The first columns of a curated codebook, with their levels and roles.
+from semsynth.codebook import Codebook
 
-meta = Metadata.from_dcat_dsv(json.load(open("../mappings/uciml-45.metadata.json")))
-[(c.name, getattr(c.summaryStatistics, "statisticalDataType", None)) for c in meta.datasetSchema.columns[:5]]
+codebook = Codebook.read("../mappings/uciml-45.metadata.json")
+[(c["name"], c.get("level"), codebook.roles.get(c["name"])) for c in codebook.columns[:5]]
 ```
 
-## Creation and ingestion
+## Sources
 
-1. **Templates**: `semsynth/dataproviders/uciml.py` emits [DCAT](https://www.w3.org/TR/vocab-dcat-3/)/[DSV](https://w3id.org/dsv-ontology)
-   JSON-LD that matches the SemMap dataclasses. The same layout is loaded by
-   `Metadata.from_dcat_dsv`.
-2. **Column mapping**: `map_columns/shared.py` parses curated metadata for LLM
-   prompts and returns a `Metadata` instance; `map_columns/sssom_to_semmap.py`
-   merges [SSSOM](https://w3id.org/sssom/) mapping files into `ColumnProperty`
-   [SKOS](https://www.w3.org/TR/skos-reference/) relationships to
-   keep column mappings aligned with downstream semantics.
-3. **Pipeline loading**: `semsynth.pipeline.Preprocessor` applies curated
-   metadata (`DatasetSpec.meta` or JSON-LD files) to incoming dataframes through
-   the pandas SemMap accessor, producing a shared `Metadata` object and
-   JSON-LD export for later stages.
+1. **Providers**: `semsynth/dataproviders/uciml.py` turns UCI metadata into a codebook and writes it as JSON-LD.
+2. **Curated files**: `mappings/<provider>-<id>.metadata.json` are codebooks written as JSON-LD. They complete
+   the provider metadata; where both describe a column, the curated file wins.
+3. **SSSOM**: `map_columns/sssom_to_codebook.py` adds the mappings of an SSSOM file to the columns.
+   linked-codebook writes only approved mappings to JSON-LD, so mappings without a reviewer get the name of the
+   file or the matching method as reviewer.
+4. **Inference**: during preprocessing, linked-codebook infers the datatype, level and observed codes of every
+   column. Declared metadata wins over inference.
 
-## Updates during preprocessing
+## Use in the pipeline
 
-- **Type inference**: Inferred discrete/continuous hints are stored alongside
-  metadata and used as fallbacks when semantics are incomplete.
-- **Missingness**: When missingness wrapping is enabled, `Metadata` is updated
-  via `update_completeness_from_missingness` to refresh dataset/column
-  completeness and missing-value annotations derived from the fitted model.
-- **Persistence**: The updated metadata is carried through
-  `PreprocessingResult.semmap_metadata` and stored with artifacts for each run.
-
-## Use in analytics
-
-- **Privacy metrics**: `Metadata.to_privacy_frame` normalizes SemMap roles to
-  the privacy expectations (`qi`, `sensitive`, `id`, `ignore`, `target`) and
-  maps `statisticalDataType` or codebooks to coarse types
-  (`numeric`/`categorical`). The resulting dataframe is passed to
-  `privacy_metrics.summarize_privacy_synthcity`, ensuring curated roles and
-  types drive quasi-identifier selection and sensitive feature handling. When
-  SemMap metadata is unavailable, the pipeline falls back to the inferred type
-  map.
-- **Downstream fidelity**: The same `Metadata` instance is serialized to JSON-LD
-  and provided to `downstream_fidelity.compare_real_vs_synth`, allowing role and
-  codebook semantics to guide modeling and encoding.
-
-## Reporting and exports
-
-`semsynth.reporting.write_report_md` receives the shared `Metadata` and renders
-human-readable dataset descriptions, citations, and completeness figures that
-match the SemMap export stored alongside backend outputs. This keeps reports,
-privacy metrics, and SemMap artifacts consistent.
+- **Types**: the level decides whether a column is treated as discrete or continuous, so integer-coded
+  categoricals stay categorical.
+- **Missingness**: `Codebook.set_statistics` sets the number of rows and the completeness of each column, from
+  the fitted missingness model when there is one.
+- **Privacy metrics**: `Codebook.privacy_frame` maps roles to `qi`, `sensitive`, `id`, `ignore` and `target`,
+  and levels to `numeric` or `categorical`.
+- **Downstream fidelity**: roles pick the target and predictors; value codes become categorical levels.
+- **Exports**: each report folder has `dataset.codebook.jsonld` and an RDFa rendering, `dataset.codebook.html`.
+  Backends write `synthetic.parquet` with the JSON-LD in the Parquet schema metadata.

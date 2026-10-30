@@ -8,7 +8,7 @@ from typing import List
 import pandas as pd
 
 from semsynth.pipeline import MetricWriter
-from semsynth.semmap import Column, DatasetSchema, Metadata
+from semsynth.codebook import Codebook
 
 
 @dataclass
@@ -45,16 +45,9 @@ def test_privacy_metadata_uses_roles_and_target(tmp_path):
         "target": "discrete",
         "ignore_me": "continuous",
     }
-    metadata = Metadata(
-        datasetSchema=DatasetSchema(
-            columns=[
-                Column(name="identifier", hadRole="identifier"),
-                Column(name="feature", hadRole="predictor"),
-                Column(name="sensitive_attr", hadRole="Sensitive"),
-                Column(name="target"),
-                Column(name="ignore_me", hadRole="ignore"),
-            ]
-        )
+    metadata = Codebook(
+        {"columns": [{"name": name} for name in ("identifier", "feature", "sensitive_attr", "target", "ignore_me")]},
+        {"identifier": "identifier", "feature": "predictor", "sensitive_attr": "Sensitive", "ignore_me": "ignore"},
     )
     writer = MetricWriter(privacy_summarizer=_capture_privacy, downstream_compare=None)
 

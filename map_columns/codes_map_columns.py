@@ -98,10 +98,10 @@ class MatchResult:
 
     @property
     def subject_id(self) -> str:
-        """Return the canonical SemMap subject identifier for the column."""
+        """Return the subject identifier (CURIE) of the column."""
 
         column_id = self.column.column_id or self.column.name or "unknown"
-        return f"semmap:{column_id}"
+        return f"variable:{column_id}"
 
     @property
     def subject_label(self) -> str:
@@ -133,7 +133,7 @@ class MatchResult:
         return max(0.0, min(1.0, self.score))
 
     def to_sssom_row(self) -> Dict[str, str]:
-        """Return a dictionary compatible with :mod:`map_columns.sssom_to_semmap`."""
+        """Return a dictionary compatible with :mod:`map_columns.sssom_to_codebook`."""
 
         return {
             "subject_id": self.subject_id,
@@ -246,7 +246,7 @@ def load_manual_overrides(overrides_path: Optional[Path]) -> Dict[str, List[Dict
 
     Args:
         overrides_path: Path to a JSON file where keys are column identifiers
-            (name or SemMap identifier) and values are lists of SSSOM-style
+            (name or subject identifier) and values are lists of SSSOM-style
             mapping dictionaries.
 
     Returns:
@@ -368,7 +368,7 @@ def write_sssom(
     """Persist matches in SSSOM TSV format."""
 
     header = [
-        "# curie_map: semmap=https://w3id.org/semsynth/variable/",
+        "# curie_map: variable=https://w3id.org/semsynth/variable/",
         "# curie_map: skos=http://www.w3.org/2004/02/skos/core#",
         "# curie_map: semapv=http://purl.org/semapv/vocab/",
     ]
@@ -427,7 +427,7 @@ def main(
     """Map dataset columns to terminology codes stored in a TSV file.
 
     Args:
-        dataset_json: Path to the DCAT/DSV JSON (or SemMap JSON-LD) describing
+        dataset_json: Path to the DSV JSON-LD describing
             the dataset.
         codes_tsv: TSV file with ``system``, ``code``, ``label``, and
             ``synonyms`` columns.

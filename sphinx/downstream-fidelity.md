@@ -13,7 +13,7 @@ kernelspec:
 
 # Downstream fidelity
 
-The downstream-fidelity module compares real and synthetic datasets by fitting equivalent predictive models and inspecting how coefficients, directions of effect, and uncertainty translate between them. It automatically derives a modeling formula from metadata, performs multiple imputation for missing data, and reports side-by-side parameter estimates to highlight agreement or drift. The example below uses the curated SemMap metadata (which marks `num` as the target).
+The downstream-fidelity module compares real and synthetic datasets by fitting equivalent predictive models and inspecting how coefficients, directions of effect, and uncertainty translate between them. It automatically derives a modeling formula from metadata, performs multiple imputation for missing data, and reports side-by-side parameter estimates to highlight agreement or drift. The example below uses the curated codebook (which marks `num` as the target).
 
 ```{code-cell} python
 # Visualize correlations to motivate downstream modeling choices.
@@ -37,7 +37,7 @@ plt.tight_layout()
 - `auto_formula` builds a Patsy formula by inferring target roles from the dataset schema, coercing dtypes (including categorical levels from codebooks), and generating main effects plus interaction candidates. Cross-validated feature screening enforces strong heredity, keeping parents of any retained interactions to stabilize the model.
 
 ```{code-cell} python
-# Create a target-aware formula straight from the SemMap metadata.
+# Create a target-aware formula straight from the codebook.
 import json
 import sys
 from pathlib import Path

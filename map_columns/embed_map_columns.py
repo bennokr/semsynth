@@ -37,8 +37,6 @@ def _format_column_text(column: ColumnInfo, dataset_meta: DatasetMetadata) -> st
         parts.append(f"Column name: {column.name}")
     if column.description:
         parts.append(f"Description: {column.description}")
-    if column.about:
-        parts.append(f"About: {column.about}")
     if column.unit:
         parts.append(f"Unit: {column.unit}")
     if column.role:

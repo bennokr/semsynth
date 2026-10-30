@@ -35,11 +35,11 @@ plt.tight_layout()
 
 ## PyBNesian
 - Learns a Bayesian network with hill climbing and configurable network types (`clg` or `semiparametric`) and scoring/structure-search options. Sensitive roots (age, sex, race by default) are blacklisted from being child nodes to avoid trivial leakage pathways.
-- Samples synthetic rows from the fitted network, exports optional SemMap parquet, and computes per-variable distances plus a held-out log-likelihood statistic. The backend serializes GraphViz and GraphML structures (when optional dependencies are present) and stores a manifest capturing structure parameters and dataset metadata.
+- Samples synthetic rows from the fitted network, writes `synthetic.parquet` with the codebook in its metadata, and computes per-variable distances plus a held-out log-likelihood statistic. The backend serializes GraphViz and GraphML structures (when optional dependencies are present) and stores a manifest capturing structure parameters and dataset metadata.
 
 ## SynthCity
 - Normalizes generator aliases (e.g., `ctgan`, `pategan`, `bayesiannetwork`) to the canonical SynthCity plugin names, then loads the chosen plugin with sanitized parameters. Continuous features are coerced to numeric types and categories are string-safe before fitting on the training split.
-- Generates synthetic rows through the plugin's `generate` API, aligns columns to the training schema, and writes synthetic CSVs and optional SemMap parquet. Per-variable distances and summary statistics are emitted alongside a manifest documenting the generator, seed, row count, and split settings.
+- Generates synthetic rows through the plugin's `generate` API, aligns columns to the training schema, and writes synthetic CSVs and `synthetic.parquet` with the codebook. Per-variable distances and summary statistics are emitted alongside a manifest documenting the generator, seed, row count, and split settings.
 
 ```{code-cell} python
 # Inspect a tiny inline TOML snippet to see which backends would execute.

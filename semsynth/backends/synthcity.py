@@ -137,7 +137,7 @@ def run_experiment(
     rows: Optional[int],
     seed: int,
     test_size: float,
-    semmap_export: Optional[Dict[str, Any]] = None,
+    codebook_jsonld: Optional[Dict[str, Any]] = None,
 ) -> Path:
     import numpy as np
     import pandas as pd
@@ -186,18 +186,13 @@ def run_experiment(
     synth_csv = run_dir.file("synthetic.csv")
     synth_df.to_csv(synth_csv, index=False)
     logging.info("Wrote synthetic CSV: %s", synth_csv)
-    if semmap_export:
+    if codebook_jsonld:
         try:
-            import copy
-            import semsynth.semmap as semmap  # noqa: F401
+            from semsynth.codebook import write_parquet
 
-            sdf = synth_df.copy()
-            sdf.semmap.from_jsonld(
-                copy.deepcopy(semmap_export), convert_pint=False
-            )
-            sdf.semmap.to_parquet(str(run_dir.file("synthetic.semmap.parquet")), index=False)
+            write_parquet(synth_df, run_dir.file("synthetic.parquet"), codebook_jsonld)
         except Exception as e:
-            logging.warning("SemMap parquet failed: %s", e)
+            logging.warning("Parquet with codebook failed: %s", e)
 
     # Per-variable distances and summary
     dist_df = per_variable_distances(test_df, synth_df, disc_cols, cont_cols)

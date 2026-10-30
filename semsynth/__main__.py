@@ -181,7 +181,7 @@ def create_mapping(
     version_tag: str = "",
     verbose: bool = False,
 ) -> None:
-    """Create SemMap-aware SSSOM mappings for one or more datasets.
+    """Create SSSOM mappings for one or more datasets and merge them into their codebooks.
 
     Args:
         provider: Dataset provider key (``"uciml"`` or ``"openml"``).
@@ -213,14 +213,14 @@ def create_mapping(
         min_score: Minimum similarity score applied to automatic matches
             produced by the lexical strategy.
         top_k: Maximum number of automatic matches per column.
-        outdir: Output directory for SSSOM and merged SemMap metadata.
-        indent: JSON indentation for saved SemMap metadata.
+        outdir: Output directory for SSSOM and the merged codebooks.
+        indent: JSON indentation for the saved codebooks.
         version_tag: Optional version string recorded in the SSSOM header.
         verbose: Switch logging level to ``INFO`` when ``True``.
     """
 
     from .datasets import load_dataset, specs_from_input
-    from .semmap import Metadata
+    from .codebook import Codebook
     from .utils import ensure_dir
     from map_columns.codes_map_columns import (
         build_manual_matches,
@@ -228,7 +228,7 @@ def create_mapping(
         write_sssom,
     )
     from map_columns.shared import parse_columns
-    from map_columns.sssom_to_semmap import integrate_sssom
+    from map_columns.sssom_to_codebook import integrate_sssom
 
     if verbose:
         logging.root.setLevel(logging.INFO)
@@ -264,7 +264,7 @@ def create_mapping(
         slug = "-".join(slug_parts)
 
         metadata_payload = payload.metadata or payload.spec.meta
-        if isinstance(metadata_payload, Metadata):
+        if isinstance(metadata_payload, Codebook):
             metadata_payload = metadata_payload.to_jsonld()
         if not isinstance(metadata_payload, dict):
             raise RuntimeError(f"No metadata found for dataset {slug}")
@@ -374,9 +374,10 @@ def create_mapping(
             version_tag=version_tag,
         )
 
-        metadata = Metadata.from_dcat_dsv(metadata_payload)
         mapping_rows = [match.to_sssom_row() for match in matches]
-        updated = integrate_sssom(metadata, mapping_rows)
+        updated = integrate_sssom(
+            Codebook.read(metadata_payload), mapping_rows, reviewer=f"semsynth map-columns ({method_key})"
+        )
         metadata_path = outdir_path / f"{slug}.metadata.json"
         metadata_path.write_text(
             json.dumps(updated.to_jsonld(), indent=indent, ensure_ascii=False),

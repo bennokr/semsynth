@@ -1,554 +1,1114 @@
 {
-  "@context": "https://w3id.org/semmap/context/v1",
+  "@context": {
+    "accessRights": "dct:accessRights",
+    "broadMatch": {
+      "@container": "@set",
+      "@id": "skos:broadMatch",
+      "@type": "@id"
+    },
+    "citation": "dct:bibliographicCitation",
+    "closeMatch": {
+      "@container": "@set",
+      "@id": "skos:closeMatch",
+      "@type": "@id"
+    },
+    "columnCompleteness": {
+      "@id": "dsv:columnCompleteness",
+      "@type": "xsd:float"
+    },
+    "columnProperty": {
+      "@id": "dsv:columnProperty",
+      "@type": "@id"
+    },
+    "columns": {
+      "@container": "@set",
+      "@id": "dsv:column"
+    },
+    "csvw": "http://www.w3.org/ns/csvw#",
+    "datasetSchema": {
+      "@id": "dsv:datasetSchema",
+      "@type": "@id"
+    },
+    "datatype": "csvw:datatype",
+    "dcat": "http://www.w3.org/ns/dcat#",
+    "dct": "http://purl.org/dc/terms/",
+    "description": "dct:description",
+    "dsv": "https://w3id.org/dsv-ontology#",
+    "exactMatch": {
+      "@container": "@set",
+      "@id": "skos:exactMatch",
+      "@type": "@id"
+    },
+    "hasCodeBook": {
+      "@id": "dsv:hasCodeBook",
+      "@type": "@id"
+    },
+    "hasUnit": {
+      "@id": "qudt:hasUnit",
+      "@type": "@id"
+    },
+    "hasVariable": {
+      "@id": "dsv:hasVariable",
+      "@type": "@id"
+    },
+    "identifier": "dct:identifier",
+    "landingPage": {
+      "@id": "dcat:landingPage",
+      "@type": "@id"
+    },
+    "license": {
+      "@id": "dct:license",
+      "@type": "@id"
+    },
+    "name": "csvw:name",
+    "narrowMatch": {
+      "@container": "@set",
+      "@id": "skos:narrowMatch",
+      "@type": "@id"
+    },
+    "nullValues": {
+      "@container": "@set",
+      "@id": "csvw:null"
+    },
+    "numberOfColumns": {
+      "@id": "dsv:numberOfColumns",
+      "@type": "xsd:integer"
+    },
+    "numberOfRows": {
+      "@id": "dsv:numberOfRows",
+      "@type": "xsd:integer"
+    },
+    "qudt": "http://qudt.org/schema/qudt/",
+    "relatedMatch": {
+      "@container": "@set",
+      "@id": "skos:relatedMatch",
+      "@type": "@id"
+    },
+    "rights": "dct:rights",
+    "schema": "https://schema.org/",
+    "skos": "http://www.w3.org/2004/02/skos/core#",
+    "statisticalDataType": {
+      "@id": "dsv:statisticalDataType",
+      "@type": "@id"
+    },
+    "summaryStatistics": {
+      "@id": "dsv:summaryStatistics",
+      "@type": "@id"
+    },
+    "title": "dct:title",
+    "titles": "csvw:title",
+    "unitText": "schema:unitText",
+    "xsd": "http://www.w3.org/2001/XMLSchema#",
+    "dcterms": "http://purl.org/dc/terms/",
+    "prov": "http://www.w3.org/ns/prov#"
+  },
+  "@id": "urn:linked-codebook:dataset:Chronic%20Kidney%20Disease%20(UCI%20id%20336)",
+  "@type": [
+    "dcat:Dataset",
+    "dsv:Dataset"
+  ],
+  "description": "Clinical records for early detection of CKD (subset of variables ped).",
+  "title": "Chronic Kidney Disease (UCI id 336)",
   "datasetSchema": {
+    "@id": "urn:linked-codebook:dataset:Chronic%20Kidney%20Disease%20(UCI%20id%20336)#schema",
+    "@type": "dsv:DatasetSchema",
     "columns": [
       {
-        "name": "age",
+        "@id": "urn:linked-codebook:dataset:Chronic%20Kidney%20Disease%20(UCI%20id%20336)#column-age",
+        "@type": "dsv:Column",
+        "datatype": "number",
         "titles": "Participant age in years",
+        "name": "age",
         "columnProperty": {
-          "summaryStatistics": {
-            "statisticalDataType": "dsv:ContinuousDataType"
+          "@id": "urn:linked-codebook:dataset:Chronic%20Kidney%20Disease%20(UCI%20id%20336)#property-age",
+          "@type": "dsv:ColumnProperty",
+          "hasVariable": {
+            "@id": "urn:linked-codebook:dataset:Chronic%20Kidney%20Disease%20(UCI%20id%20336)#variable-age",
+            "@type": "skos:Concept",
+            "skos:prefLabel": "Participant age in years",
+            "exactMatch": [
+              "https://loinc.org/30525-0/"
+            ]
           },
-          "unitText": "years",
-          "exactMatch": [
-            "https://loinc.org/30525-0/"
-          ],
-          "valueType": "xsd:float",
-          "hasQuantityKind": "quantitykind:Time",
-          "ucumCode": "a"
+          "unitText": "years"
+        },
+        "summaryStatistics": {
+          "@id": "urn:linked-codebook:dataset:Chronic%20Kidney%20Disease%20(UCI%20id%20336)#statistics-age",
+          "@type": "dsv:SummaryStatistics",
+          "statisticalDataType": "dsv:NumericalDataType"
         }
       },
       {
-        "name": "bp",
+        "@id": "urn:linked-codebook:dataset:Chronic%20Kidney%20Disease%20(UCI%20id%20336)#column-bp",
+        "@type": "dsv:Column",
+        "datatype": "number",
         "titles": "Blood pressure reading (mmHg)",
+        "name": "bp",
         "columnProperty": {
-          "summaryStatistics": {
-            "statisticalDataType": "dsv:ContinuousDataType"
+          "@id": "urn:linked-codebook:dataset:Chronic%20Kidney%20Disease%20(UCI%20id%20336)#property-bp",
+          "@type": "dsv:ColumnProperty",
+          "hasVariable": {
+            "@id": "urn:linked-codebook:dataset:Chronic%20Kidney%20Disease%20(UCI%20id%20336)#variable-bp",
+            "@type": "skos:Concept",
+            "skos:prefLabel": "Blood pressure reading (mmHg)",
+            "closeMatch": [
+              "https://loinc.org/8462-4/"
+            ]
           },
-          "unitText": "mmHg",
-          "closeMatch": [
-            "https://loinc.org/8462-4/"
-          ],
-          "valueType": "xsd:float",
-          "hasQuantityKind": "quantitykind:Pressure",
-          "ucumCode": "mm[Hg]"
+          "unitText": "mmHg"
+        },
+        "summaryStatistics": {
+          "@id": "urn:linked-codebook:dataset:Chronic%20Kidney%20Disease%20(UCI%20id%20336)#statistics-bp",
+          "@type": "dsv:SummaryStatistics",
+          "statisticalDataType": "dsv:NumericalDataType"
         }
       },
       {
-        "name": "sg",
+        "@id": "urn:linked-codebook:dataset:Chronic%20Kidney%20Disease%20(UCI%20id%20336)#column-sg",
+        "@type": "dsv:Column",
+        "datatype": "number",
         "titles": "Urine specific gravity",
+        "name": "sg",
         "columnProperty": {
-          "summaryStatistics": {
-            "statisticalDataType": "dsv:ContinuousDataType"
-          },
-          "exactMatch": [
-            "https://loinc.org/2965-2/"
-          ],
-          "valueType": "xsd:decimal"
+          "@id": "urn:linked-codebook:dataset:Chronic%20Kidney%20Disease%20(UCI%20id%20336)#property-sg",
+          "@type": "dsv:ColumnProperty",
+          "hasVariable": {
+            "@id": "urn:linked-codebook:dataset:Chronic%20Kidney%20Disease%20(UCI%20id%20336)#variable-sg",
+            "@type": "skos:Concept",
+            "skos:prefLabel": "Urine specific gravity",
+            "exactMatch": [
+              "https://loinc.org/2965-2/"
+            ]
+          }
+        },
+        "summaryStatistics": {
+          "@id": "urn:linked-codebook:dataset:Chronic%20Kidney%20Disease%20(UCI%20id%20336)#statistics-sg",
+          "@type": "dsv:SummaryStatistics",
+          "statisticalDataType": "dsv:NumericalDataType"
         }
       },
       {
-        "name": "al",
+        "@id": "urn:linked-codebook:dataset:Chronic%20Kidney%20Disease%20(UCI%20id%20336)#column-al",
+        "@type": "dsv:Column",
+        "datatype": "integer",
         "titles": "Urine albumin dipstick grade",
+        "name": "al",
         "columnProperty": {
-          "summaryStatistics": {
-            "statisticalDataType": "dsv:OrdinalDataType"
-          },
-          "hasCodeBook": {
-            "hasTopConcept": [
-              {
-                "notation": "0",
-                "prefLabel": "Albumin negative"
-              },
-              {
-                "notation": "1",
-                "prefLabel": "Trace albumin"
-              },
-              {
-                "notation": "2",
-                "prefLabel": "Albumin 1+"
-              },
-              {
-                "notation": "3",
-                "prefLabel": "Albumin 2+"
-              },
-              {
-                "notation": "4",
-                "prefLabel": "Albumin 3+"
-              },
-              {
-                "notation": "5",
-                "prefLabel": "Albumin 4+"
-              }
+          "@id": "urn:linked-codebook:dataset:Chronic%20Kidney%20Disease%20(UCI%20id%20336)#property-al",
+          "@type": "dsv:ColumnProperty",
+          "hasVariable": {
+            "@id": "urn:linked-codebook:dataset:Chronic%20Kidney%20Disease%20(UCI%20id%20336)#variable-al",
+            "@type": "skos:Concept",
+            "skos:prefLabel": "Urine albumin dipstick grade",
+            "closeMatch": [
+              "http://snomed.info/id/274769005"
             ]
           },
-          "closeMatch": [
-            "http://snomed.info/id/274769005"
-          ],
-          "valueType": "xsd:integer"
+          "hasCodeBook": {
+            "@id": "urn:linked-codebook:dataset:Chronic%20Kidney%20Disease%20(UCI%20id%20336)#variable-al-codes",
+            "@type": "skos:ConceptScheme",
+            "skos:hasTopConcept": [
+              {
+                "@id": "urn:linked-codebook:dataset:Chronic%20Kidney%20Disease%20(UCI%20id%20336)#variable-al-codes-0",
+                "@type": "skos:Concept",
+                "skos:prefLabel": "Albumin negative",
+                "skos:inScheme": {
+                  "@id": "urn:linked-codebook:dataset:Chronic%20Kidney%20Disease%20(UCI%20id%20336)#variable-al-codes"
+                },
+                "skos:notation": "0"
+              },
+              {
+                "@id": "urn:linked-codebook:dataset:Chronic%20Kidney%20Disease%20(UCI%20id%20336)#variable-al-codes-1",
+                "@type": "skos:Concept",
+                "skos:prefLabel": "Trace albumin",
+                "skos:inScheme": {
+                  "@id": "urn:linked-codebook:dataset:Chronic%20Kidney%20Disease%20(UCI%20id%20336)#variable-al-codes"
+                },
+                "skos:notation": "1"
+              },
+              {
+                "@id": "urn:linked-codebook:dataset:Chronic%20Kidney%20Disease%20(UCI%20id%20336)#variable-al-codes-2",
+                "@type": "skos:Concept",
+                "skos:prefLabel": "Albumin 1+",
+                "skos:inScheme": {
+                  "@id": "urn:linked-codebook:dataset:Chronic%20Kidney%20Disease%20(UCI%20id%20336)#variable-al-codes"
+                },
+                "skos:notation": "2"
+              },
+              {
+                "@id": "urn:linked-codebook:dataset:Chronic%20Kidney%20Disease%20(UCI%20id%20336)#variable-al-codes-3",
+                "@type": "skos:Concept",
+                "skos:prefLabel": "Albumin 2+",
+                "skos:inScheme": {
+                  "@id": "urn:linked-codebook:dataset:Chronic%20Kidney%20Disease%20(UCI%20id%20336)#variable-al-codes"
+                },
+                "skos:notation": "3"
+              },
+              {
+                "@id": "urn:linked-codebook:dataset:Chronic%20Kidney%20Disease%20(UCI%20id%20336)#variable-al-codes-4",
+                "@type": "skos:Concept",
+                "skos:prefLabel": "Albumin 3+",
+                "skos:inScheme": {
+                  "@id": "urn:linked-codebook:dataset:Chronic%20Kidney%20Disease%20(UCI%20id%20336)#variable-al-codes"
+                },
+                "skos:notation": "4"
+              },
+              {
+                "@id": "urn:linked-codebook:dataset:Chronic%20Kidney%20Disease%20(UCI%20id%20336)#variable-al-codes-5",
+                "@type": "skos:Concept",
+                "skos:prefLabel": "Albumin 4+",
+                "skos:inScheme": {
+                  "@id": "urn:linked-codebook:dataset:Chronic%20Kidney%20Disease%20(UCI%20id%20336)#variable-al-codes"
+                },
+                "skos:notation": "5"
+              }
+            ]
+          }
+        },
+        "summaryStatistics": {
+          "@id": "urn:linked-codebook:dataset:Chronic%20Kidney%20Disease%20(UCI%20id%20336)#statistics-al",
+          "@type": "dsv:SummaryStatistics",
+          "statisticalDataType": "dsv:OrdinalDataType"
         }
       },
       {
-        "name": "su",
+        "@id": "urn:linked-codebook:dataset:Chronic%20Kidney%20Disease%20(UCI%20id%20336)#column-su",
+        "@type": "dsv:Column",
+        "datatype": "integer",
         "titles": "Urine sugar dipstick grade",
+        "name": "su",
         "columnProperty": {
-          "summaryStatistics": {
-            "statisticalDataType": "dsv:OrdinalDataType"
-          },
-          "hasCodeBook": {
-            "hasTopConcept": [
-              {
-                "notation": "0",
-                "prefLabel": "Sugar negative"
-              },
-              {
-                "notation": "1",
-                "prefLabel": "Trace sugar"
-              },
-              {
-                "notation": "2",
-                "prefLabel": "Sugar 1+"
-              },
-              {
-                "notation": "3",
-                "prefLabel": "Sugar 2+"
-              },
-              {
-                "notation": "4",
-                "prefLabel": "Sugar 3+"
-              },
-              {
-                "notation": "5",
-                "prefLabel": "Sugar 4+"
-              }
+          "@id": "urn:linked-codebook:dataset:Chronic%20Kidney%20Disease%20(UCI%20id%20336)#property-su",
+          "@type": "dsv:ColumnProperty",
+          "hasVariable": {
+            "@id": "urn:linked-codebook:dataset:Chronic%20Kidney%20Disease%20(UCI%20id%20336)#variable-su",
+            "@type": "skos:Concept",
+            "skos:prefLabel": "Urine sugar dipstick grade",
+            "closeMatch": [
+              "http://snomed.info/id/45154002"
             ]
           },
-          "closeMatch": [
-            "http://snomed.info/id/45154002"
-          ],
-          "valueType": "xsd:integer"
+          "hasCodeBook": {
+            "@id": "urn:linked-codebook:dataset:Chronic%20Kidney%20Disease%20(UCI%20id%20336)#variable-su-codes",
+            "@type": "skos:ConceptScheme",
+            "skos:hasTopConcept": [
+              {
+                "@id": "urn:linked-codebook:dataset:Chronic%20Kidney%20Disease%20(UCI%20id%20336)#variable-su-codes-0",
+                "@type": "skos:Concept",
+                "skos:prefLabel": "Sugar negative",
+                "skos:inScheme": {
+                  "@id": "urn:linked-codebook:dataset:Chronic%20Kidney%20Disease%20(UCI%20id%20336)#variable-su-codes"
+                },
+                "skos:notation": "0"
+              },
+              {
+                "@id": "urn:linked-codebook:dataset:Chronic%20Kidney%20Disease%20(UCI%20id%20336)#variable-su-codes-1",
+                "@type": "skos:Concept",
+                "skos:prefLabel": "Trace sugar",
+                "skos:inScheme": {
+                  "@id": "urn:linked-codebook:dataset:Chronic%20Kidney%20Disease%20(UCI%20id%20336)#variable-su-codes"
+                },
+                "skos:notation": "1"
+              },
+              {
+                "@id": "urn:linked-codebook:dataset:Chronic%20Kidney%20Disease%20(UCI%20id%20336)#variable-su-codes-2",
+                "@type": "skos:Concept",
+                "skos:prefLabel": "Sugar 1+",
+                "skos:inScheme": {
+                  "@id": "urn:linked-codebook:dataset:Chronic%20Kidney%20Disease%20(UCI%20id%20336)#variable-su-codes"
+                },
+                "skos:notation": "2"
+              },
+              {
+                "@id": "urn:linked-codebook:dataset:Chronic%20Kidney%20Disease%20(UCI%20id%20336)#variable-su-codes-3",
+                "@type": "skos:Concept",
+                "skos:prefLabel": "Sugar 2+",
+                "skos:inScheme": {
+                  "@id": "urn:linked-codebook:dataset:Chronic%20Kidney%20Disease%20(UCI%20id%20336)#variable-su-codes"
+                },
+                "skos:notation": "3"
+              },
+              {
+                "@id": "urn:linked-codebook:dataset:Chronic%20Kidney%20Disease%20(UCI%20id%20336)#variable-su-codes-4",
+                "@type": "skos:Concept",
+                "skos:prefLabel": "Sugar 3+",
+                "skos:inScheme": {
+                  "@id": "urn:linked-codebook:dataset:Chronic%20Kidney%20Disease%20(UCI%20id%20336)#variable-su-codes"
+                },
+                "skos:notation": "4"
+              },
+              {
+                "@id": "urn:linked-codebook:dataset:Chronic%20Kidney%20Disease%20(UCI%20id%20336)#variable-su-codes-5",
+                "@type": "skos:Concept",
+                "skos:prefLabel": "Sugar 4+",
+                "skos:inScheme": {
+                  "@id": "urn:linked-codebook:dataset:Chronic%20Kidney%20Disease%20(UCI%20id%20336)#variable-su-codes"
+                },
+                "skos:notation": "5"
+              }
+            ]
+          }
+        },
+        "summaryStatistics": {
+          "@id": "urn:linked-codebook:dataset:Chronic%20Kidney%20Disease%20(UCI%20id%20336)#statistics-su",
+          "@type": "dsv:SummaryStatistics",
+          "statisticalDataType": "dsv:OrdinalDataType"
         }
       },
       {
-        "name": "rbc",
+        "@id": "urn:linked-codebook:dataset:Chronic%20Kidney%20Disease%20(UCI%20id%20336)#column-rbc",
+        "@type": "dsv:Column",
+        "datatype": "string",
         "titles": "Urine red blood cells (microscopy)",
+        "name": "rbc",
         "columnProperty": {
-          "summaryStatistics": {
-            "statisticalDataType": "dsv:NominalDataType"
-          },
-          "hasCodeBook": {
-            "hasTopConcept": [
-              {
-                "notation": "normal",
-                "prefLabel": "Normal"
-              },
-              {
-                "notation": "abnormal",
-                "prefLabel": "Abnormal"
-              }
+          "@id": "urn:linked-codebook:dataset:Chronic%20Kidney%20Disease%20(UCI%20id%20336)#property-rbc",
+          "@type": "dsv:ColumnProperty",
+          "hasVariable": {
+            "@id": "urn:linked-codebook:dataset:Chronic%20Kidney%20Disease%20(UCI%20id%20336)#variable-rbc",
+            "@type": "skos:Concept",
+            "skos:prefLabel": "Urine red blood cells (microscopy)",
+            "closeMatch": [
+              "http://snomed.info/id/34436003"
             ]
           },
-          "closeMatch": [
-            "http://snomed.info/id/34436003"
-          ],
-          "valueType": "xsd:string"
+          "hasCodeBook": {
+            "@id": "urn:linked-codebook:dataset:Chronic%20Kidney%20Disease%20(UCI%20id%20336)#variable-rbc-codes",
+            "@type": "skos:ConceptScheme",
+            "skos:hasTopConcept": [
+              {
+                "@id": "urn:linked-codebook:dataset:Chronic%20Kidney%20Disease%20(UCI%20id%20336)#variable-rbc-codes-normal",
+                "@type": "skos:Concept",
+                "skos:prefLabel": "Normal",
+                "skos:inScheme": {
+                  "@id": "urn:linked-codebook:dataset:Chronic%20Kidney%20Disease%20(UCI%20id%20336)#variable-rbc-codes"
+                },
+                "skos:notation": "normal"
+              },
+              {
+                "@id": "urn:linked-codebook:dataset:Chronic%20Kidney%20Disease%20(UCI%20id%20336)#variable-rbc-codes-abnormal",
+                "@type": "skos:Concept",
+                "skos:prefLabel": "Abnormal",
+                "skos:inScheme": {
+                  "@id": "urn:linked-codebook:dataset:Chronic%20Kidney%20Disease%20(UCI%20id%20336)#variable-rbc-codes"
+                },
+                "skos:notation": "abnormal"
+              }
+            ]
+          }
+        },
+        "summaryStatistics": {
+          "@id": "urn:linked-codebook:dataset:Chronic%20Kidney%20Disease%20(UCI%20id%20336)#statistics-rbc",
+          "@type": "dsv:SummaryStatistics",
+          "statisticalDataType": "dsv:NominalDataType"
         }
       },
       {
-        "name": "pc",
+        "@id": "urn:linked-codebook:dataset:Chronic%20Kidney%20Disease%20(UCI%20id%20336)#column-pc",
+        "@type": "dsv:Column",
+        "datatype": "string",
         "titles": "Urine pus cells (leukocytes)",
+        "name": "pc",
         "columnProperty": {
-          "summaryStatistics": {
-            "statisticalDataType": "dsv:NominalDataType"
-          },
-          "hasCodeBook": {
-            "hasTopConcept": [
-              {
-                "notation": "normal",
-                "prefLabel": "Normal"
-              },
-              {
-                "notation": "abnormal",
-                "prefLabel": "Abnormal"
-              }
+          "@id": "urn:linked-codebook:dataset:Chronic%20Kidney%20Disease%20(UCI%20id%20336)#property-pc",
+          "@type": "dsv:ColumnProperty",
+          "hasVariable": {
+            "@id": "urn:linked-codebook:dataset:Chronic%20Kidney%20Disease%20(UCI%20id%20336)#variable-pc",
+            "@type": "skos:Concept",
+            "skos:prefLabel": "Urine pus cells (leukocytes)",
+            "closeMatch": [
+              "http://snomed.info/id/275741008"
             ]
           },
-          "closeMatch": [
-            "http://snomed.info/id/275741008"
-          ],
-          "valueType": "xsd:string"
+          "hasCodeBook": {
+            "@id": "urn:linked-codebook:dataset:Chronic%20Kidney%20Disease%20(UCI%20id%20336)#variable-pc-codes",
+            "@type": "skos:ConceptScheme",
+            "skos:hasTopConcept": [
+              {
+                "@id": "urn:linked-codebook:dataset:Chronic%20Kidney%20Disease%20(UCI%20id%20336)#variable-pc-codes-normal",
+                "@type": "skos:Concept",
+                "skos:prefLabel": "Normal",
+                "skos:inScheme": {
+                  "@id": "urn:linked-codebook:dataset:Chronic%20Kidney%20Disease%20(UCI%20id%20336)#variable-pc-codes"
+                },
+                "skos:notation": "normal"
+              },
+              {
+                "@id": "urn:linked-codebook:dataset:Chronic%20Kidney%20Disease%20(UCI%20id%20336)#variable-pc-codes-abnormal",
+                "@type": "skos:Concept",
+                "skos:prefLabel": "Abnormal",
+                "skos:inScheme": {
+                  "@id": "urn:linked-codebook:dataset:Chronic%20Kidney%20Disease%20(UCI%20id%20336)#variable-pc-codes"
+                },
+                "skos:notation": "abnormal"
+              }
+            ]
+          }
+        },
+        "summaryStatistics": {
+          "@id": "urn:linked-codebook:dataset:Chronic%20Kidney%20Disease%20(UCI%20id%20336)#statistics-pc",
+          "@type": "dsv:SummaryStatistics",
+          "statisticalDataType": "dsv:NominalDataType"
         }
       },
       {
-        "name": "pcc",
+        "@id": "urn:linked-codebook:dataset:Chronic%20Kidney%20Disease%20(UCI%20id%20336)#column-pcc",
+        "@type": "dsv:Column",
+        "datatype": "string",
         "titles": "Pus cell clumps in urine",
+        "name": "pcc",
         "columnProperty": {
-          "summaryStatistics": {
-            "statisticalDataType": "dsv:NominalDataType"
-          },
-          "hasCodeBook": {
-            "hasTopConcept": [
-              {
-                "notation": "present",
-                "prefLabel": "Present"
-              },
-              {
-                "notation": "notpresent",
-                "prefLabel": "Not present"
-              }
+          "@id": "urn:linked-codebook:dataset:Chronic%20Kidney%20Disease%20(UCI%20id%20336)#property-pcc",
+          "@type": "dsv:ColumnProperty",
+          "hasVariable": {
+            "@id": "urn:linked-codebook:dataset:Chronic%20Kidney%20Disease%20(UCI%20id%20336)#variable-pcc",
+            "@type": "skos:Concept",
+            "skos:prefLabel": "Pus cell clumps in urine",
+            "exactMatch": [
+              "https://loinc.org/67848-2/"
             ]
           },
-          "exactMatch": [
-            "https://loinc.org/67848-2/"
-          ],
-          "valueType": "xsd:string"
+          "hasCodeBook": {
+            "@id": "urn:linked-codebook:dataset:Chronic%20Kidney%20Disease%20(UCI%20id%20336)#variable-pcc-codes",
+            "@type": "skos:ConceptScheme",
+            "skos:hasTopConcept": [
+              {
+                "@id": "urn:linked-codebook:dataset:Chronic%20Kidney%20Disease%20(UCI%20id%20336)#variable-pcc-codes-present",
+                "@type": "skos:Concept",
+                "skos:prefLabel": "Present",
+                "skos:inScheme": {
+                  "@id": "urn:linked-codebook:dataset:Chronic%20Kidney%20Disease%20(UCI%20id%20336)#variable-pcc-codes"
+                },
+                "skos:notation": "present"
+              },
+              {
+                "@id": "urn:linked-codebook:dataset:Chronic%20Kidney%20Disease%20(UCI%20id%20336)#variable-pcc-codes-notpresent",
+                "@type": "skos:Concept",
+                "skos:prefLabel": "Not present",
+                "skos:inScheme": {
+                  "@id": "urn:linked-codebook:dataset:Chronic%20Kidney%20Disease%20(UCI%20id%20336)#variable-pcc-codes"
+                },
+                "skos:notation": "notpresent"
+              }
+            ]
+          }
+        },
+        "summaryStatistics": {
+          "@id": "urn:linked-codebook:dataset:Chronic%20Kidney%20Disease%20(UCI%20id%20336)#statistics-pcc",
+          "@type": "dsv:SummaryStatistics",
+          "statisticalDataType": "dsv:NominalDataType"
         }
       },
       {
-        "name": "ba",
+        "@id": "urn:linked-codebook:dataset:Chronic%20Kidney%20Disease%20(UCI%20id%20336)#column-ba",
+        "@type": "dsv:Column",
+        "datatype": "string",
         "titles": "Bacteria in urine",
+        "name": "ba",
         "columnProperty": {
-          "summaryStatistics": {
-            "statisticalDataType": "dsv:NominalDataType"
-          },
-          "hasCodeBook": {
-            "hasTopConcept": [
-              {
-                "notation": "present",
-                "prefLabel": "Present"
-              },
-              {
-                "notation": "notpresent",
-                "prefLabel": "Not present"
-              }
+          "@id": "urn:linked-codebook:dataset:Chronic%20Kidney%20Disease%20(UCI%20id%20336)#property-ba",
+          "@type": "dsv:ColumnProperty",
+          "hasVariable": {
+            "@id": "urn:linked-codebook:dataset:Chronic%20Kidney%20Disease%20(UCI%20id%20336)#variable-ba",
+            "@type": "skos:Concept",
+            "skos:prefLabel": "Bacteria in urine",
+            "closeMatch": [
+              "http://snomed.info/id/61373006"
             ]
           },
-          "closeMatch": [
-            "http://snomed.info/id/61373006"
-          ],
-          "valueType": "xsd:string"
+          "hasCodeBook": {
+            "@id": "urn:linked-codebook:dataset:Chronic%20Kidney%20Disease%20(UCI%20id%20336)#variable-ba-codes",
+            "@type": "skos:ConceptScheme",
+            "skos:hasTopConcept": [
+              {
+                "@id": "urn:linked-codebook:dataset:Chronic%20Kidney%20Disease%20(UCI%20id%20336)#variable-ba-codes-present",
+                "@type": "skos:Concept",
+                "skos:prefLabel": "Present",
+                "skos:inScheme": {
+                  "@id": "urn:linked-codebook:dataset:Chronic%20Kidney%20Disease%20(UCI%20id%20336)#variable-ba-codes"
+                },
+                "skos:notation": "present"
+              },
+              {
+                "@id": "urn:linked-codebook:dataset:Chronic%20Kidney%20Disease%20(UCI%20id%20336)#variable-ba-codes-notpresent",
+                "@type": "skos:Concept",
+                "skos:prefLabel": "Not present",
+                "skos:inScheme": {
+                  "@id": "urn:linked-codebook:dataset:Chronic%20Kidney%20Disease%20(UCI%20id%20336)#variable-ba-codes"
+                },
+                "skos:notation": "notpresent"
+              }
+            ]
+          }
+        },
+        "summaryStatistics": {
+          "@id": "urn:linked-codebook:dataset:Chronic%20Kidney%20Disease%20(UCI%20id%20336)#statistics-ba",
+          "@type": "dsv:SummaryStatistics",
+          "statisticalDataType": "dsv:NominalDataType"
         }
       },
       {
-        "name": "bgr",
+        "@id": "urn:linked-codebook:dataset:Chronic%20Kidney%20Disease%20(UCI%20id%20336)#column-bgr",
+        "@type": "dsv:Column",
+        "datatype": "number",
         "titles": "Blood glucose (random)",
+        "name": "bgr",
         "columnProperty": {
-          "summaryStatistics": {
-            "statisticalDataType": "dsv:ContinuousDataType"
+          "@id": "urn:linked-codebook:dataset:Chronic%20Kidney%20Disease%20(UCI%20id%20336)#property-bgr",
+          "@type": "dsv:ColumnProperty",
+          "hasVariable": {
+            "@id": "urn:linked-codebook:dataset:Chronic%20Kidney%20Disease%20(UCI%20id%20336)#variable-bgr",
+            "@type": "skos:Concept",
+            "skos:prefLabel": "Blood glucose (random)",
+            "exactMatch": [
+              "https://loinc.org/2345-7/"
+            ]
           },
-          "unitText": "mg/dL",
-          "exactMatch": [
-            "https://loinc.org/2345-7/"
-          ],
-          "valueType": "xsd:float",
-          "ucumCode": "mg/dL"
+          "unitText": "mg/dL"
+        },
+        "summaryStatistics": {
+          "@id": "urn:linked-codebook:dataset:Chronic%20Kidney%20Disease%20(UCI%20id%20336)#statistics-bgr",
+          "@type": "dsv:SummaryStatistics",
+          "statisticalDataType": "dsv:NumericalDataType"
         }
       },
       {
-        "name": "bu",
+        "@id": "urn:linked-codebook:dataset:Chronic%20Kidney%20Disease%20(UCI%20id%20336)#column-bu",
+        "@type": "dsv:Column",
+        "datatype": "number",
         "titles": "Blood urea nitrogen",
+        "name": "bu",
         "columnProperty": {
-          "summaryStatistics": {
-            "statisticalDataType": "dsv:ContinuousDataType"
+          "@id": "urn:linked-codebook:dataset:Chronic%20Kidney%20Disease%20(UCI%20id%20336)#property-bu",
+          "@type": "dsv:ColumnProperty",
+          "hasVariable": {
+            "@id": "urn:linked-codebook:dataset:Chronic%20Kidney%20Disease%20(UCI%20id%20336)#variable-bu",
+            "@type": "skos:Concept",
+            "skos:prefLabel": "Blood urea nitrogen",
+            "exactMatch": [
+              "https://loinc.org/6299-2/"
+            ]
           },
-          "unitText": "mg/dL",
-          "exactMatch": [
-            "https://loinc.org/6299-2/"
-          ],
-          "valueType": "xsd:float",
-          "ucumCode": "mg/dL"
+          "unitText": "mg/dL"
+        },
+        "summaryStatistics": {
+          "@id": "urn:linked-codebook:dataset:Chronic%20Kidney%20Disease%20(UCI%20id%20336)#statistics-bu",
+          "@type": "dsv:SummaryStatistics",
+          "statisticalDataType": "dsv:NumericalDataType"
         }
       },
       {
-        "name": "sc",
+        "@id": "urn:linked-codebook:dataset:Chronic%20Kidney%20Disease%20(UCI%20id%20336)#column-sc",
+        "@type": "dsv:Column",
+        "datatype": "number",
         "titles": "Serum creatinine",
+        "name": "sc",
         "columnProperty": {
-          "summaryStatistics": {
-            "statisticalDataType": "dsv:ContinuousDataType"
+          "@id": "urn:linked-codebook:dataset:Chronic%20Kidney%20Disease%20(UCI%20id%20336)#property-sc",
+          "@type": "dsv:ColumnProperty",
+          "hasVariable": {
+            "@id": "urn:linked-codebook:dataset:Chronic%20Kidney%20Disease%20(UCI%20id%20336)#variable-sc",
+            "@type": "skos:Concept",
+            "skos:prefLabel": "Serum creatinine",
+            "exactMatch": [
+              "https://loinc.org/2160-0/"
+            ]
           },
-          "unitText": "mg/dL",
-          "exactMatch": [
-            "https://loinc.org/2160-0/"
-          ],
-          "valueType": "xsd:float",
-          "ucumCode": "mg/dL"
+          "unitText": "mg/dL"
+        },
+        "summaryStatistics": {
+          "@id": "urn:linked-codebook:dataset:Chronic%20Kidney%20Disease%20(UCI%20id%20336)#statistics-sc",
+          "@type": "dsv:SummaryStatistics",
+          "statisticalDataType": "dsv:NumericalDataType"
         }
       },
       {
-        "name": "sod",
+        "@id": "urn:linked-codebook:dataset:Chronic%20Kidney%20Disease%20(UCI%20id%20336)#column-sod",
+        "@type": "dsv:Column",
+        "datatype": "number",
         "titles": "Serum sodium",
+        "name": "sod",
         "columnProperty": {
-          "summaryStatistics": {
-            "statisticalDataType": "dsv:ContinuousDataType"
+          "@id": "urn:linked-codebook:dataset:Chronic%20Kidney%20Disease%20(UCI%20id%20336)#property-sod",
+          "@type": "dsv:ColumnProperty",
+          "hasVariable": {
+            "@id": "urn:linked-codebook:dataset:Chronic%20Kidney%20Disease%20(UCI%20id%20336)#variable-sod",
+            "@type": "skos:Concept",
+            "skos:prefLabel": "Serum sodium",
+            "exactMatch": [
+              "https://loinc.org/2951-2/"
+            ]
           },
-          "unitText": "mmol/L",
-          "exactMatch": [
-            "https://loinc.org/2951-2/"
-          ],
-          "valueType": "xsd:float",
-          "ucumCode": "mmol/L"
+          "unitText": "mmol/L"
+        },
+        "summaryStatistics": {
+          "@id": "urn:linked-codebook:dataset:Chronic%20Kidney%20Disease%20(UCI%20id%20336)#statistics-sod",
+          "@type": "dsv:SummaryStatistics",
+          "statisticalDataType": "dsv:NumericalDataType"
         }
       },
       {
-        "name": "pot",
+        "@id": "urn:linked-codebook:dataset:Chronic%20Kidney%20Disease%20(UCI%20id%20336)#column-pot",
+        "@type": "dsv:Column",
+        "datatype": "number",
         "titles": "Serum potassium",
+        "name": "pot",
         "columnProperty": {
-          "summaryStatistics": {
-            "statisticalDataType": "dsv:ContinuousDataType"
+          "@id": "urn:linked-codebook:dataset:Chronic%20Kidney%20Disease%20(UCI%20id%20336)#property-pot",
+          "@type": "dsv:ColumnProperty",
+          "hasVariable": {
+            "@id": "urn:linked-codebook:dataset:Chronic%20Kidney%20Disease%20(UCI%20id%20336)#variable-pot",
+            "@type": "skos:Concept",
+            "skos:prefLabel": "Serum potassium",
+            "exactMatch": [
+              "https://loinc.org/2823-3/"
+            ]
           },
-          "unitText": "mmol/L",
-          "exactMatch": [
-            "https://loinc.org/2823-3/"
-          ],
-          "valueType": "xsd:float",
-          "ucumCode": "mmol/L"
+          "unitText": "mmol/L"
+        },
+        "summaryStatistics": {
+          "@id": "urn:linked-codebook:dataset:Chronic%20Kidney%20Disease%20(UCI%20id%20336)#statistics-pot",
+          "@type": "dsv:SummaryStatistics",
+          "statisticalDataType": "dsv:NumericalDataType"
         }
       },
       {
-        "name": "hemo",
+        "@id": "urn:linked-codebook:dataset:Chronic%20Kidney%20Disease%20(UCI%20id%20336)#column-hemo",
+        "@type": "dsv:Column",
+        "datatype": "number",
         "titles": "Hemoglobin",
+        "name": "hemo",
         "columnProperty": {
-          "summaryStatistics": {
-            "statisticalDataType": "dsv:ContinuousDataType"
+          "@id": "urn:linked-codebook:dataset:Chronic%20Kidney%20Disease%20(UCI%20id%20336)#property-hemo",
+          "@type": "dsv:ColumnProperty",
+          "hasVariable": {
+            "@id": "urn:linked-codebook:dataset:Chronic%20Kidney%20Disease%20(UCI%20id%20336)#variable-hemo",
+            "@type": "skos:Concept",
+            "skos:prefLabel": "Hemoglobin",
+            "exactMatch": [
+              "https://loinc.org/718-7/"
+            ]
           },
-          "unitText": "g/dL",
-          "exactMatch": [
-            "https://loinc.org/718-7/"
-          ],
-          "valueType": "xsd:float",
-          "ucumCode": "g/dL"
+          "unitText": "g/dL"
+        },
+        "summaryStatistics": {
+          "@id": "urn:linked-codebook:dataset:Chronic%20Kidney%20Disease%20(UCI%20id%20336)#statistics-hemo",
+          "@type": "dsv:SummaryStatistics",
+          "statisticalDataType": "dsv:NumericalDataType"
         }
       },
       {
-        "name": "pcv",
+        "@id": "urn:linked-codebook:dataset:Chronic%20Kidney%20Disease%20(UCI%20id%20336)#column-pcv",
+        "@type": "dsv:Column",
+        "datatype": "number",
         "titles": "Packed cell volume (hematocrit)",
+        "name": "pcv",
         "columnProperty": {
-          "summaryStatistics": {
-            "statisticalDataType": "dsv:ContinuousDataType"
+          "@id": "urn:linked-codebook:dataset:Chronic%20Kidney%20Disease%20(UCI%20id%20336)#property-pcv",
+          "@type": "dsv:ColumnProperty",
+          "hasVariable": {
+            "@id": "urn:linked-codebook:dataset:Chronic%20Kidney%20Disease%20(UCI%20id%20336)#variable-pcv",
+            "@type": "skos:Concept",
+            "skos:prefLabel": "Packed cell volume (hematocrit)",
+            "exactMatch": [
+              "https://loinc.org/20570-8/"
+            ]
           },
-          "unitText": "percent",
-          "exactMatch": [
-            "https://loinc.org/20570-8/"
-          ],
-          "valueType": "xsd:float",
-          "ucumCode": "%"
+          "unitText": "percent"
+        },
+        "summaryStatistics": {
+          "@id": "urn:linked-codebook:dataset:Chronic%20Kidney%20Disease%20(UCI%20id%20336)#statistics-pcv",
+          "@type": "dsv:SummaryStatistics",
+          "statisticalDataType": "dsv:NumericalDataType"
         }
       },
       {
-        "name": "wbcc",
+        "@id": "urn:linked-codebook:dataset:Chronic%20Kidney%20Disease%20(UCI%20id%20336)#column-wbcc",
+        "@type": "dsv:Column",
+        "datatype": "number",
         "titles": "White blood cell count",
+        "name": "wbcc",
         "columnProperty": {
-          "summaryStatistics": {
-            "statisticalDataType": "dsv:ContinuousDataType"
+          "@id": "urn:linked-codebook:dataset:Chronic%20Kidney%20Disease%20(UCI%20id%20336)#property-wbcc",
+          "@type": "dsv:ColumnProperty",
+          "hasVariable": {
+            "@id": "urn:linked-codebook:dataset:Chronic%20Kidney%20Disease%20(UCI%20id%20336)#variable-wbcc",
+            "@type": "skos:Concept",
+            "skos:prefLabel": "White blood cell count",
+            "exactMatch": [
+              "https://loinc.org/6690-2/"
+            ]
           },
-          "unitText": "10^3 cells/\u00b5L",
-          "exactMatch": [
-            "https://loinc.org/6690-2/"
-          ],
-          "valueType": "xsd:float",
-          "ucumCode": "10*3/uL"
+          "unitText": "10^3 cells/µL"
+        },
+        "summaryStatistics": {
+          "@id": "urn:linked-codebook:dataset:Chronic%20Kidney%20Disease%20(UCI%20id%20336)#statistics-wbcc",
+          "@type": "dsv:SummaryStatistics",
+          "statisticalDataType": "dsv:NumericalDataType"
         }
       },
       {
-        "name": "rbcc",
+        "@id": "urn:linked-codebook:dataset:Chronic%20Kidney%20Disease%20(UCI%20id%20336)#column-rbcc",
+        "@type": "dsv:Column",
+        "datatype": "number",
         "titles": "Red blood cell count",
+        "name": "rbcc",
         "columnProperty": {
-          "summaryStatistics": {
-            "statisticalDataType": "dsv:ContinuousDataType"
+          "@id": "urn:linked-codebook:dataset:Chronic%20Kidney%20Disease%20(UCI%20id%20336)#property-rbcc",
+          "@type": "dsv:ColumnProperty",
+          "hasVariable": {
+            "@id": "urn:linked-codebook:dataset:Chronic%20Kidney%20Disease%20(UCI%20id%20336)#variable-rbcc",
+            "@type": "skos:Concept",
+            "skos:prefLabel": "Red blood cell count",
+            "exactMatch": [
+              "https://loinc.org/789-8/"
+            ]
           },
-          "unitText": "10^6 cells/\u00b5L",
-          "exactMatch": [
-            "https://loinc.org/789-8/"
-          ],
-          "valueType": "xsd:float",
-          "ucumCode": "10*6/uL"
+          "unitText": "10^6 cells/µL"
+        },
+        "summaryStatistics": {
+          "@id": "urn:linked-codebook:dataset:Chronic%20Kidney%20Disease%20(UCI%20id%20336)#statistics-rbcc",
+          "@type": "dsv:SummaryStatistics",
+          "statisticalDataType": "dsv:NumericalDataType"
         }
       },
       {
-        "name": "htn",
+        "@id": "urn:linked-codebook:dataset:Chronic%20Kidney%20Disease%20(UCI%20id%20336)#column-htn",
+        "@type": "dsv:Column",
+        "datatype": "string",
         "titles": "Hypertension history",
+        "name": "htn",
         "columnProperty": {
-          "summaryStatistics": {
-            "statisticalDataType": "dsv:NominalDataType"
-          },
-          "hasCodeBook": {
-            "hasTopConcept": [
-              {
-                "notation": "yes",
-                "prefLabel": "Yes"
-              },
-              {
-                "notation": "no",
-                "prefLabel": "No"
-              }
+          "@id": "urn:linked-codebook:dataset:Chronic%20Kidney%20Disease%20(UCI%20id%20336)#property-htn",
+          "@type": "dsv:ColumnProperty",
+          "hasVariable": {
+            "@id": "urn:linked-codebook:dataset:Chronic%20Kidney%20Disease%20(UCI%20id%20336)#variable-htn",
+            "@type": "skos:Concept",
+            "skos:prefLabel": "Hypertension history",
+            "closeMatch": [
+              "http://snomed.info/id/38341003"
             ]
           },
-          "closeMatch": [
-            "http://snomed.info/id/38341003"
-          ],
-          "valueType": "xsd:string"
+          "hasCodeBook": {
+            "@id": "urn:linked-codebook:dataset:Chronic%20Kidney%20Disease%20(UCI%20id%20336)#variable-htn-codes",
+            "@type": "skos:ConceptScheme",
+            "skos:hasTopConcept": [
+              {
+                "@id": "urn:linked-codebook:dataset:Chronic%20Kidney%20Disease%20(UCI%20id%20336)#variable-htn-codes-yes",
+                "@type": "skos:Concept",
+                "skos:prefLabel": "Yes",
+                "skos:inScheme": {
+                  "@id": "urn:linked-codebook:dataset:Chronic%20Kidney%20Disease%20(UCI%20id%20336)#variable-htn-codes"
+                },
+                "skos:notation": "yes"
+              },
+              {
+                "@id": "urn:linked-codebook:dataset:Chronic%20Kidney%20Disease%20(UCI%20id%20336)#variable-htn-codes-no",
+                "@type": "skos:Concept",
+                "skos:prefLabel": "No",
+                "skos:inScheme": {
+                  "@id": "urn:linked-codebook:dataset:Chronic%20Kidney%20Disease%20(UCI%20id%20336)#variable-htn-codes"
+                },
+                "skos:notation": "no"
+              }
+            ]
+          }
+        },
+        "summaryStatistics": {
+          "@id": "urn:linked-codebook:dataset:Chronic%20Kidney%20Disease%20(UCI%20id%20336)#statistics-htn",
+          "@type": "dsv:SummaryStatistics",
+          "statisticalDataType": "dsv:NominalDataType"
         }
       },
       {
-        "name": "dm",
+        "@id": "urn:linked-codebook:dataset:Chronic%20Kidney%20Disease%20(UCI%20id%20336)#column-dm",
+        "@type": "dsv:Column",
+        "datatype": "string",
         "titles": "Diabetes mellitus history",
+        "name": "dm",
         "columnProperty": {
-          "summaryStatistics": {
-            "statisticalDataType": "dsv:NominalDataType"
-          },
-          "hasCodeBook": {
-            "hasTopConcept": [
-              {
-                "notation": "yes",
-                "prefLabel": "Yes"
-              },
-              {
-                "notation": "no",
-                "prefLabel": "No"
-              }
+          "@id": "urn:linked-codebook:dataset:Chronic%20Kidney%20Disease%20(UCI%20id%20336)#property-dm",
+          "@type": "dsv:ColumnProperty",
+          "hasVariable": {
+            "@id": "urn:linked-codebook:dataset:Chronic%20Kidney%20Disease%20(UCI%20id%20336)#variable-dm",
+            "@type": "skos:Concept",
+            "skos:prefLabel": "Diabetes mellitus history",
+            "closeMatch": [
+              "http://snomed.info/id/73211009"
             ]
           },
-          "closeMatch": [
-            "http://snomed.info/id/73211009"
-          ],
-          "valueType": "xsd:string"
+          "hasCodeBook": {
+            "@id": "urn:linked-codebook:dataset:Chronic%20Kidney%20Disease%20(UCI%20id%20336)#variable-dm-codes",
+            "@type": "skos:ConceptScheme",
+            "skos:hasTopConcept": [
+              {
+                "@id": "urn:linked-codebook:dataset:Chronic%20Kidney%20Disease%20(UCI%20id%20336)#variable-dm-codes-yes",
+                "@type": "skos:Concept",
+                "skos:prefLabel": "Yes",
+                "skos:inScheme": {
+                  "@id": "urn:linked-codebook:dataset:Chronic%20Kidney%20Disease%20(UCI%20id%20336)#variable-dm-codes"
+                },
+                "skos:notation": "yes"
+              },
+              {
+                "@id": "urn:linked-codebook:dataset:Chronic%20Kidney%20Disease%20(UCI%20id%20336)#variable-dm-codes-no",
+                "@type": "skos:Concept",
+                "skos:prefLabel": "No",
+                "skos:inScheme": {
+                  "@id": "urn:linked-codebook:dataset:Chronic%20Kidney%20Disease%20(UCI%20id%20336)#variable-dm-codes"
+                },
+                "skos:notation": "no"
+              }
+            ]
+          }
+        },
+        "summaryStatistics": {
+          "@id": "urn:linked-codebook:dataset:Chronic%20Kidney%20Disease%20(UCI%20id%20336)#statistics-dm",
+          "@type": "dsv:SummaryStatistics",
+          "statisticalDataType": "dsv:NominalDataType"
         }
       },
       {
-        "name": "cad",
+        "@id": "urn:linked-codebook:dataset:Chronic%20Kidney%20Disease%20(UCI%20id%20336)#column-cad",
+        "@type": "dsv:Column",
+        "datatype": "string",
         "titles": "Coronary artery disease history",
+        "name": "cad",
         "columnProperty": {
-          "summaryStatistics": {
-            "statisticalDataType": "dsv:NominalDataType"
-          },
-          "hasCodeBook": {
-            "hasTopConcept": [
-              {
-                "notation": "yes",
-                "prefLabel": "Yes"
-              },
-              {
-                "notation": "no",
-                "prefLabel": "No"
-              }
+          "@id": "urn:linked-codebook:dataset:Chronic%20Kidney%20Disease%20(UCI%20id%20336)#property-cad",
+          "@type": "dsv:ColumnProperty",
+          "hasVariable": {
+            "@id": "urn:linked-codebook:dataset:Chronic%20Kidney%20Disease%20(UCI%20id%20336)#variable-cad",
+            "@type": "skos:Concept",
+            "skos:prefLabel": "Coronary artery disease history",
+            "closeMatch": [
+              "http://snomed.info/id/53741008"
             ]
           },
-          "closeMatch": [
-            "http://snomed.info/id/53741008"
-          ],
-          "valueType": "xsd:string"
+          "hasCodeBook": {
+            "@id": "urn:linked-codebook:dataset:Chronic%20Kidney%20Disease%20(UCI%20id%20336)#variable-cad-codes",
+            "@type": "skos:ConceptScheme",
+            "skos:hasTopConcept": [
+              {
+                "@id": "urn:linked-codebook:dataset:Chronic%20Kidney%20Disease%20(UCI%20id%20336)#variable-cad-codes-yes",
+                "@type": "skos:Concept",
+                "skos:prefLabel": "Yes",
+                "skos:inScheme": {
+                  "@id": "urn:linked-codebook:dataset:Chronic%20Kidney%20Disease%20(UCI%20id%20336)#variable-cad-codes"
+                },
+                "skos:notation": "yes"
+              },
+              {
+                "@id": "urn:linked-codebook:dataset:Chronic%20Kidney%20Disease%20(UCI%20id%20336)#variable-cad-codes-no",
+                "@type": "skos:Concept",
+                "skos:prefLabel": "No",
+                "skos:inScheme": {
+                  "@id": "urn:linked-codebook:dataset:Chronic%20Kidney%20Disease%20(UCI%20id%20336)#variable-cad-codes"
+                },
+                "skos:notation": "no"
+              }
+            ]
+          }
+        },
+        "summaryStatistics": {
+          "@id": "urn:linked-codebook:dataset:Chronic%20Kidney%20Disease%20(UCI%20id%20336)#statistics-cad",
+          "@type": "dsv:SummaryStatistics",
+          "statisticalDataType": "dsv:NominalDataType"
         }
       },
       {
-        "name": "appet",
+        "@id": "urn:linked-codebook:dataset:Chronic%20Kidney%20Disease%20(UCI%20id%20336)#column-appet",
+        "@type": "dsv:Column",
+        "datatype": "string",
         "titles": "Reported appetite",
+        "name": "appet",
         "columnProperty": {
-          "summaryStatistics": {
-            "statisticalDataType": "dsv:NominalDataType"
-          },
-          "hasCodeBook": {
-            "hasTopConcept": [
-              {
-                "notation": "good",
-                "prefLabel": "Good appetite"
-              },
-              {
-                "notation": "poor",
-                "prefLabel": "Poor appetite"
-              }
+          "@id": "urn:linked-codebook:dataset:Chronic%20Kidney%20Disease%20(UCI%20id%20336)#property-appet",
+          "@type": "dsv:ColumnProperty",
+          "hasVariable": {
+            "@id": "urn:linked-codebook:dataset:Chronic%20Kidney%20Disease%20(UCI%20id%20336)#variable-appet",
+            "@type": "skos:Concept",
+            "skos:prefLabel": "Reported appetite",
+            "closeMatch": [
+              "http://snomed.info/id/2492004"
             ]
           },
-          "closeMatch": [
-            "http://snomed.info/id/2492004"
-          ],
-          "valueType": "xsd:string"
+          "hasCodeBook": {
+            "@id": "urn:linked-codebook:dataset:Chronic%20Kidney%20Disease%20(UCI%20id%20336)#variable-appet-codes",
+            "@type": "skos:ConceptScheme",
+            "skos:hasTopConcept": [
+              {
+                "@id": "urn:linked-codebook:dataset:Chronic%20Kidney%20Disease%20(UCI%20id%20336)#variable-appet-codes-good",
+                "@type": "skos:Concept",
+                "skos:prefLabel": "Good appetite",
+                "skos:inScheme": {
+                  "@id": "urn:linked-codebook:dataset:Chronic%20Kidney%20Disease%20(UCI%20id%20336)#variable-appet-codes"
+                },
+                "skos:notation": "good"
+              },
+              {
+                "@id": "urn:linked-codebook:dataset:Chronic%20Kidney%20Disease%20(UCI%20id%20336)#variable-appet-codes-poor",
+                "@type": "skos:Concept",
+                "skos:prefLabel": "Poor appetite",
+                "skos:inScheme": {
+                  "@id": "urn:linked-codebook:dataset:Chronic%20Kidney%20Disease%20(UCI%20id%20336)#variable-appet-codes"
+                },
+                "skos:notation": "poor"
+              }
+            ]
+          }
+        },
+        "summaryStatistics": {
+          "@id": "urn:linked-codebook:dataset:Chronic%20Kidney%20Disease%20(UCI%20id%20336)#statistics-appet",
+          "@type": "dsv:SummaryStatistics",
+          "statisticalDataType": "dsv:NominalDataType"
         }
       },
       {
-        "name": "pe",
+        "@id": "urn:linked-codebook:dataset:Chronic%20Kidney%20Disease%20(UCI%20id%20336)#column-pe",
+        "@type": "dsv:Column",
+        "datatype": "string",
         "titles": "Pedal edema",
+        "name": "pe",
         "columnProperty": {
-          "summaryStatistics": {
-            "statisticalDataType": "dsv:NominalDataType"
-          },
-          "hasCodeBook": {
-            "hasTopConcept": [
-              {
-                "notation": "yes",
-                "prefLabel": "Yes"
-              },
-              {
-                "notation": "no",
-                "prefLabel": "No"
-              }
+          "@id": "urn:linked-codebook:dataset:Chronic%20Kidney%20Disease%20(UCI%20id%20336)#property-pe",
+          "@type": "dsv:ColumnProperty",
+          "hasVariable": {
+            "@id": "urn:linked-codebook:dataset:Chronic%20Kidney%20Disease%20(UCI%20id%20336)#variable-pe",
+            "@type": "skos:Concept",
+            "skos:prefLabel": "Pedal edema",
+            "closeMatch": [
+              "http://snomed.info/id/102572006"
             ]
           },
-          "closeMatch": [
-            "http://snomed.info/id/102572006"
-          ],
-          "valueType": "xsd:string"
+          "hasCodeBook": {
+            "@id": "urn:linked-codebook:dataset:Chronic%20Kidney%20Disease%20(UCI%20id%20336)#variable-pe-codes",
+            "@type": "skos:ConceptScheme",
+            "skos:hasTopConcept": [
+              {
+                "@id": "urn:linked-codebook:dataset:Chronic%20Kidney%20Disease%20(UCI%20id%20336)#variable-pe-codes-yes",
+                "@type": "skos:Concept",
+                "skos:prefLabel": "Yes",
+                "skos:inScheme": {
+                  "@id": "urn:linked-codebook:dataset:Chronic%20Kidney%20Disease%20(UCI%20id%20336)#variable-pe-codes"
+                },
+                "skos:notation": "yes"
+              },
+              {
+                "@id": "urn:linked-codebook:dataset:Chronic%20Kidney%20Disease%20(UCI%20id%20336)#variable-pe-codes-no",
+                "@type": "skos:Concept",
+                "skos:prefLabel": "No",
+                "skos:inScheme": {
+                  "@id": "urn:linked-codebook:dataset:Chronic%20Kidney%20Disease%20(UCI%20id%20336)#variable-pe-codes"
+                },
+                "skos:notation": "no"
+              }
+            ]
+          }
+        },
+        "summaryStatistics": {
+          "@id": "urn:linked-codebook:dataset:Chronic%20Kidney%20Disease%20(UCI%20id%20336)#statistics-pe",
+          "@type": "dsv:SummaryStatistics",
+          "statisticalDataType": "dsv:NominalDataType"
         }
       },
       {
-        "name": "ane",
+        "@id": "urn:linked-codebook:dataset:Chronic%20Kidney%20Disease%20(UCI%20id%20336)#column-ane",
+        "@type": "dsv:Column",
+        "datatype": "string",
         "titles": "Anemia",
+        "name": "ane",
         "columnProperty": {
-          "summaryStatistics": {
-            "statisticalDataType": "dsv:NominalDataType"
-          },
-          "hasCodeBook": {
-            "hasTopConcept": [
-              {
-                "notation": "yes",
-                "prefLabel": "Yes"
-              },
-              {
-                "notation": "no",
-                "prefLabel": "No"
-              }
+          "@id": "urn:linked-codebook:dataset:Chronic%20Kidney%20Disease%20(UCI%20id%20336)#property-ane",
+          "@type": "dsv:ColumnProperty",
+          "hasVariable": {
+            "@id": "urn:linked-codebook:dataset:Chronic%20Kidney%20Disease%20(UCI%20id%20336)#variable-ane",
+            "@type": "skos:Concept",
+            "skos:prefLabel": "Anemia",
+            "closeMatch": [
+              "http://snomed.info/id/271737000"
             ]
           },
-          "closeMatch": [
-            "http://snomed.info/id/271737000"
-          ],
-          "valueType": "xsd:string"
+          "hasCodeBook": {
+            "@id": "urn:linked-codebook:dataset:Chronic%20Kidney%20Disease%20(UCI%20id%20336)#variable-ane-codes",
+            "@type": "skos:ConceptScheme",
+            "skos:hasTopConcept": [
+              {
+                "@id": "urn:linked-codebook:dataset:Chronic%20Kidney%20Disease%20(UCI%20id%20336)#variable-ane-codes-yes",
+                "@type": "skos:Concept",
+                "skos:prefLabel": "Yes",
+                "skos:inScheme": {
+                  "@id": "urn:linked-codebook:dataset:Chronic%20Kidney%20Disease%20(UCI%20id%20336)#variable-ane-codes"
+                },
+                "skos:notation": "yes"
+              },
+              {
+                "@id": "urn:linked-codebook:dataset:Chronic%20Kidney%20Disease%20(UCI%20id%20336)#variable-ane-codes-no",
+                "@type": "skos:Concept",
+                "skos:prefLabel": "No",
+                "skos:inScheme": {
+                  "@id": "urn:linked-codebook:dataset:Chronic%20Kidney%20Disease%20(UCI%20id%20336)#variable-ane-codes"
+                },
+                "skos:notation": "no"
+              }
+            ]
+          }
+        },
+        "summaryStatistics": {
+          "@id": "urn:linked-codebook:dataset:Chronic%20Kidney%20Disease%20(UCI%20id%20336)#statistics-ane",
+          "@type": "dsv:SummaryStatistics",
+          "statisticalDataType": "dsv:NominalDataType"
         }
       },
       {
-        "name": "class",
+        "@id": "urn:linked-codebook:dataset:Chronic%20Kidney%20Disease%20(UCI%20id%20336)#column-class",
+        "@type": "dsv:Column",
+        "datatype": "string",
         "titles": "Chronic kidney disease class label",
-        "hadRole": "target",
+        "name": "class",
         "columnProperty": {
-          "summaryStatistics": {
-            "statisticalDataType": "dsv:NominalDataType"
-          },
-          "hasCodeBook": {
-            "hasTopConcept": [
-              {
-                "notation": "ckd",
-                "prefLabel": "Chronic kidney disease"
-              },
-              {
-                "notation": "notckd",
-                "prefLabel": "Not chronic kidney disease"
-              }
+          "@id": "urn:linked-codebook:dataset:Chronic%20Kidney%20Disease%20(UCI%20id%20336)#property-class",
+          "@type": "dsv:ColumnProperty",
+          "hasVariable": {
+            "@id": "urn:linked-codebook:dataset:Chronic%20Kidney%20Disease%20(UCI%20id%20336)#variable-class",
+            "@type": "skos:Concept",
+            "skos:prefLabel": "Chronic kidney disease class label",
+            "closeMatch": [
+              "http://snomed.info/id/709044004"
             ]
           },
-          "closeMatch": [
-            "http://snomed.info/id/709044004"
-          ],
-          "valueType": "xsd:string"
-        }
+          "hasCodeBook": {
+            "@id": "urn:linked-codebook:dataset:Chronic%20Kidney%20Disease%20(UCI%20id%20336)#variable-class-codes",
+            "@type": "skos:ConceptScheme",
+            "skos:hasTopConcept": [
+              {
+                "@id": "urn:linked-codebook:dataset:Chronic%20Kidney%20Disease%20(UCI%20id%20336)#variable-class-codes-ckd",
+                "@type": "skos:Concept",
+                "skos:prefLabel": "Chronic kidney disease",
+                "skos:inScheme": {
+                  "@id": "urn:linked-codebook:dataset:Chronic%20Kidney%20Disease%20(UCI%20id%20336)#variable-class-codes"
+                },
+                "skos:notation": "ckd"
+              },
+              {
+                "@id": "urn:linked-codebook:dataset:Chronic%20Kidney%20Disease%20(UCI%20id%20336)#variable-class-codes-notckd",
+                "@type": "skos:Concept",
+                "skos:prefLabel": "Not chronic kidney disease",
+                "skos:inScheme": {
+                  "@id": "urn:linked-codebook:dataset:Chronic%20Kidney%20Disease%20(UCI%20id%20336)#variable-class-codes"
+                },
+                "skos:notation": "notckd"
+              }
+            ]
+          }
+        },
+        "summaryStatistics": {
+          "@id": "urn:linked-codebook:dataset:Chronic%20Kidney%20Disease%20(UCI%20id%20336)#statistics-class",
+          "@type": "dsv:SummaryStatistics",
+          "statisticalDataType": "dsv:NominalDataType"
+        },
+        "prov:hadRole": "target"
       }
     ]
-  },
-  "dataset": {
-    "@type": [
-      "disco:LogicalDataSet",
-      "Dataset",
-      "dcat:Dataset"
-    ],
-    "title": "Chronic Kidney Disease (UCI id 336)",
-    "description": "Clinical records for early detection of CKD (subset of variables ped)."
   }
 }

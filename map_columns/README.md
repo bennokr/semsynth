@@ -100,7 +100,7 @@ sqlite-utils enable-fts terminology.db codes label synonyms --create-triggers
 
 ```bash
 python -m map_columns.codes_map_columns \
-    dataset.semmap.json \
+    dataset.codebook.jsonld \
     --codes-tsv map_columns/codes.tsv \
     --manual-overrides map_columns/manual/uciml-145.json \
     --output-tsv mappings/uciml-145.sssom.tsv \

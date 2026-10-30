@@ -171,7 +171,7 @@ def test_backend_executor_applies_missingness(
             rows: int,
             seed: int,
             test_size: float,
-            semmap_export,
+            codebook_jsonld,
         ) -> Path:
             run_dir = Path(outdir) / "models" / label
             run_dir.mkdir(parents=True, exist_ok=True)

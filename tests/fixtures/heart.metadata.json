@@ -1,93 +1,280 @@
 {
-  "@context": "https://w3id.org/semmap/context/v1",
+  "@context": {
+    "accessRights": "dct:accessRights",
+    "broadMatch": {
+      "@container": "@set",
+      "@id": "skos:broadMatch",
+      "@type": "@id"
+    },
+    "citation": "dct:bibliographicCitation",
+    "closeMatch": {
+      "@container": "@set",
+      "@id": "skos:closeMatch",
+      "@type": "@id"
+    },
+    "columnCompleteness": {
+      "@id": "dsv:columnCompleteness",
+      "@type": "xsd:float"
+    },
+    "columnProperty": {
+      "@id": "dsv:columnProperty",
+      "@type": "@id"
+    },
+    "columns": {
+      "@container": "@set",
+      "@id": "dsv:column"
+    },
+    "csvw": "http://www.w3.org/ns/csvw#",
+    "datasetSchema": {
+      "@id": "dsv:datasetSchema",
+      "@type": "@id"
+    },
+    "datatype": "csvw:datatype",
+    "dcat": "http://www.w3.org/ns/dcat#",
+    "dct": "http://purl.org/dc/terms/",
+    "description": "dct:description",
+    "dsv": "https://w3id.org/dsv-ontology#",
+    "exactMatch": {
+      "@container": "@set",
+      "@id": "skos:exactMatch",
+      "@type": "@id"
+    },
+    "hasCodeBook": {
+      "@id": "dsv:hasCodeBook",
+      "@type": "@id"
+    },
+    "hasUnit": {
+      "@id": "qudt:hasUnit",
+      "@type": "@id"
+    },
+    "hasVariable": {
+      "@id": "dsv:hasVariable",
+      "@type": "@id"
+    },
+    "identifier": "dct:identifier",
+    "landingPage": {
+      "@id": "dcat:landingPage",
+      "@type": "@id"
+    },
+    "license": {
+      "@id": "dct:license",
+      "@type": "@id"
+    },
+    "name": "csvw:name",
+    "narrowMatch": {
+      "@container": "@set",
+      "@id": "skos:narrowMatch",
+      "@type": "@id"
+    },
+    "nullValues": {
+      "@container": "@set",
+      "@id": "csvw:null"
+    },
+    "numberOfColumns": {
+      "@id": "dsv:numberOfColumns",
+      "@type": "xsd:integer"
+    },
+    "numberOfRows": {
+      "@id": "dsv:numberOfRows",
+      "@type": "xsd:integer"
+    },
+    "qudt": "http://qudt.org/schema/qudt/",
+    "relatedMatch": {
+      "@container": "@set",
+      "@id": "skos:relatedMatch",
+      "@type": "@id"
+    },
+    "rights": "dct:rights",
+    "schema": "https://schema.org/",
+    "skos": "http://www.w3.org/2004/02/skos/core#",
+    "statisticalDataType": {
+      "@id": "dsv:statisticalDataType",
+      "@type": "@id"
+    },
+    "summaryStatistics": {
+      "@id": "dsv:summaryStatistics",
+      "@type": "@id"
+    },
+    "title": "dct:title",
+    "titles": "csvw:title",
+    "unitText": "schema:unitText",
+    "xsd": "http://www.w3.org/2001/XMLSchema#",
+    "dcterms": "http://purl.org/dc/terms/",
+    "prov": "http://www.w3.org/ns/prov#"
+  },
+  "@id": "urn:linked-codebook:dataset:unnamed",
   "@type": [
-    "disco:LogicalDataSet",
-    "dsv:Dataset",
-    "dcat:Dataset"
+    "dcat:Dataset",
+    "dsv:Dataset"
   ],
-  "dct:title": "Heart dataset (example)",
-  "dct:description": "Example dataset with variable/column JSON-LD and UCUM units.",
-  "dct:license": "https://creativecommons.org/publicdomain/zero/1.0/",
   "datasetSchema": {
+    "@id": "urn:linked-codebook:dataset:unnamed#schema",
+    "@type": "dsv:DatasetSchema",
     "columns": [
       {
-        "name": "cp",
+        "@id": "urn:linked-codebook:dataset:unnamed#column-cp",
+        "@type": "dsv:Column",
         "titles": "Chest pain type",
+        "name": "cp",
         "columnProperty": {
-          "statisticalDataType": "dsv:NominalDataType",
-          "source": "https://dicom.nema.org/medical/dicom/current/output/chtml/part16/sect_CID_3202.html",
+          "@id": "urn:linked-codebook:dataset:unnamed#property-cp",
+          "@type": "dsv:ColumnProperty",
+          "hasVariable": {
+            "@id": "urn:linked-codebook:dataset:unnamed#variable-cp",
+            "@type": "skos:Concept",
+            "skos:prefLabel": "Chest pain type",
+            "skos:definition": "Documentation: https://dicom.nema.org/medical/dicom/current/output/chtml/part16/sect_CID_3202.html"
+          },
           "hasCodeBook": {
-            "hasTopConcept": [
+            "@id": "urn:linked-codebook:dataset:unnamed#variable-cp-codes",
+            "@type": "skos:ConceptScheme",
+            "skos:hasTopConcept": [
               {
-                "notation": "1",
-                "prefLabel": "Typical angina",
+                "@id": "urn:linked-codebook:dataset:unnamed#variable-cp-codes-1",
+                "@type": "skos:Concept",
+                "skos:prefLabel": "Typical angina",
                 "exactMatch": [
                   "http://snomed.info/id/429559004"
-                ]
+                ],
+                "skos:inScheme": {
+                  "@id": "urn:linked-codebook:dataset:unnamed#variable-cp-codes"
+                },
+                "skos:notation": "1"
               },
               {
-                "notation": "2",
-                "prefLabel": "Atypical angina",
+                "@id": "urn:linked-codebook:dataset:unnamed#variable-cp-codes-2",
+                "@type": "skos:Concept",
+                "skos:prefLabel": "Atypical angina",
                 "exactMatch": [
                   "http://snomed.info/id/371807002"
-                ]
+                ],
+                "skos:inScheme": {
+                  "@id": "urn:linked-codebook:dataset:unnamed#variable-cp-codes"
+                },
+                "skos:notation": "2"
               },
               {
-                "notation": "3",
-                "prefLabel": "Non-cardiac chest pain",
+                "@id": "urn:linked-codebook:dataset:unnamed#variable-cp-codes-3",
+                "@type": "skos:Concept",
+                "skos:prefLabel": "Non-cardiac chest pain",
                 "exactMatch": [
                   "http://snomed.info/id/274668005"
-                ]
+                ],
+                "skos:inScheme": {
+                  "@id": "urn:linked-codebook:dataset:unnamed#variable-cp-codes"
+                },
+                "skos:notation": "3"
               },
               {
-                "notation": "4",
-                "prefLabel": "Asymptomatic",
+                "@id": "urn:linked-codebook:dataset:unnamed#variable-cp-codes-4",
+                "@type": "skos:Concept",
+                "skos:prefLabel": "Asymptomatic",
                 "exactMatch": [
                   "http://snomed.info/id/161971004"
-                ]
+                ],
+                "skos:inScheme": {
+                  "@id": "urn:linked-codebook:dataset:unnamed#variable-cp-codes"
+                },
+                "skos:notation": "4"
               }
             ]
           }
+        },
+        "summaryStatistics": {
+          "@id": "urn:linked-codebook:dataset:unnamed#statistics-cp",
+          "@type": "dsv:SummaryStatistics",
+          "statisticalDataType": "dsv:NominalDataType"
         }
       },
       {
-        "name": "fbs",
+        "@id": "urn:linked-codebook:dataset:unnamed#column-fbs",
+        "@type": "dsv:Column",
         "titles": "Fasting blood sugar >120 mg/dL (indicator)",
+        "name": "fbs",
         "columnProperty": {
-          "statisticalDataType": "dsv:NominalDataType",
-          "hasVariable": "https://loinc.org/2345-7",
+          "@id": "urn:linked-codebook:dataset:unnamed#property-fbs",
+          "@type": "dsv:ColumnProperty",
+          "hasVariable": {
+            "@id": "https://loinc.org/2345-7",
+            "@type": "skos:Concept",
+            "skos:prefLabel": "Fasting blood sugar >120 mg/dL (indicator)"
+          },
           "hasCodeBook": {
-            "hasTopConcept": [
+            "@id": "https://loinc.org/2345-7-codes",
+            "@type": "skos:ConceptScheme",
+            "skos:hasTopConcept": [
               {
-                "notation": "0",
-                "prefLabel": "\u2264120 mg/dL"
+                "@id": "https://loinc.org/2345-7-codes-0",
+                "@type": "skos:Concept",
+                "skos:prefLabel": "≤120 mg/dL",
+                "skos:inScheme": {
+                  "@id": "https://loinc.org/2345-7-codes"
+                },
+                "skos:notation": "0"
               },
               {
-                "notation": "1",
-                "prefLabel": ">120 mg/dL"
+                "@id": "https://loinc.org/2345-7-codes-1",
+                "@type": "skos:Concept",
+                "skos:prefLabel": ">120 mg/dL",
+                "skos:inScheme": {
+                  "@id": "https://loinc.org/2345-7-codes"
+                },
+                "skos:notation": "1"
               }
             ]
           }
+        },
+        "summaryStatistics": {
+          "@id": "urn:linked-codebook:dataset:unnamed#statistics-fbs",
+          "@type": "dsv:SummaryStatistics",
+          "statisticalDataType": "dsv:NominalDataType"
         }
       },
       {
-        "name": "trestbps",
+        "@id": "urn:linked-codebook:dataset:unnamed#column-trestbps",
+        "@type": "dsv:Column",
         "titles": "Resting systolic blood pressure",
+        "name": "trestbps",
         "columnProperty": {
-          "statisticalDataType": "dsv:QuantitativeDataType",
-          "hasUnit": {"exactMatch": "unit:MilliM_HG", "ucumCode": "mm[Hg]"},
-          "hasVariable": "https://loinc.org/8480-6"
+          "@id": "urn:linked-codebook:dataset:unnamed#property-trestbps",
+          "@type": "dsv:ColumnProperty",
+          "hasVariable": {
+            "@id": "https://loinc.org/8480-6",
+            "@type": "skos:Concept",
+            "skos:prefLabel": "Resting systolic blood pressure"
+          },
+          "hasUnit": "http://qudt.org/vocab/unit/MilliM_HG",
+          "unitText": "mm[Hg]"
+        },
+        "summaryStatistics": {
+          "@id": "urn:linked-codebook:dataset:unnamed#statistics-trestbps",
+          "@type": "dsv:SummaryStatistics",
+          "statisticalDataType": "dsv:NumericalDataType"
         }
       },
       {
-        "name": "chol",
+        "@id": "urn:linked-codebook:dataset:unnamed#column-chol",
+        "@type": "dsv:Column",
         "titles": "Total cholesterol",
+        "name": "chol",
         "columnProperty": {
-          "statisticalDataType": "dsv:QuantitativeDataType",
-          "hasUnit": {"exactMatch": "unit:MilliGM-PER-DeciL", "ucumCode": "mg/dL"},
-          "hasVariable": "https://loinc.org/2093-3"
+          "@id": "urn:linked-codebook:dataset:unnamed#property-chol",
+          "@type": "dsv:ColumnProperty",
+          "hasVariable": {
+            "@id": "https://loinc.org/2093-3",
+            "@type": "skos:Concept",
+            "skos:prefLabel": "Total cholesterol"
+          },
+          "hasUnit": "http://qudt.org/vocab/unit/MilliGM-PER-DeciL",
+          "unitText": "mg/dL"
+        },
+        "summaryStatistics": {
+          "@id": "urn:linked-codebook:dataset:unnamed#statistics-chol",
+          "@type": "dsv:SummaryStatistics",
+          "statisticalDataType": "dsv:NumericalDataType"
         }
       }
     ]
-  }
+  },
+  "dct:license": "https://creativecommons.org/publicdomain/zero/1.0/"
 }

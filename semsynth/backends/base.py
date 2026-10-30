@@ -29,7 +29,7 @@ class Backend(Protocol):
         rows: Optional[int],
         seed: int,
         test_size: float,
-        semmap_export: Optional[Dict[str, Any]] = None,
+        codebook_jsonld: Optional[Dict[str, Any]] = None,
     ) -> Path:
         """Execute the backend for a dataset and return the run directory."""
 
@@ -49,7 +49,7 @@ class BackendModule(Protocol):
         rows: Optional[int],
         seed: int,
         test_size: float,
-        semmap_export: Optional[Dict[str, Any]] = None,
+        codebook_jsonld: Optional[Dict[str, Any]] = None,
     ) -> Path:
         """Execute the backend for a dataset and return the run directory."""
 
@@ -64,7 +64,7 @@ _REQUIRED_KEYWORD_PARAMS = (
     "rows",
     "seed",
     "test_size",
-    "semmap_export",
+    "codebook_jsonld",
 )
 
 

@@ -1,4 +1,4 @@
-"""Merge SSSOM mappings into SemMap/DSV metadata."""
+"""Merge SSSOM mappings into a codebook."""
 
 from __future__ import annotations
 
@@ -12,7 +12,7 @@ from typing import Dict, List, Optional
 import defopt
 from linked_codebook import from_sssom
 
-from semsynth.semmap import ColumnProperty, Metadata
+from semsynth.codebook import Codebook
 
 logger = logging.getLogger(__name__)
 
@@ -53,36 +53,23 @@ def _to_tsv(mappings: List[Dict[str, str]]) -> str:
     return "\n".join(lines) + "\n"
 
 
-def _ensure_column_property(prop: Optional[ColumnProperty]) -> ColumnProperty:
-    if prop is None:
-        return ColumnProperty()
-    return prop
-
-
-def integrate_sssom(
-    metadata: Metadata, mappings: List[Dict[str, str]]
-) -> Metadata:
-    """Attach SSSOM mappings to column properties in the SemMap metadata.
+def integrate_sssom(codebook: Codebook, mappings: List[Dict[str, str]], *, reviewer: str) -> Codebook:
+    """Adds SSSOM mappings to the columns of a codebook, approved by ``reviewer``.
 
     Rows are matched to columns and read by linked-codebook: a subject is a column when its IRI,
     its label or the end of its IRI is the column name, ignoring case, spaces, hyphens and underscores.
     Rows with another subject, or with a predicate that is not a SKOS mapping, are skipped.
+
+    linked-codebook writes only approved mappings to JSON-LD, so a mapping without a reviewer in the file gets
+    ``reviewer``. Name the tool or person who stands behind the mappings.
     """
 
-    columns = {col.name: col for col in metadata.datasetSchema.columns if col.name}
-    profile = {"columns": [{"name": name} for name in columns]}
+    profile = {"columns": [{"name": column["name"]} for column in codebook.columns]}
     found = from_sssom(_to_tsv(mappings), profile)
     for entry in found["columns"]:
-        column = columns[entry["name"]]
-        for mapping in entry.get("mappings", []):
-            field = f"{mapping['match_type']}Match"
-            column.columnProperty = _ensure_column_property(column.columnProperty)
-            existing = getattr(column.columnProperty, field)
-            values = existing if isinstance(existing, list) else ([] if existing is None else [existing])
-            if mapping["object_id"] not in values:
-                values.append(mapping["object_id"])
-            setattr(column.columnProperty, field, values)
-    return metadata
+        unique = {(mapping["match_type"], mapping["object_id"]): mapping for mapping in entry.get("mappings", [])}
+        entry["mappings"] = [{"reviewer_id": reviewer, **mapping} for mapping in unique.values()]
+    return codebook.merged(Codebook(found))
 
 
 def main(
@@ -92,10 +79,10 @@ def main(
     output_json: Optional[Path] = None,
     indent: int = 2,
 ) -> None:
-    """Merge SSSOM mappings into SemMap metadata and write JSON-LD.
+    """Merge SSSOM mappings into a codebook and write JSON-LD.
 
     Args:
-        dataset_json: Path to SemMap/DSV JSON-LD metadata file.
+        dataset_json: Path to DSV JSON-LD metadata.
         sssom_tsv: Path to an SSSOM TSV file with subject/object pairs.
         output_json: Optional output path for the merged JSON-LD. When omitted,
             the original ``dataset_json`` is overwritten.
@@ -104,19 +91,19 @@ def main(
 
     logging.basicConfig(level=logging.INFO, format="%(levelname)s:%(message)s")
 
-    metadata = Metadata.from_dcat_dsv(json.loads(dataset_json.read_text()))
+    codebook = Codebook.read(json.loads(dataset_json.read_text()))
     mappings = _load_sssom(sssom_tsv)
     for row in mappings:
         if "object_id" in row and isinstance(row["object_id"], str):
             row["object_id"] = _normalise_object_id(row["object_id"])
-    updated = integrate_sssom(metadata, mappings)
+    updated = integrate_sssom(codebook, mappings, reviewer=sssom_tsv.name)
 
     target = output_json or dataset_json
     target.write_text(
         json.dumps(updated.to_jsonld(), indent=indent, ensure_ascii=False),
         encoding="utf-8",
     )
-    logger.info("Wrote merged SemMap metadata to %s", target)
+    logger.info("Wrote merged codebook to %s", target)
 
 
 if __name__ == "__main__":

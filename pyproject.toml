@@ -7,7 +7,7 @@ name = "semsynth"
 version = "0.1.0"
 description = "Synthetic data profiling and reporting for OpenML and UCI datasets."
 readme = "README.md"
-requires-python = ">=3.9"
+requires-python = ">=3.11"
 authors = [
   { name = "SemSynth Authors" }
 ]
@@ -20,7 +20,7 @@ dependencies = [
   "numpy<2",
   "openml",
   "pandas<3",
-  "pint-pandas",
+  "linked-codebook @ https://bennokr.github.io/linked-codebook/linked_codebook-0.6.1-py3-none-any.whl",
   "makeprov>=0.4.4",
   "pyarrow",
   "tabulate",
@@ -79,8 +79,7 @@ mapping = [
   "defopt",
   "datasette",
   "sqlite-utils",
-  "sssom",
-  "linked-codebook @ https://bennokr.github.io/linked-codebook/linked_codebook-0.5.0-py3-none-any.whl"
+  "sssom"
 ]
 all = [
   "metasyn",
@@ -93,8 +92,7 @@ all = [
   "DataSynthesizer==0.1.13",
   "scipy",
   "matplotlib",
-  "umap-learn",
-  "ucumvert"
+  "umap-learn"
 ]
 
 [project.scripts]
@@ -106,7 +104,7 @@ semsynth = "semsynth.__main__:main"
 include = ["semsynth*", "map_columns*"]
 
 [tool.setuptools.package-data]
-semsynth = ["templates/*.j2", "templates/*.html", "templates/*.css", "templates/*.js", "templates/*.rq", "*.jsonld"]
+semsynth = ["templates/*.j2", "templates/*.html", "templates/*.css", "templates/*.js", "templates/*.rq"]
 
 [tool.ruff]
 line-length = 100
@@ -115,5 +113,5 @@ line-length = 100
 line-length = 100
 
 [tool.mypy]
-python_version = "3.9"
+python_version = "3.11"
 ignore_missing_imports = true

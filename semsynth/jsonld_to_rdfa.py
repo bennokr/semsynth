@@ -19,7 +19,6 @@ import json
 from pathlib import Path
 from typing import Any, Dict, List, Optional, Tuple, Union
 
-from semsynth.mappings import normalize_jsonld_payload
 
 Value = Union[str, int, float, bool, dict, list, None]
 SCHEMA_ORG = "https://schema.org/"
@@ -321,18 +320,11 @@ def main() -> None:
 
     data_raw = json.loads(Path(args.input).read_text(encoding="utf-8"))
     context: Any = None
+    data = data_raw
     if isinstance(data_raw, dict):
-        data = normalize_jsonld_payload(data_raw)
         context = data.get("@context")
     elif isinstance(data_raw, list):
-        normalized_items: List[Any] = []
         for item in data_raw:
-            if isinstance(item, dict):
-                normalized_items.append(normalize_jsonld_payload(item))
-            else:
-                normalized_items.append(item)
-        data = normalized_items
-        for item in normalized_items:
             if isinstance(item, dict) and item.get("@context"):
                 context = item["@context"]
                 break

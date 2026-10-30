@@ -82,7 +82,7 @@ def generate_matches(
 
     for column in columns:
         name = column.name or column.column_id or "<unnamed column>"
-        description = (column.description or column.about or "").strip()
+        description = (column.description or "").strip()
         if not description:
             LOGGER.info("Column %s has no description; skipping keyword lookup", name)
             continue

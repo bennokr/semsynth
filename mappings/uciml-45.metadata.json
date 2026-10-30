@@ -1,332 +1,697 @@
 {
-  "@context": "https://w3id.org/semmap/context/v1",
+  "@context": {
+    "accessRights": "dct:accessRights",
+    "broadMatch": {
+      "@container": "@set",
+      "@id": "skos:broadMatch",
+      "@type": "@id"
+    },
+    "citation": "dct:bibliographicCitation",
+    "closeMatch": {
+      "@container": "@set",
+      "@id": "skos:closeMatch",
+      "@type": "@id"
+    },
+    "columnCompleteness": {
+      "@id": "dsv:columnCompleteness",
+      "@type": "xsd:float"
+    },
+    "columnProperty": {
+      "@id": "dsv:columnProperty",
+      "@type": "@id"
+    },
+    "columns": {
+      "@container": "@set",
+      "@id": "dsv:column"
+    },
+    "csvw": "http://www.w3.org/ns/csvw#",
+    "datasetSchema": {
+      "@id": "dsv:datasetSchema",
+      "@type": "@id"
+    },
+    "datatype": "csvw:datatype",
+    "dcat": "http://www.w3.org/ns/dcat#",
+    "dct": "http://purl.org/dc/terms/",
+    "description": "dct:description",
+    "dsv": "https://w3id.org/dsv-ontology#",
+    "exactMatch": {
+      "@container": "@set",
+      "@id": "skos:exactMatch",
+      "@type": "@id"
+    },
+    "hasCodeBook": {
+      "@id": "dsv:hasCodeBook",
+      "@type": "@id"
+    },
+    "hasUnit": {
+      "@id": "qudt:hasUnit",
+      "@type": "@id"
+    },
+    "hasVariable": {
+      "@id": "dsv:hasVariable",
+      "@type": "@id"
+    },
+    "identifier": "dct:identifier",
+    "landingPage": {
+      "@id": "dcat:landingPage",
+      "@type": "@id"
+    },
+    "license": {
+      "@id": "dct:license",
+      "@type": "@id"
+    },
+    "name": "csvw:name",
+    "narrowMatch": {
+      "@container": "@set",
+      "@id": "skos:narrowMatch",
+      "@type": "@id"
+    },
+    "nullValues": {
+      "@container": "@set",
+      "@id": "csvw:null"
+    },
+    "numberOfColumns": {
+      "@id": "dsv:numberOfColumns",
+      "@type": "xsd:integer"
+    },
+    "numberOfRows": {
+      "@id": "dsv:numberOfRows",
+      "@type": "xsd:integer"
+    },
+    "qudt": "http://qudt.org/schema/qudt/",
+    "relatedMatch": {
+      "@container": "@set",
+      "@id": "skos:relatedMatch",
+      "@type": "@id"
+    },
+    "rights": "dct:rights",
+    "schema": "https://schema.org/",
+    "skos": "http://www.w3.org/2004/02/skos/core#",
+    "statisticalDataType": {
+      "@id": "dsv:statisticalDataType",
+      "@type": "@id"
+    },
+    "summaryStatistics": {
+      "@id": "dsv:summaryStatistics",
+      "@type": "@id"
+    },
+    "title": "dct:title",
+    "titles": "csvw:title",
+    "unitText": "schema:unitText",
+    "xsd": "http://www.w3.org/2001/XMLSchema#",
+    "dcterms": "http://purl.org/dc/terms/",
+    "prov": "http://www.w3.org/ns/prov#"
+  },
+  "@id": "urn:linked-codebook:dataset:Heart%20Disease%20(UCI%20id%2045)",
+  "@type": [
+    "dcat:Dataset",
+    "dsv:Dataset"
+  ],
+  "description": "4 databases: Cleveland, Hungary, Switzerland, and the VA Long Beach",
+  "title": "Heart Disease (UCI id 45)",
   "datasetSchema": {
+    "@id": "urn:linked-codebook:dataset:Heart%20Disease%20(UCI%20id%2045)#schema",
+    "@type": "dsv:DatasetSchema",
     "columns": [
       {
-        "name": "age",
+        "@id": "urn:linked-codebook:dataset:Heart%20Disease%20(UCI%20id%2045)#column-age",
+        "@type": "dsv:Column",
+        "datatype": "integer",
         "titles": "Age",
+        "name": "age",
         "columnProperty": {
-          "summaryStatistics": {
-            "statisticalDataType": "dsv:QuantitativeDataType"
+          "@id": "urn:linked-codebook:dataset:Heart%20Disease%20(UCI%20id%2045)#property-age",
+          "@type": "dsv:ColumnProperty",
+          "hasVariable": {
+            "@id": "urn:linked-codebook:dataset:Heart%20Disease%20(UCI%20id%2045)#variable-age",
+            "@type": "skos:Concept",
+            "skos:prefLabel": "Age",
+            "skos:definition": "Documentation: https://loinc.org/30525-0"
           },
-          "hasUnit": {
-            "exactMatch": [
-              "unit:YR"
-            ],
-            "ucumCode": "a"
-          },
-          "source": "https://loinc.org/30525-0",
-          "valueType": "xsd:integer"
+          "hasUnit": "http://qudt.org/vocab/unit/YR",
+          "unitText": "a"
+        },
+        "summaryStatistics": {
+          "@id": "urn:linked-codebook:dataset:Heart%20Disease%20(UCI%20id%2045)#statistics-age",
+          "@type": "dsv:SummaryStatistics",
+          "statisticalDataType": "dsv:NumericalDataType"
         }
       },
       {
-        "name": "sex",
+        "@id": "urn:linked-codebook:dataset:Heart%20Disease%20(UCI%20id%2045)#column-sex",
+        "@type": "dsv:Column",
         "titles": "Administrative sex",
+        "name": "sex",
         "columnProperty": {
-          "summaryStatistics": {
-            "statisticalDataType": "dsv:NominalDataType"
+          "@id": "urn:linked-codebook:dataset:Heart%20Disease%20(UCI%20id%2045)#property-sex",
+          "@type": "dsv:ColumnProperty",
+          "hasVariable": {
+            "@id": "urn:linked-codebook:dataset:Heart%20Disease%20(UCI%20id%2045)#variable-sex",
+            "@type": "skos:Concept",
+            "skos:prefLabel": "Administrative sex",
+            "skos:definition": "Documentation: https://docs.snomed.org/implementation-guides/snomed-ct-guide-for-covid-19/2-coding-covid-19-related-data/2.2-patient-demographics"
           },
-          "source": "https://docs.snomed.org/implementation-guides/snomed-ct-guide-for-covid-19/2-coding-covid-19-related-data/2.2-patient-demographics",
           "hasCodeBook": {
-            "hasTopConcept": [
+            "@id": "urn:linked-codebook:dataset:Heart%20Disease%20(UCI%20id%2045)#variable-sex-codes",
+            "@type": "skos:ConceptScheme",
+            "skos:hasTopConcept": [
               {
-                "notation": "0",
-                "prefLabel": "female",
+                "@id": "urn:linked-codebook:dataset:Heart%20Disease%20(UCI%20id%2045)#variable-sex-codes-0",
+                "@type": "skos:Concept",
+                "skos:prefLabel": "female",
                 "exactMatch": [
                   "http://snomed.info/id/248152002"
-                ]
+                ],
+                "skos:inScheme": {
+                  "@id": "urn:linked-codebook:dataset:Heart%20Disease%20(UCI%20id%2045)#variable-sex-codes"
+                },
+                "skos:notation": "0"
               },
               {
-                "notation": "1",
-                "prefLabel": "male",
+                "@id": "urn:linked-codebook:dataset:Heart%20Disease%20(UCI%20id%2045)#variable-sex-codes-1",
+                "@type": "skos:Concept",
+                "skos:prefLabel": "male",
                 "exactMatch": [
                   "http://snomed.info/id/248153007"
-                ]
+                ],
+                "skos:inScheme": {
+                  "@id": "urn:linked-codebook:dataset:Heart%20Disease%20(UCI%20id%2045)#variable-sex-codes"
+                },
+                "skos:notation": "1"
               }
             ]
           }
+        },
+        "summaryStatistics": {
+          "@id": "urn:linked-codebook:dataset:Heart%20Disease%20(UCI%20id%2045)#statistics-sex",
+          "@type": "dsv:SummaryStatistics",
+          "statisticalDataType": "dsv:NominalDataType"
         }
       },
       {
-        "name": "cp",
+        "@id": "urn:linked-codebook:dataset:Heart%20Disease%20(UCI%20id%2045)#column-cp",
+        "@type": "dsv:Column",
         "titles": "Chest pain type",
+        "name": "cp",
         "columnProperty": {
-          "summaryStatistics": {
-            "statisticalDataType": "dsv:NominalDataType"
+          "@id": "urn:linked-codebook:dataset:Heart%20Disease%20(UCI%20id%2045)#property-cp",
+          "@type": "dsv:ColumnProperty",
+          "hasVariable": {
+            "@id": "urn:linked-codebook:dataset:Heart%20Disease%20(UCI%20id%2045)#variable-cp",
+            "@type": "skos:Concept",
+            "skos:prefLabel": "Chest pain type",
+            "skos:definition": "Documentation: https://dicom.nema.org/medical/dicom/current/output/chtml/part16/sect_CID_3202.html"
           },
-          "source": "https://dicom.nema.org/medical/dicom/current/output/chtml/part16/sect_CID_3202.html",
           "hasCodeBook": {
-            "hasTopConcept": [
+            "@id": "urn:linked-codebook:dataset:Heart%20Disease%20(UCI%20id%2045)#variable-cp-codes",
+            "@type": "skos:ConceptScheme",
+            "skos:hasTopConcept": [
               {
-                "notation": "1",
-                "prefLabel": "Typical angina",
+                "@id": "urn:linked-codebook:dataset:Heart%20Disease%20(UCI%20id%2045)#variable-cp-codes-1",
+                "@type": "skos:Concept",
+                "skos:prefLabel": "Typical angina",
                 "exactMatch": [
                   "http://snomed.info/id/429559004"
-                ]
+                ],
+                "skos:inScheme": {
+                  "@id": "urn:linked-codebook:dataset:Heart%20Disease%20(UCI%20id%2045)#variable-cp-codes"
+                },
+                "skos:notation": "1"
               },
               {
-                "notation": "2",
-                "prefLabel": "Atypical angina",
+                "@id": "urn:linked-codebook:dataset:Heart%20Disease%20(UCI%20id%2045)#variable-cp-codes-2",
+                "@type": "skos:Concept",
+                "skos:prefLabel": "Atypical angina",
                 "exactMatch": [
                   "http://snomed.info/id/371807002"
-                ]
+                ],
+                "skos:inScheme": {
+                  "@id": "urn:linked-codebook:dataset:Heart%20Disease%20(UCI%20id%2045)#variable-cp-codes"
+                },
+                "skos:notation": "2"
               },
               {
-                "notation": "3",
-                "prefLabel": "Non-cardiac chest pain",
+                "@id": "urn:linked-codebook:dataset:Heart%20Disease%20(UCI%20id%2045)#variable-cp-codes-3",
+                "@type": "skos:Concept",
+                "skos:prefLabel": "Non-cardiac chest pain",
                 "exactMatch": [
                   "http://snomed.info/id/274668005"
-                ]
+                ],
+                "skos:inScheme": {
+                  "@id": "urn:linked-codebook:dataset:Heart%20Disease%20(UCI%20id%2045)#variable-cp-codes"
+                },
+                "skos:notation": "3"
               },
               {
-                "notation": "4",
-                "prefLabel": "Asymptomatic",
+                "@id": "urn:linked-codebook:dataset:Heart%20Disease%20(UCI%20id%2045)#variable-cp-codes-4",
+                "@type": "skos:Concept",
+                "skos:prefLabel": "Asymptomatic",
                 "exactMatch": [
                   "http://snomed.info/id/161971004"
-                ]
+                ],
+                "skos:inScheme": {
+                  "@id": "urn:linked-codebook:dataset:Heart%20Disease%20(UCI%20id%2045)#variable-cp-codes"
+                },
+                "skos:notation": "4"
               }
-            ],
-            "source": "https://dicom.nema.org/medical/dicom/current/output/chtml/part16/sect_CID_3202.html"
+            ]
           }
+        },
+        "summaryStatistics": {
+          "@id": "urn:linked-codebook:dataset:Heart%20Disease%20(UCI%20id%2045)#statistics-cp",
+          "@type": "dsv:SummaryStatistics",
+          "statisticalDataType": "dsv:NominalDataType"
         }
       },
       {
-        "name": "fbs",
+        "@id": "urn:linked-codebook:dataset:Heart%20Disease%20(UCI%20id%2045)#column-fbs",
+        "@type": "dsv:Column",
         "titles": "Fasting blood sugar >120 mg/dL (indicator)",
+        "name": "fbs",
         "columnProperty": {
-          "summaryStatistics": {
-            "statisticalDataType": "dsv:NominalDataType"
+          "@id": "urn:linked-codebook:dataset:Heart%20Disease%20(UCI%20id%2045)#property-fbs",
+          "@type": "dsv:ColumnProperty",
+          "hasVariable": {
+            "@id": "urn:linked-codebook:dataset:Heart%20Disease%20(UCI%20id%2045)#variable-fbs",
+            "@type": "skos:Concept",
+            "skos:prefLabel": "Fasting blood sugar >120 mg/dL (indicator)",
+            "skos:definition": "Documentation: https://loinc.org/2345-7"
           },
-          "source": "https://loinc.org/2345-7",
           "hasCodeBook": {
-            "hasTopConcept": [
+            "@id": "urn:linked-codebook:dataset:Heart%20Disease%20(UCI%20id%2045)#variable-fbs-codes",
+            "@type": "skos:ConceptScheme",
+            "skos:hasTopConcept": [
               {
-                "notation": "0",
-                "prefLabel": "\u2264120 mg/dL"
+                "@id": "urn:linked-codebook:dataset:Heart%20Disease%20(UCI%20id%2045)#variable-fbs-codes-0",
+                "@type": "skos:Concept",
+                "skos:prefLabel": "≤120 mg/dL",
+                "skos:inScheme": {
+                  "@id": "urn:linked-codebook:dataset:Heart%20Disease%20(UCI%20id%2045)#variable-fbs-codes"
+                },
+                "skos:notation": "0"
               },
               {
-                "notation": "1",
-                "prefLabel": ">120 mg/dL"
+                "@id": "urn:linked-codebook:dataset:Heart%20Disease%20(UCI%20id%2045)#variable-fbs-codes-1",
+                "@type": "skos:Concept",
+                "skos:prefLabel": ">120 mg/dL",
+                "skos:inScheme": {
+                  "@id": "urn:linked-codebook:dataset:Heart%20Disease%20(UCI%20id%2045)#variable-fbs-codes"
+                },
+                "skos:notation": "1"
               }
-            ],
-            "source": "https://loinc.org/2345-7"
+            ]
           }
+        },
+        "summaryStatistics": {
+          "@id": "urn:linked-codebook:dataset:Heart%20Disease%20(UCI%20id%2045)#statistics-fbs",
+          "@type": "dsv:SummaryStatistics",
+          "statisticalDataType": "dsv:NominalDataType"
         }
       },
       {
-        "name": "trestbps",
+        "@id": "urn:linked-codebook:dataset:Heart%20Disease%20(UCI%20id%2045)#column-trestbps",
+        "@type": "dsv:Column",
+        "datatype": "integer",
         "titles": "Resting systolic blood pressure",
+        "name": "trestbps",
         "columnProperty": {
-          "summaryStatistics": {
-            "statisticalDataType": "dsv:QuantitativeDataType"
+          "@id": "urn:linked-codebook:dataset:Heart%20Disease%20(UCI%20id%2045)#property-trestbps",
+          "@type": "dsv:ColumnProperty",
+          "hasVariable": {
+            "@id": "urn:linked-codebook:dataset:Heart%20Disease%20(UCI%20id%2045)#variable-trestbps",
+            "@type": "skos:Concept",
+            "skos:prefLabel": "Resting systolic blood pressure",
+            "skos:definition": "Documentation: https://loinc.org/8480-6"
           },
-          "hasUnit": {
-            "exactMatch": [
-              "unit:MilliM_HG"
-            ],
-            "ucumCode": "mm[Hg]"
-          },
-          "source": "https://loinc.org/8480-6",
-          "valueType": "xsd:integer"
+          "hasUnit": "http://qudt.org/vocab/unit/MilliM_HG",
+          "unitText": "mm[Hg]"
+        },
+        "summaryStatistics": {
+          "@id": "urn:linked-codebook:dataset:Heart%20Disease%20(UCI%20id%2045)#statistics-trestbps",
+          "@type": "dsv:SummaryStatistics",
+          "statisticalDataType": "dsv:NumericalDataType"
         }
       },
       {
-        "name": "chol",
+        "@id": "urn:linked-codebook:dataset:Heart%20Disease%20(UCI%20id%2045)#column-chol",
+        "@type": "dsv:Column",
+        "datatype": "integer",
         "titles": "Total cholesterol",
+        "name": "chol",
         "columnProperty": {
-          "summaryStatistics": {
-            "statisticalDataType": "dsv:QuantitativeDataType"
+          "@id": "urn:linked-codebook:dataset:Heart%20Disease%20(UCI%20id%2045)#property-chol",
+          "@type": "dsv:ColumnProperty",
+          "hasVariable": {
+            "@id": "urn:linked-codebook:dataset:Heart%20Disease%20(UCI%20id%2045)#variable-chol",
+            "@type": "skos:Concept",
+            "skos:prefLabel": "Total cholesterol",
+            "skos:definition": "Documentation: https://loinc.org/2093-3"
           },
-          "hasUnit": {
-            "exactMatch": [
-              "unit:MilliGM-PER-DeciL"
-            ],
-            "ucumCode": "mg/dL"
-          },
-          "source": "https://loinc.org/2093-3",
-          "valueType": "xsd:integer"
+          "hasUnit": "http://qudt.org/vocab/unit/MilliGM-PER-DeciL",
+          "unitText": "mg/dL"
+        },
+        "summaryStatistics": {
+          "@id": "urn:linked-codebook:dataset:Heart%20Disease%20(UCI%20id%2045)#statistics-chol",
+          "@type": "dsv:SummaryStatistics",
+          "statisticalDataType": "dsv:NumericalDataType"
         }
       },
       {
-        "name": "restecg",
+        "@id": "urn:linked-codebook:dataset:Heart%20Disease%20(UCI%20id%2045)#column-restecg",
+        "@type": "dsv:Column",
         "titles": "Resting ECG result",
+        "name": "restecg",
         "columnProperty": {
-          "summaryStatistics": {
-            "statisticalDataType": "dsv:NominalDataType"
+          "@id": "urn:linked-codebook:dataset:Heart%20Disease%20(UCI%20id%2045)#property-restecg",
+          "@type": "dsv:ColumnProperty",
+          "hasVariable": {
+            "@id": "urn:linked-codebook:dataset:Heart%20Disease%20(UCI%20id%2045)#variable-restecg",
+            "@type": "skos:Concept",
+            "skos:prefLabel": "Resting ECG result",
+            "skos:definition": "Documentation: https://cvquality.acc.org/docs/default-source/ncdr/data-collection/epdeviceimplant_v2-3_datadictionarycoders.pdf"
           },
-          "source": "https://cvquality.acc.org/docs/default-source/ncdr/data-collection/epdeviceimplant_v2-3_datadictionarycoders.pdf",
           "hasCodeBook": {
-            "hasTopConcept": [
+            "@id": "urn:linked-codebook:dataset:Heart%20Disease%20(UCI%20id%2045)#variable-restecg-codes",
+            "@type": "skos:ConceptScheme",
+            "skos:hasTopConcept": [
               {
-                "notation": "0",
-                "prefLabel": "normal",
+                "@id": "urn:linked-codebook:dataset:Heart%20Disease%20(UCI%20id%2045)#variable-restecg-codes-0",
+                "@type": "skos:Concept",
+                "skos:prefLabel": "normal",
                 "exactMatch": [
                   "http://snomed.info/id/164854000"
-                ]
+                ],
+                "skos:inScheme": {
+                  "@id": "urn:linked-codebook:dataset:Heart%20Disease%20(UCI%20id%2045)#variable-restecg-codes"
+                },
+                "skos:notation": "0"
               },
               {
-                "notation": "1",
-                "prefLabel": "ST-T abnormality",
+                "@id": "urn:linked-codebook:dataset:Heart%20Disease%20(UCI%20id%2045)#variable-restecg-codes-1",
+                "@type": "skos:Concept",
+                "skos:prefLabel": "ST-T abnormality",
                 "exactMatch": [
                   "http://snomed.info/id/428750005"
-                ]
+                ],
+                "skos:inScheme": {
+                  "@id": "urn:linked-codebook:dataset:Heart%20Disease%20(UCI%20id%2045)#variable-restecg-codes"
+                },
+                "skos:notation": "1"
               },
               {
-                "notation": "2",
-                "prefLabel": "LVH (Estes)",
+                "@id": "urn:linked-codebook:dataset:Heart%20Disease%20(UCI%20id%2045)#variable-restecg-codes-2",
+                "@type": "skos:Concept",
+                "skos:prefLabel": "LVH (Estes)",
                 "exactMatch": [
                   "http://snomed.info/id/25488008"
-                ]
+                ],
+                "skos:inScheme": {
+                  "@id": "urn:linked-codebook:dataset:Heart%20Disease%20(UCI%20id%2045)#variable-restecg-codes"
+                },
+                "skos:notation": "2"
               }
             ]
           }
+        },
+        "summaryStatistics": {
+          "@id": "urn:linked-codebook:dataset:Heart%20Disease%20(UCI%20id%2045)#statistics-restecg",
+          "@type": "dsv:SummaryStatistics",
+          "statisticalDataType": "dsv:NominalDataType"
         }
       },
       {
-        "name": "thalach",
+        "@id": "urn:linked-codebook:dataset:Heart%20Disease%20(UCI%20id%2045)#column-thalach",
+        "@type": "dsv:Column",
+        "datatype": "integer",
         "titles": "Maximum heart rate achieved",
+        "name": "thalach",
         "columnProperty": {
-          "summaryStatistics": {
-            "statisticalDataType": "dsv:QuantitativeDataType"
-          },
-          "source": "https://loinc.org/101692-2",
-          "valueType": "xsd:integer"
+          "@id": "urn:linked-codebook:dataset:Heart%20Disease%20(UCI%20id%2045)#property-thalach",
+          "@type": "dsv:ColumnProperty",
+          "hasVariable": {
+            "@id": "urn:linked-codebook:dataset:Heart%20Disease%20(UCI%20id%2045)#variable-thalach",
+            "@type": "skos:Concept",
+            "skos:prefLabel": "Maximum heart rate achieved",
+            "skos:definition": "Documentation: https://loinc.org/101692-2"
+          }
+        },
+        "summaryStatistics": {
+          "@id": "urn:linked-codebook:dataset:Heart%20Disease%20(UCI%20id%2045)#statistics-thalach",
+          "@type": "dsv:SummaryStatistics",
+          "statisticalDataType": "dsv:NumericalDataType"
         }
       },
       {
-        "name": "exang",
+        "@id": "urn:linked-codebook:dataset:Heart%20Disease%20(UCI%20id%2045)#column-exang",
+        "@type": "dsv:Column",
         "titles": "Exercise-induced angina",
+        "name": "exang",
         "columnProperty": {
-          "summaryStatistics": {
-            "statisticalDataType": "dsv:NominalDataType"
+          "@id": "urn:linked-codebook:dataset:Heart%20Disease%20(UCI%20id%2045)#property-exang",
+          "@type": "dsv:ColumnProperty",
+          "hasVariable": {
+            "@id": "urn:linked-codebook:dataset:Heart%20Disease%20(UCI%20id%2045)#variable-exang",
+            "@type": "skos:Concept",
+            "skos:prefLabel": "Exercise-induced angina",
+            "skos:definition": "Documentation: https://archive.datadictionary.nhs.uk/DD%20Release%20June%202021/Covid19PRA/Coronary_Heart.html"
           },
-          "source": "https://archive.datadictionary.nhs.uk/DD%20Release%20June%202021/Covid19PRA/Coronary_Heart.html",
           "hasCodeBook": {
-            "hasTopConcept": [
+            "@id": "urn:linked-codebook:dataset:Heart%20Disease%20(UCI%20id%2045)#variable-exang-codes",
+            "@type": "skos:ConceptScheme",
+            "skos:hasTopConcept": [
               {
-                "notation": "0",
-                "prefLabel": "no"
+                "@id": "urn:linked-codebook:dataset:Heart%20Disease%20(UCI%20id%2045)#variable-exang-codes-0",
+                "@type": "skos:Concept",
+                "skos:prefLabel": "no",
+                "skos:inScheme": {
+                  "@id": "urn:linked-codebook:dataset:Heart%20Disease%20(UCI%20id%2045)#variable-exang-codes"
+                },
+                "skos:notation": "0"
               },
               {
-                "notation": "1",
-                "prefLabel": "yes"
+                "@id": "urn:linked-codebook:dataset:Heart%20Disease%20(UCI%20id%2045)#variable-exang-codes-1",
+                "@type": "skos:Concept",
+                "skos:prefLabel": "yes",
+                "skos:inScheme": {
+                  "@id": "urn:linked-codebook:dataset:Heart%20Disease%20(UCI%20id%2045)#variable-exang-codes"
+                },
+                "skos:notation": "1"
               }
             ]
           }
+        },
+        "summaryStatistics": {
+          "@id": "urn:linked-codebook:dataset:Heart%20Disease%20(UCI%20id%2045)#statistics-exang",
+          "@type": "dsv:SummaryStatistics",
+          "statisticalDataType": "dsv:NominalDataType"
         }
       },
       {
-        "name": "oldpeak",
+        "@id": "urn:linked-codebook:dataset:Heart%20Disease%20(UCI%20id%2045)#column-oldpeak",
+        "@type": "dsv:Column",
+        "datatype": "number",
         "titles": "ST depression vs rest (max during study)",
+        "name": "oldpeak",
         "columnProperty": {
-          "summaryStatistics": {
-            "statisticalDataType": "dsv:QuantitativeDataType"
-          },
-          "source": "https://loinc.org/91546-2",
-          "valueType": "xsd:decimal"
+          "@id": "urn:linked-codebook:dataset:Heart%20Disease%20(UCI%20id%2045)#property-oldpeak",
+          "@type": "dsv:ColumnProperty",
+          "hasVariable": {
+            "@id": "urn:linked-codebook:dataset:Heart%20Disease%20(UCI%20id%2045)#variable-oldpeak",
+            "@type": "skos:Concept",
+            "skos:prefLabel": "ST depression vs rest (max during study)",
+            "skos:definition": "Documentation: https://loinc.org/91546-2"
+          }
+        },
+        "summaryStatistics": {
+          "@id": "urn:linked-codebook:dataset:Heart%20Disease%20(UCI%20id%2045)#statistics-oldpeak",
+          "@type": "dsv:SummaryStatistics",
+          "statisticalDataType": "dsv:NumericalDataType"
         }
       },
       {
-        "name": "slope",
+        "@id": "urn:linked-codebook:dataset:Heart%20Disease%20(UCI%20id%2045)#column-slope",
+        "@type": "dsv:Column",
         "titles": "Slope of peak exercise ST segment",
+        "name": "slope",
         "columnProperty": {
-          "summaryStatistics": {
-            "statisticalDataType": "dsv:NominalDataType"
+          "@id": "urn:linked-codebook:dataset:Heart%20Disease%20(UCI%20id%2045)#property-slope",
+          "@type": "dsv:ColumnProperty",
+          "hasVariable": {
+            "@id": "urn:linked-codebook:dataset:Heart%20Disease%20(UCI%20id%2045)#variable-slope",
+            "@type": "skos:Concept",
+            "skos:prefLabel": "Slope of peak exercise ST segment",
+            "skos:definition": "Documentation: https://dicom.nema.org/medical/dicom/current/output/chtml/part16/sect_CID_3233.html"
           },
-          "source": "https://dicom.nema.org/medical/dicom/current/output/chtml/part16/sect_CID_3233.html",
           "hasCodeBook": {
-            "hasTopConcept": [
+            "@id": "urn:linked-codebook:dataset:Heart%20Disease%20(UCI%20id%2045)#variable-slope-codes",
+            "@type": "skos:ConceptScheme",
+            "skos:hasTopConcept": [
               {
-                "notation": "1",
-                "prefLabel": "upsloping"
+                "@id": "urn:linked-codebook:dataset:Heart%20Disease%20(UCI%20id%2045)#variable-slope-codes-1",
+                "@type": "skos:Concept",
+                "skos:prefLabel": "upsloping",
+                "skos:inScheme": {
+                  "@id": "urn:linked-codebook:dataset:Heart%20Disease%20(UCI%20id%2045)#variable-slope-codes"
+                },
+                "skos:notation": "1"
               },
               {
-                "notation": "2",
-                "prefLabel": "flat"
+                "@id": "urn:linked-codebook:dataset:Heart%20Disease%20(UCI%20id%2045)#variable-slope-codes-2",
+                "@type": "skos:Concept",
+                "skos:prefLabel": "flat",
+                "skos:inScheme": {
+                  "@id": "urn:linked-codebook:dataset:Heart%20Disease%20(UCI%20id%2045)#variable-slope-codes"
+                },
+                "skos:notation": "2"
               },
               {
-                "notation": "3",
-                "prefLabel": "downsloping"
+                "@id": "urn:linked-codebook:dataset:Heart%20Disease%20(UCI%20id%2045)#variable-slope-codes-3",
+                "@type": "skos:Concept",
+                "skos:prefLabel": "downsloping",
+                "skos:inScheme": {
+                  "@id": "urn:linked-codebook:dataset:Heart%20Disease%20(UCI%20id%2045)#variable-slope-codes"
+                },
+                "skos:notation": "3"
               }
             ]
           }
+        },
+        "summaryStatistics": {
+          "@id": "urn:linked-codebook:dataset:Heart%20Disease%20(UCI%20id%2045)#statistics-slope",
+          "@type": "dsv:SummaryStatistics",
+          "statisticalDataType": "dsv:NominalDataType"
         }
       },
       {
-        "name": "ca",
+        "@id": "urn:linked-codebook:dataset:Heart%20Disease%20(UCI%20id%2045)#column-ca",
+        "@type": "dsv:Column",
+        "datatype": "integer",
         "titles": "Number of major vessels (colored by fluoroscopy)",
+        "name": "ca",
         "columnProperty": {
-          "summaryStatistics": {
-            "statisticalDataType": "dsv:QuantitativeDataType"
-          },
-          "valueType": "xsd:integer"
+          "@id": "urn:linked-codebook:dataset:Heart%20Disease%20(UCI%20id%2045)#property-ca",
+          "@type": "dsv:ColumnProperty",
+          "hasVariable": {
+            "@id": "urn:linked-codebook:dataset:Heart%20Disease%20(UCI%20id%2045)#variable-ca",
+            "@type": "skos:Concept",
+            "skos:prefLabel": "Number of major vessels (colored by fluoroscopy)"
+          }
+        },
+        "summaryStatistics": {
+          "@id": "urn:linked-codebook:dataset:Heart%20Disease%20(UCI%20id%2045)#statistics-ca",
+          "@type": "dsv:SummaryStatistics",
+          "statisticalDataType": "dsv:NumericalDataType"
         }
       },
       {
-        "name": "thal",
+        "@id": "urn:linked-codebook:dataset:Heart%20Disease%20(UCI%20id%2045)#column-thal",
+        "@type": "dsv:Column",
         "titles": "Thallium perfusion test",
+        "name": "thal",
         "columnProperty": {
-          "summaryStatistics": {
-            "statisticalDataType": "dsv:NominalDataType"
+          "@id": "urn:linked-codebook:dataset:Heart%20Disease%20(UCI%20id%2045)#property-thal",
+          "@type": "dsv:ColumnProperty",
+          "hasVariable": {
+            "@id": "urn:linked-codebook:dataset:Heart%20Disease%20(UCI%20id%2045)#variable-thal",
+            "@type": "skos:Concept",
+            "skos:prefLabel": "Thallium perfusion test"
           },
           "hasCodeBook": {
-            "hasTopConcept": [
+            "@id": "urn:linked-codebook:dataset:Heart%20Disease%20(UCI%20id%2045)#variable-thal-codes",
+            "@type": "skos:ConceptScheme",
+            "skos:hasTopConcept": [
               {
-                "notation": "3",
-                "prefLabel": "normal",
+                "@id": "urn:linked-codebook:dataset:Heart%20Disease%20(UCI%20id%2045)#variable-thal-codes-3",
+                "@type": "skos:Concept",
+                "skos:prefLabel": "normal",
                 "exactMatch": [
                   "http://snomed.info/id/371801000"
-                ]
+                ],
+                "skos:inScheme": {
+                  "@id": "urn:linked-codebook:dataset:Heart%20Disease%20(UCI%20id%2045)#variable-thal-codes"
+                },
+                "skos:notation": "3"
               },
               {
-                "notation": "6",
-                "prefLabel": "fixed defect",
+                "@id": "urn:linked-codebook:dataset:Heart%20Disease%20(UCI%20id%2045)#variable-thal-codes-6",
+                "@type": "skos:Concept",
+                "skos:prefLabel": "fixed defect",
                 "exactMatch": [
                   "http://snomed.info/id/371918009"
-                ]
+                ],
+                "skos:inScheme": {
+                  "@id": "urn:linked-codebook:dataset:Heart%20Disease%20(UCI%20id%2045)#variable-thal-codes"
+                },
+                "skos:notation": "6"
               },
               {
-                "notation": "7",
-                "prefLabel": "reversible defect",
+                "@id": "urn:linked-codebook:dataset:Heart%20Disease%20(UCI%20id%2045)#variable-thal-codes-7",
+                "@type": "skos:Concept",
+                "skos:prefLabel": "reversible defect",
                 "exactMatch": [
                   "http://snomed.info/id/371920002"
-                ]
+                ],
+                "skos:inScheme": {
+                  "@id": "urn:linked-codebook:dataset:Heart%20Disease%20(UCI%20id%2045)#variable-thal-codes"
+                },
+                "skos:notation": "7"
               }
             ]
           }
+        },
+        "summaryStatistics": {
+          "@id": "urn:linked-codebook:dataset:Heart%20Disease%20(UCI%20id%2045)#statistics-thal",
+          "@type": "dsv:SummaryStatistics",
+          "statisticalDataType": "dsv:NominalDataType"
         }
       },
       {
-        "name": "num",
+        "@id": "urn:linked-codebook:dataset:Heart%20Disease%20(UCI%20id%2045)#column-num",
+        "@type": "dsv:Column",
         "titles": "Angiographic disease status",
-        "hadRole": "target",
+        "name": "num",
         "columnProperty": {
-          "summaryStatistics": {
-            "statisticalDataType": "dsv:NominalDataType"
+          "@id": "urn:linked-codebook:dataset:Heart%20Disease%20(UCI%20id%2045)#property-num",
+          "@type": "dsv:ColumnProperty",
+          "hasVariable": {
+            "@id": "urn:linked-codebook:dataset:Heart%20Disease%20(UCI%20id%2045)#variable-num",
+            "@type": "skos:Concept",
+            "skos:prefLabel": "Angiographic disease status",
+            "skos:definition": "Documentation: https://purl.bioontology.org/ontology/SNOMEDCT/233970002"
           },
-          "source": "https://purl.bioontology.org/ontology/SNOMEDCT/233970002",
           "hasCodeBook": {
-            "hasTopConcept": [
+            "@id": "urn:linked-codebook:dataset:Heart%20Disease%20(UCI%20id%2045)#variable-num-codes",
+            "@type": "skos:ConceptScheme",
+            "skos:hasTopConcept": [
               {
-                "notation": "0",
-                "prefLabel": "<50% narrowing"
+                "@id": "urn:linked-codebook:dataset:Heart%20Disease%20(UCI%20id%2045)#variable-num-codes-0",
+                "@type": "skos:Concept",
+                "skos:prefLabel": "<50% narrowing",
+                "skos:inScheme": {
+                  "@id": "urn:linked-codebook:dataset:Heart%20Disease%20(UCI%20id%2045)#variable-num-codes"
+                },
+                "skos:notation": "0"
               },
               {
-                "notation": "1",
-                "prefLabel": "\u226550% narrowing"
+                "@id": "urn:linked-codebook:dataset:Heart%20Disease%20(UCI%20id%2045)#variable-num-codes-1",
+                "@type": "skos:Concept",
+                "skos:prefLabel": "≥50% narrowing",
+                "skos:inScheme": {
+                  "@id": "urn:linked-codebook:dataset:Heart%20Disease%20(UCI%20id%2045)#variable-num-codes"
+                },
+                "skos:notation": "1"
               }
             ]
           }
-        }
+        },
+        "summaryStatistics": {
+          "@id": "urn:linked-codebook:dataset:Heart%20Disease%20(UCI%20id%2045)#statistics-num",
+          "@type": "dsv:SummaryStatistics",
+          "statisticalDataType": "dsv:NominalDataType"
+        },
+        "prov:hadRole": "target"
       }
     ]
   },
-  "title": "Heart Disease (UCI id 45)",
-  "description": "4 databases: Cleveland, Hungary, Switzerland, and the VA Long Beach",
-  "@type": [
-    "disco:LogicalDataSet",
-    "dsv:Dataset",
-    "dcat:Dataset"
-  ],
   "dct:license": "https://creativecommons.org/publicdomain/zero/1.0/"
 }

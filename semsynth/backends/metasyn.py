@@ -2,7 +2,6 @@
 
 from __future__ import annotations
 
-import copy
 import json
 import logging
 from pathlib import Path
@@ -39,7 +38,7 @@ def run_experiment(
     rows: Optional[int],
     seed: int,
     test_size: float,
-    semmap_export: Optional[Dict[str, Any]] = None,
+    codebook_jsonld: Optional[Dict[str, Any]] = None,
 ) -> Path:
     """Fit the MetaSyn model and persist artifacts following the backend contract."""
 
@@ -95,14 +94,13 @@ def run_experiment(
     synth_csv = run_dir.file("synthetic.csv")
     synth_df.to_csv(synth_csv, index=False)
 
-    if semmap_export:
+    if codebook_jsonld:
         try:
-            synth_df.semmap.from_jsonld(
-                copy.deepcopy(semmap_export), convert_pint=False
-            )
-            synth_df.semmap.to_parquet(str(run_dir.file("synthetic.semmap.parquet")), index=False)
+            from semsynth.codebook import write_parquet
+
+            write_parquet(synth_df, run_dir.file("synthetic.parquet"), codebook_jsonld)
         except Exception:
-            logging.exception("Failed to serialize SemMap parquet for MetaSyn synthetic")
+            logging.exception("Failed to write Parquet with codebook for MetaSyn synthetic")
 
     dist_df = per_variable_distances(test_df, synth_df, disc_cols, cont_cols)
     dist_df.to_csv(run_dir.file("per_variable_metrics.csv"), index=False)

@@ -69,7 +69,7 @@ def clean_dataset_frame(
     """Return a cleaned dataframe plus detected target column and colour series.
 
     The helper removes trivial identifier columns, then inspects the provided
-    ``target`` hint and metadata for SemMap-style ``prov:hadRole`` annotations to
+    ``target`` hint and metadata for ``prov:hadRole`` annotations to
     identify the target column. When a target column is found, the returned
     series is annotated with ``prov:hadRole = "target"`` for downstream
     consumers.

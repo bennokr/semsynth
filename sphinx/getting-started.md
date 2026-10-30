@@ -34,7 +34,7 @@ python -m pip install -e .[umap,pybnesian,synthcity]
 
 SemSynth now ships with a dedicated command that orchestrates the full
 mapping workflow – metadata parsing, terminology lookup, SSSOM emission, and
-SemMap enrichment. Pick a strategy with `--method`:
+codebook enrichment. Pick a strategy with `--method`:
 
 ```bash
 python -m semsynth create-mapping uciml \
@@ -78,7 +78,7 @@ python -m semsynth report uciml --datasets 145 \
 
 SemSynth merges the curated mappings during preprocessing. Discrete versus
 continuous inference now honours the statistical data type hints stored in
-the SemMap metadata, so integer-coded categoricals remain categorical in the
+the codebook, so integer-coded categoricals remain categorical in the
 downstream analysis.
 
 After installation, confirm the cache and curated metadata are available.
@@ -86,12 +86,10 @@ After installation, confirm the cache and curated metadata are available.
 ```{code-cell} python
 # Preview the cached dataset and verify metadata loads cleanly.
 import pandas as pd
-import json
-from semsynth.semmap import Metadata
+from semsynth.codebook import Codebook
 
 heart = pd.read_csv("../downloads-cache/uciml/45.csv.gz")
-meta = json.load(open("../mappings/uciml-45.metadata.json"))
-meta_obj = Metadata.from_dcat_dsv(meta)
+codebook = Codebook.read("../mappings/uciml-45.metadata.json")
 
 heart.head()
 ```

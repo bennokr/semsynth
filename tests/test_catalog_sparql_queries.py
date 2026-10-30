@@ -24,8 +24,8 @@ def test_write_sparql_query_files_creates_distributions(tmp_path: Path) -> None:
     assert filenames == sorted(
         [
             "query-provenance-artifacts.rq",
-            "query-semmap-and-provenance-artifacts.rq",
-            "query-semmap-coverage.rq",
+            "query-codebook-and-provenance-artifacts.rq",
+            "query-codebook-coverage.rq",
         ]
     )
 

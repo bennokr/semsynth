@@ -100,7 +100,6 @@ def map_column(
     column_name = column.name or var_id
     role = column.role or ""
     description = column.description or ""
-    about = column.about or ""
     unit = column.unit or ""
     data_type = column.statistical_data_type or ""
 
@@ -113,7 +112,6 @@ Variable:
 - column_name: {column_name}
 - role: {role}
 - description: {description}
-- about: {about}
 - unit: {unit}
 - statistical_data_type: {data_type}
 

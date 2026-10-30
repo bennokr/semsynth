@@ -1,137 +1,311 @@
 {
-  "@context": "https://w3id.org/semmap/context/v1",
+  "@context": {
+    "accessRights": "dct:accessRights",
+    "broadMatch": {
+      "@container": "@set",
+      "@id": "skos:broadMatch",
+      "@type": "@id"
+    },
+    "citation": "dct:bibliographicCitation",
+    "closeMatch": {
+      "@container": "@set",
+      "@id": "skos:closeMatch",
+      "@type": "@id"
+    },
+    "columnCompleteness": {
+      "@id": "dsv:columnCompleteness",
+      "@type": "xsd:float"
+    },
+    "columnProperty": {
+      "@id": "dsv:columnProperty",
+      "@type": "@id"
+    },
+    "columns": {
+      "@container": "@set",
+      "@id": "dsv:column"
+    },
+    "csvw": "http://www.w3.org/ns/csvw#",
+    "datasetSchema": {
+      "@id": "dsv:datasetSchema",
+      "@type": "@id"
+    },
+    "datatype": "csvw:datatype",
+    "dcat": "http://www.w3.org/ns/dcat#",
+    "dct": "http://purl.org/dc/terms/",
+    "description": "dct:description",
+    "dsv": "https://w3id.org/dsv-ontology#",
+    "exactMatch": {
+      "@container": "@set",
+      "@id": "skos:exactMatch",
+      "@type": "@id"
+    },
+    "hasCodeBook": {
+      "@id": "dsv:hasCodeBook",
+      "@type": "@id"
+    },
+    "hasUnit": {
+      "@id": "qudt:hasUnit",
+      "@type": "@id"
+    },
+    "hasVariable": {
+      "@id": "dsv:hasVariable",
+      "@type": "@id"
+    },
+    "identifier": "dct:identifier",
+    "landingPage": {
+      "@id": "dcat:landingPage",
+      "@type": "@id"
+    },
+    "license": {
+      "@id": "dct:license",
+      "@type": "@id"
+    },
+    "name": "csvw:name",
+    "narrowMatch": {
+      "@container": "@set",
+      "@id": "skos:narrowMatch",
+      "@type": "@id"
+    },
+    "nullValues": {
+      "@container": "@set",
+      "@id": "csvw:null"
+    },
+    "numberOfColumns": {
+      "@id": "dsv:numberOfColumns",
+      "@type": "xsd:integer"
+    },
+    "numberOfRows": {
+      "@id": "dsv:numberOfRows",
+      "@type": "xsd:integer"
+    },
+    "qudt": "http://qudt.org/schema/qudt/",
+    "relatedMatch": {
+      "@container": "@set",
+      "@id": "skos:relatedMatch",
+      "@type": "@id"
+    },
+    "rights": "dct:rights",
+    "schema": "https://schema.org/",
+    "skos": "http://www.w3.org/2004/02/skos/core#",
+    "statisticalDataType": {
+      "@id": "dsv:statisticalDataType",
+      "@type": "@id"
+    },
+    "summaryStatistics": {
+      "@id": "dsv:summaryStatistics",
+      "@type": "@id"
+    },
+    "title": "dct:title",
+    "titles": "csvw:title",
+    "unitText": "schema:unitText",
+    "xsd": "http://www.w3.org/2001/XMLSchema#",
+    "dcterms": "http://purl.org/dc/terms/",
+    "prov": "http://www.w3.org/ns/prov#"
+  },
+  "@id": "urn:linked-codebook:dataset:Fertility",
+  "@type": [
+    "dcat:Dataset",
+    "dsv:Dataset"
+  ],
+  "landingPage": "https://archive.ics.uci.edu/dataset/244/fertility",
+  "title": "Fertility",
+  "summaryStatistics": {
+    "@id": "urn:linked-codebook:dataset:Fertility#statistics",
+    "@type": "dsv:SummaryStatistics",
+    "numberOfRows": 100,
+    "numberOfColumns": 10
+  },
   "datasetSchema": {
+    "@id": "urn:linked-codebook:dataset:Fertility#schema",
+    "@type": "dsv:DatasetSchema",
     "columns": [
       {
+        "@id": "urn:linked-codebook:dataset:Fertility#column-season",
+        "@type": "dsv:Column",
         "name": "season",
-        "hadRole": "Feature",
-        "summaryStatistics": {
-          "statisticalDataType": "dsv:StatisticalDataType",
-          "@type": "dsv:SummaryStatistics"
+        "titles": "season",
+        "columnProperty": {
+          "@id": "urn:linked-codebook:dataset:Fertility#property-season",
+          "@type": "dsv:ColumnProperty",
+          "hasVariable": {
+            "@id": "urn:linked-codebook:dataset:Fertility#variable-season",
+            "@type": "skos:Concept",
+            "skos:prefLabel": "season"
+          }
         },
-        "@type": "dsv:Column"
+        "prov:hadRole": "Feature"
       },
       {
+        "@id": "urn:linked-codebook:dataset:Fertility#column-age",
+        "@type": "dsv:Column",
         "name": "age",
-        "about": "Age",
-        "hadRole": "Feature",
-        "summaryStatistics": {
-          "statisticalDataType": "dsv:NumericalDataType",
-          "@type": "dsv:SummaryStatistics"
+        "titles": "age",
+        "columnProperty": {
+          "@id": "urn:linked-codebook:dataset:Fertility#property-age",
+          "@type": "dsv:ColumnProperty",
+          "hasVariable": {
+            "@id": "urn:linked-codebook:dataset:Fertility#variable-age",
+            "@type": "skos:Concept",
+            "skos:prefLabel": "age"
+          }
         },
-        "@type": "dsv:Column"
+        "summaryStatistics": {
+          "@id": "urn:linked-codebook:dataset:Fertility#statistics-age",
+          "@type": "dsv:SummaryStatistics",
+          "statisticalDataType": "dsv:NumericalDataType"
+        },
+        "prov:hadRole": "Feature"
       },
       {
+        "@id": "urn:linked-codebook:dataset:Fertility#column-child_diseases",
+        "@type": "dsv:Column",
         "name": "child_diseases",
-        "hadRole": "Feature",
-        "summaryStatistics": {
-          "statisticalDataType": "dsv:StatisticalDataType",
-          "@type": "dsv:SummaryStatistics"
+        "titles": "child_diseases",
+        "columnProperty": {
+          "@id": "urn:linked-codebook:dataset:Fertility#property-child_diseases",
+          "@type": "dsv:ColumnProperty",
+          "hasVariable": {
+            "@id": "urn:linked-codebook:dataset:Fertility#variable-child_diseases",
+            "@type": "skos:Concept",
+            "skos:prefLabel": "child_diseases"
+          }
         },
-        "@type": "dsv:Column"
+        "prov:hadRole": "Feature"
       },
       {
+        "@id": "urn:linked-codebook:dataset:Fertility#column-accident",
+        "@type": "dsv:Column",
         "name": "accident",
-        "hadRole": "Feature",
-        "summaryStatistics": {
-          "statisticalDataType": "dsv:StatisticalDataType",
-          "@type": "dsv:SummaryStatistics"
+        "titles": "accident",
+        "columnProperty": {
+          "@id": "urn:linked-codebook:dataset:Fertility#property-accident",
+          "@type": "dsv:ColumnProperty",
+          "hasVariable": {
+            "@id": "urn:linked-codebook:dataset:Fertility#variable-accident",
+            "@type": "skos:Concept",
+            "skos:prefLabel": "accident"
+          }
         },
-        "@type": "dsv:Column"
+        "prov:hadRole": "Feature"
       },
       {
+        "@id": "urn:linked-codebook:dataset:Fertility#column-surgical_intervention",
+        "@type": "dsv:Column",
         "name": "surgical_intervention",
-        "hadRole": "Feature",
-        "summaryStatistics": {
-          "statisticalDataType": "dsv:StatisticalDataType",
-          "@type": "dsv:SummaryStatistics"
+        "titles": "surgical_intervention",
+        "columnProperty": {
+          "@id": "urn:linked-codebook:dataset:Fertility#property-surgical_intervention",
+          "@type": "dsv:ColumnProperty",
+          "hasVariable": {
+            "@id": "urn:linked-codebook:dataset:Fertility#variable-surgical_intervention",
+            "@type": "skos:Concept",
+            "skos:prefLabel": "surgical_intervention"
+          }
         },
-        "@type": "dsv:Column"
+        "prov:hadRole": "Feature"
       },
       {
+        "@id": "urn:linked-codebook:dataset:Fertility#column-high_fevers",
+        "@type": "dsv:Column",
         "name": "high_fevers",
-        "hadRole": "Feature",
-        "summaryStatistics": {
-          "statisticalDataType": "dsv:CategoricalDataType",
-          "@type": "dsv:SummaryStatistics"
+        "titles": "high_fevers",
+        "columnProperty": {
+          "@id": "urn:linked-codebook:dataset:Fertility#property-high_fevers",
+          "@type": "dsv:ColumnProperty",
+          "hasVariable": {
+            "@id": "urn:linked-codebook:dataset:Fertility#variable-high_fevers",
+            "@type": "skos:Concept",
+            "skos:prefLabel": "high_fevers"
+          }
         },
-        "@type": "dsv:Column"
+        "summaryStatistics": {
+          "@id": "urn:linked-codebook:dataset:Fertility#statistics-high_fevers",
+          "@type": "dsv:SummaryStatistics",
+          "statisticalDataType": "dsv:CategoricalDataType"
+        },
+        "prov:hadRole": "Feature"
       },
       {
+        "@id": "urn:linked-codebook:dataset:Fertility#column-alcohol",
+        "@type": "dsv:Column",
         "name": "alcohol",
-        "hadRole": "Feature",
-        "summaryStatistics": {
-          "statisticalDataType": "dsv:CategoricalDataType",
-          "@type": "dsv:SummaryStatistics"
+        "titles": "alcohol",
+        "columnProperty": {
+          "@id": "urn:linked-codebook:dataset:Fertility#property-alcohol",
+          "@type": "dsv:ColumnProperty",
+          "hasVariable": {
+            "@id": "urn:linked-codebook:dataset:Fertility#variable-alcohol",
+            "@type": "skos:Concept",
+            "skos:prefLabel": "alcohol"
+          }
         },
-        "@type": "dsv:Column"
+        "summaryStatistics": {
+          "@id": "urn:linked-codebook:dataset:Fertility#statistics-alcohol",
+          "@type": "dsv:SummaryStatistics",
+          "statisticalDataType": "dsv:CategoricalDataType"
+        },
+        "prov:hadRole": "Feature"
       },
       {
+        "@id": "urn:linked-codebook:dataset:Fertility#column-smoking",
+        "@type": "dsv:Column",
         "name": "smoking",
-        "hadRole": "Feature",
-        "summaryStatistics": {
-          "statisticalDataType": "dsv:CategoricalDataType",
-          "@type": "dsv:SummaryStatistics"
+        "titles": "smoking",
+        "columnProperty": {
+          "@id": "urn:linked-codebook:dataset:Fertility#property-smoking",
+          "@type": "dsv:ColumnProperty",
+          "hasVariable": {
+            "@id": "urn:linked-codebook:dataset:Fertility#variable-smoking",
+            "@type": "skos:Concept",
+            "skos:prefLabel": "smoking"
+          }
         },
-        "@type": "dsv:Column"
+        "summaryStatistics": {
+          "@id": "urn:linked-codebook:dataset:Fertility#statistics-smoking",
+          "@type": "dsv:SummaryStatistics",
+          "statisticalDataType": "dsv:CategoricalDataType"
+        },
+        "prov:hadRole": "Feature"
       },
       {
+        "@id": "urn:linked-codebook:dataset:Fertility#column-hrs_sitting",
+        "@type": "dsv:Column",
         "name": "hrs_sitting",
-        "hadRole": "Feature",
-        "summaryStatistics": {
-          "statisticalDataType": "dsv:NumericalDataType",
-          "@type": "dsv:SummaryStatistics"
+        "titles": "hrs_sitting",
+        "columnProperty": {
+          "@id": "urn:linked-codebook:dataset:Fertility#property-hrs_sitting",
+          "@type": "dsv:ColumnProperty",
+          "hasVariable": {
+            "@id": "urn:linked-codebook:dataset:Fertility#variable-hrs_sitting",
+            "@type": "skos:Concept",
+            "skos:prefLabel": "hrs_sitting"
+          }
         },
-        "@type": "dsv:Column"
+        "summaryStatistics": {
+          "@id": "urn:linked-codebook:dataset:Fertility#statistics-hrs_sitting",
+          "@type": "dsv:SummaryStatistics",
+          "statisticalDataType": "dsv:NumericalDataType"
+        },
+        "prov:hadRole": "Feature"
       },
       {
+        "@id": "urn:linked-codebook:dataset:Fertility#column-diagnosis",
+        "@type": "dsv:Column",
         "name": "diagnosis",
-        "hadRole": "Target",
-        "summaryStatistics": {
-          "statisticalDataType": "dsv:StatisticalDataType",
-          "@type": "dsv:SummaryStatistics"
+        "titles": "diagnosis",
+        "columnProperty": {
+          "@id": "urn:linked-codebook:dataset:Fertility#property-diagnosis",
+          "@type": "dsv:ColumnProperty",
+          "hasVariable": {
+            "@id": "urn:linked-codebook:dataset:Fertility#variable-diagnosis",
+            "@type": "skos:Concept",
+            "skos:prefLabel": "diagnosis"
+          }
         },
-        "@type": "dsv:Column"
+        "prov:hadRole": "Target"
       }
-    ],
-    "@type": "dsv:DatasetSchema"
+    ]
   },
-  "summaryStatistics": {
-    "numberOfRows": 100,
-    "numberOfColumns": 9,
-    "@type": "dsv:SummaryStatistics"
-  },
-  "title": "Fertility",
-  "abstract": "100 volunteers provide a semen sample analyzed according to the WHO 2010 criteria. Sperm concentration are related to socio-demographic data, environmental factors, health status, and life habits",
-  "landingPage": "https://archive.ics.uci.edu/dataset/244/fertility",
-  "tableOfContents": "Season in which the analysis was performed. \t1) winter, 2) spring, 3) Summer, 4) fall. \t(-1, -0.33, 0.33, 1) \r\n\r\nAge at the time of analysis. \t18-36 \t(0, 1) \r\n\r\nChildish diseases (ie , chicken pox, measles, mumps, polio)\t1) yes, 2) no. \t(0, 1) \r\n\r\nAccident or serious trauma \t1) yes, 2) no. \t(0, 1) \r\n\r\nSurgical intervention \t1) yes, 2) no. \t(0, 1) \r\n\r\nHigh fevers in the last year \t1) less than three months ago, 2) more than three months ago, 3) no. \t(-1, 0, 1) \r\n\r\nFrequency of alcohol consumption \t1) several times a day, 2) every day, 3) several times a week, 4) once a week, 5) hardly ever or never \t(0, 1) \r\n\r\nSmoking habit \t1) never, 2) occasional 3) daily. \t(-1, 0, 1) \r\n\r\nNumber of hours spent sitting per day \tene-16\t(0, 1) \r\n\r\nOutput: Diagnosis\tnormal (N), altered (O)\t\r\n",
-  "citation": {
-    "@type": "schema:ScholarlyArticle",
-    "title": "Predicting seminal quality with artificial intelligence methods",
-    "schema:author": [
-      "David Gil",
-      "J. L. Girela",
-      "Joaquin De Juan",
-      "M. Jose Gomez-Torres",
-      "Magnus Johnsson"
-    ],
-    "schema:isPartOf": "Expert systems with applications",
-    "schema:datePublished": 2012,
-    "url": "https://www.semanticscholar.org/paper/Predicting-seminal-quality-with-artificial-methods-Gil-Girela/92759c5ee08b9e6e7b17d1ccd48a7f8c02aba893"
-  },
-  "identifier": [
-    {
-      "@type": "schema:PropertyValue",
-      "schema:propertyID": "uci",
-      "schema:value": 244
-    },
-    {
-      "@type": "schema:PropertyValue",
-      "schema:propertyID": "DOI",
-      "schema:value": "10.24432/C5Z01Z"
-    }
-  ],
-  "@type": "dcat:Dataset",
   "dcterms:created": 2012,
   "dcterms:modified": "2024-03-15",
   "dcat:theme": "Health and Medicine",
@@ -159,6 +333,34 @@
       "dcat:downloadURL": "https://archive.ics.uci.edu/static/public/244/data.csv",
       "dcat:mediaType": "text/csv",
       "dcterms:format": "text/csv"
+    }
+  ],
+  "dcterms:abstract": "100 volunteers provide a semen sample analyzed according to the WHO 2010 criteria. Sperm concentration are related to socio-demographic data, environmental factors, health status, and life habits",
+  "dcterms:tableOfContents": "Season in which the analysis was performed. \t1) winter, 2) spring, 3) Summer, 4) fall. \t(-1, -0.33, 0.33, 1) \r\n\r\nAge at the time of analysis. \t18-36 \t(0, 1) \r\n\r\nChildish diseases (ie , chicken pox, measles, mumps, polio)\t1) yes, 2) no. \t(0, 1) \r\n\r\nAccident or serious trauma \t1) yes, 2) no. \t(0, 1) \r\n\r\nSurgical intervention \t1) yes, 2) no. \t(0, 1) \r\n\r\nHigh fevers in the last year \t1) less than three months ago, 2) more than three months ago, 3) no. \t(-1, 0, 1) \r\n\r\nFrequency of alcohol consumption \t1) several times a day, 2) every day, 3) several times a week, 4) once a week, 5) hardly ever or never \t(0, 1) \r\n\r\nSmoking habit \t1) never, 2) occasional 3) daily. \t(-1, 0, 1) \r\n\r\nNumber of hours spent sitting per day \tene-16\t(0, 1) \r\n\r\nOutput: Diagnosis\tnormal (N), altered (O)\t\r\n",
+  "schema:citation": {
+    "@type": "schema:ScholarlyArticle",
+    "title": "Predicting seminal quality with artificial intelligence methods",
+    "schema:author": [
+      "David Gil",
+      "J. L. Girela",
+      "Joaquin De Juan",
+      "M. Jose Gomez-Torres",
+      "Magnus Johnsson"
+    ],
+    "schema:isPartOf": "Expert systems with applications",
+    "schema:datePublished": 2012,
+    "url": "https://www.semanticscholar.org/paper/Predicting-seminal-quality-with-artificial-methods-Gil-Girela/92759c5ee08b9e6e7b17d1ccd48a7f8c02aba893"
+  },
+  "schema:identifier": [
+    {
+      "@type": "schema:PropertyValue",
+      "schema:propertyID": "uci",
+      "schema:value": 244
+    },
+    {
+      "@type": "schema:PropertyValue",
+      "schema:propertyID": "DOI",
+      "schema:value": "10.24432/C5Z01Z"
     }
   ]
 }

@@ -20,7 +20,7 @@ For extra features, run `python -m pip install -e .[EXTRA]` with `EXTRA` in (
 `statsmodels`
 `mapping`).
 
-The `mapping` extra installs [linked-codebook](https://github.com/bennokr/linked-codebook) (Python 3.11 or newer), which `map_columns/sssom_to_semmap.py` uses to read SSSOM rows. It is not on PyPI yet, so the extra points to its published wheel.
+Dataset metadata is a [linked-codebook](https://bennokr.github.io/linked-codebook/) profile (see `sphinx/schema.md`). linked-codebook needs Python 3.11 or newer and is not on PyPI yet, so the dependency points to its published wheel. That also means SemSynth itself cannot be published to PyPI until linked-codebook is.
 
 ## 🔎 Quick start
 
@@ -53,13 +53,13 @@ The `mapping` extra installs [linked-codebook](https://github.com/bennokr/linked
       - `configs/only_metasyn_config.toml` (MetaSyn baseline only)
    - Example: `python -m semsynth report openml --datasets adult --configs-toml @configs/advanced_config.toml`
 
-   Pipeline toggles (UMAP, privacy, downstream, missingness, SemMap context URL, etc.) now live in the TOML bundle under `[pipeline]` rather than separate CLI flags.
+   Pipeline toggles (UMAP, privacy, downstream, missingness, etc.) now live in the TOML bundle under `[pipeline]` rather than separate CLI flags.
 
 4. Catalog + app helpers
    - Build a DCAT catalog and HTML index from existing outputs: `python -m semsynth build-catalog`
-   - Regenerate metadata-only reports for all curated SemMap mappings and refresh the catalog/index: `python -m semsynth mappings --pipeline-configs ""`
+   - Regenerate metadata-only reports for all curated codebooks and refresh the catalog/index: `python -m semsynth mappings --pipeline-configs ""`
    - Re-render reports for all curated mappings using existing outputs (skip mappings and metrics): `python -m semsynth refresh-mapping-reports --pipeline-configs '{pipeline={generate_umap=false,compute_privacy=false,compute_downstream=false,overwrite_umap=false}}'`
-   - The generated `output/index.html` now embeds **YASGUI + Comunica (browser)** with a static endpoint identifier (`browser://semsynth-static-catalog`) and loads runnable query tabs from `output/sparql/*.rq` files for SemMap and provenance-linked synthetic artifacts.
+   - The generated `output/index.html` now embeds **YASGUI + Comunica (browser)** with a static endpoint identifier (`browser://semsynth-static-catalog`) and loads runnable query tabs from `output/sparql/*.rq` files for codebooks and provenance-linked synthetic artifacts.
    - Launch a minimal Flask UI for search and report actions: `python -m semsynth app --host 0.0.0.0 --port 5000`
 
 ## 📄 TOML bundles
@@ -102,25 +102,24 @@ batch_size = 256
 generate_umap = true
 compute_privacy = true
 compute_downstream = true
-semmap_context_url = "https://w3id.org/semmap/context"
 ```
 
 ## 📦 Outputs
 - Per dataset (e.g., `output/Heart Disease/`):
   - `index.html` and `report.md`
-  - `dataset.semmap.json` and `dataset.semmap.html` (when SemMap metadata is available)
+  - `dataset.codebook.jsonld` (DSV JSON-LD written by linked-codebook, with roles) and its RDFa rendering `dataset.codebook.html`
   - `umap_real.png` (when `--generate-umap` is enabled and UMAP dependencies are installed)
 - Per model (e.g., `output/Heart Disease/models/<name>/`):
   - `synthetic.csv`, `metrics.json`, and `umap.png`
   - Optional metrics sidecars: `metrics.privacy.json`, `metrics.downstream.json`
   - PyBNesian extras: `structure.png`, `structure.graphml`, `model.pickle`
-  - `synthetic.semmap.parquet` (when SemMap metadata is available)
+  - `synthetic.parquet`, with the codebook JSON-LD in the Parquet schema metadata
 
 ## 🧰 Metadata templates & column mappings
 - `semsynth/dataproviders/uciml.py` exposes a CLI that turns the JSON payloads cached under `uciml-cache/` (sometimes referenced as `uci-cache/` in earlier docs) into DCAT + DSV JSON-LD that downstream tools can ingest.
 - Scripts under `map_columns/` take that JSON-LD and suggest or write terminology mappings (see `map_columns/README.md` for the full strategy catalog covering lexical, Datasette keyword, embedding, and LLM workflows).
 - `python -m semsynth create-mapping uciml --datasets 145 --method lexical` automates the end-to-end workflow (JSON-LD export → terminology scoring → SSSOM merge) and stores the results under `mappings/`.
-- Curated SemMap JSON files are repo-only under `mappings/` and are not bundled into wheels; when installing from PyPI, provide your own `mappings/` directory if you want curated mappings.
+- Curated codebooks (`mappings/*.metadata.json`, DSV JSON-LD with roles) are repo-only under `mappings/` and are not bundled into wheels; when installing from PyPI, provide your own `mappings/` directory if you want curated mappings.
 
 ### Example: UCI dataset 45 (Heart Disease)
 1. Fetch the dataset metadata. Any command that touches the UCI provider will populate `uciml-cache/<id>.json`. For example:
@@ -148,7 +147,7 @@ semmap_context_url = "https://w3id.org/semmap/context"
        --verbose
    ```
    Swap in `map_columns/embed_map_columns.py` or `map_columns/llm_map_columns.py` to use embedding or LLM variants (see `map_columns/README.md` for full parameter lists).
-4. Run the integrated helper to write mappings and SemMap metadata in one go:
+4. Run the integrated helper to write mappings and the codebook in one go:
 
    ```bash
    python -m semsynth create-mapping uciml \
@@ -177,7 +176,7 @@ semmap_context_url = "https://w3id.org/semmap/context"
 ## 🔎 Static SPARQL endpoint (demo index)
 - `python -m semsynth build-catalog` writes `output/index.html`, `output/catalog.json`, `output/catalog.jsonld`, and `output/sparql/*.rq` with an embedded YASGUI editor and browser Comunica query engine targeting static files only.
 - The page advertises endpoint id `browser://semsynth-static-catalog` and includes ready-to-run query tabs covering:
-  - datasets that publish `dataset.semmap.json`,
+  - datasets that publish `dataset.codebook.jsonld`,
   - provenance-linked synthetic artifacts,
   - distribution counts per dataset.
 - This mirrors the static-browser pattern from `data-catalog-sparql-playground` (catalog + local query UI, no server-side SPARQL service required).

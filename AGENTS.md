@@ -5,6 +5,6 @@ Maintain a brief repo structure and project intent guardrails in AGENTS.md.
 
 Repo structure guardrails:
 - `semsynth/` holds the reporting pipeline, backends, metadata utilities, CLI entrypoints, and packaged runtime assets (`semsynth/templates`).
-- `map_columns/` contains terminology helpers; use `codes_map_columns.py` + `codes.tsv` for offline Wikidata mappings and keep manual override JSONs alongside datasets. `sssom_to_semmap.py` reads SSSOM rows with `linked-codebook` (the `mapping` extra); the writers in `map_columns/` stay here because they record the justification of automatic matches.
+- `map_columns/` contains terminology helpers; use `codes_map_columns.py` + `codes.tsv` for offline Wikidata mappings and keep manual override JSONs alongside datasets. `sssom_to_codebook.py` reads SSSOM rows with `linked-codebook`; the writers in `map_columns/` stay here because they record the justification of automatic matches.
 - `configs/` stores runnable bundles. `maximal_config.toml` must finish without GPU/shared-memory features, so keep it metasyn-first and ensure optional toggles degrade gracefully.
 - Cache roots (`downloads-cache/`, `uciml-cache/`) may include synthetic stand-ins when the original sources are unreachable; document such fallbacks in README when they change.

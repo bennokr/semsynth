@@ -64,7 +64,7 @@ def test_run_experiment_writes_expected_artifacts(tmp_path: Path, monkeypatch) -
         rows=2,
         seed=7,
         test_size=0.5,
-        semmap_export=None,
+        codebook_jsonld=None,
     )
 
     synth_csv = Path(run_dir) / "synthetic.csv"

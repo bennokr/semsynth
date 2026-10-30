@@ -25,9 +25,9 @@ def test_write_index_includes_sparql_section(tmp_path: Path) -> None:
     assert "Static SPARQL endpoint playground" in html
     assert SPARQL_ENDPOINT_ID in html
     assert "output/sparql/*.rq" in html
-    assert "query-semmap-coverage.rq" in html
+    assert "query-codebook-coverage.rq" in html
     assert "query-provenance-artifacts.rq" in html
-    assert "query-semmap-and-provenance-artifacts.rq" in html
+    assert "query-codebook-and-provenance-artifacts.rq" in html
     assert 'href="Dataset A"' in html
     assert 'href="Dataset B"' in html
 

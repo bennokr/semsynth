@@ -21,9 +21,7 @@ from .metadata import get_uciml_variable_descriptions
 from .models import ModelConfigBundle, discover_model_runs, load_model_configs
 from .runtime import DEPENDENCIES
 from .specs import DatasetSpec
-from .semmap import Metadata
-from . import semmap as semmap_module
-from .semmap import normalize_role
+from .codebook import Codebook, privacy_role
 
 LOGGER = logging.getLogger(__name__)
 
@@ -51,8 +49,6 @@ class PipelineConfig(Config):
     """Configuration values controlling the reporting pipeline."""
 
     random_state: int = 42
-    semmap_context: bool = False
-    semmap_context_url: str = "https://w3id.org/semmap/context"
     max_umap_sample: int = 1000
     fit_on_sample: Optional[int] = 1000
     synthetic_sample: int = 1000
@@ -109,25 +105,12 @@ def _build_privacy_metadata(
     import pandas as pd
 
     metadata_df: Optional["pd.DataFrame"] = None
-    meta_obj: Optional[Metadata] = metadata if isinstance(metadata, Metadata) else None
-
-    if meta_obj is None and isinstance(metadata, dict):
-        try:
-            meta_obj = Metadata.from_dcat_dsv(metadata)
-        except Exception:
-            meta_obj = None
-
-    if meta_obj is None:
-        try:
-            meta_obj = df.semmap.dataset_semmap or df.semmap()
-        except Exception:
-            meta_obj = None
-
-    if meta_obj is not None:
-        try:
-            metadata_df = meta_obj.to_privacy_frame(inferred)
-        except Exception:
-            metadata_df = None
+    try:
+        codebook = Codebook.read(metadata) if metadata is not None else Codebook.from_frame(df)
+        metadata_df = codebook.privacy_frame(inferred) if codebook.columns else None
+    except Exception:
+        LOGGER.exception("Failed to read metadata for privacy roles")
+        metadata_df = None
 
     if metadata_df is None:
         rows = []
@@ -138,7 +121,7 @@ def _build_privacy_metadata(
 
     if role_overrides:
         for column, raw_role in role_overrides.items():
-            normalized = normalize_role(raw_role)
+            normalized = privacy_role(raw_role)
             if column in metadata_df.variable.values:
                 metadata_df.loc[metadata_df.variable == column, "role"] = normalized
 
@@ -162,7 +145,8 @@ def _build_downstream_meta(
     target_series: Optional["pd.Series"],
     *,
     target: Optional[str] = None,
-) -> Dict[str, Any]:
+) -> Codebook:
+    """A codebook for downstream metrics when there is no metadata: levels from ``inferred`` and the target role."""
     import pandas as pd
 
     target_name: Optional[str] = None
@@ -172,35 +156,18 @@ def _build_downstream_meta(
     if target_name is None and target and target in df.columns:
         target_name = target
 
-    columns_meta: List[Dict[str, Any]] = []
+    columns: List[Dict[str, Any]] = []
     for column in df.columns:
-        role = "target" if target_name and column == target_name else "predictor"
-        kind = inferred.get(column, "continuous")
-        col_meta: Dict[str, Any] = {
-            "schema:name": column,
-            "prov:hadRole": role,
-        }
-
-        stats_type = "dsv:QuantitativeDataType" if kind == "continuous" else "dsv:NominalDataType"
-        col_meta["dsv:summaryStatistics"] = {"dsv:statisticalDataType": stats_type}
-
-        if kind != "continuous":
-            series = df[column].astype("category")
-            categories = [str(cat) for cat in series.cat.categories]
-            if categories:
-                column_property: Dict[str, Any] = {
-                    "dsv:hasCodeBook": {
-                        "skos:hasTopConcept": [
-                            {"skos:notation": cat, "skos:prefLabel": cat}
-                            for cat in categories
-                        ]
-                    }
-                }
-                col_meta["dsv:columnProperty"] = column_property
-                col_meta["schema:defaultValue"] = categories[0]
-        columns_meta.append(col_meta)
-
-    return {"dsv:datasetSchema": {"dsv:column": columns_meta}}
+        if inferred.get(column, "continuous") == "continuous":
+            columns.append({"name": str(column), "level": "numerical"})
+            continue
+        categories = [str(cat) for cat in df[column].astype("category").cat.categories]
+        entry: Dict[str, Any] = {"name": str(column), "level": "nominal"}
+        if categories:
+            entry["values"] = [{"code": cat} for cat in categories]
+        columns.append(entry)
+    roles = {str(name): "target" if name == target_name else "predictor" for name in df.columns}
+    return Codebook({"columns": columns}, roles)  # type: ignore[arg-type]
 
 
 @dataclass
@@ -222,8 +189,8 @@ class PreprocessingResult:
     disc_cols: List[str]
     cont_cols: List[str]
     inferred_types: Dict[str, str]
-    semmap_export: Optional[Dict[str, Any]] = None
-    semmap_metadata: Optional[Metadata] = None
+    codebook_jsonld: Optional[Dict[str, Any]] = None
+    codebook: Optional[Codebook] = None
     color_series: Optional["pd.Series"] = None
     umap_png_real: Optional[Path] = None
     umap_artifacts: Optional[UmapArtifacts] = None
@@ -280,87 +247,33 @@ class DatasetPreprocessor:
 
         logging.info(str(cfg))
 
-        semmap_metadata: Optional[Metadata] = None
+        declared = Codebook()
+        if dataset_spec.meta is not None:
+            try:
+                declared = Codebook.read(dataset_spec.meta)
+            except Exception:
+                LOGGER.exception(
+                    "Failed to read dataset_spec metadata",
+                    exc_info=True,
+                    extra={"dataset": dataset_spec.name},
+                )
         mapping_path = self._resolve_mapping(dataset_spec)
         if mapping_path is not None:
             LOGGER.info(
-                "Applying curated SemMap metadata",
+                "Applying curated codebook",
                 extra={"dataset": dataset_spec.name, "mapping_path": str(mapping_path)},
             )
             try:
-                curated = self._load_mapping(mapping_path)
-                df.semmap.from_jsonld(curated, convert_pint=True)
-                semmap_metadata = df.semmap.dataset_semmap
+                declared = declared.merged(Codebook.read(self._load_mapping(mapping_path)))
             except Exception:
                 LOGGER.exception(
-                    "Failed to apply SemMap metadata",
+                    "Failed to apply curated codebook",
                     exc_info=True,
                     extra={"dataset": dataset_spec.name},
                 )
-        elif isinstance(dataset_spec.meta, Metadata):
-            semmap_metadata = dataset_spec.meta
-            df.semmap.from_jsonld(semmap_metadata.to_jsonld())
-        elif isinstance(dataset_spec.meta, dict):
-            try:
-                semmap_metadata = Metadata.from_dcat_dsv(dataset_spec.meta)
-                df.semmap.from_jsonld(semmap_metadata.to_jsonld())
-            except Exception:
-                LOGGER.exception(
-                    "Failed to apply dataset_spec metadata",
-                    exc_info=True,
-                    extra={"dataset": dataset_spec.name},
-                )
-        if semmap_metadata is None:
-            semmap_metadata = df.semmap()
-
-        def _normalise_statistical_type(value: Any) -> Optional[str]:
-            if hasattr(value, "value"):
-                return value.value  # Enum wrapper
-            if isinstance(value, str):
-                trimmed = value.strip()
-                return trimmed or None
-            return None
-
-        metadata_discrete: Set[str] = set()
-        metadata_continuous: Set[str] = set()
-        if semmap_metadata is not None:
-            categorical_types = {
-                "dsv:CategoricalDataType",
-                "dsv:NominalDataType",
-                "dsv:OrdinalDataType",
-            }
-            continuous_types = {
-                "dsv:NumericalDataType",
-                "dsv:QuantitativeDataType",
-                "dsv:ContinuousDataType",
-                "dsv:RatioDataType",
-                "dsv:IntervalDataType",
-            }
-            for column in semmap_metadata.datasetSchema.columns:
-                name = getattr(column, "name", None)
-                if not name:
-                    continue
-                type_hints = []
-                if column.summaryStatistics:
-                    type_hints.append(
-                        _normalise_statistical_type(
-                            column.summaryStatistics.statisticalDataType
-                        )
-                    )
-                col_prop = getattr(column, "columnProperty", None)
-                if col_prop and getattr(col_prop, "summaryStatistics", None):
-                    type_hints.append(
-                        _normalise_statistical_type(
-                            col_prop.summaryStatistics.statisticalDataType
-                        )
-                    )
-                dtype = next((hint for hint in type_hints if hint), None)
-                if dtype in categorical_types:
-                    metadata_discrete.add(name)
-                elif dtype in continuous_types:
-                    metadata_continuous.add(name)
-                elif col_prop and getattr(col_prop, "hasCodeBook", None):
-                    metadata_discrete.add(name)
+        codebook = Codebook.from_frame(df, declared)
+        metadata_discrete: Set[str] = {name for name in df.columns if codebook.kind(str(name)) == "categorical"}
+        metadata_continuous: Set[str] = {name for name in df.columns if codebook.kind(str(name)) == "numeric"}
 
         disc_cols, cont_cols = self._utils.infer_types(df)
         disc_set: Set[str] = set(disc_cols)
@@ -470,45 +383,16 @@ class DatasetPreprocessor:
                     df_processed, random_state=miss_state
                 )
 
-        semmap_export: Optional[Dict[str, Any]] = None
-        if semmap_metadata is not None:
-            if target_column and target_column in df_processed.columns:
-                for col in semmap_metadata.datasetSchema.columns:
-                    if col.name == target_column:
-                        col.hadRole = "target"
-                        break
-            semmap_metadata.update_completeness_from_missingness(
-                df_processed, missingness_model
-            )
-            semmap_export = semmap_metadata.to_jsonld(
-                with_context=cfg.semmap_context
-            )
-            if cfg.semmap_context:
-                if not isinstance(semmap_export.get("@context"), dict):
-                    semmap_export["@context"] = semmap_module.CONTEXT
-            elif cfg.semmap_context_url:
-                semmap_export["@context"] = cfg.semmap_context_url
-            dataset_label = dataset_spec.name or str(dataset_spec.id)
-            slug = re.sub(r"[^a-z0-9]+", "-", str(dataset_label).lower()).strip("-") or "dataset"
-            dataset_iri = f"urn:dataset:{slug}"
-            schema = semmap_export.get("datasetSchema")
-            if isinstance(schema, dict):
-                schema.setdefault("@id", f"{dataset_iri}#schema")
-            semmap_export.setdefault("@id", dataset_iri)
-            types = semmap_export.get("@type") or semmap_export.get("type") or []
-            type_list = list(types) if isinstance(types, list) else [types] if types else []
-            for needed in ("dcat:Dataset", "dsv:Dataset"):
-                if needed not in type_list:
-                    type_list.append(needed)
-            semmap_export["@type"] = type_list
-            if semmap_metadata.title:
-                semmap_export["title"] = semmap_metadata.title
-            if semmap_metadata.description:
-                semmap_export["description"] = semmap_metadata.description
-            if semmap_metadata.landingPage:
-                semmap_export["landingPage"] = semmap_metadata.landingPage
-            if schema:
-                semmap_export["datasetSchema"] = schema
+        if target_column and target_column in df_processed.columns:
+            codebook.roles[str(target_column)] = "target"
+        codebook.set_statistics(df_processed, missingness_model)
+        if "identifier" not in codebook.profile:
+            label = dataset_spec.name or str(dataset_spec.id)
+            slug = re.sub(r"[^a-z0-9]+", "-", str(label).lower()).strip("-") or "dataset"
+            codebook.profile["identifier"] = f"urn:dataset:{slug}"
+        if dataset_spec.name and "title" not in codebook.profile:
+            codebook.profile["title"] = dataset_spec.name
+        codebook_jsonld = codebook.to_jsonld()
 
         return PreprocessingResult(
             df_processed=df_processed,
@@ -517,8 +401,8 @@ class DatasetPreprocessor:
             disc_cols=disc_cols,
             cont_cols=cont_cols,
             inferred_types=inferred_map,
-            semmap_export=semmap_export,
-            semmap_metadata=semmap_metadata,
+            codebook_jsonld=codebook_jsonld,
+            codebook=codebook,
             color_series=color_series2,
             umap_png_real=umap_png_real,
             umap_artifacts=umap_artifacts,
@@ -545,7 +429,7 @@ class MetricWriter:
         real_df: "pd.DataFrame",
         inferred: Dict[str, str],
         synth_df: Optional["pd.DataFrame"] = None,
-        metadata: Optional[Metadata] = None,
+        metadata: Optional[Codebook] = None,
         *,
         role_overrides: Optional[Dict[str, str]] = None,
         target: Optional[str] = None,
@@ -571,8 +455,8 @@ class MetricWriter:
         if synth_df is None:
             synth_df = self._read_synthetic_df(run_dir)
         metadata_df = (
-            metadata.to_privacy_frame(inferred)
-            if isinstance(metadata, Metadata)
+            metadata.privacy_frame(inferred)
+            if isinstance(metadata, Codebook)
             else _build_privacy_metadata(
                 real_df,
                 inferred,
@@ -605,7 +489,7 @@ class MetricWriter:
         synth_df: "pd.DataFrame",
         inferred: Dict[str, str],
         target_series: Optional["pd.Series"],
-        metadata: Optional[Metadata] = None,
+        metadata: Optional[Codebook] = None,
         *,
         target: Optional[str] = None,
     ) -> Dict[str, Any]:
@@ -628,12 +512,10 @@ class MetricWriter:
             hint="Install downstream fidelity extras: `pip install semsynth[statsmodels]`.",
         )
 
-        meta_jsonld = metadata.to_jsonld() if isinstance(metadata, Metadata) else None
-        if meta_jsonld is None:
-            meta_jsonld = _build_downstream_meta(
-                real_df, inferred, target_series, target=target
-            )
-        results = comparer(real_df, synth_df, meta_jsonld)
+        meta = metadata if isinstance(metadata, Codebook) else _build_downstream_meta(
+            real_df, inferred, target_series, target=target
+        )
+        results = comparer(real_df, synth_df, meta)
         compare = results.get("compare")
         sign_match_rate = float("nan")
         if hasattr(compare, "__getitem__"):
@@ -685,7 +567,6 @@ class BackendExecutor:
             bundle: Bundle of backend model configurations.
             preprocessed: Preprocessed dataset artefacts.
             outdir: Output directory for backend artefacts.
-            semmap_context: Cached SemMap context used as a provenance-bearing input.
         """
 
         import pandas as pd
@@ -722,7 +603,7 @@ class BackendExecutor:
                         rows=min(rows, len(preprocessed.df_processed)),
                         seed=seed,
                         test_size=self._cfg.test_size,
-                        semmap_export=preprocessed.semmap_export,
+                        codebook_jsonld=preprocessed.codebook_jsonld,
                     )
                 except Exception:
                     LOGGER.exception(
@@ -796,7 +677,7 @@ class BackendExecutor:
                             preprocessed.df_no_na,
                             preprocessed.inferred_types,
                             synth_df,
-                            preprocessed.semmap_metadata,
+                            preprocessed.codebook,
                             target=dataset_spec.target,
                         )
                         LOGGER.info(
@@ -828,7 +709,7 @@ class BackendExecutor:
                             synth_df,
                             preprocessed.inferred_types,
                             target_series,
-                            metadata=preprocessed.semmap_metadata,
+                            metadata=preprocessed.codebook,
                             target=dataset_spec.target,
                         )
                         LOGGER.info(
@@ -859,7 +740,7 @@ class BackendExecutor:
                     "metrics.downstream.json",
                     "umap.png",
                     "manifest.json",
-                    "synthetic.semmap.parquet",
+                    "synthetic.parquet",
                     "metasyn_gmf.json",
                     "model.pickle",
                     "structure.graphml",
@@ -974,8 +855,8 @@ class ReportWriter:
             else None,
             inferred_types=inferred_types or None,
             variable_descriptions=variable_descriptions or None,
-            semmap_jsonld=preprocessed.semmap_export,
-            dataset_metadata=preprocessed.semmap_metadata,
+            codebook_jsonld=preprocessed.codebook_jsonld,
+            dataset_metadata=preprocessed.codebook,
             model_runs=model_runs,
             missingness_summary=missingness_summary,
         )
@@ -991,8 +872,6 @@ def process_dataset(
     pipeline_config: Optional[PipelineConfig] = None,
 ) -> None:
     """Process a dataset end-to-end and generate a report."""
-
-    from . import semmap  # noqa: F401  # register pandas accessor
 
     utils = DEPENDENCIES.require_module(
         "semsynth.utils",
@@ -1038,8 +917,8 @@ def process_dataset(
         generate_umap=generate_umap_flag,
         umap_utils=umap_utils,
     )
-    if preprocessed.semmap_metadata is not None:
-        dataset_spec.meta = preprocessed.semmap_metadata
+    if preprocessed.codebook is not None:
+        dataset_spec.meta = preprocessed.codebook
 
     privacy_summarizer = None
     downstream_compare = None

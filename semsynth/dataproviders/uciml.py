@@ -13,6 +13,7 @@ import pandas as pd
 import requests
 from makeprov import OutPath, rule
 
+from ..codebook import Codebook
 from ..specs import DatasetSpec
 from ._helpers import (
     CachePaths,
@@ -73,19 +74,35 @@ def _iso_date(date_string: str) -> str:
         return date_string
 
 
-def _statistical_datatype(term: str) -> str:
-    """Map variable type to a DSV statistical data type class IRI."""
+# UCI variable types, as linked-codebook levels and datatypes.
+_LEVELS = {"categorical": "categorical", "binary": "categorical", "integer": "numerical", "continuous": "numerical"}
+_DATATYPES = {"integer": "integer", "continuous": "number", "date": "date"}
 
-    lowered = (term or "").lower()
-    if lowered == "categorical":
-        return "dsv:CategoricalDataType"
-    if lowered in {"integer", "real", "numeric", "number"}:
-        return "dsv:NumericalDataType"
-    return "dsv:StatisticalDataType"
+
+def _column(variable: Mapping[str, Any], missing_symbol: Any) -> Dict[str, Any]:
+    """A UCI variable as a linked-codebook column."""
+
+    kind = str(variable.get("type") or "").lower()
+    column: Dict[str, Any] = {"name": str(variable["name"])}
+    if _present(variable.get("description")):
+        column["description"] = str(variable["description"])
+    if _present(variable.get("units")):
+        column["unit"] = str(variable["units"])
+    if kind in _DATATYPES:
+        column["datatype"] = _DATATYPES[kind]
+    if kind in _LEVELS:
+        column["level"] = _LEVELS[kind]
+    if str(variable.get("missing_values") or "").lower() == "yes" and _present(missing_symbol):
+        column["missing_values"] = [str(missing_symbol)]
+    return column
 
 
 def to_dcat_dsv(src: Mapping[str, Any]) -> Mapping[str, Any]:
-    """Transform ucimlrepo-style metadata into DCAT + DSV JSON-LD."""
+    """Transform ucimlrepo-style metadata into DCAT + DSV JSON-LD.
+
+    The variables become a linked-codebook profile; the other fields are kept as DCAT, Dublin Core and schema.org
+    properties of the dataset.
+    """
 
     ctx = {
         "dcat": "http://www.w3.org/ns/dcat#",
@@ -154,44 +171,12 @@ def to_dcat_dsv(src: Mapping[str, Any]) -> Mapping[str, Any]:
             }
         ]
 
-    dataset_schema: Mapping[str, Any] = {"@type": "dsv:DatasetSchema"}
-    columns: List[Mapping[str, Any]] = []
-
-    for variable in src.get("variables") or []:
-        column: Mapping[str, Any] = {"@type": "dsv:Column"}
-        _put(column, "schema:name", variable.get("name"))
-        _put(column, "dcterms:description", variable.get("description"))
-        _put(column, "schema:unitText", variable.get("units"))
-        _put(column, "prov:hadRole", variable.get("role"))
-        _put(column, "schema:about", variable.get("demographic"))
-
-        summary_stats: Mapping[str, Any] = {"@type": "dsv:SummaryStatistics"}
-        _put(
-            summary_stats,
-            "dsv:statisticalDataType",
-            _statistical_datatype(variable.get("type")),
-        )
-        if (variable.get("missing_values") or "").lower() == "yes":
-            _put(
-                summary_stats,
-                "dsv:missingValueFormat",
-                src.get("missing_values_symbol"),
-            )
-        if _present(summary_stats := _prune(summary_stats)):
-            column["dsv:summaryStatistics"] = summary_stats
-
-        columns.append(_prune(column))
-
-    if columns:
-        dataset_schema["dsv:column"] = columns
-        output["dsv:datasetSchema"] = dataset_schema
-
-    dataset_stats: Mapping[str, Any] = {"@type": "dsv:SummaryStatistics"}
-    _put(dataset_stats, "dsv:numberOfRows", src.get("num_instances"))
-    _put(dataset_stats, "dsv:numberOfColumns", src.get("num_features"))
-    _put(dataset_stats, "dsv:missingValueFormat", src.get("missing_values_symbol"))
-    if _present(dataset_stats := _prune(dataset_stats)):
-        output["dsv:summaryStatistics"] = dataset_stats
+    columns = [_column(variable, src.get("missing_values_symbol")) for variable in src.get("variables") or []]
+    roles = {
+        str(variable["name"]): str(variable["role"])
+        for variable in src.get("variables") or []
+        if _present(variable.get("name")) and _present(variable.get("role"))
+    }
 
     paper = src.get("intro_paper") or {}
     if paper:
@@ -242,7 +227,16 @@ def to_dcat_dsv(src: Mapping[str, Any]) -> Mapping[str, Any]:
     if additional_info.get("sensitive_data") is not None:
         output["dcterms:accessRights"] = additional_info.get("sensitive_data")
 
-    return _prune(output)
+    extras = _prune(output)
+    context = extras.pop("@context")
+    profile: Dict[str, Any] = {"columns": columns}
+    for slot, key in (("title", "dcterms:title"), ("landing_page", "dcat:landingPage")):
+        if _present(extras.get(key)):
+            profile[slot] = str(extras.pop(key))
+    if isinstance(src.get("num_instances"), int):
+        profile["rows"] = src["num_instances"]
+    extras.pop("@type", None)
+    return Codebook(profile, roles, extras, context).to_jsonld()
 
 
 def _uciml_metadata_to_dcat_dsv(

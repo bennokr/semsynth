@@ -1,570 +1,1300 @@
 {
-  "@context": "https://w3id.org/semmap/context/v1",
+  "@context": {
+    "accessRights": "dct:accessRights",
+    "broadMatch": {
+      "@container": "@set",
+      "@id": "skos:broadMatch",
+      "@type": "@id"
+    },
+    "citation": "dct:bibliographicCitation",
+    "closeMatch": {
+      "@container": "@set",
+      "@id": "skos:closeMatch",
+      "@type": "@id"
+    },
+    "columnCompleteness": {
+      "@id": "dsv:columnCompleteness",
+      "@type": "xsd:float"
+    },
+    "columnProperty": {
+      "@id": "dsv:columnProperty",
+      "@type": "@id"
+    },
+    "columns": {
+      "@container": "@set",
+      "@id": "dsv:column"
+    },
+    "csvw": "http://www.w3.org/ns/csvw#",
+    "datasetSchema": {
+      "@id": "dsv:datasetSchema",
+      "@type": "@id"
+    },
+    "datatype": "csvw:datatype",
+    "dcat": "http://www.w3.org/ns/dcat#",
+    "dct": "http://purl.org/dc/terms/",
+    "description": "dct:description",
+    "dsv": "https://w3id.org/dsv-ontology#",
+    "exactMatch": {
+      "@container": "@set",
+      "@id": "skos:exactMatch",
+      "@type": "@id"
+    },
+    "hasCodeBook": {
+      "@id": "dsv:hasCodeBook",
+      "@type": "@id"
+    },
+    "hasUnit": {
+      "@id": "qudt:hasUnit",
+      "@type": "@id"
+    },
+    "hasVariable": {
+      "@id": "dsv:hasVariable",
+      "@type": "@id"
+    },
+    "identifier": "dct:identifier",
+    "landingPage": {
+      "@id": "dcat:landingPage",
+      "@type": "@id"
+    },
+    "license": {
+      "@id": "dct:license",
+      "@type": "@id"
+    },
+    "name": "csvw:name",
+    "narrowMatch": {
+      "@container": "@set",
+      "@id": "skos:narrowMatch",
+      "@type": "@id"
+    },
+    "nullValues": {
+      "@container": "@set",
+      "@id": "csvw:null"
+    },
+    "numberOfColumns": {
+      "@id": "dsv:numberOfColumns",
+      "@type": "xsd:integer"
+    },
+    "numberOfRows": {
+      "@id": "dsv:numberOfRows",
+      "@type": "xsd:integer"
+    },
+    "qudt": "http://qudt.org/schema/qudt/",
+    "relatedMatch": {
+      "@container": "@set",
+      "@id": "skos:relatedMatch",
+      "@type": "@id"
+    },
+    "rights": "dct:rights",
+    "schema": "https://schema.org/",
+    "skos": "http://www.w3.org/2004/02/skos/core#",
+    "statisticalDataType": {
+      "@id": "dsv:statisticalDataType",
+      "@type": "@id"
+    },
+    "summaryStatistics": {
+      "@id": "dsv:summaryStatistics",
+      "@type": "@id"
+    },
+    "title": "dct:title",
+    "titles": "csvw:title",
+    "unitText": "schema:unitText",
+    "xsd": "http://www.w3.org/2001/XMLSchema#",
+    "dcterms": "http://purl.org/dc/terms/",
+    "prov": "http://www.w3.org/ns/prov#"
+  },
+  "@id": "urn:linked-codebook:dataset:CDC%20Diabetes%20Health%20Indicators%20(UCI%20ML%20Repository%20ID%20891)",
+  "@type": [
+    "dcat:Dataset",
+    "dsv:Dataset"
+  ],
+  "landingPage": "https://archive.ics.uci.edu/dataset/891/cdc+diabetes+health+indicators",
+  "title": "CDC Diabetes Health Indicators (UCI ML Repository ID 891)",
   "datasetSchema": {
+    "@id": "urn:linked-codebook:dataset:CDC%20Diabetes%20Health%20Indicators%20(UCI%20ML%20Repository%20ID%20891)#schema",
+    "@type": "dsv:DatasetSchema",
     "columns": [
       {
-        "name": "ID",
+        "@id": "urn:linked-codebook:dataset:CDC%20Diabetes%20Health%20Indicators%20(UCI%20ML%20Repository%20ID%20891)#column-ID",
+        "@type": "dsv:Column",
+        "datatype": "integer",
         "titles": "Record identifier",
+        "name": "ID",
         "columnProperty": {
-          "statisticalDataType": "dsv:IdentifierDataType",
-          "valueType": "xsd:integer"
-        }
+          "@id": "urn:linked-codebook:dataset:CDC%20Diabetes%20Health%20Indicators%20(UCI%20ML%20Repository%20ID%20891)#property-ID",
+          "@type": "dsv:ColumnProperty",
+          "hasVariable": {
+            "@id": "urn:linked-codebook:dataset:CDC%20Diabetes%20Health%20Indicators%20(UCI%20ML%20Repository%20ID%20891)#variable-ID",
+            "@type": "skos:Concept",
+            "skos:prefLabel": "Record identifier"
+          }
+        },
+        "prov:hadRole": "id"
       },
       {
-        "name": "Diabetes_binary",
+        "@id": "urn:linked-codebook:dataset:CDC%20Diabetes%20Health%20Indicators%20(UCI%20ML%20Repository%20ID%20891)#column-Diabetes_binary",
+        "@type": "dsv:Column",
         "titles": "Diabetes status (0 = no diabetes, 1 = prediabetes or diabetes)",
-        "hadRole": "target",
+        "name": "Diabetes_binary",
         "columnProperty": {
+          "@id": "urn:linked-codebook:dataset:CDC%20Diabetes%20Health%20Indicators%20(UCI%20ML%20Repository%20ID%20891)#property-Diabetes_binary",
+          "@type": "dsv:ColumnProperty",
+          "hasVariable": {
+            "@id": "urn:linked-codebook:dataset:CDC%20Diabetes%20Health%20Indicators%20(UCI%20ML%20Repository%20ID%20891)#variable-Diabetes_binary",
+            "@type": "skos:Concept",
+            "skos:prefLabel": "Diabetes status (0 = no diabetes, 1 = prediabetes or diabetes)"
+          },
           "hasCodeBook": {
-            "hasTopConcept": [
+            "@id": "urn:linked-codebook:dataset:CDC%20Diabetes%20Health%20Indicators%20(UCI%20ML%20Repository%20ID%20891)#variable-Diabetes_binary-codes",
+            "@type": "skos:ConceptScheme",
+            "skos:hasTopConcept": [
               {
-                "notation": "0",
-                "prefLabel": "No diabetes diagnosis"
+                "@id": "urn:linked-codebook:dataset:CDC%20Diabetes%20Health%20Indicators%20(UCI%20ML%20Repository%20ID%20891)#variable-Diabetes_binary-codes-0",
+                "@type": "skos:Concept",
+                "skos:prefLabel": "No diabetes diagnosis",
+                "skos:inScheme": {
+                  "@id": "urn:linked-codebook:dataset:CDC%20Diabetes%20Health%20Indicators%20(UCI%20ML%20Repository%20ID%20891)#variable-Diabetes_binary-codes"
+                },
+                "skos:notation": "0"
               },
               {
-                "notation": "1",
-                "prefLabel": "Prediabetes or diabetes diagnosis",
+                "@id": "urn:linked-codebook:dataset:CDC%20Diabetes%20Health%20Indicators%20(UCI%20ML%20Repository%20ID%20891)#variable-Diabetes_binary-codes-1",
+                "@type": "skos:Concept",
+                "skos:prefLabel": "Prediabetes or diabetes diagnosis",
                 "closeMatch": [
                   "http://snomed.info/id/73211009",
                   "http://snomed.info/id/9414007"
-                ]
+                ],
+                "skos:inScheme": {
+                  "@id": "urn:linked-codebook:dataset:CDC%20Diabetes%20Health%20Indicators%20(UCI%20ML%20Repository%20ID%20891)#variable-Diabetes_binary-codes"
+                },
+                "skos:notation": "1"
               }
             ]
-          },
+          }
+        },
+        "summaryStatistics": {
+          "@id": "urn:linked-codebook:dataset:CDC%20Diabetes%20Health%20Indicators%20(UCI%20ML%20Repository%20ID%20891)#statistics-Diabetes_binary",
+          "@type": "dsv:SummaryStatistics",
           "statisticalDataType": "dsv:NominalDataType"
-        }
+        },
+        "prov:hadRole": "target"
       },
       {
-        "name": "HighBP",
+        "@id": "urn:linked-codebook:dataset:CDC%20Diabetes%20Health%20Indicators%20(UCI%20ML%20Repository%20ID%20891)#column-HighBP",
+        "@type": "dsv:Column",
         "titles": "Ever told you have high blood pressure",
+        "name": "HighBP",
         "columnProperty": {
+          "@id": "urn:linked-codebook:dataset:CDC%20Diabetes%20Health%20Indicators%20(UCI%20ML%20Repository%20ID%20891)#property-HighBP",
+          "@type": "dsv:ColumnProperty",
+          "hasVariable": {
+            "@id": "urn:linked-codebook:dataset:CDC%20Diabetes%20Health%20Indicators%20(UCI%20ML%20Repository%20ID%20891)#variable-HighBP",
+            "@type": "skos:Concept",
+            "skos:prefLabel": "Ever told you have high blood pressure"
+          },
           "hasCodeBook": {
-            "hasTopConcept": [
+            "@id": "urn:linked-codebook:dataset:CDC%20Diabetes%20Health%20Indicators%20(UCI%20ML%20Repository%20ID%20891)#variable-HighBP-codes",
+            "@type": "skos:ConceptScheme",
+            "skos:hasTopConcept": [
               {
-                "notation": "0",
-                "prefLabel": "No reported high blood pressure"
+                "@id": "urn:linked-codebook:dataset:CDC%20Diabetes%20Health%20Indicators%20(UCI%20ML%20Repository%20ID%20891)#variable-HighBP-codes-0",
+                "@type": "skos:Concept",
+                "skos:prefLabel": "No reported high blood pressure",
+                "skos:inScheme": {
+                  "@id": "urn:linked-codebook:dataset:CDC%20Diabetes%20Health%20Indicators%20(UCI%20ML%20Repository%20ID%20891)#variable-HighBP-codes"
+                },
+                "skos:notation": "0"
               },
               {
-                "notation": "1",
-                "prefLabel": "Reported high blood pressure",
+                "@id": "urn:linked-codebook:dataset:CDC%20Diabetes%20Health%20Indicators%20(UCI%20ML%20Repository%20ID%20891)#variable-HighBP-codes-1",
+                "@type": "skos:Concept",
+                "skos:prefLabel": "Reported high blood pressure",
                 "exactMatch": [
                   "http://snomed.info/id/38341003"
-                ]
+                ],
+                "skos:inScheme": {
+                  "@id": "urn:linked-codebook:dataset:CDC%20Diabetes%20Health%20Indicators%20(UCI%20ML%20Repository%20ID%20891)#variable-HighBP-codes"
+                },
+                "skos:notation": "1"
               }
             ]
-          },
+          }
+        },
+        "summaryStatistics": {
+          "@id": "urn:linked-codebook:dataset:CDC%20Diabetes%20Health%20Indicators%20(UCI%20ML%20Repository%20ID%20891)#statistics-HighBP",
+          "@type": "dsv:SummaryStatistics",
           "statisticalDataType": "dsv:NominalDataType"
         }
       },
       {
-        "name": "HighChol",
+        "@id": "urn:linked-codebook:dataset:CDC%20Diabetes%20Health%20Indicators%20(UCI%20ML%20Repository%20ID%20891)#column-HighChol",
+        "@type": "dsv:Column",
         "titles": "Ever told you have high cholesterol",
+        "name": "HighChol",
         "columnProperty": {
+          "@id": "urn:linked-codebook:dataset:CDC%20Diabetes%20Health%20Indicators%20(UCI%20ML%20Repository%20ID%20891)#property-HighChol",
+          "@type": "dsv:ColumnProperty",
+          "hasVariable": {
+            "@id": "urn:linked-codebook:dataset:CDC%20Diabetes%20Health%20Indicators%20(UCI%20ML%20Repository%20ID%20891)#variable-HighChol",
+            "@type": "skos:Concept",
+            "skos:prefLabel": "Ever told you have high cholesterol"
+          },
           "hasCodeBook": {
-            "hasTopConcept": [
+            "@id": "urn:linked-codebook:dataset:CDC%20Diabetes%20Health%20Indicators%20(UCI%20ML%20Repository%20ID%20891)#variable-HighChol-codes",
+            "@type": "skos:ConceptScheme",
+            "skos:hasTopConcept": [
               {
-                "notation": "0",
-                "prefLabel": "No reported high cholesterol"
+                "@id": "urn:linked-codebook:dataset:CDC%20Diabetes%20Health%20Indicators%20(UCI%20ML%20Repository%20ID%20891)#variable-HighChol-codes-0",
+                "@type": "skos:Concept",
+                "skos:prefLabel": "No reported high cholesterol",
+                "skos:inScheme": {
+                  "@id": "urn:linked-codebook:dataset:CDC%20Diabetes%20Health%20Indicators%20(UCI%20ML%20Repository%20ID%20891)#variable-HighChol-codes"
+                },
+                "skos:notation": "0"
               },
               {
-                "notation": "1",
-                "prefLabel": "Reported high cholesterol",
+                "@id": "urn:linked-codebook:dataset:CDC%20Diabetes%20Health%20Indicators%20(UCI%20ML%20Repository%20ID%20891)#variable-HighChol-codes-1",
+                "@type": "skos:Concept",
+                "skos:prefLabel": "Reported high cholesterol",
                 "exactMatch": [
                   "http://snomed.info/id/267432004"
-                ]
+                ],
+                "skos:inScheme": {
+                  "@id": "urn:linked-codebook:dataset:CDC%20Diabetes%20Health%20Indicators%20(UCI%20ML%20Repository%20ID%20891)#variable-HighChol-codes"
+                },
+                "skos:notation": "1"
               }
             ]
-          },
+          }
+        },
+        "summaryStatistics": {
+          "@id": "urn:linked-codebook:dataset:CDC%20Diabetes%20Health%20Indicators%20(UCI%20ML%20Repository%20ID%20891)#statistics-HighChol",
+          "@type": "dsv:SummaryStatistics",
           "statisticalDataType": "dsv:NominalDataType"
         }
       },
       {
-        "name": "CholCheck",
+        "@id": "urn:linked-codebook:dataset:CDC%20Diabetes%20Health%20Indicators%20(UCI%20ML%20Repository%20ID%20891)#column-CholCheck",
+        "@type": "dsv:Column",
         "titles": "Cholesterol checked within the past 5 years",
+        "name": "CholCheck",
         "columnProperty": {
+          "@id": "urn:linked-codebook:dataset:CDC%20Diabetes%20Health%20Indicators%20(UCI%20ML%20Repository%20ID%20891)#property-CholCheck",
+          "@type": "dsv:ColumnProperty",
+          "hasVariable": {
+            "@id": "urn:linked-codebook:dataset:CDC%20Diabetes%20Health%20Indicators%20(UCI%20ML%20Repository%20ID%20891)#variable-CholCheck",
+            "@type": "skos:Concept",
+            "skos:prefLabel": "Cholesterol checked within the past 5 years"
+          },
           "hasCodeBook": {
-            "hasTopConcept": [
+            "@id": "urn:linked-codebook:dataset:CDC%20Diabetes%20Health%20Indicators%20(UCI%20ML%20Repository%20ID%20891)#variable-CholCheck-codes",
+            "@type": "skos:ConceptScheme",
+            "skos:hasTopConcept": [
               {
-                "notation": "0",
-                "prefLabel": "No cholesterol check in past five years"
+                "@id": "urn:linked-codebook:dataset:CDC%20Diabetes%20Health%20Indicators%20(UCI%20ML%20Repository%20ID%20891)#variable-CholCheck-codes-0",
+                "@type": "skos:Concept",
+                "skos:prefLabel": "No cholesterol check in past five years",
+                "skos:inScheme": {
+                  "@id": "urn:linked-codebook:dataset:CDC%20Diabetes%20Health%20Indicators%20(UCI%20ML%20Repository%20ID%20891)#variable-CholCheck-codes"
+                },
+                "skos:notation": "0"
               },
               {
-                "notation": "1",
-                "prefLabel": "Cholesterol check in past five years",
+                "@id": "urn:linked-codebook:dataset:CDC%20Diabetes%20Health%20Indicators%20(UCI%20ML%20Repository%20ID%20891)#variable-CholCheck-codes-1",
+                "@type": "skos:Concept",
+                "skos:prefLabel": "Cholesterol check in past five years",
                 "exactMatch": [
                   "http://loinc.org/2093-3"
-                ]
+                ],
+                "skos:inScheme": {
+                  "@id": "urn:linked-codebook:dataset:CDC%20Diabetes%20Health%20Indicators%20(UCI%20ML%20Repository%20ID%20891)#variable-CholCheck-codes"
+                },
+                "skos:notation": "1"
               }
             ]
-          },
+          }
+        },
+        "summaryStatistics": {
+          "@id": "urn:linked-codebook:dataset:CDC%20Diabetes%20Health%20Indicators%20(UCI%20ML%20Repository%20ID%20891)#statistics-CholCheck",
+          "@type": "dsv:SummaryStatistics",
           "statisticalDataType": "dsv:NominalDataType"
         }
       },
       {
-        "name": "BMI",
+        "@id": "urn:linked-codebook:dataset:CDC%20Diabetes%20Health%20Indicators%20(UCI%20ML%20Repository%20ID%20891)#column-BMI",
+        "@type": "dsv:Column",
+        "datatype": "integer",
         "titles": "Body Mass Index",
+        "name": "BMI",
         "columnProperty": {
-          "hasUnit": {
+          "@id": "urn:linked-codebook:dataset:CDC%20Diabetes%20Health%20Indicators%20(UCI%20ML%20Repository%20ID%20891)#property-BMI",
+          "@type": "dsv:ColumnProperty",
+          "hasVariable": {
+            "@id": "urn:linked-codebook:dataset:CDC%20Diabetes%20Health%20Indicators%20(UCI%20ML%20Repository%20ID%20891)#variable-BMI",
+            "@type": "skos:Concept",
+            "skos:prefLabel": "Body Mass Index",
             "exactMatch": [
-              "unit:KiloGM-PER-M2"
+              "http://loinc.org/39156-5"
             ]
           },
-          "exactMatch": [
-            "http://loinc.org/39156-5"
-          ],
-          "statisticalDataType": "dsv:QuantitativeDataType",
-          "valueType": "xsd:integer",
+          "hasUnit": "http://qudt.org/vocab/unit/KiloGM-PER-M2",
           "unitText": "kg/m^2"
+        },
+        "summaryStatistics": {
+          "@id": "urn:linked-codebook:dataset:CDC%20Diabetes%20Health%20Indicators%20(UCI%20ML%20Repository%20ID%20891)#statistics-BMI",
+          "@type": "dsv:SummaryStatistics",
+          "statisticalDataType": "dsv:NumericalDataType"
         }
       },
       {
+        "@id": "urn:linked-codebook:dataset:CDC%20Diabetes%20Health%20Indicators%20(UCI%20ML%20Repository%20ID%20891)#column-Smoker",
+        "@type": "dsv:Column",
+        "titles": "Lifetime cigarette smoking (≥100 cigarettes)",
         "name": "Smoker",
-        "titles": "Lifetime cigarette smoking (\u2265100 cigarettes)",
         "columnProperty": {
+          "@id": "urn:linked-codebook:dataset:CDC%20Diabetes%20Health%20Indicators%20(UCI%20ML%20Repository%20ID%20891)#property-Smoker",
+          "@type": "dsv:ColumnProperty",
+          "hasVariable": {
+            "@id": "urn:linked-codebook:dataset:CDC%20Diabetes%20Health%20Indicators%20(UCI%20ML%20Repository%20ID%20891)#variable-Smoker",
+            "@type": "skos:Concept",
+            "skos:prefLabel": "Lifetime cigarette smoking (≥100 cigarettes)"
+          },
           "hasCodeBook": {
-            "hasTopConcept": [
+            "@id": "urn:linked-codebook:dataset:CDC%20Diabetes%20Health%20Indicators%20(UCI%20ML%20Repository%20ID%20891)#variable-Smoker-codes",
+            "@type": "skos:ConceptScheme",
+            "skos:hasTopConcept": [
               {
-                "notation": "0",
-                "prefLabel": "Fewer than 100 cigarettes ever",
+                "@id": "urn:linked-codebook:dataset:CDC%20Diabetes%20Health%20Indicators%20(UCI%20ML%20Repository%20ID%20891)#variable-Smoker-codes-0",
+                "@type": "skos:Concept",
+                "skos:prefLabel": "Fewer than 100 cigarettes ever",
                 "exactMatch": [
                   "http://snomed.info/id/266919005"
-                ]
+                ],
+                "skos:inScheme": {
+                  "@id": "urn:linked-codebook:dataset:CDC%20Diabetes%20Health%20Indicators%20(UCI%20ML%20Repository%20ID%20891)#variable-Smoker-codes"
+                },
+                "skos:notation": "0"
               },
               {
-                "notation": "1",
-                "prefLabel": "At least 100 cigarettes ever",
+                "@id": "urn:linked-codebook:dataset:CDC%20Diabetes%20Health%20Indicators%20(UCI%20ML%20Repository%20ID%20891)#variable-Smoker-codes-1",
+                "@type": "skos:Concept",
+                "skos:prefLabel": "At least 100 cigarettes ever",
                 "exactMatch": [
                   "http://snomed.info/id/77176002"
-                ]
+                ],
+                "skos:inScheme": {
+                  "@id": "urn:linked-codebook:dataset:CDC%20Diabetes%20Health%20Indicators%20(UCI%20ML%20Repository%20ID%20891)#variable-Smoker-codes"
+                },
+                "skos:notation": "1"
               }
             ]
-          },
+          }
+        },
+        "summaryStatistics": {
+          "@id": "urn:linked-codebook:dataset:CDC%20Diabetes%20Health%20Indicators%20(UCI%20ML%20Repository%20ID%20891)#statistics-Smoker",
+          "@type": "dsv:SummaryStatistics",
           "statisticalDataType": "dsv:NominalDataType"
         }
       },
       {
-        "name": "Stroke",
+        "@id": "urn:linked-codebook:dataset:CDC%20Diabetes%20Health%20Indicators%20(UCI%20ML%20Repository%20ID%20891)#column-Stroke",
+        "@type": "dsv:Column",
         "titles": "Ever told you had a stroke",
+        "name": "Stroke",
         "columnProperty": {
+          "@id": "urn:linked-codebook:dataset:CDC%20Diabetes%20Health%20Indicators%20(UCI%20ML%20Repository%20ID%20891)#property-Stroke",
+          "@type": "dsv:ColumnProperty",
+          "hasVariable": {
+            "@id": "urn:linked-codebook:dataset:CDC%20Diabetes%20Health%20Indicators%20(UCI%20ML%20Repository%20ID%20891)#variable-Stroke",
+            "@type": "skos:Concept",
+            "skos:prefLabel": "Ever told you had a stroke"
+          },
           "hasCodeBook": {
-            "hasTopConcept": [
+            "@id": "urn:linked-codebook:dataset:CDC%20Diabetes%20Health%20Indicators%20(UCI%20ML%20Repository%20ID%20891)#variable-Stroke-codes",
+            "@type": "skos:ConceptScheme",
+            "skos:hasTopConcept": [
               {
-                "notation": "0",
-                "prefLabel": "No stroke diagnosis"
+                "@id": "urn:linked-codebook:dataset:CDC%20Diabetes%20Health%20Indicators%20(UCI%20ML%20Repository%20ID%20891)#variable-Stroke-codes-0",
+                "@type": "skos:Concept",
+                "skos:prefLabel": "No stroke diagnosis",
+                "skos:inScheme": {
+                  "@id": "urn:linked-codebook:dataset:CDC%20Diabetes%20Health%20Indicators%20(UCI%20ML%20Repository%20ID%20891)#variable-Stroke-codes"
+                },
+                "skos:notation": "0"
               },
               {
-                "notation": "1",
-                "prefLabel": "Stroke diagnosis",
+                "@id": "urn:linked-codebook:dataset:CDC%20Diabetes%20Health%20Indicators%20(UCI%20ML%20Repository%20ID%20891)#variable-Stroke-codes-1",
+                "@type": "skos:Concept",
+                "skos:prefLabel": "Stroke diagnosis",
                 "exactMatch": [
                   "http://snomed.info/id/230690007"
-                ]
+                ],
+                "skos:inScheme": {
+                  "@id": "urn:linked-codebook:dataset:CDC%20Diabetes%20Health%20Indicators%20(UCI%20ML%20Repository%20ID%20891)#variable-Stroke-codes"
+                },
+                "skos:notation": "1"
               }
             ]
-          },
+          }
+        },
+        "summaryStatistics": {
+          "@id": "urn:linked-codebook:dataset:CDC%20Diabetes%20Health%20Indicators%20(UCI%20ML%20Repository%20ID%20891)#statistics-Stroke",
+          "@type": "dsv:SummaryStatistics",
           "statisticalDataType": "dsv:NominalDataType"
         }
       },
       {
-        "name": "HeartDiseaseorAttack",
+        "@id": "urn:linked-codebook:dataset:CDC%20Diabetes%20Health%20Indicators%20(UCI%20ML%20Repository%20ID%20891)#column-HeartDiseaseorAttack",
+        "@type": "dsv:Column",
         "titles": "Ever told you had coronary heart disease or myocardial infarction",
+        "name": "HeartDiseaseorAttack",
         "columnProperty": {
+          "@id": "urn:linked-codebook:dataset:CDC%20Diabetes%20Health%20Indicators%20(UCI%20ML%20Repository%20ID%20891)#property-HeartDiseaseorAttack",
+          "@type": "dsv:ColumnProperty",
+          "hasVariable": {
+            "@id": "urn:linked-codebook:dataset:CDC%20Diabetes%20Health%20Indicators%20(UCI%20ML%20Repository%20ID%20891)#variable-HeartDiseaseorAttack",
+            "@type": "skos:Concept",
+            "skos:prefLabel": "Ever told you had coronary heart disease or myocardial infarction"
+          },
           "hasCodeBook": {
-            "hasTopConcept": [
+            "@id": "urn:linked-codebook:dataset:CDC%20Diabetes%20Health%20Indicators%20(UCI%20ML%20Repository%20ID%20891)#variable-HeartDiseaseorAttack-codes",
+            "@type": "skos:ConceptScheme",
+            "skos:hasTopConcept": [
               {
-                "notation": "0",
-                "prefLabel": "No CHD or MI diagnosis"
+                "@id": "urn:linked-codebook:dataset:CDC%20Diabetes%20Health%20Indicators%20(UCI%20ML%20Repository%20ID%20891)#variable-HeartDiseaseorAttack-codes-0",
+                "@type": "skos:Concept",
+                "skos:prefLabel": "No CHD or MI diagnosis",
+                "skos:inScheme": {
+                  "@id": "urn:linked-codebook:dataset:CDC%20Diabetes%20Health%20Indicators%20(UCI%20ML%20Repository%20ID%20891)#variable-HeartDiseaseorAttack-codes"
+                },
+                "skos:notation": "0"
               },
               {
-                "notation": "1",
-                "prefLabel": "CHD or MI diagnosis",
+                "@id": "urn:linked-codebook:dataset:CDC%20Diabetes%20Health%20Indicators%20(UCI%20ML%20Repository%20ID%20891)#variable-HeartDiseaseorAttack-codes-1",
+                "@type": "skos:Concept",
+                "skos:prefLabel": "CHD or MI diagnosis",
                 "exactMatch": [
                   "http://snomed.info/id/53741008"
-                ]
+                ],
+                "skos:inScheme": {
+                  "@id": "urn:linked-codebook:dataset:CDC%20Diabetes%20Health%20Indicators%20(UCI%20ML%20Repository%20ID%20891)#variable-HeartDiseaseorAttack-codes"
+                },
+                "skos:notation": "1"
               }
             ]
-          },
+          }
+        },
+        "summaryStatistics": {
+          "@id": "urn:linked-codebook:dataset:CDC%20Diabetes%20Health%20Indicators%20(UCI%20ML%20Repository%20ID%20891)#statistics-HeartDiseaseorAttack",
+          "@type": "dsv:SummaryStatistics",
           "statisticalDataType": "dsv:NominalDataType"
         }
       },
       {
-        "name": "PhysActivity",
+        "@id": "urn:linked-codebook:dataset:CDC%20Diabetes%20Health%20Indicators%20(UCI%20ML%20Repository%20ID%20891)#column-PhysActivity",
+        "@type": "dsv:Column",
         "titles": "Any physical activity besides regular job in past 30 days",
+        "name": "PhysActivity",
         "columnProperty": {
+          "@id": "urn:linked-codebook:dataset:CDC%20Diabetes%20Health%20Indicators%20(UCI%20ML%20Repository%20ID%20891)#property-PhysActivity",
+          "@type": "dsv:ColumnProperty",
+          "hasVariable": {
+            "@id": "urn:linked-codebook:dataset:CDC%20Diabetes%20Health%20Indicators%20(UCI%20ML%20Repository%20ID%20891)#variable-PhysActivity",
+            "@type": "skos:Concept",
+            "skos:prefLabel": "Any physical activity besides regular job in past 30 days"
+          },
           "hasCodeBook": {
-            "hasTopConcept": [
+            "@id": "urn:linked-codebook:dataset:CDC%20Diabetes%20Health%20Indicators%20(UCI%20ML%20Repository%20ID%20891)#variable-PhysActivity-codes",
+            "@type": "skos:ConceptScheme",
+            "skos:hasTopConcept": [
               {
-                "notation": "0",
-                "prefLabel": "No physical activity reported"
+                "@id": "urn:linked-codebook:dataset:CDC%20Diabetes%20Health%20Indicators%20(UCI%20ML%20Repository%20ID%20891)#variable-PhysActivity-codes-0",
+                "@type": "skos:Concept",
+                "skos:prefLabel": "No physical activity reported",
+                "skos:inScheme": {
+                  "@id": "urn:linked-codebook:dataset:CDC%20Diabetes%20Health%20Indicators%20(UCI%20ML%20Repository%20ID%20891)#variable-PhysActivity-codes"
+                },
+                "skos:notation": "0"
               },
               {
-                "notation": "1",
-                "prefLabel": "Physical activity reported",
+                "@id": "urn:linked-codebook:dataset:CDC%20Diabetes%20Health%20Indicators%20(UCI%20ML%20Repository%20ID%20891)#variable-PhysActivity-codes-1",
+                "@type": "skos:Concept",
+                "skos:prefLabel": "Physical activity reported",
                 "exactMatch": [
                   "http://snomed.info/id/228447005"
-                ]
+                ],
+                "skos:inScheme": {
+                  "@id": "urn:linked-codebook:dataset:CDC%20Diabetes%20Health%20Indicators%20(UCI%20ML%20Repository%20ID%20891)#variable-PhysActivity-codes"
+                },
+                "skos:notation": "1"
               }
             ]
-          },
+          }
+        },
+        "summaryStatistics": {
+          "@id": "urn:linked-codebook:dataset:CDC%20Diabetes%20Health%20Indicators%20(UCI%20ML%20Repository%20ID%20891)#statistics-PhysActivity",
+          "@type": "dsv:SummaryStatistics",
           "statisticalDataType": "dsv:NominalDataType"
         }
       },
       {
-        "name": "Fruits",
+        "@id": "urn:linked-codebook:dataset:CDC%20Diabetes%20Health%20Indicators%20(UCI%20ML%20Repository%20ID%20891)#column-Fruits",
+        "@type": "dsv:Column",
         "titles": "Consumes fruit one or more times per day",
+        "name": "Fruits",
         "columnProperty": {
+          "@id": "urn:linked-codebook:dataset:CDC%20Diabetes%20Health%20Indicators%20(UCI%20ML%20Repository%20ID%20891)#property-Fruits",
+          "@type": "dsv:ColumnProperty",
+          "hasVariable": {
+            "@id": "urn:linked-codebook:dataset:CDC%20Diabetes%20Health%20Indicators%20(UCI%20ML%20Repository%20ID%20891)#variable-Fruits",
+            "@type": "skos:Concept",
+            "skos:prefLabel": "Consumes fruit one or more times per day"
+          },
           "hasCodeBook": {
-            "hasTopConcept": [
+            "@id": "urn:linked-codebook:dataset:CDC%20Diabetes%20Health%20Indicators%20(UCI%20ML%20Repository%20ID%20891)#variable-Fruits-codes",
+            "@type": "skos:ConceptScheme",
+            "skos:hasTopConcept": [
               {
-                "notation": "0",
-                "prefLabel": "Less than daily fruit consumption"
+                "@id": "urn:linked-codebook:dataset:CDC%20Diabetes%20Health%20Indicators%20(UCI%20ML%20Repository%20ID%20891)#variable-Fruits-codes-0",
+                "@type": "skos:Concept",
+                "skos:prefLabel": "Less than daily fruit consumption",
+                "skos:inScheme": {
+                  "@id": "urn:linked-codebook:dataset:CDC%20Diabetes%20Health%20Indicators%20(UCI%20ML%20Repository%20ID%20891)#variable-Fruits-codes"
+                },
+                "skos:notation": "0"
               },
               {
-                "notation": "1",
-                "prefLabel": "Daily fruit consumption"
+                "@id": "urn:linked-codebook:dataset:CDC%20Diabetes%20Health%20Indicators%20(UCI%20ML%20Repository%20ID%20891)#variable-Fruits-codes-1",
+                "@type": "skos:Concept",
+                "skos:prefLabel": "Daily fruit consumption",
+                "skos:inScheme": {
+                  "@id": "urn:linked-codebook:dataset:CDC%20Diabetes%20Health%20Indicators%20(UCI%20ML%20Repository%20ID%20891)#variable-Fruits-codes"
+                },
+                "skos:notation": "1"
               }
             ]
-          },
+          }
+        },
+        "summaryStatistics": {
+          "@id": "urn:linked-codebook:dataset:CDC%20Diabetes%20Health%20Indicators%20(UCI%20ML%20Repository%20ID%20891)#statistics-Fruits",
+          "@type": "dsv:SummaryStatistics",
           "statisticalDataType": "dsv:NominalDataType"
         }
       },
       {
-        "name": "Veggies",
+        "@id": "urn:linked-codebook:dataset:CDC%20Diabetes%20Health%20Indicators%20(UCI%20ML%20Repository%20ID%20891)#column-Veggies",
+        "@type": "dsv:Column",
         "titles": "Consumes vegetables one or more times per day",
+        "name": "Veggies",
         "columnProperty": {
+          "@id": "urn:linked-codebook:dataset:CDC%20Diabetes%20Health%20Indicators%20(UCI%20ML%20Repository%20ID%20891)#property-Veggies",
+          "@type": "dsv:ColumnProperty",
+          "hasVariable": {
+            "@id": "urn:linked-codebook:dataset:CDC%20Diabetes%20Health%20Indicators%20(UCI%20ML%20Repository%20ID%20891)#variable-Veggies",
+            "@type": "skos:Concept",
+            "skos:prefLabel": "Consumes vegetables one or more times per day"
+          },
           "hasCodeBook": {
-            "hasTopConcept": [
+            "@id": "urn:linked-codebook:dataset:CDC%20Diabetes%20Health%20Indicators%20(UCI%20ML%20Repository%20ID%20891)#variable-Veggies-codes",
+            "@type": "skos:ConceptScheme",
+            "skos:hasTopConcept": [
               {
-                "notation": "0",
-                "prefLabel": "Less than daily vegetable consumption"
+                "@id": "urn:linked-codebook:dataset:CDC%20Diabetes%20Health%20Indicators%20(UCI%20ML%20Repository%20ID%20891)#variable-Veggies-codes-0",
+                "@type": "skos:Concept",
+                "skos:prefLabel": "Less than daily vegetable consumption",
+                "skos:inScheme": {
+                  "@id": "urn:linked-codebook:dataset:CDC%20Diabetes%20Health%20Indicators%20(UCI%20ML%20Repository%20ID%20891)#variable-Veggies-codes"
+                },
+                "skos:notation": "0"
               },
               {
-                "notation": "1",
-                "prefLabel": "Daily vegetable consumption"
+                "@id": "urn:linked-codebook:dataset:CDC%20Diabetes%20Health%20Indicators%20(UCI%20ML%20Repository%20ID%20891)#variable-Veggies-codes-1",
+                "@type": "skos:Concept",
+                "skos:prefLabel": "Daily vegetable consumption",
+                "skos:inScheme": {
+                  "@id": "urn:linked-codebook:dataset:CDC%20Diabetes%20Health%20Indicators%20(UCI%20ML%20Repository%20ID%20891)#variable-Veggies-codes"
+                },
+                "skos:notation": "1"
               }
             ]
-          },
+          }
+        },
+        "summaryStatistics": {
+          "@id": "urn:linked-codebook:dataset:CDC%20Diabetes%20Health%20Indicators%20(UCI%20ML%20Repository%20ID%20891)#statistics-Veggies",
+          "@type": "dsv:SummaryStatistics",
           "statisticalDataType": "dsv:NominalDataType"
         }
       },
       {
-        "name": "HvyAlcoholConsump",
+        "@id": "urn:linked-codebook:dataset:CDC%20Diabetes%20Health%20Indicators%20(UCI%20ML%20Repository%20ID%20891)#column-HvyAlcoholConsump",
+        "@type": "dsv:Column",
         "titles": "Meets heavy drinking threshold",
+        "name": "HvyAlcoholConsump",
         "columnProperty": {
+          "@id": "urn:linked-codebook:dataset:CDC%20Diabetes%20Health%20Indicators%20(UCI%20ML%20Repository%20ID%20891)#property-HvyAlcoholConsump",
+          "@type": "dsv:ColumnProperty",
+          "hasVariable": {
+            "@id": "urn:linked-codebook:dataset:CDC%20Diabetes%20Health%20Indicators%20(UCI%20ML%20Repository%20ID%20891)#variable-HvyAlcoholConsump",
+            "@type": "skos:Concept",
+            "skos:prefLabel": "Meets heavy drinking threshold"
+          },
           "hasCodeBook": {
-            "hasTopConcept": [
+            "@id": "urn:linked-codebook:dataset:CDC%20Diabetes%20Health%20Indicators%20(UCI%20ML%20Repository%20ID%20891)#variable-HvyAlcoholConsump-codes",
+            "@type": "skos:ConceptScheme",
+            "skos:hasTopConcept": [
               {
-                "notation": "0",
-                "prefLabel": "Alcohol consumption below heavy threshold"
+                "@id": "urn:linked-codebook:dataset:CDC%20Diabetes%20Health%20Indicators%20(UCI%20ML%20Repository%20ID%20891)#variable-HvyAlcoholConsump-codes-0",
+                "@type": "skos:Concept",
+                "skos:prefLabel": "Alcohol consumption below heavy threshold",
+                "skos:inScheme": {
+                  "@id": "urn:linked-codebook:dataset:CDC%20Diabetes%20Health%20Indicators%20(UCI%20ML%20Repository%20ID%20891)#variable-HvyAlcoholConsump-codes"
+                },
+                "skos:notation": "0"
               },
               {
-                "notation": "1",
-                "prefLabel": "Alcohol consumption above heavy threshold",
+                "@id": "urn:linked-codebook:dataset:CDC%20Diabetes%20Health%20Indicators%20(UCI%20ML%20Repository%20ID%20891)#variable-HvyAlcoholConsump-codes-1",
+                "@type": "skos:Concept",
+                "skos:prefLabel": "Alcohol consumption above heavy threshold",
                 "exactMatch": [
                   "http://snomed.info/id/160592001"
-                ]
+                ],
+                "skos:inScheme": {
+                  "@id": "urn:linked-codebook:dataset:CDC%20Diabetes%20Health%20Indicators%20(UCI%20ML%20Repository%20ID%20891)#variable-HvyAlcoholConsump-codes"
+                },
+                "skos:notation": "1"
               }
             ]
-          },
+          }
+        },
+        "summaryStatistics": {
+          "@id": "urn:linked-codebook:dataset:CDC%20Diabetes%20Health%20Indicators%20(UCI%20ML%20Repository%20ID%20891)#statistics-HvyAlcoholConsump",
+          "@type": "dsv:SummaryStatistics",
           "statisticalDataType": "dsv:NominalDataType"
         }
       },
       {
-        "name": "AnyHealthcare",
+        "@id": "urn:linked-codebook:dataset:CDC%20Diabetes%20Health%20Indicators%20(UCI%20ML%20Repository%20ID%20891)#column-AnyHealthcare",
+        "@type": "dsv:Column",
         "titles": "Has any form of health care coverage",
+        "name": "AnyHealthcare",
         "columnProperty": {
+          "@id": "urn:linked-codebook:dataset:CDC%20Diabetes%20Health%20Indicators%20(UCI%20ML%20Repository%20ID%20891)#property-AnyHealthcare",
+          "@type": "dsv:ColumnProperty",
+          "hasVariable": {
+            "@id": "urn:linked-codebook:dataset:CDC%20Diabetes%20Health%20Indicators%20(UCI%20ML%20Repository%20ID%20891)#variable-AnyHealthcare",
+            "@type": "skos:Concept",
+            "skos:prefLabel": "Has any form of health care coverage"
+          },
           "hasCodeBook": {
-            "hasTopConcept": [
+            "@id": "urn:linked-codebook:dataset:CDC%20Diabetes%20Health%20Indicators%20(UCI%20ML%20Repository%20ID%20891)#variable-AnyHealthcare-codes",
+            "@type": "skos:ConceptScheme",
+            "skos:hasTopConcept": [
               {
-                "notation": "0",
-                "prefLabel": "No health care coverage"
+                "@id": "urn:linked-codebook:dataset:CDC%20Diabetes%20Health%20Indicators%20(UCI%20ML%20Repository%20ID%20891)#variable-AnyHealthcare-codes-0",
+                "@type": "skos:Concept",
+                "skos:prefLabel": "No health care coverage",
+                "skos:inScheme": {
+                  "@id": "urn:linked-codebook:dataset:CDC%20Diabetes%20Health%20Indicators%20(UCI%20ML%20Repository%20ID%20891)#variable-AnyHealthcare-codes"
+                },
+                "skos:notation": "0"
               },
               {
-                "notation": "1",
-                "prefLabel": "Has health care coverage"
+                "@id": "urn:linked-codebook:dataset:CDC%20Diabetes%20Health%20Indicators%20(UCI%20ML%20Repository%20ID%20891)#variable-AnyHealthcare-codes-1",
+                "@type": "skos:Concept",
+                "skos:prefLabel": "Has health care coverage",
+                "skos:inScheme": {
+                  "@id": "urn:linked-codebook:dataset:CDC%20Diabetes%20Health%20Indicators%20(UCI%20ML%20Repository%20ID%20891)#variable-AnyHealthcare-codes"
+                },
+                "skos:notation": "1"
               }
             ]
-          },
+          }
+        },
+        "summaryStatistics": {
+          "@id": "urn:linked-codebook:dataset:CDC%20Diabetes%20Health%20Indicators%20(UCI%20ML%20Repository%20ID%20891)#statistics-AnyHealthcare",
+          "@type": "dsv:SummaryStatistics",
           "statisticalDataType": "dsv:NominalDataType"
         }
       },
       {
-        "name": "NoDocbcCost",
+        "@id": "urn:linked-codebook:dataset:CDC%20Diabetes%20Health%20Indicators%20(UCI%20ML%20Repository%20ID%20891)#column-NoDocbcCost",
+        "@type": "dsv:Column",
         "titles": "Could not see a doctor due to cost in past 12 months",
+        "name": "NoDocbcCost",
         "columnProperty": {
+          "@id": "urn:linked-codebook:dataset:CDC%20Diabetes%20Health%20Indicators%20(UCI%20ML%20Repository%20ID%20891)#property-NoDocbcCost",
+          "@type": "dsv:ColumnProperty",
+          "hasVariable": {
+            "@id": "urn:linked-codebook:dataset:CDC%20Diabetes%20Health%20Indicators%20(UCI%20ML%20Repository%20ID%20891)#variable-NoDocbcCost",
+            "@type": "skos:Concept",
+            "skos:prefLabel": "Could not see a doctor due to cost in past 12 months"
+          },
           "hasCodeBook": {
-            "hasTopConcept": [
+            "@id": "urn:linked-codebook:dataset:CDC%20Diabetes%20Health%20Indicators%20(UCI%20ML%20Repository%20ID%20891)#variable-NoDocbcCost-codes",
+            "@type": "skos:ConceptScheme",
+            "skos:hasTopConcept": [
               {
-                "notation": "0",
-                "prefLabel": "Cost did not prevent doctor visit"
+                "@id": "urn:linked-codebook:dataset:CDC%20Diabetes%20Health%20Indicators%20(UCI%20ML%20Repository%20ID%20891)#variable-NoDocbcCost-codes-0",
+                "@type": "skos:Concept",
+                "skos:prefLabel": "Cost did not prevent doctor visit",
+                "skos:inScheme": {
+                  "@id": "urn:linked-codebook:dataset:CDC%20Diabetes%20Health%20Indicators%20(UCI%20ML%20Repository%20ID%20891)#variable-NoDocbcCost-codes"
+                },
+                "skos:notation": "0"
               },
               {
-                "notation": "1",
-                "prefLabel": "Cost prevented doctor visit"
+                "@id": "urn:linked-codebook:dataset:CDC%20Diabetes%20Health%20Indicators%20(UCI%20ML%20Repository%20ID%20891)#variable-NoDocbcCost-codes-1",
+                "@type": "skos:Concept",
+                "skos:prefLabel": "Cost prevented doctor visit",
+                "skos:inScheme": {
+                  "@id": "urn:linked-codebook:dataset:CDC%20Diabetes%20Health%20Indicators%20(UCI%20ML%20Repository%20ID%20891)#variable-NoDocbcCost-codes"
+                },
+                "skos:notation": "1"
               }
             ]
-          },
+          }
+        },
+        "summaryStatistics": {
+          "@id": "urn:linked-codebook:dataset:CDC%20Diabetes%20Health%20Indicators%20(UCI%20ML%20Repository%20ID%20891)#statistics-NoDocbcCost",
+          "@type": "dsv:SummaryStatistics",
           "statisticalDataType": "dsv:NominalDataType"
         }
       },
       {
-        "name": "GenHlth",
+        "@id": "urn:linked-codebook:dataset:CDC%20Diabetes%20Health%20Indicators%20(UCI%20ML%20Repository%20ID%20891)#column-GenHlth",
+        "@type": "dsv:Column",
         "titles": "Self-reported general health (1 = excellent to 5 = poor)",
+        "name": "GenHlth",
         "columnProperty": {
+          "@id": "urn:linked-codebook:dataset:CDC%20Diabetes%20Health%20Indicators%20(UCI%20ML%20Repository%20ID%20891)#property-GenHlth",
+          "@type": "dsv:ColumnProperty",
+          "hasVariable": {
+            "@id": "urn:linked-codebook:dataset:CDC%20Diabetes%20Health%20Indicators%20(UCI%20ML%20Repository%20ID%20891)#variable-GenHlth",
+            "@type": "skos:Concept",
+            "skos:prefLabel": "Self-reported general health (1 = excellent to 5 = poor)"
+          },
           "hasCodeBook": {
-            "hasTopConcept": [
+            "@id": "urn:linked-codebook:dataset:CDC%20Diabetes%20Health%20Indicators%20(UCI%20ML%20Repository%20ID%20891)#variable-GenHlth-codes",
+            "@type": "skos:ConceptScheme",
+            "skos:hasTopConcept": [
               {
-                "notation": "1",
-                "prefLabel": "Excellent health"
+                "@id": "urn:linked-codebook:dataset:CDC%20Diabetes%20Health%20Indicators%20(UCI%20ML%20Repository%20ID%20891)#variable-GenHlth-codes-1",
+                "@type": "skos:Concept",
+                "skos:prefLabel": "Excellent health",
+                "skos:inScheme": {
+                  "@id": "urn:linked-codebook:dataset:CDC%20Diabetes%20Health%20Indicators%20(UCI%20ML%20Repository%20ID%20891)#variable-GenHlth-codes"
+                },
+                "skos:notation": "1"
               },
               {
-                "notation": "2",
-                "prefLabel": "Very good health"
+                "@id": "urn:linked-codebook:dataset:CDC%20Diabetes%20Health%20Indicators%20(UCI%20ML%20Repository%20ID%20891)#variable-GenHlth-codes-2",
+                "@type": "skos:Concept",
+                "skos:prefLabel": "Very good health",
+                "skos:inScheme": {
+                  "@id": "urn:linked-codebook:dataset:CDC%20Diabetes%20Health%20Indicators%20(UCI%20ML%20Repository%20ID%20891)#variable-GenHlth-codes"
+                },
+                "skos:notation": "2"
               },
               {
-                "notation": "3",
-                "prefLabel": "Good health"
+                "@id": "urn:linked-codebook:dataset:CDC%20Diabetes%20Health%20Indicators%20(UCI%20ML%20Repository%20ID%20891)#variable-GenHlth-codes-3",
+                "@type": "skos:Concept",
+                "skos:prefLabel": "Good health",
+                "skos:inScheme": {
+                  "@id": "urn:linked-codebook:dataset:CDC%20Diabetes%20Health%20Indicators%20(UCI%20ML%20Repository%20ID%20891)#variable-GenHlth-codes"
+                },
+                "skos:notation": "3"
               },
               {
-                "notation": "4",
-                "prefLabel": "Fair health"
+                "@id": "urn:linked-codebook:dataset:CDC%20Diabetes%20Health%20Indicators%20(UCI%20ML%20Repository%20ID%20891)#variable-GenHlth-codes-4",
+                "@type": "skos:Concept",
+                "skos:prefLabel": "Fair health",
+                "skos:inScheme": {
+                  "@id": "urn:linked-codebook:dataset:CDC%20Diabetes%20Health%20Indicators%20(UCI%20ML%20Repository%20ID%20891)#variable-GenHlth-codes"
+                },
+                "skos:notation": "4"
               },
               {
-                "notation": "5",
-                "prefLabel": "Poor health"
+                "@id": "urn:linked-codebook:dataset:CDC%20Diabetes%20Health%20Indicators%20(UCI%20ML%20Repository%20ID%20891)#variable-GenHlth-codes-5",
+                "@type": "skos:Concept",
+                "skos:prefLabel": "Poor health",
+                "skos:inScheme": {
+                  "@id": "urn:linked-codebook:dataset:CDC%20Diabetes%20Health%20Indicators%20(UCI%20ML%20Repository%20ID%20891)#variable-GenHlth-codes"
+                },
+                "skos:notation": "5"
               }
             ]
-          },
+          }
+        },
+        "summaryStatistics": {
+          "@id": "urn:linked-codebook:dataset:CDC%20Diabetes%20Health%20Indicators%20(UCI%20ML%20Repository%20ID%20891)#statistics-GenHlth",
+          "@type": "dsv:SummaryStatistics",
           "statisticalDataType": "dsv:OrdinalDataType"
         }
       },
       {
-        "name": "MentHlth",
+        "@id": "urn:linked-codebook:dataset:CDC%20Diabetes%20Health%20Indicators%20(UCI%20ML%20Repository%20ID%20891)#column-MentHlth",
+        "@type": "dsv:Column",
+        "datatype": "integer",
         "titles": "Number of days mental health was not good in past 30 days",
+        "name": "MentHlth",
         "columnProperty": {
-          "hasUnit": {
-            "ucumCode": "d",
-            "exactMatch": [
-              "unit:D"
-            ]
+          "@id": "urn:linked-codebook:dataset:CDC%20Diabetes%20Health%20Indicators%20(UCI%20ML%20Repository%20ID%20891)#property-MentHlth",
+          "@type": "dsv:ColumnProperty",
+          "hasVariable": {
+            "@id": "urn:linked-codebook:dataset:CDC%20Diabetes%20Health%20Indicators%20(UCI%20ML%20Repository%20ID%20891)#variable-MentHlth",
+            "@type": "skos:Concept",
+            "skos:prefLabel": "Number of days mental health was not good in past 30 days"
           },
-          "statisticalDataType": "dsv:QuantitativeDataType",
-          "valueType": "xsd:integer",
+          "hasUnit": "http://qudt.org/vocab/unit/D",
           "unitText": "day"
+        },
+        "summaryStatistics": {
+          "@id": "urn:linked-codebook:dataset:CDC%20Diabetes%20Health%20Indicators%20(UCI%20ML%20Repository%20ID%20891)#statistics-MentHlth",
+          "@type": "dsv:SummaryStatistics",
+          "statisticalDataType": "dsv:NumericalDataType"
         }
       },
       {
-        "name": "PhysHlth",
+        "@id": "urn:linked-codebook:dataset:CDC%20Diabetes%20Health%20Indicators%20(UCI%20ML%20Repository%20ID%20891)#column-PhysHlth",
+        "@type": "dsv:Column",
+        "datatype": "integer",
         "titles": "Number of days physical health was not good in past 30 days",
+        "name": "PhysHlth",
         "columnProperty": {
-          "hasUnit": {
-            "ucumCode": "d",
-            "exactMatch": [
-              "unit:D"
-            ]
+          "@id": "urn:linked-codebook:dataset:CDC%20Diabetes%20Health%20Indicators%20(UCI%20ML%20Repository%20ID%20891)#property-PhysHlth",
+          "@type": "dsv:ColumnProperty",
+          "hasVariable": {
+            "@id": "urn:linked-codebook:dataset:CDC%20Diabetes%20Health%20Indicators%20(UCI%20ML%20Repository%20ID%20891)#variable-PhysHlth",
+            "@type": "skos:Concept",
+            "skos:prefLabel": "Number of days physical health was not good in past 30 days"
           },
-          "statisticalDataType": "dsv:QuantitativeDataType",
-          "valueType": "xsd:integer",
+          "hasUnit": "http://qudt.org/vocab/unit/D",
           "unitText": "day"
+        },
+        "summaryStatistics": {
+          "@id": "urn:linked-codebook:dataset:CDC%20Diabetes%20Health%20Indicators%20(UCI%20ML%20Repository%20ID%20891)#statistics-PhysHlth",
+          "@type": "dsv:SummaryStatistics",
+          "statisticalDataType": "dsv:NumericalDataType"
         }
       },
       {
-        "name": "DiffWalk",
+        "@id": "urn:linked-codebook:dataset:CDC%20Diabetes%20Health%20Indicators%20(UCI%20ML%20Repository%20ID%20891)#column-DiffWalk",
+        "@type": "dsv:Column",
         "titles": "Serious difficulty walking or climbing stairs",
+        "name": "DiffWalk",
         "columnProperty": {
+          "@id": "urn:linked-codebook:dataset:CDC%20Diabetes%20Health%20Indicators%20(UCI%20ML%20Repository%20ID%20891)#property-DiffWalk",
+          "@type": "dsv:ColumnProperty",
+          "hasVariable": {
+            "@id": "urn:linked-codebook:dataset:CDC%20Diabetes%20Health%20Indicators%20(UCI%20ML%20Repository%20ID%20891)#variable-DiffWalk",
+            "@type": "skos:Concept",
+            "skos:prefLabel": "Serious difficulty walking or climbing stairs"
+          },
           "hasCodeBook": {
-            "hasTopConcept": [
+            "@id": "urn:linked-codebook:dataset:CDC%20Diabetes%20Health%20Indicators%20(UCI%20ML%20Repository%20ID%20891)#variable-DiffWalk-codes",
+            "@type": "skos:ConceptScheme",
+            "skos:hasTopConcept": [
               {
-                "notation": "0",
-                "prefLabel": "No reported difficulty walking or climbing stairs"
+                "@id": "urn:linked-codebook:dataset:CDC%20Diabetes%20Health%20Indicators%20(UCI%20ML%20Repository%20ID%20891)#variable-DiffWalk-codes-0",
+                "@type": "skos:Concept",
+                "skos:prefLabel": "No reported difficulty walking or climbing stairs",
+                "skos:inScheme": {
+                  "@id": "urn:linked-codebook:dataset:CDC%20Diabetes%20Health%20Indicators%20(UCI%20ML%20Repository%20ID%20891)#variable-DiffWalk-codes"
+                },
+                "skos:notation": "0"
               },
               {
-                "notation": "1",
-                "prefLabel": "Reported difficulty walking or climbing stairs",
+                "@id": "urn:linked-codebook:dataset:CDC%20Diabetes%20Health%20Indicators%20(UCI%20ML%20Repository%20ID%20891)#variable-DiffWalk-codes-1",
+                "@type": "skos:Concept",
+                "skos:prefLabel": "Reported difficulty walking or climbing stairs",
                 "exactMatch": [
                   "http://snomed.info/id/719232003"
-                ]
+                ],
+                "skos:inScheme": {
+                  "@id": "urn:linked-codebook:dataset:CDC%20Diabetes%20Health%20Indicators%20(UCI%20ML%20Repository%20ID%20891)#variable-DiffWalk-codes"
+                },
+                "skos:notation": "1"
               }
             ]
-          },
+          }
+        },
+        "summaryStatistics": {
+          "@id": "urn:linked-codebook:dataset:CDC%20Diabetes%20Health%20Indicators%20(UCI%20ML%20Repository%20ID%20891)#statistics-DiffWalk",
+          "@type": "dsv:SummaryStatistics",
           "statisticalDataType": "dsv:NominalDataType"
         }
       },
       {
-        "name": "Sex",
+        "@id": "urn:linked-codebook:dataset:CDC%20Diabetes%20Health%20Indicators%20(UCI%20ML%20Repository%20ID%20891)#column-Sex",
+        "@type": "dsv:Column",
         "titles": "Sex assigned at birth (0 = female, 1 = male)",
+        "name": "Sex",
         "columnProperty": {
+          "@id": "urn:linked-codebook:dataset:CDC%20Diabetes%20Health%20Indicators%20(UCI%20ML%20Repository%20ID%20891)#property-Sex",
+          "@type": "dsv:ColumnProperty",
+          "hasVariable": {
+            "@id": "urn:linked-codebook:dataset:CDC%20Diabetes%20Health%20Indicators%20(UCI%20ML%20Repository%20ID%20891)#variable-Sex",
+            "@type": "skos:Concept",
+            "skos:prefLabel": "Sex assigned at birth (0 = female, 1 = male)"
+          },
           "hasCodeBook": {
-            "hasTopConcept": [
+            "@id": "urn:linked-codebook:dataset:CDC%20Diabetes%20Health%20Indicators%20(UCI%20ML%20Repository%20ID%20891)#variable-Sex-codes",
+            "@type": "skos:ConceptScheme",
+            "skos:hasTopConcept": [
               {
-                "notation": "0",
-                "prefLabel": "Female",
+                "@id": "urn:linked-codebook:dataset:CDC%20Diabetes%20Health%20Indicators%20(UCI%20ML%20Repository%20ID%20891)#variable-Sex-codes-0",
+                "@type": "skos:Concept",
+                "skos:prefLabel": "Female",
                 "exactMatch": [
                   "http://snomed.info/id/248152002"
-                ]
+                ],
+                "skos:inScheme": {
+                  "@id": "urn:linked-codebook:dataset:CDC%20Diabetes%20Health%20Indicators%20(UCI%20ML%20Repository%20ID%20891)#variable-Sex-codes"
+                },
+                "skos:notation": "0"
               },
               {
-                "notation": "1",
-                "prefLabel": "Male",
+                "@id": "urn:linked-codebook:dataset:CDC%20Diabetes%20Health%20Indicators%20(UCI%20ML%20Repository%20ID%20891)#variable-Sex-codes-1",
+                "@type": "skos:Concept",
+                "skos:prefLabel": "Male",
                 "exactMatch": [
                   "http://snomed.info/id/248153007"
-                ]
+                ],
+                "skos:inScheme": {
+                  "@id": "urn:linked-codebook:dataset:CDC%20Diabetes%20Health%20Indicators%20(UCI%20ML%20Repository%20ID%20891)#variable-Sex-codes"
+                },
+                "skos:notation": "1"
               }
             ]
-          },
+          }
+        },
+        "summaryStatistics": {
+          "@id": "urn:linked-codebook:dataset:CDC%20Diabetes%20Health%20Indicators%20(UCI%20ML%20Repository%20ID%20891)#statistics-Sex",
+          "@type": "dsv:SummaryStatistics",
           "statisticalDataType": "dsv:NominalDataType"
         }
       },
       {
+        "@id": "urn:linked-codebook:dataset:CDC%20Diabetes%20Health%20Indicators%20(UCI%20ML%20Repository%20ID%20891)#column-Age",
+        "@type": "dsv:Column",
+        "titles": "Age category (1 = 18–24 up to 13 = 80 or older)",
         "name": "Age",
-        "titles": "Age category (1 = 18\u201324 up to 13 = 80 or older)",
         "columnProperty": {
+          "@id": "urn:linked-codebook:dataset:CDC%20Diabetes%20Health%20Indicators%20(UCI%20ML%20Repository%20ID%20891)#property-Age",
+          "@type": "dsv:ColumnProperty",
+          "hasVariable": {
+            "@id": "urn:linked-codebook:dataset:CDC%20Diabetes%20Health%20Indicators%20(UCI%20ML%20Repository%20ID%20891)#variable-Age",
+            "@type": "skos:Concept",
+            "skos:prefLabel": "Age category (1 = 18–24 up to 13 = 80 or older)"
+          },
           "hasCodeBook": {
-            "hasTopConcept": [
+            "@id": "urn:linked-codebook:dataset:CDC%20Diabetes%20Health%20Indicators%20(UCI%20ML%20Repository%20ID%20891)#variable-Age-codes",
+            "@type": "skos:ConceptScheme",
+            "skos:hasTopConcept": [
               {
-                "notation": "1",
-                "prefLabel": "18\u201324 years"
+                "@id": "urn:linked-codebook:dataset:CDC%20Diabetes%20Health%20Indicators%20(UCI%20ML%20Repository%20ID%20891)#variable-Age-codes-1",
+                "@type": "skos:Concept",
+                "skos:prefLabel": "18–24 years",
+                "skos:inScheme": {
+                  "@id": "urn:linked-codebook:dataset:CDC%20Diabetes%20Health%20Indicators%20(UCI%20ML%20Repository%20ID%20891)#variable-Age-codes"
+                },
+                "skos:notation": "1"
               },
               {
-                "notation": "2",
-                "prefLabel": "25\u201329 years"
+                "@id": "urn:linked-codebook:dataset:CDC%20Diabetes%20Health%20Indicators%20(UCI%20ML%20Repository%20ID%20891)#variable-Age-codes-2",
+                "@type": "skos:Concept",
+                "skos:prefLabel": "25–29 years",
+                "skos:inScheme": {
+                  "@id": "urn:linked-codebook:dataset:CDC%20Diabetes%20Health%20Indicators%20(UCI%20ML%20Repository%20ID%20891)#variable-Age-codes"
+                },
+                "skos:notation": "2"
               },
               {
-                "notation": "3",
-                "prefLabel": "30\u201334 years"
+                "@id": "urn:linked-codebook:dataset:CDC%20Diabetes%20Health%20Indicators%20(UCI%20ML%20Repository%20ID%20891)#variable-Age-codes-3",
+                "@type": "skos:Concept",
+                "skos:prefLabel": "30–34 years",
+                "skos:inScheme": {
+                  "@id": "urn:linked-codebook:dataset:CDC%20Diabetes%20Health%20Indicators%20(UCI%20ML%20Repository%20ID%20891)#variable-Age-codes"
+                },
+                "skos:notation": "3"
               },
               {
-                "notation": "4",
-                "prefLabel": "35\u201339 years"
+                "@id": "urn:linked-codebook:dataset:CDC%20Diabetes%20Health%20Indicators%20(UCI%20ML%20Repository%20ID%20891)#variable-Age-codes-4",
+                "@type": "skos:Concept",
+                "skos:prefLabel": "35–39 years",
+                "skos:inScheme": {
+                  "@id": "urn:linked-codebook:dataset:CDC%20Diabetes%20Health%20Indicators%20(UCI%20ML%20Repository%20ID%20891)#variable-Age-codes"
+                },
+                "skos:notation": "4"
               },
               {
-                "notation": "5",
-                "prefLabel": "40\u201344 years"
+                "@id": "urn:linked-codebook:dataset:CDC%20Diabetes%20Health%20Indicators%20(UCI%20ML%20Repository%20ID%20891)#variable-Age-codes-5",
+                "@type": "skos:Concept",
+                "skos:prefLabel": "40–44 years",
+                "skos:inScheme": {
+                  "@id": "urn:linked-codebook:dataset:CDC%20Diabetes%20Health%20Indicators%20(UCI%20ML%20Repository%20ID%20891)#variable-Age-codes"
+                },
+                "skos:notation": "5"
               },
               {
-                "notation": "6",
-                "prefLabel": "45\u201349 years"
+                "@id": "urn:linked-codebook:dataset:CDC%20Diabetes%20Health%20Indicators%20(UCI%20ML%20Repository%20ID%20891)#variable-Age-codes-6",
+                "@type": "skos:Concept",
+                "skos:prefLabel": "45–49 years",
+                "skos:inScheme": {
+                  "@id": "urn:linked-codebook:dataset:CDC%20Diabetes%20Health%20Indicators%20(UCI%20ML%20Repository%20ID%20891)#variable-Age-codes"
+                },
+                "skos:notation": "6"
               },
               {
-                "notation": "7",
-                "prefLabel": "50\u201354 years"
+                "@id": "urn:linked-codebook:dataset:CDC%20Diabetes%20Health%20Indicators%20(UCI%20ML%20Repository%20ID%20891)#variable-Age-codes-7",
+                "@type": "skos:Concept",
+                "skos:prefLabel": "50–54 years",
+                "skos:inScheme": {
+                  "@id": "urn:linked-codebook:dataset:CDC%20Diabetes%20Health%20Indicators%20(UCI%20ML%20Repository%20ID%20891)#variable-Age-codes"
+                },
+                "skos:notation": "7"
               },
               {
-                "notation": "8",
-                "prefLabel": "55\u201359 years"
+                "@id": "urn:linked-codebook:dataset:CDC%20Diabetes%20Health%20Indicators%20(UCI%20ML%20Repository%20ID%20891)#variable-Age-codes-8",
+                "@type": "skos:Concept",
+                "skos:prefLabel": "55–59 years",
+                "skos:inScheme": {
+                  "@id": "urn:linked-codebook:dataset:CDC%20Diabetes%20Health%20Indicators%20(UCI%20ML%20Repository%20ID%20891)#variable-Age-codes"
+                },
+                "skos:notation": "8"
               },
               {
-                "notation": "9",
-                "prefLabel": "60\u201364 years"
+                "@id": "urn:linked-codebook:dataset:CDC%20Diabetes%20Health%20Indicators%20(UCI%20ML%20Repository%20ID%20891)#variable-Age-codes-9",
+                "@type": "skos:Concept",
+                "skos:prefLabel": "60–64 years",
+                "skos:inScheme": {
+                  "@id": "urn:linked-codebook:dataset:CDC%20Diabetes%20Health%20Indicators%20(UCI%20ML%20Repository%20ID%20891)#variable-Age-codes"
+                },
+                "skos:notation": "9"
               },
               {
-                "notation": "10",
-                "prefLabel": "65\u201369 years"
+                "@id": "urn:linked-codebook:dataset:CDC%20Diabetes%20Health%20Indicators%20(UCI%20ML%20Repository%20ID%20891)#variable-Age-codes-10",
+                "@type": "skos:Concept",
+                "skos:prefLabel": "65–69 years",
+                "skos:inScheme": {
+                  "@id": "urn:linked-codebook:dataset:CDC%20Diabetes%20Health%20Indicators%20(UCI%20ML%20Repository%20ID%20891)#variable-Age-codes"
+                },
+                "skos:notation": "10"
               },
               {
-                "notation": "11",
-                "prefLabel": "70\u201374 years"
+                "@id": "urn:linked-codebook:dataset:CDC%20Diabetes%20Health%20Indicators%20(UCI%20ML%20Repository%20ID%20891)#variable-Age-codes-11",
+                "@type": "skos:Concept",
+                "skos:prefLabel": "70–74 years",
+                "skos:inScheme": {
+                  "@id": "urn:linked-codebook:dataset:CDC%20Diabetes%20Health%20Indicators%20(UCI%20ML%20Repository%20ID%20891)#variable-Age-codes"
+                },
+                "skos:notation": "11"
               },
               {
-                "notation": "12",
-                "prefLabel": "75\u201379 years"
+                "@id": "urn:linked-codebook:dataset:CDC%20Diabetes%20Health%20Indicators%20(UCI%20ML%20Repository%20ID%20891)#variable-Age-codes-12",
+                "@type": "skos:Concept",
+                "skos:prefLabel": "75–79 years",
+                "skos:inScheme": {
+                  "@id": "urn:linked-codebook:dataset:CDC%20Diabetes%20Health%20Indicators%20(UCI%20ML%20Repository%20ID%20891)#variable-Age-codes"
+                },
+                "skos:notation": "12"
               },
               {
-                "notation": "13",
-                "prefLabel": "80 years or older"
+                "@id": "urn:linked-codebook:dataset:CDC%20Diabetes%20Health%20Indicators%20(UCI%20ML%20Repository%20ID%20891)#variable-Age-codes-13",
+                "@type": "skos:Concept",
+                "skos:prefLabel": "80 years or older",
+                "skos:inScheme": {
+                  "@id": "urn:linked-codebook:dataset:CDC%20Diabetes%20Health%20Indicators%20(UCI%20ML%20Repository%20ID%20891)#variable-Age-codes"
+                },
+                "skos:notation": "13"
               }
             ]
-          },
+          }
+        },
+        "summaryStatistics": {
+          "@id": "urn:linked-codebook:dataset:CDC%20Diabetes%20Health%20Indicators%20(UCI%20ML%20Repository%20ID%20891)#statistics-Age",
+          "@type": "dsv:SummaryStatistics",
           "statisticalDataType": "dsv:OrdinalDataType"
         }
       },
       {
-        "name": "Education",
+        "@id": "urn:linked-codebook:dataset:CDC%20Diabetes%20Health%20Indicators%20(UCI%20ML%20Repository%20ID%20891)#column-Education",
+        "@type": "dsv:Column",
         "titles": "Highest education level completed (1 = less than elementary to 6 = college graduate)",
+        "name": "Education",
         "columnProperty": {
+          "@id": "urn:linked-codebook:dataset:CDC%20Diabetes%20Health%20Indicators%20(UCI%20ML%20Repository%20ID%20891)#property-Education",
+          "@type": "dsv:ColumnProperty",
+          "hasVariable": {
+            "@id": "urn:linked-codebook:dataset:CDC%20Diabetes%20Health%20Indicators%20(UCI%20ML%20Repository%20ID%20891)#variable-Education",
+            "@type": "skos:Concept",
+            "skos:prefLabel": "Highest education level completed (1 = less than elementary to 6 = college graduate)"
+          },
           "hasCodeBook": {
-            "hasTopConcept": [
+            "@id": "urn:linked-codebook:dataset:CDC%20Diabetes%20Health%20Indicators%20(UCI%20ML%20Repository%20ID%20891)#variable-Education-codes",
+            "@type": "skos:ConceptScheme",
+            "skos:hasTopConcept": [
               {
-                "notation": "1",
-                "prefLabel": "Never attended school or only kindergarten"
+                "@id": "urn:linked-codebook:dataset:CDC%20Diabetes%20Health%20Indicators%20(UCI%20ML%20Repository%20ID%20891)#variable-Education-codes-1",
+                "@type": "skos:Concept",
+                "skos:prefLabel": "Never attended school or only kindergarten",
+                "skos:inScheme": {
+                  "@id": "urn:linked-codebook:dataset:CDC%20Diabetes%20Health%20Indicators%20(UCI%20ML%20Repository%20ID%20891)#variable-Education-codes"
+                },
+                "skos:notation": "1"
               },
               {
-                "notation": "2",
-                "prefLabel": "Grades 1\u20138 (elementary)"
+                "@id": "urn:linked-codebook:dataset:CDC%20Diabetes%20Health%20Indicators%20(UCI%20ML%20Repository%20ID%20891)#variable-Education-codes-2",
+                "@type": "skos:Concept",
+                "skos:prefLabel": "Grades 1–8 (elementary)",
+                "skos:inScheme": {
+                  "@id": "urn:linked-codebook:dataset:CDC%20Diabetes%20Health%20Indicators%20(UCI%20ML%20Repository%20ID%20891)#variable-Education-codes"
+                },
+                "skos:notation": "2"
               },
               {
-                "notation": "3",
-                "prefLabel": "Grades 9\u201311 (some high school)"
+                "@id": "urn:linked-codebook:dataset:CDC%20Diabetes%20Health%20Indicators%20(UCI%20ML%20Repository%20ID%20891)#variable-Education-codes-3",
+                "@type": "skos:Concept",
+                "skos:prefLabel": "Grades 9–11 (some high school)",
+                "skos:inScheme": {
+                  "@id": "urn:linked-codebook:dataset:CDC%20Diabetes%20Health%20Indicators%20(UCI%20ML%20Repository%20ID%20891)#variable-Education-codes"
+                },
+                "skos:notation": "3"
               },
               {
-                "notation": "4",
-                "prefLabel": "Grade 12 or GED (high school graduate)"
+                "@id": "urn:linked-codebook:dataset:CDC%20Diabetes%20Health%20Indicators%20(UCI%20ML%20Repository%20ID%20891)#variable-Education-codes-4",
+                "@type": "skos:Concept",
+                "skos:prefLabel": "Grade 12 or GED (high school graduate)",
+                "skos:inScheme": {
+                  "@id": "urn:linked-codebook:dataset:CDC%20Diabetes%20Health%20Indicators%20(UCI%20ML%20Repository%20ID%20891)#variable-Education-codes"
+                },
+                "skos:notation": "4"
               },
               {
-                "notation": "5",
-                "prefLabel": "College 1\u20133 years (some college or technical school)"
+                "@id": "urn:linked-codebook:dataset:CDC%20Diabetes%20Health%20Indicators%20(UCI%20ML%20Repository%20ID%20891)#variable-Education-codes-5",
+                "@type": "skos:Concept",
+                "skos:prefLabel": "College 1–3 years (some college or technical school)",
+                "skos:inScheme": {
+                  "@id": "urn:linked-codebook:dataset:CDC%20Diabetes%20Health%20Indicators%20(UCI%20ML%20Repository%20ID%20891)#variable-Education-codes"
+                },
+                "skos:notation": "5"
               },
               {
-                "notation": "6",
-                "prefLabel": "College 4 years or more (college graduate)"
+                "@id": "urn:linked-codebook:dataset:CDC%20Diabetes%20Health%20Indicators%20(UCI%20ML%20Repository%20ID%20891)#variable-Education-codes-6",
+                "@type": "skos:Concept",
+                "skos:prefLabel": "College 4 years or more (college graduate)",
+                "skos:inScheme": {
+                  "@id": "urn:linked-codebook:dataset:CDC%20Diabetes%20Health%20Indicators%20(UCI%20ML%20Repository%20ID%20891)#variable-Education-codes"
+                },
+                "skos:notation": "6"
               }
             ]
-          },
+          }
+        },
+        "summaryStatistics": {
+          "@id": "urn:linked-codebook:dataset:CDC%20Diabetes%20Health%20Indicators%20(UCI%20ML%20Repository%20ID%20891)#statistics-Education",
+          "@type": "dsv:SummaryStatistics",
           "statisticalDataType": "dsv:OrdinalDataType"
         }
       },
       {
+        "@id": "urn:linked-codebook:dataset:CDC%20Diabetes%20Health%20Indicators%20(UCI%20ML%20Repository%20ID%20891)#column-Income",
+        "@type": "dsv:Column",
+        "titles": "Household income category (1 = <$10,000 to 8 = ≥$75,000)",
         "name": "Income",
-        "titles": "Household income category (1 = <$10,000 to 8 = \u2265$75,000)",
         "columnProperty": {
+          "@id": "urn:linked-codebook:dataset:CDC%20Diabetes%20Health%20Indicators%20(UCI%20ML%20Repository%20ID%20891)#property-Income",
+          "@type": "dsv:ColumnProperty",
+          "hasVariable": {
+            "@id": "urn:linked-codebook:dataset:CDC%20Diabetes%20Health%20Indicators%20(UCI%20ML%20Repository%20ID%20891)#variable-Income",
+            "@type": "skos:Concept",
+            "skos:prefLabel": "Household income category (1 = <$10,000 to 8 = ≥$75,000)"
+          },
           "hasCodeBook": {
-            "hasTopConcept": [
+            "@id": "urn:linked-codebook:dataset:CDC%20Diabetes%20Health%20Indicators%20(UCI%20ML%20Repository%20ID%20891)#variable-Income-codes",
+            "@type": "skos:ConceptScheme",
+            "skos:hasTopConcept": [
               {
-                "notation": "1",
-                "prefLabel": "Less than $10,000"
+                "@id": "urn:linked-codebook:dataset:CDC%20Diabetes%20Health%20Indicators%20(UCI%20ML%20Repository%20ID%20891)#variable-Income-codes-1",
+                "@type": "skos:Concept",
+                "skos:prefLabel": "Less than $10,000",
+                "skos:inScheme": {
+                  "@id": "urn:linked-codebook:dataset:CDC%20Diabetes%20Health%20Indicators%20(UCI%20ML%20Repository%20ID%20891)#variable-Income-codes"
+                },
+                "skos:notation": "1"
               },
               {
-                "notation": "2",
-                "prefLabel": "$10,000 to <$15,000"
+                "@id": "urn:linked-codebook:dataset:CDC%20Diabetes%20Health%20Indicators%20(UCI%20ML%20Repository%20ID%20891)#variable-Income-codes-2",
+                "@type": "skos:Concept",
+                "skos:prefLabel": "$10,000 to <$15,000",
+                "skos:inScheme": {
+                  "@id": "urn:linked-codebook:dataset:CDC%20Diabetes%20Health%20Indicators%20(UCI%20ML%20Repository%20ID%20891)#variable-Income-codes"
+                },
+                "skos:notation": "2"
               },
               {
-                "notation": "3",
-                "prefLabel": "$15,000 to <$20,000"
+                "@id": "urn:linked-codebook:dataset:CDC%20Diabetes%20Health%20Indicators%20(UCI%20ML%20Repository%20ID%20891)#variable-Income-codes-3",
+                "@type": "skos:Concept",
+                "skos:prefLabel": "$15,000 to <$20,000",
+                "skos:inScheme": {
+                  "@id": "urn:linked-codebook:dataset:CDC%20Diabetes%20Health%20Indicators%20(UCI%20ML%20Repository%20ID%20891)#variable-Income-codes"
+                },
+                "skos:notation": "3"
               },
               {
-                "notation": "4",
-                "prefLabel": "$20,000 to <$25,000"
+                "@id": "urn:linked-codebook:dataset:CDC%20Diabetes%20Health%20Indicators%20(UCI%20ML%20Repository%20ID%20891)#variable-Income-codes-4",
+                "@type": "skos:Concept",
+                "skos:prefLabel": "$20,000 to <$25,000",
+                "skos:inScheme": {
+                  "@id": "urn:linked-codebook:dataset:CDC%20Diabetes%20Health%20Indicators%20(UCI%20ML%20Repository%20ID%20891)#variable-Income-codes"
+                },
+                "skos:notation": "4"
               },
               {
-                "notation": "5",
-                "prefLabel": "$25,000 to <$35,000"
+                "@id": "urn:linked-codebook:dataset:CDC%20Diabetes%20Health%20Indicators%20(UCI%20ML%20Repository%20ID%20891)#variable-Income-codes-5",
+                "@type": "skos:Concept",
+                "skos:prefLabel": "$25,000 to <$35,000",
+                "skos:inScheme": {
+                  "@id": "urn:linked-codebook:dataset:CDC%20Diabetes%20Health%20Indicators%20(UCI%20ML%20Repository%20ID%20891)#variable-Income-codes"
+                },
+                "skos:notation": "5"
               },
               {
-                "notation": "6",
-                "prefLabel": "$35,000 to <$50,000"
+                "@id": "urn:linked-codebook:dataset:CDC%20Diabetes%20Health%20Indicators%20(UCI%20ML%20Repository%20ID%20891)#variable-Income-codes-6",
+                "@type": "skos:Concept",
+                "skos:prefLabel": "$35,000 to <$50,000",
+                "skos:inScheme": {
+                  "@id": "urn:linked-codebook:dataset:CDC%20Diabetes%20Health%20Indicators%20(UCI%20ML%20Repository%20ID%20891)#variable-Income-codes"
+                },
+                "skos:notation": "6"
               },
               {
-                "notation": "7",
-                "prefLabel": "$50,000 to <$75,000"
+                "@id": "urn:linked-codebook:dataset:CDC%20Diabetes%20Health%20Indicators%20(UCI%20ML%20Repository%20ID%20891)#variable-Income-codes-7",
+                "@type": "skos:Concept",
+                "skos:prefLabel": "$50,000 to <$75,000",
+                "skos:inScheme": {
+                  "@id": "urn:linked-codebook:dataset:CDC%20Diabetes%20Health%20Indicators%20(UCI%20ML%20Repository%20ID%20891)#variable-Income-codes"
+                },
+                "skos:notation": "7"
               },
               {
-                "notation": "8",
-                "prefLabel": "$75,000 or more"
+                "@id": "urn:linked-codebook:dataset:CDC%20Diabetes%20Health%20Indicators%20(UCI%20ML%20Repository%20ID%20891)#variable-Income-codes-8",
+                "@type": "skos:Concept",
+                "skos:prefLabel": "$75,000 or more",
+                "skos:inScheme": {
+                  "@id": "urn:linked-codebook:dataset:CDC%20Diabetes%20Health%20Indicators%20(UCI%20ML%20Repository%20ID%20891)#variable-Income-codes"
+                },
+                "skos:notation": "8"
               }
             ]
-          },
+          }
+        },
+        "summaryStatistics": {
+          "@id": "urn:linked-codebook:dataset:CDC%20Diabetes%20Health%20Indicators%20(UCI%20ML%20Repository%20ID%20891)#statistics-Income",
+          "@type": "dsv:SummaryStatistics",
           "statisticalDataType": "dsv:OrdinalDataType"
         }
       }
     ]
-  },
-  "dataset": {
-    "@type": [
-      "disco:LogicalDataSet",
-      "dsv:Dataset",
-      "dcat:Dataset"
-    ],
-    "title": "CDC Diabetes Health Indicators (UCI ML Repository ID 891)",
-    "source": "https://archive.ics.uci.edu/dataset/891/cdc+diabetes+health+indicators",
-    "landingPage": "https://archive.ics.uci.edu/dataset/891/cdc+diabetes+health+indicators"
   }
 }

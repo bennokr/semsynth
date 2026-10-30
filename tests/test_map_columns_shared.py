@@ -22,17 +22,12 @@ def dataset_json(tmp_path: Path) -> Path:
                 {
                     "schema:name": "col_a",
                     "dcterms:description": "First column",
-                    "schema:about": "About A",
-                    "schema:unitText": "kg",
+                    "dsv:columnProperty": {"schema:unitText": "kg"},
                     "prov:hadRole": "measure",
-                    "dsv:summaryStatistics": {
-                        "dsv:statisticalDataType": "quantitative",
-                        "count": 10,
-                    },
+                    "dsv:summaryStatistics": {"dsv:statisticalDataType": "dsv:NumericalDataType"},
                 },
                 {
                     "dcterms:title": "Column B",
-                    "schema:identifier": "col_b",
                     "dcterms:description": "Second column",
                 },
             ]
@@ -60,17 +55,13 @@ def test_load_columns_returns_structured_data(dataset_json: Path) -> None:
     assert first.column_id == "col_a"
     assert first.name == "col_a"
     assert first.description == "First column"
-    assert first.about == "About A"
     assert first.unit == "kg"
     assert first.role == "measure"
-    assert first.statistical_data_type == "quantitative"
-    assert first.summary_statistics is not None
-    assert first.summary_statistics["count"] == 10
+    assert first.statistical_data_type == "numerical"
 
-    assert second.column_id == "col_b"
+    assert second.column_id == "Column B"
     assert second.name == "Column B"
     assert second.description == "Second column"
-    assert second.summary_statistics is None
 
 
 def test_load_columns_handles_single_column_object(tmp_path: Path) -> None:
@@ -78,7 +69,7 @@ def test_load_columns_handles_single_column_object(tmp_path: Path) -> None:
     data = {
         "dsv:datasetSchema": {
             "dsv:column": {
-                "schema:identifier": "single",
+                "schema:name": "single",
                 "dcterms:description": "Only column",
             }
         }

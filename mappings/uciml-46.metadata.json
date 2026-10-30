@@ -1,432 +1,922 @@
 {
-  "@context": "https://w3id.org/semmap/context/v1",
+  "@context": {
+    "accessRights": "dct:accessRights",
+    "broadMatch": {
+      "@container": "@set",
+      "@id": "skos:broadMatch",
+      "@type": "@id"
+    },
+    "citation": "dct:bibliographicCitation",
+    "closeMatch": {
+      "@container": "@set",
+      "@id": "skos:closeMatch",
+      "@type": "@id"
+    },
+    "columnCompleteness": {
+      "@id": "dsv:columnCompleteness",
+      "@type": "xsd:float"
+    },
+    "columnProperty": {
+      "@id": "dsv:columnProperty",
+      "@type": "@id"
+    },
+    "columns": {
+      "@container": "@set",
+      "@id": "dsv:column"
+    },
+    "csvw": "http://www.w3.org/ns/csvw#",
+    "datasetSchema": {
+      "@id": "dsv:datasetSchema",
+      "@type": "@id"
+    },
+    "datatype": "csvw:datatype",
+    "dcat": "http://www.w3.org/ns/dcat#",
+    "dct": "http://purl.org/dc/terms/",
+    "description": "dct:description",
+    "dsv": "https://w3id.org/dsv-ontology#",
+    "exactMatch": {
+      "@container": "@set",
+      "@id": "skos:exactMatch",
+      "@type": "@id"
+    },
+    "hasCodeBook": {
+      "@id": "dsv:hasCodeBook",
+      "@type": "@id"
+    },
+    "hasUnit": {
+      "@id": "qudt:hasUnit",
+      "@type": "@id"
+    },
+    "hasVariable": {
+      "@id": "dsv:hasVariable",
+      "@type": "@id"
+    },
+    "identifier": "dct:identifier",
+    "landingPage": {
+      "@id": "dcat:landingPage",
+      "@type": "@id"
+    },
+    "license": {
+      "@id": "dct:license",
+      "@type": "@id"
+    },
+    "name": "csvw:name",
+    "narrowMatch": {
+      "@container": "@set",
+      "@id": "skos:narrowMatch",
+      "@type": "@id"
+    },
+    "nullValues": {
+      "@container": "@set",
+      "@id": "csvw:null"
+    },
+    "numberOfColumns": {
+      "@id": "dsv:numberOfColumns",
+      "@type": "xsd:integer"
+    },
+    "numberOfRows": {
+      "@id": "dsv:numberOfRows",
+      "@type": "xsd:integer"
+    },
+    "qudt": "http://qudt.org/schema/qudt/",
+    "relatedMatch": {
+      "@container": "@set",
+      "@id": "skos:relatedMatch",
+      "@type": "@id"
+    },
+    "rights": "dct:rights",
+    "schema": "https://schema.org/",
+    "skos": "http://www.w3.org/2004/02/skos/core#",
+    "statisticalDataType": {
+      "@id": "dsv:statisticalDataType",
+      "@type": "@id"
+    },
+    "summaryStatistics": {
+      "@id": "dsv:summaryStatistics",
+      "@type": "@id"
+    },
+    "title": "dct:title",
+    "titles": "csvw:title",
+    "unitText": "schema:unitText",
+    "xsd": "http://www.w3.org/2001/XMLSchema#",
+    "dcterms": "http://purl.org/dc/terms/",
+    "prov": "http://www.w3.org/ns/prov#"
+  },
+  "@id": "urn:linked-codebook:dataset:unnamed",
+  "@type": [
+    "dcat:Dataset",
+    "dsv:Dataset"
+  ],
   "datasetSchema": {
+    "@id": "urn:linked-codebook:dataset:unnamed#schema",
+    "@type": "dsv:DatasetSchema",
     "columns": [
       {
-        "name": "Class",
+        "@id": "urn:linked-codebook:dataset:unnamed#column-Class",
+        "@type": "dsv:Column",
+        "datatype": "string",
         "titles": "Patient outcome class (1=die, 2=live)",
-        "hadRole": "target",
+        "name": "Class",
         "columnProperty": {
-          "summaryStatistics": {
-            "statisticalDataType": "dsv:NominalDataType"
+          "@id": "urn:linked-codebook:dataset:unnamed#property-Class",
+          "@type": "dsv:ColumnProperty",
+          "hasVariable": {
+            "@id": "urn:linked-codebook:dataset:unnamed#variable-Class",
+            "@type": "skos:Concept",
+            "skos:prefLabel": "Patient outcome class (1=die, 2=live)"
           },
           "hasCodeBook": {
-            "hasTopConcept": [
+            "@id": "urn:linked-codebook:dataset:unnamed#variable-Class-codes",
+            "@type": "skos:ConceptScheme",
+            "skos:hasTopConcept": [
               {
-                "notation": "DIE",
-                "prefLabel": "Outcome recorded as death"
+                "@id": "urn:linked-codebook:dataset:unnamed#variable-Class-codes-DIE",
+                "@type": "skos:Concept",
+                "skos:prefLabel": "Outcome recorded as death",
+                "skos:inScheme": {
+                  "@id": "urn:linked-codebook:dataset:unnamed#variable-Class-codes"
+                },
+                "skos:notation": "DIE"
               },
               {
-                "notation": "LIVE",
-                "prefLabel": "Outcome recorded as survival"
+                "@id": "urn:linked-codebook:dataset:unnamed#variable-Class-codes-LIVE",
+                "@type": "skos:Concept",
+                "skos:prefLabel": "Outcome recorded as survival",
+                "skos:inScheme": {
+                  "@id": "urn:linked-codebook:dataset:unnamed#variable-Class-codes"
+                },
+                "skos:notation": "LIVE"
               }
             ]
-          },
-          "valueType": "xsd:string"
-        }
+          }
+        },
+        "summaryStatistics": {
+          "@id": "urn:linked-codebook:dataset:unnamed#statistics-Class",
+          "@type": "dsv:SummaryStatistics",
+          "statisticalDataType": "dsv:NominalDataType"
+        },
+        "prov:hadRole": "target"
       },
       {
-        "name": "Age",
+        "@id": "urn:linked-codebook:dataset:unnamed#column-Age",
+        "@type": "dsv:Column",
+        "datatype": "integer",
         "titles": "Age in years",
+        "name": "Age",
         "columnProperty": {
-          "summaryStatistics": {
-            "statisticalDataType": "dsv:ContinuousDataType"
+          "@id": "urn:linked-codebook:dataset:unnamed#property-Age",
+          "@type": "dsv:ColumnProperty",
+          "hasVariable": {
+            "@id": "urn:linked-codebook:dataset:unnamed#variable-Age",
+            "@type": "skos:Concept",
+            "skos:prefLabel": "Age in years",
+            "exactMatch": [
+              "https://loinc.org/30525-0/"
+            ]
           },
-          "unitText": "years",
-          "exactMatch": [
-            "https://loinc.org/30525-0/"
-          ],
-          "valueType": "xsd:integer",
-          "hasQuantityKind": "quantitykind:Time",
-          "ucumCode": "a"
+          "unitText": "years"
+        },
+        "summaryStatistics": {
+          "@id": "urn:linked-codebook:dataset:unnamed#statistics-Age",
+          "@type": "dsv:SummaryStatistics",
+          "statisticalDataType": "dsv:NumericalDataType"
         }
       },
       {
-        "name": "Sex",
+        "@id": "urn:linked-codebook:dataset:unnamed#column-Sex",
+        "@type": "dsv:Column",
+        "datatype": "string",
         "titles": "Sex recorded for participant",
+        "name": "Sex",
         "columnProperty": {
-          "summaryStatistics": {
-            "statisticalDataType": "dsv:NominalDataType"
-          },
-          "hasCodeBook": {
-            "hasTopConcept": [
-              {
-                "notation": "male",
-                "prefLabel": "Male"
-              },
-              {
-                "notation": "female",
-                "prefLabel": "Female"
-              }
+          "@id": "urn:linked-codebook:dataset:unnamed#property-Sex",
+          "@type": "dsv:ColumnProperty",
+          "hasVariable": {
+            "@id": "urn:linked-codebook:dataset:unnamed#variable-Sex",
+            "@type": "skos:Concept",
+            "skos:prefLabel": "Sex recorded for participant",
+            "exactMatch": [
+              "https://loinc.org/76689-9/"
             ]
           },
-          "exactMatch": [
-            "https://loinc.org/76689-9/"
-          ],
-          "valueType": "xsd:string"
+          "hasCodeBook": {
+            "@id": "urn:linked-codebook:dataset:unnamed#variable-Sex-codes",
+            "@type": "skos:ConceptScheme",
+            "skos:hasTopConcept": [
+              {
+                "@id": "urn:linked-codebook:dataset:unnamed#variable-Sex-codes-male",
+                "@type": "skos:Concept",
+                "skos:prefLabel": "Male",
+                "skos:inScheme": {
+                  "@id": "urn:linked-codebook:dataset:unnamed#variable-Sex-codes"
+                },
+                "skos:notation": "male"
+              },
+              {
+                "@id": "urn:linked-codebook:dataset:unnamed#variable-Sex-codes-female",
+                "@type": "skos:Concept",
+                "skos:prefLabel": "Female",
+                "skos:inScheme": {
+                  "@id": "urn:linked-codebook:dataset:unnamed#variable-Sex-codes"
+                },
+                "skos:notation": "female"
+              }
+            ]
+          }
+        },
+        "summaryStatistics": {
+          "@id": "urn:linked-codebook:dataset:unnamed#statistics-Sex",
+          "@type": "dsv:SummaryStatistics",
+          "statisticalDataType": "dsv:NominalDataType"
         }
       },
       {
-        "name": "Steroid",
+        "@id": "urn:linked-codebook:dataset:unnamed#column-Steroid",
+        "@type": "dsv:Column",
+        "datatype": "string",
         "titles": "Systemic corticosteroid therapy indicator",
+        "name": "Steroid",
         "columnProperty": {
-          "summaryStatistics": {
-            "statisticalDataType": "dsv:NominalDataType"
+          "@id": "urn:linked-codebook:dataset:unnamed#property-Steroid",
+          "@type": "dsv:ColumnProperty",
+          "hasVariable": {
+            "@id": "urn:linked-codebook:dataset:unnamed#variable-Steroid",
+            "@type": "skos:Concept",
+            "skos:prefLabel": "Systemic corticosteroid therapy indicator"
           },
           "hasCodeBook": {
-            "hasTopConcept": [
+            "@id": "urn:linked-codebook:dataset:unnamed#variable-Steroid-codes",
+            "@type": "skos:ConceptScheme",
+            "skos:hasTopConcept": [
               {
-                "notation": "yes",
-                "prefLabel": "Yes"
+                "@id": "urn:linked-codebook:dataset:unnamed#variable-Steroid-codes-yes",
+                "@type": "skos:Concept",
+                "skos:prefLabel": "Yes",
+                "skos:inScheme": {
+                  "@id": "urn:linked-codebook:dataset:unnamed#variable-Steroid-codes"
+                },
+                "skos:notation": "yes"
               },
               {
-                "notation": "no",
-                "prefLabel": "No"
+                "@id": "urn:linked-codebook:dataset:unnamed#variable-Steroid-codes-no",
+                "@type": "skos:Concept",
+                "skos:prefLabel": "No",
+                "skos:inScheme": {
+                  "@id": "urn:linked-codebook:dataset:unnamed#variable-Steroid-codes"
+                },
+                "skos:notation": "no"
               }
             ]
-          },
-          "valueType": "xsd:string"
+          }
+        },
+        "summaryStatistics": {
+          "@id": "urn:linked-codebook:dataset:unnamed#statistics-Steroid",
+          "@type": "dsv:SummaryStatistics",
+          "statisticalDataType": "dsv:NominalDataType"
         }
       },
       {
-        "name": "Antivirals",
+        "@id": "urn:linked-codebook:dataset:unnamed#column-Antivirals",
+        "@type": "dsv:Column",
+        "datatype": "string",
         "titles": "Antiviral therapy indicator",
+        "name": "Antivirals",
         "columnProperty": {
-          "summaryStatistics": {
-            "statisticalDataType": "dsv:NominalDataType"
+          "@id": "urn:linked-codebook:dataset:unnamed#property-Antivirals",
+          "@type": "dsv:ColumnProperty",
+          "hasVariable": {
+            "@id": "urn:linked-codebook:dataset:unnamed#variable-Antivirals",
+            "@type": "skos:Concept",
+            "skos:prefLabel": "Antiviral therapy indicator"
           },
           "hasCodeBook": {
-            "hasTopConcept": [
+            "@id": "urn:linked-codebook:dataset:unnamed#variable-Antivirals-codes",
+            "@type": "skos:ConceptScheme",
+            "skos:hasTopConcept": [
               {
-                "notation": "yes",
-                "prefLabel": "Yes"
+                "@id": "urn:linked-codebook:dataset:unnamed#variable-Antivirals-codes-yes",
+                "@type": "skos:Concept",
+                "skos:prefLabel": "Yes",
+                "skos:inScheme": {
+                  "@id": "urn:linked-codebook:dataset:unnamed#variable-Antivirals-codes"
+                },
+                "skos:notation": "yes"
               },
               {
-                "notation": "no",
-                "prefLabel": "No"
+                "@id": "urn:linked-codebook:dataset:unnamed#variable-Antivirals-codes-no",
+                "@type": "skos:Concept",
+                "skos:prefLabel": "No",
+                "skos:inScheme": {
+                  "@id": "urn:linked-codebook:dataset:unnamed#variable-Antivirals-codes"
+                },
+                "skos:notation": "no"
               }
             ]
-          },
-          "valueType": "xsd:string"
+          }
+        },
+        "summaryStatistics": {
+          "@id": "urn:linked-codebook:dataset:unnamed#statistics-Antivirals",
+          "@type": "dsv:SummaryStatistics",
+          "statisticalDataType": "dsv:NominalDataType"
         }
       },
       {
-        "name": "Fatigue",
+        "@id": "urn:linked-codebook:dataset:unnamed#column-Fatigue",
+        "@type": "dsv:Column",
+        "datatype": "string",
         "titles": "Reported fatigue",
+        "name": "Fatigue",
         "columnProperty": {
-          "summaryStatistics": {
-            "statisticalDataType": "dsv:NominalDataType"
-          },
-          "hasCodeBook": {
-            "hasTopConcept": [
-              {
-                "notation": "yes",
-                "prefLabel": "Yes"
-              },
-              {
-                "notation": "no",
-                "prefLabel": "No"
-              }
+          "@id": "urn:linked-codebook:dataset:unnamed#property-Fatigue",
+          "@type": "dsv:ColumnProperty",
+          "hasVariable": {
+            "@id": "urn:linked-codebook:dataset:unnamed#variable-Fatigue",
+            "@type": "skos:Concept",
+            "skos:prefLabel": "Reported fatigue",
+            "closeMatch": [
+              "http://snomed.info/id/84229001"
             ]
           },
-          "closeMatch": [
-            "http://snomed.info/id/84229001"
-          ],
-          "valueType": "xsd:string"
+          "hasCodeBook": {
+            "@id": "urn:linked-codebook:dataset:unnamed#variable-Fatigue-codes",
+            "@type": "skos:ConceptScheme",
+            "skos:hasTopConcept": [
+              {
+                "@id": "urn:linked-codebook:dataset:unnamed#variable-Fatigue-codes-yes",
+                "@type": "skos:Concept",
+                "skos:prefLabel": "Yes",
+                "skos:inScheme": {
+                  "@id": "urn:linked-codebook:dataset:unnamed#variable-Fatigue-codes"
+                },
+                "skos:notation": "yes"
+              },
+              {
+                "@id": "urn:linked-codebook:dataset:unnamed#variable-Fatigue-codes-no",
+                "@type": "skos:Concept",
+                "skos:prefLabel": "No",
+                "skos:inScheme": {
+                  "@id": "urn:linked-codebook:dataset:unnamed#variable-Fatigue-codes"
+                },
+                "skos:notation": "no"
+              }
+            ]
+          }
+        },
+        "summaryStatistics": {
+          "@id": "urn:linked-codebook:dataset:unnamed#statistics-Fatigue",
+          "@type": "dsv:SummaryStatistics",
+          "statisticalDataType": "dsv:NominalDataType"
         }
       },
       {
-        "name": "Malaise",
+        "@id": "urn:linked-codebook:dataset:unnamed#column-Malaise",
+        "@type": "dsv:Column",
+        "datatype": "string",
         "titles": "Reported malaise",
+        "name": "Malaise",
         "columnProperty": {
-          "summaryStatistics": {
-            "statisticalDataType": "dsv:NominalDataType"
-          },
-          "hasCodeBook": {
-            "hasTopConcept": [
-              {
-                "notation": "yes",
-                "prefLabel": "Yes"
-              },
-              {
-                "notation": "no",
-                "prefLabel": "No"
-              }
+          "@id": "urn:linked-codebook:dataset:unnamed#property-Malaise",
+          "@type": "dsv:ColumnProperty",
+          "hasVariable": {
+            "@id": "urn:linked-codebook:dataset:unnamed#variable-Malaise",
+            "@type": "skos:Concept",
+            "skos:prefLabel": "Reported malaise",
+            "closeMatch": [
+              "http://snomed.info/id/367391008"
             ]
           },
-          "closeMatch": [
-            "http://snomed.info/id/367391008"
-          ],
-          "valueType": "xsd:string"
+          "hasCodeBook": {
+            "@id": "urn:linked-codebook:dataset:unnamed#variable-Malaise-codes",
+            "@type": "skos:ConceptScheme",
+            "skos:hasTopConcept": [
+              {
+                "@id": "urn:linked-codebook:dataset:unnamed#variable-Malaise-codes-yes",
+                "@type": "skos:Concept",
+                "skos:prefLabel": "Yes",
+                "skos:inScheme": {
+                  "@id": "urn:linked-codebook:dataset:unnamed#variable-Malaise-codes"
+                },
+                "skos:notation": "yes"
+              },
+              {
+                "@id": "urn:linked-codebook:dataset:unnamed#variable-Malaise-codes-no",
+                "@type": "skos:Concept",
+                "skos:prefLabel": "No",
+                "skos:inScheme": {
+                  "@id": "urn:linked-codebook:dataset:unnamed#variable-Malaise-codes"
+                },
+                "skos:notation": "no"
+              }
+            ]
+          }
+        },
+        "summaryStatistics": {
+          "@id": "urn:linked-codebook:dataset:unnamed#statistics-Malaise",
+          "@type": "dsv:SummaryStatistics",
+          "statisticalDataType": "dsv:NominalDataType"
         }
       },
       {
-        "name": "Anorexia",
+        "@id": "urn:linked-codebook:dataset:unnamed#column-Anorexia",
+        "@type": "dsv:Column",
+        "datatype": "string",
         "titles": "Loss of appetite indicator",
+        "name": "Anorexia",
         "columnProperty": {
-          "summaryStatistics": {
-            "statisticalDataType": "dsv:NominalDataType"
-          },
-          "hasCodeBook": {
-            "hasTopConcept": [
-              {
-                "notation": "yes",
-                "prefLabel": "Yes"
-              },
-              {
-                "notation": "no",
-                "prefLabel": "No"
-              }
+          "@id": "urn:linked-codebook:dataset:unnamed#property-Anorexia",
+          "@type": "dsv:ColumnProperty",
+          "hasVariable": {
+            "@id": "urn:linked-codebook:dataset:unnamed#variable-Anorexia",
+            "@type": "skos:Concept",
+            "skos:prefLabel": "Loss of appetite indicator",
+            "closeMatch": [
+              "http://snomed.info/id/79890006"
             ]
           },
-          "closeMatch": [
-            "http://snomed.info/id/79890006"
-          ],
-          "valueType": "xsd:string"
+          "hasCodeBook": {
+            "@id": "urn:linked-codebook:dataset:unnamed#variable-Anorexia-codes",
+            "@type": "skos:ConceptScheme",
+            "skos:hasTopConcept": [
+              {
+                "@id": "urn:linked-codebook:dataset:unnamed#variable-Anorexia-codes-yes",
+                "@type": "skos:Concept",
+                "skos:prefLabel": "Yes",
+                "skos:inScheme": {
+                  "@id": "urn:linked-codebook:dataset:unnamed#variable-Anorexia-codes"
+                },
+                "skos:notation": "yes"
+              },
+              {
+                "@id": "urn:linked-codebook:dataset:unnamed#variable-Anorexia-codes-no",
+                "@type": "skos:Concept",
+                "skos:prefLabel": "No",
+                "skos:inScheme": {
+                  "@id": "urn:linked-codebook:dataset:unnamed#variable-Anorexia-codes"
+                },
+                "skos:notation": "no"
+              }
+            ]
+          }
+        },
+        "summaryStatistics": {
+          "@id": "urn:linked-codebook:dataset:unnamed#statistics-Anorexia",
+          "@type": "dsv:SummaryStatistics",
+          "statisticalDataType": "dsv:NominalDataType"
         }
       },
       {
-        "name": "Liver Big",
+        "@id": "urn:linked-codebook:dataset:unnamed#column-Liver%20Big",
+        "@type": "dsv:Column",
+        "datatype": "string",
         "titles": "Clinically enlarged liver",
+        "name": "Liver Big",
         "columnProperty": {
-          "summaryStatistics": {
-            "statisticalDataType": "dsv:NominalDataType"
-          },
-          "hasCodeBook": {
-            "hasTopConcept": [
-              {
-                "notation": "yes",
-                "prefLabel": "Yes"
-              },
-              {
-                "notation": "no",
-                "prefLabel": "No"
-              }
+          "@id": "urn:linked-codebook:dataset:unnamed#property-Liver%20Big",
+          "@type": "dsv:ColumnProperty",
+          "hasVariable": {
+            "@id": "urn:linked-codebook:dataset:unnamed#variable-Liver%20Big",
+            "@type": "skos:Concept",
+            "skos:prefLabel": "Clinically enlarged liver",
+            "closeMatch": [
+              "http://snomed.info/id/80515008"
             ]
           },
-          "closeMatch": [
-            "http://snomed.info/id/80515008"
-          ],
-          "valueType": "xsd:string"
+          "hasCodeBook": {
+            "@id": "urn:linked-codebook:dataset:unnamed#variable-Liver%20Big-codes",
+            "@type": "skos:ConceptScheme",
+            "skos:hasTopConcept": [
+              {
+                "@id": "urn:linked-codebook:dataset:unnamed#variable-Liver%20Big-codes-yes",
+                "@type": "skos:Concept",
+                "skos:prefLabel": "Yes",
+                "skos:inScheme": {
+                  "@id": "urn:linked-codebook:dataset:unnamed#variable-Liver%20Big-codes"
+                },
+                "skos:notation": "yes"
+              },
+              {
+                "@id": "urn:linked-codebook:dataset:unnamed#variable-Liver%20Big-codes-no",
+                "@type": "skos:Concept",
+                "skos:prefLabel": "No",
+                "skos:inScheme": {
+                  "@id": "urn:linked-codebook:dataset:unnamed#variable-Liver%20Big-codes"
+                },
+                "skos:notation": "no"
+              }
+            ]
+          }
+        },
+        "summaryStatistics": {
+          "@id": "urn:linked-codebook:dataset:unnamed#statistics-Liver%20Big",
+          "@type": "dsv:SummaryStatistics",
+          "statisticalDataType": "dsv:NominalDataType"
         }
       },
       {
-        "name": "Liver Firm",
+        "@id": "urn:linked-codebook:dataset:unnamed#column-Liver%20Firm",
+        "@type": "dsv:Column",
+        "datatype": "string",
         "titles": "Palpable firm liver",
+        "name": "Liver Firm",
         "columnProperty": {
-          "summaryStatistics": {
-            "statisticalDataType": "dsv:NominalDataType"
+          "@id": "urn:linked-codebook:dataset:unnamed#property-Liver%20Firm",
+          "@type": "dsv:ColumnProperty",
+          "hasVariable": {
+            "@id": "urn:linked-codebook:dataset:unnamed#variable-Liver%20Firm",
+            "@type": "skos:Concept",
+            "skos:prefLabel": "Palpable firm liver"
           },
           "hasCodeBook": {
-            "hasTopConcept": [
+            "@id": "urn:linked-codebook:dataset:unnamed#variable-Liver%20Firm-codes",
+            "@type": "skos:ConceptScheme",
+            "skos:hasTopConcept": [
               {
-                "notation": "yes",
-                "prefLabel": "Yes"
+                "@id": "urn:linked-codebook:dataset:unnamed#variable-Liver%20Firm-codes-yes",
+                "@type": "skos:Concept",
+                "skos:prefLabel": "Yes",
+                "skos:inScheme": {
+                  "@id": "urn:linked-codebook:dataset:unnamed#variable-Liver%20Firm-codes"
+                },
+                "skos:notation": "yes"
               },
               {
-                "notation": "no",
-                "prefLabel": "No"
+                "@id": "urn:linked-codebook:dataset:unnamed#variable-Liver%20Firm-codes-no",
+                "@type": "skos:Concept",
+                "skos:prefLabel": "No",
+                "skos:inScheme": {
+                  "@id": "urn:linked-codebook:dataset:unnamed#variable-Liver%20Firm-codes"
+                },
+                "skos:notation": "no"
               }
             ]
-          },
-          "valueType": "xsd:string"
+          }
+        },
+        "summaryStatistics": {
+          "@id": "urn:linked-codebook:dataset:unnamed#statistics-Liver%20Firm",
+          "@type": "dsv:SummaryStatistics",
+          "statisticalDataType": "dsv:NominalDataType"
         }
       },
       {
-        "name": "Spleen Palpable",
+        "@id": "urn:linked-codebook:dataset:unnamed#column-Spleen%20Palpable",
+        "@type": "dsv:Column",
+        "datatype": "string",
         "titles": "Palpable spleen",
+        "name": "Spleen Palpable",
         "columnProperty": {
-          "summaryStatistics": {
-            "statisticalDataType": "dsv:NominalDataType"
-          },
-          "hasCodeBook": {
-            "hasTopConcept": [
-              {
-                "notation": "yes",
-                "prefLabel": "Yes"
-              },
-              {
-                "notation": "no",
-                "prefLabel": "No"
-              }
+          "@id": "urn:linked-codebook:dataset:unnamed#property-Spleen%20Palpable",
+          "@type": "dsv:ColumnProperty",
+          "hasVariable": {
+            "@id": "urn:linked-codebook:dataset:unnamed#variable-Spleen%20Palpable",
+            "@type": "skos:Concept",
+            "skos:prefLabel": "Palpable spleen",
+            "closeMatch": [
+              "http://snomed.info/id/249572006"
             ]
           },
-          "closeMatch": [
-            "http://snomed.info/id/249572006"
-          ],
-          "valueType": "xsd:string"
+          "hasCodeBook": {
+            "@id": "urn:linked-codebook:dataset:unnamed#variable-Spleen%20Palpable-codes",
+            "@type": "skos:ConceptScheme",
+            "skos:hasTopConcept": [
+              {
+                "@id": "urn:linked-codebook:dataset:unnamed#variable-Spleen%20Palpable-codes-yes",
+                "@type": "skos:Concept",
+                "skos:prefLabel": "Yes",
+                "skos:inScheme": {
+                  "@id": "urn:linked-codebook:dataset:unnamed#variable-Spleen%20Palpable-codes"
+                },
+                "skos:notation": "yes"
+              },
+              {
+                "@id": "urn:linked-codebook:dataset:unnamed#variable-Spleen%20Palpable-codes-no",
+                "@type": "skos:Concept",
+                "skos:prefLabel": "No",
+                "skos:inScheme": {
+                  "@id": "urn:linked-codebook:dataset:unnamed#variable-Spleen%20Palpable-codes"
+                },
+                "skos:notation": "no"
+              }
+            ]
+          }
+        },
+        "summaryStatistics": {
+          "@id": "urn:linked-codebook:dataset:unnamed#statistics-Spleen%20Palpable",
+          "@type": "dsv:SummaryStatistics",
+          "statisticalDataType": "dsv:NominalDataType"
         }
       },
       {
-        "name": "Spiders",
+        "@id": "urn:linked-codebook:dataset:unnamed#column-Spiders",
+        "@type": "dsv:Column",
+        "datatype": "string",
         "titles": "Spider angioma observed",
+        "name": "Spiders",
         "columnProperty": {
-          "summaryStatistics": {
-            "statisticalDataType": "dsv:NominalDataType"
-          },
-          "hasCodeBook": {
-            "hasTopConcept": [
-              {
-                "notation": "yes",
-                "prefLabel": "Yes"
-              },
-              {
-                "notation": "no",
-                "prefLabel": "No"
-              }
+          "@id": "urn:linked-codebook:dataset:unnamed#property-Spiders",
+          "@type": "dsv:ColumnProperty",
+          "hasVariable": {
+            "@id": "urn:linked-codebook:dataset:unnamed#variable-Spiders",
+            "@type": "skos:Concept",
+            "skos:prefLabel": "Spider angioma observed",
+            "closeMatch": [
+              "http://snomed.info/id/195382003"
             ]
           },
-          "closeMatch": [
-            "http://snomed.info/id/195382003"
-          ],
-          "valueType": "xsd:string"
+          "hasCodeBook": {
+            "@id": "urn:linked-codebook:dataset:unnamed#variable-Spiders-codes",
+            "@type": "skos:ConceptScheme",
+            "skos:hasTopConcept": [
+              {
+                "@id": "urn:linked-codebook:dataset:unnamed#variable-Spiders-codes-yes",
+                "@type": "skos:Concept",
+                "skos:prefLabel": "Yes",
+                "skos:inScheme": {
+                  "@id": "urn:linked-codebook:dataset:unnamed#variable-Spiders-codes"
+                },
+                "skos:notation": "yes"
+              },
+              {
+                "@id": "urn:linked-codebook:dataset:unnamed#variable-Spiders-codes-no",
+                "@type": "skos:Concept",
+                "skos:prefLabel": "No",
+                "skos:inScheme": {
+                  "@id": "urn:linked-codebook:dataset:unnamed#variable-Spiders-codes"
+                },
+                "skos:notation": "no"
+              }
+            ]
+          }
+        },
+        "summaryStatistics": {
+          "@id": "urn:linked-codebook:dataset:unnamed#statistics-Spiders",
+          "@type": "dsv:SummaryStatistics",
+          "statisticalDataType": "dsv:NominalDataType"
         }
       },
       {
-        "name": "Ascites",
+        "@id": "urn:linked-codebook:dataset:unnamed#column-Ascites",
+        "@type": "dsv:Column",
+        "datatype": "string",
         "titles": "Ascites observed",
+        "name": "Ascites",
         "columnProperty": {
-          "summaryStatistics": {
-            "statisticalDataType": "dsv:NominalDataType"
-          },
-          "hasCodeBook": {
-            "hasTopConcept": [
-              {
-                "notation": "yes",
-                "prefLabel": "Yes"
-              },
-              {
-                "notation": "no",
-                "prefLabel": "No"
-              }
+          "@id": "urn:linked-codebook:dataset:unnamed#property-Ascites",
+          "@type": "dsv:ColumnProperty",
+          "hasVariable": {
+            "@id": "urn:linked-codebook:dataset:unnamed#variable-Ascites",
+            "@type": "skos:Concept",
+            "skos:prefLabel": "Ascites observed",
+            "closeMatch": [
+              "http://snomed.info/id/389026000"
             ]
           },
-          "closeMatch": [
-            "http://snomed.info/id/389026000"
-          ],
-          "valueType": "xsd:string"
+          "hasCodeBook": {
+            "@id": "urn:linked-codebook:dataset:unnamed#variable-Ascites-codes",
+            "@type": "skos:ConceptScheme",
+            "skos:hasTopConcept": [
+              {
+                "@id": "urn:linked-codebook:dataset:unnamed#variable-Ascites-codes-yes",
+                "@type": "skos:Concept",
+                "skos:prefLabel": "Yes",
+                "skos:inScheme": {
+                  "@id": "urn:linked-codebook:dataset:unnamed#variable-Ascites-codes"
+                },
+                "skos:notation": "yes"
+              },
+              {
+                "@id": "urn:linked-codebook:dataset:unnamed#variable-Ascites-codes-no",
+                "@type": "skos:Concept",
+                "skos:prefLabel": "No",
+                "skos:inScheme": {
+                  "@id": "urn:linked-codebook:dataset:unnamed#variable-Ascites-codes"
+                },
+                "skos:notation": "no"
+              }
+            ]
+          }
+        },
+        "summaryStatistics": {
+          "@id": "urn:linked-codebook:dataset:unnamed#statistics-Ascites",
+          "@type": "dsv:SummaryStatistics",
+          "statisticalDataType": "dsv:NominalDataType"
         }
       },
       {
-        "name": "Varices",
+        "@id": "urn:linked-codebook:dataset:unnamed#column-Varices",
+        "@type": "dsv:Column",
+        "datatype": "string",
         "titles": "Esophageal varices observed",
+        "name": "Varices",
         "columnProperty": {
-          "summaryStatistics": {
-            "statisticalDataType": "dsv:NominalDataType"
-          },
-          "hasCodeBook": {
-            "hasTopConcept": [
-              {
-                "notation": "yes",
-                "prefLabel": "Yes"
-              },
-              {
-                "notation": "no",
-                "prefLabel": "No"
-              }
+          "@id": "urn:linked-codebook:dataset:unnamed#property-Varices",
+          "@type": "dsv:ColumnProperty",
+          "hasVariable": {
+            "@id": "urn:linked-codebook:dataset:unnamed#variable-Varices",
+            "@type": "skos:Concept",
+            "skos:prefLabel": "Esophageal varices observed",
+            "closeMatch": [
+              "http://snomed.info/id/28670008"
             ]
           },
-          "closeMatch": [
-            "http://snomed.info/id/28670008"
-          ],
-          "valueType": "xsd:string"
+          "hasCodeBook": {
+            "@id": "urn:linked-codebook:dataset:unnamed#variable-Varices-codes",
+            "@type": "skos:ConceptScheme",
+            "skos:hasTopConcept": [
+              {
+                "@id": "urn:linked-codebook:dataset:unnamed#variable-Varices-codes-yes",
+                "@type": "skos:Concept",
+                "skos:prefLabel": "Yes",
+                "skos:inScheme": {
+                  "@id": "urn:linked-codebook:dataset:unnamed#variable-Varices-codes"
+                },
+                "skos:notation": "yes"
+              },
+              {
+                "@id": "urn:linked-codebook:dataset:unnamed#variable-Varices-codes-no",
+                "@type": "skos:Concept",
+                "skos:prefLabel": "No",
+                "skos:inScheme": {
+                  "@id": "urn:linked-codebook:dataset:unnamed#variable-Varices-codes"
+                },
+                "skos:notation": "no"
+              }
+            ]
+          }
+        },
+        "summaryStatistics": {
+          "@id": "urn:linked-codebook:dataset:unnamed#statistics-Varices",
+          "@type": "dsv:SummaryStatistics",
+          "statisticalDataType": "dsv:NominalDataType"
         }
       },
       {
-        "name": "Bilirubin",
+        "@id": "urn:linked-codebook:dataset:unnamed#column-Bilirubin",
+        "@type": "dsv:Column",
+        "datatype": "number",
         "titles": "Total bilirubin concentration",
+        "name": "Bilirubin",
         "columnProperty": {
-          "summaryStatistics": {
-            "statisticalDataType": "dsv:ContinuousDataType"
-          },
-          "unitText": "mg/dL",
-          "exactMatch": [
-            "https://loinc.org/1975-2/"
-          ],
-          "valueType": "xsd:float",
-          "ucumCode": "mg/dL"
-        }
-      },
-      {
-        "name": "Alk Phosphate",
-        "titles": "Alkaline phosphatase activity",
-        "columnProperty": {
-          "summaryStatistics": {
-            "statisticalDataType": "dsv:ContinuousDataType"
-          },
-          "unitText": "U/L",
-          "exactMatch": [
-            "https://loinc.org/6768-6/"
-          ],
-          "valueType": "xsd:float",
-          "ucumCode": "U/L"
-        }
-      },
-      {
-        "name": "Sgot",
-        "titles": "Aspartate aminotransferase activity",
-        "columnProperty": {
-          "summaryStatistics": {
-            "statisticalDataType": "dsv:ContinuousDataType"
-          },
-          "unitText": "U/L",
-          "exactMatch": [
-            "https://loinc.org/1920-8/"
-          ],
-          "valueType": "xsd:float",
-          "ucumCode": "U/L"
-        }
-      },
-      {
-        "name": "Albumin",
-        "titles": "Serum albumin concentration",
-        "columnProperty": {
-          "summaryStatistics": {
-            "statisticalDataType": "dsv:ContinuousDataType"
-          },
-          "unitText": "g/dL",
-          "exactMatch": [
-            "https://loinc.org/1751-7/"
-          ],
-          "valueType": "xsd:float",
-          "ucumCode": "g/dL"
-        }
-      },
-      {
-        "name": "Protime",
-        "titles": "Prothrombin time",
-        "columnProperty": {
-          "summaryStatistics": {
-            "statisticalDataType": "dsv:ContinuousDataType"
-          },
-          "unitText": "seconds",
-          "exactMatch": [
-            "https://loinc.org/5902-2/"
-          ],
-          "valueType": "xsd:float",
-          "ucumCode": "s"
-        }
-      },
-      {
-        "name": "Histology",
-        "titles": "Histology result available",
-        "columnProperty": {
-          "summaryStatistics": {
-            "statisticalDataType": "dsv:NominalDataType"
-          },
-          "hasCodeBook": {
-            "hasTopConcept": [
-              {
-                "notation": "yes",
-                "prefLabel": "Yes"
-              },
-              {
-                "notation": "no",
-                "prefLabel": "No"
-              }
+          "@id": "urn:linked-codebook:dataset:unnamed#property-Bilirubin",
+          "@type": "dsv:ColumnProperty",
+          "hasVariable": {
+            "@id": "urn:linked-codebook:dataset:unnamed#variable-Bilirubin",
+            "@type": "skos:Concept",
+            "skos:prefLabel": "Total bilirubin concentration",
+            "exactMatch": [
+              "https://loinc.org/1975-2/"
             ]
           },
-          "valueType": "xsd:string"
+          "unitText": "mg/dL"
+        },
+        "summaryStatistics": {
+          "@id": "urn:linked-codebook:dataset:unnamed#statistics-Bilirubin",
+          "@type": "dsv:SummaryStatistics",
+          "statisticalDataType": "dsv:NumericalDataType"
+        }
+      },
+      {
+        "@id": "urn:linked-codebook:dataset:unnamed#column-Alk%20Phosphate",
+        "@type": "dsv:Column",
+        "datatype": "number",
+        "titles": "Alkaline phosphatase activity",
+        "name": "Alk Phosphate",
+        "columnProperty": {
+          "@id": "urn:linked-codebook:dataset:unnamed#property-Alk%20Phosphate",
+          "@type": "dsv:ColumnProperty",
+          "hasVariable": {
+            "@id": "urn:linked-codebook:dataset:unnamed#variable-Alk%20Phosphate",
+            "@type": "skos:Concept",
+            "skos:prefLabel": "Alkaline phosphatase activity",
+            "exactMatch": [
+              "https://loinc.org/6768-6/"
+            ]
+          },
+          "unitText": "U/L"
+        },
+        "summaryStatistics": {
+          "@id": "urn:linked-codebook:dataset:unnamed#statistics-Alk%20Phosphate",
+          "@type": "dsv:SummaryStatistics",
+          "statisticalDataType": "dsv:NumericalDataType"
+        }
+      },
+      {
+        "@id": "urn:linked-codebook:dataset:unnamed#column-Sgot",
+        "@type": "dsv:Column",
+        "datatype": "number",
+        "titles": "Aspartate aminotransferase activity",
+        "name": "Sgot",
+        "columnProperty": {
+          "@id": "urn:linked-codebook:dataset:unnamed#property-Sgot",
+          "@type": "dsv:ColumnProperty",
+          "hasVariable": {
+            "@id": "urn:linked-codebook:dataset:unnamed#variable-Sgot",
+            "@type": "skos:Concept",
+            "skos:prefLabel": "Aspartate aminotransferase activity",
+            "exactMatch": [
+              "https://loinc.org/1920-8/"
+            ]
+          },
+          "unitText": "U/L"
+        },
+        "summaryStatistics": {
+          "@id": "urn:linked-codebook:dataset:unnamed#statistics-Sgot",
+          "@type": "dsv:SummaryStatistics",
+          "statisticalDataType": "dsv:NumericalDataType"
+        }
+      },
+      {
+        "@id": "urn:linked-codebook:dataset:unnamed#column-Albumin",
+        "@type": "dsv:Column",
+        "datatype": "number",
+        "titles": "Serum albumin concentration",
+        "name": "Albumin",
+        "columnProperty": {
+          "@id": "urn:linked-codebook:dataset:unnamed#property-Albumin",
+          "@type": "dsv:ColumnProperty",
+          "hasVariable": {
+            "@id": "urn:linked-codebook:dataset:unnamed#variable-Albumin",
+            "@type": "skos:Concept",
+            "skos:prefLabel": "Serum albumin concentration",
+            "exactMatch": [
+              "https://loinc.org/1751-7/"
+            ]
+          },
+          "unitText": "g/dL"
+        },
+        "summaryStatistics": {
+          "@id": "urn:linked-codebook:dataset:unnamed#statistics-Albumin",
+          "@type": "dsv:SummaryStatistics",
+          "statisticalDataType": "dsv:NumericalDataType"
+        }
+      },
+      {
+        "@id": "urn:linked-codebook:dataset:unnamed#column-Protime",
+        "@type": "dsv:Column",
+        "datatype": "number",
+        "titles": "Prothrombin time",
+        "name": "Protime",
+        "columnProperty": {
+          "@id": "urn:linked-codebook:dataset:unnamed#property-Protime",
+          "@type": "dsv:ColumnProperty",
+          "hasVariable": {
+            "@id": "urn:linked-codebook:dataset:unnamed#variable-Protime",
+            "@type": "skos:Concept",
+            "skos:prefLabel": "Prothrombin time",
+            "exactMatch": [
+              "https://loinc.org/5902-2/"
+            ]
+          },
+          "unitText": "seconds"
+        },
+        "summaryStatistics": {
+          "@id": "urn:linked-codebook:dataset:unnamed#statistics-Protime",
+          "@type": "dsv:SummaryStatistics",
+          "statisticalDataType": "dsv:NumericalDataType"
+        }
+      },
+      {
+        "@id": "urn:linked-codebook:dataset:unnamed#column-Histology",
+        "@type": "dsv:Column",
+        "datatype": "string",
+        "titles": "Histology result available",
+        "name": "Histology",
+        "columnProperty": {
+          "@id": "urn:linked-codebook:dataset:unnamed#property-Histology",
+          "@type": "dsv:ColumnProperty",
+          "hasVariable": {
+            "@id": "urn:linked-codebook:dataset:unnamed#variable-Histology",
+            "@type": "skos:Concept",
+            "skos:prefLabel": "Histology result available"
+          },
+          "hasCodeBook": {
+            "@id": "urn:linked-codebook:dataset:unnamed#variable-Histology-codes",
+            "@type": "skos:ConceptScheme",
+            "skos:hasTopConcept": [
+              {
+                "@id": "urn:linked-codebook:dataset:unnamed#variable-Histology-codes-yes",
+                "@type": "skos:Concept",
+                "skos:prefLabel": "Yes",
+                "skos:inScheme": {
+                  "@id": "urn:linked-codebook:dataset:unnamed#variable-Histology-codes"
+                },
+                "skos:notation": "yes"
+              },
+              {
+                "@id": "urn:linked-codebook:dataset:unnamed#variable-Histology-codes-no",
+                "@type": "skos:Concept",
+                "skos:prefLabel": "No",
+                "skos:inScheme": {
+                  "@id": "urn:linked-codebook:dataset:unnamed#variable-Histology-codes"
+                },
+                "skos:notation": "no"
+              }
+            ]
+          }
+        },
+        "summaryStatistics": {
+          "@id": "urn:linked-codebook:dataset:unnamed#statistics-Histology",
+          "@type": "dsv:SummaryStatistics",
+          "statisticalDataType": "dsv:NominalDataType"
         }
       }
     ]

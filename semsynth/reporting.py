@@ -32,11 +32,12 @@ from markupsafe import Markup
 import pandas as pd
 from makeprov import OutPath, rule
 
+from .codebook import Codebook
 from .jsonld_to_rdfa import SCHEMA_ORG, render_rdfa
 from .models import ModelRun
 
 
-_TEMPLATE_FILES = ("report.md.j2", "report_template.html", "report_style.css", "semmap_style.css")
+_TEMPLATE_FILES = ("report.md.j2", "report_template.html", "report_style.css", "codebook_style.css")
 
 
 def _load_template_sources() -> Dict[str, str]:
@@ -86,21 +87,21 @@ def _jinja_environment() -> Environment:
     )
 
 
-def _resolve_semmap_context(data: Dict[str, Any]) -> Any:
+def _resolve_codebook_context(data: Dict[str, Any]) -> Any:
     if isinstance(data, dict) and data.get("@context"):
         return data["@context"]
     return SCHEMA_ORG
 
 
-def _write_semmap_artifacts(
-    output_dir: Path, dataset_name: str, semmap_jsonld: Optional[dict]
+def _write_codebook_artifacts(
+    output_dir: Path, dataset_name: str, codebook_jsonld: Optional[dict]
 ) -> tuple[Optional[str], Optional[str]]:
-    """Persist SemMap metadata artifacts and return filenames.
+    """Persist the codebook artifacts and return filenames.
 
     Args:
         output_dir: Target directory for report files.
         dataset_name: Dataset label used for the HTML title.
-        semmap_jsonld: JSON-LD payload representing semantic metadata.
+        codebook_jsonld: JSON-LD payload representing semantic metadata.
 
     Returns:
         Tuple containing the JSON filename and the rendered HTML filename. Each
@@ -108,24 +109,24 @@ def _write_semmap_artifacts(
         generated.
     """
 
-    if not isinstance(semmap_jsonld, dict) or not semmap_jsonld:
+    if not isinstance(codebook_jsonld, dict) or not codebook_jsonld:
         return None, None
 
-    json_name = "dataset.semmap.json"
+    json_name = "dataset.codebook.jsonld"
     json_path = output_dir / json_name
-    json_path.write_text(json.dumps(semmap_jsonld, indent=2), encoding="utf-8")
+    json_path.write_text(json.dumps(codebook_jsonld, indent=2), encoding="utf-8")
 
     html_name: Optional[str] = None
     try:
-        context = _resolve_semmap_context(semmap_jsonld)
-        html_title = f"{dataset_name} — SemMap metadata"
-        semmap_fragment = render_rdfa(semmap_jsonld, context, html_title)
-        html_path = output_dir / "dataset.semmap.html"
-        html_path.write_text(semmap_fragment, encoding="utf-8")
+        context = _resolve_codebook_context(codebook_jsonld)
+        html_title = f"{dataset_name} — codebook"
+        codebook_fragment = render_rdfa(codebook_jsonld, context, html_title)
+        html_path = output_dir / "dataset.codebook.html"
+        html_path.write_text(codebook_fragment, encoding="utf-8")
         html_name = html_path.name
-        logging.info("Wrote SemMap metadata HTML: %s", html_path)
+        logging.info("Wrote codebook HTML: %s", html_path)
     except Exception:  # pragma: no cover - log and continue report generation
-        logging.exception("Failed to render SemMap metadata HTML", exc_info=True)
+        logging.exception("Failed to render codebook HTML", exc_info=True)
     return json_name, html_name
 
 
@@ -144,7 +145,7 @@ def write_report_md(
     declared_types: Optional[dict] = None,
     inferred_types: Optional[dict] = None,
     variable_descriptions: Optional[dict] = None,
-    semmap_jsonld: Optional[dict] = None,
+    codebook_jsonld: Optional[dict] = None,
     dataset_metadata: Optional[Any] = None,
     model_runs: Optional[List[ModelRun]] = None,
     missingness_summary: Optional[Dict[str, Any]] = None,
@@ -163,7 +164,7 @@ def write_report_md(
         declared_types: Mapping of declared data types per variable.
         inferred_types: Mapping of inferred data types per variable.
         variable_descriptions: Optional free text descriptions for variables.
-        semmap_jsonld: Semantic metadata to attach to the report.
+        codebook_jsonld: Semantic metadata to attach to the report.
         model_runs: Model execution metadata used to build model sections.
         missingness_summary: Optional description of fitted missingness rates used
             for contextual reporting.
@@ -177,8 +178,8 @@ def write_report_md(
     md_path = output_dir / "report.md"
     dataset_title = dataset_name
 
-    semmap_json_name, semmap_html_name = _write_semmap_artifacts(
-        output_dir, dataset_title, semmap_jsonld
+    codebook_json_name, codebook_html_name = _write_codebook_artifacts(
+        output_dir, dataset_title, codebook_jsonld
     )
 
     metadata_dict: Dict[str, Any] = {}
@@ -187,7 +188,7 @@ def write_report_md(
             metadata_dict = dataset_metadata.to_jsonld() or {}
         elif isinstance(dataset_metadata, dict):
             metadata_dict = dataset_metadata
-    codebook_labels = _extract_codebook_labels(metadata_dict)
+    codebook_labels = _extract_codebook_labels(dataset_metadata if dataset_metadata is not None else {})
 
     dataset_description = metadata_dict.get("dcterms:description") or metadata_dict.get("description")
     dataset_purpose = metadata_dict.get("dcterms:purpose") or metadata_dict.get("purpose")
@@ -212,8 +213,8 @@ def write_report_md(
     overview_table = _build_overview_table(
         dataset_name=dataset_title,
         provider_link=provider_link,
-        semmap_json_name=semmap_json_name,
-        semmap_html_name=semmap_html_name,
+        codebook_json_name=codebook_json_name,
+        codebook_html_name=codebook_html_name,
         num_rows=num_rows,
         num_cols=num_cols,
         num_disc=len(disc_cols),
@@ -226,8 +227,8 @@ def write_report_md(
     md_text = template.render(
         dataset_name=dataset_title,
         provider_link=provider_link,
-        semmap_json_name=semmap_json_name,
-        semmap_html_name=semmap_html_name,
+        codebook_json_name=codebook_json_name,
+        codebook_html_name=codebook_html_name,
         num_rows=num_rows,
         num_cols=num_cols,
         num_disc=len(disc_cols),
@@ -775,65 +776,18 @@ def _select_positive_key(keys: Sequence[str]) -> str:
     return keys[0] if keys else ""
 
 
-def _iter_columns(metadata: Optional[Dict[str, Any]]) -> List[Dict[str, Any]]:
-    """Yield column dictionaries from a SemMap-style metadata payload."""
-
-    if not isinstance(metadata, dict):
-        return []
-    schema = (
-        metadata.get("datasetSchema")
-        or metadata.get("dsv:datasetSchema")
-        or {}
-    )
-    columns = (
-        schema.get("columns")
-        or schema.get("dsv:column")
-        or []
-    )
-    if isinstance(columns, list):
-        return columns
-    if columns:
-        return [columns]
-    return []
-
-
-def _extract_codebook_labels(metadata: Dict[str, Any]) -> Dict[str, Dict[str, str]]:
+def _extract_codebook_labels(metadata: Any) -> Dict[str, Dict[str, str]]:
     """Return per-column mappings from raw codes to human-readable labels."""
 
     codebooks: Dict[str, Dict[str, str]] = {}
-    for column in _iter_columns(metadata):
-        name = column.get("name") or column.get("schema:name")
-        if not isinstance(name, str) or not name:
-            continue
-        column_prop = column.get("columnProperty") or column.get("dsv:columnProperty")
-        if not isinstance(column_prop, dict):
-            continue
-        codebook = column_prop.get("hasCodeBook") or column_prop.get("dsv:hasCodeBook")
-        if not isinstance(codebook, dict):
-            continue
-        concepts = codebook.get("hasTopConcept") or codebook.get("dsv:hasTopConcept")
-        if not concepts:
-            continue
-        if not isinstance(concepts, list):
-            concepts = [concepts]
-        mapping: Dict[str, str] = {}
-        for concept in concepts:
-            if not isinstance(concept, dict):
-                continue
-            notation = concept.get("notation")
-            label = (
-                concept.get("prefLabel")
-                or concept.get("label")
-                or concept.get("titles")
-            )
-            if notation is None or label is None:
-                continue
-            key = _normalise_scalar(notation)
-            if not key:
-                continue
-            mapping[key] = str(label).strip()
+    for column in Codebook.read(metadata).columns:
+        mapping = {
+            _normalise_scalar(value["code"]): value["label"].strip()
+            for value in column.get("values", [])
+            if value.get("label") and _normalise_scalar(value["code"])
+        }
         if mapping:
-            codebooks[name] = mapping
+            codebooks[column["name"]] = mapping
     return codebooks
 
 
@@ -841,8 +795,8 @@ def _build_overview_table(
     *,
     dataset_name: str,
     provider_link: Optional[Dict[str, str]],
-    semmap_json_name: Optional[str],
-    semmap_html_name: Optional[str],
+    codebook_json_name: Optional[str],
+    codebook_html_name: Optional[str],
     num_rows: int,
     num_cols: int,
     num_disc: int,
@@ -868,13 +822,13 @@ def _build_overview_table(
             },
         )
 
-    semmap_links: List[str] = []
-    if semmap_json_name:
-        semmap_links.append(f"[SemMap JSON-LD]({semmap_json_name})")
-    if semmap_html_name:
-        semmap_links.append(f"[SemMap HTML]({semmap_html_name})")
-    if semmap_links:
-        rows.append({"Metric": "SemMap", "Value": "<br />".join(semmap_links)})
+    codebook_links: List[str] = []
+    if codebook_json_name:
+        codebook_links.append(f"[Codebook JSON-LD]({codebook_json_name})")
+    if codebook_html_name:
+        codebook_links.append(f"[Codebook HTML]({codebook_html_name})")
+    if codebook_links:
+        rows.append({"Metric": "Codebook", "Value": "<br />".join(codebook_links)})
 
     if missingness_summary:
         modeled = missingness_summary.get("nonzero_count", 0)

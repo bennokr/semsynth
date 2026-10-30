@@ -16,7 +16,6 @@ from typing import Dict, List, Optional, Sequence, Set, Tuple
 from makeprov import InPath, RDFMixin, OutPath, main, rule
 from makeprov.config import ProvenanceConfig
 
-from .mappings import normalize_jsonld_payload
 
 LOGGER = logging.getLogger(__name__)
 
@@ -41,9 +40,9 @@ class SparqlQueryDefinition:
 
 SPARQL_QUERY_DEFINITIONS: Tuple[SparqlQueryDefinition, ...] = (
     SparqlQueryDefinition(
-        name="SemMap coverage per dataset",
-        filename="query-semmap-coverage.rq",
-        description="Counts SemMap distributions across datasets to confirm semantic metadata coverage.",
+        name="Codebook coverage per dataset",
+        filename="query-codebook-coverage.rq",
+        description="Counts the columns described by each dataset codebook.",
     ),
     SparqlQueryDefinition(
         name="Provenance sources driving synthetic artifacts",
@@ -51,9 +50,9 @@ SPARQL_QUERY_DEFINITIONS: Tuple[SparqlQueryDefinition, ...] = (
         description="Aggregates provenance sources linked to multiple synthetic artifact distributions.",
     ),
     SparqlQueryDefinition(
-        name="Datasets with SemMap + provenance synthetic outputs",
-        filename="query-semmap-and-provenance-artifacts.rq",
-        description="Joins SemMap and provenance-linked synthetic distributions per dataset.",
+        name="Datasets with codebook and provenance synthetic outputs",
+        filename="query-codebook-and-provenance-artifacts.rq",
+        description="Joins codebook columns and provenance-linked synthetic distributions per dataset.",
     ),
 )
 
@@ -218,8 +217,8 @@ def infer_model_name(path: Path, dataset_dir: Path) -> str:
 def distribution_title(dataset_name: str, dataset_dir: Path, path: Path) -> str:
     """Create a human readable title for a distribution."""
 
-    if path.name == "dataset.semmap.json":
-        return f"{dataset_name} SemMap JSON-LD"
+    if path.name == "dataset.codebook.jsonld":
+        return f"{dataset_name} codebook JSON-LD"
     model = infer_model_name(path, dataset_dir)
     suffix = path.suffix.lstrip(".")
     return f"{dataset_name} synthetic data ({model}, {suffix})"
@@ -245,28 +244,28 @@ def sha256_digest(path: Path) -> str:
 def collect_distributions(
     dataset_name: str, dataset_dir: InPath, mapper: PathURLMapper
 ) -> Tuple[List[CatalogDistribution], Set[Path]]:
-    """Collect SemMap and synthetic distributions for a dataset."""
+    """Collect codebook and synthetic distributions for a dataset."""
 
     distributions: List[CatalogDistribution] = []
     inputs: Set[Path] = set()
 
-    semmap = dataset_dir / "dataset.semmap.json"
-    if semmap.exists():
-        url = mapper.for_path(semmap)
+    codebook_path = dataset_dir / "dataset.codebook.jsonld"
+    if codebook_path.exists():
+        url = mapper.for_path(codebook_path)
         distributions.append(
             CatalogDistribution(
-                id=f"urn:distribution:{slugify(dataset_name)}:semmap-json",
-                title=distribution_title(dataset_name, dataset_dir, semmap),
+                id=f"urn:distribution:{slugify(dataset_name)}:codebook-jsonld",
+                title=distribution_title(dataset_name, dataset_dir, codebook_path),
                 access_url=url,
                 download_url=url,
                 media_type="application/ld+json",
                 format="JSON-LD",
-                byte_size=semmap.stat().st_size,
-                modified=to_iso(datetime.fromtimestamp(semmap.stat().st_mtime, tz=timezone.utc)),
-                issued=to_iso(datetime.fromtimestamp(semmap.stat().st_ctime, tz=timezone.utc)),
+                byte_size=codebook_path.stat().st_size,
+                modified=to_iso(datetime.fromtimestamp(codebook_path.stat().st_mtime, tz=timezone.utc)),
+                issued=to_iso(datetime.fromtimestamp(codebook_path.stat().st_ctime, tz=timezone.utc)),
             )
         )
-        inputs.add(semmap)
+        inputs.add(codebook_path)
 
     seen: Set[Path] = set()
     for pattern in ("synthetic*.csv", "synthetic*.parquet", "synthetic*.json"):
@@ -363,7 +362,7 @@ def collect_datasets(
             identifier=slug,
             title=dataset_name,
             description=build_description(dataset_name, dataset_dir / "report.md"),
-            keywords=[dataset_name, "synthetic data", "SemMap", "SemSynth"],
+            keywords=[dataset_name, "synthetic data", "codebook", "SemSynth"],
             landing_page=mapper.for_path(landing) if landing.exists() else None,
             modified=to_iso(latest_modified),
             issued=distributions[0].issued,
@@ -523,7 +522,7 @@ def build_catalog(
         distributions=sparql_distributions,
     )
     write_index(index_path, dataset_dirs, query_examples)
-    catalog_payload = normalize_jsonld_payload(catalog.to_jsonld())
+    catalog_payload = catalog.to_jsonld()
     catalog_json = json.dumps(catalog_payload, indent=2)
     out_path.write_text(catalog_json)
 
