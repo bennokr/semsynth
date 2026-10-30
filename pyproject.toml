@@ -20,7 +20,7 @@ dependencies = [
   "numpy<2",
   "openml",
   "pandas<3",
-  "linked-codebook @ https://bennokr.github.io/linked-codebook/linked_codebook-0.6.1-py3-none-any.whl",
+  "linked-codebook @ https://bennokr.github.io/linked-codebook/linked_codebook-0.7.0-py3-none-any.whl",
   "makeprov>=0.4.4",
   "pyarrow<26",  # 26.0 requires NumPy 2; numpy<2 above
   "tabulate",

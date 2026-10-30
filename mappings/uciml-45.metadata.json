@@ -109,6 +109,7 @@
   ],
   "description": "4 databases: Cleveland, Hungary, Switzerland, and the VA Long Beach",
   "title": "Heart Disease (UCI id 45)",
+  "license": "https://creativecommons.org/publicdomain/zero/1.0/",
   "datasetSchema": {
     "@id": "urn:linked-codebook:dataset:Heart%20Disease%20(UCI%20id%2045)#schema",
     "@type": "dsv:DatasetSchema",
@@ -126,7 +127,9 @@
             "@id": "urn:linked-codebook:dataset:Heart%20Disease%20(UCI%20id%2045)#variable-age",
             "@type": "skos:Concept",
             "skos:prefLabel": "Age",
-            "skos:definition": "Documentation: https://loinc.org/30525-0"
+            "dct:source": {
+              "@id": "https://loinc.org/30525-0"
+            }
           },
           "hasUnit": "http://qudt.org/vocab/unit/YR",
           "unitText": "a"
@@ -149,7 +152,9 @@
             "@id": "urn:linked-codebook:dataset:Heart%20Disease%20(UCI%20id%2045)#variable-sex",
             "@type": "skos:Concept",
             "skos:prefLabel": "Administrative sex",
-            "skos:definition": "Documentation: https://docs.snomed.org/implementation-guides/snomed-ct-guide-for-covid-19/2-coding-covid-19-related-data/2.2-patient-demographics"
+            "dct:source": {
+              "@id": "https://docs.snomed.org/implementation-guides/snomed-ct-guide-for-covid-19/2-coding-covid-19-related-data/2.2-patient-demographics"
+            }
           },
           "hasCodeBook": {
             "@id": "urn:linked-codebook:dataset:Heart%20Disease%20(UCI%20id%2045)#variable-sex-codes",
@@ -200,7 +205,9 @@
             "@id": "urn:linked-codebook:dataset:Heart%20Disease%20(UCI%20id%2045)#variable-cp",
             "@type": "skos:Concept",
             "skos:prefLabel": "Chest pain type",
-            "skos:definition": "Documentation: https://dicom.nema.org/medical/dicom/current/output/chtml/part16/sect_CID_3202.html"
+            "dct:source": {
+              "@id": "https://dicom.nema.org/medical/dicom/current/output/chtml/part16/sect_CID_3202.html"
+            }
           },
           "hasCodeBook": {
             "@id": "urn:linked-codebook:dataset:Heart%20Disease%20(UCI%20id%2045)#variable-cp-codes",
@@ -275,7 +282,9 @@
             "@id": "urn:linked-codebook:dataset:Heart%20Disease%20(UCI%20id%2045)#variable-fbs",
             "@type": "skos:Concept",
             "skos:prefLabel": "Fasting blood sugar >120 mg/dL (indicator)",
-            "skos:definition": "Documentation: https://loinc.org/2345-7"
+            "dct:source": {
+              "@id": "https://loinc.org/2345-7"
+            }
           },
           "hasCodeBook": {
             "@id": "urn:linked-codebook:dataset:Heart%20Disease%20(UCI%20id%2045)#variable-fbs-codes",
@@ -321,7 +330,9 @@
             "@id": "urn:linked-codebook:dataset:Heart%20Disease%20(UCI%20id%2045)#variable-trestbps",
             "@type": "skos:Concept",
             "skos:prefLabel": "Resting systolic blood pressure",
-            "skos:definition": "Documentation: https://loinc.org/8480-6"
+            "dct:source": {
+              "@id": "https://loinc.org/8480-6"
+            }
           },
           "hasUnit": "http://qudt.org/vocab/unit/MilliM_HG",
           "unitText": "mm[Hg]"
@@ -345,7 +356,9 @@
             "@id": "urn:linked-codebook:dataset:Heart%20Disease%20(UCI%20id%2045)#variable-chol",
             "@type": "skos:Concept",
             "skos:prefLabel": "Total cholesterol",
-            "skos:definition": "Documentation: https://loinc.org/2093-3"
+            "dct:source": {
+              "@id": "https://loinc.org/2093-3"
+            }
           },
           "hasUnit": "http://qudt.org/vocab/unit/MilliGM-PER-DeciL",
           "unitText": "mg/dL"
@@ -368,7 +381,9 @@
             "@id": "urn:linked-codebook:dataset:Heart%20Disease%20(UCI%20id%2045)#variable-restecg",
             "@type": "skos:Concept",
             "skos:prefLabel": "Resting ECG result",
-            "skos:definition": "Documentation: https://cvquality.acc.org/docs/default-source/ncdr/data-collection/epdeviceimplant_v2-3_datadictionarycoders.pdf"
+            "dct:source": {
+              "@id": "https://cvquality.acc.org/docs/default-source/ncdr/data-collection/epdeviceimplant_v2-3_datadictionarycoders.pdf"
+            }
           },
           "hasCodeBook": {
             "@id": "urn:linked-codebook:dataset:Heart%20Disease%20(UCI%20id%2045)#variable-restecg-codes",
@@ -432,7 +447,9 @@
             "@id": "urn:linked-codebook:dataset:Heart%20Disease%20(UCI%20id%2045)#variable-thalach",
             "@type": "skos:Concept",
             "skos:prefLabel": "Maximum heart rate achieved",
-            "skos:definition": "Documentation: https://loinc.org/101692-2"
+            "dct:source": {
+              "@id": "https://loinc.org/101692-2"
+            }
           }
         },
         "summaryStatistics": {
@@ -453,7 +470,9 @@
             "@id": "urn:linked-codebook:dataset:Heart%20Disease%20(UCI%20id%2045)#variable-exang",
             "@type": "skos:Concept",
             "skos:prefLabel": "Exercise-induced angina",
-            "skos:definition": "Documentation: https://archive.datadictionary.nhs.uk/DD%20Release%20June%202021/Covid19PRA/Coronary_Heart.html"
+            "dct:source": {
+              "@id": "https://archive.datadictionary.nhs.uk/DD%20Release%20June%202021/Covid19PRA/Coronary_Heart.html"
+            }
           },
           "hasCodeBook": {
             "@id": "urn:linked-codebook:dataset:Heart%20Disease%20(UCI%20id%2045)#variable-exang-codes",
@@ -499,7 +518,9 @@
             "@id": "urn:linked-codebook:dataset:Heart%20Disease%20(UCI%20id%2045)#variable-oldpeak",
             "@type": "skos:Concept",
             "skos:prefLabel": "ST depression vs rest (max during study)",
-            "skos:definition": "Documentation: https://loinc.org/91546-2"
+            "dct:source": {
+              "@id": "https://loinc.org/91546-2"
+            }
           }
         },
         "summaryStatistics": {
@@ -520,7 +541,9 @@
             "@id": "urn:linked-codebook:dataset:Heart%20Disease%20(UCI%20id%2045)#variable-slope",
             "@type": "skos:Concept",
             "skos:prefLabel": "Slope of peak exercise ST segment",
-            "skos:definition": "Documentation: https://dicom.nema.org/medical/dicom/current/output/chtml/part16/sect_CID_3233.html"
+            "dct:source": {
+              "@id": "https://dicom.nema.org/medical/dicom/current/output/chtml/part16/sect_CID_3233.html"
+            }
           },
           "hasCodeBook": {
             "@id": "urn:linked-codebook:dataset:Heart%20Disease%20(UCI%20id%2045)#variable-slope-codes",
@@ -657,7 +680,9 @@
             "@id": "urn:linked-codebook:dataset:Heart%20Disease%20(UCI%20id%2045)#variable-num",
             "@type": "skos:Concept",
             "skos:prefLabel": "Angiographic disease status",
-            "skos:definition": "Documentation: https://purl.bioontology.org/ontology/SNOMEDCT/233970002"
+            "dct:source": {
+              "@id": "https://purl.bioontology.org/ontology/SNOMEDCT/233970002"
+            }
           },
           "hasCodeBook": {
             "@id": "urn:linked-codebook:dataset:Heart%20Disease%20(UCI%20id%2045)#variable-num-codes",
@@ -692,6 +717,5 @@
         "prov:hadRole": "target"
       }
     ]
-  },
-  "dct:license": "https://creativecommons.org/publicdomain/zero/1.0/"
+  }
 }

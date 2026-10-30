@@ -245,7 +245,9 @@
             "@id": "urn:linked-codebook:dataset:Gallstone-1%20(UCI%20ML%20Repository%2C%20ID%201150)#variable-BMI",
             "@type": "skos:Concept",
             "skos:prefLabel": "BMI",
-            "skos:definition": "Documentation: https://loinc.org/39156-5"
+            "dct:source": {
+              "@id": "https://loinc.org/39156-5"
+            }
           },
           "hasUnit": "http://qudt.org/vocab/unit/KiloGM-PER-M2"
         },
@@ -268,7 +270,9 @@
             "@id": "urn:linked-codebook:dataset:Gallstone-1%20(UCI%20ML%20Repository%2C%20ID%201150)#variable-Glucose",
             "@type": "skos:Concept",
             "skos:prefLabel": "Glucose",
-            "skos:definition": "Documentation: https://loinc.org/2345-7"
+            "dct:source": {
+              "@id": "https://loinc.org/2345-7"
+            }
           },
           "hasUnit": "http://qudt.org/vocab/unit/MilliGM-PER-DeciL",
           "unitText": "mg/dL"

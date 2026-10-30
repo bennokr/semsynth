@@ -130,6 +130,7 @@
               "https://loinc.org/30525-0/"
             ]
           },
+          "hasUnit": "http://qudt.org/vocab/unit/YR",
           "unitText": "years"
         },
         "summaryStatistics": {
@@ -155,6 +156,7 @@
               "https://loinc.org/8462-4/"
             ]
           },
+          "hasUnit": "http://qudt.org/vocab/unit/MilliM_HG",
           "unitText": "mmHg"
         },
         "summaryStatistics": {
@@ -215,7 +217,8 @@
                 "skos:inScheme": {
                   "@id": "urn:linked-codebook:dataset:Chronic%20Kidney%20Disease%20(UCI%20id%20336)#variable-al-codes"
                 },
-                "skos:notation": "0"
+                "skos:notation": "0",
+                "schema:position": 1
               },
               {
                 "@id": "urn:linked-codebook:dataset:Chronic%20Kidney%20Disease%20(UCI%20id%20336)#variable-al-codes-1",
@@ -224,7 +227,8 @@
                 "skos:inScheme": {
                   "@id": "urn:linked-codebook:dataset:Chronic%20Kidney%20Disease%20(UCI%20id%20336)#variable-al-codes"
                 },
-                "skos:notation": "1"
+                "skos:notation": "1",
+                "schema:position": 2
               },
               {
                 "@id": "urn:linked-codebook:dataset:Chronic%20Kidney%20Disease%20(UCI%20id%20336)#variable-al-codes-2",
@@ -233,7 +237,8 @@
                 "skos:inScheme": {
                   "@id": "urn:linked-codebook:dataset:Chronic%20Kidney%20Disease%20(UCI%20id%20336)#variable-al-codes"
                 },
-                "skos:notation": "2"
+                "skos:notation": "2",
+                "schema:position": 3
               },
               {
                 "@id": "urn:linked-codebook:dataset:Chronic%20Kidney%20Disease%20(UCI%20id%20336)#variable-al-codes-3",
@@ -242,7 +247,8 @@
                 "skos:inScheme": {
                   "@id": "urn:linked-codebook:dataset:Chronic%20Kidney%20Disease%20(UCI%20id%20336)#variable-al-codes"
                 },
-                "skos:notation": "3"
+                "skos:notation": "3",
+                "schema:position": 4
               },
               {
                 "@id": "urn:linked-codebook:dataset:Chronic%20Kidney%20Disease%20(UCI%20id%20336)#variable-al-codes-4",
@@ -251,7 +257,8 @@
                 "skos:inScheme": {
                   "@id": "urn:linked-codebook:dataset:Chronic%20Kidney%20Disease%20(UCI%20id%20336)#variable-al-codes"
                 },
-                "skos:notation": "4"
+                "skos:notation": "4",
+                "schema:position": 5
               },
               {
                 "@id": "urn:linked-codebook:dataset:Chronic%20Kidney%20Disease%20(UCI%20id%20336)#variable-al-codes-5",
@@ -260,7 +267,8 @@
                 "skos:inScheme": {
                   "@id": "urn:linked-codebook:dataset:Chronic%20Kidney%20Disease%20(UCI%20id%20336)#variable-al-codes"
                 },
-                "skos:notation": "5"
+                "skos:notation": "5",
+                "schema:position": 6
               }
             ]
           }
@@ -299,7 +307,8 @@
                 "skos:inScheme": {
                   "@id": "urn:linked-codebook:dataset:Chronic%20Kidney%20Disease%20(UCI%20id%20336)#variable-su-codes"
                 },
-                "skos:notation": "0"
+                "skos:notation": "0",
+                "schema:position": 1
               },
               {
                 "@id": "urn:linked-codebook:dataset:Chronic%20Kidney%20Disease%20(UCI%20id%20336)#variable-su-codes-1",
@@ -308,7 +317,8 @@
                 "skos:inScheme": {
                   "@id": "urn:linked-codebook:dataset:Chronic%20Kidney%20Disease%20(UCI%20id%20336)#variable-su-codes"
                 },
-                "skos:notation": "1"
+                "skos:notation": "1",
+                "schema:position": 2
               },
               {
                 "@id": "urn:linked-codebook:dataset:Chronic%20Kidney%20Disease%20(UCI%20id%20336)#variable-su-codes-2",
@@ -317,7 +327,8 @@
                 "skos:inScheme": {
                   "@id": "urn:linked-codebook:dataset:Chronic%20Kidney%20Disease%20(UCI%20id%20336)#variable-su-codes"
                 },
-                "skos:notation": "2"
+                "skos:notation": "2",
+                "schema:position": 3
               },
               {
                 "@id": "urn:linked-codebook:dataset:Chronic%20Kidney%20Disease%20(UCI%20id%20336)#variable-su-codes-3",
@@ -326,7 +337,8 @@
                 "skos:inScheme": {
                   "@id": "urn:linked-codebook:dataset:Chronic%20Kidney%20Disease%20(UCI%20id%20336)#variable-su-codes"
                 },
-                "skos:notation": "3"
+                "skos:notation": "3",
+                "schema:position": 4
               },
               {
                 "@id": "urn:linked-codebook:dataset:Chronic%20Kidney%20Disease%20(UCI%20id%20336)#variable-su-codes-4",
@@ -335,7 +347,8 @@
                 "skos:inScheme": {
                   "@id": "urn:linked-codebook:dataset:Chronic%20Kidney%20Disease%20(UCI%20id%20336)#variable-su-codes"
                 },
-                "skos:notation": "4"
+                "skos:notation": "4",
+                "schema:position": 5
               },
               {
                 "@id": "urn:linked-codebook:dataset:Chronic%20Kidney%20Disease%20(UCI%20id%20336)#variable-su-codes-5",
@@ -344,7 +357,8 @@
                 "skos:inScheme": {
                   "@id": "urn:linked-codebook:dataset:Chronic%20Kidney%20Disease%20(UCI%20id%20336)#variable-su-codes"
                 },
-                "skos:notation": "5"
+                "skos:notation": "5",
+                "schema:position": 6
               }
             ]
           }

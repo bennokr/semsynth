@@ -149,7 +149,6 @@ def to_dcat_dsv(src: Mapping[str, Any]) -> Mapping[str, Any]:
     if keywords:
         output["dcat:keyword"] = keywords
 
-    _put(output, "schema:numberOfItems", src.get("num_instances"))
     if src.get("num_features") is not None:
         output["dcterms:extent"] = f"{src['num_features']} features"
 
@@ -233,8 +232,8 @@ def to_dcat_dsv(src: Mapping[str, Any]) -> Mapping[str, Any]:
     for slot, key in (("title", "dcterms:title"), ("landing_page", "dcat:landingPage")):
         if _present(extras.get(key)):
             profile[slot] = str(extras.pop(key))
-    if isinstance(src.get("num_instances"), int):
-        profile["rows"] = src["num_instances"]
+    if _present(src.get("num_instances")):
+        profile["rows"] = int(src["num_instances"])
     extras.pop("@type", None)
     return Codebook(profile, roles, extras, context).to_jsonld()
 
