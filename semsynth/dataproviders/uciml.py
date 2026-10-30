@@ -331,6 +331,28 @@ def _uciml_cache_paths(cache_dir: pathlib.Path | OutPath, dataset_id: int) -> Ca
     )
 
 
+def _load_from_archive(dataset_id: int, spec: DatasetSpec, cache_paths: CachePaths) -> DatasetPayload:
+    """Load a dataset that ucimlrepo cannot import, from its archive and the UCI API."""
+
+    from .uci_archive import fetch_frame
+
+    df_all, metadata = fetch_frame(dataset_id)
+    targets = [name for name in metadata.get("target_col") or [] if name in df_all.columns]
+    df_clean, detected_target, color_series = clean_dataset_frame(
+        df_all, target=targets[0] if targets else None
+    )
+    spec.target = detected_target
+    spec.name = _SPACE_CLEANUP(str(metadata.get("name") or f"UCI_{dataset_id}"))
+    dcat_dsv_meta = to_dcat_dsv(metadata)
+    spec.meta = dcat_dsv_meta
+    store_cached_payload(
+        cache_paths,
+        df_clean,
+        {"id": dataset_id, "name": spec.name, "target": spec.target, "dcat_dsv": dcat_dsv_meta},
+    )
+    return DatasetPayload(spec=spec, frame=df_clean, color=color_series, metadata=dcat_dsv_meta)
+
+
 @rule(phony=True)
 def load_uciml_by_id(dataset_id: int, cache_dir: pathlib.Path | OutPath) -> DatasetPayload:
     """Load a UCI ML dataset by ID, with local caching of the data payload.
@@ -372,8 +394,14 @@ def load_uciml_by_id(dataset_id: int, cache_dir: pathlib.Path | OutPath) -> Data
 
     from ucimlrepo import fetch_ucirepo
 
+    from ucimlrepo.fetch import DatasetNotFoundError
+
     logging.info("Downloading UCI ML dataset %s", dataset_id)
-    dataset = fetch_ucirepo(id=dataset_id)
+    try:
+        dataset = fetch_ucirepo(id=dataset_id)
+    except DatasetNotFoundError:
+        # No data_url in the UCI API: read the published archive instead.
+        return _load_from_archive(dataset_id, spec, cache_paths)
 
     X = dataset.data.features
     y = dataset.data.targets

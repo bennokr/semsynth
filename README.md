@@ -165,7 +165,7 @@ compute_downstream = true
 - Metadata-only reports require no TOML file; pass `--configs-toml` to opt into synthetic runs.
 - All models are treated uniformly in the report; UMAPs share the same projection trained on real data.
 - When optional dependencies (e.g., `umap-learn`, PyBNesian, SynthCity) are missing or blocked by runtime sandboxing, SemSynth logs a warning and continues with the available components. The shipped `maximal_config` keeps MetaSyn as the default to guarantee completion under those constraints.
-- UCI dataset 1150 (Gallstone) is currently unavailable via `ucimlrepo`; the `mappings` target skips it with a warning until a cached stand-in or upstream access is restored.
+- Some UCI datasets, such as 1150 (Gallstone), have no `data_url`, so `ucimlrepo` cannot import them. SemSynth then downloads the published archive and reads the table from it (`semsynth/dataproviders/uci_archive.py`; run `python -m semsynth.dataproviders.uci_archive 1150` to fill the cache).
 - If external dataset hosts are unreachable, cached payloads under `downloads-cache/` may contain synthetic stand-ins that mimic the documented schema so pipeline checks can proceed. Keep README notes in sync when such fallbacks are introduced.
 
 ## 📚 Testing, Contributing, Documentation
