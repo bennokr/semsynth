@@ -10,3 +10,8 @@ docs/.doctrees/
 prov/
 .DS_Store
 .buildinfo.bak
+
+# Built by .github/workflows/pages.yml, not committed
+output/
+docs/
+_site/

@@ -172,6 +172,7 @@ compute_downstream = true
 - Install dev and documentation deps with `python -m pip install -e .[dev,docs]` (use `.[dev]` if you do not need to build docs).
 - Run tests with `python -m pytest`
 - Build the Sphinx site with `sphinx-build -b html sphinx docs`.
+- The published site (demo reports for the curated datasets, the catalog and the documentation) is built by `.github/workflows/pages.yml` on every push to `main`, or by hand with a model bundle of your choice. `output/` and `docs/` are not committed.
 
 ## 🔎 Static SPARQL endpoint (demo index)
 - `python -m semsynth build-catalog` writes `output/index.html`, `output/catalog.json`, `output/catalog.jsonld`, and `output/sparql/*.rq` with an embedded YASGUI editor and browser Comunica query engine targeting static files only.

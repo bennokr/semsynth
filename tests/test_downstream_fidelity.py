@@ -1,6 +1,7 @@
 import pandas as pd
 
 from semsynth import downstream_fidelity as dfid
+from semsynth.codebook import Codebook
 
 
 def _meta_with_columns(columns):
@@ -143,3 +144,15 @@ def test_multiclass_targets_supported():
     result = dfid.compute_downstream(df_real, df_synth, meta)
     assert result.get("skipped_reason") is None
     assert result["compare"] is not None
+
+
+def test_numeric_codes_match_declared_text_codes():
+    meta = Codebook(
+        {"columns": [{"name": "y", "level": "nominal", "values": [{"code": "0"}, {"code": "1"}]}, {"name": "x"}]},
+        {"y": "target"},
+    )
+    df = pd.DataFrame({"y": [0, 1, 2, 0], "x": [0.1, 0.2, 0.3, 0.4]})
+    coerced = dfid._coerce_frame(df, meta)
+    assert list(coerced["y"].astype(str)) == ["0", "1", "2", "0"]
+    meta.profile["columns"][0]["closed"] = True
+    assert dfid._coerce_frame(df, meta)["y"].isna().sum() == 1

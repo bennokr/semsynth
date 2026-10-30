@@ -1,0 +1,68 @@
+name: pages
+
+# Builds the site (demo reports for the curated datasets, the catalog and the Sphinx documentation)
+# and publishes it on GitHub Pages. Nothing it builds is committed.
+
+on:
+  push:
+    branches: [main]
+  workflow_dispatch:
+    inputs:
+      config:
+        description: Model bundle for the demo reports
+        default: configs/advanced_config.toml
+
+permissions:
+  contents: read
+
+concurrency:
+  group: pages-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    timeout-minutes: 300
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+          cache: pip
+      - name: Install
+        run: python -m pip install -e '.[docs,metasyn,pybnesian,synthcity,umap,statsmodels]'
+      - name: Cache downloaded datasets
+        uses: actions/cache@v4
+        with:
+          path: |
+            downloads-cache
+            uciml-cache
+          key: datasets-${{ hashFiles('mappings/*.metadata.json') }}
+          restore-keys: datasets-
+      - name: Demo reports and catalog
+        run: python -m semsynth mappings --pipeline-configs "${{ inputs.config || 'configs/advanced_config.toml' }}" --outdir output/
+      - name: Documentation
+        run: sphinx-build -b html sphinx _site/docs
+      - name: Assemble the site
+        run: |
+          mkdir -p _site/templates
+          cp index.html _site/
+          cp -r output _site/output
+          cp semsynth/templates/*.css semsynth/templates/*.js _site/templates/
+      - uses: actions/upload-pages-artifact@v3
+        with:
+          path: _site
+
+  deploy:
+    needs: build
+    if: github.ref == 'refs/heads/main'
+    runs-on: ubuntu-latest
+    permissions:
+      pages: write
+      id-token: write
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
+    steps:
+      - id: deployment
+        uses: actions/deploy-pages@v4

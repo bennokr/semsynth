@@ -67,6 +67,15 @@ def _is_cat(col: Col, series: Optional[pd.Series] = None) -> bool:
     return False
 
 
+def _code_text(value: Any) -> Optional[str]:
+    """A cell as the text of a code: whole numbers without a fraction, missing values as ``None``."""
+    if value is None or (not isinstance(value, str) and pd.isna(value)):
+        return None
+    if isinstance(value, float) and value.is_integer():
+        return str(int(value))
+    return str(value)
+
+
 def _levels(col: Col) -> List[str]:
     meta, name = col
     return meta.codes(name)
@@ -107,7 +116,12 @@ def _coerce_frame(df: pd.DataFrame, meta: Codebook) -> pd.DataFrame:
         if _is_cat(col_meta, series):
             levels = _levels(col_meta)
             if levels:
-                df[name] = pd.Categorical(series, categories=levels)
+                # Codes are text; values outside a list that is not closed are kept as extra levels.
+                codes = series.map(_code_text)
+                meta_, column = col_meta
+                closed = (meta_.column(column) or {}).get("closed", False)
+                extra = [] if closed else [c for c in pd.unique(codes.dropna()) if c not in levels]
+                df[name] = pd.Categorical(codes, categories=levels + extra)
             else:
                 df[name] = pd.Categorical(series)
         else:
