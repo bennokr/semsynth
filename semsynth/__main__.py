@@ -29,7 +29,7 @@ __all__ = [
 ]
 
 if TYPE_CHECKING:  # pragma: no cover - imported for typing only
-    from .models import ModelConfigBundle, ModelSpec
+    from .models import ModelConfigBundle
     from .specs import DatasetSpec
 
 
@@ -99,8 +99,8 @@ def report(
         area: Default topic area for UCI datasets.
         verbose: Whether to enable informational logging during execution.
     """
-    from .datasets import DatasetSpec, load_dataset, specs_from_input
-    from .models import ModelConfigBundle, load_model_configs, parse_toml_config
+    from .datasets import load_dataset, specs_from_input
+    from .models import load_model_configs, parse_toml_config
     from .pipeline import PipelineConfig, process_dataset
     from .utils import ensure_dir
 

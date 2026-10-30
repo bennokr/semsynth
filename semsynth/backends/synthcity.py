@@ -4,10 +4,9 @@ import json
 import logging
 from dataclasses import dataclass
 from pathlib import Path
-from typing import Any, Dict, List, Optional, Tuple, TYPE_CHECKING
+from typing import Any, Dict, List, Optional, TYPE_CHECKING
 
 if TYPE_CHECKING:  # pragma: no cover - typing only
-    import numpy as np
     import pandas as pd
 
 from makeprov import OutDir
@@ -139,7 +138,6 @@ def run_experiment(
     test_size: float,
     codebook_jsonld: Optional[Dict[str, Any]] = None,
 ) -> Path:
-    import numpy as np
     import pandas as pd
     from sklearn.model_selection import train_test_split
 

@@ -36,7 +36,7 @@ def test_write_report_md_renders_expected_sections(tmp_path: Path) -> None:
         json.dumps({"formula": "status ~ age", "sign_match_rate": 0.9}),
     )
     umap_png = _touch(run_dir / "umap.png", "binary")
-    structure_png = _touch(run_dir / "structure.png", "binary")
+    _touch(run_dir / "structure.png", "binary")
 
     model_run = ModelRun(
         name="demo_model",

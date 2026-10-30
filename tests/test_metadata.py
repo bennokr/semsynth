@@ -15,9 +15,9 @@ dummy_makeprov.OutPath = lambda path: path
 dummy_makeprov.rule = lambda *_args, **_kwargs: (lambda func: func)
 sys.modules.setdefault("makeprov", dummy_makeprov)
 
-from semsynth.metadata import get_uciml_variable_descriptions
-from semsynth.pipeline import PreprocessingResult, ReportWriter
-from semsynth.specs import DatasetSpec
+from semsynth.metadata import get_uciml_variable_descriptions  # noqa: E402  (needs the makeprov stub above)
+from semsynth.pipeline import PreprocessingResult, ReportWriter  # noqa: E402  (needs the makeprov stub above)
+from semsynth.specs import DatasetSpec  # noqa: E402  (needs the makeprov stub above)
 
 
 class DummyReporting:

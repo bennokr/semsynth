@@ -7,7 +7,7 @@ import logging
 import keyword
 from dataclasses import dataclass
 from pathlib import Path
-from typing import Any, Dict, List, Mapping, Optional, Sequence
+from typing import Any, Dict, List, Mapping, Optional
 
 import numpy as np
 import pandas as pd
@@ -15,7 +15,6 @@ from pandas.api.types import CategoricalDtype
 import statsmodels.api as sm
 from makeprov import Config, InPath, OutPath, rule
 from sklearn.impute import SimpleImputer
-from sklearn.linear_model import LogisticRegression
 
 from .codebook import Codebook, modeling_role
 

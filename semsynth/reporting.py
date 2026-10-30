@@ -171,7 +171,6 @@ def write_report_md(
     """
 
     import markdown
-    import pandas as pd
 
     output_dir = Path(outdir)
     output_dir.mkdir(parents=True, exist_ok=True)

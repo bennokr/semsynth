@@ -158,7 +158,6 @@ def run_experiment(
     model_info keys: type ('clg' or 'semiparametric'), score, operators, max_indegree.
     """
 
-    import pandas as pd
     from sklearn.model_selection import train_test_split
 
     model_info = dict(model_info or {})
