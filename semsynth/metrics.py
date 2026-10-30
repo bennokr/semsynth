@@ -1,6 +1,6 @@
 from __future__ import annotations
 
-from typing import Dict, List
+from typing import Any, Dict, List
 
 import numpy as np
 import pandas as pd
@@ -43,15 +43,27 @@ def heldout_loglik(model, df_test: pd.DataFrame) -> Dict[str, float]:
     }
 
 
+def _labels(series: pd.Series) -> pd.Series:
+    """The values of a discrete column as text, so that the code ``70`` and the integer 70 are one category."""
+
+    def text(value: Any) -> str:
+        if isinstance(value, (int, float, np.integer, np.floating)) and not isinstance(value, (bool, np.bool_)):
+            return str(int(value)) if float(value).is_integer() else str(value)
+        return str(value)
+
+    return series.dropna().map(text)
+
+
 def js_divergence_discrete(p: pd.Series, q: pd.Series) -> float:
-    cats = sorted(set(p.dropna().unique()).union(set(q.dropna().unique())))
+    p, q = _labels(p), _labels(q)
+    cats = sorted(set(p.unique()).union(set(q.unique())))
     if len(cats) == 0:
         return float("nan")
     p_counts = (
-        p.value_counts(dropna=True).reindex(cats, fill_value=0).to_numpy(dtype=float)
+        p.value_counts().reindex(cats, fill_value=0).to_numpy(dtype=float)
     )
     q_counts = (
-        q.value_counts(dropna=True).reindex(cats, fill_value=0).to_numpy(dtype=float)
+        q.value_counts().reindex(cats, fill_value=0).to_numpy(dtype=float)
     )
     p_probs = (p_counts + 1e-9) / (p_counts.sum() + 1e-9 * len(cats))
     q_probs = (q_counts + 1e-9) / (q_counts.sum() + 1e-9 * len(cats))

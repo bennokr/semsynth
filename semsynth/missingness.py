@@ -28,6 +28,23 @@ def _make_one_hot_encoder() -> OneHotEncoder:
         return OneHotEncoder(handle_unknown="ignore", sparse=False)
 
 
+def _plain_frame(df: pd.DataFrame) -> pd.DataFrame:
+    """A copy of ``df`` without nullable extension dtypes, whose ``pd.NA`` scikit-learn cannot compare."""
+
+    out = df.copy()
+    for col in out.columns:
+        dtype = out[col].dtype
+        if not pd.api.types.is_extension_array_dtype(dtype) or isinstance(dtype, pd.CategoricalDtype):
+            continue
+        if pd.api.types.is_bool_dtype(dtype):
+            out[col] = out[col].astype(object).where(out[col].notna(), np.nan)
+        elif pd.api.types.is_numeric_dtype(dtype):
+            out[col] = out[col].astype(float)
+        else:
+            out[col] = out[col].astype(object).where(out[col].notna(), np.nan)
+    return out
+
+
 @dataclass
 class ColumnMissingnessModel:
     """Estimate conditional missingness for a single column."""
@@ -52,7 +69,7 @@ class ColumnMissingnessModel:
             self.pipeline_ = None
             return self
 
-        X = df.drop(columns=[self.col])
+        X = _plain_frame(df.drop(columns=[self.col]))
         num_selector = make_column_selector(dtype_exclude=["object", "category", "bool"])
         cat_selector = make_column_selector(dtype_include=["object", "category", "bool"])
 
@@ -94,7 +111,7 @@ class ColumnMissingnessModel:
                 return pd.Series(False, index=df.index)
             probs = np.full(len(df), self.p_missing_, dtype=float)
         else:
-            X = df.drop(columns=[self.col], errors="ignore")
+            X = _plain_frame(df.drop(columns=[self.col], errors="ignore"))
             probs = self.pipeline_.predict_proba(X)[:, 1]
             mean_pred = probs.mean()
             if mean_pred > 0:

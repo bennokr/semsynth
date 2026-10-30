@@ -507,7 +507,7 @@ class MetricWriter:
 
         comparer = self._downstream_compare or DEPENDENCIES.require_attr(
             "semsynth.downstream_fidelity",
-            "compare_real_vs_synth",
+            "compute_downstream",
             hint="Install downstream fidelity extras: `pip install semsynth[statsmodels]`.",
         )
 
@@ -935,7 +935,7 @@ def process_dataset(
         try:
             downstream_compare = DEPENDENCIES.require_attr(
                 "semsynth.downstream_fidelity",
-                "compare_real_vs_synth",
+                "compute_downstream",
                 hint="Install downstream fidelity extras: `pip install semsynth[statsmodels]`.",
             )
         except RuntimeError as exc:

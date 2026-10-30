@@ -13,7 +13,7 @@ kernelspec:
 
 # Downstream fidelity
 
-The downstream-fidelity module compares real and synthetic datasets by fitting equivalent predictive models and inspecting how coefficients, directions of effect, and uncertainty translate between them. It automatically derives a modeling formula from metadata, performs multiple imputation for missing data, and reports side-by-side parameter estimates to highlight agreement or drift. The example below uses the curated codebook (which marks `num` as the target).
+The downstream-fidelity module compares real and synthetic datasets by fitting equivalent predictive models and inspecting how coefficients, directions of effect, and uncertainty translate between them. It automatically derives a modeling formula from metadata, fits the same model on the complete rows of each dataset, and reports side-by-side parameter estimates to highlight agreement or drift. The example below uses the curated codebook (which marks `num` as the target).
 
 ```{code-cell} python
 # Visualize correlations to motivate downstream modeling choices.
@@ -53,11 +53,11 @@ formula
 
 The curated metadata already declares the `num` diagnosis column as the target, so `auto_formula` discovers the correct prediction task without manual overrides.
 
-## Multiple imputation and estimation
-- `fit_with_mi` recodes categorical variables, replaces missing codes, and runs MICE (`statsmodels.imputation.mice`) to produce pooled estimates for generalized linear models appropriate to the target type (binomial, Poisson, or OLS).
+## Estimation
+- The model is fitted on the rows without missing values: a binomial GLM for a binary target, a multinomial logit for several classes, a Poisson GLM for counts and OLS otherwise. Predictors without variation are dropped first.
 
 ## Comparative reporting
-- `compare_real_vs_synth` sanitizes the inputs, fits the auto-discovered model with multiple imputation on real and synthetic data, and returns a dataframe of paired coefficients and standard errors with a sign-match indicator. When model fitting fails, it falls back to a simpler logistic comparison but still surfaces the skipped reason to the caller.
+- `compute_downstream` sanitizes both datasets, fits the discovered formula on each, and returns the formula and a data frame of paired coefficients and standard errors with a sign-match indicator. When the formula or the fit fails, it returns `compare=None` and a `skipped_reason`. The pipeline calls it for every model run when `compute_downstream` is enabled and writes the share of matching signs to `metrics.downstream.json`.
 
 ## References
 - Patsy formula language: <https://patsy.readthedocs.io/en/latest/>
