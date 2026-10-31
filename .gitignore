@@ -15,3 +15,5 @@ prov/
 output/
 docs/
 _site/
+dist/
+node_modules/

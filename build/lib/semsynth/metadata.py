@@ -1,0 +1,127 @@
+from __future__ import annotations
+
+import json
+import logging
+from collections.abc import Mapping
+from dataclasses import dataclass
+from pathlib import Path
+from typing import Any
+
+from makeprov import RDFMixin
+
+JSONLD_CONTEXT = {
+    "@context": {
+        "dcat": "http://www.w3.org/ns/dcat#",
+        "dct": "http://purl.org/dc/terms/",
+        "xsd": "http://www.w3.org/2001/XMLSchema#",
+        "identifier": "dct:identifier",
+        "title": "dct:title",
+        "description": "dct:description",
+        "publisher": "dct:publisher",
+        "keywords": "dcat:keyword",
+        "issued": {"@id": "dct:issued", "@type": "xsd:date"},
+        "modified": {"@id": "dct:modified", "@type": "xsd:date"},
+        "language": "dct:language",
+        "distributions": {"@id": "dcat:distribution", "@type": "@id"},
+        "Distribution": "dcat:Distribution",
+        "access_url": "dcat:accessURL",
+        "download_url": "dcat:downloadURL",
+        "media_type": "dcat:mediaType",
+    }
+}
+
+
+@dataclass
+class DCATDistribution(RDFMixin):
+    __context__ = JSONLD_CONTEXT
+    title: str
+    access_url: str | None = None
+    download_url: str | None = None
+    media_type: str | None = None
+
+
+def get_uciml_variable_descriptions(dataset_id: int) -> dict[str, str]:
+    """Best-effort retrieval of UCI ML variable descriptions.
+
+    The lookup first checks for a cached UCI ML payload under
+    ``uciml-cache/{dataset_id}.json``. If no cached metadata is found or the
+    payload does not contain variable descriptions, it falls back to the
+    ``ucimlrepo`` metadata API.
+
+    Args:
+        dataset_id: UCI ML dataset identifier used for cache lookup and API
+            fallback.
+
+    Returns:
+        Mapping of column name to free-text description. Missing or empty
+        descriptions are filtered out.
+    """
+
+    def _read_cached_variables(cache_path: Path) -> list[Any]:
+        try:
+            payload = json.loads(cache_path.read_text())
+        except Exception:
+            logging.exception("Failed to read UCI ML cache file: %s", cache_path)
+            return []
+
+        if isinstance(payload, dict) and "data" in payload:
+            payload = payload.get("data") or {}
+
+        variables = payload.get("variables") if isinstance(payload, dict) else None
+        return variables if isinstance(variables, list) else []
+
+    cache_path = Path("uciml-cache") / f"{int(dataset_id)}.json"
+    variables: list[Any] = []
+    if cache_path.exists():
+        variables = _read_cached_variables(cache_path)
+
+    if not variables:
+        try:
+            import ssl
+
+            from ucimlrepo import fetch_ucirepo
+
+            try:
+                dataset = fetch_ucirepo(id=dataset_id)
+            except ConnectionError as exc:  # pragma: no cover - network dependent
+                logging.warning(
+                    "Retrying ucimlrepo fetch for %s with relaxed SSL: %s",
+                    dataset_id,
+                    exc,
+                )
+                default_https_context = ssl._create_default_https_context
+                default_context_factory = ssl.create_default_context
+
+                def insecure_context(*args, **kwargs):
+                    context = default_context_factory(*args, **kwargs)
+                    context.check_hostname = False
+                    context.verify_mode = ssl.CERT_NONE
+                    return context
+
+                try:
+                    ssl._create_default_https_context = (
+                        ssl._create_unverified_context
+                    )
+                    ssl.create_default_context = insecure_context
+                    dataset = fetch_ucirepo(id=dataset_id)
+                finally:
+                    ssl._create_default_https_context = default_https_context
+                    ssl.create_default_context = default_context_factory
+
+            metadata = getattr(dataset, "metadata", None)
+            variables = getattr(metadata, "variables", None) or []
+        except Exception:
+            logging.exception(
+                "Failed to fetch UCI ML metadata for variable descriptions (%s)",
+                dataset_id,
+            )
+            variables = []
+
+    descriptions: dict[str, str] = {}
+    for var in variables:
+        entry = var if isinstance(var, Mapping) else vars(var)
+        name = entry.get("name")
+        description = entry.get("description")
+        if isinstance(name, str) and name and isinstance(description, str) and description:
+            descriptions[name] = description
+    return descriptions

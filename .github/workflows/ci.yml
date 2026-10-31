@@ -40,3 +40,16 @@ jobs:
             https://bennokr.github.io/linked-codebook/linked_codebook-0.7.0-py3-none-any.whl
           uv pip install --no-deps -e .
           pytest -q --ignore=tests/test_sparql_playwright.py
+
+  pyodide-smoke:
+    # PrivBayes, MetaSyn, missingness and the downstream comparison inside Pyodide 0.27.7 (Python 3.12).
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: astral-sh/setup-uv@v6
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+      - run: uv build --wheel --out-dir dist
+      - run: npm i --no-save pyodide@0.27.7
+      - run: node --max-old-space-size=8192 scripts/pyodide_smoke.cjs dist/semsynth-*.whl
