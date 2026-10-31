@@ -17,12 +17,12 @@ dependencies = [
   "flask",
   "markdown",
   "jinja2",
-  "numpy<2",
+  "numpy>=1.26",
   "openml",
-  "pandas<3",
+  "pandas>=2.1,<3",
   "linked-codebook @ https://bennokr.github.io/linked-codebook/linked_codebook-0.7.0-py3-none-any.whl",
   "makeprov>=0.4.4",
-  "pyarrow<26",  # 26.0 requires NumPy 2; numpy<2 above
+  "pyarrow>=15",
   "tabulate",  # pandas.DataFrame.to_markdown, used by reporting.py
   "requests",
   "scikit-learn",
@@ -55,11 +55,13 @@ metasyn = [
   "metasyn"
 ]
 pybnesian = [
+  "numpy<2",  # not tested with NumPy 2
   "graphviz",
   "networkx",
   "pybnesian"
 ]
 synthcity = [
+  "numpy<2",  # not tested with NumPy 2
   "synthcity>=0.2",
   "torch"
 ]
@@ -68,6 +70,7 @@ privbayes = [
   "scipy"
 ]
 umap = [
+  "numpy<2",  # not tested with NumPy 2
   "numba<0.63",
   "llvmlite<0.46",
   "matplotlib",

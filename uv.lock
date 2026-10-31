@@ -5867,12 +5867,14 @@ privbayes = [
 pybnesian = [
     { name = "graphviz" },
     { name = "networkx" },
+    { name = "numpy" },
     { name = "pybnesian" },
 ]
 statsmodels = [
     { name = "statsmodels" },
 ]
 synthcity = [
+    { name = "numpy" },
     { name = "synthcity" },
     { name = "torch" },
 ]
@@ -5880,6 +5882,7 @@ umap = [
     { name = "llvmlite" },
     { name = "matplotlib" },
     { name = "numba" },
+    { name = "numpy" },
     { name = "umap-learn" },
 ]
 
@@ -5909,11 +5912,14 @@ requires-dist = [
     { name = "networkx", marker = "extra == 'all'" },
     { name = "networkx", marker = "extra == 'pybnesian'" },
     { name = "numba", marker = "extra == 'umap'", specifier = "<0.63" },
-    { name = "numpy", specifier = "<2" },
+    { name = "numpy", specifier = ">=1.26" },
+    { name = "numpy", marker = "extra == 'pybnesian'", specifier = "<2" },
+    { name = "numpy", marker = "extra == 'synthcity'", specifier = "<2" },
+    { name = "numpy", marker = "extra == 'umap'", specifier = "<2" },
     { name = "openml" },
-    { name = "pandas", specifier = "<3" },
+    { name = "pandas", specifier = ">=2.1,<3" },
     { name = "pandas-stubs", marker = "extra == 'dev'" },
-    { name = "pyarrow", specifier = "<26" },
+    { name = "pyarrow", specifier = ">=15" },
     { name = "pybnesian", marker = "extra == 'all'" },
     { name = "pybnesian", marker = "extra == 'pybnesian'" },
     { name = "pytest", marker = "extra == 'dev'" },
