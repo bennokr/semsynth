@@ -126,7 +126,7 @@ def modeling_role(raw: str | None, default: str = "predictor") -> str:
 class Codebook:
     """A profile, the role of each column and the dataset properties that the profile has no slot for."""
 
-    profile: Profile = field(default_factory=lambda: {"columns": []})
+    profile: Profile = field(default_factory=lambda: Profile(columns=[]))
     roles: dict[str, str] = field(default_factory=dict)
     extras: dict[str, Any] = field(default_factory=dict)
     prefixes: dict[str, str] = field(default_factory=dict)
@@ -182,7 +182,7 @@ class Codebook:
 
     def kind(self, name: str) -> str | None:
         """``categorical`` or ``numeric`` according to the level of the column, or ``None`` if it has none."""
-        column = self.column(name) or {}
+        column: Column = self.column(name) or Column(name=name)
         level = column.get("level")
         if level in CATEGORICAL_LEVELS or column.get("datatype") == "boolean":
             return "categorical"
@@ -192,7 +192,8 @@ class Codebook:
 
     def codes(self, name: str) -> list[str]:
         """The declared codes of a column, in order."""
-        return [value["code"] for value in (self.column(name) or {}).get("values", [])]
+        column = self.column(name)
+        return [value["code"] for value in (column.get("values", []) if column else [])]
 
     def privacy_frame(self, inferred: Mapping[str, str]) -> pd.DataFrame:
         """The ``variable``, ``role`` and ``type`` of every column, as the privacy metrics expect them.

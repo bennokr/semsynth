@@ -1,0 +1,42 @@
+name: canary
+
+# Installs the newest version of every dependency each week and runs the checks, so that a release such as
+# ruff 0.16 or pyarrow 26 shows up as an issue on the day it breaks us, not during an unrelated push.
+
+on:
+  schedule:
+    - cron: '17 5 * * 1'
+  workflow_dispatch:
+
+permissions:
+  contents: read
+  issues: write
+
+jobs:
+  latest:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.13'
+      - run: python -m pip install --upgrade -e '.[dev,privbayes,metasyn,statsmodels]'
+      - id: check
+        run: make check
+        continue-on-error: true
+      - name: Open an issue if the checks fail
+        if: steps.check.outcome == 'failure'
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          gh issue create --title "Canary: checks fail with the newest dependencies" \
+            --body "The weekly run with unpinned dependencies failed: $GITHUB_SERVER_URL/$GITHUB_REPOSITORY/actions/runs/$GITHUB_RUN_ID"
+      - name: Warn if the linked-codebook pin is not the latest release
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          pinned=$(grep -o 'linked_codebook-[0-9.]*' pyproject.toml | head -1 | sed 's/linked_codebook-//')
+          latest=$(gh api repos/bennokr/linked-codebook/contents/releases --jq '.[].name' \
+            | grep -o 'linked_codebook-[0-9.]*[0-9]' | sed 's/linked_codebook-//' | sort -V | tail -1)
+          echo "pinned $pinned, latest $latest"
+          if [ "$pinned" != "$latest" ]; then echo "::warning::linked-codebook $pinned is pinned, $latest is released"; fi

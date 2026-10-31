@@ -1,5 +1,6 @@
 from __future__ import annotations
 
+from collections.abc import Callable
 from typing import Any
 
 import numpy as np
@@ -8,7 +9,7 @@ from scipy.spatial.distance import jensenshannon
 from scipy.stats import ks_2samp, wasserstein_distance
 
 
-def heldout_loglik(model, df_test: pd.DataFrame) -> dict[str, float]:
+def heldout_loglik(model: Any, df_test: pd.DataFrame) -> dict[str, float]:
     try:
         arr = model.logl(df_test)
     except Exception:
@@ -117,7 +118,7 @@ def summarize_distance_metrics(distances: pd.DataFrame) -> dict[str, float]:
         else pd.DataFrame()
     )
 
-    def _agg(frame: pd.DataFrame, column: str, reducer) -> float:
+    def _agg(frame: pd.DataFrame, column: str, reducer: Callable[[Any], float]) -> float:
         if frame.empty or column not in frame.columns:
             return float("nan")
         series = pd.to_numeric(frame[column], errors="coerce").dropna()

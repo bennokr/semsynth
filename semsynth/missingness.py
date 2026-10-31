@@ -209,7 +209,7 @@ class MissingnessWrappedGenerator:
         miss_model = DataFrameMissingnessModel(random_state=random_state).fit(real_df)
         return cls(base_generator=base_generator, missingness_model=miss_model)
 
-    def sample(self, n: int, **kwargs) -> pd.DataFrame:
+    def sample(self, n: int, **kwargs: Any) -> pd.DataFrame:
         """Generate ``n`` samples with realistic missing values applied."""
 
         df_syn = self.base_generator(n, **kwargs)
@@ -344,7 +344,7 @@ def _refresh_metrics_after_missingness(
     """Recompute per-variable metrics after missingness injection."""
 
     try:
-        dist_df = per_variable_distances(real_df, synth_df, disc_cols, cont_cols)
+        dist_df = per_variable_distances(real_df, synth_df, list(disc_cols), list(cont_cols))
         dist_df.to_csv(run_dir / "per_variable_metrics.csv", index=False)
         metrics_path = run_dir / "metrics.json"
         metrics_payload: dict[str, Any] = {}
