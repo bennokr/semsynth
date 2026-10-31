@@ -1,8 +1,0 @@
-# Install SemSynth in editable mode with dev tools for testing and docs builds.
--e .[dev,docs]
-
-# Optional extras are available for specific backends:
-#   pip install -e .[pybnesian]
-#   pip install -e .[metasyn]
-#   pip install -e .[synthcity]
-#   pip install -e .[umap]

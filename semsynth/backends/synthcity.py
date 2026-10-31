@@ -2,7 +2,6 @@ from __future__ import annotations
 
 import json
 import logging
-from dataclasses import dataclass
 from pathlib import Path
 from typing import TYPE_CHECKING, Any
 
@@ -59,21 +58,6 @@ def _load_synthcity_plugins():
             "SynthCity backend requires 'synthcity'; install with pip install semsynth[synthcity]"
         ) from exc
     return Plugins
-
-
-@dataclass
-class SynthRunArtifacts:
-    plugin_name: str
-    plugin_params: dict[str, Any]
-    model_obj: Any
-    real_train: pd.DataFrame
-    real_test: pd.DataFrame
-    synth_df: pd.DataFrame
-    discrete_cols: list[str]
-    continuous_cols: list[str]
-    seed: int
-    rows: int
-    test_size: float
 
 
 def _get_plugin(name: str, params: dict[str, Any]):

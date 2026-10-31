@@ -57,23 +57,6 @@ def to_list(x: Any) -> list[Any]:
     return x if isinstance(x, list) else [x]
 
 
-def types_to_iris(types: str | list[str], vocab: str) -> list[str]:
-    out: list[str] = []
-    for t in to_list(types):
-        if is_iri(t):
-            out.append(t)
-        elif isinstance(t, str):
-            if ":" in t:
-                prefix, local = t.split(":", 1)
-                if prefix == "schema":
-                    out.append(ensure_ns(SCHEMA_ORG) + local)
-                else:
-                    out.append(t)  # leave compact as-is
-            else:
-                out.append(ensure_ns(vocab) + t)
-    return out
-
-
 # ---------------- HTML builders ----------------
 
 

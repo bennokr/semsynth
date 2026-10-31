@@ -1,10 +1,30 @@
-Use Google-style docstrings, logging and dataclasses.
-Maintain a short pyproject.toml with separate dev dependencies.
-Check whether AGENTS.md and README.md need updating at every commit.
-Maintain a brief repo structure and project intent guardrails in AGENTS.md.
+# SemSynth: notes for coding agents
 
-Repo structure guardrails:
-- `semsynth/` holds the reporting pipeline, backends, metadata utilities, CLI entrypoints, and packaged runtime assets (`semsynth/templates`).
-- `map_columns/` contains terminology helpers; use `codes_map_columns.py` + `codes.tsv` for offline Wikidata mappings and keep manual override JSONs alongside datasets. `sssom_to_codebook.py` reads SSSOM rows with `linked-codebook`; the writers in `map_columns/` stay here because they record the justification of automatic matches.
-- `configs/` stores runnable bundles. `maximal_config.toml` must finish without GPU/shared-memory features, so keep it metasyn-first and ensure optional toggles degrade gracefully.
-- Cache roots (`downloads-cache/`, `uciml-cache/`) may include synthetic stand-ins when the original sources are unreachable; document such fallbacks in README when they change.
+Synthetic-data generation and evaluation (PrivBayes, MetaSyn, PyBNesian, SynthCity), driven by a
+linked-codebook profile; plus the report/catalog site. Target shape: python API + CLI + Pyodide app.
+
+## Commands
+- Setup: `uv sync --locked --extra dev --extra privbayes --extra metasyn --extra statsmodels`
+- Check (what CI runs): `uv run make check` = ruff, `mypy --strict` on the core, pytest, statement budgets.
+- After shrinking a module: `python scripts/check_size.py --update` (budgets only go down).
+- Golden safety net: `tests/test_golden_pipeline.py` runs MetaSyn + missingness + downstream end to end.
+
+## Layout
+- `semsynth/`: `codebook.py` (profile + roles), `backends/` (privbayes, metasyn, pybnesian, synthcity), `missingness.py`,
+  `metrics.py`, `downstream_fidelity.py`, `pipeline.py` (being split), `reporting.py`, `catalog.py`, `dataproviders/`.
+- `mappings/` curated codebooks; `map_columns/` holds only terminology data (matchers live in entailmap).
+- Core modules listed in the `Makefile` (`CORE`) are `mypy --strict`; add a module there when it is clean.
+
+## Hard rules
+- No network in tests; build small tables in `tmp_path`. Cached datasets are for manual runs only.
+- Do not compress statements to satisfy ruff/complexity limits; split functions. Ruff debt is the `ignore` list in
+  `pyproject.toml`; remove entries as modules are fixed, never add new ones.
+- A new dependency goes into a named extra, not `dependencies`; keep `import semsynth` light (lazy heavy imports).
+- Check at every commit whether README.md and this file need updating.
+- Google-style docstrings, logging, dataclasses.
+
+## Known debt
+- `pipeline.py` / `reporting.py` do too much; global state (`ProvenanceConfig`, backend cache) hinders reuse.
+- Missing-value policy and type inference heuristics are brittle; reproducibility is partial.
+- Two backend contracts exist (`run_experiment -> Path` and `SynthesisResult`); converge on the latter.
+- `map_columns/` data (codes.tsv, terminology.db) should become an entailmap release asset.

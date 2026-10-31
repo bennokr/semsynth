@@ -5,6 +5,7 @@
 
 import json
 import logging
+import os
 import pathlib
 from collections.abc import Mapping
 from datetime import datetime
@@ -352,6 +353,23 @@ def _load_from_archive(dataset_id: int, spec: DatasetSpec, cache_paths: CachePat
     return DatasetPayload(spec=spec, frame=df_clean, color=color_series, metadata=dcat_dsv_meta)
 
 
+INSECURE_ENV_VAR = "SEMSYNTH_INSECURE_UCI"
+
+
+def _disable_tls_verification() -> None:
+    """Make ucimlrepo skip certificate checks, for networks with an intercepting TLS proxy.
+
+    Only used when ``SEMSYNTH_INSECURE_UCI=1``; the default is to verify certificates.
+    """
+
+    import ssl
+
+    import ucimlrepo.fetch as ucimlrepo_fetch
+
+    logging.warning("%s=1: TLS certificates are not verified for ucimlrepo downloads.", INSECURE_ENV_VAR)
+    ucimlrepo_fetch.ssl.create_default_context = lambda *_, **__: ssl._create_unverified_context()
+
+
 @rule(phony=True)
 def load_uciml_by_id(dataset_id: int, cache_dir: pathlib.Path | OutPath) -> DatasetPayload:
     """Load a UCI ML dataset by ID, with local caching of the data payload.
@@ -383,14 +401,8 @@ def load_uciml_by_id(dataset_id: int, cache_dir: pathlib.Path | OutPath) -> Data
             metadata=spec.meta,
         )
 
-    import ssl as _ssl
-
-    import ucimlrepo.fetch as _ucimlrepo_fetch
-
-    # Some environments have self-signed or intercepting TLS proxies that prevent
-    # certificate verification.  Fall back to an unverified context so the
-    # pipeline works even without a trusted CA chain.
-    _ucimlrepo_fetch.ssl.create_default_context = lambda *a, **kw: _ssl._create_unverified_context()
+    if os.environ.get(INSECURE_ENV_VAR) == "1":
+        _disable_tls_verification()
 
     from ucimlrepo import fetch_ucirepo
     from ucimlrepo.fetch import DatasetNotFoundError

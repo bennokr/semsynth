@@ -3,7 +3,7 @@ from __future__ import annotations
 import json
 import logging
 from collections.abc import Mapping
-from dataclasses import dataclass, field
+from dataclasses import dataclass
 from pathlib import Path
 from typing import Any
 
@@ -38,20 +38,6 @@ class DCATDistribution(RDFMixin):
     access_url: str | None = None
     download_url: str | None = None
     media_type: str | None = None
-
-
-@dataclass
-class DCATDataset(RDFMixin):
-    __context__ = JSONLD_CONTEXT
-    identifier: str
-    title: str
-    description: str
-    publisher: str | None = None
-    keywords: list[str] = field(default_factory=list)
-    issued: str | None = None
-    modified: str | None = None
-    language: str | None = None
-    distributions: list[DCATDistribution] = field(default_factory=list)
 
 
 def get_uciml_variable_descriptions(dataset_id: int) -> dict[str, str]:

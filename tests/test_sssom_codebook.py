@@ -6,8 +6,8 @@ import pytest
 
 pytest.importorskip("defopt")
 
-from map_columns.sssom_to_codebook import integrate_sssom
 from semsynth.codebook import Codebook
+from semsynth.sssom_codebook import integrate_sssom
 
 CODEBOOK = Codebook({"columns": [{"name": "col_a"}, {"name": "col_b"}, {"name": "Col C"}]})
 

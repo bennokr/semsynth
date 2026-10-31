@@ -163,14 +163,6 @@ def model_run_root(dataset_outdir: Path | OutPath) -> Path:
 
 
 @rule(merge=True, phony=True)
-def model_run_dir(dataset_outdir: Path | OutPath, name: str) -> Path:
-    root = model_run_root(dataset_outdir)
-    run_dir = root / str(name)
-    run_dir.mkdir(parents=True, exist_ok=True)
-    return run_dir
-
-
-@rule(merge=True, phony=True)
 def write_manifest(run_dir: Path | OutPath, manifest: dict[str, Any]) -> None:
     (run_dir / "manifest.json").write_text(json.dumps(manifest, indent=2), encoding="utf-8")
     logging.debug("Wrote manifest to %s", run_dir / "manifest.json")

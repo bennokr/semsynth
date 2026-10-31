@@ -8,7 +8,7 @@ import re
 from collections.abc import Sequence
 from dataclasses import fields
 from pathlib import Path
-from typing import TYPE_CHECKING, Any
+from typing import TYPE_CHECKING
 
 from makeprov import OutPath, main, rule
 from makeprov.config import ProvenanceConfig
@@ -18,7 +18,6 @@ from .app import run_app
 from .catalog import build_catalog
 
 __all__ = [
-    "build",
     "build_catalog",
     "create_mapping",
     "main",
@@ -154,13 +153,31 @@ def report(
         raise SystemExit("; ".join(failures))
 
 
+def _dataset_slug(spec: DatasetSpec, label: str) -> str:
+    """The file stem of a dataset's mappings: provider and id, or provider and the slugged name."""
+
+    tail = str(spec.id) if spec.id is not None else re.sub(r"[^a-z0-9]+", "-", label.lower()).strip("-")
+    return "-".join(part for part in (spec.provider, tail) if part)
+
+
+def _override_file(directory: Path | None, spec: DatasetSpec, slug: str) -> Path | None:
+    """The manual override file of a dataset in ``directory``, if there is one."""
+
+    if directory is None:
+        return None
+    names = [f"{slug}.json"]
+    if spec.id is not None:
+        names.append(f"{spec.provider}-{spec.id}.json")
+    return next((path for name in names if (path := directory / name).exists()), None)
+
+
 @rule(merge=True, phony=True)
 def create_mapping(
     provider: str,
     *,
     datasets: list[str] | None = None,
     codes_tsv: str = "map_columns/codes.tsv",
-    manual_overrides_dir: str | None = "map_columns/manual",
+    manual_overrides_dir: str | None = None,
     systems: Sequence[str] = ("WD",),
     method: str = "lexical",
     datasette_url: str = "http://127.0.0.1:8001/terminology",
@@ -188,7 +205,7 @@ def create_mapping(
         datasets: Optional list of dataset identifiers; falls back to default
             provider catalog when omitted.
         codes_tsv: Path to the terminology TSV produced by
-            :mod:`map_columns.build_wikidata_medical_codes_table`.
+            `entailmap.match.build_wikidata_medical_codes_table`.
         manual_overrides_dir: Directory holding optional ``*.json`` overrides.
         systems: Terminology systems to consider during matching.
         method: Mapping strategy to use. Supported values are ``"lexical"``
@@ -219,16 +236,18 @@ def create_mapping(
         verbose: Switch logging level to ``INFO`` when ``True``.
     """
 
-    from map_columns.codes_map_columns import (
-        build_manual_matches,
-        load_manual_overrides,
-        write_sssom,
-    )
-    from map_columns.shared import parse_columns
-    from map_columns.sssom_to_codebook import integrate_sssom
+    try:
+        from entailmap.match.api import run_match
+        from entailmap.match.codes_map_columns import load_manual_overrides, write_sssom
+        from entailmap.match.shared import parse_columns
+    except ImportError as exc:
+        raise SystemExit(
+            "create_mapping needs entailmap.match: pip install 'semsynth[mapping]'."
+        ) from exc
 
     from .codebook import Codebook
     from .datasets import load_dataset, specs_from_input
+    from .sssom_codebook import integrate_sssom
     from .utils import ensure_dir
 
     if verbose:
@@ -236,33 +255,12 @@ def create_mapping(
 
     specs = specs_from_input(provider=provider, datasets=datasets)
     overrides_dir = Path(manual_overrides_dir) if manual_overrides_dir else None
-    allowed_systems = tuple(system for system in systems if system)
-
-    codes_cache: dict[str, Any] | None = None
-    if method.lower() in {"lexical", "embed"} or overrides_dir:
-        from map_columns.codes_map_columns import load_codes
-
-        codes_cache = load_codes(
-            Path(codes_tsv), allowed_systems=allowed_systems or None
-        )
-
     outdir_path = Path(outdir)
     ensure_dir(str(outdir_path))
 
-    def _slug(text: str) -> str:
-        return re.sub(r"[^a-z0-9]+", "-", text.lower()).strip("-")
-
-    method_key = method.lower()
-
     for spec in specs:
         payload = load_dataset(spec)
-        dataset_label = payload.spec.name or str(payload.spec.id)
-        slug_parts = [spec.provider]
-        if spec.id is not None:
-            slug_parts.append(str(spec.id))
-        elif dataset_label:
-            slug_parts.append(_slug(dataset_label))
-        slug = "-".join(slug_parts)
+        slug = _dataset_slug(spec, payload.spec.name or str(payload.spec.id))
 
         metadata_payload = payload.metadata or payload.spec.meta
         if isinstance(metadata_payload, Codebook):
@@ -271,113 +269,38 @@ def create_mapping(
             raise RuntimeError(f"No metadata found for dataset {slug}")
 
         columns, dataset_meta = parse_columns(metadata_payload)
-
-        manual_overrides_path: Path | None = None
-        if overrides_dir:
-            candidate_names = [
-                f"{slug}.json",
-                f"{spec.provider}-{spec.id}.json" if spec.id is not None else "",
-            ]
-            for name in candidate_names:
-                if not name:
-                    continue
-                candidate = overrides_dir / name
-                if candidate.exists():
-                    manual_overrides_path = candidate
-                    break
-        overrides = load_manual_overrides(manual_overrides_path)
-
-        if method_key == "lexical":
-            from map_columns.codes_map_columns import generate_matches as lexical_generate_matches
-
-            matches = lexical_generate_matches(
+        try:
+            matches = run_match(
                 columns,
-                codes_cache or {},
+                dataset_meta,
+                method=method,
+                codes_tsv=codes_tsv,
+                systems=systems,
+                overrides=load_manual_overrides(_override_file(overrides_dir, spec, slug)),
                 min_score=min_score,
                 top_k=top_k,
-                manual_overrides=overrides,
-            )
-        elif method_key == "keyword":
-            from map_columns.kwd_map_columns import generate_matches as keyword_generate_matches
-
-            matches = keyword_generate_matches(
-                columns,
-                dataset_meta,
-                datasette_db_url=datasette_url,
-                table=datasette_table,
-                limit=datasette_limit,
-                allowed_systems=allowed_systems,
+                datasette_url=datasette_url,
+                datasette_table=datasette_table,
+                datasette_limit=datasette_limit,
                 lexical_threshold=lexical_threshold,
-                top_k=top_k,
-            )
-        elif method_key == "embed":
-            from map_columns.embed_map_columns import generate_matches as embed_generate_matches
-
-            if not codes_cache:
-                raise SystemExit(
-                    "Embedding-based mapping requires a terminology codes TSV."
-                )
-            matches = embed_generate_matches(
-                columns,
-                dataset_meta,
-                list(codes_cache.values()),
-                model_name=embed_model,
-                top_k=top_k,
+                embed_model=embed_model,
                 candidate_pool_multiplier=candidate_pool_multiplier,
                 cosine_threshold=cosine_threshold,
-                lexical_threshold=lexical_threshold,
-            )
-        elif method_key == "llm":
-            from map_columns.llm_map_columns import generate_matches as llm_generate_matches
-
-            matches = llm_generate_matches(
-                columns,
-                dataset_meta,
-                datasette_url=datasette_url,
-                model=llm_model,
-                extra_prompt=llm_extra_prompt,
-                subject_prefix=llm_subject_prefix,
-                allowed_systems=allowed_systems,
-                top_k=top_k,
+                llm_model=llm_model,
+                llm_extra_prompt=llm_extra_prompt,
+                llm_subject_prefix=llm_subject_prefix,
                 confidence_threshold=confidence_threshold,
             )
-        else:
-            raise SystemExit(
-                f"Unknown mapping method '{method}'. Expected lexical, keyword, embed, or llm."
-            )
-
-        if overrides and method_key != "lexical":
-            if codes_cache is None:
-                from map_columns.codes_map_columns import load_codes
-
-                codes_cache = load_codes(
-                    Path(codes_tsv), allowed_systems=allowed_systems or None
-                )
-            manual_matches = []
-            overridden = set()
-            for column in columns:
-                manual = build_manual_matches(
-                    column, overrides, codes_cache, min_score=min_score
-                )
-                if manual:
-                    manual_matches.extend(manual)
-                    overridden.add(column)
-            if manual_matches:
-                matches = manual_matches + [
-                    match for match in matches if match.column not in overridden
-                ]
+        except ValueError as exc:
+            raise SystemExit(str(exc)) from exc
 
         sssom_path = outdir_path / f"{slug}.sssom.tsv"
-        write_sssom(
-            matches,
-            sssom_path,
-            dataset_meta=dataset_meta,
-            version_tag=version_tag,
-        )
+        write_sssom(matches, sssom_path, dataset_meta=dataset_meta, version_tag=version_tag)
 
-        mapping_rows = [match.to_sssom_row() for match in matches]
         updated = integrate_sssom(
-            Codebook.read(metadata_payload), mapping_rows, reviewer=f"semsynth map-columns ({method_key})"
+            Codebook.read(metadata_payload),
+            [match.to_sssom_row() for match in matches],
+            reviewer=f"semsynth map-columns ({method.lower()})",
         )
         metadata_path = outdir_path / f"{slug}.metadata.json"
         metadata_path.write_text(
@@ -503,14 +426,6 @@ def _run_reports_for_targets(
         logging.warning("Completed with skipped datasets: %s", "; ".join(failures))
         if successes == 0:
             raise SystemExit("; ".join(failures))
-
-
-def build(*args, **kwargs):  # pragma: no cover - passthrough to makeprov
-    """Expose makeprov build targets via ``python -m semsynth build ...``."""
-
-    from makeprov import main as makeprov_main
-
-    return makeprov_main(*args, **kwargs)
 
 
 if __name__ == "__main__":

@@ -9,7 +9,6 @@ import re
 from collections.abc import Sequence
 from dataclasses import dataclass, field
 from datetime import UTC, datetime
-from hashlib import sha256
 from importlib import resources
 from pathlib import Path
 
@@ -228,16 +227,6 @@ def mimetype_for(path: Path) -> str | None:
 
     mime, _ = mimetypes.guess_type(path.name)
     return mime
-
-
-def sha256_digest(path: Path) -> str:
-    """Compute a SHA-256 digest for a file."""
-
-    hsh = sha256()
-    with path.open("rb") as handle:
-        for chunk in iter(lambda: handle.read(1024 * 1024), b""):
-            hsh.update(chunk)
-    return hsh.hexdigest()
 
 
 def collect_distributions(

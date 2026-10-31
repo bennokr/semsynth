@@ -23,9 +23,10 @@ dependencies = [
   "linked-codebook @ https://bennokr.github.io/linked-codebook/linked_codebook-0.7.0-py3-none-any.whl",
   "makeprov>=0.4.4",
   "pyarrow<26",  # 26.0 requires NumPy 2; numpy<2 above
-  "tabulate",
+  "tabulate",  # pandas.DataFrame.to_markdown, used by reporting.py
   "requests",
   "scikit-learn",
+  "scipy",
   "ucimlrepo"
 ]
 
@@ -76,11 +77,7 @@ statsmodels = [
   "statsmodels"
 ]
 mapping = [
-  "requests",
-  "defopt",
-  "datasette",
-  "sqlite-utils",
-  "sssom"
+  "entailmap[lexical] @ git+https://github.com/bennokr/entailmap@dda21fb",  # until entailmap is released
 ]
 all = [
   "metasyn",
@@ -102,7 +99,7 @@ semsynth = "semsynth.__main__:main"
 [tool.setuptools]
 
 [tool.setuptools.packages.find]
-include = ["semsynth*", "map_columns*"]
+include = ["semsynth*"]
 
 [tool.setuptools.package-data]
 semsynth = ["templates/*.j2", "templates/*.html", "templates/*.css", "templates/*.js", "templates/*.rq"]

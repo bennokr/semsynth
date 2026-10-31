@@ -53,16 +53,10 @@ The command writes `*.sssom.tsv` and `*.metadata.json` artefacts under
 column identifier pointing to a list of SSSOM-style dictionaries. Alternate
 strategies include `--method keyword` (Datasette keyword search),
 `--method embed` (sentence-transformer re-ranking), and `--method llm` (LLM +
-Datasette). Each honours the flags documented in `map_columns/README.md`.
+Datasette). Each honours the flags of `entailmap match --help`. Install the matchers with `pip install "semsynth[mapping]"`.
 
-To rebuild the Wikidata terminology table offline, run:
-
-```bash
-python map_columns/build_wikidata_medical_codes_table.py
-```
-
-This produces an updated `map_columns/codes.tsv` enriched with descriptions
-and alternate labels.
+To rebuild the Wikidata terminology table offline, use the builders in `entailmap.match` (`build_wikidata_medical_codes_table`),
+and point `ENTAILMAP_MATCH_DATA` at the directory that holds the result.
 
 ## Generate reports
 

@@ -38,7 +38,7 @@ codebook = Codebook.read("../mappings/uciml-45.metadata.json")
 1. **Providers**: `semsynth/dataproviders/uciml.py` turns UCI metadata into a codebook and writes it as JSON-LD.
 2. **Curated files**: `mappings/<provider>-<id>.metadata.json` are codebooks written as JSON-LD. They complete
    the provider metadata; where both describe a column, the curated file wins.
-3. **SSSOM**: `map_columns/sssom_to_codebook.py` adds the mappings of an SSSOM file to the columns.
+3. **SSSOM**: `semsynth/sssom_codebook.py` adds the mappings of an SSSOM file to the columns.
    linked-codebook writes only approved mappings to JSON-LD, so mappings without a reviewer get the name of the
    file or the matching method as reviewer.
 4. **Inference**: during preprocessing, linked-codebook infers the datatype, level and observed codes of every

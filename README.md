@@ -117,7 +117,7 @@ compute_downstream = true
 
 ## 🧰 Metadata templates & column mappings
 - `semsynth/dataproviders/uciml.py` exposes a CLI that turns the JSON payloads cached under `uciml-cache/` (sometimes referenced as `uci-cache/` in earlier docs) into DCAT + DSV JSON-LD that downstream tools can ingest.
-- Scripts under `map_columns/` take that JSON-LD and suggest or write terminology mappings (see `map_columns/README.md` for the full strategy catalog covering lexical, Datasette keyword, embedding, and LLM workflows).
+- Terminology matching (lexical, Datasette keyword, embedding and LLM strategies) lives in [entailmap](https://github.com/bennokr/entailmap) as `entailmap.match`. Install it with `pip install "semsynth[mapping]"`. This repository keeps only the terminology data in `map_columns/` (`codes.tsv`, `terminology.db`) until it becomes a release asset of entailmap; `ENTAILMAP_MATCH_DATA` can point elsewhere.
 - `python -m semsynth create-mapping uciml --datasets 145 --method lexical` automates the end-to-end workflow (JSON-LD export → terminology scoring → SSSOM merge) and stores the results under `mappings/`.
 - Curated codebooks (`mappings/*.metadata.json`, DSV JSON-LD with roles) are repo-only under `mappings/` and are not bundled into wheels; when installing from PyPI, provide your own `mappings/` directory if you want curated mappings.
 
@@ -135,18 +135,14 @@ compute_downstream = true
    python semsynth/dataproviders/uciml.py uciml-cache/45.json heart-dataset.jsonld
    ```
    The resulting `heart-dataset.jsonld` contains dataset-level `dcat:Dataset` fields plus a `dsv:datasetSchema` block with each variable from the Heart Disease dataset.
-3. Suggest terminology mappings for every variable description using the keyword search helper (writes SSSOM when `--output` is provided):
-   
+3. Suggest terminology mappings for every variable description with entailmap (writes SSSOM):
+
    ```bash
-   python map_columns/kwd_map_columns.py heart-dataset.jsonld \
-       --datasette-db-url http://127.0.0.1:8001/terminology \
-       --table codes \
-       --limit 10 \
-       --top-k 3 \
-       --output mappings/uciml-45.keyword.sssom.tsv \
-       --verbose
+   entailmap match keyword heart-dataset.jsonld \
+       --datasette-url http://127.0.0.1:8001/terminology \
+       --top-k 3 -o mappings/uciml-45.keyword.sssom.tsv
    ```
-   Swap in `map_columns/embed_map_columns.py` or `map_columns/llm_map_columns.py` to use embedding or LLM variants (see `map_columns/README.md` for full parameter lists).
+   Use `lexical`, `embed` or `llm` instead of `keyword` for the other strategies; see `entailmap match --help`.
 4. Run the integrated helper to write mappings and the codebook in one go:
 
    ```bash
@@ -165,6 +161,7 @@ compute_downstream = true
 - Metadata-only reports require no TOML file; pass `--configs-toml` to opt into synthetic runs.
 - All models are treated uniformly in the report; UMAPs share the same projection trained on real data.
 - When optional dependencies (e.g., `umap-learn`, PyBNesian, SynthCity) are missing or blocked by runtime sandboxing, SemSynth logs a warning and continues with the available components. The shipped `maximal_config` keeps MetaSyn as the default to guarantee completion under those constraints.
+- Downloads verify TLS certificates. On a network with an intercepting proxy, set `SEMSYNTH_INSECURE_UCI=1` to make `ucimlrepo` skip verification (it logs a warning).
 - Some UCI datasets, such as 1150 (Gallstone), have no `data_url`, so `ucimlrepo` cannot import them. SemSynth then downloads the published archive and reads the table from it (`semsynth/dataproviders/uci_archive.py`; run `python -m semsynth.dataproviders.uci_archive 1150` to fill the cache).
 - If external dataset hosts are unreachable, cached payloads under `downloads-cache/` may contain synthetic stand-ins that mimic the documented schema so pipeline checks can proceed. Keep README notes in sync when such fallbacks are introduced.
 
