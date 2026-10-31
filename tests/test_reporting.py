@@ -1,7 +1,7 @@
 from __future__ import annotations
 
-from pathlib import Path
 import json
+from pathlib import Path
 
 import pandas as pd
 import pytest
@@ -10,6 +10,7 @@ pytest.importorskip("jinja2")
 
 from semsynth.models import ModelRun
 from semsynth.reporting import write_report_md
+
 
 def _touch(path: Path, content: str = "data") -> Path:
     path.parent.mkdir(parents=True, exist_ok=True)

@@ -3,13 +3,15 @@
 from __future__ import annotations
 
 import logging
-from dataclasses import fields
-from dataclasses import dataclass
+from dataclasses import dataclass, fields
 from pathlib import Path
-from typing import Optional
+from typing import TYPE_CHECKING
 
 from makeprov import rule
 from makeprov.config import ProvenanceConfig
+
+if TYPE_CHECKING:
+    from flask import Flask
 
 LOGGER = logging.getLogger(__name__)
 
@@ -24,7 +26,7 @@ class SearchResult:
 
 def _run_search(
     provider: str,
-    name_substr: Optional[str] = None,
+    name_substr: str | None = None,
     area: str = "Health and Medicine",
     cat_min: int = 1,
     num_min: int = 1,
@@ -60,7 +62,7 @@ def _run_search(
 
 def _run_report(
     provider: str,
-    datasets: Optional[list[str]] = None,
+    datasets: list[str] | None = None,
     pipeline_configs: str = "",
     area: str = "Health and Medicine",
     outdir = Path('outputs'),
@@ -76,8 +78,8 @@ def _run_report(
     Returns:
         Status text summarizing the invocation.
     """
-    from .datasets import DatasetSpec, load_dataset, specs_from_input
-    from .models import ModelConfigBundle, load_model_configs, parse_toml_config
+    from .datasets import load_dataset, specs_from_input
+    from .models import load_model_configs, parse_toml_config
     from .pipeline import PipelineConfig, process_dataset
     from .utils import ensure_dir
 
@@ -121,15 +123,15 @@ def _run_report(
 def create_app() -> Flask:
     """Create and configure the Flask application."""
 
-    from flask import Flask, render_template_string, request # defer
+    from flask import Flask, render_template_string, request  # defer
 
     app = Flask(__name__)
     app.config["JSON_SORT_KEYS"] = False
 
     @app.route("/", methods=["GET", "POST"])
     def index() -> str:
-        search_result: Optional[SearchResult] = None
-        status_message: Optional[str] = None
+        search_result: SearchResult | None = None
+        status_message: str | None = None
 
         form_state = request.form if request.method == "POST" else request.args
         if request.method == "POST":

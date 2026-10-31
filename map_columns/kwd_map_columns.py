@@ -4,8 +4,9 @@
 from __future__ import annotations
 
 import logging
+from collections.abc import Iterable, Sequence
 from pathlib import Path
-from typing import Any, Dict, Iterable, List, Optional, Sequence, Tuple
+from typing import Any
 
 import defopt
 import requests
@@ -37,7 +38,7 @@ def query_codes(
     table: str,
     term: str,
     limit: int,
-) -> List[Dict[str, Any]]:
+) -> list[dict[str, Any]]:
     """Query Datasette for candidate terminology rows."""
 
     base = datasette_db_url.rstrip("/")
@@ -56,8 +57,8 @@ def query_codes(
     return rows
 
 
-def _candidate_texts(label: str, synonyms: Iterable[str]) -> Tuple[str, ...]:
-    texts: List[str] = []
+def _candidate_texts(label: str, synonyms: Iterable[str]) -> tuple[str, ...]:
+    texts: list[str] = []
     if label:
         texts.append(label)
     texts.extend(synonyms)
@@ -71,14 +72,14 @@ def generate_matches(
     datasette_db_url: str,
     table: str = "codes",
     limit: int = 10,
-    allowed_systems: Optional[Iterable[str]] = None,
+    allowed_systems: Iterable[str] | None = None,
     lexical_threshold: float = 0.35,
     top_k: int = 3,
-) -> List[MatchResult]:
+) -> list[MatchResult]:
     """Generate Datasette-backed lexical matches for dataset columns."""
 
     allowed = {system.strip() for system in allowed_systems or [] if system.strip()}
-    matches: List[MatchResult] = []
+    matches: list[MatchResult] = []
 
     for column in columns:
         name = column.name or column.column_id or "<unnamed column>"
@@ -93,7 +94,7 @@ def generate_matches(
             LOGGER.warning("Error querying Datasette for %s: %s", name, exc)
             continue
 
-        scored: List[Tuple[float, MatchResult]] = []
+        scored: list[tuple[float, MatchResult]] = []
         for row in rows:
             system = (row.get("system") or "").strip()
             if allowed and system not in allowed:
@@ -151,8 +152,8 @@ def main(
     limit: int = 10,
     lexical_threshold: float = 0.35,
     top_k: int = 3,
-    output: Optional[Path] = None,
-    systems: Optional[Sequence[str]] = None,
+    output: Path | None = None,
+    systems: Sequence[str] | None = None,
     verbose: bool = False,
 ) -> None:
     """Suggest Datasette-backed terminology rows for each dataset column."""

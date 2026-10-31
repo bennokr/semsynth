@@ -5,9 +5,10 @@ from __future__ import annotations
 import json
 import logging
 from pathlib import Path
-from typing import Any, Dict, Optional, TYPE_CHECKING
+from typing import TYPE_CHECKING, Any
 
 from makeprov import OutDir
+
 from ..metrics import per_variable_distances, summarize_distance_metrics
 from ..models import model_run_root, write_manifest
 from ..utils import coerce_continuous_to_float, ensure_dir, infer_types
@@ -27,18 +28,18 @@ def _load_metasyn() -> Any:
 
 
 def run_experiment(
-    df: "pd.DataFrame",
+    df: pd.DataFrame,
     *,
-    provider: Optional[str],
-    dataset_name: Optional[str],
-    provider_id: Optional[int],
+    provider: str | None,
+    dataset_name: str | None,
+    provider_id: int | None,
     outdir: str,
     label: str,
-    model_info: Dict[str, Any] | None,
-    rows: Optional[int],
+    model_info: dict[str, Any] | None,
+    rows: int | None,
     seed: int,
     test_size: float,
-    codebook_jsonld: Optional[Dict[str, Any]] = None,
+    codebook_jsonld: dict[str, Any] | None = None,
 ) -> Path:
     """Fit the MetaSyn model and persist artifacts following the backend contract."""
 

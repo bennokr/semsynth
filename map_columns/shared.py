@@ -5,9 +5,10 @@ from __future__ import annotations
 import json
 import logging
 import re
+from collections.abc import Iterable, Mapping, Sequence
 from dataclasses import dataclass, field
 from pathlib import Path
-from typing import Any, Dict, FrozenSet, Iterable, List, Mapping, Optional, Sequence, Tuple
+from typing import Any
 
 from semsynth.codebook import Codebook
 
@@ -18,23 +19,23 @@ logger = logging.getLogger(__name__)
 class ColumnInfo:
     """The parts of a codebook column that matchers use."""
 
-    column_id: Optional[str]
-    name: Optional[str]
-    description: Optional[str] = None
-    unit: Optional[str] = None
-    role: Optional[str] = None
-    statistical_data_type: Optional[str] = None
+    column_id: str | None
+    name: str | None
+    description: str | None = None
+    unit: str | None = None
+    role: str | None = None
+    statistical_data_type: str | None = None
 
 
 @dataclass(frozen=True)
 class DatasetMetadata:
     """Dataset-level metadata extracted from a DCAT/DSV payload."""
 
-    title: Optional[str]
-    description: Optional[str]
-    table_of_contents: Optional[str]
+    title: str | None
+    description: str | None
+    table_of_contents: str | None
 
-    def as_dict(self) -> Dict[str, Optional[str]]:
+    def as_dict(self) -> dict[str, str | None]:
         """Convert the dataset metadata into a plain mapping."""
 
         return {
@@ -51,8 +52,8 @@ class SimilarityResult:
     score: float = 0.0
     jaccard: float = 0.0
     ratio: float = 0.0
-    overlap_terms: FrozenSet[str] = field(default_factory=frozenset)
-    matched_pair: Optional[Tuple[str, str]] = None
+    overlap_terms: frozenset[str] = field(default_factory=frozenset)
+    matched_pair: tuple[str, str] | None = None
 
     @property
     def has_overlap(self) -> bool:
@@ -61,7 +62,7 @@ class SimilarityResult:
         return bool(self.overlap_terms)
 
 
-DEFAULT_STOP_WORDS: FrozenSet[str] = frozenset(
+DEFAULT_STOP_WORDS: frozenset[str] = frozenset(
     {
         "the",
         "a",
@@ -96,7 +97,7 @@ DEFAULT_STOP_WORDS: FrozenSet[str] = frozenset(
 )
 
 
-def _coerce_optional_str(value: Any) -> Optional[str]:
+def _coerce_optional_str(value: Any) -> str | None:
     """Convert ``value`` to a trimmed string when possible."""
     if value is None:
         return None
@@ -106,7 +107,7 @@ def _coerce_optional_str(value: Any) -> Optional[str]:
     return None
 
 
-def parse_columns(data: Mapping[str, Any]) -> Tuple[List[ColumnInfo], DatasetMetadata]:
+def parse_columns(data: Mapping[str, Any]) -> tuple[list[ColumnInfo], DatasetMetadata]:
     """Normalize raw metadata payload into column info and dataset summary.
 
     Args:
@@ -142,7 +143,7 @@ def parse_columns(data: Mapping[str, Any]) -> Tuple[List[ColumnInfo], DatasetMet
     return columns, dataset_meta
 
 
-def load_columns(path: Path) -> Tuple[List[ColumnInfo], DatasetMetadata]:
+def load_columns(path: Path) -> tuple[list[ColumnInfo], DatasetMetadata]:
     """Load dataset metadata and column definitions from JSON.
 
     Args:
@@ -160,11 +161,11 @@ def load_columns(path: Path) -> Tuple[List[ColumnInfo], DatasetMetadata]:
 
 
 def tokenize(
-    text: Optional[str],
+    text: str | None,
     *,
-    stop_words: Optional[Iterable[str]] = None,
+    stop_words: Iterable[str] | None = None,
     min_token_length: int = 2,
-) -> FrozenSet[str]:
+) -> frozenset[str]:
     """Tokenize ``text`` removing punctuation and optional stop words.
 
     Args:
@@ -192,8 +193,8 @@ def tokenize(
 def column_tokens(
     column: ColumnInfo,
     *,
-    stop_words: Optional[Iterable[str]] = None,
-) -> FrozenSet[str]:
+    stop_words: Iterable[str] | None = None,
+) -> frozenset[str]:
     """Return the union of tokens derived from a column's name and description.
 
     Args:
@@ -239,8 +240,8 @@ def format_similarity_comment(
     return base
 
 
-def sequence_ratio(lhs: Optional[str], rhs: Optional[str]) -> float:
-    """Compute a Sørensen–Dice-like bigram similarity ratio in [0, 1].
+def sequence_ratio(lhs: str | None, rhs: str | None) -> float:
+    """Compute a Sørensen-Dice-like bigram similarity ratio in [0, 1].
 
     Args:
         lhs: Left-hand text input.
@@ -253,7 +254,7 @@ def sequence_ratio(lhs: Optional[str], rhs: Optional[str]) -> float:
     if not lhs or not rhs:
         return 0.0
 
-    def _bigrams(value: str) -> FrozenSet[str]:
+    def _bigrams(value: str) -> frozenset[str]:
         cleaned = value.lower()
         return frozenset({cleaned[i : i + 2] for i in range(len(cleaned) - 1)})
 
@@ -269,7 +270,7 @@ def score_column_against_texts(
     column: ColumnInfo,
     candidate_texts: Sequence[str],
     *,
-    stop_words: Optional[Iterable[str]] = None,
+    stop_words: Iterable[str] | None = None,
 ) -> SimilarityResult:
     """Score similarity between column metadata and candidate text snippets.
 
@@ -291,8 +292,8 @@ def score_column_against_texts(
         return SimilarityResult()
 
     best_jaccard = 0.0
-    best_overlap: FrozenSet[str] = frozenset()
-    best_pair: Optional[Tuple[str, str]] = None
+    best_overlap: frozenset[str] = frozenset()
+    best_pair: tuple[str, str] | None = None
 
     for field_text in column_fields:
         field_tokens = tokenize(field_text, stop_words=stop_words)

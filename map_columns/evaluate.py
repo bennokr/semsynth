@@ -7,9 +7,9 @@ import csv
 import json
 import logging
 import math
+from collections.abc import Iterable, Sequence
 from dataclasses import dataclass
 from pathlib import Path
-from typing import Dict, Iterable, List, Optional, Sequence
 
 import defopt
 
@@ -38,7 +38,7 @@ class MetricResults:
     mean_average_precision: float
     ndcg: float
 
-    def as_dict(self) -> Dict[str, float]:
+    def as_dict(self) -> dict[str, float]:
         """Convert the metrics to a plain dictionary."""
 
         return {
@@ -53,8 +53,8 @@ class MetricResults:
         }
 
 
-def _read_sssom_rows(path: Path) -> List[MappingRow]:
-    rows: List[MappingRow] = []
+def _read_sssom_rows(path: Path) -> list[MappingRow]:
+    rows: list[MappingRow] = []
     with path.open("r", encoding="utf-8") as handle:
         filtered = [line for line in handle if not line.lstrip().startswith("#")]
     if not filtered:
@@ -74,8 +74,8 @@ def _read_sssom_rows(path: Path) -> List[MappingRow]:
     return rows
 
 
-def _group_by_subject(rows: Iterable[MappingRow]) -> Dict[str, List[MappingRow]]:
-    grouped: Dict[str, List[MappingRow]] = {}
+def _group_by_subject(rows: Iterable[MappingRow]) -> dict[str, list[MappingRow]]:
+    grouped: dict[str, list[MappingRow]] = {}
     for row in rows:
         grouped.setdefault(row.subject_id, []).append(row)
     for values in grouped.values():
@@ -83,8 +83,8 @@ def _group_by_subject(rows: Iterable[MappingRow]) -> Dict[str, List[MappingRow]]
     return grouped
 
 
-def _set_by_subject(rows: Iterable[MappingRow]) -> Dict[str, set[str]]:
-    grouped: Dict[str, set[str]] = {}
+def _set_by_subject(rows: Iterable[MappingRow]) -> dict[str, set[str]]:
+    grouped: dict[str, set[str]] = {}
     for row in rows:
         grouped.setdefault(row.subject_id, set()).add(row.object_id)
     return grouped
@@ -94,7 +94,7 @@ def _safe_div(num: float, denom: float) -> float:
     return num / denom if denom else 0.0
 
 
-def _average_precision(preds: List[MappingRow], gold: set[str]) -> float:
+def _average_precision(preds: list[MappingRow], gold: set[str]) -> float:
     if not gold:
         return 0.0
     hits = 0
@@ -108,7 +108,7 @@ def _average_precision(preds: List[MappingRow], gold: set[str]) -> float:
     return precision_sum / len(gold)
 
 
-def _ndcg(preds: List[MappingRow], gold: set[str]) -> float:
+def _ndcg(preds: list[MappingRow], gold: set[str]) -> float:
     if not gold:
         return 0.0
     dcg = 0.0
@@ -120,18 +120,18 @@ def _ndcg(preds: List[MappingRow], gold: set[str]) -> float:
     return _safe_div(dcg, idcg)
 
 
-def compute_metrics(gold_rows: List[MappingRow], pred_rows: List[MappingRow]) -> MetricResults:
+def compute_metrics(gold_rows: list[MappingRow], pred_rows: list[MappingRow]) -> MetricResults:
     gold_by_subject = _set_by_subject(gold_rows)
     pred_by_subject = _group_by_subject(pred_rows)
     all_subjects = sorted(set(gold_by_subject.keys()) | set(pred_by_subject.keys()))
 
     micro_tp = micro_fp = micro_fn = 0
-    macro_precisions: List[float] = []
-    macro_recalls: List[float] = []
-    macro_f1s: List[float] = []
+    macro_precisions: list[float] = []
+    macro_recalls: list[float] = []
+    macro_f1s: list[float] = []
 
-    ap_values: List[float] = []
-    ndcg_values: List[float] = []
+    ap_values: list[float] = []
+    ndcg_values: list[float] = []
 
     for subject in all_subjects:
         gold_set = gold_by_subject.get(subject, set())
@@ -202,7 +202,7 @@ def main(
     gold_tsv: Path,
     predictions: Sequence[Path],
     *,
-    output: Optional[Path] = None,
+    output: Path | None = None,
     verbose: bool = False,
 ) -> None:
     """Compare one or more SSSOM files against a gold standard.
@@ -226,7 +226,7 @@ def main(
     if not gold_rows:
         raise SystemExit(f"No gold mappings found in {gold_tsv}")
 
-    summary: Dict[str, Dict[str, float]] = {}
+    summary: dict[str, dict[str, float]] = {}
 
     for pred_path in predictions:
         pred_rows = _read_sssom_rows(pred_path)

@@ -3,7 +3,6 @@
 from __future__ import annotations
 
 import numbers
-from typing import Tuple
 
 
 def ensure_npsum_compat() -> None:
@@ -67,7 +66,7 @@ def ensure_torch_rmsnorm() -> None:
     class _RMSNorm(nn.Module):
         def __init__(
             self,
-            normalized_shape: int | Tuple[int, ...],
+            normalized_shape: int | tuple[int, ...],
             eps: float = 1e-6,
             elementwise_affine: bool = True,
         ) -> None:
@@ -84,7 +83,7 @@ def ensure_torch_rmsnorm() -> None:
             else:
                 self.register_parameter("weight", None)
 
-        def forward(self, input: "torch.Tensor") -> "torch.Tensor":  # type: ignore[name-defined]
+        def forward(self, input: torch.Tensor) -> torch.Tensor:  # type: ignore[name-defined]
             dims = tuple(range(-len(self.normalized_shape), 0))
             rms = torch.rsqrt(input.pow(2).mean(dim=dims, keepdim=True) + self.eps)
             output = input * rms

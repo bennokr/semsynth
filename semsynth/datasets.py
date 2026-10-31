@@ -1,8 +1,7 @@
 from __future__ import annotations
 
-from typing import Iterable, List, Optional
-
 import pathlib
+from collections.abc import Iterable
 
 from makeprov import InPath, OutPath, rule
 
@@ -12,12 +11,12 @@ from .dataproviders.uciml import get_default_uciml, list_uciml, load_uciml_by_id
 from .specs import DatasetSpec
 
 __all__ = [
-    "DatasetSpec",
     "DatasetPayload",
-    "specs_from_input",
-    "load_dataset",
+    "DatasetSpec",
     "list_openml",
     "list_uciml",
+    "load_dataset",
+    "specs_from_input",
 ]
 
 # Local cache directories for dataset payloads (separate from uciml metadata cache)
@@ -41,12 +40,12 @@ def _as_path(path_like: pathlib.Path | InPath | OutPath | str) -> pathlib.Path:
 @rule(merge=True, phony=True)
 def specs_from_input(
     provider: str,
-    datasets: Optional[Iterable[str]] = None,
+    datasets: Iterable[str] | None = None,
     area: str = "Health and Medicine",
     *,
     openml_cache_dir: OutPath = OutPath(str(_OPENML_CACHE_DIR)),
     uciml_cache_dir: OutPath = OutPath(str(_UCIML_CACHE_DIR)),
-) -> List[DatasetSpec]:
+) -> list[DatasetSpec]:
     openml_cache = _as_path(openml_cache_dir)
     uciml_cache = _as_path(uciml_cache_dir)
     _ensure_cache_dirs(openml_cache, uciml_cache)
@@ -57,14 +56,14 @@ def specs_from_input(
         if provider == "openml":
             return [DatasetSpec("openml", name=d) for d in datasets]
         else:
-            ids: List[DatasetSpec] = []
+            ids: list[DatasetSpec] = []
             for d in datasets:
                 try:
                     ids.append(DatasetSpec("uciml", name=None, id=int(d)))
-                except ValueError:
+                except ValueError as exc:
                     raise ValueError(
                         "For uciml provider, datasets must be numeric IDs (as strings)."
-                    )
+                    ) from exc
             return ids
     else:
         if provider == "openml":

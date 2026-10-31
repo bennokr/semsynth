@@ -30,7 +30,7 @@ class _DummyUtils:
 
     @staticmethod
     def infer_types(df: pd.DataFrame) -> tuple[list[str], list[str]]:
-        cont = [c for c in df.select_dtypes(include=["number"]).columns]
+        cont = list(df.select_dtypes(include=["number"]).columns)
         disc = [c for c in df.columns if c not in cont]
         return disc, cont
 

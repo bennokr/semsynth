@@ -3,11 +3,12 @@
 # ---------------------------
 
 
-from datetime import datetime
 import json
 import logging
 import pathlib
-from typing import Any, Dict, List, Mapping, Optional
+from collections.abc import Mapping
+from datetime import datetime
+from typing import Any
 
 import pandas as pd
 import requests
@@ -22,7 +23,6 @@ from ._helpers import (
     load_cached_payload,
     store_cached_payload,
 )
-
 
 EMPTY = (None, "", [], {},)
 _SPACE_CLEANUP = str.strip
@@ -79,11 +79,11 @@ _LEVELS = {"categorical": "categorical", "binary": "categorical", "integer": "nu
 _DATATYPES = {"integer": "integer", "continuous": "number", "date": "date"}
 
 
-def _column(variable: Mapping[str, Any], missing_symbol: Any) -> Dict[str, Any]:
+def _column(variable: Mapping[str, Any], missing_symbol: Any) -> dict[str, Any]:
     """A UCI variable as a linked-codebook column."""
 
     kind = str(variable.get("type") or "").lower()
-    column: Dict[str, Any] = {"name": str(variable["name"])}
+    column: dict[str, Any] = {"name": str(variable["name"])}
     if _present(variable.get("description")):
         column["description"] = str(variable["description"])
     if _present(variable.get("units")):
@@ -191,7 +191,7 @@ def to_dcat_dsv(src: Mapping[str, Any]) -> Mapping[str, Any]:
             "schema:datePublished": paper.get("year"),
             "schema:url": paper.get("URL"),
         }
-        identifiers_secondary: List[Mapping[str, Any]] = []
+        identifiers_secondary: list[Mapping[str, Any]] = []
         if paper.get("DOI"):
             identifiers_secondary.append(
                 {
@@ -228,7 +228,7 @@ def to_dcat_dsv(src: Mapping[str, Any]) -> Mapping[str, Any]:
 
     extras = _prune(output)
     context = extras.pop("@context")
-    profile: Dict[str, Any] = {"columns": columns}
+    profile: dict[str, Any] = {"columns": columns}
     for slot, key in (("title", "dcterms:title"), ("landing_page", "dcat:landingPage")):
         if _present(extras.get(key)):
             profile[slot] = str(extras.pop(key))
@@ -240,7 +240,7 @@ def to_dcat_dsv(src: Mapping[str, Any]) -> Mapping[str, Any]:
 
 def _uciml_metadata_to_dcat_dsv(
     metadata: Mapping[str, Any],
-    variables: Optional[pd.DataFrame],
+    variables: pd.DataFrame | None,
     dataset_id: int,
 ) -> Mapping[str, Any]:
     """Map ucimlrepo metadata into a DCAT/DSV JSON-LD skeleton."""
@@ -256,7 +256,7 @@ def _uciml_metadata_to_dcat_dsv(
 @rule(phony=True)
 def list_uciml(
     area: str = "Health and Medicine",
-    name_substr: Optional[str] = None,
+    name_substr: str | None = None,
     cat_min: int = 1,
     num_min: int = 1,
     *,
@@ -317,7 +317,7 @@ def list_uciml(
 @rule(phony=True)
 def get_default_uciml(
     area: str = "Health and Medicine", *, cache_dir: pathlib.Path = pathlib.Path("uciml-cache")
-) -> List[DatasetSpec]:
+) -> list[DatasetSpec]:
     df = list_uciml(area=area, cachedir=cache_dir)
     return [DatasetSpec("uciml", name=r.name, id=r.id) for r in df.itertuples()]
 
@@ -384,6 +384,7 @@ def load_uciml_by_id(dataset_id: int, cache_dir: pathlib.Path | OutPath) -> Data
         )
 
     import ssl as _ssl
+
     import ucimlrepo.fetch as _ucimlrepo_fetch
 
     # Some environments have self-signed or intercepting TLS proxies that prevent
@@ -392,7 +393,6 @@ def load_uciml_by_id(dataset_id: int, cache_dir: pathlib.Path | OutPath) -> Data
     _ucimlrepo_fetch.ssl.create_default_context = lambda *a, **kw: _ssl._create_unverified_context()
 
     from ucimlrepo import fetch_ucirepo
-
     from ucimlrepo.fetch import DatasetNotFoundError
 
     logging.info("Downloading UCI ML dataset %s", dataset_id)
@@ -426,7 +426,7 @@ def load_uciml_by_id(dataset_id: int, cache_dir: pathlib.Path | OutPath) -> Data
     spec.meta = dcat_dsv_meta
     spec.name = _SPACE_CLEANUP(getattr(dataset.metadata, "name", f"UCI_{dataset_id}"))
 
-    meta_payload: Dict[str, Any] = {
+    meta_payload: dict[str, Any] = {
         "id": dataset_id,
         "name": spec.name,
         "target": spec.target,
@@ -449,7 +449,7 @@ if __name__ == "__main__":
 
     def main(
         input_json: pathlib.Path,
-        output_json: Optional[pathlib.Path] = None,
+        output_json: pathlib.Path | None = None,
         indent: int = 2,
     ) -> None:
         """Transform UCI ML style metadata JSON to DCAT + DSV JSON-LD.

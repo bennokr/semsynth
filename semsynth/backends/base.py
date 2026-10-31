@@ -5,7 +5,7 @@ from __future__ import annotations
 import inspect
 from pathlib import Path
 from types import ModuleType
-from typing import Any, Dict, Optional, Protocol, TYPE_CHECKING
+from typing import TYPE_CHECKING, Any, Protocol
 
 if TYPE_CHECKING:  # pragma: no cover - typing only
     import pandas as pd
@@ -18,18 +18,18 @@ class Backend(Protocol):
 
     def run_experiment(
         self,
-        df: "pd.DataFrame",
+        df: pd.DataFrame,
         *,
-        provider: Optional[str],
-        dataset_name: Optional[str],
-        provider_id: Optional[int],
+        provider: str | None,
+        dataset_name: str | None,
+        provider_id: int | None,
         outdir: str,
         label: str,
-        model_info: Optional[Dict[str, Any]],
-        rows: Optional[int],
+        model_info: dict[str, Any] | None,
+        rows: int | None,
         seed: int,
         test_size: float,
-        codebook_jsonld: Optional[Dict[str, Any]] = None,
+        codebook_jsonld: dict[str, Any] | None = None,
     ) -> Path:
         """Execute the backend for a dataset and return the run directory."""
 
@@ -38,18 +38,18 @@ class BackendModule(Protocol):
     """Protocol applied to backend modules."""
 
     def run_experiment(
-        df: "pd.DataFrame",
+        df: pd.DataFrame,
         *,
-        provider: Optional[str],
-        dataset_name: Optional[str],
-        provider_id: Optional[int],
+        provider: str | None,
+        dataset_name: str | None,
+        provider_id: int | None,
         outdir: str,
         label: str,
-        model_info: Optional[Dict[str, Any]],
-        rows: Optional[int],
+        model_info: dict[str, Any] | None,
+        rows: int | None,
         seed: int,
         test_size: float,
-        codebook_jsonld: Optional[Dict[str, Any]] = None,
+        codebook_jsonld: dict[str, Any] | None = None,
     ) -> Path:
         """Execute the backend for a dataset and return the run directory."""
 

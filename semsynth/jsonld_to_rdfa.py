@@ -13,14 +13,14 @@ Features:
 """
 
 from __future__ import annotations
+
 import argparse
 import html
 import json
 from pathlib import Path
-from typing import Any, Dict, List, Optional, Tuple, Union
+from typing import Any
 
-
-Value = Union[str, int, float, bool, dict, list, None]
+Value = str | int | float | bool | dict | list | None
 SCHEMA_ORG = "https://schema.org/"
 
 # ---------------- Context & IRI helpers ----------------
@@ -34,9 +34,9 @@ def ensure_ns(v: str) -> str:
     return v if v.endswith(("/", "#")) else v + "/"
 
 
-def extract_vocab_and_prefixes(context: Any) -> Tuple[str, Dict[str, str]]:
+def extract_vocab_and_prefixes(context: Any) -> tuple[str, dict[str, str]]:
     vocab = ""
-    prefixes: Dict[str, str] = {}
+    prefixes: dict[str, str] = {}
     if isinstance(context, str) and is_iri(context):
         vocab = SCHEMA_ORG if "schema.org" in context else ensure_ns(context)
     elif isinstance(context, dict):
@@ -53,12 +53,12 @@ def extract_vocab_and_prefixes(context: Any) -> Tuple[str, Dict[str, str]]:
     return vocab, prefixes
 
 
-def to_list(x: Any) -> List[Any]:
+def to_list(x: Any) -> list[Any]:
     return x if isinstance(x, list) else [x]
 
 
-def types_to_iris(types: Union[str, List[str]], vocab: str) -> List[str]:
-    out: List[str] = []
+def types_to_iris(types: str | list[str], vocab: str) -> list[str]:
+    out: list[str] = []
     for t in to_list(types):
         if is_iri(t):
             out.append(t)
@@ -79,7 +79,7 @@ def types_to_iris(types: Union[str, List[str]], vocab: str) -> List[str]:
 
 def tag(
     name: str,
-    attrs: Dict[str, Optional[str]] | None = None,
+    attrs: dict[str, str | None] | None = None,
     content: str = "",
     self_close: bool = False,
 ) -> str:
@@ -98,17 +98,17 @@ def tag(
 # ---------------- Repeating-structure detection ----------------
 
 
-def repeating_headers(lst: List[dict]) -> List[str]:
+def repeating_headers(lst: list[dict]) -> list[str]:
     """Return a stable list of shared keys for a list of dicts (ignoring @-keys)."""
     if len(lst) < 2:
         return []
-    key_sets = [tuple(k for k in d.keys() if not k.startswith("@")) for d in lst]
+    key_sets = [tuple(k for k in d if not k.startswith("@")) for d in lst]
     if not key_sets:
         return []
     allk = set().union(*map(set, key_sets))
     # Try to find keyset that contains all headers
     for ks in key_sets:
-        if all([k in ks for k in allk]):
+        if all(k in ks for k in allk):
             return ks
     # Otherwise, stable sort by frequency desc then name
     freq = {k: sum(1 for s in key_sets if k in s) for k in allk}
@@ -118,7 +118,7 @@ def repeating_headers(lst: List[dict]) -> List[str]:
 # ---------------- Rendering (RDFa only) ----------------
 
 
-def render_literal(prop: str, value: Union[str, int, float, bool]) -> str:
+def render_literal(prop: str, value: str | int | float | bool) -> str:
     text = "true" if value is True else "false" if value is False else str(value)
     return tag("span", {"property": prop}, html.escape(text).replace("\n", "<br>"))
 
@@ -128,7 +128,7 @@ def render_iri(prop: str, iri: str) -> str:
 
 
 def render_property(
-    prop: str, value: Value, vocab: str, prefixes: Dict[str, str], depth: int
+    prop: str, value: Value, vocab: str, prefixes: dict[str, str], depth: int
 ) -> str:
     """Render a property value in RDFa. Handles dict, list, and literals. Recursive."""
     if value is None:
@@ -149,7 +149,7 @@ def render_property(
             # Try table
             headers = repeating_headers(dicts)
             if headers:
-                rows: List[str] = []
+                rows: list[str] = []
                 thead = tag(
                     "thead",
                     {},
@@ -162,7 +162,7 @@ def render_property(
                 for obj in value:  # type: ignore
                     typeof = " ".join(to_list(obj.get("@type", "Thing")))
                     resource = obj.get("@id")
-                    row_cells: List[str] = []
+                    row_cells: list[str] = []
                     for h in headers:
                         cell_val = obj.get(h)
                         cell_html = render_cell(h, cell_val, vocab, prefixes, depth + 2)
@@ -204,7 +204,7 @@ def render_property(
 
 
 def render_cell(
-    prop: str, value: Value, vocab: str, prefixes: Dict[str, str], depth: int
+    prop: str, value: Value, vocab: str, prefixes: dict[str, str], depth: int
 ) -> str:
     """Cell-friendly rendering (no leading label)."""
     if value is None:
@@ -229,9 +229,9 @@ def render_cell(
 
 
 def render_object(
-    obj: Dict[str, Any], vocab: str, prefixes: Dict[str, str], depth: int
+    obj: dict[str, Any], vocab: str, prefixes: dict[str, str], depth: int
 ) -> str:
-    parts: List[str] = []
+    parts: list[str] = []
     # Visible title (optional)
     title = obj.get("name") or obj.get("headline") or obj.get("@type")
     if isinstance(title, (str, int, float)):
@@ -254,9 +254,9 @@ def render_rdfa(root: Value, context: Any, title: str) -> str:
     vocab, prefixes = extract_vocab_and_prefixes(context)
     prefix_attr = " ".join(f"{p}: {iri}" for p, iri in prefixes.items())
     prefix_html = {"prefix": prefix_attr} if prefix_attr else {}
-    items: List[str] = []
+    items: list[str] = []
 
-    def wrap_item(item: Dict[str, Any]) -> str:
+    def wrap_item(item: dict[str, Any]) -> str:
         typeof = " ".join(to_list(item.get("@type", "Thing")))
         about = item.get("@id")
         attrs = {"class": "item", "vocab": vocab, "typeof": typeof}

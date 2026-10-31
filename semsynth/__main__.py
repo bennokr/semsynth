@@ -5,9 +5,10 @@ from __future__ import annotations
 import json
 import logging
 import re
+from collections.abc import Sequence
 from dataclasses import fields
 from pathlib import Path
-from typing import TYPE_CHECKING, Any, Dict, List, Optional, Sequence
+from typing import TYPE_CHECKING, Any
 
 from makeprov import OutPath, main, rule
 from makeprov.config import ProvenanceConfig
@@ -16,16 +17,15 @@ from . import downstream_fidelity  # noqa: F401 - register build rules
 from .app import run_app
 from .catalog import build_catalog
 
-
 __all__ = [
-    "search",
-    "report",
-    "create_mapping",
-    "mappings",
-    "run_app",
-    "build_catalog",
     "build",
+    "build_catalog",
+    "create_mapping",
     "main",
+    "mappings",
+    "report",
+    "run_app",
+    "search",
 ]
 
 if TYPE_CHECKING:  # pragma: no cover - imported for typing only
@@ -38,7 +38,7 @@ if TYPE_CHECKING:  # pragma: no cover - imported for typing only
 def search(
     provider: str,
     *,
-    name_substr: Optional[str] = None,
+    name_substr: str | None = None,
     area: str = "Health and Medicine",
     cat_min: int = 1,
     num_min: int = 1,
@@ -82,7 +82,7 @@ def search(
 def report(
     provider: str = "openml",
     *,
-    datasets: List[str] | None = None,
+    datasets: list[str] | None = None,
     outdir: OutPath = OutPath("output/"),
     pipeline_configs: str = "",
     area: str = "Health and Medicine",
@@ -110,7 +110,7 @@ def report(
     outdir_path = Path(outdir)
     ensure_dir(str(outdir_path))
 
-    dataset_specs: List[DatasetSpec]
+    dataset_specs: list[DatasetSpec]
     dataset_specs = specs_from_input(provider=provider, datasets=datasets, area=area)
 
     config_text = pipeline_configs.strip()
@@ -128,7 +128,7 @@ def report(
             if value is not None:
                 setattr(cfg, field_def.name, value)
 
-    failures: List[str] = []
+    failures: list[str] = []
     for dataset_spec in dataset_specs:
         logging.info("Loading dataset %s", dataset_spec)
         try:
@@ -158,9 +158,9 @@ def report(
 def create_mapping(
     provider: str,
     *,
-    datasets: Optional[List[str]] = None,
+    datasets: list[str] | None = None,
     codes_tsv: str = "map_columns/codes.tsv",
-    manual_overrides_dir: Optional[str] = "map_columns/manual",
+    manual_overrides_dir: str | None = "map_columns/manual",
     systems: Sequence[str] = ("WD",),
     method: str = "lexical",
     datasette_url: str = "http://127.0.0.1:8001/terminology",
@@ -219,9 +219,6 @@ def create_mapping(
         verbose: Switch logging level to ``INFO`` when ``True``.
     """
 
-    from .datasets import load_dataset, specs_from_input
-    from .codebook import Codebook
-    from .utils import ensure_dir
     from map_columns.codes_map_columns import (
         build_manual_matches,
         load_manual_overrides,
@@ -230,6 +227,10 @@ def create_mapping(
     from map_columns.shared import parse_columns
     from map_columns.sssom_to_codebook import integrate_sssom
 
+    from .codebook import Codebook
+    from .datasets import load_dataset, specs_from_input
+    from .utils import ensure_dir
+
     if verbose:
         logging.root.setLevel(logging.INFO)
 
@@ -237,7 +238,7 @@ def create_mapping(
     overrides_dir = Path(manual_overrides_dir) if manual_overrides_dir else None
     allowed_systems = tuple(system for system in systems if system)
 
-    codes_cache: Optional[Dict[str, Any]] = None
+    codes_cache: dict[str, Any] | None = None
     if method.lower() in {"lexical", "embed"} or overrides_dir:
         from map_columns.codes_map_columns import load_codes
 
@@ -271,7 +272,7 @@ def create_mapping(
 
         columns, dataset_meta = parse_columns(metadata_payload)
 
-        manual_overrides_path: Optional[Path] = None
+        manual_overrides_path: Path | None = None
         if overrides_dir:
             candidate_names = [
                 f"{slug}.json",
@@ -444,10 +445,10 @@ def refresh_mapping_reports(
     )
 
 
-def _collect_mapping_targets(mapping_root: Path) -> Dict[str, List[str]]:
+def _collect_mapping_targets(mapping_root: Path) -> dict[str, list[str]]:
     """Return provider→dataset_id mappings discovered under a mapping directory."""
 
-    provider_to_ids: Dict[str, List[str]] = {}
+    provider_to_ids: dict[str, list[str]] = {}
     for path in sorted(mapping_root.glob("*.metadata.json")):
         stem = path.stem
         if "-" not in stem:
@@ -461,20 +462,20 @@ def _collect_mapping_targets(mapping_root: Path) -> Dict[str, List[str]]:
 
 
 def _run_reports_for_targets(
-    provider_to_ids: Dict[str, List[str]],
+    provider_to_ids: dict[str, list[str]],
     *,
     outdir: str,
     pipeline_configs: str,
     verbose: bool,
     rebuild_catalog: bool,
-    base_url: Optional[str],
+    base_url: str | None,
 ) -> None:
     """Invoke the report pipeline for a provider→dataset mapping."""
 
     if not provider_to_ids:
         return
 
-    failures: List[str] = []
+    failures: list[str] = []
     successes = 0
     for provider, dataset_ids in provider_to_ids.items():
         for dataset_id in sorted(set(dataset_ids)):
@@ -513,6 +514,6 @@ def build(*args, **kwargs):  # pragma: no cover - passthrough to makeprov
 
 
 if __name__ == "__main__":
-    main(argparse_kwargs = dict(
-        prog='python -m semsynth',
-        description=__doc__), version=True)
+    main(argparse_kwargs = {
+        "prog": 'python -m semsynth',
+        "description": __doc__}, version=True)

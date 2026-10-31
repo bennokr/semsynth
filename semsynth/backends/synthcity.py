@@ -4,15 +4,16 @@ import json
 import logging
 from dataclasses import dataclass
 from pathlib import Path
-from typing import Any, Dict, List, Optional, TYPE_CHECKING
+from typing import TYPE_CHECKING, Any
 
 if TYPE_CHECKING:  # pragma: no cover - typing only
     import pandas as pd
 
 from makeprov import OutDir
+
 from ..metrics import per_variable_distances, summarize_distance_metrics
 from ..models import model_run_root, write_manifest
-from ..torch_compat import ensure_torch_rmsnorm, ensure_trapz_compat, ensure_npsum_compat
+from ..torch_compat import ensure_npsum_compat, ensure_torch_rmsnorm, ensure_trapz_compat
 from ..utils import (
     coerce_continuous_to_float,
     coerce_discrete_to_category,
@@ -63,19 +64,19 @@ def _load_synthcity_plugins():
 @dataclass
 class SynthRunArtifacts:
     plugin_name: str
-    plugin_params: Dict[str, Any]
+    plugin_params: dict[str, Any]
     model_obj: Any
-    real_train: "pd.DataFrame"
-    real_test: "pd.DataFrame"
-    synth_df: "pd.DataFrame"
-    discrete_cols: List[str]
-    continuous_cols: List[str]
+    real_train: pd.DataFrame
+    real_test: pd.DataFrame
+    synth_df: pd.DataFrame
+    discrete_cols: list[str]
+    continuous_cols: list[str]
     seed: int
     rows: int
     test_size: float
 
 
-def _get_plugin(name: str, params: Dict[str, Any]):
+def _get_plugin(name: str, params: dict[str, Any]):
     ensure_trapz_compat()
     ensure_npsum_compat()
     ensure_torch_rmsnorm()
@@ -86,8 +87,8 @@ def _get_plugin(name: str, params: Dict[str, Any]):
 
 
 def _normalize_plugin_params(
-    plugin_name: str, params: Dict[str, Any]
-) -> Dict[str, Any]:
+    plugin_name: str, params: dict[str, Any]
+) -> dict[str, Any]:
     normalized = {k: v for k, v in (params or {}).items() if v is not None}
     iter_plugins = {
         "ctgan",
@@ -105,7 +106,7 @@ def _normalize_plugin_params(
     return normalized
 
 
-def _ensure_dataframe(obj: Any) -> "pd.DataFrame":
+def _ensure_dataframe(obj: Any) -> pd.DataFrame:
     import numpy as np
     import pandas as pd
 
@@ -125,18 +126,18 @@ def _ensure_dataframe(obj: Any) -> "pd.DataFrame":
 
 
 def run_experiment(
-    df: "pd.DataFrame",
+    df: pd.DataFrame,
     *,
-    provider: Optional[str],
-    dataset_name: Optional[str],
-    provider_id: Optional[int],
+    provider: str | None,
+    dataset_name: str | None,
+    provider_id: int | None,
     outdir: str,
     label: str,
-    model_info: Dict[str, Any] | None,
-    rows: Optional[int],
+    model_info: dict[str, Any] | None,
+    rows: int | None,
     seed: int,
     test_size: float,
-    codebook_jsonld: Optional[Dict[str, Any]] = None,
+    codebook_jsonld: dict[str, Any] | None = None,
 ) -> Path:
     import pandas as pd
     from sklearn.model_selection import train_test_split

@@ -2,7 +2,6 @@ from __future__ import annotations
 
 import math
 import os
-from typing import Dict, List, Optional, Tuple
 
 import numpy as np
 import pandas as pd
@@ -52,7 +51,7 @@ def seed_all(seed: int) -> np.random.Generator:
 def _preserve_series_attrs(source: pd.Series, target: pd.Series) -> pd.Series:
     attrs = getattr(source, "attrs", None)
     if isinstance(attrs, dict) and attrs:
-        target.attrs.update({k: v for k, v in attrs.items()})
+        target.attrs.update(dict(attrs.items()))
     return target
 
 
@@ -69,9 +68,7 @@ def is_numeric_series(s: pd.Series) -> bool:
         return True
     # PintArray columns (pint_pandas) are numeric even though pandas dtype
     # checks return False for them.
-    if PintType is not None and isinstance(getattr(s, "dtype", None), PintType):
-        return True
-    return False
+    return bool(PintType is not None and isinstance(getattr(s, "dtype", None), PintType))
 
 
 def is_discrete_series(s: pd.Series, cardinality_threshold: int = 20) -> bool:
@@ -107,7 +104,7 @@ def is_discrete_series(s: pd.Series, cardinality_threshold: int = 20) -> bool:
 
 def infer_types(
     df: pd.DataFrame, cardinality_threshold: int = 20
-) -> Tuple[List[str], List[str]]:
+) -> tuple[list[str], list[str]]:
     """Split dataframe columns into discrete and continuous lists.
 
     Args:
@@ -137,7 +134,7 @@ def infer_types(
 
 
 def coerce_discrete_to_category(
-    df: pd.DataFrame, discrete_cols: List[str]
+    df: pd.DataFrame, discrete_cols: list[str]
 ) -> pd.DataFrame:
     """Convert selected columns to the categorical dtype.
 
@@ -167,7 +164,7 @@ def coerce_discrete_to_category(
 
 
 def coerce_continuous_to_float(
-    df: pd.DataFrame, continuous_cols: List[str]
+    df: pd.DataFrame, continuous_cols: list[str]
 ) -> pd.DataFrame:
     """Convert continuous columns to floating point when possible.
 
@@ -182,7 +179,7 @@ def coerce_continuous_to_float(
     df = df.copy()
     for c in continuous_cols:
         s = df[c]
-        converted: Optional[pd.Series] = None
+        converted: pd.Series | None = None
         if pd.api.types.is_integer_dtype(s):
             numeric = pd.to_numeric(s, errors="coerce")
             converted = pd.Series(
@@ -207,7 +204,7 @@ def coerce_continuous_to_float(
 
 
 def rename_categorical_categories_to_str(
-    df: pd.DataFrame, discrete_cols: List[str]
+    df: pd.DataFrame, discrete_cols: list[str]
 ) -> pd.DataFrame:
     """Ensure categorical levels are strings to keep outputs JSON-friendly.
 
@@ -233,7 +230,7 @@ def rename_categorical_categories_to_str(
                 # 3. CategoricalDtype(new_cats) + int-valued codes produces NaN.
                 na_mask = s.isna()
                 # Map each code to its new string category label.
-                code_to_str = {i: lbl for i, lbl in enumerate(new_cats)}
+                code_to_str = dict(enumerate(new_cats))
                 str_vals = s.cat.codes.map(code_to_str)  # -1 (NaN) → NaN
                 new_dtype = pd.CategoricalDtype(
                     categories=pd.Index(new_cats, dtype=object), ordered=s.cat.ordered
@@ -250,7 +247,7 @@ def rename_categorical_categories_to_str(
 
 
 def summarize_dataframe(
-    df: pd.DataFrame, discrete_cols: List[str], continuous_cols: List[str]
+    df: pd.DataFrame, discrete_cols: list[str], continuous_cols: list[str]
 ) -> pd.DataFrame:
     """Summarise dataframe columns with statistics tailored by type.
 
@@ -301,31 +298,31 @@ def summarize_dataframe(
                 else float("nan")
             )
             rows.append(
-                dict(
-                    variable=c,
-                    type="continuous",
-                    na_frac=na_frac,
-                    unique=uniq,
-                    mean=mean,
-                    std=std,
-                    min=minv,
-                    q25=q25,
-                    median=q50,
-                    q75=q75,
-                    max=maxv,
-                )
+                {
+                    "variable": c,
+                    "type": "continuous",
+                    "na_frac": na_frac,
+                    "unique": uniq,
+                    "mean": mean,
+                    "std": std,
+                    "min": minv,
+                    "q25": q25,
+                    "median": q50,
+                    "q75": q75,
+                    "max": maxv,
+                }
             )
         else:
             top = col.value_counts(dropna=True).head(3)
             top_items = "; ".join([f"{k}:{int(v)}" for k, v in top.items()])
             rows.append(
-                dict(
-                    variable=c,
-                    type="discrete",
-                    na_frac=na_frac,
-                    unique=uniq,
-                    top3=top_items,
-                )
+                {
+                    "variable": c,
+                    "type": "discrete",
+                    "na_frac": na_frac,
+                    "unique": uniq,
+                    "top3": top_items,
+                }
             )
     return pd.DataFrame(rows)
 

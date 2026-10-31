@@ -7,7 +7,6 @@ import json
 import logging
 import re
 from pathlib import Path
-from typing import Dict, List, Optional
 
 import defopt
 from linked_codebook import from_sssom
@@ -31,19 +30,19 @@ def _normalise_object_id(object_id: str) -> str:
     return object_id
 
 
-def _load_sssom(tsv_path: Path) -> List[Dict[str, str]]:
+def _load_sssom(tsv_path: Path) -> list[dict[str, str]]:
     """Load mappings from an SSSOM TSV file."""
 
     with tsv_path.open("r", encoding="utf-8") as f:
         rows = [line for line in f if not line.lstrip().startswith("#")]
     reader = csv.DictReader(rows, delimiter="\t")
-    return [row for row in reader]
+    return list(reader)
 
 
-def _to_tsv(mappings: List[Dict[str, str]]) -> str:
+def _to_tsv(mappings: list[dict[str, str]]) -> str:
     """Write mapping rows as SSSOM TSV text, with Wikidata CURIEs expanded to URIs."""
 
-    def cell(value: Optional[str]) -> str:
+    def cell(value: str | None) -> str:
         return re.sub(r"[\t\r\n]+", " ", value or "")
 
     lines = ["\t".join(SSSOM_COLUMNS)]
@@ -53,7 +52,7 @@ def _to_tsv(mappings: List[Dict[str, str]]) -> str:
     return "\n".join(lines) + "\n"
 
 
-def integrate_sssom(codebook: Codebook, mappings: List[Dict[str, str]], *, reviewer: str) -> Codebook:
+def integrate_sssom(codebook: Codebook, mappings: list[dict[str, str]], *, reviewer: str) -> Codebook:
     """Adds SSSOM mappings to the columns of a codebook, approved by ``reviewer``.
 
     Rows are matched to columns and read by linked-codebook: a subject is a column when its IRI,
@@ -76,7 +75,7 @@ def main(
     dataset_json: Path,
     sssom_tsv: Path,
     *,
-    output_json: Optional[Path] = None,
+    output_json: Path | None = None,
     indent: int = 2,
 ) -> None:
     """Merge SSSOM mappings into a codebook and write JSON-LD.

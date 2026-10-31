@@ -6,13 +6,12 @@ import json
 from dataclasses import dataclass
 from pathlib import Path
 from types import SimpleNamespace
-from typing import Any, Dict, List, Optional
+from typing import Any
 
 import pandas as pd
-
-from semsynth.codebook import Codebook
 import pytest
 
+from semsynth.codebook import Codebook
 from semsynth.dataproviders._helpers import clean_dataset_frame
 from semsynth.dataproviders.openml import load_openml_by_name
 from semsynth.dataproviders.uciml import load_uciml_by_id
@@ -34,15 +33,15 @@ class _StubUtils:
     """Small helper mimicking the subset of utils used by the preprocessor."""
 
     def __init__(self) -> None:
-        self._dirs: List[str] = []
+        self._dirs: list[str] = []
 
     def ensure_dir(self, path: str) -> None:
         Path(path).mkdir(parents=True, exist_ok=True)
         self._dirs.append(path)
 
     def infer_types(self, df: pd.DataFrame) -> Any:
-        discrete: List[str] = []
-        continuous: List[str] = []
+        discrete: list[str] = []
+        continuous: list[str] = []
         for column in df.columns:
             series = df[column]
             if pd.api.types.is_numeric_dtype(series):
@@ -51,18 +50,18 @@ class _StubUtils:
                 discrete.append(column)
         return discrete, continuous
 
-    def coerce_discrete_to_category(self, df: pd.DataFrame, cols: List[str]) -> pd.DataFrame:
+    def coerce_discrete_to_category(self, df: pd.DataFrame, cols: list[str]) -> pd.DataFrame:
         df = df.copy()
         for column in cols:
             df[column] = pd.Categorical(df[column])
         return df
 
     def rename_categorical_categories_to_str(
-        self, df: pd.DataFrame, cols: List[str]
+        self, df: pd.DataFrame, cols: list[str]
     ) -> pd.DataFrame:
         return df
 
-    def coerce_continuous_to_float(self, df: pd.DataFrame, cols: List[str]) -> pd.DataFrame:
+    def coerce_continuous_to_float(self, df: pd.DataFrame, cols: list[str]) -> pd.DataFrame:
         df = df.copy()
         for column in cols:
             df[column] = df[column].astype(float)
@@ -78,15 +77,15 @@ class _StubUmapModule:
     """Simple module stub recording calls to UMAP helpers."""
 
     def __init__(self) -> None:
-        self.build_calls: List[Dict[str, Any]] = []
-        self.transform_calls: List[Dict[str, Any]] = []
-        self.plot_calls: List[Dict[str, Any]] = []
+        self.build_calls: list[dict[str, Any]] = []
+        self.transform_calls: list[dict[str, Any]] = []
+        self.plot_calls: list[dict[str, Any]] = []
 
     def build_umap(self, *args: Any, **kwargs: Any) -> Any:
         self.build_calls.append({"args": args, "kwargs": kwargs})
         return SimpleNamespace(embedding=[[0.0, 0.0]], color_labels=None)
 
-    def plot_umap(self, embedding: Any, path: str, **kwargs: Any) -> Dict[str, float]:
+    def plot_umap(self, embedding: Any, path: str, **kwargs: Any) -> dict[str, float]:
         self.plot_calls.append({"embedding": embedding, "path": path, "kwargs": kwargs})
         Path(path).write_text("png")
         return {"x": 1.0, "y": 2.0}
@@ -186,7 +185,7 @@ def test_metric_writer_writes_metrics(tmp_path):
     def summarizer(_: pd.DataFrame, __: pd.DataFrame, ___: pd.DataFrame) -> Summary:
         return Summary(score=0.5)
 
-    def comparer(_: pd.DataFrame, __: pd.DataFrame, metadata: Codebook) -> Dict[str, Any]:
+    def comparer(_: pd.DataFrame, __: pd.DataFrame, metadata: Codebook) -> dict[str, Any]:
         assert [column["name"] for column in metadata.columns] == ["value"]
         assert metadata.kind("value") == "numeric"
         return {
@@ -257,7 +256,7 @@ def test_clean_dataset_frame_detects_role_in_metadata():
         }
     }
 
-    cleaned, target_name, color_series = clean_dataset_frame(
+    _cleaned, target_name, color_series = clean_dataset_frame(
         df, metadata=metadata
     )
 
@@ -282,13 +281,13 @@ def test_openml_cached_uses_helper(monkeypatch: pytest.MonkeyPatch, tmp_path: Pa
     )
     df.to_csv(cache_dir / f"{dataset_id}.csv.gz", index=False, compression="infer")
 
-    called: Dict[str, Any] = {}
+    called: dict[str, Any] = {}
 
     def fake_helper(
         data: pd.DataFrame,
         *,
-        target: Optional[str] = None,
-        metadata: Optional[Dict[str, Any]] = None,
+        target: str | None = None,
+        metadata: dict[str, Any] | None = None,
     ) -> Any:
         cleaned = data.drop(columns=["id"], errors="ignore")
         series = cleaned["class"].copy()
@@ -331,13 +330,13 @@ def test_uciml_cached_uses_helper(monkeypatch: pytest.MonkeyPatch, tmp_path: Pat
     )
     df.to_csv(cache_dir / f"{dataset_id}.csv.gz", index=False, compression="infer")
 
-    called: Dict[str, Any] = {}
+    called: dict[str, Any] = {}
 
     def fake_helper(
         data: pd.DataFrame,
         *,
-        target: Optional[str] = None,
-        metadata: Optional[Dict[str, Any]] = None,
+        target: str | None = None,
+        metadata: dict[str, Any] | None = None,
     ) -> Any:
         cleaned = data.drop(columns=["index"], errors="ignore")
         series = cleaned["target"].copy()
@@ -475,7 +474,7 @@ def test_backend_executor_runs_models(tmp_path):
     spec = DatasetSpec(provider="demo", name="example", target="value")
     preprocessed = _create_preprocessing_result(df, tmp_path)
 
-    calls: Dict[str, Any] = {}
+    calls: dict[str, Any] = {}
 
     class Backend:
         def run_experiment(self, **kwargs: Any) -> str:
@@ -491,19 +490,19 @@ def test_backend_executor_runs_models(tmp_path):
 
     class DummyMetricWriter:
         def __init__(self) -> None:
-            self.privacy_calls: List[Dict[str, Any]] = []
-            self.downstream_calls: List[Dict[str, Any]] = []
+            self.privacy_calls: list[dict[str, Any]] = []
+            self.downstream_calls: list[dict[str, Any]] = []
 
         def write_privacy(
             self,
             run_dir: Any,
             real_df: pd.DataFrame,
-            inferred: Dict[str, str],
+            inferred: dict[str, str],
             synth_df: pd.DataFrame,
             metadata: Any = None,
             *,
-            target: Optional[str] = None,
-        ) -> Dict[str, Any]:
+            target: str | None = None,
+        ) -> dict[str, Any]:
             self.privacy_calls.append(
                 {
                     "run_dir": run_dir,
@@ -521,12 +520,12 @@ def test_backend_executor_runs_models(tmp_path):
             run_dir: Any,
             real_df: pd.DataFrame,
             synth_df: pd.DataFrame,
-            inferred: Dict[str, str],
-            target_series: Optional[pd.Series],
+            inferred: dict[str, str],
+            target_series: pd.Series | None,
             *,
             metadata: Any = None,
-            target: Optional[str] = None,
-        ) -> Dict[str, Any]:
+            target: str | None = None,
+        ) -> dict[str, Any]:
             self.downstream_calls.append(
                 {
                     "run_dir": run_dir,
@@ -601,7 +600,7 @@ def test_report_writer_generates_outputs(tmp_path):
 
     class ReportingModule:
         def __init__(self) -> None:
-            self.calls: List[Dict[str, Any]] = []
+            self.calls: list[dict[str, Any]] = []
 
         def write_report_md(self, **kwargs: Any) -> None:
             self.calls.append(kwargs)

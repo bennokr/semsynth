@@ -43,13 +43,13 @@ def test_privacy_frame_normalizes_roles_and_types() -> None:
     )
     inferred = {"age": "continuous", "disease": "discrete", "id_col": "discrete", "notes": "continuous"}
     privacy_df = codebook.privacy_frame(inferred)
-    assert dict(zip(privacy_df.variable, privacy_df.role)) == {
+    assert dict(zip(privacy_df.variable, privacy_df.role, strict=True)) == {
         "age": "qi",
         "disease": "sensitive",
         "id_col": "id",
         "notes": "qi",
     }
-    types = dict(zip(privacy_df.variable, privacy_df.type))
+    types = dict(zip(privacy_df.variable, privacy_df.type, strict=True))
     assert types == {"age": "numeric", "disease": "categorical", "id_col": "categorical", "notes": "numeric"}
 
 

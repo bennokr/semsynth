@@ -4,23 +4,23 @@ from __future__ import annotations
 
 import json
 import logging
-from pathlib import Path
-from collections.abc import Mapping
-from dataclasses import asdict, dataclass, field, fields, is_dataclass
 import re
-from typing import TYPE_CHECKING, Any, Dict, Iterable, List, Optional, Set
+from collections.abc import Iterable, Mapping
+from dataclasses import asdict, dataclass, field, fields, is_dataclass
+from pathlib import Path
+from typing import TYPE_CHECKING, Any
 
 import pandas as pd
 from makeprov import OutDir, OutPath, rule, span
 from makeprov.config import Config
 
 from .backends.base import BackendModule, ensure_backend_contract
+from .codebook import Codebook, privacy_role
 from .mappings import load_mapping_json, resolve_mapping_json
 from .metadata import get_uciml_variable_descriptions
 from .models import ModelConfigBundle, discover_model_runs, load_model_configs
 from .runtime import DEPENDENCIES
 from .specs import DatasetSpec
-from .codebook import Codebook, privacy_role
 
 LOGGER = logging.getLogger(__name__)
 
@@ -49,7 +49,7 @@ class PipelineConfig(Config):
 
     random_state: int = 42
     max_umap_sample: int = 1000
-    fit_on_sample: Optional[int] = 1000
+    fit_on_sample: int | None = 1000
     synthetic_sample: int = 1000
     test_size: float = 0.2
     umap: UmapConfig = field(default_factory=UmapConfig)
@@ -58,9 +58,9 @@ class PipelineConfig(Config):
     compute_downstream: bool = False
     overwrite_umap: bool = False
     enable_missingness_wrapping: bool = False
-    missingness_random_state: Optional[int] = None
+    missingness_random_state: int | None = None
 
-    def apply_mapping(self, params: Mapping[str, Any]) -> "PipelineConfig":
+    def apply_mapping(self, params: Mapping[str, Any]) -> PipelineConfig:
         """Apply a mapping of overrides onto this config, recursing into nested dataclasses."""
 
         if not isinstance(params, Mapping):
@@ -94,16 +94,16 @@ def _load_backend_module(name: str) -> BackendModule:
 
 
 def _build_privacy_metadata(
-    df: "pd.DataFrame",
-    inferred: Dict[str, str],
+    df: pd.DataFrame,
+    inferred: dict[str, str],
     *,
-    metadata: Optional[Any] = None,
-    role_overrides: Optional[Dict[str, str]] = None,
-    target: Optional[str] = None,
-) -> "pd.DataFrame":
+    metadata: Any | None = None,
+    role_overrides: dict[str, str] | None = None,
+    target: str | None = None,
+) -> pd.DataFrame:
     import pandas as pd
 
-    metadata_df: Optional["pd.DataFrame"] = None
+    metadata_df: pd.DataFrame | None = None
     try:
         codebook = Codebook.read(metadata) if metadata is not None else Codebook.from_frame(df)
         metadata_df = codebook.privacy_frame(inferred) if codebook.columns else None
@@ -139,29 +139,28 @@ def _build_privacy_metadata(
 
 
 def _build_downstream_meta(
-    df: "pd.DataFrame",
-    inferred: Dict[str, str],
-    target_series: Optional["pd.Series"],
+    df: pd.DataFrame,
+    inferred: dict[str, str],
+    target_series: pd.Series | None,
     *,
-    target: Optional[str] = None,
+    target: str | None = None,
 ) -> Codebook:
     """A codebook for downstream metrics when there is no metadata: levels from ``inferred`` and the target role."""
     import pandas as pd
 
-    target_name: Optional[str] = None
-    if isinstance(target_series, pd.Series):
-        if target_series.attrs.get("prov:hadRole") == "target":
-            target_name = target_series.name if target_series.name in df.columns else None
+    target_name: str | None = None
+    if isinstance(target_series, pd.Series) and target_series.attrs.get("prov:hadRole") == "target":
+        target_name = target_series.name if target_series.name in df.columns else None
     if target_name is None and target and target in df.columns:
         target_name = target
 
-    columns: List[Dict[str, Any]] = []
+    columns: list[dict[str, Any]] = []
     for column in df.columns:
         if inferred.get(column, "continuous") == "continuous":
             columns.append({"name": str(column), "level": "numerical"})
             continue
         categories = [str(cat) for cat in df[column].astype("category").cat.categories]
-        entry: Dict[str, Any] = {"name": str(column), "level": "nominal"}
+        entry: dict[str, Any] = {"name": str(column), "level": "nominal"}
         if categories:
             entry["values"] = [{"code": cat} for cat in categories]
         columns.append(entry)
@@ -175,25 +174,25 @@ class UmapArtifacts:
 
     transformer: Any
     real_png: Path
-    limits: Optional[Any]
+    limits: Any | None
 
 
 @dataclass
 class PreprocessingResult:
     """Result values produced by :class:`DatasetPreprocessor`."""
 
-    df_processed: "pd.DataFrame"
-    df_no_na: "pd.DataFrame"
-    df_fit_sample: "pd.DataFrame"
-    disc_cols: List[str]
-    cont_cols: List[str]
-    inferred_types: Dict[str, str]
-    codebook_jsonld: Optional[Dict[str, Any]] = None
-    codebook: Optional[Codebook] = None
-    color_series: Optional["pd.Series"] = None
-    umap_png_real: Optional[Path] = None
-    umap_artifacts: Optional[UmapArtifacts] = None
-    missingness_model: Optional["DataFrameMissingnessModel"] = None
+    df_processed: pd.DataFrame
+    df_no_na: pd.DataFrame
+    df_fit_sample: pd.DataFrame
+    disc_cols: list[str]
+    cont_cols: list[str]
+    inferred_types: dict[str, str]
+    codebook_jsonld: dict[str, Any] | None = None
+    codebook: Codebook | None = None
+    color_series: pd.Series | None = None
+    umap_png_real: Path | None = None
+    umap_artifacts: UmapArtifacts | None = None
+    missingness_model: DataFrameMissingnessModel | None = None
 
 
 class DatasetPreprocessor:
@@ -213,15 +212,15 @@ class DatasetPreprocessor:
     @rule(phony=True)
     def preprocess(
         self,
-        dataset_spec: "DatasetSpec",
-        df: "pd.DataFrame",
-        color_series: Optional["pd.Series"],
+        dataset_spec: DatasetSpec,
+        df: pd.DataFrame,
+        color_series: pd.Series | None,
         outdir: OutPath,
         cfg: PipelineConfig,
         rng: Any,
         *,
         generate_umap: bool,
-        umap_utils: Optional[Any],
+        umap_utils: Any | None,
     ) -> PreprocessingResult:
         """Clean data, apply metadata and optionally prepare UMAP artifacts.
 
@@ -271,12 +270,12 @@ class DatasetPreprocessor:
                     extra={"dataset": dataset_spec.name},
                 )
         codebook = Codebook.from_frame(df, declared)
-        metadata_discrete: Set[str] = {name for name in df.columns if codebook.kind(str(name)) == "categorical"}
-        metadata_continuous: Set[str] = {name for name in df.columns if codebook.kind(str(name)) == "numeric"}
+        metadata_discrete: set[str] = {name for name in df.columns if codebook.kind(str(name)) == "categorical"}
+        metadata_continuous: set[str] = {name for name in df.columns if codebook.kind(str(name)) == "numeric"}
 
         disc_cols, cont_cols = self._utils.infer_types(df)
-        disc_set: Set[str] = set(disc_cols)
-        cont_set: Set[str] = set(cont_cols)
+        disc_set: set[str] = set(disc_cols)
+        cont_set: set[str] = set(cont_cols)
         disc_set |= metadata_discrete
         cont_set |= {name for name in metadata_continuous if name not in disc_set}
         # Remove any lingering overlaps while preferring discrete assignments.
@@ -313,8 +312,8 @@ class DatasetPreprocessor:
             color_series2 = df_no_na[target_column].copy()
             color_series2.attrs["prov:hadRole"] = "target"
 
-        umap_png_real: Optional[Path] = outdir / "umap_real.png"
-        umap_artifacts: Optional[UmapArtifacts] = None
+        umap_png_real: Path | None = outdir / "umap_real.png"
+        umap_artifacts: UmapArtifacts | None = None
         if generate_umap and umap_utils is not None:
             LOGGER.info(
                 "Fitting UMAP on real data sample",
@@ -365,7 +364,7 @@ class DatasetPreprocessor:
                 cfg.fit_on_sample, random_state=cfg.random_state
             )
 
-        missingness_model: Optional["DataFrameMissingnessModel"] = None
+        missingness_model: DataFrameMissingnessModel | None = None
         if cfg.enable_missingness_wrapping:
             miss_state = cfg.missingness_random_state
             if miss_state is None:
@@ -415,8 +414,8 @@ class MetricWriter:
     def __init__(
         self,
         *,
-        privacy_summarizer: Optional[Any] = None,
-        downstream_compare: Optional[Any] = None,
+        privacy_summarizer: Any | None = None,
+        downstream_compare: Any | None = None,
     ) -> None:
         self._privacy_summarizer = privacy_summarizer
         self._downstream_compare = downstream_compare
@@ -425,14 +424,14 @@ class MetricWriter:
     def write_privacy(
         self,
         run_dir: OutPath,
-        real_df: "pd.DataFrame",
-        inferred: Dict[str, str],
-        synth_df: Optional["pd.DataFrame"] = None,
-        metadata: Optional[Codebook] = None,
+        real_df: pd.DataFrame,
+        inferred: dict[str, str],
+        synth_df: pd.DataFrame | None = None,
+        metadata: Codebook | None = None,
         *,
-        role_overrides: Optional[Dict[str, str]] = None,
-        target: Optional[str] = None,
-    ) -> Dict[str, Any]:
+        role_overrides: dict[str, str] | None = None,
+        target: str | None = None,
+    ) -> dict[str, Any]:
         """Write privacy metrics to disk for a backend run.
 
         Args:
@@ -484,14 +483,14 @@ class MetricWriter:
     def write_downstream(
         self,
         run_dir: OutPath,
-        real_df: "pd.DataFrame",
-        synth_df: "pd.DataFrame",
-        inferred: Dict[str, str],
-        target_series: Optional["pd.Series"],
-        metadata: Optional[Codebook] = None,
+        real_df: pd.DataFrame,
+        synth_df: pd.DataFrame,
+        inferred: dict[str, str],
+        target_series: pd.Series | None,
+        metadata: Codebook | None = None,
         *,
-        target: Optional[str] = None,
-    ) -> Dict[str, Any]:
+        target: str | None = None,
+    ) -> dict[str, Any]:
         """Write downstream metrics comparing synthetic and real data.
 
         Args:
@@ -531,7 +530,7 @@ class MetricWriter:
         return payload
 
     @staticmethod
-    def _read_synthetic_df(run_dir: Path) -> "pd.DataFrame":
+    def _read_synthetic_df(run_dir: Path) -> pd.DataFrame:
         import pandas as pd
 
         return pd.read_csv(run_dir / "synthetic.csv").convert_dtypes()
@@ -554,7 +553,7 @@ class BackendExecutor:
     @rule(phony=True)
     def run_models(
         self,
-        dataset_spec: "DatasetSpec",
+        dataset_spec: DatasetSpec,
         bundle: ModelConfigBundle,
         preprocessed: PreprocessingResult,
         outdir: OutDir,
@@ -615,7 +614,6 @@ class BackendExecutor:
                 synth_path = run_dir_path / "synthetic.csv"
                 synth_df = pd.read_csv(synth_path).convert_dtypes()
 
-                missingness_applied = False
                 if preprocessed.missingness_model is not None:
                     try:
                         from . import missingness as missingness_module
@@ -625,7 +623,7 @@ class BackendExecutor:
                             extra={"label": label},
                         )
                     else:
-                        synth_df, missingness_applied = (
+                        synth_df, _ = (
                             missingness_module.apply_missingness_to_outputs(
                                 run_dir=run_dir_path,
                                 synth_df=synth_df,
@@ -755,7 +753,7 @@ class BackendExecutor:
 class ReportWriter:
     """Generate report outputs once backend runs are complete."""
 
-    def __init__(self, reporting_module: Any, umap_utils: Optional[Any]) -> None:
+    def __init__(self, reporting_module: Any, umap_utils: Any | None) -> None:
         self._reporting = reporting_module
         self._umap_utils = umap_utils
 
@@ -763,7 +761,7 @@ class ReportWriter:
     def generate_synthetic_umaps(
         self,
         model_runs: Iterable[Any],
-        dataset_spec: "DatasetSpec",
+        dataset_spec: DatasetSpec,
         preprocessed: PreprocessingResult,
         cfg: PipelineConfig,
     ) -> None:
@@ -805,7 +803,7 @@ class ReportWriter:
                 )
 
     @staticmethod
-    def _read_synthetic_df(run: Any) -> "pd.DataFrame":
+    def _read_synthetic_df(run: Any) -> pd.DataFrame:
         import pandas as pd
 
         return pd.read_csv(run.synthetic_csv).convert_dtypes()
@@ -815,11 +813,11 @@ class ReportWriter:
         self,
         *,
         outdir: OutPath,
-        dataset_spec: "DatasetSpec",
+        dataset_spec: DatasetSpec,
         preprocessed: PreprocessingResult,
-        model_runs: List[Any],
-        inferred_types: Optional[Dict[str, str]],
-        variable_descriptions: Optional[Dict[str, Any]],
+        model_runs: list[Any],
+        inferred_types: dict[str, str] | None,
+        variable_descriptions: dict[str, Any] | None,
     ) -> None:
         """Persist the Markdown summary report.
 
@@ -862,13 +860,13 @@ class ReportWriter:
 
 @rule(phony=True)
 def process_dataset(
-    dataset_spec: "DatasetSpec",
-    df: "pd.DataFrame",
-    color_series: Optional["pd.Series"],
+    dataset_spec: DatasetSpec,
+    df: pd.DataFrame,
+    color_series: pd.Series | None,
     base_outdir: Path | OutPath | str,
     *,
-    model_bundle: Optional[ModelConfigBundle] = None,
-    pipeline_config: Optional[PipelineConfig] = None,
+    model_bundle: ModelConfigBundle | None = None,
+    pipeline_config: PipelineConfig | None = None,
 ) -> None:
     """Process a dataset end-to-end and generate a report."""
 
@@ -956,14 +954,14 @@ def process_dataset(
 
     executor.run_models(dataset_spec, bundle, preprocessed, outdir)
 
-    var_desc_map: Dict[str, Any] = {}
+    var_desc_map: dict[str, Any] = {}
     if dataset_spec.provider == "uciml" and isinstance(dataset_spec.id, int):
         try:
             var_desc_map = get_uciml_variable_descriptions(dataset_spec.id)
         except Exception:
             var_desc_map = {}
 
-    model_runs: List[Any] = []
+    model_runs: list[Any] = []
     try:
         model_runs = discover_model_runs(outdir)
     except Exception:

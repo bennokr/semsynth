@@ -6,8 +6,9 @@ from __future__ import annotations
 import csv
 import json
 import logging
+from collections.abc import Iterable, Sequence
 from pathlib import Path
-from typing import Any, Dict, Iterable, List, Optional, Sequence
+from typing import Any
 
 import defopt
 import llm
@@ -91,7 +92,7 @@ def map_column(
     column: ColumnInfo,
     system_prompt: str,
     subject_prefix: str = "dataset",
-) -> List[Dict[str, Any]]:
+) -> list[dict[str, Any]]:
     """
     Ask the LLM (with the Datasette tool) to map one column.
     Returns a list of mapping dicts compatible with SSSOM core columns.
@@ -184,7 +185,7 @@ Rules:
         LOGGER.warning("Unexpected JSON structure for column %s; skipping", var_id)
         return []
 
-    cleaned: List[Dict[str, Any]] = []
+    cleaned: list[dict[str, Any]] = []
     for mapping in data:
         if not isinstance(mapping, dict):
             continue
@@ -218,10 +219,10 @@ def generate_matches(
     model: str,
     extra_prompt: str = "",
     subject_prefix: str = "dataset",
-    allowed_systems: Optional[Iterable[str]] = None,
+    allowed_systems: Iterable[str] | None = None,
     top_k: int = 3,
     confidence_threshold: float = 0.0,
-) -> List[MatchResult]:
+) -> list[MatchResult]:
     """Run the LLM mapping workflow and convert to MatchResult objects."""
 
     allowed = {system.strip() for system in allowed_systems or [] if system.strip()}
@@ -229,7 +230,7 @@ def generate_matches(
     model_obj = llm.get_model(model)
     datasette_tool = Datasette(datasette_url)
 
-    matches: List[MatchResult] = []
+    matches: list[MatchResult] = []
     for column in columns:
         raw_mappings = map_column(
             model=model_obj,
@@ -239,7 +240,7 @@ def generate_matches(
             subject_prefix=subject_prefix,
         )
 
-        def _confidence(mapping: Dict[str, Any]) -> float:
+        def _confidence(mapping: dict[str, Any]) -> float:
             try:
                 return float(mapping.get("confidence", 0.0))
             except (TypeError, ValueError):
@@ -268,7 +269,7 @@ def generate_matches(
                 system=system,
                 code=code,
                 label=mapping.get("object_label", ""),
-                synonyms=tuple(),
+                synonyms=(),
             )
             matches.append(
                 MatchResult(
@@ -286,7 +287,7 @@ def generate_matches(
     return matches
 
 
-def write_rows(rows: List[Dict[str, Any]], out_path: Path) -> None:
+def write_rows(rows: list[dict[str, Any]], out_path: Path) -> None:
     """Write raw LLM rows in SSSOM TSV form (legacy helper)."""
 
     out_path.parent.mkdir(parents=True, exist_ok=True)
@@ -307,8 +308,8 @@ def main(
     subject_prefix: str = "dataset",
     top_k: int = 3,
     confidence_threshold: float = 0.0,
-    systems: Optional[Sequence[str]] = None,
-    output: Optional[Path] = None,
+    systems: Sequence[str] | None = None,
+    output: Path | None = None,
     verbose: bool = False,
 ) -> None:
     """Map dataset columns (from JSON/JSON-LD) to terminology codes via Datasette."""

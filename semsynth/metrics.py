@@ -1,6 +1,6 @@
 from __future__ import annotations
 
-from typing import Any, Dict, List
+from typing import Any
 
 import numpy as np
 import pandas as pd
@@ -8,7 +8,7 @@ from scipy.spatial.distance import jensenshannon
 from scipy.stats import ks_2samp, wasserstein_distance
 
 
-def heldout_loglik(model, df_test: pd.DataFrame) -> Dict[str, float]:
+def heldout_loglik(model, df_test: pd.DataFrame) -> dict[str, float]:
     try:
         arr = model.logl(df_test)
     except Exception:
@@ -16,7 +16,7 @@ def heldout_loglik(model, df_test: pd.DataFrame) -> Dict[str, float]:
             "mean_loglik": float("nan"),
             "std_loglik": float("nan"),
             "sum_loglik": float("nan"),
-            "n_rows": int(0),
+            "n_rows": 0,
         }
     try:
         arr = np.asarray(arr, dtype=float).reshape(-1)
@@ -32,14 +32,14 @@ def heldout_loglik(model, df_test: pd.DataFrame) -> Dict[str, float]:
             "mean_loglik": float("nan"),
             "std_loglik": float("nan"),
             "sum_loglik": float("nan"),
-            "n_rows": int(0),
+            "n_rows": 0,
         }
     vals = arr[mask]
     return {
         "mean_loglik": float(np.mean(vals)),
         "std_loglik": float(np.std(vals)),
         "sum_loglik": float(np.sum(vals)),
-        "n_rows": int(len(vals)),
+        "n_rows": len(vals),
     }
 
 
@@ -73,31 +73,31 @@ def js_divergence_discrete(p: pd.Series, q: pd.Series) -> float:
 def per_variable_distances(
     real_df: pd.DataFrame,
     synth_df: pd.DataFrame,
-    discrete_cols: List[str],
-    continuous_cols: List[str],
+    discrete_cols: list[str],
+    continuous_cols: list[str],
 ) -> pd.DataFrame:
     rows = []
     for c in real_df.columns:
         if c in discrete_cols:
             jsd = js_divergence_discrete(real_df[c], synth_df[c])
-            rows.append(dict(variable=c, type="discrete", JSD=jsd))
+            rows.append({"variable": c, "type": "discrete", "JSD": jsd})
         else:
             a = pd.to_numeric(real_df[c], errors="coerce").dropna()
             b = pd.to_numeric(synth_df[c], errors="coerce").dropna()
             if len(a) == 0 or len(b) == 0:
                 rows.append(
-                    dict(
-                        variable=c, type="continuous", KS=float("nan"), W1=float("nan")
-                    )
+                    {
+                        "variable": c, "type": "continuous", "KS": float("nan"), "W1": float("nan")
+                    }
                 )
                 continue
             ks = ks_2samp(a, b, method="auto").statistic
             w1 = wasserstein_distance(a, b)
-            rows.append(dict(variable=c, type="continuous", KS=ks, W1=w1))
+            rows.append({"variable": c, "type": "continuous", "KS": ks, "W1": w1})
     return pd.DataFrame(rows)
 
 
-def summarize_distance_metrics(distances: pd.DataFrame) -> Dict[str, float]:
+def summarize_distance_metrics(distances: pd.DataFrame) -> dict[str, float]:
     """Compute aggregate statistics for per-variable distance metrics."""
     if distances.empty:
         return {

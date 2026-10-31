@@ -3,14 +3,12 @@
 from __future__ import annotations
 
 import importlib
-from typing import Dict
 
 import pytest
 
 from semsynth.backends.base import ensure_backend_contract
 
-
-_BACKEND_DEPENDENCIES: Dict[str, str] = {
+_BACKEND_DEPENDENCIES: dict[str, str] = {
     "semsynth.backends.pybnesian": "pybnesian",
     "semsynth.backends.synthcity": "synthcity",
     "semsynth.backends.metasyn": "metasyn",

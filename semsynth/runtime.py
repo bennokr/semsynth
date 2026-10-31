@@ -2,11 +2,11 @@
 
 from __future__ import annotations
 
-from dataclasses import dataclass, field
 import importlib
 import logging
+from dataclasses import dataclass, field
 from types import ModuleType
-from typing import Any, Dict, Optional
+from typing import Any
 
 
 @dataclass(slots=True)
@@ -18,9 +18,9 @@ class DependencyRegistry:
     of actionable messaging.
     """
 
-    _cache: Dict[str, ModuleType] = field(default_factory=dict)
+    _cache: dict[str, ModuleType] = field(default_factory=dict)
 
-    def require_module(self, module_name: str, *, hint: Optional[str] = None) -> ModuleType:
+    def require_module(self, module_name: str, *, hint: str | None = None) -> ModuleType:
         """Load ``module_name`` and memoize the result.
 
         Args:
@@ -50,7 +50,7 @@ class DependencyRegistry:
         module_name: str,
         attribute: str,
         *,
-        hint: Optional[str] = None,
+        hint: str | None = None,
     ) -> Any:
         """Return ``attribute`` from ``module_name``.
 
@@ -79,4 +79,4 @@ DEPENDENCIES = DependencyRegistry()
 """Singleton dependency registry used across SemSynth."""
 
 
-__all__ = ["DependencyRegistry", "DEPENDENCIES"]
+__all__ = ["DEPENDENCIES", "DependencyRegistry"]

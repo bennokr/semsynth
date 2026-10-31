@@ -16,31 +16,31 @@ formatting.
 
 from __future__ import annotations
 
-from dataclasses import dataclass
-from pathlib import Path
-from importlib import resources
-import math
-from typing import Any, Dict, Iterable, List, Optional, Sequence
 import json
 import logging
+import math
 import os
 import textwrap
+from collections.abc import Iterable, Sequence
+from dataclasses import dataclass
+from importlib import resources
 from numbers import Integral, Real
+from pathlib import Path
+from typing import Any
 
-from jinja2 import Environment, DictLoader, select_autoescape
-from markupsafe import Markup
 import pandas as pd
+from jinja2 import DictLoader, Environment, select_autoescape
 from makeprov import OutPath, rule
+from markupsafe import Markup
 
 from .codebook import Codebook
 from .jsonld_to_rdfa import SCHEMA_ORG, render_rdfa
 from .models import ModelRun
 
-
 _TEMPLATE_FILES = ("report.md.j2", "report_template.html", "report_style.css", "codebook_style.css")
 
 
-def _load_template_sources() -> Dict[str, str]:
+def _load_template_sources() -> dict[str, str]:
     """Load packaged template text for Jinja and static CSS assets."""
 
     return {
@@ -65,15 +65,15 @@ class _ModelRow:
     backend: str
     seed: Any
     rows: Any
-    params_json: Optional[str]
-    umap_rel: Optional[str]
-    structure_rel: Optional[str]
+    params_json: str | None
+    umap_rel: str | None
+    structure_rel: str | None
     links: Sequence[_ModelLink]
-    missingness: Optional[Dict[str, Any]] = None
-    per_variable_table: Optional[str] = None
-    downstream_table: Optional[str] = None
-    privacy_table: Optional[str] = None
-    structure_table: Optional[str] = None
+    missingness: dict[str, Any] | None = None
+    per_variable_table: str | None = None
+    downstream_table: str | None = None
+    privacy_table: str | None = None
+    structure_table: str | None = None
 
 
 def _jinja_environment() -> Environment:
@@ -87,15 +87,15 @@ def _jinja_environment() -> Environment:
     )
 
 
-def _resolve_codebook_context(data: Dict[str, Any]) -> Any:
+def _resolve_codebook_context(data: dict[str, Any]) -> Any:
     if isinstance(data, dict) and data.get("@context"):
         return data["@context"]
     return SCHEMA_ORG
 
 
 def _write_codebook_artifacts(
-    output_dir: Path, dataset_name: str, codebook_jsonld: Optional[dict]
-) -> tuple[Optional[str], Optional[str]]:
+    output_dir: Path, dataset_name: str, codebook_jsonld: dict | None
+) -> tuple[str | None, str | None]:
     """Persist the codebook artifacts and return filenames.
 
     Args:
@@ -116,7 +116,7 @@ def _write_codebook_artifacts(
     json_path = output_dir / json_name
     json_path.write_text(json.dumps(codebook_jsonld, indent=2), encoding="utf-8")
 
-    html_name: Optional[str] = None
+    html_name: str | None = None
     try:
         context = _resolve_codebook_context(codebook_jsonld)
         html_title = f"{dataset_name} — codebook"
@@ -136,19 +136,19 @@ def write_report_md(
     dataset_name: str,
     # metadata_file: str,
     # dataset_jsonld_file: Optional[str],
-    dataset_provider: Optional[str],
-    dataset_provider_id: Optional[int],
-    df: "pd.DataFrame",
-    disc_cols: List[str],
-    cont_cols: List[str],
-    umap_png_real: Optional[str] = None,
-    declared_types: Optional[dict] = None,
-    inferred_types: Optional[dict] = None,
-    variable_descriptions: Optional[dict] = None,
-    codebook_jsonld: Optional[dict] = None,
-    dataset_metadata: Optional[Any] = None,
-    model_runs: Optional[List[ModelRun]] = None,
-    missingness_summary: Optional[Dict[str, Any]] = None,
+    dataset_provider: str | None,
+    dataset_provider_id: int | None,
+    df: pd.DataFrame,
+    disc_cols: list[str],
+    cont_cols: list[str],
+    umap_png_real: str | None = None,
+    declared_types: dict | None = None,
+    inferred_types: dict | None = None,
+    variable_descriptions: dict | None = None,
+    codebook_jsonld: dict | None = None,
+    dataset_metadata: Any | None = None,
+    model_runs: list[ModelRun] | None = None,
+    missingness_summary: dict[str, Any] | None = None,
 ) -> None:
     """Render Markdown and HTML reports for a dataset.
 
@@ -181,7 +181,7 @@ def write_report_md(
         output_dir, dataset_title, codebook_jsonld
     )
 
-    metadata_dict: Dict[str, Any] = {}
+    metadata_dict: dict[str, Any] = {}
     if dataset_metadata is not None:
         if hasattr(dataset_metadata, "to_jsonld"):
             metadata_dict = dataset_metadata.to_jsonld() or {}
@@ -265,9 +265,9 @@ def write_report_md(
 
 def _format_dist(
     col: pd.Series,
-    cont_cols: List[str],
+    cont_cols: list[str],
     *,
-    codebook: Optional[Dict[str, str]] = None,
+    codebook: dict[str, str] | None = None,
     top_n: int = 10,
 ) -> str:
     """Return a concise distribution summary for a column."""
@@ -300,7 +300,7 @@ def _format_dist(
         total = float(vc.sum()) if vc.sum() else 1.0
     except Exception:
         return ""
-    entries: List[tuple[str, str, int]] = []
+    entries: list[tuple[str, str, int]] = []
     for value, cnt in vc.items():
         key = _normalise_scalar(value)
         display = _format_codebook_value(key, codebook)
@@ -327,10 +327,10 @@ def _build_variable_summary(
     df: pd.DataFrame,
     cont_cols: Iterable[str],
     *,
-    declared_types: Optional[dict],
-    inferred_types: Optional[dict],
-    variable_descriptions: Optional[dict],
-    codebook_labels: Optional[Dict[str, Dict[str, str]]],
+    declared_types: dict | None,
+    inferred_types: dict | None,
+    variable_descriptions: dict | None,
+    codebook_labels: dict[str, dict[str, str]] | None,
 ) -> str:
     """Create the Markdown table summarising variables."""
 
@@ -363,7 +363,7 @@ def _build_variable_summary(
     return _dataframe_to_markdown(merged, index=False)
 
 
-def _coerce_numeric(value: Any) -> Optional[float]:
+def _coerce_numeric(value: Any) -> float | None:
     """Coerce a value to a finite float when possible."""
 
     try:
@@ -386,14 +386,14 @@ def _format_metric_cell(value: Any) -> str:
     return f"{num:.4f}".rstrip("0").rstrip(".")
 
 
-def _build_fidelity_table(*, model_runs: Optional[Sequence[ModelRun]]) -> Optional[str]:
+def _build_fidelity_table(*, model_runs: Sequence[ModelRun] | None) -> str | None:
     """Create the markdown representation of the fidelity table."""
 
     runs = sorted(model_runs or [], key=lambda run: (run.backend, run.name))
     if not runs:
         return None
 
-    rows: List[Dict[str, Any]] = []
+    rows: list[dict[str, Any]] = []
     for run in runs:
         summary = run.metrics.get("summary", {}) if isinstance(run.metrics, dict) else {}
         rows.append(
@@ -427,7 +427,7 @@ def _build_fidelity_table(*, model_runs: Optional[Sequence[ModelRun]]) -> Option
     return _dataframe_to_markdown(out, index=False)
 
 
-def _privacy_metrics_summary(metrics: Optional[Dict[str, Any]]) -> Dict[str, Any]:
+def _privacy_metrics_summary(metrics: dict[str, Any] | None) -> dict[str, Any]:
     """Pick a consistent subset of privacy metrics for tabular reporting."""
 
     if not isinstance(metrics, dict) or not metrics:
@@ -453,11 +453,11 @@ def _privacy_metrics_summary(metrics: Optional[Dict[str, Any]]) -> Dict[str, Any
     return summary
 
 
-def _build_privacy_table(*, model_runs: Optional[Sequence[ModelRun]]) -> Optional[str]:
+def _build_privacy_table(*, model_runs: Sequence[ModelRun] | None) -> str | None:
     """Create the markdown representation of the dataset-level privacy table."""
 
     runs = sorted(model_runs or [], key=lambda run: (run.backend, run.name))
-    rows: List[Dict[str, Any]] = []
+    rows: list[dict[str, Any]] = []
     for run in runs:
         summary = _privacy_metrics_summary(run.privacy_metrics)
         if not summary:
@@ -489,7 +489,7 @@ def _build_privacy_table(*, model_runs: Optional[Sequence[ModelRun]]) -> Optiona
     return _dataframe_to_markdown(out, index=False)
 
 
-def _extract_downstream_sign_match(run: ModelRun) -> Optional[float]:
+def _extract_downstream_sign_match(run: ModelRun) -> float | None:
     """Return the downstream sign match value using available sources."""
 
     for candidate in (
@@ -509,12 +509,12 @@ def _extract_downstream_sign_match(run: ModelRun) -> Optional[float]:
     return None
 
 
-def _build_metric_table(items: List[tuple[str, Any]]) -> Optional[str]:
+def _build_metric_table(items: list[tuple[str, Any]]) -> str | None:
     """Convert a list of metric items into an HTML table."""
 
     if not items:
         return None
-    rows: List[Dict[str, Any]] = []
+    rows: list[dict[str, Any]] = []
     for label, value in items:
         formatted = _format_metric_cell(value)
         cell = formatted if formatted != "" else ("" if value is None else value)
@@ -524,12 +524,12 @@ def _build_metric_table(items: List[tuple[str, Any]]) -> Optional[str]:
     return df.to_html(index=False, escape=False, border=0)
 
 
-def _downstream_metric_items(metrics: Optional[Dict[str, Any]]) -> List[tuple[str, Any]]:
+def _downstream_metric_items(metrics: dict[str, Any] | None) -> list[tuple[str, Any]]:
     """Select downstream metric entries for display."""
 
     if not isinstance(metrics, dict) or not metrics:
         return []
-    items: List[tuple[str, Any]] = []
+    items: list[tuple[str, Any]] = []
     if "sign_match_rate" in metrics:
         items.append(("sign_match_rate", metrics.get("sign_match_rate")))
     for key, value in metrics.items():
@@ -539,7 +539,7 @@ def _downstream_metric_items(metrics: Optional[Dict[str, Any]]) -> List[tuple[st
     return items
 
 
-def _privacy_metric_items(metrics: Optional[Dict[str, Any]]) -> List[tuple[str, Any]]:
+def _privacy_metric_items(metrics: dict[str, Any] | None) -> list[tuple[str, Any]]:
     """Select a compact set of privacy metrics for per-model display."""
 
     summary = _privacy_metrics_summary(metrics)
@@ -559,7 +559,7 @@ def _privacy_metric_items(metrics: Optional[Dict[str, Any]]) -> List[tuple[str, 
     return [(label, value) for label, value in ordered if value is not None]
 
 
-def _build_per_variable_table(per_variable_path: Optional[Path]) -> Optional[str]:
+def _build_per_variable_table(per_variable_path: Path | None) -> str | None:
     """Render a concise per-variable fidelity table."""
 
     if per_variable_path is None or not per_variable_path.exists():
@@ -578,7 +578,7 @@ def _build_per_variable_table(per_variable_path: Optional[Path]) -> Optional[str
     return per_var.fillna("").to_html(index=False, escape=False, border=0)
 
 
-def _build_metasyn_gmf_table(run_dir: Path) -> Optional[str]:
+def _build_metasyn_gmf_table(run_dir: Path) -> str | None:
     """Render a GMF summary table for MetaSyn models."""
 
     gmf_path = run_dir / "metasyn_gmf.json"
@@ -591,7 +591,7 @@ def _build_metasyn_gmf_table(run_dir: Path) -> Optional[str]:
     vars_block = payload.get("vars")
     if not isinstance(vars_block, list):
         return None
-    rows: List[Dict[str, str]] = []
+    rows: list[dict[str, str]] = []
     for entry in vars_block:
         if not isinstance(entry, dict):
             continue
@@ -606,7 +606,7 @@ def _build_metasyn_gmf_table(run_dir: Path) -> Optional[str]:
     return df.to_html(index=False, escape=False, border=0)
 
 
-def _build_missingness_table(summary: Optional[Dict[str, Any]]) -> Optional[str]:
+def _build_missingness_table(summary: dict[str, Any] | None) -> str | None:
     """Create a markdown table describing modeled missingness rates."""
 
     if not summary:
@@ -634,10 +634,10 @@ def _build_missingness_table(summary: Optional[Dict[str, Any]]) -> Optional[str]
     return _dataframe_to_markdown(out[["Column", "Missing rate", "Missing %"]], index=False)
 
 
-def _prepare_model_rows(model_runs: Iterable[ModelRun], base_dir: Path) -> List[_ModelRow]:
+def _prepare_model_rows(model_runs: Iterable[ModelRun], base_dir: Path) -> list[_ModelRow]:
     """Convert model runs into template-friendly rows."""
 
-    prepared: List[_ModelRow] = []
+    prepared: list[_ModelRow] = []
     for run in sorted(model_runs, key=lambda r: (r.backend, r.name)):
         manifest = run.manifest or {}
         params = manifest.get("params") or {}
@@ -680,7 +680,7 @@ def _prepare_model_rows(model_runs: Iterable[ModelRun], base_dir: Path) -> List[
     return prepared
 
 
-def _relative_path(target: Optional[Path], base_dir: Path) -> Optional[str]:
+def _relative_path(target: Path | None, base_dir: Path) -> str | None:
     """Return a relative path when the target exists."""
 
     if target is None:
@@ -692,8 +692,8 @@ def _relative_path(target: Optional[Path], base_dir: Path) -> Optional[str]:
 
 
 def _provider_link(
-    dataset_provider: Optional[str], dataset_provider_id: Optional[int]
-) -> Optional[Dict[str, str]]:
+    dataset_provider: str | None, dataset_provider_id: int | None
+) -> dict[str, str] | None:
     """Build a provider hyperlink descriptor for the template."""
 
     if not dataset_provider or not dataset_provider_id:
@@ -746,7 +746,7 @@ def _normalise_scalar(value: Any) -> str:
     return text.strip()
 
 
-def _format_codebook_value(value_key: str, codebook: Optional[Dict[str, str]]) -> str:
+def _format_codebook_value(value_key: str, codebook: dict[str, str] | None) -> str:
     """Return a user-friendly value label leveraging codebook metadata."""
 
     if not value_key:
@@ -764,7 +764,7 @@ def _select_positive_key(keys: Sequence[str]) -> str:
     for key in keys:
         if key.strip().lower() in {"true", "1", "yes", "y", "t"}:
             return key
-    numeric_candidates: List[tuple[float, str]] = []
+    numeric_candidates: list[tuple[float, str]] = []
     for key in keys:
         try:
             numeric_candidates.append((float(key), key))
@@ -775,10 +775,10 @@ def _select_positive_key(keys: Sequence[str]) -> str:
     return keys[0] if keys else ""
 
 
-def _extract_codebook_labels(metadata: Any) -> Dict[str, Dict[str, str]]:
+def _extract_codebook_labels(metadata: Any) -> dict[str, dict[str, str]]:
     """Return per-column mappings from raw codes to human-readable labels."""
 
-    codebooks: Dict[str, Dict[str, str]] = {}
+    codebooks: dict[str, dict[str, str]] = {}
     for column in Codebook.read(metadata).columns:
         mapping = {
             _normalise_scalar(value["code"]): value["label"].strip()
@@ -793,18 +793,18 @@ def _extract_codebook_labels(metadata: Any) -> Dict[str, Dict[str, str]]:
 def _build_overview_table(
     *,
     dataset_name: str,
-    provider_link: Optional[Dict[str, str]],
-    codebook_json_name: Optional[str],
-    codebook_html_name: Optional[str],
+    provider_link: dict[str, str] | None,
+    codebook_json_name: str | None,
+    codebook_html_name: str | None,
     num_rows: int,
     num_cols: int,
     num_disc: int,
     num_cont: int,
-    missingness_summary: Optional[Dict[str, Any]],
+    missingness_summary: dict[str, Any] | None,
 ) -> str:
     """Construct a compact overview table for the report header."""
 
-    rows: List[Dict[str, str]] = [
+    rows: list[dict[str, str]] = [
         {"Metric": "Dataset", "Value": dataset_name},
         {"Metric": "Rows", "Value": f"{num_rows:,}"},
         {"Metric": "Columns", "Value": f"{num_cols:,}"},
@@ -821,7 +821,7 @@ def _build_overview_table(
             },
         )
 
-    codebook_links: List[str] = []
+    codebook_links: list[str] = []
     if codebook_json_name:
         codebook_links.append(f"[Codebook JSON-LD]({codebook_json_name})")
     if codebook_html_name:

@@ -4,7 +4,6 @@ from __future__ import annotations
 
 import json
 from pathlib import Path
-from typing import Dict
 
 import pandas as pd
 
@@ -18,7 +17,7 @@ class _FakeMetaFrame:
         self._train_df = train_df
 
     @classmethod
-    def fit_dataframe(cls, train_df: pd.DataFrame) -> "_FakeMetaFrame":
+    def fit_dataframe(cls, train_df: pd.DataFrame) -> _FakeMetaFrame:
         return cls(train_df)
 
     def save(self, path: str) -> None:
@@ -32,7 +31,7 @@ def _fake_distance(_test: pd.DataFrame, synth: pd.DataFrame, *_args, **_kwargs) 
     return pd.DataFrame({"variable": synth.columns, "distance": 0.0})
 
 
-def _fake_summary(_dist: pd.DataFrame) -> Dict[str, float]:
+def _fake_summary(_dist: pd.DataFrame) -> dict[str, float]:
     return {"disc_jsd_mean": 0.0}
 
 

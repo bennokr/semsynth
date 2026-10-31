@@ -27,8 +27,8 @@ import argparse
 import csv
 import re
 from collections import defaultdict
+from collections.abc import Iterable
 from pathlib import Path
-from typing import Iterable, List, Tuple, Dict, Set, Optional
 
 # SNOMED description type IDs (FSN + synonym)  
 FSN_TYPE_ID = "900000000000003001"
@@ -98,9 +98,9 @@ def strip_semantic_tag(fsn: str) -> str:
 def load_snomed_codes(
     description_path: Path,
     language: str = "en",
-    allowed_tags: Optional[Set[str]] = None,
-    max_concepts: Optional[int] = None,
-) -> List[Tuple[str, str, str, str]]:
+    allowed_tags: set[str] | None = None,
+    max_concepts: int | None = None,
+) -> list[tuple[str, str, str, str]]:
     """
     Build a list of (system, code, label, synonyms) for SNOMED.
 
@@ -111,9 +111,9 @@ def load_snomed_codes(
     """
     allowed_tags = allowed_tags or COMMON_SNOMED_TAGS
 
-    fsn_by_concept: Dict[str, str] = {}
-    tag_by_concept: Dict[str, str] = {}
-    synonyms_by_concept: Dict[str, Set[str]] = defaultdict(set)
+    fsn_by_concept: dict[str, str] = {}
+    tag_by_concept: dict[str, str] = {}
+    synonyms_by_concept: dict[str, set[str]] = defaultdict(set)
 
     # First pass: capture FSN and synonyms
     with description_path.open("r", encoding="utf-8") as f:
@@ -147,7 +147,7 @@ def load_snomed_codes(
                 synonyms_by_concept[concept_id].add(term)
 
     # Build final rows
-    codes: List[Tuple[str, str, str, str]] = []
+    codes: list[tuple[str, str, str, str]] = []
     for concept_id, fsn in fsn_by_concept.items():
         label = strip_semantic_tag(fsn)
         syns = set(synonyms_by_concept.get(concept_id, set()))
@@ -169,7 +169,7 @@ def load_snomed_codes(
 def load_loinc_codes(
     loinc_path: Path,
     only_common: bool = True,
-) -> List[Tuple[str, str, str, str]]:
+) -> list[tuple[str, str, str, str]]:
     """
     Build a list of (system, code, label, synonyms) for LOINC.
 
@@ -178,7 +178,7 @@ def load_loinc_codes(
     - If only_common=True, keeps only rows where COMMON_TEST_RANK or
       COMMON_ORDER_RANK is populated (Top 20k list).
     """
-    codes: List[Tuple[str, str, str, str]] = []
+    codes: list[tuple[str, str, str, str]] = []
 
     with loinc_path.open("r", encoding="utf-8") as f:
         reader = csv.DictReader(f)
@@ -208,7 +208,7 @@ def load_loinc_codes(
                 continue
 
             # Build synonyms from a few fields, deduplicated
-            syns: List[str] = []
+            syns: list[str] = []
             for field in [
                 LOINC_SHORT_NAME_COL,
                 LOINC_COMPONENT_COL,
@@ -237,7 +237,7 @@ def load_loinc_codes(
 # ---------------------------------------------------------------------------
 
 def write_codes_tsv(
-    rows: Iterable[Tuple[str, str, str, str]],
+    rows: Iterable[tuple[str, str, str, str]],
     out_path: Path,
 ) -> None:
     out_path.parent.mkdir(parents=True, exist_ok=True)

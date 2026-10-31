@@ -2,18 +2,20 @@
 
 from __future__ import annotations
 
+import itertools
 import json
-import logging
 import keyword
+import logging
+from collections.abc import Mapping
 from dataclasses import dataclass
 from pathlib import Path
-from typing import Any, Dict, List, Mapping, Optional
+from typing import Any
 
 import numpy as np
 import pandas as pd
-from pandas.api.types import CategoricalDtype
 import statsmodels.api as sm
 from makeprov import Config, InPath, OutPath, rule
+from pandas.api.types import CategoricalDtype
 from sklearn.impute import SimpleImputer
 
 from .codebook import Codebook, modeling_role
@@ -34,12 +36,12 @@ class DownstreamConfig(Config):
 Col = tuple
 
 
-def _infer_meta(df: pd.DataFrame, target: Optional[str]) -> Codebook:
+def _infer_meta(df: pd.DataFrame, target: str | None) -> Codebook:
     roles = {str(col): "target" if target and col == target else "predictor" for col in df.columns}
     return Codebook({"columns": [{"name": str(col)} for col in df.columns]}, roles)  # type: ignore[arg-type]
 
 
-def _column_lookup(meta: Any) -> Dict[str, Col]:
+def _column_lookup(meta: Any) -> dict[str, Col]:
     meta = meta if isinstance(meta, Codebook) else Codebook.read(meta)
     return {column["name"]: (meta, column["name"]) for column in meta.columns}
 
@@ -49,7 +51,7 @@ def _role(col: Col) -> str:
     return modeling_role(meta.roles.get(name))
 
 
-def _is_cat(col: Col, series: Optional[pd.Series] = None) -> bool:
+def _is_cat(col: Col, series: pd.Series | None = None) -> bool:
     meta, name = col
     if (meta.column(name) or {}).get("level") in {"nominal", "categorical", "ordinal"}:
         return True
@@ -66,7 +68,7 @@ def _is_cat(col: Col, series: Optional[pd.Series] = None) -> bool:
     return False
 
 
-def _code_text(value: Any) -> Optional[str]:
+def _code_text(value: Any) -> str | None:
     """A cell as the text of a code: whole numbers without a fraction, missing values as ``None``."""
     if value is None or (not isinstance(value, str) and pd.isna(value)):
         return None
@@ -75,7 +77,7 @@ def _code_text(value: Any) -> Optional[str]:
     return str(value)
 
 
-def _levels(col: Col) -> List[str]:
+def _levels(col: Col) -> list[str]:
     meta, name = col
     return meta.codes(name)
 
@@ -85,7 +87,7 @@ def _sanitize_for_formula(
     df_real: pd.DataFrame, df_synth: pd.DataFrame, meta: Codebook
 ) -> tuple[pd.DataFrame, pd.DataFrame, Codebook]:
     used: set[str] = set()
-    rename: Dict[str, str] = {}
+    rename: dict[str, str] = {}
     for col in df_real.columns:
         base = "".join(ch if ch.isalnum() else "_" for ch in str(col))
         if base and base[0].isdigit():
@@ -150,7 +152,7 @@ def _impute(df: pd.DataFrame, meta: Codebook) -> pd.DataFrame:
 
 
 # --- formula discovery --------------------------------------------------------
-def _var_term(name: str, col_meta: Codebook, series: Optional[pd.Series] = None) -> str:
+def _var_term(name: str, col_meta: Codebook, series: pd.Series | None = None) -> str:
     quoted = f"Q('{name}')"
     return f"C({quoted}, levels={_levels(col_meta)!r})" if _is_cat(col_meta, series) else quoted
 
@@ -169,8 +171,8 @@ def _build_terms(df: pd.DataFrame, meta: Codebook, max_interactions: int) -> tup
             continue
         preds.append(n)
     mains = [_var_term(n, lookup[n], df[n]) for n in preds]
-    inters: List[str] = []
-    for a, b in zip(preds, preds[1:max_interactions + 1]):
+    inters: list[str] = []
+    for a, b in itertools.pairwise(preds):
         inters.append(f"{_var_term(a, lookup[a], df[a])}:{_var_term(b, lookup[b], df[b])}")
     return mains, inters
 
@@ -227,7 +229,7 @@ def _fit_model(df: pd.DataFrame, formula: str, target_type: str, cfg: Downstream
     return sm.OLS.from_formula(formula, df_f).fit()
 
 
-def _coerce_series(arr_like: Any, *, index: Optional[pd.Index] = None) -> pd.Series:
+def _coerce_series(arr_like: Any, *, index: pd.Index | None = None) -> pd.Series:
     if isinstance(arr_like, pd.DataFrame):
         return arr_like.stack()
     if isinstance(arr_like, pd.Series):
@@ -244,8 +246,8 @@ def compute_downstream(
     df_synth: pd.DataFrame,
     meta: Any = None,
     *,
-    cfg: Optional[DownstreamConfig] = None,
-    target: Optional[str] = None,
+    cfg: DownstreamConfig | None = None,
+    target: str | None = None,
 ) -> Mapping[str, Any]:
     cfg = cfg or DownstreamConfig()
     meta_obj = Codebook.read(meta) if meta is not None else _infer_meta(df_real, target)
@@ -325,10 +327,10 @@ def compute_downstream(
 def recompute_downstream(
     metrics: OutPath = OutPath("{metrics}"),
     *,
-    real: Optional[InPath] = None,
-    synth: Optional[InPath] = None,
-    meta: Optional[InPath] = None,
-    target: Optional[str] = None,
+    real: InPath | None = None,
+    synth: InPath | None = None,
+    meta: InPath | None = None,
+    target: str | None = None,
     verbose: bool = False,
 ) -> None:
     """Recompute downstream metrics from existing real/synthetic CSVs."""
@@ -363,7 +365,7 @@ def recompute_downstream(
     real_df = pd.read_csv(real).convert_dtypes()
     synth_df = pd.read_csv(synth).convert_dtypes()
 
-    meta_obj: Optional[Mapping[str, Any]] = None
+    meta_obj: Mapping[str, Any] | None = None
     if meta is not None:
         meta_obj = json.loads(Path(meta).read_text(encoding="utf-8"))
 

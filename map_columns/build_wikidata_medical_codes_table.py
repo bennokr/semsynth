@@ -24,15 +24,14 @@ Then:
 import csv
 import time
 from pathlib import Path
-from typing import Dict, List, Tuple
 
 import requests
 
-# ENDPOINT = "https://query.wikidata.org/sparql"
+# The official endpoint is https://query.wikidata.org/sparql; QLever is used for its larger limits.
 ENDPOINT = "https://qlever.dev/api/wikidata"
 USER_AGENT = "WikidataMedicalProxy/0.1 (b.b.kruit@amsterdamumc.nl)"
 
-# Safety limits to reduce timeouts – tune these as needed
+# Safety limits to reduce timeouts - tune these as needed
 DEFAULT_LIMIT_PER_SYSTEM = 50000
 
 # Your simplified query template
@@ -84,7 +83,7 @@ GROUP BY ?system ?qid ?labelEn
 """
 
 # Systems and their root classes
-ROOTS: List[Tuple[str, str]] = [
+ROOTS: list[tuple[str, str]] = [
     ("DISEASE", "wd:Q12136"),   # disease
     ("SYMPTOM", "wd:Q169872"),  # symptom
     ("PROCEDURE", "wd:Q796194"),  # medical procedure
@@ -100,7 +99,7 @@ ROOTS: List[Tuple[str, str]] = [
 ]
 
 
-def run_sparql(query: str) -> Dict:
+def run_sparql(query: str) -> dict:
     """Run a SPARQL query and return the JSON result."""
     headers = {"User-Agent": USER_AGENT}
     params = {"query": query, "format": "json"}
@@ -109,7 +108,7 @@ def run_sparql(query: str) -> Dict:
     return resp.json()
 
 
-def fetch_system(system: str, root: str, limit: int) -> Dict[Tuple[str, str], Dict]:
+def fetch_system(system: str, root: str, limit: int) -> dict[tuple[str, str], dict]:
     """
     Run the query for one system/root.
     Returns a dict keyed by (system, qid) to deduplicate rows.
@@ -121,7 +120,7 @@ def fetch_system(system: str, root: str, limit: int) -> Dict[Tuple[str, str], Di
     data = run_sparql(query)
     bindings = data.get("results", {}).get("bindings", [])
 
-    rows: Dict[Tuple[str, str], Dict] = {}
+    rows: dict[tuple[str, str], dict] = {}
     print(f"Got {len(bindings)} results")
     for b in bindings:
         qid = b["qid"]["value"]          # e.g. "Q12136"
@@ -152,7 +151,7 @@ def fetch_system(system: str, root: str, limit: int) -> Dict[Tuple[str, str], Di
     return rows
 
 
-def write_codes_tsv(rows: Dict[Tuple[str, str], Dict], out_path: Path) -> None:
+def write_codes_tsv(rows: dict[tuple[str, str], dict], out_path: Path) -> None:
     out_path.parent.mkdir(parents=True, exist_ok=True)
     with out_path.open("w", encoding="utf-8", newline="") as f:
         writer = csv.writer(f, delimiter="\t")
@@ -169,7 +168,7 @@ def write_codes_tsv(rows: Dict[Tuple[str, str], Dict], out_path: Path) -> None:
 
 def main() -> None:
     out_path = Path("codes.tsv")
-    all_rows: Dict[Tuple[str, str], Dict] = {}
+    all_rows: dict[tuple[str, str], dict] = {}
 
     for system, root in ROOTS:
         print(f"Fetching {system} from {root} ...")
@@ -183,7 +182,6 @@ def main() -> None:
         # Be polite to the WDQS service
         time.sleep(2)
 
-    # print(f"Collected {len(all_rows)} items total")
     write_codes_tsv(all_rows, out_path)
     print(f"Wrote {out_path}")
 

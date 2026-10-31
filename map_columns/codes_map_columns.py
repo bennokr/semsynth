@@ -15,16 +15,17 @@ import csv
 import json
 import logging
 from collections import defaultdict
+from collections.abc import Iterable, Sequence
 from dataclasses import dataclass, field
 from pathlib import Path
-from typing import Any, Dict, Iterable, List, Optional, Sequence, Set, Tuple
+from typing import Any
 
 import defopt
 
 from map_columns.shared import (
+    DEFAULT_STOP_WORDS,
     ColumnInfo,
     DatasetMetadata,
-    DEFAULT_STOP_WORDS,
     column_tokens,
     format_similarity_comment,
     load_columns,
@@ -41,7 +42,7 @@ DEFAULT_PREDICATE = "skos:closeMatch"
 
 # Stop words removed from tokens before scoring. Keep short to avoid
 # discarding medically relevant terms.
-STOP_WORDS: Set[str] = set(DEFAULT_STOP_WORDS)
+STOP_WORDS: set[str] = set(DEFAULT_STOP_WORDS)
 
 
 @dataclass(frozen=True)
@@ -51,7 +52,7 @@ class CodeEntry:
     system: str
     code: str
     label: str
-    synonyms: Tuple[str, ...] = field(default_factory=tuple)
+    synonyms: tuple[str, ...] = field(default_factory=tuple)
 
     @property
     def curie(self) -> str:
@@ -63,7 +64,7 @@ class CodeIndex:
     """Simple token index for code synonyms."""
 
     def __init__(self, codes: Iterable[CodeEntry]):
-        self._index: Dict[str, Set[CodeEntry]] = defaultdict(set)
+        self._index: dict[str, set[CodeEntry]] = defaultdict(set)
         total_codes = 0
         for code in codes:
             total_codes += 1
@@ -76,10 +77,10 @@ class CodeIndex:
             len(self._index),
         )
 
-    def query(self, tokens: Iterable[str]) -> Set[CodeEntry]:
+    def query(self, tokens: Iterable[str]) -> set[CodeEntry]:
         """Return candidate codes matching any of the provided tokens."""
 
-        candidates: Set[CodeEntry] = set()
+        candidates: set[CodeEntry] = set()
         for token in tokens:
             candidates.update(self._index.get(token, set()))
         return candidates
@@ -132,7 +133,7 @@ class MatchResult:
 
         return max(0.0, min(1.0, self.score))
 
-    def to_sssom_row(self) -> Dict[str, str]:
+    def to_sssom_row(self) -> dict[str, str]:
         """Return a dictionary compatible with :mod:`map_columns.sssom_to_codebook`."""
 
         return {
@@ -150,8 +151,8 @@ class MatchResult:
 def load_codes(
     codes_tsv: Path,
     *,
-    allowed_systems: Optional[Sequence[str]] = None,
-) -> Dict[str, CodeEntry]:
+    allowed_systems: Sequence[str] | None = None,
+) -> dict[str, CodeEntry]:
     """Load terminology codes from a TSV file.
 
     Args:
@@ -164,7 +165,7 @@ def load_codes(
     """
 
     allowed = {system.strip() for system in allowed_systems or [] if system.strip()}
-    store: Dict[str, CodeEntry] = {}
+    store: dict[str, CodeEntry] = {}
     skipped_systems = set()
     with codes_tsv.open("r", encoding="utf-8") as handle:
         reader = csv.DictReader(handle, delimiter="\t")
@@ -198,7 +199,7 @@ def rank_codes_for_column(
     *,
     min_score: float,
     top_k: int,
-) -> List[MatchResult]:
+) -> list[MatchResult]:
     """Return the best ``top_k`` codes for ``column`` above ``min_score``."""
 
     tokens = column_tokens(column, stop_words=STOP_WORDS)
@@ -209,8 +210,8 @@ def rank_codes_for_column(
         )
         return []
 
-    scored: List[Tuple[float, CodeEntry]] = []
-    comments: Dict[str, str] = {}
+    scored: list[tuple[float, CodeEntry]] = []
+    comments: dict[str, str] = {}
     for code in code_index.query(tokens):
         similarity = score_column_against_texts(
             column,
@@ -241,7 +242,7 @@ def rank_codes_for_column(
     return results
 
 
-def load_manual_overrides(overrides_path: Optional[Path]) -> Dict[str, List[Dict[str, Any]]]:
+def load_manual_overrides(overrides_path: Path | None) -> dict[str, list[dict[str, Any]]]:
     """Read manual override configuration keyed by column identifier.
 
     Args:
@@ -256,7 +257,7 @@ def load_manual_overrides(overrides_path: Optional[Path]) -> Dict[str, List[Dict
     if overrides_path is None:
         return {}
     data = json.loads(overrides_path.read_text(encoding="utf-8"))
-    overrides: Dict[str, List[Dict[str, Any]]] = {}
+    overrides: dict[str, list[dict[str, Any]]] = {}
     for column_name, entries in data.items():
         if not isinstance(entries, list):
             raise ValueError(f"Overrides for {column_name!r} must be a list.")
@@ -266,11 +267,11 @@ def load_manual_overrides(overrides_path: Optional[Path]) -> Dict[str, List[Dict
 
 def build_manual_matches(
     column: ColumnInfo,
-    overrides: Dict[str, List[Dict[str, Any]]],
-    codes: Dict[str, CodeEntry],
+    overrides: dict[str, list[dict[str, Any]]],
+    codes: dict[str, CodeEntry],
     *,
     min_score: float,
-) -> List[MatchResult]:
+) -> list[MatchResult]:
     """Create :class:`MatchResult` entries from manual overrides.
 
     Args:
@@ -284,12 +285,12 @@ def build_manual_matches(
         List of manual :class:`MatchResult` objects for ``column``.
     """
 
-    results: List[MatchResult] = []
+    results: list[MatchResult] = []
     candidate_keys = [
         column.name or "",
         column.column_id or "",
     ]
-    seen: Set[str] = set()
+    seen: set[str] = set()
     for key in candidate_keys:
         if not key:
             continue
@@ -321,12 +322,12 @@ def build_manual_matches(
 
 def generate_matches(
     columns: Sequence[ColumnInfo],
-    codes: Dict[str, CodeEntry],
+    codes: dict[str, CodeEntry],
     *,
     min_score: float,
     top_k: int,
-    manual_overrides: Optional[Dict[str, List[Dict[str, Any]]]] = None,
-) -> List[MatchResult]:
+    manual_overrides: dict[str, list[dict[str, Any]]] | None = None,
+) -> list[MatchResult]:
     """Generate SSSOM-style matches for the provided columns.
 
     Args:
@@ -342,7 +343,7 @@ def generate_matches(
 
     overrides = manual_overrides or {}
     code_index = CodeIndex(codes.values())
-    matches: List[MatchResult] = []
+    matches: list[MatchResult] = []
     for column in columns:
         manual = build_manual_matches(column, overrides, codes, min_score=min_score)
         if manual:
@@ -418,10 +419,10 @@ def main(
     *,
     codes_tsv: Path,
     output_tsv: Path,
-    systems: Sequence[str] = None,
+    systems: Sequence[str] | None = None,
     min_score: float = 0.45,
     top_k: int = 2,
-    manual_overrides: Optional[Path] = None,
+    manual_overrides: Path | None = None,
     verbose: bool = False,
 ) -> None:
     """Map dataset columns to terminology codes stored in a TSV file.

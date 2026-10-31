@@ -14,7 +14,8 @@ import io
 import logging
 import re
 import zipfile
-from typing import Any, Dict, Iterator, List, Tuple
+from collections.abc import Iterator
+from typing import Any
 from xml.etree import ElementTree
 
 import pandas as pd
@@ -28,11 +29,11 @@ def _local(tag: str) -> str:
     return tag.rsplit("}", 1)[-1]
 
 
-def _children(node: ElementTree.Element, name: str) -> List[ElementTree.Element]:
+def _children(node: ElementTree.Element, name: str) -> list[ElementTree.Element]:
     return [child for child in node.iter() if _local(child.tag) == name]
 
 
-def _cell(cell: ElementTree.Element, shared: List[str]) -> Any:
+def _cell(cell: ElementTree.Element, shared: list[str]) -> Any:
     kind = cell.get("t")
     value = next((child.text for child in cell if _local(child.tag) == "v"), None)
     if kind == "inlineStr":
@@ -51,13 +52,13 @@ def read_xlsx(payload: bytes) -> pd.DataFrame:
     """The first worksheet of an .xlsx file, with its first row as header. Namespaces are ignored."""
     with zipfile.ZipFile(io.BytesIO(payload)) as book:
         names = book.namelist()
-        shared: List[str] = []
+        shared: list[str] = []
         if "xl/sharedStrings.xml" in names:
             root = ElementTree.fromstring(book.read("xl/sharedStrings.xml"))
             shared = ["".join(t.text or "" for t in _children(si, "t")) for si in _children(root, "si")]
         sheet = sorted(name for name in names if re.fullmatch(r"xl/worksheets/sheet\d+\.xml", name))[0]
         root = ElementTree.fromstring(book.read(sheet))
-    rows: List[Dict[str, Any]] = []
+    rows: list[dict[str, Any]] = []
     for row in _children(root, "row"):
         cells = {re.sub(r"\d", "", cell.get("r", "")): _cell(cell, shared) for cell in _children(row, "c")}
         rows.append(cells)
@@ -75,14 +76,14 @@ _READERS = {
 }
 
 
-def fetch_metadata(dataset_id: int) -> Dict[str, Any]:
+def fetch_metadata(dataset_id: int) -> dict[str, Any]:
     """The metadata of a dataset from the UCI API, with its variables."""
     response = requests.get(API_URL, params={"id": dataset_id}, timeout=60)
     response.raise_for_status()
     return response.json()["data"]
 
 
-def _tables(payload: bytes) -> Iterator[Tuple[str, bytes]]:
+def _tables(payload: bytes) -> Iterator[tuple[str, bytes]]:
     """Every table file in a zip archive, also inside zip archives in it."""
     with zipfile.ZipFile(io.BytesIO(payload)) as archive:
         for name in archive.namelist():
@@ -98,7 +99,7 @@ def _read(name: str, payload: bytes) -> pd.DataFrame:
     return _READERS[suffix](payload)
 
 
-def fetch_frame(dataset_id: int) -> Tuple[pd.DataFrame, Dict[str, Any]]:
+def fetch_frame(dataset_id: int) -> tuple[pd.DataFrame, dict[str, Any]]:
     """The table of a dataset and its API metadata.
 
     Of the tables in the archive, the first that has every variable as a column is used, or else the largest.

@@ -108,10 +108,22 @@ semsynth = ["templates/*.j2", "templates/*.html", "templates/*.css", "templates/
 
 [tool.ruff]
 line-length = 100
+target-version = "py311"
 
 [tool.ruff.lint]
-# Ruff's defaults before 0.16. Later versions enable more rules by default, which made every changed file fail CI.
-select = ["E4", "E7", "E9", "F"]
+select = ["E4", "E7", "E9", "F", "I", "UP", "B", "SIM", "C4", "C90", "PLR09", "ARG", "RUF", "PERF", "ERA"]
+ignore = [
+  "B008",  # makeprov and defopt take InPath/OutPath calls as parameter defaults
+  # Ratchet: these hold today's backlog. Remove one at a time as the modules are split (see the plan in AGENTS.md).
+  "C901", "PLR0911", "PLR0912", "PLR0913", "PLR0915", "PLR0917",
+  "ARG001", "ARG002", "ARG004", "ARG005",
+]
+
+[tool.ruff.lint.mccabe]
+max-complexity = 12
+
+[tool.ruff.lint.per-file-ignores]
+"tests/*" = ["ARG", "PLR09"]
 
 [tool.black]
 line-length = 100

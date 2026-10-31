@@ -32,7 +32,7 @@ class _MimeAwareHandler(BaseHTTPRequestHandler):
     def log_message(self, *_args) -> None:  # silence access logs in tests
         pass
 
-    def do_GET(self) -> None:  # noqa: N802
+    def do_GET(self) -> None:
         path = self.path.split("?")[0].lstrip("/")
         target = (PROJECT_ROOT / path).resolve()
         # Prevent path traversal.

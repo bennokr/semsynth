@@ -2,19 +2,20 @@
 
 from __future__ import annotations
 
-from dataclasses import dataclass, field
 import json
 import logging
+from collections.abc import Callable, Iterable
+from dataclasses import dataclass, field
 from pathlib import Path
-from typing import Any, Callable, Dict, Iterable, List, Optional, Tuple
+from typing import Any
 
 import numpy as np
 import pandas as pd
 from sklearn.compose import ColumnTransformer, make_column_selector
+from sklearn.impute import SimpleImputer
 from sklearn.linear_model import LogisticRegression
 from sklearn.pipeline import Pipeline
 from sklearn.preprocessing import OneHotEncoder
-from sklearn.impute import SimpleImputer
 
 from .metrics import per_variable_distances, summarize_distance_metrics
 
@@ -51,9 +52,9 @@ class ColumnMissingnessModel:
 
     col: str
     p_missing_: float = 0.0
-    pipeline_: Optional[Pipeline] = None
+    pipeline_: Pipeline | None = None
 
-    def fit(self, df: pd.DataFrame) -> "ColumnMissingnessModel":
+    def fit(self, df: pd.DataFrame) -> ColumnMissingnessModel:
         """Fit the column-level missingness model.
 
         Args:
@@ -129,10 +130,10 @@ class ColumnMissingnessModel:
 class DataFrameMissingnessModel:
     """Learn and apply missingness patterns across dataframe columns."""
 
-    random_state: Optional[int] = None
-    models_: Dict[str, ColumnMissingnessModel] = field(default_factory=dict)
+    random_state: int | None = None
+    models_: dict[str, ColumnMissingnessModel] = field(default_factory=dict)
 
-    def fit(self, df: pd.DataFrame) -> "DataFrameMissingnessModel":
+    def fit(self, df: pd.DataFrame) -> DataFrameMissingnessModel:
         """Fit per-column missingness models on the provided dataframe.
 
         Args:
@@ -192,8 +193,8 @@ class MissingnessWrappedGenerator:
         cls,
         base_generator: Callable[..., pd.DataFrame],
         real_df: pd.DataFrame,
-        random_state: Optional[int] = None,
-    ) -> "MissingnessWrappedGenerator":
+        random_state: int | None = None,
+    ) -> MissingnessWrappedGenerator:
         """Create a wrapper by fitting missingness to real data.
 
         Args:
@@ -216,8 +217,8 @@ class MissingnessWrappedGenerator:
 
 
 def fit_missingness_model(
-    df: pd.DataFrame, *, random_state: Optional[int] = None
-) -> Optional[DataFrameMissingnessModel]:
+    df: pd.DataFrame, *, random_state: int | None = None
+) -> DataFrameMissingnessModel | None:
     """Fit a dataframe-level missingness model with logging safeguards.
 
     Args:
@@ -245,7 +246,7 @@ def apply_missingness_to_outputs(
     disc_cols: Iterable[str],
     cont_cols: Iterable[str],
     backend_name: str,
-) -> Tuple[pd.DataFrame, bool]:
+) -> tuple[pd.DataFrame, bool]:
     """Apply missingness to backend artefacts and refresh derived metrics.
 
     Args:
@@ -296,8 +297,8 @@ def apply_missingness_to_outputs(
 
 
 def summarize_missingness_model(
-    missingness_model: Optional[DataFrameMissingnessModel],
-) -> Optional[Dict[str, Any]]:
+    missingness_model: DataFrameMissingnessModel | None,
+) -> dict[str, Any] | None:
     """Build a reporting-friendly summary of the missingness model.
 
     Args:
@@ -312,7 +313,7 @@ def summarize_missingness_model(
         return None
 
     models = getattr(missingness_model, "models_", {}) or {}
-    rows: List[Dict[str, float]] = []
+    rows: list[dict[str, float]] = []
     for column, column_model in sorted(models.items()):
         rate = float(getattr(column_model, "p_missing_", 0.0) or 0.0)
         if rate > 0.0:
@@ -346,7 +347,7 @@ def _refresh_metrics_after_missingness(
         dist_df = per_variable_distances(real_df, synth_df, disc_cols, cont_cols)
         dist_df.to_csv(run_dir / "per_variable_metrics.csv", index=False)
         metrics_path = run_dir / "metrics.json"
-        metrics_payload: Dict[str, Any] = {}
+        metrics_payload: dict[str, Any] = {}
         if metrics_path.exists():
             try:
                 metrics_payload = json.loads(metrics_path.read_text(encoding="utf-8"))
@@ -370,7 +371,7 @@ def _update_missingness_manifest(
     """Record missingness configuration in the backend manifest."""
 
     manifest_path = run_dir / "manifest.json"
-    manifest: Dict[str, Any] = {}
+    manifest: dict[str, Any] = {}
     if manifest_path.exists():
         try:
             manifest = json.loads(manifest_path.read_text(encoding="utf-8"))

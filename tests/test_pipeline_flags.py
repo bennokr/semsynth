@@ -4,14 +4,13 @@ from __future__ import annotations
 
 from pathlib import Path
 from types import SimpleNamespace
-from typing import List
 
 import numpy as np
 import pandas as pd
 import pytest
 
 from semsynth.models import ModelConfigBundle, ModelRun
-from semsynth.pipeline import PipelineConfig, process_dataset
+from semsynth.pipeline import PipelineConfig
 from semsynth.specs import DatasetSpec
 
 
@@ -23,21 +22,21 @@ class _DummyUtils:
         Path(path).mkdir(parents=True, exist_ok=True)
 
     @staticmethod
-    def infer_types(df: pd.DataFrame) -> tuple[List[str], List[str]]:
-        cont = [c for c in df.select_dtypes(include=["number"]).columns]
+    def infer_types(df: pd.DataFrame) -> tuple[list[str], list[str]]:
+        cont = list(df.select_dtypes(include=["number"]).columns)
         disc = [c for c in df.columns if c not in cont]
         return disc, cont
 
     @staticmethod
-    def coerce_discrete_to_category(df: pd.DataFrame, cols: List[str]) -> pd.DataFrame:
+    def coerce_discrete_to_category(df: pd.DataFrame, cols: list[str]) -> pd.DataFrame:
         return df
 
     @staticmethod
-    def rename_categorical_categories_to_str(df: pd.DataFrame, cols: List[str]) -> pd.DataFrame:
+    def rename_categorical_categories_to_str(df: pd.DataFrame, cols: list[str]) -> pd.DataFrame:
         return df
 
     @staticmethod
-    def coerce_continuous_to_float(df: pd.DataFrame, cols: List[str]) -> pd.DataFrame:
+    def coerce_continuous_to_float(df: pd.DataFrame, cols: list[str]) -> pd.DataFrame:
         return df
 
     @staticmethod

@@ -3,19 +3,18 @@
 from __future__ import annotations
 
 from dataclasses import dataclass
-from typing import List
 
 import pandas as pd
 
-from semsynth.pipeline import MetricWriter
 from semsynth.codebook import Codebook
+from semsynth.pipeline import MetricWriter
 
 
 @dataclass
 class _PrivacyCapture:
-    qi: List[str]
-    sensitive: List[str]
-    used: List[str]
+    qi: list[str]
+    sensitive: list[str]
+    used: list[str]
 
 
 def _capture_privacy(real_df: pd.DataFrame, synth_df: pd.DataFrame, meta_df: pd.DataFrame) -> _PrivacyCapture:

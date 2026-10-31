@@ -2,7 +2,7 @@ from __future__ import annotations
 
 import logging
 from dataclasses import dataclass
-from typing import Dict, List, Optional, TYPE_CHECKING
+from typing import TYPE_CHECKING
 
 if TYPE_CHECKING:  # pragma: no cover - typing only
     import pandas as pd
@@ -15,19 +15,19 @@ LOGGER = logging.getLogger(__name__)
 class DatasetPrivacySummary:
     n_real: int
     n_synth: int
-    used_columns: List[str]
-    qi_columns: List[str]
-    sensitive_columns: List[str]
+    used_columns: list[str]
+    qi_columns: list[str]
+    sensitive_columns: list[str]
     exact_overlap_rate: float
-    near_duplicate_rate_eps: float          # uses synthcity’s close-values threshold (0.2)
-    nn_distance_stats: Dict[str, float]     # {'mean','median','p95','min','max'}
-    k_min: Optional[int]
-    k_pct_lt5: Optional[float]
-    k_map: Optional[int]
-    rare_qi_reproduction_rate: Optional[float]
-    t_closeness: Dict[str, Dict[str, float]]  # per sensitive var: {'mean','p95','max'}
-    identifiability_score: Optional[float] = None
-    delta_presence: Optional[float] = None
+    near_duplicate_rate_eps: float          # uses synthcity's close-values threshold (0.2)
+    nn_distance_stats: dict[str, float]     # {'mean','median','p95','min','max'}
+    k_min: int | None
+    k_pct_lt5: float | None
+    k_map: int | None
+    rare_qi_reproduction_rate: float | None
+    t_closeness: dict[str, dict[str, float]]  # per sensitive var: {'mean','p95','max'}
+    identifiability_score: float | None = None
+    delta_presence: float | None = None
 
 
 def _tv(p, q) -> float:
@@ -39,14 +39,15 @@ def _tv(p, q) -> float:
 def _w1(x, y) -> float:
     import numpy as np
 
-    x = np.sort(x[~np.isnan(x)]); y = np.sort(y[~np.isnan(y)])
+    x = np.sort(x[~np.isnan(x)])
+    y = np.sort(y[~np.isnan(y)])
     if len(x) == 0 or len(y) == 0:
         return 0.0
     n = max(len(x), len(y))
     q = (np.arange(n) + 0.5) / n
     return float(np.mean(np.abs(np.quantile(x, q) - np.quantile(y, q))))
 
-def _metric_value(scores, name: str, field: str = "mean") -> Optional[float]:
+def _metric_value(scores, name: str, field: str = "mean") -> float | None:
     """Pull a metric cell from a Metrics.evaluate dataframe."""
     try:
         val = scores.loc[name, field]
@@ -58,13 +59,13 @@ def _metric_value(scores, name: str, field: str = "mean") -> Optional[float]:
         return None
 
 
-def _normalize_frames(df: "pd.DataFrame",
-                      meta: "pd.DataFrame",
-                      use_cols: List[str]) -> "pd.DataFrame":
+def _normalize_frames(df: pd.DataFrame,
+                      meta: pd.DataFrame,
+                      use_cols: list[str]) -> pd.DataFrame:
     """Ensure consistent dtypes and missing handling before SynthCity Metrics."""
     import pandas as pd
 
-    tmap = dict(zip(meta.variable, meta.type))
+    tmap = dict(zip(meta.variable, meta.type, strict=False))
     cat_cols = [c for c in use_cols if tmap.get(c) not in ("numeric", "datetime")]
     num_cols = [c for c in use_cols if tmap.get(c) == "numeric"]
     dt_cols = [c for c in use_cols if tmap.get(c) == "datetime"]
@@ -84,9 +85,9 @@ def _normalize_frames(df: "pd.DataFrame",
     return out
 
 
-def summarize_privacy_synthcity(df_real: "pd.DataFrame",
-                                df_synth: "pd.DataFrame",
-                                meta: "pd.DataFrame",
+def summarize_privacy_synthcity(df_real: pd.DataFrame,
+                                df_synth: pd.DataFrame,
+                                meta: pd.DataFrame,
                                 *,
                                 eps: float = 0.1) -> DatasetPrivacySummary:
     """Summarize privacy metrics using SynthCity on aligned real/synthetic dataframes.
@@ -102,7 +103,6 @@ def summarize_privacy_synthcity(df_real: "pd.DataFrame",
         optional identifiability/delta-presence scores.
     """
     import numpy as np
-    import pandas as pd
 
     ensure_torch_rmsnorm()
     try:
@@ -116,7 +116,8 @@ def summarize_privacy_synthcity(df_real: "pd.DataFrame",
     assert {'variable','role','type'}.issubset(meta.columns)
     use_meta = meta[~meta.role.isin(['ignore', 'id', 'target'])].copy()
     use_cols = [c for c in use_meta.variable if c in df_real.columns and c in df_synth.columns]
-    if not use_cols: raise ValueError("No overlapping usable columns.")
+    if not use_cols:
+        raise ValueError("No overlapping usable columns.")
     qi = [c for c in use_meta.loc[use_meta.role=='qi','variable'] if c in use_cols]
     sens = [c for c in use_meta.loc[use_meta.role=='sensitive','variable'] if c in use_cols]
 
@@ -157,10 +158,7 @@ def summarize_privacy_synthcity(df_real: "pd.DataFrame",
         k_min = int(eq_sizes.min()) if eq_sizes.size else None
         k_pct_lt5 = float((eq_sizes < 5).mean()) if eq_sizes.size else None
         k_map_val = _metric_value(scores, "privacy.k-map.score") if scores is not None else None
-        if k_map_val is not None and not np.isnan(k_map_val):
-            k_map_val = int(k_map_val)
-        else:
-            k_map_val = None
+        k_map_val = int(k_map_val) if k_map_val is not None and not np.isnan(k_map_val) else None
     else:
         k_min = k_pct_lt5 = k_map_val = None
 
@@ -183,8 +181,8 @@ def summarize_privacy_synthcity(df_real: "pd.DataFrame",
         rare_rate = None
 
     # t-closeness per sensitive var (TV for categoricals; W1 for numerics)
-    tmap = dict(zip(use_meta.variable, use_meta.type))
-    t_close: Dict[str, Dict[str, float]] = {}
+    tmap = dict(zip(use_meta.variable, use_meta.type, strict=False))
+    t_close: dict[str, dict[str, float]] = {}
     if qi and sens:
         groups = df_s.groupby(qi, dropna=False)
         for s_col in sens:
@@ -208,7 +206,7 @@ def summarize_privacy_synthcity(df_real: "pd.DataFrame",
         qi_columns=qi,
         sensitive_columns=sens,
         exact_overlap_rate=exact_overlap,
-        near_duplicate_rate_eps=close_prob,     # synthcity’s fixed threshold
+        near_duplicate_rate_eps=close_prob,     # synthcity's fixed threshold
         nn_distance_stats=nn_stats,
         k_min=k_min,
         k_pct_lt5=k_pct_lt5,

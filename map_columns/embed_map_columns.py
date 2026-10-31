@@ -4,8 +4,8 @@
 from __future__ import annotations
 
 import logging
+from collections.abc import Sequence
 from pathlib import Path
-from typing import Dict, List, Optional, Sequence, Tuple
 
 import defopt
 import torch
@@ -32,7 +32,7 @@ LOGGER = logging.getLogger(__name__)
 
 
 def _format_column_text(column: ColumnInfo, dataset_meta: DatasetMetadata) -> str:
-    parts: List[str] = []
+    parts: list[str] = []
     if column.name:
         parts.append(f"Column name: {column.name}")
     if column.description:
@@ -63,7 +63,7 @@ def generate_matches(
     candidate_pool_multiplier: int = 5,
     cosine_threshold: float = 0.0,
     lexical_threshold: float = 0.2,
-) -> List[MatchResult]:
+) -> list[MatchResult]:
     """Generate embedding-assisted matches between columns and codes."""
 
     if not codes:
@@ -91,7 +91,7 @@ def generate_matches(
         show_progress_bar=True,
     )
 
-    matches: List[MatchResult] = []
+    matches: list[MatchResult] = []
     for column in columns:
         column_text = _format_column_text(column, dataset_meta)
         if not column_text:
@@ -108,15 +108,15 @@ def generate_matches(
         )
         pool_scores, pool_indices = torch.topk(cosine_scores, k=pool_size)
 
-        scored_candidates: List[Tuple[float, MatchResult]] = []
-        for cosine_value, idx in zip(pool_scores, pool_indices):
+        scored_candidates: list[tuple[float, MatchResult]] = []
+        for cosine_value, idx in zip(pool_scores, pool_indices, strict=False):
             cosine_float = float(cosine_value)
             if cosine_float < cosine_threshold:
                 continue
             code = codes[int(idx)]
             similarity = score_column_against_texts(
                 column,
-                code.synonyms + (code.label,),
+                (*code.synonyms, code.label),
                 stop_words=DEFAULT_STOP_WORDS,
             )
             if similarity.score < lexical_threshold:
@@ -169,8 +169,8 @@ def main(
     candidate_pool_multiplier: int = 5,
     cosine_threshold: float = 0.0,
     lexical_threshold: float = 0.2,
-    systems: Optional[Sequence[str]] = None,
-    output: Optional[Path] = None,
+    systems: Sequence[str] | None = None,
+    output: Path | None = None,
     verbose: bool = False,
 ) -> None:
     """Match dataset columns to terminology codes using embeddings."""
@@ -185,7 +185,7 @@ def main(
         LOGGER.warning("No columns found in %s", dataset_json)
         return
 
-    codes_dict: Dict[str, CodeEntry] = load_codes(
+    codes_dict: dict[str, CodeEntry] = load_codes(
         codes_tsv, allowed_systems=systems or None
     )
     codes = list(codes_dict.values())

@@ -3,9 +3,10 @@
 from __future__ import annotations
 
 import json
+from collections.abc import Iterable, Mapping
 from dataclasses import dataclass
 from pathlib import Path
-from typing import Any, Dict, Iterable, Mapping, Optional, Tuple
+from typing import Any
 
 import pandas as pd
 
@@ -32,17 +33,17 @@ class DatasetPayload:
 
     spec: DatasetSpec
     frame: pd.DataFrame
-    color: Optional[pd.Series] = None
-    metadata: Optional[Mapping[str, Any]] = None
+    color: pd.Series | None = None
+    metadata: Mapping[str, Any] | None = None
 
 
-def load_cached_payload(paths: CachePaths) -> Optional[Tuple[pd.DataFrame, Dict[str, Any]]]:
+def load_cached_payload(paths: CachePaths) -> tuple[pd.DataFrame, dict[str, Any]] | None:
     """Return cached dataframe and metadata when both files exist."""
 
     if not paths.data.exists():
         return None
     frame = pd.read_csv(paths.data).convert_dtypes()
-    meta: Dict[str, Any] = {}
+    meta: dict[str, Any] = {}
     if paths.meta.exists():
         try:
             meta_text = paths.meta.read_text(encoding="utf-8")
@@ -63,9 +64,9 @@ def store_cached_payload(paths: CachePaths, frame: pd.DataFrame, meta: Mapping[s
 def clean_dataset_frame(
     df: pd.DataFrame,
     *,
-    target: Optional[str] = None,
-    metadata: Optional[Mapping[str, object]] = None,
-) -> Tuple[pd.DataFrame, Optional[str], Optional[pd.Series]]:
+    target: str | None = None,
+    metadata: Mapping[str, object] | None = None,
+) -> tuple[pd.DataFrame, str | None, pd.Series | None]:
     """Return a cleaned dataframe plus detected target column and colour series.
 
     The helper removes trivial identifier columns, then inspects the provided
@@ -82,11 +83,11 @@ def clean_dataset_frame(
 
     candidates = []
 
-    def _append_candidate(name: Optional[str]) -> None:
+    def _append_candidate(name: str | None) -> None:
         if isinstance(name, str) and name and name not in candidates:
             candidates.append(name)
 
-    def _normalise_role(role: object) -> Optional[str]:
+    def _normalise_role(role: object) -> str | None:
         if isinstance(role, str) and role:
             role_lower = role.strip().lower()
             if role_lower == "target":
@@ -129,8 +130,8 @@ def clean_dataset_frame(
     if metadata and isinstance(metadata, Mapping):
         _extract_named_role(metadata)
 
-    detected_target: Optional[str] = None
-    color_series: Optional[pd.Series] = None
+    detected_target: str | None = None
+    color_series: pd.Series | None = None
     for candidate in candidates:
         if candidate in clean_df.columns:
             detected_target = candidate

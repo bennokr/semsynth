@@ -4,14 +4,15 @@ import json
 import logging
 from dataclasses import dataclass
 from pathlib import Path
-from typing import Any, Dict, List, Optional, Tuple, TYPE_CHECKING
+from typing import TYPE_CHECKING, Any
 
 from makeprov import OutDir
 
 if TYPE_CHECKING:  # pragma: no cover - typing only
     import pandas as pd
 
-from ..metrics import per_variable_distances, summarize_distance_metrics, heldout_loglik
+from ..metrics import heldout_loglik, per_variable_distances, summarize_distance_metrics
+from ..models import model_run_root, write_manifest
 from ..utils import (
     coerce_continuous_to_float,
     coerce_discrete_to_category,
@@ -19,19 +20,18 @@ from ..utils import (
     infer_types,
     rename_categorical_categories_to_str,
 )
-from ..models import model_run_root, write_manifest
 
 
 @dataclass
 class BNArtifacts:
     model: object
-    discrete_cols: List[str]
-    continuous_cols: List[str]
+    discrete_cols: list[str]
+    continuous_cols: list[str]
 
 
 def _load_pybnesian():
     try:
-        from pybnesian import hc, CLGNetworkType, SemiparametricBNType
+        from pybnesian import CLGNetworkType, SemiparametricBNType, hc
     except ImportError as exc:  # pragma: no cover - optional dependency
         raise RuntimeError(
             "PyBNesian backend requires 'pybnesian'; install with pip install semsynth[pybnesian]"
@@ -62,11 +62,11 @@ def learn_bn(
     train_df,
     bn_type: str = "clg",
     random_state: int = 42,
-    arc_blacklist: Optional[List[Tuple[str, str]]] = None,
+    arc_blacklist: list[tuple[str, str]] | None = None,
     *,
-    score: Optional[str] = None,
-    operators: Optional[List[str]] = None,
-    max_indegree: Optional[int] = None,
+    score: str | None = None,
+    operators: list[str] | None = None,
+    max_indegree: int | None = None,
 ) -> BNArtifacts:
     hc, _, _ = _load_pybnesian()
     bn_type_obj = _bn_type_from_str(bn_type)
@@ -97,7 +97,7 @@ def learn_bn(
 
 
 def bn_to_graphviz(
-    model, node_types: Dict[str, object], out_png: str, title: str = "Learned BN"
+    model, node_types: dict[str, object], out_png: str, title: str = "Learned BN"
 ) -> None:
     try:
         from graphviz import Digraph
@@ -122,7 +122,7 @@ def bn_to_graphviz(
 
 
 def save_graphml_structure(
-    model, node_types: Dict[str, object], out_graphml: str
+    model, node_types: dict[str, object], out_graphml: str
 ) -> None:
     try:
         import networkx as nx
@@ -140,18 +140,18 @@ def save_graphml_structure(
 
 
 def run_experiment(
-    df: "pd.DataFrame",
+    df: pd.DataFrame,
     *,
-    provider: Optional[str],
-    dataset_name: Optional[str],
-    provider_id: Optional[int],
+    provider: str | None,
+    dataset_name: str | None,
+    provider_id: int | None,
     outdir: str,
     label: str,
-    model_info: Dict[str, Any] | None,
-    rows: Optional[int],
+    model_info: dict[str, Any] | None,
+    rows: int | None,
     seed: int,
     test_size: float,
-    codebook_jsonld: Optional[Dict[str, Any]] = None,
+    codebook_jsonld: dict[str, Any] | None = None,
 ) -> Path:
     """Fit/generate/evaluate a PyBNesian model and write artifacts under models/<label>.
 
@@ -184,10 +184,8 @@ def run_experiment(
     cols = list(working.columns)
     col_map = {str(c).lower(): c for c in cols}
     sens_in_cols = [col_map[s] for s in [x.lower() for x in roots] if s in col_map]
-    arc_blacklist_pairs: List[Tuple[str, str]] = []
-    for u in sens_in_cols:
-        for v in cols:
-            arc_blacklist_pairs.append((v, u))
+    arc_blacklist_pairs: list[tuple[str, str]] = []
+    arc_blacklist_pairs.extend((v, u) for u in sens_in_cols for v in cols)
 
     bn_art = learn_bn(
         train_df,
@@ -260,9 +258,9 @@ def run_experiment(
         "dataset_name": dataset_name,
         "provider_id": provider_id,
         "type": bn_type,
-        "params": dict(
-            type=bn_type, score=score, operators=operators, max_indegree=max_indegree
-        ),
+        "params": {
+            "type": bn_type, "score": score, "operators": operators, "max_indegree": max_indegree
+        },
         "seed": seed,
         "rows": n_rows,
         "test_size": test_size,

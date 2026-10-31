@@ -11,9 +11,10 @@ from __future__ import annotations
 import copy
 import json
 import math
+from collections.abc import Iterator, Mapping
 from dataclasses import dataclass, field
 from pathlib import Path
-from typing import Any, Dict, Iterator, List, Mapping, Optional, Tuple
+from typing import Any
 
 import pandas as pd
 import pyarrow as pa
@@ -64,13 +65,13 @@ def _local(key: str) -> str:
     return key.rsplit(":", 1)[-1].rsplit("#", 1)[-1]
 
 
-def _first_text(value: Any) -> Optional[str]:
+def _first_text(value: Any) -> str | None:
     if isinstance(value, list):
         value = next((item for item in value if isinstance(item, str)), None)
     return value if isinstance(value, str) and value else None
 
 
-def _named_roles(node: Any) -> Iterator[Tuple[str, str]]:
+def _named_roles(node: Any) -> Iterator[tuple[str, str]]:
     """Yields ``(column name, role)`` for every node of a document that has both."""
     if isinstance(node, Mapping):
         name = next((_first_text(node.get(key)) for key in _NAME_KEYS if _first_text(node.get(key))), None)
@@ -101,7 +102,7 @@ def infer_profile(df: pd.DataFrame) -> Profile:
     return infer({str(name): [_cell(value) for value in df[name].tolist()] for name in df.columns})
 
 
-def privacy_role(raw: Optional[str]) -> str:
+def privacy_role(raw: str | None) -> str:
     """The role a privacy metric expects: ``qi``, ``sensitive``, ``id``, ``ignore``, ``target`` or as given."""
     if not raw:
         return "qi"
@@ -109,7 +110,7 @@ def privacy_role(raw: Optional[str]) -> str:
     return _PRIVACY_ROLES.get(role, role)
 
 
-def modeling_role(raw: Optional[str], default: str = "predictor") -> str:
+def modeling_role(raw: str | None, default: str = "predictor") -> str:
     """The role a model expects: ``target``, ``predictor`` or as given."""
     if not raw:
         return default
@@ -126,12 +127,12 @@ class Codebook:
     """A profile, the role of each column and the dataset properties that the profile has no slot for."""
 
     profile: Profile = field(default_factory=lambda: {"columns": []})
-    roles: Dict[str, str] = field(default_factory=dict)
-    extras: Dict[str, Any] = field(default_factory=dict)
-    prefixes: Dict[str, str] = field(default_factory=dict)
+    roles: dict[str, str] = field(default_factory=dict)
+    extras: dict[str, Any] = field(default_factory=dict)
+    prefixes: dict[str, str] = field(default_factory=dict)
 
     @classmethod
-    def read(cls, document: Any) -> "Codebook":
+    def read(cls, document: Any) -> Codebook:
         """Reads a codebook, profile JSON or DSV JSON-LD (nested or a flat ``@graph``)."""
         if isinstance(document, Codebook):
             return copy.deepcopy(document)
@@ -158,12 +159,12 @@ class Codebook:
         return cls(profile, dict(_named_roles(document)), extras, prefixes)
 
     @classmethod
-    def from_frame(cls, df: pd.DataFrame, document: Any = None) -> "Codebook":
+    def from_frame(cls, df: pd.DataFrame, document: Any = None) -> Codebook:
         """The codebook of ``document`` completed with what linked-codebook infers from ``df``."""
         declared = cls.read(document)
         return cls(merge(infer_profile(df), declared.profile), declared.roles, declared.extras, declared.prefixes)
 
-    def merged(self, other: "Codebook") -> "Codebook":
+    def merged(self, other: Codebook) -> Codebook:
         """This codebook completed with ``other``; what ``other`` says wins."""
         return Codebook(
             merge(self.profile, other.profile),
@@ -173,13 +174,13 @@ class Codebook:
         )
 
     @property
-    def columns(self) -> List[Column]:
+    def columns(self) -> list[Column]:
         return list(self.profile.get("columns", []))
 
-    def column(self, name: str) -> Optional[Column]:
+    def column(self, name: str) -> Column | None:
         return next((column for column in self.columns if column["name"] == name), None)
 
-    def kind(self, name: str) -> Optional[str]:
+    def kind(self, name: str) -> str | None:
         """``categorical`` or ``numeric`` according to the level of the column, or ``None`` if it has none."""
         column = self.column(name) or {}
         level = column.get("level")
@@ -189,7 +190,7 @@ class Codebook:
             return "numeric"
         return "categorical" if column.get("values") else None
 
-    def codes(self, name: str) -> List[str]:
+    def codes(self, name: str) -> list[str]:
         """The declared codes of a column, in order."""
         return [value["code"] for value in (self.column(name) or {}).get("values", [])]
 
@@ -206,10 +207,10 @@ class Codebook:
             rows.append({"variable": name, "role": privacy_role(self.roles.get(name)), "type": self.kind(name) or fallback})
         return pd.DataFrame(rows, columns=["variable", "role", "type"])
 
-    def set_statistics(self, df: pd.DataFrame, missingness_model: Optional[Any] = None) -> None:
+    def set_statistics(self, df: pd.DataFrame, missingness_model: Any | None = None) -> None:
         """Sets the number of rows and the completeness of each column, from a fitted missingness model if given."""
         models = getattr(missingness_model, "models_", {}) or {}
-        self.profile["rows"] = int(len(df))
+        self.profile["rows"] = len(df)
         for column in self.profile.get("columns", []):
             name = column["name"]
             if name not in df.columns:
@@ -218,7 +219,7 @@ class Codebook:
             rate = float(getattr(model, "p_missing_", 0.0) or 0.0) if model is not None else float(df[name].isna().mean())
             column["completeness"] = min(1.0, max(0.0, 1.0 - rate))
 
-    def rename(self, names: Mapping[str, str]) -> "Codebook":
+    def rename(self, names: Mapping[str, str]) -> Codebook:
         """A copy with columns renamed."""
         renamed = copy.deepcopy(self)
         for column in renamed.profile.get("columns", []):
@@ -226,7 +227,7 @@ class Codebook:
         renamed.roles = {names.get(name, name): role for name, role in self.roles.items()}
         return renamed
 
-    def to_jsonld(self) -> Dict[str, Any]:
+    def to_jsonld(self) -> dict[str, Any]:
         """DSV JSON-LD written by linked-codebook, with the roles and the other dataset properties added."""
         document = build(self.profile)
         context = dict(document["@context"])
@@ -242,7 +243,7 @@ class Codebook:
         return document
 
 
-def write_parquet(df: pd.DataFrame, path: str | Path, document: Optional[Mapping[str, Any]] = None) -> None:
+def write_parquet(df: pd.DataFrame, path: str | Path, document: Mapping[str, Any] | None = None) -> None:
     """Writes ``df`` as Parquet, with ``document`` (JSON-LD) in the metadata of the schema."""
     table = pa.Table.from_pandas(df, preserve_index=False)
     if document:
@@ -251,7 +252,7 @@ def write_parquet(df: pd.DataFrame, path: str | Path, document: Optional[Mapping
     pq.write_table(table, str(path))
 
 
-def read_parquet(path: str | Path) -> Tuple[pd.DataFrame, Optional[Codebook]]:
+def read_parquet(path: str | Path) -> tuple[pd.DataFrame, Codebook | None]:
     """Reads Parquet written by :func:`write_parquet`, with its codebook if it has one."""
     table = pq.read_table(str(path))
     raw = (table.schema.metadata or {}).get(PARQUET_KEY)

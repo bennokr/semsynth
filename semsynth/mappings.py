@@ -3,9 +3,10 @@ from __future__ import annotations
 import json
 import re
 from pathlib import Path
-from typing import Any, Dict, Optional
+from typing import Any
 
 from .specs import DatasetSpec
+
 
 def _mappings_dir() -> Path:
     """Return directory containing curated mapping files."""
@@ -20,7 +21,7 @@ def _slugify(value: str) -> str:
     return value.strip("-")
 
 
-def resolve_mapping_json(dataset_spec: DatasetSpec) -> Optional[Path]:
+def resolve_mapping_json(dataset_spec: DatasetSpec) -> Path | None:
     """Return the curated JSON-LD mapping path for the dataset if it exists."""
     mappings_dir = _mappings_dir()
     candidates = []
@@ -56,7 +57,7 @@ def resolve_mapping_json(dataset_spec: DatasetSpec) -> Optional[Path]:
     return None
 
 
-def load_mapping_json(path: Path) -> Dict[str, Any]:
+def load_mapping_json(path: Path) -> dict[str, Any]:
     """Load a curated codebook: DSV JSON-LD written by linked-codebook, with roles."""
     if not path.exists():
         raise FileNotFoundError(path)

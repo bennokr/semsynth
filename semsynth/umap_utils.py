@@ -2,11 +2,11 @@
 
 from __future__ import annotations
 
-from dataclasses import dataclass
 import os
 import tempfile
+from dataclasses import dataclass
 from pathlib import Path
-from typing import Any, Dict, List, Optional, Tuple, TYPE_CHECKING
+from typing import TYPE_CHECKING, Any
 
 if TYPE_CHECKING:  # pragma: no cover - typing only
     import numpy as np
@@ -28,22 +28,20 @@ class UMAPArtifacts:
 
     preproc: Any
     umap_model: Any
-    sample_idx: "np.ndarray"
-    embedding: "np.ndarray"
-    label_mapping: Optional[Dict[Any, int]]
-    color_labels: Optional["np.ndarray"]
+    sample_idx: np.ndarray
+    embedding: np.ndarray
+    label_mapping: dict[Any, int] | None
+    color_labels: np.ndarray | None
 
 
 def pick_color_labels(
-    series: Optional["pd.Series"],
-) -> Tuple[Optional["np.ndarray"], Optional[Dict[Any, int]]]:
+    series: pd.Series | None,
+) -> tuple[np.ndarray | None, dict[Any, int] | None]:
     """Convert a categorical series into numeric labels for coloring."""
 
     if series is None:
         return None, None
 
-    import numpy as np
-    import pandas as pd
 
     values = series.astype("category")
     cats = list(values.cat.categories)
@@ -53,11 +51,11 @@ def pick_color_labels(
 
 
 def build_umap(
-    df: "pd.DataFrame",
-    discrete_cols: List[str],
-    continuous_cols: List[str],
-    color_series: Optional["pd.Series"],
-    rng: "np.random.Generator",
+    df: pd.DataFrame,
+    discrete_cols: list[str],
+    continuous_cols: list[str],
+    color_series: pd.Series | None,
+    rng: np.random.Generator,
     random_state: int = 42,
     max_sample: int = 1000,
     n_neighbors: int = 30,
@@ -66,8 +64,6 @@ def build_umap(
 ) -> UMAPArtifacts:
     """Fit a UMAP model on a sample of the dataset."""
 
-    import numpy as np
-    import pandas as pd
 
     try:
         from sklearn.compose import ColumnTransformer
@@ -137,19 +133,19 @@ def build_umap(
     )
 
 
-def transform_with_umap(art: UMAPArtifacts, df: "pd.DataFrame") -> "np.ndarray":
+def transform_with_umap(art: UMAPArtifacts, df: pd.DataFrame) -> np.ndarray:
     """Project new data with the fitted UMAP model."""
 
     return art.umap_model.transform(art.preproc.transform(df))
 
 
 def plot_umap(
-    embedding: "np.ndarray",
+    embedding: np.ndarray,
     outfile: str,
     title: str,
-    color_labels: Optional["np.ndarray"] = None,
-    lims: Optional[Tuple[Tuple[float, float], Tuple[float, float]]] = None,
-) -> Tuple[Tuple[float, float], Tuple[float, float]]:
+    color_labels: np.ndarray | None = None,
+    lims: tuple[tuple[float, float], tuple[float, float]] | None = None,
+) -> tuple[tuple[float, float], tuple[float, float]]:
     """Render the embedding to disk and return axis limits."""
 
     import numpy as np
