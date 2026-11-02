@@ -32,7 +32,7 @@ jobs:
       - name: Install Graphviz
         run: sudo apt-get install -y --no-install-recommends graphviz
       - name: Install
-        run: python -m pip install -e '.[docs,metasyn,pybnesian,synthcity,umap,statsmodels]'
+        run: python -m pip install -e '.[docs,providers,metasyn,pybnesian,synthcity,umap,statsmodels]'
       - name: Cache downloaded datasets
         uses: actions/cache@v4
         with:

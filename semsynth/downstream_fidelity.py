@@ -13,10 +13,8 @@ from typing import Any
 
 import numpy as np
 import pandas as pd
-import statsmodels.api as sm
 from makeprov import Config
 from pandas.api.types import CategoricalDtype
-from sklearn.impute import SimpleImputer
 
 from .codebook import Codebook, modeling_role
 
@@ -135,6 +133,8 @@ def _coerce_frame(df: pd.DataFrame, meta: Codebook) -> pd.DataFrame:
 
 
 def _impute(df: pd.DataFrame, meta: Codebook) -> pd.DataFrame:
+    from sklearn.impute import SimpleImputer
+
     df = df.copy()
     for name, col_meta in _column_lookup(meta).items():
         if name not in df.columns:
@@ -199,7 +199,20 @@ def auto_formula(df: pd.DataFrame, meta: Codebook, cfg: DownstreamConfig) -> str
 
 
 # --- fitting ------------------------------------------------------------------
+def _statsmodels() -> Any:
+    """statsmodels, which only the downstream comparison needs (extra ``statsmodels``)."""
+
+    try:
+        import statsmodels.api as sm
+    except ImportError as exc:
+        raise ImportError(
+            "Downstream metrics need statsmodels; install it with `pip install 'semsynth[statsmodels]'`."
+        ) from exc
+    return sm
+
+
 def _fit_model(df: pd.DataFrame, formula: str, target_type: str, cfg: DownstreamConfig):
+    sm = _statsmodels()
     df_f = df.dropna(axis=0, how="any").copy()
     yname = formula.split("~", 1)[0].strip()
     if yname in df_f.columns:
@@ -249,6 +262,7 @@ def compute_downstream(
     cfg: DownstreamConfig | None = None,
     target: str | None = None,
 ) -> Mapping[str, Any]:
+    _statsmodels()  # fail early and loudly: a missing extra must not look like a skipped comparison
     cfg = cfg or DownstreamConfig()
     meta_obj = Codebook.read(meta) if meta is not None else _infer_meta(df_real, target)
     df_real, df_synth, meta_obj = _sanitize_for_formula(df_real, df_synth, meta_obj)

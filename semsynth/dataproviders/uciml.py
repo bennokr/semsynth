@@ -12,7 +12,6 @@ from datetime import datetime
 from typing import Any
 
 import pandas as pd
-import requests
 
 from ..codebook import Codebook
 from ..specs import DatasetSpec
@@ -20,6 +19,7 @@ from ._helpers import (
     CachePaths,
     DatasetPayload,
     clean_dataset_frame,
+    import_provider,
     load_cached_payload,
     store_cached_payload,
 )
@@ -268,6 +268,7 @@ def list_uciml(
     it is mixed (has at least one categorical and one numeric). Only mixed datasets
     are returned.
     """
+    requests = import_provider("requests")
     list_url = "https://archive.ics.uci.edu/api/datasets/list"
     logging.info(f"Requesting UCI ML datasets ({area=})")
     resp = requests.get(list_url, params={"area": area}, timeout=30)
@@ -361,7 +362,7 @@ def _disable_tls_verification() -> None:
 
     import ssl
 
-    import ucimlrepo.fetch as ucimlrepo_fetch
+    ucimlrepo_fetch = import_provider("ucimlrepo.fetch")
 
     logging.warning("%s=1: TLS certificates are not verified for ucimlrepo downloads.", INSECURE_ENV_VAR)
     ucimlrepo_fetch.ssl.create_default_context = lambda *_, **__: ssl._create_unverified_context()
@@ -400,6 +401,7 @@ def load_uciml_by_id(dataset_id: int, cache_dir: pathlib.Path) -> DatasetPayload
     if os.environ.get(INSECURE_ENV_VAR) == "1":
         _disable_tls_verification()
 
+    import_provider("ucimlrepo")
     from ucimlrepo import fetch_ucirepo
     from ucimlrepo.fetch import DatasetNotFoundError
 

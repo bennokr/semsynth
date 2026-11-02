@@ -19,7 +19,8 @@ from typing import Any
 from xml.etree import ElementTree
 
 import pandas as pd
-import requests
+
+from ._helpers import import_provider
 
 API_URL = "https://archive.ics.uci.edu/api/dataset"
 ARCHIVE_URL = "https://archive.ics.uci.edu/static/public/{id}/{slug}.zip"
@@ -78,6 +79,7 @@ _READERS = {
 
 def fetch_metadata(dataset_id: int) -> dict[str, Any]:
     """The metadata of a dataset from the UCI API, with its variables."""
+    requests = import_provider("requests")
     response = requests.get(API_URL, params={"id": dataset_id}, timeout=60)
     response.raise_for_status()
     return response.json()["data"]
@@ -108,7 +110,7 @@ def fetch_frame(dataset_id: int) -> tuple[pd.DataFrame, dict[str, Any]]:
     slug = str(metadata["repository_url"]).rstrip("/").rsplit("/", 1)[-1]
     url = ARCHIVE_URL.format(id=dataset_id, slug=slug)
     logging.info("Downloading UCI ML archive %s", url)
-    response = requests.get(url, timeout=120)
+    response = import_provider("requests").get(url, timeout=120)
     response.raise_for_status()
     frames = [(name, _read(name, data)) for name, data in _tables(response.content)]
     if not frames:

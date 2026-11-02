@@ -22,7 +22,9 @@ linked-codebook profile; plus the report/catalog site. Target shape: python API 
 - No network in tests; build small tables in `tmp_path`. Cached datasets are for manual runs only.
 - Do not compress statements to satisfy ruff/complexity limits; split functions. Ruff debt is the `ignore` list in
   `pyproject.toml`; remove entries as modules are fixed, never add new ones.
-- A new dependency goes into a named extra, not `dependencies`; keep `import semsynth` light (lazy heavy imports).
+- A new dependency goes into a named extra, not `dependencies`; keep `import semsynth` and `--help` light: import
+  pandas/sklearn/statsmodels/jinja2/requests inside the function that needs them, and raise an `ImportError` that names
+  the extra. `tests/test_lazy_imports.py` enforces this by blocking those libraries.
 - Check at every commit whether README.md and this file need updating.
 - Google-style docstrings, logging, dataclasses.
 

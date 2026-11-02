@@ -5802,34 +5802,34 @@ version = "0.1.0"
 source = { editable = "." }
 dependencies = [
     { name = "defopt" },
-    { name = "flask" },
     { name = "jinja2" },
     { name = "linked-codebook" },
     { name = "makeprov" },
     { name = "markdown" },
     { name = "numpy" },
-    { name = "openml" },
     { name = "pandas" },
     { name = "pyarrow" },
-    { name = "requests" },
     { name = "scikit-learn" },
     { name = "scipy" },
     { name = "tabulate" },
-    { name = "ucimlrepo" },
 ]
 
 [package.optional-dependencies]
 all = [
     { name = "datasynthesizer" },
+    { name = "flask" },
     { name = "graphviz" },
     { name = "matplotlib" },
     { name = "metasyn" },
     { name = "networkx" },
+    { name = "openml" },
     { name = "pybnesian" },
+    { name = "requests" },
     { name = "scipy" },
     { name = "statsmodels" },
     { name = "synthcity" },
     { name = "torch" },
+    { name = "ucimlrepo" },
     { name = "umap-learn" },
 ]
 app = [
@@ -5848,11 +5848,14 @@ docs = [
     { name = "linkify-it-py" },
     { name = "myst-nb" },
     { name = "myst-parser" },
+    { name = "openml" },
+    { name = "requests" },
     { name = "sphinx", version = "9.0.4", source = { registry = "https://pypi.org/simple" }, marker = "python_full_version < '3.12'" },
     { name = "sphinx", version = "9.1.1", source = { registry = "https://pypi.org/simple" }, marker = "python_full_version == '3.12.*'" },
     { name = "sphinx", version = "9.2.0", source = { registry = "https://pypi.org/simple" }, marker = "python_full_version >= '3.13'" },
     { name = "sphinx-rtd-theme" },
     { name = "statsmodels" },
+    { name = "ucimlrepo" },
 ]
 mapping = [
     { name = "entailmap", extra = ["lexical"] },
@@ -5863,6 +5866,11 @@ metasyn = [
 privbayes = [
     { name = "datasynthesizer" },
     { name = "scipy" },
+]
+providers = [
+    { name = "openml" },
+    { name = "requests" },
+    { name = "ucimlrepo" },
 ]
 pybnesian = [
     { name = "graphviz" },
@@ -5892,7 +5900,7 @@ requires-dist = [
     { name = "datasynthesizer", marker = "extra == 'privbayes'", specifier = "==0.1.13" },
     { name = "defopt" },
     { name = "entailmap", extras = ["lexical"], marker = "extra == 'mapping'", git = "https://github.com/bennokr/entailmap?rev=dda21fb" },
-    { name = "flask" },
+    { name = "flask", marker = "extra == 'all'" },
     { name = "flask", marker = "extra == 'app'" },
     { name = "graphviz", marker = "extra == 'all'" },
     { name = "graphviz", marker = "extra == 'pybnesian'" },
@@ -5916,7 +5924,9 @@ requires-dist = [
     { name = "numpy", marker = "extra == 'pybnesian'", specifier = "<2" },
     { name = "numpy", marker = "extra == 'synthcity'", specifier = "<2" },
     { name = "numpy", marker = "extra == 'umap'", specifier = "<2" },
-    { name = "openml" },
+    { name = "openml", marker = "extra == 'all'" },
+    { name = "openml", marker = "extra == 'docs'" },
+    { name = "openml", marker = "extra == 'providers'" },
     { name = "pandas", specifier = ">=2.1,<3" },
     { name = "pandas-stubs", marker = "extra == 'dev'" },
     { name = "pyarrow", specifier = ">=15" },
@@ -5924,7 +5934,9 @@ requires-dist = [
     { name = "pybnesian", marker = "extra == 'pybnesian'" },
     { name = "pytest", marker = "extra == 'dev'" },
     { name = "pytest-cov", marker = "extra == 'dev'" },
-    { name = "requests" },
+    { name = "requests", marker = "extra == 'all'" },
+    { name = "requests", marker = "extra == 'docs'" },
+    { name = "requests", marker = "extra == 'providers'" },
     { name = "ruff", marker = "extra == 'dev'", specifier = ">=0.17,<0.18" },
     { name = "scikit-learn" },
     { name = "scipy" },
@@ -5942,11 +5954,13 @@ requires-dist = [
     { name = "torch", marker = "extra == 'all'" },
     { name = "torch", marker = "extra == 'synthcity'" },
     { name = "ty", marker = "extra == 'dev'" },
-    { name = "ucimlrepo" },
+    { name = "ucimlrepo", marker = "extra == 'all'" },
+    { name = "ucimlrepo", marker = "extra == 'docs'" },
+    { name = "ucimlrepo", marker = "extra == 'providers'" },
     { name = "umap-learn", marker = "extra == 'all'" },
     { name = "umap-learn", marker = "extra == 'umap'" },
 ]
-provides-extras = ["dev", "app", "docs", "metasyn", "pybnesian", "synthcity", "privbayes", "umap", "statsmodels", "mapping", "all"]
+provides-extras = ["dev", "app", "providers", "docs", "metasyn", "pybnesian", "synthcity", "privbayes", "umap", "statsmodels", "mapping", "all"]
 
 [[package]]
 name = "setuptools"

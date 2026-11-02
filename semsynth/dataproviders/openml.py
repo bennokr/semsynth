@@ -15,6 +15,7 @@ from ._helpers import (
     CachePaths,
     DatasetPayload,
     clean_dataset_frame,
+    import_provider,
     load_cached_payload,
     store_cached_payload,
 )
@@ -37,7 +38,7 @@ def list_openml(
     num_min: int = 1,
     cache_dir: Path = Path("downloads-cache/openml/"),
 ) -> pd.DataFrame:
-    import openml
+    openml = import_provider("openml")
 
     with warnings.catch_warnings():
         warnings.simplefilter("ignore", category=FutureWarning)
@@ -129,7 +130,7 @@ def load_openml_by_name(name: str, cache_dir: pathlib.Path | Path) -> DatasetPay
             )
 
     # 2) Fallback to OpenML API and cache results
-    import openml
+    openml = import_provider("openml")
 
     with warnings.catch_warnings():
         warnings.simplefilter("ignore", category=FutureWarning)

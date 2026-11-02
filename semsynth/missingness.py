@@ -5,21 +5,22 @@ from __future__ import annotations
 import logging
 from collections.abc import Callable, Iterable
 from dataclasses import dataclass, field
-from typing import Any
+from typing import TYPE_CHECKING, Any
 
 import numpy as np
 import pandas as pd
-from sklearn.compose import ColumnTransformer, make_column_selector
-from sklearn.impute import SimpleImputer
-from sklearn.linear_model import LogisticRegression
-from sklearn.pipeline import Pipeline
-from sklearn.preprocessing import OneHotEncoder
 
 from .metrics import per_variable_distances, summarize_distance_metrics
+
+if TYPE_CHECKING:  # pragma: no cover - typing only
+    from sklearn.pipeline import Pipeline
+    from sklearn.preprocessing import OneHotEncoder
 
 
 def _make_one_hot_encoder() -> OneHotEncoder:
     """Instantiate a dense ``OneHotEncoder`` compatible with sklearn versions."""
+
+    from sklearn.preprocessing import OneHotEncoder
 
     try:
         return OneHotEncoder(handle_unknown="ignore", sparse_output=False)
@@ -67,6 +68,11 @@ class ColumnMissingnessModel:
         if self.p_missing_ == 0.0 or self.p_missing_ == 1.0:
             self.pipeline_ = None
             return self
+
+        from sklearn.compose import ColumnTransformer, make_column_selector
+        from sklearn.impute import SimpleImputer
+        from sklearn.linear_model import LogisticRegression
+        from sklearn.pipeline import Pipeline
 
         X = _plain_frame(df.drop(columns=[self.col]))
         num_selector = make_column_selector(dtype_exclude=["object", "category", "bool"])

@@ -12,6 +12,19 @@ import pandas as pd
 
 from ..specs import DatasetSpec
 
+PROVIDERS_HINT = "install the dataset providers with `pip install 'semsynth[providers]'`"
+
+
+def import_provider(module: str) -> Any:
+    """Import a library that only the dataset providers need; the error names the extra to install."""
+
+    import importlib
+
+    try:
+        return importlib.import_module(module)
+    except ImportError as exc:
+        raise ImportError(f"Loading datasets needs {module!r}; {PROVIDERS_HINT}.") from exc
+
 
 @dataclass(slots=True)
 class CachePaths:

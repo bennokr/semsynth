@@ -13,21 +13,19 @@ authors = [
 ]
 keywords = ["synthetic-data", "data-profiling", "metadata", "uci"]
 dependencies = [
+  # Heavy libraries (pyarrow, scikit-learn, jinja2, markdown) are imported when a feature needs them, not at
+  # `import semsynth`; see tests/test_lazy_imports.py. Anything else goes into a named extra below.
   "defopt",
-  "flask",
   "markdown",
   "jinja2",
   "numpy>=1.26",
-  "openml",
   "pandas>=2.1,<3",
   "linked-codebook @ https://bennokr.github.io/linked-codebook/linked_codebook-0.7.0-py3-none-any.whl",
   "makeprov>=0.4.4",
   "pyarrow>=15",
-  "tabulate",  # pandas.DataFrame.to_markdown, used by reporting.py
-  "requests",
+  "tabulate",  # pandas.DataFrame.to_markdown, used by report_tables.py
   "scikit-learn",
   "scipy",
-  "ucimlrepo"
 ]
 
 [project.optional-dependencies]
@@ -41,9 +39,17 @@ dev = [
   "statsmodels"
 ]
 app = [
-  "flask"
+  "flask"  # `python -m semsynth run-app`
+]
+providers = [
+  "openml",
+  "requests",
+  "ucimlrepo"  # load and list datasets from OpenML and the UCI ML Repository
 ]
 docs = [
+  "openml",
+  "requests",
+  "ucimlrepo",
   "sphinx",
   "myst-parser",
   "myst-nb",
@@ -83,6 +89,10 @@ mapping = [
   "entailmap[lexical] @ git+https://github.com/bennokr/entailmap@dda21fb",  # until entailmap is released
 ]
 all = [
+  "flask",
+  "openml",
+  "requests",
+  "ucimlrepo",
   "metasyn",
   "statsmodels",
   "graphviz",

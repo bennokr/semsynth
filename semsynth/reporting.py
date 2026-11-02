@@ -24,11 +24,9 @@ from collections.abc import Iterable, Sequence
 from dataclasses import dataclass
 from importlib import resources
 from pathlib import Path
-from typing import Any
+from typing import TYPE_CHECKING, Any
 
 import pandas as pd
-from jinja2 import DictLoader, Environment, select_autoescape
-from markupsafe import Markup
 
 from .jsonld_to_rdfa import SCHEMA_ORG, render_rdfa
 from .models import ModelRun
@@ -45,6 +43,9 @@ from .report_tables import (
     extract_codebook_labels,
     privacy_metric_items,
 )
+
+if TYPE_CHECKING:  # pragma: no cover - typing only
+    from jinja2 import Environment
 
 _TEMPLATE_FILES = ("report.md.j2", "report_template.html", "report_style.css", "codebook_style.css")
 
@@ -87,6 +88,8 @@ class _ModelRow:
 
 def _jinja_environment() -> Environment:
     """Return a configured Jinja environment for report templates."""
+
+    from jinja2 import DictLoader, Environment, select_autoescape
 
     return Environment(
         loader=DictLoader(_load_template_sources()),
@@ -252,6 +255,7 @@ def _write_html(env: Environment, md_text: str, html_path: Path, title: str) -> 
     """Convert the Markdown report to the HTML page."""
 
     import markdown
+    from markupsafe import Markup
 
     html_body = markdown.markdown(md_text, extensions=["extra", "md_in_html"])
     html_out = _load_html_template(env).render(

@@ -17,8 +17,6 @@ from pathlib import Path
 from typing import Any
 
 import pandas as pd
-import pyarrow as pa
-import pyarrow.parquet as pq
 from linked_codebook import build, infer, merge, parse
 from linked_codebook.types import Column, Profile
 
@@ -246,6 +244,9 @@ class Codebook:
 
 def write_parquet(df: pd.DataFrame, path: str | Path, document: Mapping[str, Any] | None = None) -> None:
     """Writes ``df`` as Parquet, with ``document`` (JSON-LD) in the metadata of the schema."""
+    import pyarrow as pa
+    import pyarrow.parquet as pq
+
     table = pa.Table.from_pandas(df, preserve_index=False)
     if document:
         metadata = {**(table.schema.metadata or {}), PARQUET_KEY: json.dumps(document, ensure_ascii=False).encode("utf-8")}
@@ -255,6 +256,8 @@ def write_parquet(df: pd.DataFrame, path: str | Path, document: Mapping[str, Any
 
 def read_parquet(path: str | Path) -> tuple[pd.DataFrame, Codebook | None]:
     """Reads Parquet written by :func:`write_parquet`, with its codebook if it has one."""
+    import pyarrow.parquet as pq
+
     table = pq.read_table(str(path))
     raw = (table.schema.metadata or {}).get(PARQUET_KEY)
     return table.to_pandas(), Codebook.read(json.loads(raw.decode("utf-8"))) if raw else None

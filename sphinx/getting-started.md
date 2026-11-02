@@ -27,7 +27,7 @@ Optional extras (UMAP, PyBNesian, SynthCity, etc.) can be layered on top by
 supplying the relevant extras group, for example:
 
 ```bash
-python -m pip install -e .[umap,pybnesian,synthcity]
+python -m pip install -e .[providers,umap,pybnesian,synthcity]
 ```
 
 ## Create semantic mappings

@@ -11,14 +11,22 @@ SemSynth is a compact toolkit to profile tabular datasets, synthesize data with 
 ## ⚙️ Install
 Clone and run `python -m pip install -e .`
 
-For extra features, run `python -m pip install -e .[EXTRA]` with `EXTRA` in (
-`app`
-`metasyn`
-`pybnesian`
-`synthcity`
-`umap`
-`statsmodels`
-`mapping`).
+The core (`import semsynth`, `python -m semsynth --help`, synthesizing from a DataFrame) needs only numpy, pandas,
+scipy, scikit-learn, pyarrow, jinja2, markdown, makeprov and linked-codebook, and imports them when a feature needs
+them. Everything else is an extra: `python -m pip install -e .[EXTRA]` with `EXTRA` in
+
+| extra | adds |
+| --- | --- |
+| `providers` | `openml`, `ucimlrepo`, `requests`: load and search OpenML and UCI ML datasets (all of `search`, `report`) |
+| `app` | `flask`: `python -m semsynth run-app` |
+| `metasyn`, `privbayes` | the MetaSyn and DataSynthesizer (PrivBayes) backends |
+| `pybnesian`, `synthcity` | the PyBNesian and SynthCity backends (they pin NumPy below 2) |
+| `statsmodels` | the downstream coefficient comparison |
+| `umap` | UMAP plots |
+| `mapping` | `entailmap.match`, for `create-mapping` |
+
+A missing extra raises an `ImportError` that names it. `python -m semsynth report ...` therefore needs
+`.[providers]` plus the extras of the models and metrics it runs.
 
 Dataset metadata is a [linked-codebook](https://bennokr.github.io/linked-codebook/) profile (see `sphinx/schema.md`). linked-codebook needs Python 3.11 or newer and is not on PyPI yet, so the dependency points to its published wheel. That also means SemSynth itself cannot be published to PyPI until linked-codebook is.
 
