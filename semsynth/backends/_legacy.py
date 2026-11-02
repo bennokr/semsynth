@@ -82,7 +82,7 @@ def synthesize_via_run_experiment(
         synthetic = pd.read_csv(run_dir / "synthetic.csv")
         metrics = _read_json(run_dir / "metrics.json")
         manifest = _read_json(run_dir / "manifest.json")
-        artifacts = {
+        artifacts: dict[str, bytes | str] = {
             path.name: path.read_bytes()
             for path in sorted(run_dir.iterdir())
             if path.is_file() and path.name not in _REGENERATED

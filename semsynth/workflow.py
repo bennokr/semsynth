@@ -76,7 +76,7 @@ def read_pipeline_config(pipeline_configs: str = "") -> tuple[ModelConfigBundle,
     bundle = load_model_configs(config_data=config_data)
     cfg = PipelineConfig()
     section = config_data.get("pipeline") if isinstance(config_data.get("pipeline"), dict) else config_data
-    cfg.apply_mapping(section)
+    cfg.apply_mapping(section if isinstance(section, dict) else {})
     for field_def in fields(cfg):
         value = getattr(bundle, field_def.name, None)
         if value is not None:

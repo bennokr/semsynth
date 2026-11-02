@@ -15,6 +15,8 @@ linked-codebook profile; plus the report/catalog site. Target shape: python API 
   `preprocess.py`, `evaluate.py` (pure metrics), `runner.py` (`process_dataset`, the part that writes files),
   `pipeline.py` (re-exports), `workflow.py` (what the CLI and the app call), `reporting.py` + `report_tables.py`,
   `catalog.py`, `dataproviders/`. makeprov `@rule`s exist only in `__main__.py`.
+- The catalog page loads YASGUI and Comunica from `../templates/`. They are not in the repository or the wheel:
+  `scripts/fetch_site_assets.sh <dir>` downloads them with pinned SHA-256 checks (the Pages workflow runs it).
 - `mappings/` curated codebooks; `map_columns/` holds only terminology data (matchers live in entailmap).
 - Core modules listed in the `Makefile` (`CORE`) are `mypy --strict`; add a module there when it is clean.
 

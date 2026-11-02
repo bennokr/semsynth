@@ -180,6 +180,7 @@ compute_downstream = true
 - The published site (demo reports for the curated datasets, the catalog and the documentation) is built by `.github/workflows/pages.yml` on every push to `main`, or by hand with a model bundle of your choice. `output/` and `docs/` are not committed.
 
 ## 🔎 Static SPARQL endpoint (demo index)
+- The YASGUI and Comunica scripts that the catalog page loads are not in the repository. To preview the catalog locally, run `scripts/fetch_site_assets.sh templates` next to `output/` (the page loads `../templates/`); the Pages workflow does the same.
 - `python -m semsynth build-catalog` writes `output/index.html`, `output/catalog.json`, `output/catalog.jsonld`, and `output/sparql/*.rq` with an embedded YASGUI editor and browser Comunica query engine targeting static files only.
 - The page advertises endpoint id `browser://semsynth-static-catalog` and includes ready-to-run query tabs covering:
   - datasets that publish `dataset.codebook.jsonld`,

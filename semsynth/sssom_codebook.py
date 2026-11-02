@@ -7,9 +7,11 @@ import json
 import logging
 import re
 from pathlib import Path
+from typing import cast
 
 import defopt
 from linked_codebook import from_sssom
+from linked_codebook.types import Profile
 
 from semsynth.codebook import Codebook
 
@@ -63,7 +65,7 @@ def integrate_sssom(codebook: Codebook, mappings: list[dict[str, str]], *, revie
     ``reviewer``. Name the tool or person who stands behind the mappings.
     """
 
-    profile = {"columns": [{"name": column["name"]} for column in codebook.columns]}
+    profile = cast("Profile", {"columns": [{"name": column["name"]} for column in codebook.columns]})
     found = from_sssom(_to_tsv(mappings), profile)
     for entry in found["columns"]:
         unique = {(mapping["match_type"], mapping["object_id"]): mapping for mapping in entry.get("mappings", [])}

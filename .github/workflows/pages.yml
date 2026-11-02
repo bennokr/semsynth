@@ -50,7 +50,8 @@ jobs:
           mkdir -p _site/templates
           cp index.html _site/
           cp -r output _site/output
-          cp semsynth/templates/*.css semsynth/templates/*.js _site/templates/
+          cp semsynth/templates/*.css _site/templates/
+          scripts/fetch_site_assets.sh _site/templates
       - uses: actions/upload-pages-artifact@v3
         with:
           path: _site

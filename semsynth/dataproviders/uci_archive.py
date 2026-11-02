@@ -82,7 +82,8 @@ def fetch_metadata(dataset_id: int) -> dict[str, Any]:
     requests = import_provider("requests")
     response = requests.get(API_URL, params={"id": dataset_id}, timeout=60)
     response.raise_for_status()
-    return response.json()["data"]
+    data: dict[str, Any] = response.json()["data"]
+    return data
 
 
 def _tables(payload: bytes) -> Iterator[tuple[str, bytes]]:
