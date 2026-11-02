@@ -48,7 +48,7 @@ def test_synthcity_draws_a_table_with_a_fast_generator() -> None:
 
     assert list(result.synthetic_data.columns) == ["age", "sex", "chol", "smoker"]
     assert len(result.synthetic_data) == 30
-    assert result.parameters["generator"] == "bayesiannetwork"
+    assert result.parameters["generator"] == "bayesian_network"
 
 
 def test_synthcity_needs_a_generator() -> None:
@@ -56,3 +56,13 @@ def test_synthcity_needs_a_generator() -> None:
 
     with pytest.raises(ValueError, match="needs a generator"):
         synthesize(_table(), backend="synthcity")
+
+
+def test_synthcity_neural_generator_takes_epochs_as_iterations() -> None:
+    pytest.importorskip("synthcity")
+
+    result = synthesize(_table(), backend="synthcity", rows=20, seed=1, type="ctgan", epochs=2, batch_size=40)
+
+    assert len(result.synthetic_data) == 20
+    assert result.parameters["params"]["n_iter"] == 2
+    assert "epochs" not in result.parameters["params"]
