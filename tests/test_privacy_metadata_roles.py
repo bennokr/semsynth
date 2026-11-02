@@ -7,7 +7,7 @@ from dataclasses import dataclass
 import pandas as pd
 
 from semsynth.codebook import Codebook
-from semsynth.pipeline import MetricWriter
+from semsynth.evaluate import privacy_scores
 
 
 @dataclass
@@ -27,7 +27,7 @@ def _capture_privacy(real_df: pd.DataFrame, synth_df: pd.DataFrame, meta_df: pd.
     return _PrivacyCapture(qi=qi_cols, sensitive=sensitive_cols, used=use_cols)
 
 
-def test_privacy_metadata_uses_roles_and_target(tmp_path):
+def test_privacy_metadata_uses_roles_and_target():
     real_df = pd.DataFrame(
         {
             "identifier": [1, 2, 3],
@@ -48,14 +48,12 @@ def test_privacy_metadata_uses_roles_and_target(tmp_path):
         {"columns": [{"name": name} for name in ("identifier", "feature", "sensitive_attr", "target", "ignore_me")]},
         {"identifier": "identifier", "feature": "predictor", "sensitive_attr": "Sensitive", "ignore_me": "ignore"},
     )
-    writer = MetricWriter(privacy_summarizer=_capture_privacy, downstream_compare=None)
-
-    payload = writer.write_privacy(
-        tmp_path,
+    payload = privacy_scores(
         real_df,
+        real_df.copy(),
         inferred,
-        synth_df=real_df.copy(),
-        metadata=metadata,
+        metadata,
+        summarizer=_capture_privacy,
         target="target",
     )
 
@@ -65,7 +63,7 @@ def test_privacy_metadata_uses_roles_and_target(tmp_path):
     assert "ignore_me" not in payload["used"]
 
 
-def test_privacy_metadata_supports_role_overrides(tmp_path):
+def test_privacy_metadata_supports_role_overrides():
     real_df = pd.DataFrame(
         {
             "identifier": [1, 2, 3],
@@ -82,14 +80,12 @@ def test_privacy_metadata_supports_role_overrides(tmp_path):
         "target": "discrete",
         "ignore_me": "continuous",
     }
-    writer = MetricWriter(privacy_summarizer=_capture_privacy, downstream_compare=None)
-
-    payload = writer.write_privacy(
-        tmp_path,
+    payload = privacy_scores(
         real_df,
+        real_df.copy(),
         inferred,
-        synth_df=real_df.copy(),
-        metadata=None,
+        None,
+        summarizer=_capture_privacy,
         role_overrides={
             "identifier": "id",
             "sensitive_attr": "sensitive",

@@ -14,7 +14,7 @@ from typing import Any
 import numpy as np
 import pandas as pd
 import statsmodels.api as sm
-from makeprov import Config, InPath, OutPath, rule
+from makeprov import Config
 from pandas.api.types import CategoricalDtype
 from sklearn.impute import SimpleImputer
 
@@ -323,17 +323,25 @@ def compute_downstream(
     return {"formula": formula, "compare": out}
 
 
-@rule(merge=True)
 def recompute_downstream(
-    metrics: OutPath = OutPath("{metrics}"),
+    metrics: str | Path,
     *,
-    real: InPath | None = None,
-    synth: InPath | None = None,
-    meta: InPath | None = None,
+    real: str | Path | None = None,
+    synth: str | Path | None = None,
+    meta: str | Path | None = None,
     target: str | None = None,
     verbose: bool = False,
 ) -> None:
-    """Recompute downstream metrics from existing real/synthetic CSVs."""
+    """Recompute downstream metrics from existing real/synthetic CSVs.
+
+    Args:
+        metrics: Where to write ``metrics.downstream.json``; the model directory is taken from it.
+        real: Real table (CSV); found through the run's manifest for UCI datasets when omitted.
+        synth: Synthetic table; ``synthetic.csv`` of the model directory when omitted.
+        meta: Codebook JSON-LD; ``dataset.codebook.jsonld`` of the dataset directory when omitted.
+        target: Name of the target column.
+        verbose: Log more.
+    """
 
     if verbose:
         LOGGER.setLevel(logging.INFO)

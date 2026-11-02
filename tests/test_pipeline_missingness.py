@@ -10,14 +10,11 @@ import numpy as np
 import pandas as pd
 import pytest
 
+from semsynth.config import PipelineConfig
 from semsynth.models import ModelConfigBundle, ModelSpec
-from semsynth.pipeline import (
-    BackendExecutor,
-    DatasetPreprocessor,
-    MetricWriter,
-    PipelineConfig,
-    ReportWriter,
-)
+from semsynth.preprocess import DatasetPreprocessor
+from semsynth.result import SynthesisResult
+from semsynth.runner import BackendExecutor, ReportWriter
 from semsynth.specs import DatasetSpec
 
 
@@ -49,23 +46,6 @@ class _DummyUtils:
     @staticmethod
     def seed_all(seed: int) -> np.random.Generator:
         return np.random.default_rng(seed)
-
-
-class _NoopMetricWriter(MetricWriter):
-    """Metric writer that records calls without touching disk."""
-
-    def __init__(self) -> None:
-        super().__init__(privacy_summarizer=None, downstream_compare=None)
-        self.privacy_calls: list[dict] = []
-        self.downstream_calls: list[dict] = []
-
-    def write_privacy(self, *args, **kwargs):  # type: ignore[override]
-        self.privacy_calls.append({"args": args, "kwargs": kwargs})
-        return {}
-
-    def write_downstream(self, *args, **kwargs):  # type: ignore[override]
-        self.downstream_calls.append({"args": args, "kwargs": kwargs})
-        return {}
 
 
 @pytest.fixture()
@@ -109,7 +89,6 @@ def test_preprocess_builds_missingness_model(
         spec,
         df,
         color_series=None,
-        outdir=tmp_path,
         cfg=cfg,
         rng=rng,
         generate_umap=False,
@@ -147,62 +126,30 @@ def test_backend_executor_applies_missingness(
         spec,
         df,
         color_series=None,
-        outdir=tmp_path,
         cfg=cfg,
         rng=rng,
         generate_umap=False,
         umap_utils=None,
     )
 
-    class _StubBackend:
-        def __init__(self) -> None:
-            self.calls: list[dict] = []
+    calls: list[dict] = []
 
-        def run_experiment(
-            self,
-            *,
-            df: pd.DataFrame,
-            provider,
-            dataset_name,
-            provider_id,
-            outdir: str,
-            label: str,
-            model_info,
-            rows: int,
-            seed: int,
-            test_size: float,
-            codebook_jsonld,
-        ) -> Path:
-            run_dir = Path(outdir) / "models" / label
-            run_dir.mkdir(parents=True, exist_ok=True)
-            synth = pd.DataFrame(
-                {
-                    "num": np.linspace(0.0, 3.0, num=20, endpoint=False),
-                    "cat": ["a", "b"] * 10,
-                }
-            )
-            synth.to_csv(run_dir / "synthetic.csv", index=False)
-            (run_dir / "manifest.json").write_text(
-                json.dumps({"backend": "stub", "name": label}),
-                encoding="utf-8",
-            )
-            (run_dir / "metrics.json").write_text(
-                json.dumps({"backend": "stub"}),
-                encoding="utf-8",
-            )
-            self.calls.append({"label": label, "rows": rows, "seed": seed})
-            return run_dir
+    def stub_synthesize(
+        frame: pd.DataFrame, codebook: Any, *, backend: str, rows: int, seed: int, **_options: Any
+    ) -> SynthesisResult:
+        calls.append({"backend": backend, "rows": rows, "seed": seed})
+        synth = pd.DataFrame(
+            {
+                "num": np.linspace(0.0, 3.0, num=20, endpoint=False),
+                "cat": ["a", "b"] * 10,
+            }
+        )
+        return SynthesisResult(synthetic_data=synth, backend="stub", parameters={"rows": rows, "seed": seed})
 
-    backend = _StubBackend()
     bundle = ModelConfigBundle(
         specs=[ModelSpec(name="stub", backend="stub", model={}, rows=None, seed=None)]
     )
-    metric_writer = _NoopMetricWriter()
-    executor = BackendExecutor(
-        cfg,
-        load_backend=lambda name: backend,
-        metric_writer=metric_writer,
-    )
+    executor = BackendExecutor(cfg, synthesize_fn=stub_synthesize)
 
     outdir = tmp_path / "dataset"
     outdir.mkdir(parents=True, exist_ok=True)
@@ -214,15 +161,15 @@ def test_backend_executor_applies_missingness(
     manifest = json.loads((run_dir / "manifest.json").read_text(encoding="utf-8"))
     metrics = json.loads((run_dir / "metrics.json").read_text(encoding="utf-8"))
 
+    assert calls and calls[0]["backend"] == "stub"
     assert wrapped_df.isna().any().any(), "wrapped data should contain missing values"
     assert not pristine_df.isna().any().any(), "original synthetic data should be preserved"
     assert manifest.get("missingness", {}).get("wrapped") is True
     assert manifest.get("missingness", {}).get("source") == "pipeline"
     assert metrics.get("missingness_wrapped") is True
     assert (run_dir / "per_variable_metrics.csv").exists()
-
-    assert not metric_writer.privacy_calls
-    assert not metric_writer.downstream_calls
+    assert not (run_dir / "metrics.privacy.json").exists()
+    assert not (run_dir / "metrics.downstream.json").exists()
 
 
 def test_report_writer_includes_missingness_summary(
@@ -249,7 +196,6 @@ def test_report_writer_includes_missingness_summary(
         spec,
         df,
         color_series=None,
-        outdir=tmp_path,
         cfg=cfg,
         rng=rng,
         generate_umap=False,

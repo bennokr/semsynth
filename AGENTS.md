@@ -12,7 +12,9 @@ linked-codebook profile; plus the report/catalog site. Target shape: python API 
 ## Layout
 - `semsynth/`: `codebook.py` (profile + roles), `backends/` (privbayes, metasyn, pybnesian, synthcity), `missingness.py`,
   `metrics.py`, `downstream_fidelity.py`, `synthesis.py` (`synthesize` + `write_run`, the one backend contract),
-  `evaluate.py` (pure metrics), `pipeline.py` (being split), `reporting.py`, `catalog.py`, `dataproviders/`.
+  `preprocess.py`, `evaluate.py` (pure metrics), `runner.py` (`process_dataset`, the part that writes files),
+  `pipeline.py` (re-exports), `workflow.py` (what the CLI and the app call), `reporting.py` + `report_tables.py`,
+  `catalog.py`, `dataproviders/`. makeprov `@rule`s exist only in `__main__.py`.
 - `mappings/` curated codebooks; `map_columns/` holds only terminology data (matchers live in entailmap).
 - Core modules listed in the `Makefile` (`CORE`) are `mypy --strict`; add a module there when it is clean.
 
@@ -25,7 +27,10 @@ linked-codebook profile; plus the report/catalog site. Target shape: python API 
 - Google-style docstrings, logging, dataclasses.
 
 ## Known debt
-- `pipeline.py` / `reporting.py` do too much (pipeline is being split); global state (`ProvenanceConfig`, backend cache) hinders reuse.
+- Functions over 60 lines remain in `dataproviders/`, `privacy_metrics.py`, `catalog.py`, `metadata.py`, `umap_utils.py`,
+  `downstream_fidelity.py`, `utils.py` and in `pybnesian`/`synthcity` `run_experiment` (not split: they cannot be run here).
+- `semsynth.pipeline` only re-exports; `MetricWriter` became `evaluate.privacy_scores` / `downstream_scores`. Delete
+  the shim when no caller imports `semsynth.pipeline` any more.
 - Missing-value policy and type inference heuristics are brittle; reproducibility is partial.
 - PyBNesian and SynthCity still implement the file-writing `run_experiment` (`backends/base.py` keeps its contract
   check); their `synthesize` wraps it (`backends/_legacy.py`) and has never run in CI because the engines are not

@@ -2,11 +2,9 @@
 
 from __future__ import annotations
 
-import json
 import logging
 from collections.abc import Callable, Iterable
 from dataclasses import dataclass, field
-from pathlib import Path
 from typing import Any
 
 import numpy as np
@@ -274,65 +272,6 @@ def missingness_manifest(missingness_model: DataFrameMissingnessModel) -> dict[s
     return {"wrapped": True, "random_state": missingness_model.random_state, "source": "pipeline"}
 
 
-def apply_missingness_to_outputs(
-    *,
-    run_dir: Path,
-    synth_df: pd.DataFrame,
-    missingness_model: DataFrameMissingnessModel,
-    real_df: pd.DataFrame,
-    disc_cols: Iterable[str],
-    cont_cols: Iterable[str],
-    backend_name: str,
-) -> tuple[pd.DataFrame, bool]:
-    """Apply missingness to backend artefacts and refresh derived metrics.
-
-    Args:
-        run_dir: Directory containing backend outputs.
-        synth_df: Synthetic dataframe prior to missingness injection.
-        missingness_model: Learned missingness model to apply.
-        real_df: Real dataframe without missing values for metric refresh.
-        disc_cols: Iterable of discrete column names.
-        cont_cols: Iterable of continuous column names.
-        backend_name: Name of the backend used for logging context.
-
-    Returns:
-        Tuple of the updated synthetic dataframe and a boolean indicating
-        whether missingness was successfully applied.
-    """
-
-    pristine_path = run_dir / "synthetic.nomissing.csv"
-    synth_path = run_dir / "synthetic.csv"
-
-    try:
-        if pristine_path.exists():
-            import pandas as _pd
-            source_df = _pd.read_csv(pristine_path).convert_dtypes()
-        else:
-            source_df = synth_df
-            source_df.to_csv(pristine_path, index=False)
-        updated_df = missingness_model.apply(source_df).convert_dtypes()
-        updated_df.to_csv(synth_path, index=False)
-    except Exception:
-        logging.exception(
-            "Failed to apply missingness model for backend %s", backend_name,
-            exc_info=True,
-        )
-        return synth_df, False
-
-    _refresh_metrics_after_missingness(
-        run_dir=run_dir,
-        backend_name=backend_name,
-        real_df=real_df,
-        synth_df=updated_df,
-        disc_cols=disc_cols,
-        cont_cols=cont_cols,
-    )
-    _update_missingness_manifest(
-        run_dir=run_dir, missingness_model=missingness_model
-    )
-    return updated_df, True
-
-
 def summarize_missingness_model(
     missingness_model: DataFrameMissingnessModel | None,
 ) -> dict[str, Any] | None:
@@ -367,59 +306,3 @@ def summarize_missingness_model(
         "zero_count": zero_count,
         "rows": rows,
     }
-
-
-def _refresh_metrics_after_missingness(
-    *,
-    run_dir: Path,
-    backend_name: str,
-    real_df: pd.DataFrame,
-    synth_df: pd.DataFrame,
-    disc_cols: Iterable[str],
-    cont_cols: Iterable[str],
-) -> None:
-    """Recompute per-variable metrics after missingness injection."""
-
-    try:
-        dist_df = per_variable_distances(real_df, synth_df, list(disc_cols), list(cont_cols))
-        dist_df.to_csv(run_dir / "per_variable_metrics.csv", index=False)
-        metrics_path = run_dir / "metrics.json"
-        metrics_payload: dict[str, Any] = {}
-        if metrics_path.exists():
-            try:
-                metrics_payload = json.loads(metrics_path.read_text(encoding="utf-8"))
-            except Exception:
-                metrics_payload = {}
-        metrics_payload.setdefault("backend", backend_name)
-        metrics_payload["summary"] = summarize_distance_metrics(dist_df)
-        metrics_payload["missingness_wrapped"] = True
-        metrics_path.write_text(json.dumps(metrics_payload, indent=2), encoding="utf-8")
-    except Exception:  # pragma: no cover - surfaced via pipeline logging
-        logging.exception(
-            "Failed to refresh metrics after missingness injection for backend %s",
-            backend_name,
-            exc_info=True,
-        )
-
-
-def _update_missingness_manifest(
-    *, run_dir: Path, missingness_model: DataFrameMissingnessModel
-) -> None:
-    """Record missingness configuration in the backend manifest."""
-
-    manifest_path = run_dir / "manifest.json"
-    manifest: dict[str, Any] = {}
-    if manifest_path.exists():
-        try:
-            manifest = json.loads(manifest_path.read_text(encoding="utf-8"))
-        except Exception:
-            manifest = {}
-    manifest.setdefault("missingness", {})
-    manifest["missingness"].update(
-        {
-            "wrapped": True,
-            "random_state": missingness_model.random_state,
-            "source": "pipeline",
-        }
-    )
-    manifest_path.write_text(json.dumps(manifest, indent=2), encoding="utf-8")

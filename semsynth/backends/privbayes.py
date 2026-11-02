@@ -401,18 +401,11 @@ def synthesize(
         datatypes={**semantic_datatypes, **dict(attribute_to_datatype or {})},
         categorical=categorical,
     )
-    marginal_tv, excluded = _marginals(describer, generator)
-
-    warnings: list[str] = []
-    if epsilon == 0:
-        warnings.append("epsilon=0 disables differential privacy in DataSynthesizer.")
-    if excluded:
-        warnings.append("Excluded from learned network: " + ", ".join(excluded))
-
-    return SynthesisResult(
-        synthetic_data=generator.synthetic_dataset,
-        backend="privbayes",
-        parameters={
+    return _build_result(
+        describer,
+        generator,
+        log,
+        settings={
             "epsilon": epsilon,
             "k": k,
             "rows": count,
@@ -422,6 +415,35 @@ def synthesize(
             "category_threshold": category_threshold,
             "input_rows": int(frame.shape[0]),
         },
+        semantics={
+            "column_profiles": semantic_profiles,
+            "computational_actions": semantic_actions,
+            "datatype_constraints": semantic_datatypes,
+            "categorical_constraints": semantic_categorical,
+        },
+    )
+
+
+def _build_result(
+    describer: Any,
+    generator: Any,
+    log: str,
+    *,
+    settings: Mapping[str, Any],
+    semantics: Mapping[str, Any],
+) -> SynthesisResult:
+    """Collect what DataSynthesizer produced, its quality and its privacy facts into a result."""
+
+    marginal_tv, excluded = _marginals(describer, generator)
+    warnings: list[str] = []
+    if settings["epsilon"] == 0:
+        warnings.append("epsilon=0 disables differential privacy in DataSynthesizer.")
+    if excluded:
+        warnings.append("Excluded from learned network: " + ", ".join(excluded))
+    return SynthesisResult(
+        synthetic_data=generator.synthetic_dataset,
+        backend="privbayes",
+        parameters=dict(settings),
         metrics={
             "marginal_total_variation": marginal_tv,
             "mean_marginal_total_variation": (
@@ -430,8 +452,8 @@ def synthesize(
         },
         privacy_report={
             "mechanism": "DataSynthesizer correlated mode (PrivBayes)",
-            "epsilon": epsilon,
-            "network_degree": k,
+            "epsilon": settings["epsilon"],
+            "network_degree": settings["k"],
         },
         provenance={
             "engine": "DataSynthesizer",
@@ -439,12 +461,7 @@ def synthesize(
             "log": log,
         },
         learned_model=describer.data_description,
-        semantics={
-            "column_profiles": semantic_profiles,
-            "computational_actions": semantic_actions,
-            "datatype_constraints": semantic_datatypes,
-            "categorical_constraints": semantic_categorical,
-        },
+        semantics=semantics,
         warnings=warnings,
     )
 

@@ -62,6 +62,11 @@ async def main() -> dict:
     )
     out = {"privbayes_rows": len(result.synthetic_data), "privbayes_columns": list(result.synthetic_data.columns)}
 
+    from semsynth import synthesize
+
+    dummy = synthesize(frame, backend="metasyn", rows=50, seed=2)
+    out["dummy_rows"] = len(dummy.synthetic_data)
+
     from semsynth.models import ModelConfigBundle, ModelSpec
     from semsynth.pipeline import PipelineConfig, process_dataset
     from semsynth.specs import DatasetSpec

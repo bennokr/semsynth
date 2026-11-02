@@ -10,8 +10,9 @@ import numpy as np
 import pandas as pd
 import pytest
 
+from semsynth.config import PipelineConfig
 from semsynth.models import ModelConfigBundle, ModelRun
-from semsynth.pipeline import PipelineConfig, PipelineDeps
+from semsynth.runner import PipelineDeps
 from semsynth.specs import DatasetSpec
 
 
@@ -80,15 +81,15 @@ def test_process_dataset_skips_umap_when_disabled(
 ) -> None:
     """Disable UMAP and ensure the heavy module is never imported."""
 
-    import semsynth.pipeline as pipeline_module
+    import semsynth.runner as runner_module
 
     # The doubles are injected; umap_utils is deliberately left out of the injected set and
     # `semsynth.umap_utils` is blocked, so any attempt to import it fails the test.
     deps = PipelineDeps(utils=dummy_utils, reporting=dummy_reporting)
     _block_import(monkeypatch, "umap_utils")
-    monkeypatch.setattr(pipeline_module, "resolve_mapping_json", lambda *_: None)
-    monkeypatch.setattr(pipeline_module, "get_uciml_variable_descriptions", lambda *_: {})
-    monkeypatch.setattr(pipeline_module, "discover_model_runs", lambda *_: [])
+    monkeypatch.setattr(runner_module, "resolve_mapping_json", lambda *_: None)
+    monkeypatch.setattr(runner_module, "get_uciml_variable_descriptions", lambda *_: {})
+    monkeypatch.setattr(runner_module, "discover_model_runs", lambda *_: [])
     monkeypatch.setattr("semsynth.utils.coerce_discrete_to_category", lambda df, cols: df)
     monkeypatch.setattr("semsynth.utils.rename_categorical_categories_to_str", lambda df, cols: df)
     monkeypatch.setattr("semsynth.utils.coerce_continuous_to_float", lambda df, cols: df)
@@ -98,7 +99,7 @@ def test_process_dataset_skips_umap_when_disabled(
     cfg = PipelineConfig(generate_umap=False)
     bundle = ModelConfigBundle(specs=[])
 
-    pipeline_module.process_dataset(
+    runner_module.process_dataset(
         spec, df, None, str(tmp_path), model_bundle=bundle, pipeline_config=cfg, deps=deps
     )
 
@@ -130,7 +131,7 @@ def test_existing_umap_is_respected(
     def fake_transform_with_umap(_art, df: pd.DataFrame) -> np.ndarray:
         return np.zeros((len(df), 2))
 
-    import semsynth.pipeline as pipeline_module
+    import semsynth.runner as runner_module
 
     fake_umap_module = SimpleNamespace(
         build_umap=fake_build_umap,
@@ -138,8 +139,8 @@ def test_existing_umap_is_respected(
         transform_with_umap=fake_transform_with_umap,
     )
     deps = PipelineDeps(utils=dummy_utils, reporting=dummy_reporting, umap_utils=fake_umap_module)
-    monkeypatch.setattr(pipeline_module, "resolve_mapping_json", lambda *_: None)
-    monkeypatch.setattr(pipeline_module, "get_uciml_variable_descriptions", lambda *_: {})
+    monkeypatch.setattr(runner_module, "resolve_mapping_json", lambda *_: None)
+    monkeypatch.setattr(runner_module, "get_uciml_variable_descriptions", lambda *_: {})
     monkeypatch.setattr("semsynth.utils.coerce_discrete_to_category", lambda df, cols: df)
     monkeypatch.setattr("semsynth.utils.rename_categorical_categories_to_str", lambda df, cols: df)
     monkeypatch.setattr("semsynth.utils.coerce_continuous_to_float", lambda df, cols: df)
@@ -167,13 +168,13 @@ def test_existing_umap_is_respected(
         downstream_metrics={},
     )
 
-    monkeypatch.setattr("semsynth.pipeline.discover_model_runs", lambda *_: [run])
+    monkeypatch.setattr("semsynth.runner.discover_model_runs", lambda *_: [run])
 
     df = pd.DataFrame({"a": [1, 2, 3], "b": ["x", "y", "z"], "target": [0, 1, 0]})
     spec = DatasetSpec(provider="openml", name="demo", id=1, target="target")
     bundle = ModelConfigBundle(specs=[])
 
-    pipeline_module.process_dataset(
+    runner_module.process_dataset(
         spec, df, None, str(tmp_path), model_bundle=bundle, deps=deps
     )
 
@@ -188,21 +189,21 @@ def test_process_dataset_does_not_load_optional_metrics_when_disabled(
 ) -> None:
     """Avoid loading privacy/downstream dependencies during metadata-only runs."""
 
-    import semsynth.pipeline as pipeline_module
+    import semsynth.runner as runner_module
 
     deps = PipelineDeps(utils=dummy_utils, reporting=dummy_reporting)
     _block_import(monkeypatch, "downstream_fidelity")
     _block_import(monkeypatch, "privacy_metrics")
-    monkeypatch.setattr(pipeline_module, "resolve_mapping_json", lambda *_: None)
-    monkeypatch.setattr(pipeline_module, "get_uciml_variable_descriptions", lambda *_: {})
-    monkeypatch.setattr(pipeline_module, "discover_model_runs", lambda *_: [])
+    monkeypatch.setattr(runner_module, "resolve_mapping_json", lambda *_: None)
+    monkeypatch.setattr(runner_module, "get_uciml_variable_descriptions", lambda *_: {})
+    monkeypatch.setattr(runner_module, "discover_model_runs", lambda *_: [])
 
     df = pd.DataFrame({"a": [1, 2, 3], "b": ["x", "y", "z"]})
     spec = DatasetSpec(provider="openml", name="demo", id=1, target=None)
     cfg = PipelineConfig(compute_privacy=False, compute_downstream=False)
     bundle = ModelConfigBundle(specs=[])
 
-    pipeline_module.process_dataset(
+    runner_module.process_dataset(
         spec,
         df,
         None,

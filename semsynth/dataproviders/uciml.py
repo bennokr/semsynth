@@ -13,7 +13,6 @@ from typing import Any
 
 import pandas as pd
 import requests
-from makeprov import OutPath, rule
 
 from ..codebook import Codebook
 from ..specs import DatasetSpec
@@ -254,7 +253,6 @@ def _uciml_metadata_to_dcat_dsv(
     return to_dcat_dsv(enriched_metadata)
 
 
-@rule(phony=True)
 def list_uciml(
     area: str = "Health and Medicine",
     name_substr: str | None = None,
@@ -315,7 +313,6 @@ def list_uciml(
     return df.sort_values("min_cat_num", ascending=False).reset_index(drop=True)
 
 
-@rule(phony=True)
 def get_default_uciml(
     area: str = "Health and Medicine", *, cache_dir: pathlib.Path = pathlib.Path("uciml-cache")
 ) -> list[DatasetSpec]:
@@ -323,7 +320,7 @@ def get_default_uciml(
     return [DatasetSpec("uciml", name=r.name, id=r.id) for r in df.itertuples()]
 
 
-def _uciml_cache_paths(cache_dir: pathlib.Path | OutPath, dataset_id: int) -> CachePaths:
+def _uciml_cache_paths(cache_dir: pathlib.Path, dataset_id: int) -> CachePaths:
     cache_base = pathlib.Path(cache_dir)
     return CachePaths(
         data=cache_base / f"{dataset_id}.csv.gz",
@@ -370,8 +367,7 @@ def _disable_tls_verification() -> None:
     ucimlrepo_fetch.ssl.create_default_context = lambda *_, **__: ssl._create_unverified_context()
 
 
-@rule(phony=True)
-def load_uciml_by_id(dataset_id: int, cache_dir: pathlib.Path | OutPath) -> DatasetPayload:
+def load_uciml_by_id(dataset_id: int, cache_dir: pathlib.Path) -> DatasetPayload:
     """Load a UCI ML dataset by ID, with local caching of the data payload.
 
     Caching layout:

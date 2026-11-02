@@ -19,7 +19,7 @@ const LINKED_CODEBOOK_WHEEL = 'https://bennokr.github.io/linked-codebook/linked_
   const result = await py.runPythonAsync(source);
   const out = result.toJs ? Object.fromEntries(result.toJs()) : result;
   console.log(JSON.stringify(out), `${((Date.now() - started) / 1000).toFixed(1)}s`);
-  if (!(out.privbayes_rows > 0) || out.missingness_wrapped !== true || !(out.sign_match_rate >= 0)) process.exit(1);
+  if (!(out.privbayes_rows > 0) || !(out.dummy_rows > 0) || out.missingness_wrapped !== true || !(out.sign_match_rate >= 0)) process.exit(1);
 })().catch((error) => {
   console.error(error);
   process.exit(1);

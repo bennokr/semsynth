@@ -4,7 +4,7 @@ from __future__ import annotations
 
 from pathlib import Path
 
-from semsynth.__main__ import _dataset_slug, _override_file
+from semsynth.mappings import _dataset_slug, _override_file
 from semsynth.specs import DatasetSpec
 
 

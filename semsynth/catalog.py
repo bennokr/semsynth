@@ -12,8 +12,7 @@ from datetime import UTC, datetime
 from importlib import resources
 from pathlib import Path
 
-from makeprov import InPath, OutPath, RDFMixin, main, rule
-from makeprov.config import ProvenanceConfig
+from makeprov import RDFMixin
 
 LOGGER = logging.getLogger(__name__)
 
@@ -230,7 +229,7 @@ def mimetype_for(path: Path) -> str | None:
 
 
 def collect_distributions(
-    dataset_name: str, dataset_dir: InPath, mapper: PathURLMapper
+    dataset_name: str, dataset_dir: Path, mapper: PathURLMapper
 ) -> tuple[list[CatalogDistribution], set[Path]]:
     """Collect codebook and synthetic distributions for a dataset."""
 
@@ -467,13 +466,12 @@ def write_index(
     LOGGER.info("Updated %s", index_path)
 
 
-@rule()
 def build_catalog(
-    base_dir: InPath = InPath("output"),
+    base_dir: Path | str = "output",
     base_url: str = "https://w3id.org/semsynth/demo#",
-    out_path: OutPath = OutPath("output/catalog.json"),
-    index_path: OutPath = OutPath("output/index.html"),
-):
+    out_path: Path | str = "output/catalog.json",
+    index_path: Path | str = "output/index.html",
+) -> None:
     """Construct the DCAT catalog.
 
     Args:
@@ -483,8 +481,7 @@ def build_catalog(
         index_path: Output path for the HTML index file.
     """
 
-    ProvenanceConfig.get().prov_dir = out_path.parent
-
+    base_dir, out_path, index_path = Path(base_dir), Path(out_path), Path(index_path)
     mapper = PathURLMapper(root_dir=base_dir.parent, base_url=base_url)
 
     dataset_dirs = []
@@ -518,6 +515,3 @@ def build_catalog(
     jsonld_path.write_text(catalog_json)
     LOGGER.info("Updated %s", jsonld_path)
 
-
-if __name__ == "__main__":  # pragma: no cover - CLI bridge
-    main()

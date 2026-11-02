@@ -7,7 +7,6 @@ from dataclasses import dataclass, fields
 from pathlib import Path
 from typing import TYPE_CHECKING
 
-from makeprov import rule
 from makeprov.config import ProvenanceConfig
 
 if TYPE_CHECKING:
@@ -206,7 +205,6 @@ def create_app() -> Flask:
 
     return app
 
-@rule(phony=True)
 def run_app(*, host: str = "127.0.0.1", port: int = 5000, debug: bool = False) -> None:
     """Create and run the Flask development server.
 

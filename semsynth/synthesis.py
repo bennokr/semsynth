@@ -118,9 +118,10 @@ def write_run(
     directory.mkdir(parents=True, exist_ok=True)
     name = label or result.backend
     result.synthetic_data.to_csv(directory / "synthetic.csv", index=False)
-    if codebook_jsonld:
-        _write_parquet(result.synthetic_data, directory / "synthetic.parquet", codebook_jsonld)
-    written = _write_metrics(result, directory)
+    written: list[str] = []
+    if codebook_jsonld and _write_parquet(result.synthetic_data, directory / "synthetic.parquet", codebook_jsonld):
+        written.append("synthetic.parquet")
+    written += _write_metrics(result, directory)
     written += _write_artifacts(result, directory)
     manifest = _manifest(result, name, dataset or {})
     _write_json(directory / "manifest.json", manifest)
@@ -133,13 +134,17 @@ def _write_json(path: Path, payload: Any) -> None:
     path.write_text(json.dumps(payload, indent=2, default=str), encoding="utf-8")
 
 
-def _write_parquet(frame: pd.DataFrame, path: Path, codebook_jsonld: Mapping[str, Any]) -> None:
+def _write_parquet(frame: pd.DataFrame, path: Path, codebook_jsonld: Mapping[str, Any]) -> bool:
+    """Write the Parquet file with the codebook in its metadata; ``False`` if that failed."""
+
     try:
         from .codebook import write_parquet
 
         write_parquet(frame, path, dict(codebook_jsonld))
     except Exception:
         LOGGER.exception("Failed to write Parquet with the codebook")
+        return False
+    return True
 
 
 def _write_metrics(result: SynthesisResult, directory: Path) -> list[str]:

@@ -9,7 +9,6 @@ from dataclasses import dataclass, field
 from pathlib import Path
 from typing import Any
 
-from makeprov import OutPath, rule
 from makeprov.config import Config
 
 
@@ -114,7 +113,6 @@ def _extract_globals(data: Any) -> tuple[list[dict[str, Any]], dict[str, bool | 
     return items, globals_map
 
 
-@rule(merge=True, phony=True)
 def load_model_configs(config_input: str | None = None, *, config_data: dict[str, Any] | None = None) -> ModelConfigBundle:
     """Load model specifications and global flags from TOML."""
 
@@ -155,20 +153,17 @@ def load_model_configs(config_input: str | None = None, *, config_data: dict[str
     )
 
 
-@rule(merge=True, phony=True)
-def model_run_root(dataset_outdir: Path | OutPath) -> Path:
+def model_run_root(dataset_outdir: Path) -> Path:
     root = dataset_outdir / "models"
     root.mkdir(parents=True, exist_ok=True)
     return root
 
 
-@rule(merge=True, phony=True)
-def write_manifest(run_dir: Path | OutPath, manifest: dict[str, Any]) -> None:
+def write_manifest(run_dir: Path, manifest: dict[str, Any]) -> None:
     (run_dir / "manifest.json").write_text(json.dumps(manifest, indent=2), encoding="utf-8")
     logging.debug("Wrote manifest to %s", run_dir / "manifest.json")
 
 
-@rule(merge=True, phony=True)
 def discover_model_runs(dataset_outdir: str | Path) -> list[ModelRun]:
     root = Path(dataset_outdir) / "models"
     if not root.exists():
