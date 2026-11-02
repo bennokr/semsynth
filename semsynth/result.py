@@ -14,6 +14,8 @@ class SynthesisResult:
     synthetic_data and learned_model deliberately remain backend-neutral
     Python objects. Batch runners may serialize them as files; interactive
     consumers may adapt them directly without round-tripping through disk.
+    ``artifacts`` holds extra files (name to content) that a backend produced
+    besides the data; :func:`semsynth.synthesis.write_run` writes them next to it.
     """
 
     synthetic_data: Any
@@ -25,6 +27,7 @@ class SynthesisResult:
     learned_model: Any = None
     semantics: Mapping[str, Any] = field(default_factory=dict)
     warnings: list[str] = field(default_factory=list)
+    artifacts: dict[str, bytes | str] = field(default_factory=dict)
 
     def summary(self) -> dict[str, Any]:
         """Return JSON-friendly metadata without serializing data or model."""

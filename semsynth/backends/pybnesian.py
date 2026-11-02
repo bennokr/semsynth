@@ -6,13 +6,12 @@ from dataclasses import dataclass
 from pathlib import Path
 from typing import TYPE_CHECKING, Any
 
-from makeprov import OutDir
-
 if TYPE_CHECKING:  # pragma: no cover - typing only
     import pandas as pd
 
 from ..metrics import heldout_loglik, per_variable_distances, summarize_distance_metrics
 from ..models import model_run_root, write_manifest
+from ..result import SynthesisResult
 from ..utils import (
     coerce_continuous_to_float,
     coerce_discrete_to_category,
@@ -206,9 +205,9 @@ def run_experiment(
             synth_df[c] = synth_df[c].astype("category")
 
     run_root = model_run_root(Path(outdir))
-    run_dir = OutDir(run_root / label)
+    run_dir = run_root / label
     ensure_dir(str(run_dir))
-    synth_csv = run_dir.file("synthetic.csv")
+    synth_csv = run_dir / "synthetic.csv"
     synth_df.to_csv(synth_csv, index=False)
     logging.info("Wrote synthetic CSV: %s", synth_csv)
 
@@ -217,13 +216,13 @@ def run_experiment(
         try:
             from semsynth.codebook import write_parquet
 
-            write_parquet(synth_df, run_dir.file("synthetic.parquet"), codebook_jsonld)
+            write_parquet(synth_df, run_dir / "synthetic.parquet", codebook_jsonld)
         except Exception as e:
             logging.warning("Parquet with codebook failed: %s", e)
 
     # Distances and summary
     dist_df = per_variable_distances(test_df, synth_df, disc_cols, cont_cols)
-    dist_df.to_csv(run_dir.file("per_variable_metrics.csv"), index=False)
+    dist_df.to_csv(run_dir / "per_variable_metrics.csv", index=False)
     metrics = {
         "backend": "pybnesian",
         "summary": summarize_distance_metrics(dist_df),
@@ -235,7 +234,7 @@ def run_experiment(
         "heldout_loglik": heldout_loglik(model, test_df),
         "umap_png": None,
     }
-    run_dir.file("metrics.json").write_text(json.dumps(metrics, indent=2), encoding="utf-8")
+    (run_dir / "metrics.json").write_text(json.dumps(metrics, indent=2), encoding="utf-8")
 
     # BN visualizations and serialization inside model dir
     try:
@@ -243,11 +242,11 @@ def run_experiment(
         bn_to_graphviz(
             model,
             node_types,
-            str(run_dir.file("structure.png")),
+            str(run_dir / "structure.png"),
             title=f"{dataset_name or 'dataset'} — {label} BN",
         )
-        save_graphml_structure(model, node_types, run_dir.file("structure.graphml"))
-        model.save(str(run_dir.file("model.pickle")))
+        save_graphml_structure(model, node_types, run_dir / "structure.graphml")
+        model.save(str(run_dir / "model.pickle"))
     except Exception as e:
         logging.warning("BN serialization failed: %s", e)
 
@@ -268,3 +267,24 @@ def run_experiment(
     write_manifest(run_dir, manifest)
     logging.info("Finished PyBNesian run: %s", label)
     return run_dir
+
+
+def synthesize(
+    df: pd.DataFrame,
+    codebook: Any = None,
+    *,
+    rows: int | None = None,
+    seed: int = 0,
+    **options: Any,
+) -> SynthesisResult:
+    """Fit the model on ``df`` and draw ``rows`` rows, through :func:`run_experiment`.
+
+    ``codebook`` is not used by this backend. See :mod:`semsynth.backends._legacy` for what the wrapper does
+    to the outcome.
+    """
+
+    from ._legacy import synthesize_via_run_experiment
+
+    return synthesize_via_run_experiment(
+        run_experiment, "pybnesian", df, rows=rows, seed=seed, options=options
+    )

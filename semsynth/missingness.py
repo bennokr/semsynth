@@ -237,6 +237,43 @@ def fit_missingness_model(
         return None
 
 
+def apply_missingness(
+    missingness_model: DataFrameMissingnessModel,
+    synth_df: pd.DataFrame,
+    real_df: pd.DataFrame,
+    disc_cols: Iterable[str],
+    cont_cols: Iterable[str],
+) -> tuple[pd.DataFrame, dict[str, Any]]:
+    """Put learned missingness into a synthetic table and measure it again.
+
+    Args:
+        missingness_model: Learned missingness model to apply.
+        synth_df: Synthetic table without missing values.
+        real_df: Real table without missing values, for the refreshed distances.
+        disc_cols: Discrete column names.
+        cont_cols: Continuous column names.
+
+    Returns:
+        The wrapped table, and the metrics that replace those of the complete table: ``summary``,
+        ``per_variable`` and ``missingness_wrapped``.
+    """
+
+    wrapped = missingness_model.apply(synth_df).convert_dtypes()
+    distances = per_variable_distances(real_df, wrapped, list(disc_cols), list(cont_cols))
+    metrics: dict[str, Any] = {
+        "summary": summarize_distance_metrics(distances),
+        "per_variable": distances.to_dict("records"),
+        "missingness_wrapped": True,
+    }
+    return wrapped, metrics
+
+
+def missingness_manifest(missingness_model: DataFrameMissingnessModel) -> dict[str, Any]:
+    """What the manifest of a run records about the missingness wrapping."""
+
+    return {"wrapped": True, "random_state": missingness_model.random_state, "source": "pipeline"}
+
+
 def apply_missingness_to_outputs(
     *,
     run_dir: Path,

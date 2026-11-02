@@ -1,4 +1,13 @@
-"""Backend interface definitions for SemSynth."""
+"""Backend interface definitions for SemSynth.
+
+Every backend module defines ``synthesize(df, codebook, *, rows, seed, **options) -> SynthesisResult``; that is the
+contract that :func:`semsynth.synthesis.synthesize` dispatches to (see :func:`ensure_synthesize_contract`).
+
+PyBNesian and SynthCity also keep their file-writing ``run_experiment`` (the second contract below, checked by
+:func:`ensure_backend_contract`), because their ``synthesize`` is a wrapper around it and cannot be exercised
+without the engines installed. MetaSyn keeps a thin ``run_experiment`` for compatibility. The second contract
+can be retired once the two engines are called directly.
+"""
 
 from __future__ import annotations
 
@@ -93,4 +102,20 @@ def ensure_backend_contract(module: ModuleType) -> None:
             raise RuntimeError(f"Parameter '{name}' must be positional-or-keyword or keyword-only")
 
 
-__all__ = ["Backend", "BackendModule", "ensure_backend_contract"]
+def ensure_synthesize_contract(module: ModuleType) -> None:
+    """Validate that a backend module exposes ``synthesize(df, codebook, *, rows, seed, **options)``."""
+
+    synthesize = getattr(module, "synthesize", None)
+    if not callable(synthesize):
+        raise RuntimeError(f"Backend module {module.__name__!r} must define a callable 'synthesize'")
+    params = list(inspect.signature(synthesize).parameters.values())
+    positional = [p.name for p in params if p.kind in (p.POSITIONAL_ONLY, p.POSITIONAL_OR_KEYWORD)]
+    if positional[:2] != ["df", "codebook"]:
+        raise RuntimeError("synthesize must take the table and the codebook as its first two parameters")
+    keyword_only = {p.name for p in params if p.kind is p.KEYWORD_ONLY}
+    missing = {"rows", "seed"} - keyword_only
+    if missing:
+        raise RuntimeError(f"synthesize is missing keyword-only parameters {sorted(missing)}")
+
+
+__all__ = ["Backend", "BackendModule", "ensure_backend_contract", "ensure_synthesize_contract"]

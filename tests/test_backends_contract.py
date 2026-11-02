@@ -6,7 +6,7 @@ import importlib
 
 import pytest
 
-from semsynth.backends.base import ensure_backend_contract
+from semsynth.backends.base import ensure_backend_contract, ensure_synthesize_contract
 
 _BACKEND_DEPENDENCIES: dict[str, str] = {
     "semsynth.backends.pybnesian": "pybnesian",
@@ -24,3 +24,11 @@ def test_backend_contract(module_name: str) -> None:
 
     module = importlib.import_module(module_name)
     ensure_backend_contract(module)
+
+
+@pytest.mark.parametrize("name", ["metasyn", "privbayes", "pybnesian", "synthcity"])
+def test_synthesize_contract(name: str) -> None:
+    """Every backend module imports without its engine and exposes ``synthesize``."""
+
+    module = importlib.import_module(f"semsynth.backends.{name}")
+    ensure_synthesize_contract(module)

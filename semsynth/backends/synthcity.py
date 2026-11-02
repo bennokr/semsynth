@@ -8,10 +8,9 @@ from typing import TYPE_CHECKING, Any
 if TYPE_CHECKING:  # pragma: no cover - typing only
     import pandas as pd
 
-from makeprov import OutDir
-
 from ..metrics import per_variable_distances, summarize_distance_metrics
 from ..models import model_run_root, write_manifest
+from ..result import SynthesisResult
 from ..torch_compat import ensure_npsum_compat, ensure_torch_rmsnorm, ensure_trapz_compat
 from ..utils import (
     coerce_continuous_to_float,
@@ -164,22 +163,22 @@ def run_experiment(
     synth_df = coerce_continuous_to_float(synth_df, cont_cols)
 
     run_root = model_run_root(Path(outdir))
-    run_dir = OutDir(run_root / label)
+    run_dir = run_root / label
     ensure_dir(str(run_dir))
-    synth_csv = run_dir.file("synthetic.csv")
+    synth_csv = run_dir / "synthetic.csv"
     synth_df.to_csv(synth_csv, index=False)
     logging.info("Wrote synthetic CSV: %s", synth_csv)
     if codebook_jsonld:
         try:
             from semsynth.codebook import write_parquet
 
-            write_parquet(synth_df, run_dir.file("synthetic.parquet"), codebook_jsonld)
+            write_parquet(synth_df, run_dir / "synthetic.parquet", codebook_jsonld)
         except Exception as e:
             logging.warning("Parquet with codebook failed: %s", e)
 
     # Per-variable distances and summary
     dist_df = per_variable_distances(test_df, synth_df, disc_cols, cont_cols)
-    dist_df.to_csv(run_dir.file("per_variable_metrics.csv"), index=False)
+    dist_df.to_csv(run_dir / "per_variable_metrics.csv", index=False)
     metrics = {
         "backend": "synthcity",
         "summary": summarize_distance_metrics(dist_df),
@@ -190,7 +189,7 @@ def run_experiment(
         "continuous_cols": len(cont_cols),
         "umap_png": None,
     }
-    run_dir.file("metrics.json").write_text(json.dumps(metrics, indent=2), encoding="utf-8")
+    (run_dir / "metrics.json").write_text(json.dumps(metrics, indent=2), encoding="utf-8")
     manifest = {
         "backend": "synthcity",
         "name": label,
@@ -206,3 +205,24 @@ def run_experiment(
     write_manifest(run_dir, manifest)
     logging.info("Finished synthcity run: %s", label)
     return run_dir
+
+
+def synthesize(
+    df: pd.DataFrame,
+    codebook: Any = None,
+    *,
+    rows: int | None = None,
+    seed: int = 0,
+    **options: Any,
+) -> SynthesisResult:
+    """Fit the model on ``df`` and draw ``rows`` rows, through :func:`run_experiment`.
+
+    ``codebook`` is not used by this backend. See :mod:`semsynth.backends._legacy` for what the wrapper does
+    to the outcome.
+    """
+
+    from ._legacy import synthesize_via_run_experiment
+
+    return synthesize_via_run_experiment(
+        run_experiment, "synthcity", df, rows=rows, seed=seed, options=options
+    )

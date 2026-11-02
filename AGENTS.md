@@ -11,7 +11,8 @@ linked-codebook profile; plus the report/catalog site. Target shape: python API 
 
 ## Layout
 - `semsynth/`: `codebook.py` (profile + roles), `backends/` (privbayes, metasyn, pybnesian, synthcity), `missingness.py`,
-  `metrics.py`, `downstream_fidelity.py`, `pipeline.py` (being split), `reporting.py`, `catalog.py`, `dataproviders/`.
+  `metrics.py`, `downstream_fidelity.py`, `synthesis.py` (`synthesize` + `write_run`, the one backend contract),
+  `evaluate.py` (pure metrics), `pipeline.py` (being split), `reporting.py`, `catalog.py`, `dataproviders/`.
 - `mappings/` curated codebooks; `map_columns/` holds only terminology data (matchers live in entailmap).
 - Core modules listed in the `Makefile` (`CORE`) are `mypy --strict`; add a module there when it is clean.
 
@@ -26,5 +27,7 @@ linked-codebook profile; plus the report/catalog site. Target shape: python API 
 ## Known debt
 - `pipeline.py` / `reporting.py` do too much (pipeline is being split); global state (`ProvenanceConfig`, backend cache) hinders reuse.
 - Missing-value policy and type inference heuristics are brittle; reproducibility is partial.
-- Two backend contracts exist (`run_experiment -> Path` and `SynthesisResult`); converge on the latter.
+- PyBNesian and SynthCity still implement the file-writing `run_experiment` (`backends/base.py` keeps its contract
+  check); their `synthesize` wraps it (`backends/_legacy.py`) and has never run in CI because the engines are not
+  installed. Call the engines directly, then delete `ensure_backend_contract` and `_legacy.py`.
 - `map_columns/` data (codes.tsv, terminology.db) should become an entailmap release asset.

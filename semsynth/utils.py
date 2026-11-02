@@ -2,6 +2,7 @@ from __future__ import annotations
 
 import math
 import os
+from typing import Any
 
 import numpy as np
 import pandas as pd
@@ -131,6 +132,33 @@ def infer_types(
         else:
             disc.append(c)
     return disc, cont
+
+
+def split_columns(
+    df: pd.DataFrame, codebook: Any = None, *, infer: Any = None
+) -> tuple[list[str], list[str]]:
+    """Split the columns into discrete and continuous ones, letting the codebook's levels override inference.
+
+    Args:
+        df: The table.
+        codebook: A :class:`semsynth.codebook.Codebook` (or ``None``); a column that it calls categorical is
+            discrete and one that it calls numeric is continuous, unless inference found it discrete.
+        infer: Replacement for :func:`infer_types`.
+
+    Returns:
+        Two lists of column names, each in the order of the table.
+    """
+
+    disc_cols, cont_cols = (infer or infer_types)(df)
+    discrete, continuous = set(disc_cols), set(cont_cols)
+    if codebook is not None:
+        kinds = {name: codebook.kind(str(name)) for name in df.columns}
+        declared_discrete = {name for name, kind in kinds.items() if kind == "categorical"}
+        declared_continuous = {name for name, kind in kinds.items() if kind == "numeric"}
+        discrete |= declared_discrete
+        continuous |= {name for name in declared_continuous if name not in discrete}
+        continuous -= {name for name in continuous if name in discrete and name not in declared_continuous}
+    return [name for name in df.columns if name in discrete], [name for name in df.columns if name in continuous]
 
 
 def coerce_discrete_to_category(

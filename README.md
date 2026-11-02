@@ -181,18 +181,28 @@ compute_downstream = true
 - SPARQL query templates are also described as catalog distributions so tooling can discover and preload them as tabs.
 
 
-## Backend result contract
+## Synthesizing from Python
 
-Interactive synthesis backends return `semsynth.SynthesisResult`. The contract
-keeps generated data and a learned model as Python objects, alongside parameters,
-utility metrics, privacy facts, provenance, semantic actions, and warnings.
-Batch reporting can still serialize those values as artifacts.
+```python
+from semsynth import synthesize
+from semsynth.synthesis import write_run
 
-PrivBayes now lives in `semsynth.backends.privbayes` and is installed with:
-
-```bash
-pip install -e ".[privbayes]"
+result = synthesize(df, codebook, backend="metasyn", rows=500, seed=1)   # or "privbayes", "pybnesian", "synthcity"
+result.synthetic_data      # a pandas DataFrame
+result.learned_model       # backend-specific object
+write_run(result, "output/run-1")   # only if you want the files
 ```
+
+`synthesize` never touches the disk, so it also runs in a browser (Pyodide). Every backend module defines
+`synthesize(df, codebook, *, rows, seed, **options)` and returns a `semsynth.SynthesisResult`: the generated data
+and the learned model as Python objects, alongside parameters, utility metrics, privacy facts, provenance, semantic
+actions, and warnings. `write_run` is the one function that serializes a result (`synthetic.csv`, metrics,
+`manifest.json`, a PROV-O `provenance.json`, ...); the report pipeline uses it.
+
+MetaSyn learns one distribution per column and is the choice for dummy data with realistic types, ranges and
+missingness. It carries no privacy claim. PrivBayes (`pip install -e ".[privbayes]"`) is differentially private
+for the budget `epsilon` you give it. PyBNesian and SynthCity wrap their file-based `run_experiment`
+(see `semsynth/backends/_legacy.py`); that wrapper has not been exercised in CI because their engines are not installed.
 
 Declared semantic bins, datatypes, and categorical flags are applied before
 PrivBayes learns its network. The result records those computational actions so
