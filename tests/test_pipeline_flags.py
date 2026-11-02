@@ -2,6 +2,7 @@
 
 from __future__ import annotations
 
+import sys
 from pathlib import Path
 from types import SimpleNamespace
 
@@ -10,7 +11,7 @@ import pandas as pd
 import pytest
 
 from semsynth.models import ModelConfigBundle, ModelRun
-from semsynth.pipeline import PipelineConfig
+from semsynth.pipeline import PipelineConfig, PipelineDeps
 from semsynth.specs import DatasetSpec
 
 
@@ -62,6 +63,15 @@ def dummy_reporting() -> _DummyReporting:
     return _DummyReporting()
 
 
+def _block_import(monkeypatch: pytest.MonkeyPatch, name: str) -> None:
+    """Make ``import semsynth.<name>`` raise, even if the module was imported by an earlier test."""
+
+    import semsynth
+
+    monkeypatch.setitem(sys.modules, f"semsynth.{name}", None)
+    monkeypatch.delattr(semsynth, name, raising=False)
+
+
 def test_process_dataset_skips_umap_when_disabled(
     tmp_path: Path,
     monkeypatch: pytest.MonkeyPatch,
@@ -71,13 +81,11 @@ def test_process_dataset_skips_umap_when_disabled(
     """Disable UMAP and ensure the heavy module is never imported."""
 
     import semsynth.pipeline as pipeline_module
-    from semsynth.runtime import DEPENDENCIES
 
-    # Pre-populate cache with test doubles; umap_utils deliberately omitted so
-    # any attempt to load it would call importlib (and likely fail) rather than
-    # returning silently — proving the disabled-UMAP path never requests it.
-    monkeypatch.setitem(DEPENDENCIES._cache, "semsynth.utils", dummy_utils)
-    monkeypatch.setitem(DEPENDENCIES._cache, "semsynth.reporting", dummy_reporting)
+    # The doubles are injected; umap_utils is deliberately left out of the injected set and
+    # `semsynth.umap_utils` is blocked, so any attempt to import it fails the test.
+    deps = PipelineDeps(utils=dummy_utils, reporting=dummy_reporting)
+    _block_import(monkeypatch, "umap_utils")
     monkeypatch.setattr(pipeline_module, "resolve_mapping_json", lambda *_: None)
     monkeypatch.setattr(pipeline_module, "get_uciml_variable_descriptions", lambda *_: {})
     monkeypatch.setattr(pipeline_module, "discover_model_runs", lambda *_: [])
@@ -91,7 +99,7 @@ def test_process_dataset_skips_umap_when_disabled(
     bundle = ModelConfigBundle(specs=[])
 
     pipeline_module.process_dataset(
-        spec, df, None, str(tmp_path), model_bundle=bundle, pipeline_config=cfg
+        spec, df, None, str(tmp_path), model_bundle=bundle, pipeline_config=cfg, deps=deps
     )
 
     assert dummy_reporting.calls, "reporting should still run"
@@ -123,16 +131,13 @@ def test_existing_umap_is_respected(
         return np.zeros((len(df), 2))
 
     import semsynth.pipeline as pipeline_module
-    from semsynth.runtime import DEPENDENCIES
 
     fake_umap_module = SimpleNamespace(
         build_umap=fake_build_umap,
         plot_umap=fake_plot_umap,
         transform_with_umap=fake_transform_with_umap,
     )
-    monkeypatch.setitem(DEPENDENCIES._cache, "semsynth.umap_utils", fake_umap_module)
-    monkeypatch.setitem(DEPENDENCIES._cache, "semsynth.utils", dummy_utils)
-    monkeypatch.setitem(DEPENDENCIES._cache, "semsynth.reporting", dummy_reporting)
+    deps = PipelineDeps(utils=dummy_utils, reporting=dummy_reporting, umap_utils=fake_umap_module)
     monkeypatch.setattr(pipeline_module, "resolve_mapping_json", lambda *_: None)
     monkeypatch.setattr(pipeline_module, "get_uciml_variable_descriptions", lambda *_: {})
     monkeypatch.setattr("semsynth.utils.coerce_discrete_to_category", lambda df, cols: df)
@@ -168,7 +173,9 @@ def test_existing_umap_is_respected(
     spec = DatasetSpec(provider="openml", name="demo", id=1, target="target")
     bundle = ModelConfigBundle(specs=[])
 
-    pipeline_module.process_dataset(spec, df, None, str(tmp_path), model_bundle=bundle)
+    pipeline_module.process_dataset(
+        spec, df, None, str(tmp_path), model_bundle=bundle, deps=deps
+    )
 
     assert len(calls) == 1, "only the real-data UMAP should be plotted"
 
@@ -182,10 +189,10 @@ def test_process_dataset_does_not_load_optional_metrics_when_disabled(
     """Avoid loading privacy/downstream dependencies during metadata-only runs."""
 
     import semsynth.pipeline as pipeline_module
-    from semsynth.runtime import DEPENDENCIES
 
-    monkeypatch.setitem(DEPENDENCIES._cache, "semsynth.utils", dummy_utils)
-    monkeypatch.setitem(DEPENDENCIES._cache, "semsynth.reporting", dummy_reporting)
+    deps = PipelineDeps(utils=dummy_utils, reporting=dummy_reporting)
+    _block_import(monkeypatch, "downstream_fidelity")
+    _block_import(monkeypatch, "privacy_metrics")
     monkeypatch.setattr(pipeline_module, "resolve_mapping_json", lambda *_: None)
     monkeypatch.setattr(pipeline_module, "get_uciml_variable_descriptions", lambda *_: {})
     monkeypatch.setattr(pipeline_module, "discover_model_runs", lambda *_: [])
@@ -202,6 +209,7 @@ def test_process_dataset_does_not_load_optional_metrics_when_disabled(
         str(tmp_path),
         model_bundle=bundle,
         pipeline_config=cfg,
+        deps=deps,
     )
 
     assert dummy_reporting.calls, "reporting should complete for metadata-only runs"

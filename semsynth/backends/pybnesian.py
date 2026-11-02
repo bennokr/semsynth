@@ -33,7 +33,7 @@ def _load_pybnesian():
     try:
         from pybnesian import CLGNetworkType, SemiparametricBNType, hc
     except ImportError as exc:  # pragma: no cover - optional dependency
-        raise RuntimeError(
+        raise ImportError(
             "PyBNesian backend requires 'pybnesian'; install with pip install semsynth[pybnesian]"
         ) from exc
     return hc, CLGNetworkType, SemiparametricBNType

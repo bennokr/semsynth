@@ -71,14 +71,14 @@ def build_umap(
         from sklearn.pipeline import Pipeline
         from sklearn.preprocessing import OneHotEncoder, StandardScaler
     except ImportError as exc:  # pragma: no cover - optional dependency
-        raise RuntimeError(
+        raise ImportError(
             "UMAP generation requires scikit-learn; install with pip install semsynth[umap]"
         ) from exc
 
     try:
         import umap
     except ImportError as exc:  # pragma: no cover - optional dependency
-        raise RuntimeError(
+        raise ImportError(
             "UMAP generation requires 'umap-learn'; install with pip install semsynth[umap]"
         ) from exc
 
@@ -153,7 +153,7 @@ def plot_umap(
     try:
         import matplotlib.pyplot as plt
     except ImportError as exc:  # pragma: no cover - optional dependency
-        raise RuntimeError(
+        raise ImportError(
             "UMAP plotting requires matplotlib; install with pip install semsynth[umap]"
         ) from exc
 

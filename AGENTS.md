@@ -24,7 +24,7 @@ linked-codebook profile; plus the report/catalog site. Target shape: python API 
 - Google-style docstrings, logging, dataclasses.
 
 ## Known debt
-- `pipeline.py` / `reporting.py` do too much; global state (`ProvenanceConfig`, backend cache) hinders reuse.
+- `pipeline.py` / `reporting.py` do too much (pipeline is being split); global state (`ProvenanceConfig`, backend cache) hinders reuse.
 - Missing-value policy and type inference heuristics are brittle; reproducibility is partial.
 - Two backend contracts exist (`run_experiment -> Path` and `SynthesisResult`); converge on the latter.
 - `map_columns/` data (codes.tsv, terminology.db) should become an entailmap release asset.

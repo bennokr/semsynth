@@ -2,27 +2,40 @@
 
 from __future__ import annotations
 
+import importlib
 import json
 import logging
 import re
 from collections.abc import Iterable, Mapping
-from dataclasses import asdict, dataclass, field, fields, is_dataclass
+from dataclasses import asdict, dataclass, is_dataclass
 from pathlib import Path
 from typing import TYPE_CHECKING, Any
 
 import pandas as pd
 from makeprov import OutDir, OutPath, rule, span
-from makeprov.config import Config
 
 from .backends.base import BackendModule, ensure_backend_contract
 from .codebook import Codebook, privacy_role
+from .config import PipelineConfig, UmapConfig
 from .mappings import load_mapping_json, resolve_mapping_json
 from .metadata import get_uciml_variable_descriptions
 from .models import ModelConfigBundle, discover_model_runs, load_model_configs
-from .runtime import DEPENDENCIES
 from .specs import DatasetSpec
 
 LOGGER = logging.getLogger(__name__)
+
+__all__ = [
+    "BackendExecutor",
+    "DatasetPreprocessor",
+    "MetricWriter",
+    "PipelineConfig",
+    "PipelineDeps",
+    "PreprocessingResult",
+    "ReportWriter",
+    "UmapArtifacts",
+    "UmapConfig",
+    "process_dataset",
+]
 
 if TYPE_CHECKING:  # pragma: no cover - typing only
     from .missingness import DataFrameMissingnessModel
@@ -34,63 +47,83 @@ _BACKEND_MODULE_PATHS = {
     "metasyn": "semsynth.backends.metasyn",
 }
 
-@dataclass
-class UmapConfig(Config):
-    """UMAP geometry parameters."""
-
-    n_neighbors: int = 30
-    min_dist: float = 0.1
-    n_components: int = 2
-
-
-@dataclass
-class PipelineConfig(Config):
-    """Configuration values controlling the reporting pipeline."""
-
-    random_state: int = 42
-    max_umap_sample: int = 1000
-    fit_on_sample: int | None = 1000
-    synthetic_sample: int = 1000
-    test_size: float = 0.2
-    umap: UmapConfig = field(default_factory=UmapConfig)
-    generate_umap: bool = True
-    compute_privacy: bool = False
-    compute_downstream: bool = False
-    overwrite_umap: bool = False
-    enable_missingness_wrapping: bool = False
-    missingness_random_state: int | None = None
-
-    def apply_mapping(self, params: Mapping[str, Any]) -> PipelineConfig:
-        """Apply a mapping of overrides onto this config, recursing into nested dataclasses."""
-
-        if not isinstance(params, Mapping):
-            return self
-
-        def set_conf(dc: Any, mapping: Mapping[str, Any]) -> None:
-            field_names = {f.name for f in fields(dc)}
-            for key, value in mapping.items():
-                if key not in field_names:
-                    continue
-                current = getattr(dc, key)
-                if is_dataclass(current) and isinstance(value, Mapping):
-                    set_conf(current, value)
-                else:
-                    setattr(dc, key, value)
-
-        set_conf(self, params)
-        return self
+_RUN_ARTIFACTS = (
+    "synthetic.csv",
+    "per_variable_metrics.csv",
+    "metrics.json",
+    "metrics.privacy.json",
+    "metrics.downstream.json",
+    "umap.png",
+    "manifest.json",
+    "synthetic.parquet",
+    "metasyn_gmf.json",
+    "model.pickle",
+    "structure.graphml",
+    "structure.png",
+    "provenance.json",
+)
 
 
 def _load_backend_module(name: str) -> BackendModule:
+    """Import a backend module by name; an ImportError names the extra that provides it."""
+
     module_path = _BACKEND_MODULE_PATHS.get(name)
     if not module_path:
         raise ValueError(f"Unknown backend '{name}'")
-    module = DEPENDENCIES.require_module(
-        module_path,
-        hint=f"Install with `pip install semsynth[{name}]`.",
-    )
+    try:
+        module = importlib.import_module(module_path)
+    except ImportError as exc:
+        raise ImportError(
+            f"The {name!r} backend could not be imported ({exc}); install it with "
+            f"`pip install 'semsynth[{name}]'`."
+        ) from exc
     ensure_backend_contract(module)
     return module  # type: ignore[return-value]
+
+
+def _default_privacy_summarizer() -> Any:
+    """The SynthCity-based privacy summary (extra ``synthcity``), imported on first use."""
+
+    from .privacy_metrics import summarize_privacy_synthcity
+
+    return summarize_privacy_synthcity
+
+
+def _default_downstream_compare() -> Any:
+    """The downstream coefficient comparison (extra ``statsmodels``), imported on first use."""
+
+    try:
+        from .downstream_fidelity import compute_downstream
+    except ImportError as exc:
+        raise ImportError(
+            f"Downstream metrics need statsmodels ({exc}); install `pip install 'semsynth[statsmodels]'`."
+        ) from exc
+    return compute_downstream
+
+
+def _resolve_flag(name: str, configured: bool, bundle_value: bool | None, spec_value: bool | None, label: str) -> bool:
+    """A model's metric flag: its own setting wins, then the pipeline configuration (the bundle's is ignored)."""
+
+    if bundle_value is not None and bundle_value != configured:
+        LOGGER.info(
+            "Ignoring bundle %s flag in favour of pipeline configuration",
+            name,
+            extra={"label": label, "bundle_value": bundle_value, "pipeline_value": configured},
+        )
+    return configured if spec_value is None else spec_value
+
+
+def _write_metric(kind: str, label: str, write: Any, *args: Any, **kwargs: Any) -> None:
+    """Run a metric writer; a missing extra or a failure is logged and does not stop the run."""
+
+    try:
+        write(*args, **kwargs)
+    except ImportError as exc:
+        LOGGER.warning("%s metrics unavailable; skipping: %s", kind.capitalize(), exc, extra={"label": label})
+    except Exception:
+        LOGGER.exception("Failed to compute %s metrics", kind, extra={"label": label})
+    else:
+        LOGGER.info("Wrote %s metrics", kind, extra={"label": label})
 
 
 def _build_privacy_metadata(
@@ -338,7 +371,7 @@ class DatasetPreprocessor:
                     title=f"{dataset_spec.name}: real (sample)",
                     color_labels=umap_art.color_labels,
                 )
-            except RuntimeError as exc:
+            except ImportError as exc:
                 LOGGER.warning(
                     "Skipping UMAP generation: %s",
                     exc,
@@ -444,11 +477,7 @@ class MetricWriter:
             Dict[str, Any]: Serialized payload written to disk.
         """
 
-        summarizer = self._privacy_summarizer or DEPENDENCIES.require_attr(
-            "semsynth.privacy_metrics",
-            "summarize_privacy_synthcity",
-            hint="Install SemSynth with `synthcity` extras: `pip install semsynth[synthcity]`.",
-        )
+        summarizer = self._privacy_summarizer or _default_privacy_summarizer()
 
         if synth_df is None:
             synth_df = self._read_synthetic_df(run_dir)
@@ -504,11 +533,7 @@ class MetricWriter:
             Dict[str, Any]: Serialized payload written to disk.
         """
 
-        comparer = self._downstream_compare or DEPENDENCIES.require_attr(
-            "semsynth.downstream_fidelity",
-            "compute_downstream",
-            hint="Install downstream fidelity extras: `pip install semsynth[statsmodels]`.",
-        )
+        comparer = self._downstream_compare or _default_downstream_compare()
 
         meta = metadata if isinstance(metadata, Codebook) else _build_downstream_meta(
             real_df, inferred, target_series, target=target
@@ -635,63 +660,25 @@ class BackendExecutor:
                             )
                         )
 
-                compute_privacy_flag = self._cfg.compute_privacy
-                if (
-                    bundle.compute_privacy is not None
-                    and bundle.compute_privacy != compute_privacy_flag
-                ):
-                    LOGGER.info(
-                        "Ignoring bundle privacy flag in favour of pipeline configuration",
-                        extra={
-                            "label": label,
-                            "bundle_value": bundle.compute_privacy,
-                            "pipeline_value": compute_privacy_flag,
-                        },
-                    )
-                if spec.compute_privacy is not None:
-                    compute_privacy_flag = spec.compute_privacy
-
-                compute_downstream_flag = self._cfg.compute_downstream
-                if (
-                    bundle.compute_downstream is not None
-                    and bundle.compute_downstream != compute_downstream_flag
-                ):
-                    LOGGER.info(
-                        "Ignoring bundle downstream flag in favour of pipeline configuration",
-                        extra={
-                            "label": label,
-                            "bundle_value": bundle.compute_downstream,
-                            "pipeline_value": compute_downstream_flag,
-                        },
-                    )
-                if spec.compute_downstream is not None:
-                    compute_downstream_flag = spec.compute_downstream
+                compute_privacy_flag = _resolve_flag(
+                    "privacy", self._cfg.compute_privacy, bundle.compute_privacy, spec.compute_privacy, label
+                )
+                compute_downstream_flag = _resolve_flag(
+                    "downstream", self._cfg.compute_downstream, bundle.compute_downstream, spec.compute_downstream, label
+                )
 
                 if compute_privacy_flag:
-                    try:
-                        self._metric_writer.write_privacy(
-                            run_dir_path,
-                            preprocessed.df_no_na,
-                            preprocessed.inferred_types,
-                            synth_df,
-                            preprocessed.codebook,
-                            target=dataset_spec.target,
-                        )
-                        LOGGER.info(
-                            "Wrote privacy metrics",
-                            extra={"label": label},
-                        )
-                    except RuntimeError as exc:
-                        LOGGER.warning(
-                            "Privacy metrics unavailable; skipping: %s",
-                            exc,
-                            extra={"label": label},
-                        )
-                    except Exception:
-                        LOGGER.exception(
-                            "Failed to compute privacy metrics",
-                            extra={"label": label},
-                        )
+                    _write_metric(
+                        "privacy",
+                        label,
+                        self._metric_writer.write_privacy,
+                        run_dir_path,
+                        preprocessed.df_no_na,
+                        preprocessed.inferred_types,
+                        synth_df,
+                        preprocessed.codebook,
+                        target=dataset_spec.target,
+                    )
 
                 target_series = preprocessed.color_series
                 has_target_series = (
@@ -699,52 +686,24 @@ class BackendExecutor:
                     and target_series.attrs.get("prov:hadRole") == "target"
                 )
                 if compute_downstream_flag and has_target_series:
-                    try:
-                        self._metric_writer.write_downstream(
-                            run_dir_path,
-                            preprocessed.df_no_na,
-                            synth_df,
-                            preprocessed.inferred_types,
-                            target_series,
-                            metadata=preprocessed.codebook,
-                            target=dataset_spec.target,
-                        )
-                        LOGGER.info(
-                            "Wrote downstream metrics",
-                            extra={"label": label},
-                        )
-                    except RuntimeError as exc:
-                        LOGGER.warning(
-                            "Downstream metrics unavailable; skipping: %s",
-                            exc,
-                            extra={"label": label},
-                        )
-                    except Exception:
-                        LOGGER.exception(
-                            "Failed to compute downstream metrics",
-                            extra={"label": label},
-                        )
+                    _write_metric(
+                        "downstream",
+                        label,
+                        self._metric_writer.write_downstream,
+                        run_dir_path,
+                        preprocessed.df_no_na,
+                        synth_df,
+                        preprocessed.inferred_types,
+                        target_series,
+                        metadata=preprocessed.codebook,
+                        target=dataset_spec.target,
+                    )
 
                 try:
                     rel_root = run_dir_path.relative_to(outdir_path)
                 except ValueError:
                     rel_root = Path("models") / label
-                artifact_names = (
-                    "synthetic.csv",
-                    "per_variable_metrics.csv",
-                    "metrics.json",
-                    "metrics.privacy.json",
-                    "metrics.downstream.json",
-                    "umap.png",
-                    "manifest.json",
-                    "synthetic.parquet",
-                    "metasyn_gmf.json",
-                    "model.pickle",
-                    "structure.graphml",
-                    "structure.png",
-                    "provenance.json",
-                )
-                for fname in artifact_names:
+                for fname in _RUN_ARTIFACTS:
                     candidate = run_dir_path / fname
                     if candidate.exists():
                         outdir.file(rel_root / fname)
@@ -858,6 +817,22 @@ class ReportWriter:
             missingness_summary=missingness_summary,
         )
 
+@dataclass
+class PipelineDeps:
+    """Replaceable collaborators of :func:`process_dataset`.
+
+    Every field defaults to ``None``, which means "import the real one when it is needed". Tests and
+    embedding applications pass their own objects instead of patching modules.
+    """
+
+    utils: Any | None = None
+    reporting: Any | None = None
+    umap_utils: Any | None = None
+    privacy_summarizer: Any | None = None
+    downstream_compare: Any | None = None
+    load_backend: Any | None = None
+
+
 @rule(phony=True)
 def process_dataset(
     dataset_spec: DatasetSpec,
@@ -867,40 +842,37 @@ def process_dataset(
     *,
     model_bundle: ModelConfigBundle | None = None,
     pipeline_config: PipelineConfig | None = None,
+    deps: PipelineDeps | None = None,
 ) -> None:
     """Process a dataset end-to-end and generate a report."""
 
-    utils = DEPENDENCIES.require_module(
-        "semsynth.utils",
-        hint="Install SemSynth with base dependencies.",
-    )
-    reporting = DEPENDENCIES.require_module(
-        "semsynth.reporting",
-        hint="SemSynth reporting module missing. Reinstall package.",
-    )
+    deps = deps or PipelineDeps()
+    if deps.utils is None:
+        from . import utils as utils_module
+    else:
+        utils_module = deps.utils
+    if deps.reporting is None:
+        from . import reporting as reporting_module
+    else:
+        reporting_module = deps.reporting
 
     bundle = model_bundle or load_model_configs(None)
     cfg = pipeline_config or PipelineConfig()
 
     base_path = Path(base_outdir)
     outdir = OutDir(base_path / dataset_spec.name.replace("/", "_"))
-    rng = utils.seed_all(cfg.random_state)
+    rng = utils_module.seed_all(cfg.random_state)
 
     generate_umap_flag = cfg.generate_umap
     if bundle.generate_umap is not None:
         generate_umap_flag = bundle.generate_umap
 
-    umap_utils = (
-        DEPENDENCIES.require_module(
-            "semsynth.umap_utils",
-            hint="Install UMAP extras via `pip install semsynth[umap]`.",
-        )
-        if generate_umap_flag
-        else None
-    )
+    umap_utils = deps.umap_utils
+    if umap_utils is None and generate_umap_flag:
+        from . import umap_utils  # extra `umap` is only needed when a plot is drawn
 
     preprocessor = DatasetPreprocessor(
-        utils_module=utils,
+        utils_module=utils_module,
         load_mapping=load_mapping_json,
         resolve_mapping=resolve_mapping_json,
     )
@@ -917,26 +889,12 @@ def process_dataset(
     if preprocessed.codebook is not None:
         dataset_spec.meta = preprocessed.codebook
 
-    privacy_summarizer = None
-    downstream_compare = None
-    if cfg.compute_privacy:
+    privacy_summarizer = deps.privacy_summarizer
+    downstream_compare = deps.downstream_compare
+    if cfg.compute_downstream and downstream_compare is None:
         try:
-            privacy_summarizer = DEPENDENCIES.require_attr(
-                "semsynth.privacy_metrics",
-                "summarize_privacy_synthcity",
-                hint="Install SemSynth with `synthcity` extras: `pip install semsynth[synthcity]`.",
-            )
-        except RuntimeError as exc:
-            LOGGER.warning("Privacy metrics unavailable; disabling privacy computation: %s", exc)
-            cfg.compute_privacy = False
-    if cfg.compute_downstream:
-        try:
-            downstream_compare = DEPENDENCIES.require_attr(
-                "semsynth.downstream_fidelity",
-                "compute_downstream",
-                hint="Install downstream fidelity extras: `pip install semsynth[statsmodels]`.",
-            )
-        except RuntimeError as exc:
+            downstream_compare = _default_downstream_compare()
+        except ImportError as exc:
             LOGGER.warning(
                 "Downstream metrics unavailable; disabling downstream computation: %s", exc
             )
@@ -948,7 +906,7 @@ def process_dataset(
     )
     executor = BackendExecutor(
         cfg,
-        load_backend=_load_backend_module,
+        load_backend=deps.load_backend or _load_backend_module,
         metric_writer=metric_writer,
     )
 
@@ -971,7 +929,7 @@ def process_dataset(
         )
         model_runs = []
 
-    reporter = ReportWriter(reporting, umap_utils)
+    reporter = ReportWriter(reporting_module, umap_utils)
     reporter.generate_synthetic_umaps(model_runs, dataset_spec, preprocessed, cfg)
     reporter.write_report(
         outdir=outdir,

@@ -21,7 +21,7 @@ def _load_metasyn() -> Any:
     try:
         from metasyn.metaframe import MetaFrame
     except ImportError as exc:  # pragma: no cover - optional dependency
-        raise RuntimeError(
+        raise ImportError(
             "MetaSyn backend requires 'metasyn'; install with pip install semsynth[metasyn]"
         ) from exc
     return MetaFrame

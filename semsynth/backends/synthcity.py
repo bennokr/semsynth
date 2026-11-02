@@ -54,7 +54,7 @@ def _load_synthcity_plugins():
     try:
         from synthcity.plugins import Plugins
     except ImportError as exc:  # pragma: no cover - optional dependency
-        raise RuntimeError(
+        raise ImportError(
             "SynthCity backend requires 'synthcity'; install with pip install semsynth[synthcity]"
         ) from exc
     return Plugins

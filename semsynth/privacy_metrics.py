@@ -108,7 +108,7 @@ def summarize_privacy_synthcity(df_real: pd.DataFrame,
     try:
         from synthcity.metrics import Metrics
     except ImportError as exc:  # pragma: no cover - optional dependency
-        raise RuntimeError(
+        raise ImportError(
             "Privacy metrics require 'synthcity'; install with pip install semsynth[synthcity]"
         ) from exc
 

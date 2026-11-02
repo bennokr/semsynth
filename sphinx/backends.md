@@ -13,7 +13,7 @@ kernelspec:
 
 # Backends overview
 
-SemSynth ships three interchangeable generation backends—MetaSyn, PyBNesian, and SynthCity—that follow the common `run_experiment` contract and produce aligned artifacts (synthetic CSVs, per-variable metrics, and manifests). The backends share the same type inference and train/test splitting utilities so synthetic rows and downstream metrics remain comparable across runs. If a backend's optional dependency is missing, the implementation raises a clear runtime error suggesting the corresponding extras install (for example, `pip install semsynth[metasyn]`).
+SemSynth ships three interchangeable generation backends—MetaSyn, PyBNesian, and SynthCity—that follow the common `run_experiment` contract and produce aligned artifacts (synthetic CSVs, per-variable metrics, and manifests). The backends share the same type inference and train/test splitting utilities so synthetic rows and downstream metrics remain comparable across runs. If a backend's optional dependency is missing, the implementation raises an `ImportError` naming the corresponding extra (for example, `pip install semsynth[metasyn]`).
 
 We keep all backend examples grounded in the cached Heart Disease dataset to keep comparisons consistent.
 
