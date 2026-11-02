@@ -4,7 +4,7 @@ Synthetic-data generation and evaluation (PrivBayes, MetaSyn, PyBNesian, SynthCi
 linked-codebook profile; plus the report/catalog site. Target shape: python API + CLI + Pyodide app.
 
 ## Commands
-- Setup: `uv sync --locked --extra dev --extra privbayes --extra metasyn --extra statsmodels`
+- Setup: `uv sync --locked --extra dev --extra app --extra privbayes --extra metasyn --extra statsmodels`
 - Check (what CI runs): `uv run make check` = ruff, `mypy --strict` on the core, pytest, statement budgets.
 - After shrinking a module: `python scripts/check_size.py --update` (budgets only go down).
 - Golden safety net: `tests/test_golden_pipeline.py` runs MetaSyn + missingness + downstream end to end.

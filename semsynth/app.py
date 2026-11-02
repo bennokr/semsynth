@@ -1,18 +1,65 @@
-"""Minimal Flask application exposing SemSynth search and report actions."""
+"""Minimal Flask application for dataset search and report launching.
+
+It calls the same functions as the command line (:mod:`semsynth.workflow`); Flask is only imported when the app is
+created (extra ``app``).
+"""
 
 from __future__ import annotations
 
 import logging
-from dataclasses import dataclass, fields
-from pathlib import Path
+from collections.abc import Mapping
+from dataclasses import dataclass
 from typing import TYPE_CHECKING
-
-from makeprov.config import ProvenanceConfig
 
 if TYPE_CHECKING:
     from flask import Flask
 
 LOGGER = logging.getLogger(__name__)
+
+_PAGE = """
+<!doctype html>
+<title>SemSynth</title>
+<h1>SemSynth CLI Helper</h1>
+<section>
+    <h2>Search</h2>
+    <form method="post">
+        <input type="hidden" name="action" value="search">
+        <label>Provider
+            <select name="provider">
+                <option value="openml" {% if form_state.get('provider', 'openml') == 'openml' %}selected{% endif %}>OpenML</option>
+                <option value="uciml" {% if form_state.get('provider') == 'uciml' %}selected{% endif %}>UCI ML</option>
+            </select>
+        </label>
+        <label>Name contains <input name="name_substr" value="{{ form_state.get('name_substr', '') }}"></label>
+        <label>Area <input name="area" value="{{ form_state.get('area', 'Health and Medicine') }}"></label>
+        <label>Min categorical <input type="number" name="cat_min" value="{{ form_state.get('cat_min', 1) }}"></label>
+        <label>Min numeric <input type="number" name="num_min" value="{{ form_state.get('num_min', 1) }}"></label>
+        <button type="submit">Search</button>
+    </form>
+    {% if search_result %}
+    <pre style="white-space: pre-wrap; border: 1px solid #ccc; padding: 1rem;">{{ search_result.output }}</pre>
+    {% endif %}
+</section>
+<section>
+    <h2>Report</h2>
+    <form method="post">
+        <input type="hidden" name="action" value="report">
+        <label>Provider
+            <select name="provider">
+                <option value="openml">OpenML</option>
+                <option value="uciml">UCI ML</option>
+            </select>
+        </label>
+        <label>Datasets (comma-separated)<input name="datasets" value="{{ form_state.get('datasets', '') }}"></label>
+        <label>Configs (inline TOML) <textarea name="configs_toml">{{ form_state.get('configs_toml', '') }}</textarea></label>
+        <label>Area <input name="area" value="{{ form_state.get('area', 'Health and Medicine') }}"></label>
+        <button type="submit">Run report</button>
+    </form>
+    {% if status_message %}
+    <p>{{ status_message }}</p>
+    {% endif %}
+</section>
+"""
 
 
 @dataclass
@@ -23,197 +70,92 @@ class SearchResult:
     output: str
 
 
-def _run_search(
-    provider: str,
-    name_substr: str | None = None,
-    area: str = "Health and Medicine",
-    cat_min: int = 1,
-    num_min: int = 1,
-) -> SearchResult:
-    """Execute the search command and capture its text output.
+def _inline_toml(text: str) -> str:
+    """The configuration text of the form; file paths are refused because the form is reachable over the network."""
+
+    text = text.strip()
+    if text.startswith("@") or (text and "=" not in text and "[" not in text):
+        raise ValueError("Configs must be inline TOML, not a file path.")
+    return text
+
+
+def search(form: Mapping[str, str]) -> SearchResult:
+    """Run :func:`semsynth.workflow.search_datasets` for the search form and render its table as TSV."""
+
+    from .workflow import search_datasets
+
+    provider = form.get("provider", "openml")
+    table = search_datasets(
+        provider,
+        name_substr=form.get("name_substr") or None,
+        area=form.get("area", "Health and Medicine"),
+        cat_min=int(form.get("cat_min", 1)),
+        num_min=int(form.get("num_min", 1)),
+    )
+    return SearchResult(provider=provider, output=table.to_csv(sep="\t", index=False))
+
+
+def report(form: Mapping[str, str], outdir: str) -> str:
+    """Run :func:`semsynth.workflow.run_reports` for the report form and describe the outcome."""
+
+    from .workflow import run_reports
+
+    provider = form.get("provider", "openml")
+    names = [value.strip() for value in form.get("datasets", "").split(",") if value.strip()]
+    failures = run_reports(
+        provider,
+        datasets=names or None,
+        outdir=outdir,
+        pipeline_configs=_inline_toml(form.get("configs_toml", "")),
+        area=form.get("area", "Health and Medicine"),
+    )
+    label = ", ".join(names) if names else "default selection"
+    if failures:
+        return f"Report for {provider} datasets {label} failed: {'; '.join(failures)}"
+    return f"Report finished for {provider} datasets: {label}, written to {outdir}."
+
+
+def create_app(outdir: str = "output/") -> Flask:
+    """Create and configure the Flask application.
 
     Args:
-        provider: Data provider identifier.
-        name_substr: Substring filter for dataset names.
-        area: Topic area filter for UCI ML datasets.
-        cat_min: Minimum number of categorical columns.
-        num_min: Minimum number of numeric columns.
-
-    Returns:
-        SearchResult containing the provider and captured TSV output.
+        outdir: Directory that the reports are written to.
     """
-    from .datasets import list_openml, list_uciml  # defer heavy imports
-    provider_key = provider.lower()
-    if provider_key == "openml":
-        df = list_openml(name_substr=name_substr, cat_min=cat_min, num_min=num_min)
-    elif provider_key == "uciml":
-        df = list_uciml(
-            area=area,
-            name_substr=name_substr,
-            cat_min=cat_min,
-            num_min=num_min,
-        )
-    else:
-        raise SystemExit("provider must be 'openml' or 'uciml'")
-    output_text = df.to_csv(sep="\t", index=None)
-    return SearchResult(provider=provider, output=output_text)
 
-
-def _run_report(
-    provider: str,
-    datasets: list[str] | None = None,
-    pipeline_configs: str = "",
-    area: str = "Health and Medicine",
-    outdir = Path('outputs'),
-) -> str:
-    """Execute the report command and return a status message.
-
-    Args:
-        provider: Dataset provider.
-        datasets: Dataset identifiers supplied by the user.
-        pipeline_configs: Path to a configuration file for models.
-        area: Topic area filter for UCI ML datasets.
-
-    Returns:
-        Status text summarizing the invocation.
-    """
-    from .datasets import load_dataset, specs_from_input
-    from .models import load_model_configs, parse_toml_config
-    from .pipeline import PipelineConfig, process_dataset
-    from .utils import ensure_dir
-
-    outdir_path = Path(outdir)
-    ensure_dir(str(outdir_path))
-    
-    dataset_specs = specs_from_input(provider=provider, datasets=datasets, area=area)
-    config_text = pipeline_configs.strip()
-    config_data = parse_toml_config(config_text or None)
-    bundle = load_model_configs(config_data=config_data)
-    cfg = PipelineConfig()
-    if isinstance(config_data, dict):
-        section = config_data.get("pipeline") if isinstance(config_data.get("pipeline"), dict) else config_data
-        if isinstance(section, dict):
-            cfg.apply_mapping(section)
-    for field_def in fields(cfg):
-        if hasattr(bundle, field_def.name):
-            value = getattr(bundle, field_def.name)
-            if value is not None:
-                setattr(cfg, field_def.name, value)
-
-    for dataset_spec in dataset_specs:
-        logging.info("Loading dataset %s", dataset_spec)
-        payload = load_dataset(dataset_spec)
-        resolved_spec = payload.spec
-        dataset_label = resolved_spec.name or str(resolved_spec.id)
-        dataset_outdir = outdir_path / str(dataset_label).replace("/", "_")
-        ProvenanceConfig.get().prov_dir = str(dataset_outdir / "prov")
-        process_dataset(
-            resolved_spec,
-            payload.frame,
-            payload.color,
-            str(outdir_path),
-            model_bundle=bundle,
-            pipeline_config=cfg,
-        )
-    dataset_label = ", ".join(datasets) if datasets else "default selection"
-    return f"Report launched for {provider} datasets: {dataset_label}."
-
-
-def create_app() -> Flask:
-    """Create and configure the Flask application."""
-
-    from flask import Flask, render_template_string, request  # defer
+    from flask import Flask, render_template_string, request
 
     app = Flask(__name__)
-    app.config["JSON_SORT_KEYS"] = False
 
     @app.route("/", methods=["GET", "POST"])
     def index() -> str:
         search_result: SearchResult | None = None
         status_message: str | None = None
-
         form_state = request.form if request.method == "POST" else request.args
-        if request.method == "POST":
-            action = form_state.get("action")
+        action = form_state.get("action") if request.method == "POST" else None
+        try:
             if action == "search":
-                search_result = _run_search(
-                    form_state.get("provider", "openml"),
-                    name_substr=form_state.get("name_substr") or None,
-                    area=form_state.get("area", "Health and Medicine"),
-                    cat_min=int(form_state.get("cat_min", 1)),
-                    num_min=int(form_state.get("num_min", 1)),
-                )
+                search_result = search(form_state)
             elif action == "report":
-                datasets_text = form_state.get("datasets", "").strip()
-                datasets = [value.strip() for value in datasets_text.split(",") if value.strip()]
-                status_message = _run_report(
-                    form_state.get("provider", "openml"),
-                    datasets=datasets or None,
-                    configs_toml=form_state.get("configs_toml", ""),
-                    area=form_state.get("area", "Health and Medicine"),
-                )
-
+                status_message = report(form_state, outdir)
+        except (ValueError, ImportError) as exc:
+            status_message = str(exc)
         return render_template_string(
-            """
-            <!doctype html>
-            <title>SemSynth</title>
-            <h1>SemSynth CLI Helper</h1>
-            <section>
-                <h2>Search</h2>
-                <form method="post">
-                    <input type="hidden" name="action" value="search">
-                    <label>Provider
-                        <select name="provider">
-                            <option value="openml" {% if form_state.get('provider', 'openml') == 'openml' %}selected{% endif %}>OpenML</option>
-                            <option value="uciml" {% if form_state.get('provider') == 'uciml' %}selected{% endif %}>UCI ML</option>
-                        </select>
-                    </label>
-                    <label>Name contains <input name="name_substr" value="{{ form_state.get('name_substr', '') }}"></label>
-                    <label>Area <input name="area" value="{{ form_state.get('area', 'Health and Medicine') }}"></label>
-                    <label>Min categorical <input type="number" name="cat_min" value="{{ form_state.get('cat_min', 1) }}"></label>
-                    <label>Min numeric <input type="number" name="num_min" value="{{ form_state.get('num_min', 1) }}"></label>
-                    <button type="submit">Search</button>
-                </form>
-                {% if search_result %}
-                <pre style="white-space: pre-wrap; border: 1px solid #ccc; padding: 1rem;">{{ search_result.output }}</pre>
-                {% endif %}
-            </section>
-            <section>
-                <h2>Report</h2>
-                <form method="post">
-                    <input type="hidden" name="action" value="report">
-                    <label>Provider
-                        <select name="provider">
-                            <option value="openml">OpenML</option>
-                            <option value="uciml">UCI ML</option>
-                        </select>
-                    </label>
-                    <label>Datasets (comma-separated)<input name="datasets" value="{{ form_state.get('datasets', '') }}"></label>
-                    <label>Configs TOML <input name="configs_toml" value="{{ form_state.get('configs_toml', '') }}"></label>
-                    <label>Area <input name="area" value="{{ form_state.get('area', 'Health and Medicine') }}"></label>
-                <button type="submit">Run report</button>
-                </form>
-                {% if status_message %}
-                <p>{{ status_message }}</p>
-                {% endif %}
-            </section>
-            """,
-            search_result=search_result,
-            status_message=status_message,
-            form_state=form_state,
+            _PAGE, search_result=search_result, status_message=status_message, form_state=form_state
         )
 
     return app
 
-def run_app(*, host: str = "127.0.0.1", port: int = 5000, debug: bool = False) -> None:
+
+def run_app(*, host: str = "127.0.0.1", port: int = 5000, debug: bool = False, outdir: str = "output/") -> None:
     """Create and run the Flask development server.
 
     Args:
         host: Host interface for the server.
         port: Port to bind the server to.
         debug: Whether to enable Flask debug mode.
+        outdir: Directory that the reports are written to.
     """
 
     logging.basicConfig(level=logging.INFO)
     LOGGER.info("Starting SemSynth app on %s:%s (debug=%s)", host, port, debug)
-    create_app().run(host=host, port=port, debug=debug)
+    create_app(outdir).run(host=host, port=port, debug=debug)

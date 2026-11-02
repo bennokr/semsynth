@@ -1,7 +1,7 @@
 {
   "semsynth/__init__.py": 14,
   "semsynth/__main__.py": 67,
-  "semsynth/app.py": 75,
+  "semsynth/app.py": 51,
   "semsynth/backends/__init__.py": 2,
   "semsynth/backends/_legacy.py": 25,
   "semsynth/backends/base.py": 42,

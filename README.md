@@ -68,7 +68,7 @@ Dataset metadata is a [linked-codebook](https://bennokr.github.io/linked-codeboo
    - Regenerate metadata-only reports for all curated codebooks and refresh the catalog/index: `python -m semsynth mappings --pipeline-configs ""`
    - Re-render reports for all curated mappings using existing outputs (skip mappings and metrics): `python -m semsynth refresh-mapping-reports --pipeline-configs '{pipeline={generate_umap=false,compute_privacy=false,compute_downstream=false,overwrite_umap=false}}'`
    - The generated `output/index.html` now embeds **YASGUI + Comunica (browser)** with a static endpoint identifier (`browser://semsynth-static-catalog`) and loads runnable query tabs from `output/sparql/*.rq` files for codebooks and provenance-linked synthetic artifacts.
-   - Launch a minimal Flask UI for search and report actions: `python -m semsynth run-app --host 0.0.0.0 --port 5000`
+   - Launch a minimal Flask UI for search and report actions (needs `.[app,providers]`): `python -m semsynth run-app --port 5000`. It calls the same functions as `search` and `report`, accepts inline TOML only, and binds to 127.0.0.1 unless you pass `--host`
 
 ## 📄 TOML bundles
 - `configs/simple_config.toml` mixes MetaSyn with two PyBNesian baselines.
