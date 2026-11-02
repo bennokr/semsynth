@@ -22,13 +22,10 @@ if TYPE_CHECKING:  # pragma: no cover - typing only
 
 LOGGER = logging.getLogger(__name__)
 
-__all__ = ["BACKENDS", "EVALUATES_ITSELF", "load_backend", "synthesize", "write_run"]
+__all__ = ["BACKENDS", "load_backend", "synthesize", "write_run"]
 
 BACKENDS = ("metasyn", "privbayes", "pybnesian", "synthcity")
 """The backend names; each is also the name of the extra that installs its engine."""
-
-EVALUATES_ITSELF = frozenset({"pybnesian", "synthcity"})
-"""Backends that hold rows out and report held-out metrics themselves; the runner gives them the whole sample."""
 
 _PROV = "http://www.w3.org/ns/prov#"
 

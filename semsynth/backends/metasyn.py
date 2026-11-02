@@ -8,8 +8,6 @@ from __future__ import annotations
 
 import importlib.metadata
 import logging
-from dataclasses import replace
-from pathlib import Path
 from typing import TYPE_CHECKING, Any
 
 from ..result import SynthesisResult
@@ -96,46 +94,4 @@ def synthesize(
         parameters={"rows": count, "seed": seed, "params": dict(options)},
         provenance={"engine": "metasyn", "engine_version": _version()},
         learned_model=frame,
-    )
-
-
-def run_experiment(
-    df: pd.DataFrame,
-    *,
-    provider: str | None,
-    dataset_name: str | None,
-    provider_id: int | None,
-    outdir: str,
-    label: str,
-    model_info: dict[str, Any] | None,
-    rows: int | None,
-    seed: int,
-    test_size: float,
-    codebook_jsonld: dict[str, Any] | None = None,
-) -> Path:
-    """Fit on a training split, evaluate on the held-out rows and write the run's files.
-
-    This is the file-based entry point that the other backends still implement; the pipeline calls
-    :func:`synthesize` and :func:`semsynth.synthesis.write_run` itself.
-    """
-
-    from ..evaluate import holdout_metrics, split_train_test
-    from ..synthesis import write_run
-
-    disc_cols, cont_cols = split_columns(df)
-    train, test = split_train_test(df, test_size, seed)
-    result = synthesize(train, rows=rows or len(df), seed=seed, **dict(model_info or {}))
-    metrics = holdout_metrics(test, result.synthetic_data, disc_cols, cont_cols)
-    result = replace(
-        result,
-        metrics={**metrics, "train_rows": len(train)},
-        parameters={**result.parameters, "test_size": test_size},
-    )
-    dataset = {"provider": provider, "dataset_name": dataset_name, "provider_id": provider_id}
-    return write_run(
-        result,
-        Path(outdir) / "models" / label,
-        label=label,
-        dataset=dataset,
-        codebook_jsonld=codebook_jsonld,
     )

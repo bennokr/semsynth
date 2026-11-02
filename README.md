@@ -210,8 +210,10 @@ actions, and warnings. `write_run` is the one function that serializes a result 
 
 MetaSyn learns one distribution per column and is the choice for dummy data with realistic types, ranges and
 missingness. It carries no privacy claim. PrivBayes (`pip install -e ".[privbayes]"`) is differentially private
-for the budget `epsilon` you give it. PyBNesian and SynthCity wrap their file-based `run_experiment`
-(see `semsynth/backends/_legacy.py`); that wrapper has not been exercised in CI because their engines are not installed.
+for the budget `epsilon` you give it. PyBNesian (`.[pybnesian]`) learns a Bayesian network (`type="clg"` or
+`"semiparametric"`) and keeps its GraphML, picture and pickle as artifacts; SynthCity (`.[synthcity]`, heavy: PyTorch)
+runs one of its generators (`type="ctgan"`, `"tvae"`, `"adsgan"`, `"bn"`, ...). PyBNesian is tested in CI; SynthCity is
+tested by the weekly canary, because its install is several gigabytes.
 
 Declared semantic bins, datatypes, and categorical flags are applied before
 PrivBayes learns its network. The result records those computational actions so

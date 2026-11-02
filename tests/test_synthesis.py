@@ -4,13 +4,11 @@ from __future__ import annotations
 
 import json
 from pathlib import Path
-from typing import Any
 
 import numpy as np
 import pandas as pd
 import pytest
 
-from semsynth.backends._legacy import synthesize_via_run_experiment
 from semsynth.codebook import Codebook
 from semsynth.result import SynthesisResult
 from semsynth.synthesis import load_backend, synthesize, write_run
@@ -115,28 +113,3 @@ def test_write_run_writes_the_files_of_a_run(tmp_path: Path) -> None:
     assert "prov:Activity" in kinds.values()
     generated = [n for n in provenance["@graph"] if n.get("prov:wasGeneratedBy")]
     assert {n["dcterms:title"] for n in generated} >= {"synthetic.csv", "metrics.json", "extra.txt"}
-
-
-def test_adapter_reads_back_what_a_file_based_backend_wrote() -> None:
-    seen: dict[str, Any] = {}
-
-    def run_experiment(*, df: pd.DataFrame, outdir: str, label: str, model_info: dict, rows: int, seed: int,
-                       test_size: float, **_kwargs: Any) -> Path:
-        seen.update(model_info=model_info, rows=rows, seed=seed, test_size=test_size)
-        run_dir = Path(outdir) / "models" / label
-        run_dir.mkdir(parents=True)
-        df.head(rows).to_csv(run_dir / "synthetic.csv", index=False)
-        (run_dir / "metrics.json").write_text(json.dumps({"backend": "fake", "heldout_loglik": {"mean_loglik": -1.0}}))
-        (run_dir / "manifest.json").write_text(json.dumps({"backend": "fake", "name": label, "type": "clg", "seed": seed}))
-        (run_dir / "structure.graphml").write_text("<graphml/>")
-        return run_dir
-
-    result = synthesize_via_run_experiment(
-        run_experiment, "fake", _table(), rows=5, seed=9, options={"type": "clg", "test_size": 0.3}
-    )
-
-    assert seen == {"model_info": {"type": "clg"}, "rows": 5, "seed": 9, "test_size": 0.3}
-    assert len(result.synthetic_data) == 5
-    assert result.metrics == {"heldout_loglik": {"mean_loglik": -1.0}}
-    assert result.parameters == {"type": "clg", "seed": 9}
-    assert result.artifacts == {"structure.graphml": b"<graphml/>"}

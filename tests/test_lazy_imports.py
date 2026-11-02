@@ -56,7 +56,7 @@ def test_import_semsynth_and_the_cli_help_load_no_heavy_library() -> None:
 def test_library_modules_import_without_the_optional_libraries() -> None:
     modules = [
         "semsynth.synthesis", "semsynth.codebook", "semsynth.evaluate", "semsynth.preprocess", "semsynth.runner",
-        "semsynth.pipeline", "semsynth.workflow", "semsynth.datasets", "semsynth.reporting",
+        "semsynth.workflow", "semsynth.datasets", "semsynth.reporting",
         "semsynth.report_tables", "semsynth.catalog", "semsynth.app", "semsynth.downstream_fidelity",
         "semsynth.missingness", "semsynth.privacy_metrics", "semsynth.umap_utils", "semsynth.mappings",
         "semsynth.dataproviders.uciml", "semsynth.dataproviders.openml", "semsynth.dataproviders.uci_archive",

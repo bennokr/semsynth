@@ -153,15 +153,8 @@ def load_model_configs(config_input: str | None = None, *, config_data: dict[str
     )
 
 
-def model_run_root(dataset_outdir: Path) -> Path:
-    root = dataset_outdir / "models"
-    root.mkdir(parents=True, exist_ok=True)
-    return root
 
 
-def write_manifest(run_dir: Path, manifest: dict[str, Any]) -> None:
-    (run_dir / "manifest.json").write_text(json.dumps(manifest, indent=2), encoding="utf-8")
-    logging.debug("Wrote manifest to %s", run_dir / "manifest.json")
 
 
 def discover_model_runs(dataset_outdir: str | Path) -> list[ModelRun]:

@@ -32,8 +32,9 @@ def _table(n: int = 300) -> pd.DataFrame:
 
 
 def test_report_pipeline_runs_every_stage(tmp_path: Path) -> None:
+    from semsynth.config import PipelineConfig
     from semsynth.models import ModelConfigBundle, ModelSpec
-    from semsynth.pipeline import PipelineConfig, process_dataset
+    from semsynth.runner import process_dataset
     from semsynth.specs import DatasetSpec
 
     frame = _table()

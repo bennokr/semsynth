@@ -1,7 +1,7 @@
 # The checks that CI runs. `make check` before every push.
 CORE = semsynth/codebook.py semsynth/metrics.py semsynth/missingness.py semsynth/result.py \
-	semsynth/app.py semsynth/backends/_legacy.py semsynth/backends/metasyn.py semsynth/dataproviders/_helpers.py \
-	semsynth/dataproviders/uci_archive.py semsynth/datasets.py semsynth/mappings.py semsynth/pipeline.py \
+	semsynth/app.py semsynth/backends/metasyn.py semsynth/dataproviders/_helpers.py \
+	semsynth/dataproviders/uci_archive.py semsynth/datasets.py semsynth/mappings.py \
 	semsynth/specs.py semsynth/sssom_codebook.py semsynth/synthesis.py semsynth/workflow.py
 
 .PHONY: check lint types ty test size

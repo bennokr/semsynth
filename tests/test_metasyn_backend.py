@@ -11,6 +11,7 @@ import pandas as pd
 import pytest
 
 from semsynth.backends import metasyn as metasyn_backend
+from semsynth.synthesis import write_run
 
 
 class _FakeMetaFrame:
@@ -62,30 +63,16 @@ def test_missing_metasyn_names_the_extra(monkeypatch: pytest.MonkeyPatch) -> Non
         metasyn_backend._load_metasyn()
 
 
-def test_run_experiment_writes_expected_artifacts(tmp_path: Path, fake_metasyn: None) -> None:
-    """The file-based entry point still writes the run directory that the report reads."""
-
+def test_write_run_writes_the_files_the_report_reads(tmp_path: Path, fake_metasyn: None) -> None:
     df = pd.DataFrame({"a": [1.0, 2.0, 3.0, 4.0], "b": [0.1, 0.2, 0.3, 0.4]})
+    dataset = {"provider": "openml", "dataset_name": "demo", "provider_id": 1}
 
-    run_dir = metasyn_backend.run_experiment(
-        df=df,
-        provider="openml",
-        dataset_name="demo",
-        provider_id=1,
-        outdir=str(tmp_path),
-        label="model_a",
-        model_info={"type": "fake"},
-        rows=2,
-        seed=7,
-        test_size=0.5,
-        codebook_jsonld=None,
-    )
+    result = metasyn_backend.synthesize(df, rows=2, seed=7, type="fake")
+    run_dir = write_run(result, tmp_path / "models" / "model_a", label="model_a", dataset=dataset, codebook_jsonld=None)
 
     assert run_dir == tmp_path / "models" / "model_a"
-    for name in ("synthetic.csv", "metrics.json", "manifest.json", "per_variable_metrics.csv", "metasyn_gmf.json"):
+    for name in ("synthetic.csv", "manifest.json", "provenance.json"):
         assert (run_dir / name).exists(), name
+    assert len(pd.read_csv(run_dir / "synthetic.csv")) == 2
     manifest = json.loads((run_dir / "manifest.json").read_text(encoding="utf-8"))
     assert manifest["backend"] == "metasyn"
-    assert manifest["params"] == {"type": "fake"}
-    assert manifest["test_size"] == 0.5
-    assert len(pd.read_csv(run_dir / "synthetic.csv")) == 2

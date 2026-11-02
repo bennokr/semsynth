@@ -8,7 +8,7 @@ from dataclasses import asdict, is_dataclass
 from typing import TYPE_CHECKING, Any
 
 from .codebook import Codebook, privacy_role
-from .metrics import per_variable_distances, summarize_distance_metrics
+from .metrics import heldout_loglik, per_variable_distances, summarize_distance_metrics
 
 if TYPE_CHECKING:  # pragma: no cover - typing only
     import pandas as pd
@@ -35,7 +35,12 @@ def split_train_test(df: pd.DataFrame, test_size: float, seed: int) -> tuple[pd.
 
 
 def holdout_metrics(
-    real: pd.DataFrame, synthetic: pd.DataFrame, disc_cols: list[str], cont_cols: list[str]
+    real: pd.DataFrame,
+    synthetic: pd.DataFrame,
+    disc_cols: list[str],
+    cont_cols: list[str],
+    *,
+    model: Any = None,
 ) -> dict[str, Any]:
     """Per-variable distances between real and synthetic columns, and their summary.
 
@@ -44,6 +49,8 @@ def holdout_metrics(
         synthetic: The synthetic table.
         disc_cols: Names of the discrete columns.
         cont_cols: Names of the continuous columns.
+        model: The learned model; if it has a ``logl`` method (a PyBNesian network), the log-likelihood of the
+            held-out rows is added as ``heldout_loglik``.
 
     Returns:
         ``summary`` (JSD for discrete, KS and Wasserstein for continuous columns), ``per_variable`` (one record
@@ -52,6 +59,7 @@ def holdout_metrics(
 
     distances = per_variable_distances(real, synthetic, disc_cols, cont_cols)
     return {
+        **({"heldout_loglik": heldout_loglik(model, real)} if hasattr(model, "logl") else {}),
         "summary": summarize_distance_metrics(distances),
         "per_variable": distances.to_dict("records"),
         "test_rows": len(real),

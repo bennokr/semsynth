@@ -21,7 +21,7 @@ from .models import ModelConfigBundle, ModelSpec, discover_model_runs, load_mode
 from .preprocess import DatasetPreprocessor, PreprocessingResult
 from .result import SynthesisResult
 from .specs import DatasetSpec
-from .synthesis import EVALUATES_ITSELF, synthesize, write_run
+from .synthesis import synthesize, write_run
 
 if TYPE_CHECKING:  # pragma: no cover - typing only
     import pandas as pd
@@ -164,27 +164,20 @@ class BackendExecutor:
         )
 
     def _generate(self, spec: ModelSpec, preprocessed: PreprocessingResult) -> SynthesisResult:
-        """Synthesize with one model and, unless the backend does it itself, evaluate on held-out rows."""
+        """Synthesize with one model and evaluate it on held-out rows."""
 
         cfg = self._cfg
         seed = int(spec.seed if spec.seed is not None else cfg.random_state)
         wanted = spec.rows if spec.rows is not None else cfg.synthetic_sample
         rows = min(wanted, len(preprocessed.df_processed))
         options = dict(spec.model or {})
-        if spec.backend in EVALUATES_ITSELF:
-            return self._synthesize(  # type: ignore[no-any-return]
-                preprocessed.df_fit_sample,
-                preprocessed.codebook,
-                backend=spec.backend,
-                rows=rows,
-                seed=seed,
-                **{**options, "test_size": cfg.test_size},
-            )
         train, test = split_train_test(preprocessed.df_fit_sample, cfg.test_size, seed)
         result: SynthesisResult = self._synthesize(
             train, preprocessed.codebook, backend=spec.backend, rows=rows, seed=seed, **options
         )
-        metrics = holdout_metrics(test, result.synthetic_data, preprocessed.disc_cols, preprocessed.cont_cols)
+        metrics = holdout_metrics(
+            test, result.synthetic_data, preprocessed.disc_cols, preprocessed.cont_cols, model=result.learned_model
+        )
         return replace(
             result,
             metrics={**result.metrics, **metrics, "train_rows": len(train)},

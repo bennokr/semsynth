@@ -1,7 +1,5 @@
 from __future__ import annotations
 
-import math
-import os
 from typing import Any
 
 import numpy as np
@@ -13,22 +11,6 @@ except Exception:  # pragma: no cover - pint is optional
     PintType = None  # type: ignore[assignment]
 
 
-def ensure_dir(path: str) -> None:
-    """Create the directory at ``path`` if it is missing.
-
-    Args:
-        path: Filesystem location to create.
-
-    Examples:
-        >>> import os, tempfile
-        >>> base = tempfile.mkdtemp()
-        >>> target = os.path.join(base, "nested")
-        >>> ensure_dir(target)
-        >>> os.path.isdir(target)
-        True
-    """
-
-    os.makedirs(path, exist_ok=True)
 
 
 def seed_all(seed: int) -> np.random.Generator:
@@ -90,7 +72,7 @@ def is_discrete_series(s: pd.Series, cardinality_threshold: int = 20) -> bool:
 
     if (
         pd.api.types.is_bool_dtype(s)
-        or pd.api.types.is_categorical_dtype(s)
+        or isinstance(s.dtype, pd.CategoricalDtype)
         or pd.api.types.is_object_dtype(s)
     ):
         return True
@@ -184,7 +166,7 @@ def coerce_discrete_to_category(
     df = df.copy()
     for c in discrete_cols:
         s = df[c]
-        if pd.api.types.is_categorical_dtype(s):
+        if isinstance(s.dtype, pd.CategoricalDtype):
             continue
         converted = s.astype("category")
         df[c] = _preserve_series_attrs(s, converted)
@@ -247,7 +229,7 @@ def rename_categorical_categories_to_str(
     df = df.copy()
     for c in discrete_cols:
         s = df[c]
-        if pd.api.types.is_categorical_dtype(s):
+        if isinstance(s.dtype, pd.CategoricalDtype):
             try:
                 new_cats = [str(cat) for cat in s.cat.categories]
                 # Build string-valued series preserving NA positions, then
@@ -274,117 +256,5 @@ def rename_categorical_categories_to_str(
     return df
 
 
-def summarize_dataframe(
-    df: pd.DataFrame, discrete_cols: list[str], continuous_cols: list[str]
-) -> pd.DataFrame:
-    """Summarise dataframe columns with statistics tailored by type.
-
-    Args:
-        df: Dataframe to summarise.
-        discrete_cols: Columns considered discrete.
-        continuous_cols: Columns considered continuous.
-
-    Returns:
-        A dataframe with summary statistics per column.
-
-    Examples:
-        >>> import pandas as pd
-        >>> df = pd.DataFrame({"grade": ["A", "B", "A"], "score": [0.1, 0.2, 0.3]})
-        >>> summary = summarize_dataframe(df, ["grade"], ["score"])
-        >>> summary.loc[summary['variable'] == 'grade', 'top3'].iloc[0]
-        'A:2; B:1'
-    """
-
-    rows = []
-    for c in df.columns:
-        col = df[c]
-        na_frac = float(col.isna().mean())
-        uniq = int(col.nunique(dropna=True))
-        if c in continuous_cols:
-            desc = col.describe(percentiles=[0.25, 0.5, 0.75])
-            mean = (
-                float(desc.get("mean", np.nan))
-                if not isinstance(desc, float)
-                else float("nan")
-            )
-            std = (
-                float(desc.get("std", np.nan))
-                if not isinstance(desc, float)
-                else float("nan")
-            )
-            minv = (
-                float(desc.get("min", np.nan))
-                if not isinstance(desc, float)
-                else float("nan")
-            )
-            q25 = float(desc.get("25%", np.nan)) if "25%" in desc else float("nan")
-            q50 = float(desc.get("50%", np.nan)) if "50%" in desc else float("nan")
-            q75 = float(desc.get("75%", np.nan)) if "75%" in desc else float("nan")
-            maxv = (
-                float(desc.get("max", np.nan))
-                if not isinstance(desc, float)
-                else float("nan")
-            )
-            rows.append(
-                {
-                    "variable": c,
-                    "type": "continuous",
-                    "na_frac": na_frac,
-                    "unique": uniq,
-                    "mean": mean,
-                    "std": std,
-                    "min": minv,
-                    "q25": q25,
-                    "median": q50,
-                    "q75": q75,
-                    "max": maxv,
-                }
-            )
-        else:
-            top = col.value_counts(dropna=True).head(3)
-            top_items = "; ".join([f"{k}:{int(v)}" for k, v in top.items()])
-            rows.append(
-                {
-                    "variable": c,
-                    "type": "discrete",
-                    "na_frac": na_frac,
-                    "unique": uniq,
-                    "top3": top_items,
-                }
-            )
-    return pd.DataFrame(rows)
 
 
-def dataframe_to_markdown_table(df: pd.DataFrame, float_fmt: str = "{:.4f}") -> str:
-    """Render a dataframe as a GitHub-flavoured markdown table.
-
-    Args:
-        df: Table to render.
-        float_fmt: Format string applied to floating values.
-
-    Returns:
-        Markdown string representing the table.
-
-    Examples:
-        >>> import pandas as pd
-        >>> table = pd.DataFrame({"variable": ["grade"], "type": ["discrete"]})
-        >>> print(dataframe_to_markdown_table(table))
-        | variable | type |
-        | --- | --- |
-        | grade | discrete |
-    """
-
-    def fmt(x):
-        if isinstance(x, float):
-            if math.isnan(x):
-                return ""
-            return float_fmt.format(x)
-        return str(x)
-
-    cols = list(df.columns)
-    header = "| " + " | ".join(cols) + " |"
-    sep = "| " + " | ".join(["---"] * len(cols)) + " |"
-    lines = [header, sep]
-    for _, r in df.iterrows():
-        lines.append("| " + " | ".join(fmt(r[c]) for c in cols) + " |")
-    return "\n".join(lines)

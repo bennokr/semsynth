@@ -67,8 +67,9 @@ async def main() -> dict:
     dummy = synthesize(frame, backend="metasyn", rows=50, seed=2)
     out["dummy_rows"] = len(dummy.synthetic_data)
 
+    from semsynth.config import PipelineConfig
     from semsynth.models import ModelConfigBundle, ModelSpec
-    from semsynth.pipeline import PipelineConfig, process_dataset
+    from semsynth.runner import process_dataset
     from semsynth.specs import DatasetSpec
 
     spec = DatasetSpec("openml", name="smoke", target="disease")

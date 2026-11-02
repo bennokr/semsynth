@@ -40,3 +40,23 @@ jobs:
             | grep -o 'linked_codebook-[0-9.]*[0-9]' | sed 's/linked_codebook-//' | sort -V | tail -1)
           echo "pinned $pinned, latest $latest"
           if [ "$pinned" != "$latest" ]; then echo "::warning::linked-codebook $pinned is pinned, $latest is released"; fi
+
+  engines:
+    # PyBNesian runs in the regular checks. SynthCity pulls in PyTorch (several gigabytes), so it is tested here.
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+      - run: python -m pip install --upgrade -e '.[dev,pybnesian,synthcity]'
+      - id: engines
+        run: python -m pytest -q tests/test_engines.py
+        continue-on-error: true
+      - name: Open an issue if an engine fails
+        if: steps.engines.outcome == 'failure'
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          gh issue create --title "Canary: an engine (PyBNesian or SynthCity) fails" \
+            --body "The weekly engine tests failed: $GITHUB_SERVER_URL/$GITHUB_REPOSITORY/actions/runs/$GITHUB_RUN_ID"

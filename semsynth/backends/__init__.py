@@ -1,5 +1,1 @@
-"""Backend implementations and shared interfaces."""
-
-from .base import Backend, BackendModule
-
-__all__ = ["Backend", "BackendModule"]
+"""Synthesis backends. Each module defines ``synthesize(df, codebook, *, rows, seed, **options)``."""

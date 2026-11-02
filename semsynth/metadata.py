@@ -3,11 +3,8 @@ from __future__ import annotations
 import json
 import logging
 from collections.abc import Mapping
-from dataclasses import dataclass
 from pathlib import Path
 from typing import Any
-
-from makeprov import RDFMixin
 
 JSONLD_CONTEXT = {
     "@context": {
@@ -31,13 +28,6 @@ JSONLD_CONTEXT = {
 }
 
 
-@dataclass
-class DCATDistribution(RDFMixin):
-    __context__ = JSONLD_CONTEXT
-    title: str
-    access_url: str | None = None
-    download_url: str | None = None
-    media_type: str | None = None
 
 
 def get_uciml_variable_descriptions(dataset_id: int) -> dict[str, str]:
