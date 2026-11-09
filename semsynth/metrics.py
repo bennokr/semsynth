@@ -1,6 +1,7 @@
 from __future__ import annotations
 
-from typing import Dict, List
+from collections.abc import Callable
+from typing import Any
 
 import numpy as np
 import pandas as pd
@@ -8,7 +9,7 @@ from scipy.spatial.distance import jensenshannon
 from scipy.stats import ks_2samp, wasserstein_distance
 
 
-def heldout_loglik(model, df_test: pd.DataFrame) -> Dict[str, float]:
+def heldout_loglik(model: Any, df_test: pd.DataFrame) -> dict[str, float]:
     try:
         arr = model.logl(df_test)
     except Exception:
@@ -16,7 +17,7 @@ def heldout_loglik(model, df_test: pd.DataFrame) -> Dict[str, float]:
             "mean_loglik": float("nan"),
             "std_loglik": float("nan"),
             "sum_loglik": float("nan"),
-            "n_rows": int(0),
+            "n_rows": 0,
         }
     try:
         arr = np.asarray(arr, dtype=float).reshape(-1)
@@ -32,26 +33,38 @@ def heldout_loglik(model, df_test: pd.DataFrame) -> Dict[str, float]:
             "mean_loglik": float("nan"),
             "std_loglik": float("nan"),
             "sum_loglik": float("nan"),
-            "n_rows": int(0),
+            "n_rows": 0,
         }
     vals = arr[mask]
     return {
         "mean_loglik": float(np.mean(vals)),
         "std_loglik": float(np.std(vals)),
         "sum_loglik": float(np.sum(vals)),
-        "n_rows": int(len(vals)),
+        "n_rows": len(vals),
     }
 
 
+def _labels(series: pd.Series) -> pd.Series:
+    """The values of a discrete column as text, so that the code ``70`` and the integer 70 are one category."""
+
+    def text(value: Any) -> str:
+        if isinstance(value, (int, float, np.integer, np.floating)) and not isinstance(value, (bool, np.bool_)):
+            return str(int(value)) if float(value).is_integer() else str(value)
+        return str(value)
+
+    return series.dropna().map(text)
+
+
 def js_divergence_discrete(p: pd.Series, q: pd.Series) -> float:
-    cats = sorted(set(p.dropna().unique()).union(set(q.dropna().unique())))
+    p, q = _labels(p), _labels(q)
+    cats = sorted(set(p.unique()).union(set(q.unique())))
     if len(cats) == 0:
         return float("nan")
     p_counts = (
-        p.value_counts(dropna=True).reindex(cats, fill_value=0).to_numpy(dtype=float)
+        p.value_counts().reindex(cats, fill_value=0).to_numpy(dtype=float)
     )
     q_counts = (
-        q.value_counts(dropna=True).reindex(cats, fill_value=0).to_numpy(dtype=float)
+        q.value_counts().reindex(cats, fill_value=0).to_numpy(dtype=float)
     )
     p_probs = (p_counts + 1e-9) / (p_counts.sum() + 1e-9 * len(cats))
     q_probs = (q_counts + 1e-9) / (q_counts.sum() + 1e-9 * len(cats))
@@ -61,31 +74,31 @@ def js_divergence_discrete(p: pd.Series, q: pd.Series) -> float:
 def per_variable_distances(
     real_df: pd.DataFrame,
     synth_df: pd.DataFrame,
-    discrete_cols: List[str],
-    continuous_cols: List[str],
+    discrete_cols: list[str],
+    continuous_cols: list[str],
 ) -> pd.DataFrame:
     rows = []
     for c in real_df.columns:
         if c in discrete_cols:
             jsd = js_divergence_discrete(real_df[c], synth_df[c])
-            rows.append(dict(variable=c, type="discrete", JSD=jsd))
+            rows.append({"variable": c, "type": "discrete", "JSD": jsd})
         else:
             a = pd.to_numeric(real_df[c], errors="coerce").dropna()
             b = pd.to_numeric(synth_df[c], errors="coerce").dropna()
             if len(a) == 0 or len(b) == 0:
                 rows.append(
-                    dict(
-                        variable=c, type="continuous", KS=float("nan"), W1=float("nan")
-                    )
+                    {
+                        "variable": c, "type": "continuous", "KS": float("nan"), "W1": float("nan")
+                    }
                 )
                 continue
             ks = ks_2samp(a, b, method="auto").statistic
             w1 = wasserstein_distance(a, b)
-            rows.append(dict(variable=c, type="continuous", KS=ks, W1=w1))
+            rows.append({"variable": c, "type": "continuous", "KS": ks, "W1": w1})
     return pd.DataFrame(rows)
 
 
-def summarize_distance_metrics(distances: pd.DataFrame) -> Dict[str, float]:
+def summarize_distance_metrics(distances: pd.DataFrame) -> dict[str, float]:
     """Compute aggregate statistics for per-variable distance metrics."""
     if distances.empty:
         return {
@@ -105,7 +118,7 @@ def summarize_distance_metrics(distances: pd.DataFrame) -> Dict[str, float]:
         else pd.DataFrame()
     )
 
-    def _agg(frame: pd.DataFrame, column: str, reducer) -> float:
+    def _agg(frame: pd.DataFrame, column: str, reducer: Callable[[Any], float]) -> float:
         if frame.empty or column not in frame.columns:
             return float("nan")
         series = pd.to_numeric(frame[column], errors="coerce").dropna()

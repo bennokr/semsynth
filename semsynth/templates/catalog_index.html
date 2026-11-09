@@ -158,14 +158,14 @@
 
     for (const dataset of datasets) {
       const distUrls = collectDistributionUrls(dataset);
-      const semmapUrls = distUrls.filter((u) => String(u).toLowerCase().includes("dataset.semmap.json"));
+      const codebookUrls = distUrls.filter((u) => String(u).toLowerCase().includes("dataset.codebook.jsonld"));
       const provUrls = distUrls.filter((u) => String(u).toLowerCase().includes("provenance.json"));
 
-      for (const url of semmapUrls) {
+      for (const url of codebookUrls) {
         try {
           sources.push(await loadSerialized(url));
         } catch (error) {
-          console.warn("Failed to load SemMap", url, error);
+          console.warn("Failed to load codebook", url, error);
         }
       }
 

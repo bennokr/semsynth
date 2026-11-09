@@ -27,14 +27,14 @@ Optional extras (UMAP, PyBNesian, SynthCity, etc.) can be layered on top by
 supplying the relevant extras group, for example:
 
 ```bash
-python -m pip install -e .[umap,pybnesian,synthcity]
+python -m pip install -e .[providers,umap,pybnesian,synthcity]
 ```
 
 ## Create semantic mappings
 
 SemSynth now ships with a dedicated command that orchestrates the full
 mapping workflow – metadata parsing, terminology lookup, SSSOM emission, and
-SemMap enrichment. Pick a strategy with `--method`:
+codebook enrichment. Pick a strategy with `--method`:
 
 ```bash
 python -m semsynth create-mapping uciml \
@@ -53,16 +53,10 @@ The command writes `*.sssom.tsv` and `*.metadata.json` artefacts under
 column identifier pointing to a list of SSSOM-style dictionaries. Alternate
 strategies include `--method keyword` (Datasette keyword search),
 `--method embed` (sentence-transformer re-ranking), and `--method llm` (LLM +
-Datasette). Each honours the flags documented in `map_columns/README.md`.
+Datasette). Each honours the flags of `entailmap match --help`. Install the matchers with `pip install "semsynth[mapping]"`.
 
-To rebuild the Wikidata terminology table offline, run:
-
-```bash
-python map_columns/build_wikidata_medical_codes_table.py
-```
-
-This produces an updated `map_columns/codes.tsv` enriched with descriptions
-and alternate labels.
+To rebuild the Wikidata terminology table offline, use the builders in `entailmap.match` (`build_wikidata_medical_codes_table`),
+and point `ENTAILMAP_MATCH_DATA` at the directory that holds the result.
 
 ## Generate reports
 
@@ -78,7 +72,7 @@ python -m semsynth report uciml --datasets 145 \
 
 SemSynth merges the curated mappings during preprocessing. Discrete versus
 continuous inference now honours the statistical data type hints stored in
-the SemMap metadata, so integer-coded categoricals remain categorical in the
+the codebook, so integer-coded categoricals remain categorical in the
 downstream analysis.
 
 After installation, confirm the cache and curated metadata are available.
@@ -86,12 +80,10 @@ After installation, confirm the cache and curated metadata are available.
 ```{code-cell} python
 # Preview the cached dataset and verify metadata loads cleanly.
 import pandas as pd
-import json
-from semsynth.semmap import Metadata
+from semsynth.codebook import Codebook
 
 heart = pd.read_csv("../downloads-cache/uciml/45.csv.gz")
-meta = json.load(open("../mappings/uciml-45.metadata.json"))
-meta_obj = Metadata.from_dcat_dsv(meta)
+codebook = Codebook.read("../mappings/uciml-45.metadata.json")
 
 heart.head()
 ```

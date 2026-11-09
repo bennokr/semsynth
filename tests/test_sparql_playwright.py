@@ -32,7 +32,7 @@ class _MimeAwareHandler(BaseHTTPRequestHandler):
     def log_message(self, *_args) -> None:  # silence access logs in tests
         pass
 
-    def do_GET(self) -> None:  # noqa: N802
+    def do_GET(self) -> None:
         path = self.path.split("?")[0].lstrip("/")
         target = (PROJECT_ROOT / path).resolve()
         # Prevent path traversal.
@@ -135,7 +135,7 @@ class TestYasguiInitialisation:
 # ---------------------------------------------------------------------------
 
 class TestSparqlExecution:
-    def test_semmap_coverage_query_returns_results(self, browser, server_url):
+    def test_codebook_coverage_query_returns_results(self, browser, server_url):
         """Run the first query tab via Ctrl+Enter and verify output appears."""
         context = browser.new_context()
         page = context.new_page()

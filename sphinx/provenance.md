@@ -23,8 +23,8 @@ sorted(p.name for p in prov_dir.glob("*") if p.is_file())[:5]
 ```
 
 ## How it is wired
-- `search` and `report` CLI commands in `semsynth/__main__.py` are decorated with `@rule(merge=True)`, so makeprov tracks their inputs/outputs automatically.
-- The reporting pipeline (`semsynth/pipeline.py`) marks major artifacts (UMAPs, metrics, reports) as provenance outputs, and `ProvenanceConfig.prov_dir` is set per dataset before processing starts.
+- The CLI commands in `semsynth/__main__.py` are thin wrappers decorated with `@rule`, so makeprov tracks their inputs and outputs. The library (`semsynth.synthesis`, `semsynth.runner`, ...) does not use makeprov rules, which keeps it importable from a notebook or a browser; `ProvenanceConfig.prov_dir` is set per dataset before processing starts.
+- Every model run additionally gets a PROV-O `provenance.json` (`semsynth.synthesis.write_run`): the synthesis activity, the dataset and engine it used, the software agent, and the files it generated. The catalog and its SPARQL queries read these files.
 - Default settings live in `prov-config.toml` (base IRI and output directory). You can override them via CLI flags or config.
 
 ## Browser catalog

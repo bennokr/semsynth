@@ -6,7 +6,6 @@ import builtins
 
 import pytest
 
-
 _HEAVY_ROOT_MODULES = frozenset(
     {
         "pandas",

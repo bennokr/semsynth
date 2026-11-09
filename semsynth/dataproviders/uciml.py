@@ -3,25 +3,26 @@
 # ---------------------------
 
 
-from datetime import datetime
 import json
 import logging
+import os
 import pathlib
-from typing import Any, Dict, List, Mapping, Optional
+from collections.abc import Mapping
+from datetime import datetime
+from typing import Any
 
 import pandas as pd
-import requests
-from makeprov import OutPath, rule
 
+from ..codebook import Codebook
 from ..specs import DatasetSpec
 from ._helpers import (
     CachePaths,
     DatasetPayload,
     clean_dataset_frame,
+    import_provider,
     load_cached_payload,
     store_cached_payload,
 )
-
 
 EMPTY = (None, "", [], {},)
 _SPACE_CLEANUP = str.strip
@@ -73,19 +74,35 @@ def _iso_date(date_string: str) -> str:
         return date_string
 
 
-def _statistical_datatype(term: str) -> str:
-    """Map variable type to a DSV statistical data type class IRI."""
+# UCI variable types, as linked-codebook levels and datatypes.
+_LEVELS = {"categorical": "categorical", "binary": "categorical", "integer": "numerical", "continuous": "numerical"}
+_DATATYPES = {"integer": "integer", "continuous": "number", "date": "date"}
 
-    lowered = (term or "").lower()
-    if lowered == "categorical":
-        return "dsv:CategoricalDataType"
-    if lowered in {"integer", "real", "numeric", "number"}:
-        return "dsv:NumericalDataType"
-    return "dsv:StatisticalDataType"
+
+def _column(variable: Mapping[str, Any], missing_symbol: Any) -> dict[str, Any]:
+    """A UCI variable as a linked-codebook column."""
+
+    kind = str(variable.get("type") or "").lower()
+    column: dict[str, Any] = {"name": str(variable["name"])}
+    if _present(variable.get("description")):
+        column["description"] = str(variable["description"])
+    if _present(variable.get("units")):
+        column["unit"] = str(variable["units"])
+    if kind in _DATATYPES:
+        column["datatype"] = _DATATYPES[kind]
+    if kind in _LEVELS:
+        column["level"] = _LEVELS[kind]
+    if str(variable.get("missing_values") or "").lower() == "yes" and _present(missing_symbol):
+        column["missing_values"] = [str(missing_symbol)]
+    return column
 
 
 def to_dcat_dsv(src: Mapping[str, Any]) -> Mapping[str, Any]:
-    """Transform ucimlrepo-style metadata into DCAT + DSV JSON-LD."""
+    """Transform ucimlrepo-style metadata into DCAT + DSV JSON-LD.
+
+    The variables become a linked-codebook profile; the other fields are kept as DCAT, Dublin Core and schema.org
+    properties of the dataset.
+    """
 
     ctx = {
         "dcat": "http://www.w3.org/ns/dcat#",
@@ -132,7 +149,6 @@ def to_dcat_dsv(src: Mapping[str, Any]) -> Mapping[str, Any]:
     if keywords:
         output["dcat:keyword"] = keywords
 
-    _put(output, "schema:numberOfItems", src.get("num_instances"))
     if src.get("num_features") is not None:
         output["dcterms:extent"] = f"{src['num_features']} features"
 
@@ -154,44 +170,12 @@ def to_dcat_dsv(src: Mapping[str, Any]) -> Mapping[str, Any]:
             }
         ]
 
-    dataset_schema: Mapping[str, Any] = {"@type": "dsv:DatasetSchema"}
-    columns: List[Mapping[str, Any]] = []
-
-    for variable in src.get("variables") or []:
-        column: Mapping[str, Any] = {"@type": "dsv:Column"}
-        _put(column, "schema:name", variable.get("name"))
-        _put(column, "dcterms:description", variable.get("description"))
-        _put(column, "schema:unitText", variable.get("units"))
-        _put(column, "prov:hadRole", variable.get("role"))
-        _put(column, "schema:about", variable.get("demographic"))
-
-        summary_stats: Mapping[str, Any] = {"@type": "dsv:SummaryStatistics"}
-        _put(
-            summary_stats,
-            "dsv:statisticalDataType",
-            _statistical_datatype(variable.get("type")),
-        )
-        if (variable.get("missing_values") or "").lower() == "yes":
-            _put(
-                summary_stats,
-                "dsv:missingValueFormat",
-                src.get("missing_values_symbol"),
-            )
-        if _present(summary_stats := _prune(summary_stats)):
-            column["dsv:summaryStatistics"] = summary_stats
-
-        columns.append(_prune(column))
-
-    if columns:
-        dataset_schema["dsv:column"] = columns
-        output["dsv:datasetSchema"] = dataset_schema
-
-    dataset_stats: Mapping[str, Any] = {"@type": "dsv:SummaryStatistics"}
-    _put(dataset_stats, "dsv:numberOfRows", src.get("num_instances"))
-    _put(dataset_stats, "dsv:numberOfColumns", src.get("num_features"))
-    _put(dataset_stats, "dsv:missingValueFormat", src.get("missing_values_symbol"))
-    if _present(dataset_stats := _prune(dataset_stats)):
-        output["dsv:summaryStatistics"] = dataset_stats
+    columns = [_column(variable, src.get("missing_values_symbol")) for variable in src.get("variables") or []]
+    roles = {
+        str(variable["name"]): str(variable["role"])
+        for variable in src.get("variables") or []
+        if _present(variable.get("name")) and _present(variable.get("role"))
+    }
 
     paper = src.get("intro_paper") or {}
     if paper:
@@ -207,7 +191,7 @@ def to_dcat_dsv(src: Mapping[str, Any]) -> Mapping[str, Any]:
             "schema:datePublished": paper.get("year"),
             "schema:url": paper.get("URL"),
         }
-        identifiers_secondary: List[Mapping[str, Any]] = []
+        identifiers_secondary: list[Mapping[str, Any]] = []
         if paper.get("DOI"):
             identifiers_secondary.append(
                 {
@@ -242,12 +226,21 @@ def to_dcat_dsv(src: Mapping[str, Any]) -> Mapping[str, Any]:
     if additional_info.get("sensitive_data") is not None:
         output["dcterms:accessRights"] = additional_info.get("sensitive_data")
 
-    return _prune(output)
+    extras = _prune(output)
+    context = extras.pop("@context")
+    profile: dict[str, Any] = {"columns": columns}
+    for slot, key in (("title", "dcterms:title"), ("landing_page", "dcat:landingPage")):
+        if _present(extras.get(key)):
+            profile[slot] = str(extras.pop(key))
+    if _present(src.get("num_instances")):
+        profile["rows"] = int(src["num_instances"])
+    extras.pop("@type", None)
+    return Codebook(profile, roles, extras, context).to_jsonld()
 
 
 def _uciml_metadata_to_dcat_dsv(
     metadata: Mapping[str, Any],
-    variables: Optional[pd.DataFrame],
+    variables: pd.DataFrame | None,
     dataset_id: int,
 ) -> Mapping[str, Any]:
     """Map ucimlrepo metadata into a DCAT/DSV JSON-LD skeleton."""
@@ -260,10 +253,9 @@ def _uciml_metadata_to_dcat_dsv(
     return to_dcat_dsv(enriched_metadata)
 
 
-@rule(phony=True)
 def list_uciml(
     area: str = "Health and Medicine",
-    name_substr: Optional[str] = None,
+    name_substr: str | None = None,
     cat_min: int = 1,
     num_min: int = 1,
     *,
@@ -276,6 +268,7 @@ def list_uciml(
     it is mixed (has at least one categorical and one numeric). Only mixed datasets
     are returned.
     """
+    requests = import_provider("requests")
     list_url = "https://archive.ics.uci.edu/api/datasets/list"
     logging.info(f"Requesting UCI ML datasets ({area=})")
     resp = requests.get(list_url, params={"area": area}, timeout=30)
@@ -321,15 +314,14 @@ def list_uciml(
     return df.sort_values("min_cat_num", ascending=False).reset_index(drop=True)
 
 
-@rule(phony=True)
 def get_default_uciml(
     area: str = "Health and Medicine", *, cache_dir: pathlib.Path = pathlib.Path("uciml-cache")
-) -> List[DatasetSpec]:
+) -> list[DatasetSpec]:
     df = list_uciml(area=area, cachedir=cache_dir)
     return [DatasetSpec("uciml", name=r.name, id=r.id) for r in df.itertuples()]
 
 
-def _uciml_cache_paths(cache_dir: pathlib.Path | OutPath, dataset_id: int) -> CachePaths:
+def _uciml_cache_paths(cache_dir: pathlib.Path, dataset_id: int) -> CachePaths:
     cache_base = pathlib.Path(cache_dir)
     return CachePaths(
         data=cache_base / f"{dataset_id}.csv.gz",
@@ -337,8 +329,46 @@ def _uciml_cache_paths(cache_dir: pathlib.Path | OutPath, dataset_id: int) -> Ca
     )
 
 
-@rule(phony=True)
-def load_uciml_by_id(dataset_id: int, cache_dir: pathlib.Path | OutPath) -> DatasetPayload:
+def _load_from_archive(dataset_id: int, spec: DatasetSpec, cache_paths: CachePaths) -> DatasetPayload:
+    """Load a dataset that ucimlrepo cannot import, from its archive and the UCI API."""
+
+    from .uci_archive import fetch_frame
+
+    df_all, metadata = fetch_frame(dataset_id)
+    targets = [name for name in metadata.get("target_col") or [] if name in df_all.columns]
+    df_clean, detected_target, color_series = clean_dataset_frame(
+        df_all, target=targets[0] if targets else None
+    )
+    spec.target = detected_target
+    spec.name = _SPACE_CLEANUP(str(metadata.get("name") or f"UCI_{dataset_id}"))
+    dcat_dsv_meta = to_dcat_dsv(metadata)
+    spec.meta = dcat_dsv_meta
+    store_cached_payload(
+        cache_paths,
+        df_clean,
+        {"id": dataset_id, "name": spec.name, "target": spec.target, "dcat_dsv": dcat_dsv_meta},
+    )
+    return DatasetPayload(spec=spec, frame=df_clean, color=color_series, metadata=dcat_dsv_meta)
+
+
+INSECURE_ENV_VAR = "SEMSYNTH_INSECURE_UCI"
+
+
+def _disable_tls_verification() -> None:
+    """Make ucimlrepo skip certificate checks, for networks with an intercepting TLS proxy.
+
+    Only used when ``SEMSYNTH_INSECURE_UCI=1``; the default is to verify certificates.
+    """
+
+    import ssl
+
+    ucimlrepo_fetch = import_provider("ucimlrepo.fetch")
+
+    logging.warning("%s=1: TLS certificates are not verified for ucimlrepo downloads.", INSECURE_ENV_VAR)
+    ucimlrepo_fetch.ssl.create_default_context = lambda *_, **__: ssl._create_unverified_context()
+
+
+def load_uciml_by_id(dataset_id: int, cache_dir: pathlib.Path) -> DatasetPayload:
     """Load a UCI ML dataset by ID, with local caching of the data payload.
 
     Caching layout:
@@ -368,18 +398,19 @@ def load_uciml_by_id(dataset_id: int, cache_dir: pathlib.Path | OutPath) -> Data
             metadata=spec.meta,
         )
 
-    import ssl as _ssl
-    import ucimlrepo.fetch as _ucimlrepo_fetch
+    if os.environ.get(INSECURE_ENV_VAR) == "1":
+        _disable_tls_verification()
 
-    # Some environments have self-signed or intercepting TLS proxies that prevent
-    # certificate verification.  Fall back to an unverified context so the
-    # pipeline works even without a trusted CA chain.
-    _ucimlrepo_fetch.ssl.create_default_context = lambda *a, **kw: _ssl._create_unverified_context()
-
+    import_provider("ucimlrepo")
     from ucimlrepo import fetch_ucirepo
+    from ucimlrepo.fetch import DatasetNotFoundError
 
     logging.info("Downloading UCI ML dataset %s", dataset_id)
-    dataset = fetch_ucirepo(id=dataset_id)
+    try:
+        dataset = fetch_ucirepo(id=dataset_id)
+    except DatasetNotFoundError:
+        # No data_url in the UCI API: read the published archive instead.
+        return _load_from_archive(dataset_id, spec, cache_paths)
 
     X = dataset.data.features
     y = dataset.data.targets
@@ -405,7 +436,7 @@ def load_uciml_by_id(dataset_id: int, cache_dir: pathlib.Path | OutPath) -> Data
     spec.meta = dcat_dsv_meta
     spec.name = _SPACE_CLEANUP(getattr(dataset.metadata, "name", f"UCI_{dataset_id}"))
 
-    meta_payload: Dict[str, Any] = {
+    meta_payload: dict[str, Any] = {
         "id": dataset_id,
         "name": spec.name,
         "target": spec.target,
@@ -428,7 +459,7 @@ if __name__ == "__main__":
 
     def main(
         input_json: pathlib.Path,
-        output_json: Optional[pathlib.Path] = None,
+        output_json: pathlib.Path | None = None,
         indent: int = 2,
     ) -> None:
         """Transform UCI ML style metadata JSON to DCAT + DSV JSON-LD.

@@ -1,133 +1,97 @@
-"""MetaSyn backend implementation for SemSynth."""
+"""MetaSyn backend: a metadata-only generative model per column.
+
+MetaSyn learns one distribution per column and draws columns independently, so it is the backend to use for
+dummy data that has the right types, ranges and missingness but no relations between columns.
+"""
 
 from __future__ import annotations
 
-import copy
-import json
+import importlib.metadata
 import logging
-from pathlib import Path
-from typing import Any, Dict, Optional, TYPE_CHECKING
+from typing import TYPE_CHECKING, Any
 
-from makeprov import OutDir
-from ..metrics import per_variable_distances, summarize_distance_metrics
-from ..models import model_run_root, write_manifest
-from ..utils import coerce_continuous_to_float, ensure_dir, infer_types
+from ..result import SynthesisResult
+from ..utils import coerce_continuous_to_float, split_columns
 
 if TYPE_CHECKING:  # pragma: no cover - typing only
     import pandas as pd
+
+LOGGER = logging.getLogger(__name__)
 
 
 def _load_metasyn() -> Any:
     try:
         from metasyn.metaframe import MetaFrame
     except ImportError as exc:  # pragma: no cover - optional dependency
-        raise RuntimeError(
-            "MetaSyn backend requires 'metasyn'; install with pip install semsynth[metasyn]"
+        raise ImportError(
+            "The MetaSyn backend needs 'metasyn'; install it with `pip install 'semsynth[metasyn]'`."
         ) from exc
     return MetaFrame
 
 
-def run_experiment(
-    df: "pd.DataFrame",
-    *,
-    provider: Optional[str],
-    dataset_name: Optional[str],
-    provider_id: Optional[int],
-    outdir: str,
-    label: str,
-    model_info: Dict[str, Any] | None,
-    rows: Optional[int],
-    seed: int,
-    test_size: float,
-    semmap_export: Optional[Dict[str, Any]] = None,
-) -> Path:
-    """Fit the MetaSyn model and persist artifacts following the backend contract."""
+def _to_pandas(drawn: Any) -> pd.DataFrame:
+    import pandas as pd
+
+    return drawn.to_pandas() if hasattr(drawn, "to_pandas") else pd.DataFrame(drawn)
+
+
+def _restore_dtypes(
+    synthetic: pd.DataFrame, real: pd.DataFrame, disc_cols: list[str], cont_cols: list[str]
+) -> pd.DataFrame:
+    """Give the synthetic columns the column order and categorical levels of the real table."""
 
     import pandas as pd
-    from sklearn.model_selection import train_test_split
+
+    synthetic = synthetic.reindex(columns=real.columns)
+    for column in disc_cols:
+        synthetic[column] = synthetic[column].astype("category")
+        if isinstance(real[column].dtype, pd.CategoricalDtype):
+            synthetic[column] = synthetic[column].cat.set_categories(real[column].cat.categories)
+    return coerce_continuous_to_float(synthetic, cont_cols)
+
+
+def _version() -> str:
+    try:
+        return importlib.metadata.version("metasyn")
+    except importlib.metadata.PackageNotFoundError:  # pragma: no cover - vendored copy
+        return "unknown"
+
+
+def synthesize(
+    df: pd.DataFrame,
+    codebook: Any = None,
+    *,
+    rows: int | None = None,
+    seed: int = 0,
+    **options: Any,
+) -> SynthesisResult:
+    """Fit MetaSyn on ``df`` and draw ``rows`` rows.
+
+    Args:
+        df: The table to learn from.
+        codebook: Optional :class:`~semsynth.codebook.Codebook`; its levels decide which columns are discrete.
+        rows: Number of rows to draw; the rows of ``df`` when omitted.
+        seed: Random seed handed to MetaSyn.
+        **options: Recorded as parameters of the run; MetaSyn has no settings that are used here.
+
+    Returns:
+        The synthetic table, with ``learned_model`` set to the fitted MetaFrame.
+    """
 
     MetaFrame = _load_metasyn()
+    count = int(rows or len(df))
+    disc_cols, cont_cols = split_columns(df, codebook)
+    working = coerce_continuous_to_float(df.copy(), cont_cols)
 
-    rows = rows or len(df)
-    working = df.copy()
-    disc_cols, cont_cols = infer_types(working)
-    working = coerce_continuous_to_float(working, cont_cols)
+    LOGGER.info("Fitting MetaSyn on %d rows", len(working))
+    frame = MetaFrame.fit_dataframe(working, progress_bar=False)
+    drawn = frame.synthesize(n=count, seed=seed, progress_bar=False)
+    synthetic = _restore_dtypes(_to_pandas(drawn), df, disc_cols, cont_cols)
 
-    train_df, test_df = train_test_split(
-        working, test_size=test_size, random_state=seed, shuffle=True
+    return SynthesisResult(
+        synthetic_data=synthetic,
+        backend="metasyn",
+        parameters={"rows": count, "seed": seed, "params": dict(options)},
+        provenance={"engine": "metasyn", "engine_version": _version()},
+        learned_model=frame,
     )
-    train_df = train_df.reset_index(drop=True)
-    test_df = test_df.reset_index(drop=True)
-
-    run_root = model_run_root(Path(outdir))
-    run_dir = OutDir(run_root / label)
-    ensure_dir(str(run_dir))
-
-    logging.info("Fitting MetaSyn MetaFrame on train for %s", label)
-    mf = MetaFrame.fit_dataframe(train_df)
-    gmf_path = run_dir.file("metasyn_gmf.json")
-    try:
-        mf.save(str(gmf_path))
-    except Exception:
-        logging.warning("Could not serialize MetaSyn GMF", exc_info=True)
-        gmf_path = None
-
-    try:
-        synth_meta = mf.synthesize(n=rows)
-        if hasattr(synth_meta, "to_pandas"):
-            synth_df = synth_meta.to_pandas()
-        else:
-            synth_df = pd.DataFrame(synth_meta)
-    except Exception:
-        logging.exception("MetaSyn synthesis failed", exc_info=True)
-        synth_df = pd.DataFrame(columns=working.columns)
-
-    synth_df = synth_df.reindex(columns=working.columns)
-    for column in disc_cols:
-        if column in synth_df.columns:
-            synth_df[column] = synth_df[column].astype("category")
-            if pd.api.types.is_categorical_dtype(df[column]):
-                synth_df[column] = synth_df[column].cat.set_categories(
-                    df[column].cat.categories
-                )
-    synth_df = coerce_continuous_to_float(synth_df, cont_cols)
-
-    synth_csv = run_dir.file("synthetic.csv")
-    synth_df.to_csv(synth_csv, index=False)
-
-    if semmap_export:
-        try:
-            synth_df.semmap.from_jsonld(
-                copy.deepcopy(semmap_export), convert_pint=False
-            )
-            synth_df.semmap.to_parquet(str(run_dir.file("synthetic.semmap.parquet")), index=False)
-        except Exception:
-            logging.exception("Failed to serialize SemMap parquet for MetaSyn synthetic")
-
-    dist_df = per_variable_distances(test_df, synth_df, disc_cols, cont_cols)
-    dist_df.to_csv(run_dir.file("per_variable_metrics.csv"), index=False)
-    metrics = {
-        "backend": "metasyn",
-        "summary": summarize_distance_metrics(dist_df),
-        "train_rows": len(train_df),
-        "test_rows": len(test_df),
-        "synth_rows": len(synth_df),
-        "discrete_cols": len(disc_cols),
-        "continuous_cols": len(cont_cols),
-    }
-    run_dir.file("metrics.json").write_text(json.dumps(metrics, indent=2), encoding="utf-8")
-
-    manifest = {
-        "backend": "metasyn",
-        "name": label,
-        "provider": provider,
-        "dataset_name": dataset_name,
-        "provider_id": provider_id,
-        "params": dict(model_info or {}),
-        "seed": seed,
-        "rows": rows,
-        "test_size": test_size,
-    }
-    write_manifest(run_dir, manifest)
-    logging.info("Finished MetaSyn run: %s", label)
-    return run_dir

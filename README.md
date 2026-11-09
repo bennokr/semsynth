@@ -11,14 +11,24 @@ SemSynth is a compact toolkit to profile tabular datasets, synthesize data with 
 ## ⚙️ Install
 Clone and run `python -m pip install -e .`
 
-For extra features, run `python -m pip install -e .[EXTRA]` with `EXTRA` in (
-`app`
-`metasyn`
-`pybnesian`
-`synthcity`
-`umap`
-`statsmodels`
-`mapping`).
+The core (`import semsynth`, `python -m semsynth --help`, synthesizing from a DataFrame) needs only numpy, pandas,
+scipy, scikit-learn, pyarrow, jinja2, markdown, makeprov and linked-codebook, and imports them when a feature needs
+them. Everything else is an extra: `python -m pip install -e .[EXTRA]` with `EXTRA` in
+
+| extra | adds |
+| --- | --- |
+| `providers` | `openml`, `ucimlrepo`, `requests`: load and search OpenML and UCI ML datasets (all of `search`, `report`) |
+| `app` | `flask`: `python -m semsynth run-app` |
+| `metasyn`, `privbayes` | the MetaSyn and DataSynthesizer (PrivBayes) backends |
+| `pybnesian`, `synthcity` | the PyBNesian and SynthCity backends (they pin NumPy below 2) |
+| `statsmodels` | the downstream coefficient comparison |
+| `umap` | UMAP plots |
+| `mapping` | `entailmap.match`, for `create-mapping` |
+
+A missing extra raises an `ImportError` that names it. `python -m semsynth report ...` therefore needs
+`.[providers]` plus the extras of the models and metrics it runs.
+
+Dataset metadata is a [linked-codebook](https://bennokr.github.io/linked-codebook/) profile (see `sphinx/schema.md`). linked-codebook needs Python 3.11 or newer and is not on PyPI yet, so the dependency points to its published wheel. That also means SemSynth itself cannot be published to PyPI until linked-codebook is.
 
 ## 🔎 Quick start
 
@@ -51,14 +61,14 @@ For extra features, run `python -m pip install -e .[EXTRA]` with `EXTRA` in (
       - `configs/only_metasyn_config.toml` (MetaSyn baseline only)
    - Example: `python -m semsynth report openml --datasets adult --configs-toml @configs/advanced_config.toml`
 
-   Pipeline toggles (UMAP, privacy, downstream, missingness, SemMap context URL, etc.) now live in the TOML bundle under `[pipeline]` rather than separate CLI flags.
+   Pipeline toggles (UMAP, privacy, downstream, missingness, etc.) now live in the TOML bundle under `[pipeline]` rather than separate CLI flags.
 
 4. Catalog + app helpers
    - Build a DCAT catalog and HTML index from existing outputs: `python -m semsynth build-catalog`
-   - Regenerate metadata-only reports for all curated SemMap mappings and refresh the catalog/index: `python -m semsynth mappings --pipeline-configs ""`
+   - Regenerate metadata-only reports for all curated codebooks and refresh the catalog/index: `python -m semsynth mappings --pipeline-configs ""`
    - Re-render reports for all curated mappings using existing outputs (skip mappings and metrics): `python -m semsynth refresh-mapping-reports --pipeline-configs '{pipeline={generate_umap=false,compute_privacy=false,compute_downstream=false,overwrite_umap=false}}'`
-   - The generated `output/index.html` now embeds **YASGUI + Comunica (browser)** with a static endpoint identifier (`browser://semsynth-static-catalog`) and loads runnable query tabs from `output/sparql/*.rq` files for SemMap and provenance-linked synthetic artifacts.
-   - Launch a minimal Flask UI for search and report actions: `python -m semsynth app --host 0.0.0.0 --port 5000`
+   - The generated `output/index.html` now embeds **YASGUI + Comunica (browser)** with a static endpoint identifier (`browser://semsynth-static-catalog`) and loads runnable query tabs from `output/sparql/*.rq` files for codebooks and provenance-linked synthetic artifacts.
+   - Launch a minimal Flask UI for search and report actions (needs `.[app,providers]`): `python -m semsynth run-app --port 5000`. It calls the same functions as `search` and `report`, accepts inline TOML only, and binds to 127.0.0.1 unless you pass `--host`
 
 ## 📄 TOML bundles
 - `configs/simple_config.toml` mixes MetaSyn with two PyBNesian baselines.
@@ -100,25 +110,24 @@ batch_size = 256
 generate_umap = true
 compute_privacy = true
 compute_downstream = true
-semmap_context_url = "https://w3id.org/semmap/context"
 ```
 
 ## 📦 Outputs
 - Per dataset (e.g., `output/Heart Disease/`):
   - `index.html` and `report.md`
-  - `dataset.semmap.json` and `dataset.semmap.html` (when SemMap metadata is available)
+  - `dataset.codebook.jsonld` (DSV JSON-LD written by linked-codebook, with roles) and its RDFa rendering `dataset.codebook.html`
   - `umap_real.png` (when `--generate-umap` is enabled and UMAP dependencies are installed)
 - Per model (e.g., `output/Heart Disease/models/<name>/`):
   - `synthetic.csv`, `metrics.json`, and `umap.png`
   - Optional metrics sidecars: `metrics.privacy.json`, `metrics.downstream.json`
   - PyBNesian extras: `structure.png`, `structure.graphml`, `model.pickle`
-  - `synthetic.semmap.parquet` (when SemMap metadata is available)
+  - `synthetic.parquet`, with the codebook JSON-LD in the Parquet schema metadata
 
 ## 🧰 Metadata templates & column mappings
 - `semsynth/dataproviders/uciml.py` exposes a CLI that turns the JSON payloads cached under `uciml-cache/` (sometimes referenced as `uci-cache/` in earlier docs) into DCAT + DSV JSON-LD that downstream tools can ingest.
-- Scripts under `map_columns/` take that JSON-LD and suggest or write terminology mappings (see `map_columns/README.md` for the full strategy catalog covering lexical, Datasette keyword, embedding, and LLM workflows).
+- Terminology matching (lexical, Datasette keyword, embedding and LLM strategies) lives in [entailmap](https://github.com/bennokr/entailmap) as `entailmap.match`. Install it with `pip install "semsynth[mapping]"`. This repository keeps only the terminology data in `map_columns/` (`codes.tsv`, `terminology.db`) until it becomes a release asset of entailmap; `ENTAILMAP_MATCH_DATA` can point elsewhere.
 - `python -m semsynth create-mapping uciml --datasets 145 --method lexical` automates the end-to-end workflow (JSON-LD export → terminology scoring → SSSOM merge) and stores the results under `mappings/`.
-- Curated SemMap JSON files are repo-only under `mappings/` and are not bundled into wheels; when installing from PyPI, provide your own `mappings/` directory if you want curated mappings.
+- Curated codebooks (`mappings/*.metadata.json`, DSV JSON-LD with roles) are repo-only under `mappings/` and are not bundled into wheels; when installing from PyPI, provide your own `mappings/` directory if you want curated mappings.
 
 ### Example: UCI dataset 45 (Heart Disease)
 1. Fetch the dataset metadata. Any command that touches the UCI provider will populate `uciml-cache/<id>.json`. For example:
@@ -134,19 +143,15 @@ semmap_context_url = "https://w3id.org/semmap/context"
    python semsynth/dataproviders/uciml.py uciml-cache/45.json heart-dataset.jsonld
    ```
    The resulting `heart-dataset.jsonld` contains dataset-level `dcat:Dataset` fields plus a `dsv:datasetSchema` block with each variable from the Heart Disease dataset.
-3. Suggest terminology mappings for every variable description using the keyword search helper (writes SSSOM when `--output` is provided):
-   
+3. Suggest terminology mappings for every variable description with entailmap (writes SSSOM):
+
    ```bash
-   python map_columns/kwd_map_columns.py heart-dataset.jsonld \
-       --datasette-db-url http://127.0.0.1:8001/terminology \
-       --table codes \
-       --limit 10 \
-       --top-k 3 \
-       --output mappings/uciml-45.keyword.sssom.tsv \
-       --verbose
+   entailmap match keyword heart-dataset.jsonld \
+       --datasette-url http://127.0.0.1:8001/terminology \
+       --top-k 3 -o mappings/uciml-45.keyword.sssom.tsv
    ```
-   Swap in `map_columns/embed_map_columns.py` or `map_columns/llm_map_columns.py` to use embedding or LLM variants (see `map_columns/README.md` for full parameter lists).
-4. Run the integrated helper to write mappings and SemMap metadata in one go:
+   Use `lexical`, `embed` or `llm` instead of `keyword` for the other strategies; see `entailmap match --help`.
+4. Run the integrated helper to write mappings and the codebook in one go:
 
    ```bash
    python -m semsynth create-mapping uciml \
@@ -164,36 +169,51 @@ semmap_context_url = "https://w3id.org/semmap/context"
 - Metadata-only reports require no TOML file; pass `--configs-toml` to opt into synthetic runs.
 - All models are treated uniformly in the report; UMAPs share the same projection trained on real data.
 - When optional dependencies (e.g., `umap-learn`, PyBNesian, SynthCity) are missing or blocked by runtime sandboxing, SemSynth logs a warning and continues with the available components. The shipped `maximal_config` keeps MetaSyn as the default to guarantee completion under those constraints.
-- UCI dataset 1150 (Gallstone) is currently unavailable via `ucimlrepo`; the `mappings` target skips it with a warning until a cached stand-in or upstream access is restored.
+- Downloads verify TLS certificates. On a network with an intercepting proxy, set `SEMSYNTH_INSECURE_UCI=1` to make `ucimlrepo` skip verification (it logs a warning).
+- Some UCI datasets, such as 1150 (Gallstone), have no `data_url`, so `ucimlrepo` cannot import them. SemSynth then downloads the published archive and reads the table from it (`semsynth/dataproviders/uci_archive.py`; run `python -m semsynth.dataproviders.uci_archive 1150` to fill the cache).
 - If external dataset hosts are unreachable, cached payloads under `downloads-cache/` may contain synthetic stand-ins that mimic the documented schema so pipeline checks can proceed. Keep README notes in sync when such fallbacks are introduced.
 
 ## 📚 Testing, Contributing, Documentation
 - Install dev and documentation deps with `python -m pip install -e .[dev,docs]` (use `.[dev]` if you do not need to build docs).
 - Run tests with `python -m pytest`
 - Build the Sphinx site with `sphinx-build -b html sphinx docs`.
+- The published site (demo reports for the curated datasets, the catalog and the documentation) is built by `.github/workflows/pages.yml` on every push to `main`, or by hand with a model bundle of your choice. `output/` and `docs/` are not committed.
 
 ## 🔎 Static SPARQL endpoint (demo index)
+- The YASGUI and Comunica scripts that the catalog page loads are not in the repository. To preview the catalog locally, run `scripts/fetch_site_assets.sh templates` next to `output/` (the page loads `../templates/`); the Pages workflow does the same.
 - `python -m semsynth build-catalog` writes `output/index.html`, `output/catalog.json`, `output/catalog.jsonld`, and `output/sparql/*.rq` with an embedded YASGUI editor and browser Comunica query engine targeting static files only.
 - The page advertises endpoint id `browser://semsynth-static-catalog` and includes ready-to-run query tabs covering:
-  - datasets that publish `dataset.semmap.json`,
+  - datasets that publish `dataset.codebook.jsonld`,
   - provenance-linked synthetic artifacts,
   - distribution counts per dataset.
 - This mirrors the static-browser pattern from `data-catalog-sparql-playground` (catalog + local query UI, no server-side SPARQL service required).
 - SPARQL query templates are also described as catalog distributions so tooling can discover and preload them as tabs.
 
 
-## Backend result contract
+## Synthesizing from Python
 
-Interactive synthesis backends return `semsynth.SynthesisResult`. The contract
-keeps generated data and a learned model as Python objects, alongside parameters,
-utility metrics, privacy facts, provenance, semantic actions, and warnings.
-Batch reporting can still serialize those values as artifacts.
+```python
+from semsynth import synthesize
+from semsynth.synthesis import write_run
 
-PrivBayes now lives in `semsynth.backends.privbayes` and is installed with:
-
-```bash
-pip install -e ".[privbayes]"
+result = synthesize(df, codebook, backend="metasyn", rows=500, seed=1)   # or "privbayes", "pybnesian", "synthcity"
+result.synthetic_data      # a pandas DataFrame
+result.learned_model       # backend-specific object
+write_run(result, "output/run-1")   # only if you want the files
 ```
+
+`synthesize` never touches the disk, so it also runs in a browser (Pyodide). Every backend module defines
+`synthesize(df, codebook, *, rows, seed, **options)` and returns a `semsynth.SynthesisResult`: the generated data
+and the learned model as Python objects, alongside parameters, utility metrics, privacy facts, provenance, semantic
+actions, and warnings. `write_run` is the one function that serializes a result (`synthetic.csv`, metrics,
+`manifest.json`, a PROV-O `provenance.json`, ...); the report pipeline uses it.
+
+MetaSyn learns one distribution per column and is the choice for dummy data with realistic types, ranges and
+missingness. It carries no privacy claim. PrivBayes (`pip install -e ".[privbayes]"`) is differentially private
+for the budget `epsilon` you give it. PyBNesian (`.[pybnesian]`) learns a Bayesian network (`type="clg"` or
+`"semiparametric"`) and keeps its GraphML, picture and pickle as artifacts; SynthCity (`.[synthcity]`, heavy: PyTorch)
+runs one of its generators (`type="ctgan"`, `"tvae"`, `"adsgan"`, `"bn"`, ...). PyBNesian is tested in CI; SynthCity is
+tested by the weekly canary, because its install is several gigabytes.
 
 Declared semantic bins, datatypes, and categorical flags are applied before
 PrivBayes learns its network. The result records those computational actions so

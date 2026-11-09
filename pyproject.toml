@@ -7,41 +7,49 @@ name = "semsynth"
 version = "0.1.0"
 description = "Synthetic data profiling and reporting for OpenML and UCI datasets."
 readme = "README.md"
-requires-python = ">=3.9"
+requires-python = ">=3.11"
 authors = [
   { name = "SemSynth Authors" }
 ]
 keywords = ["synthetic-data", "data-profiling", "metadata", "uci"]
 dependencies = [
+  # Heavy libraries (pyarrow, scikit-learn, jinja2, markdown) are imported when a feature needs them, not at
+  # `import semsynth`; see tests/test_lazy_imports.py. Anything else goes into a named extra below.
   "defopt",
-  "flask",
   "markdown",
   "jinja2",
-  "numpy<2",
-  "openml",
-  "pandas<3",
-  "pint-pandas",
+  "numpy>=1.26",
+  "pandas>=2.1,<3",
+  "linked-codebook @ https://bennokr.github.io/linked-codebook/linked_codebook-0.7.0-py3-none-any.whl",
   "makeprov>=0.4.4",
-  "pyarrow",
-  "tabulate",
-  "requests",
+  "pyarrow>=15",
+  "tabulate",  # pandas.DataFrame.to_markdown, used by report_tables.py
   "scikit-learn",
-  "ucimlrepo"
+  "scipy",
 ]
 
 [project.optional-dependencies]
 dev = [
   "pytest",
   "pytest-cov",
-  "ruff",
-  "black",
+  "ruff>=0.17,<0.18",
   "mypy",
+  "pandas-stubs",
+  "ty",
   "statsmodels"
 ]
 app = [
-  "flask"
+  "flask"  # `python -m semsynth run-app`
+]
+providers = [
+  "openml",
+  "requests",
+  "ucimlrepo"  # load and list datasets from OpenML and the UCI ML Repository
 ]
 docs = [
+  "openml",
+  "requests",
+  "ucimlrepo",
   "sphinx",
   "myst-parser",
   "myst-nb",
@@ -53,11 +61,13 @@ metasyn = [
   "metasyn"
 ]
 pybnesian = [
+  "numpy<2",  # not tested with NumPy 2
   "graphviz",
   "networkx",
   "pybnesian"
 ]
 synthcity = [
+  "numpy<2",  # not tested with NumPy 2
   "synthcity>=0.2",
   "torch"
 ]
@@ -66,6 +76,7 @@ privbayes = [
   "scipy"
 ]
 umap = [
+  "numpy<2",  # not tested with NumPy 2
   "numba<0.63",
   "llvmlite<0.46",
   "matplotlib",
@@ -75,13 +86,13 @@ statsmodels = [
   "statsmodels"
 ]
 mapping = [
-  "requests",
-  "defopt",
-  "datasette",
-  "sqlite-utils",
-  "sssom"
+  "entailmap[lexical] @ git+https://github.com/bennokr/entailmap@bbfb008",  # until entailmap is released
 ]
 all = [
+  "flask",
+  "openml",
+  "requests",
+  "ucimlrepo",
   "metasyn",
   "statsmodels",
   "graphviz",
@@ -92,8 +103,7 @@ all = [
   "DataSynthesizer==0.1.13",
   "scipy",
   "matplotlib",
-  "umap-learn",
-  "ucumvert"
+  "umap-learn"
 ]
 
 [project.scripts]
@@ -102,17 +112,38 @@ semsynth = "semsynth.__main__:main"
 [tool.setuptools]
 
 [tool.setuptools.packages.find]
-include = ["semsynth*", "map_columns*"]
+include = ["semsynth*"]
 
 [tool.setuptools.package-data]
-semsynth = ["templates/*.j2", "templates/*.html", "templates/*.css", "templates/*.js", "templates/*.rq", "*.jsonld"]
+semsynth = ["templates/*.j2", "templates/*.html", "templates/*.css", "templates/*.rq"]
 
 [tool.ruff]
 line-length = 100
+target-version = "py311"
 
-[tool.black]
-line-length = 100
+[tool.ruff.lint]
+select = ["E4", "E7", "E9", "F", "I", "UP", "B", "SIM", "C4", "C90", "PLR09", "ARG", "RUF", "PERF", "ERA"]
+ignore = [
+  "B008",  # makeprov and defopt take InPath/OutPath calls as parameter defaults
+  "PLR0913", "PLR0917",  # argument counts: the CLI mirrors the pipeline options; shrink with the options
+]
+
+[tool.ruff.lint.mccabe]
+max-complexity = 12
+
+[tool.ruff.lint.per-file-ignores]
+"tests/*" = ["ARG", "PLR09"]
+# Ratchet: the modules that are not split yet. Delete a line when its module is fixed; never add one.
+"semsynth/privacy_metrics.py" = ["C901", "PLR0912", "PLR0915", "ARG001"]
+"semsynth/dataproviders/uciml.py" = ["C901", "PLR0912", "PLR0915"]
+"semsynth/dataproviders/_helpers.py" = ["C901"]
+"semsynth/dataproviders/openml.py" = ["PLR0915", "ARG001"]
+"semsynth/jsonld_to_rdfa.py" = ["PLR0911"]
+"semsynth/downstream_fidelity.py" = ["ARG001"]
+"semsynth/utils.py" = ["ARG001"]
+"semsynth/metrics.py" = ["ARG001"]
+"semsynth/catalog.py" = ["ARG001"]
 
 [tool.mypy]
-python_version = "3.9"
+python_version = "3.11"
 ignore_missing_imports = true

@@ -6,17 +6,13 @@ import json
 import logging
 import mimetypes
 import re
-from importlib import resources
+from collections.abc import Sequence
 from dataclasses import dataclass, field
-from datetime import datetime, timezone
-from hashlib import sha256
+from datetime import UTC, datetime
+from importlib import resources
 from pathlib import Path
-from typing import Dict, List, Optional, Sequence, Set, Tuple
 
-from makeprov import InPath, RDFMixin, OutPath, main, rule
-from makeprov.config import ProvenanceConfig
-
-from .mappings import normalize_jsonld_payload
+from makeprov import RDFMixin
 
 LOGGER = logging.getLogger(__name__)
 
@@ -39,11 +35,11 @@ class SparqlQueryDefinition:
     description: str
 
 
-SPARQL_QUERY_DEFINITIONS: Tuple[SparqlQueryDefinition, ...] = (
+SPARQL_QUERY_DEFINITIONS: tuple[SparqlQueryDefinition, ...] = (
     SparqlQueryDefinition(
-        name="SemMap coverage per dataset",
-        filename="query-semmap-coverage.rq",
-        description="Counts SemMap distributions across datasets to confirm semantic metadata coverage.",
+        name="Codebook coverage per dataset",
+        filename="query-codebook-coverage.rq",
+        description="Counts the columns described by each dataset codebook.",
     ),
     SparqlQueryDefinition(
         name="Provenance sources driving synthetic artifacts",
@@ -51,9 +47,9 @@ SPARQL_QUERY_DEFINITIONS: Tuple[SparqlQueryDefinition, ...] = (
         description="Aggregates provenance sources linked to multiple synthetic artifact distributions.",
     ),
     SparqlQueryDefinition(
-        name="Datasets with SemMap + provenance synthetic outputs",
-        filename="query-semmap-and-provenance-artifacts.rq",
-        description="Joins SemMap and provenance-linked synthetic distributions per dataset.",
+        name="Datasets with codebook and provenance synthetic outputs",
+        filename="query-codebook-and-provenance-artifacts.rq",
+        description="Joins codebook columns and provenance-linked synthetic distributions per dataset.",
     ),
 )
 
@@ -63,7 +59,7 @@ class PathURLMapper:
     """Map repository paths to catalog-friendly URLs."""
 
     root_dir: Path
-    base_url: Optional[str] = None
+    base_url: str | None = None
 
     def for_path(self, path: Path) -> str:
         """Return a URL for a filesystem path."""
@@ -82,7 +78,7 @@ class PathURLMapper:
         return relative_text
 
 
-DCAT_CONTEXT: Dict[str, object] = {
+DCAT_CONTEXT: dict[str, object] = {
     "id": "@id",
     "type": "@type",
     "dcat": "http://www.w3.org/ns/dcat#",
@@ -116,14 +112,14 @@ class CatalogDistribution(RDFMixin):
 
     id: str
     title: str
-    type: List[str] = field(default_factory=lambda: ["dcat:Distribution"])
-    access_url: Optional[str] = None
-    download_url: Optional[str] = None
-    media_type: Optional[str] = None
-    format: Optional[str] = None
-    byte_size: Optional[int] = None
-    modified: Optional[str] = None
-    issued: Optional[str] = None
+    type: list[str] = field(default_factory=lambda: ["dcat:Distribution"])
+    access_url: str | None = None
+    download_url: str | None = None
+    media_type: str | None = None
+    format: str | None = None
+    byte_size: int | None = None
+    modified: str | None = None
+    issued: str | None = None
 
 
 @dataclass
@@ -136,13 +132,13 @@ class CatalogDataset(RDFMixin):
     identifier: str
     title: str
     description: str
-    type: List[str] = field(default_factory=lambda: ["dcat:Dataset"])
-    keywords: List[str] = field(default_factory=list)
-    landing_page: Optional[str] = None
-    modified: Optional[str] = None
-    issued: Optional[str] = None
-    wasDerivedFrom: Optional[List[Dict[str, str]]] = None
-    distributions: List[CatalogDistribution] = field(default_factory=list)
+    type: list[str] = field(default_factory=lambda: ["dcat:Dataset"])
+    keywords: list[str] = field(default_factory=list)
+    landing_page: str | None = None
+    modified: str | None = None
+    issued: str | None = None
+    wasDerivedFrom: list[dict[str, str]] | None = None
+    distributions: list[CatalogDistribution] = field(default_factory=list)
 
 
 @dataclass
@@ -154,11 +150,11 @@ class DataCatalog(RDFMixin):
     id: str
     title: str
     description: str
-    type: List[str] = field(default_factory=lambda: ["dcat:Catalog"])
-    modified: Optional[str] = None
-    datasets: List[CatalogDataset] = field(default_factory=list)
-    distributions: List[CatalogDistribution] = field(default_factory=list)
-    wasGeneratedBy: Optional[Dict[str, str]] = None
+    type: list[str] = field(default_factory=lambda: ["dcat:Catalog"])
+    modified: str | None = None
+    datasets: list[CatalogDataset] = field(default_factory=list)
+    distributions: list[CatalogDistribution] = field(default_factory=list)
+    wasGeneratedBy: dict[str, str] | None = None
 
 
 def slugify(value: str) -> str:
@@ -171,7 +167,7 @@ def slugify(value: str) -> str:
 def to_iso(dt: datetime) -> str:
     """Return an ISO 8601 timestamp with timezone information."""
 
-    return dt.astimezone(timezone.utc).isoformat()
+    return dt.astimezone(UTC).isoformat()
 
 
 def read_lines(path: Path) -> Sequence[str]:
@@ -218,57 +214,47 @@ def infer_model_name(path: Path, dataset_dir: Path) -> str:
 def distribution_title(dataset_name: str, dataset_dir: Path, path: Path) -> str:
     """Create a human readable title for a distribution."""
 
-    if path.name == "dataset.semmap.json":
-        return f"{dataset_name} SemMap JSON-LD"
+    if path.name == "dataset.codebook.jsonld":
+        return f"{dataset_name} codebook JSON-LD"
     model = infer_model_name(path, dataset_dir)
     suffix = path.suffix.lstrip(".")
     return f"{dataset_name} synthetic data ({model}, {suffix})"
 
 
-def mimetype_for(path: Path) -> Optional[str]:
+def mimetype_for(path: Path) -> str | None:
     """Look up the MIME type for a path."""
 
     mime, _ = mimetypes.guess_type(path.name)
     return mime
 
 
-def sha256_digest(path: Path) -> str:
-    """Compute a SHA-256 digest for a file."""
-
-    hsh = sha256()
-    with path.open("rb") as handle:
-        for chunk in iter(lambda: handle.read(1024 * 1024), b""):
-            hsh.update(chunk)
-    return hsh.hexdigest()
-
-
 def collect_distributions(
-    dataset_name: str, dataset_dir: InPath, mapper: PathURLMapper
-) -> Tuple[List[CatalogDistribution], Set[Path]]:
-    """Collect SemMap and synthetic distributions for a dataset."""
+    dataset_name: str, dataset_dir: Path, mapper: PathURLMapper
+) -> tuple[list[CatalogDistribution], set[Path]]:
+    """Collect codebook and synthetic distributions for a dataset."""
 
-    distributions: List[CatalogDistribution] = []
-    inputs: Set[Path] = set()
+    distributions: list[CatalogDistribution] = []
+    inputs: set[Path] = set()
 
-    semmap = dataset_dir / "dataset.semmap.json"
-    if semmap.exists():
-        url = mapper.for_path(semmap)
+    codebook_path = dataset_dir / "dataset.codebook.jsonld"
+    if codebook_path.exists():
+        url = mapper.for_path(codebook_path)
         distributions.append(
             CatalogDistribution(
-                id=f"urn:distribution:{slugify(dataset_name)}:semmap-json",
-                title=distribution_title(dataset_name, dataset_dir, semmap),
+                id=f"urn:distribution:{slugify(dataset_name)}:codebook-jsonld",
+                title=distribution_title(dataset_name, dataset_dir, codebook_path),
                 access_url=url,
                 download_url=url,
                 media_type="application/ld+json",
                 format="JSON-LD",
-                byte_size=semmap.stat().st_size,
-                modified=to_iso(datetime.fromtimestamp(semmap.stat().st_mtime, tz=timezone.utc)),
-                issued=to_iso(datetime.fromtimestamp(semmap.stat().st_ctime, tz=timezone.utc)),
+                byte_size=codebook_path.stat().st_size,
+                modified=to_iso(datetime.fromtimestamp(codebook_path.stat().st_mtime, tz=UTC)),
+                issued=to_iso(datetime.fromtimestamp(codebook_path.stat().st_ctime, tz=UTC)),
             )
         )
-        inputs.add(semmap)
+        inputs.add(codebook_path)
 
-    seen: Set[Path] = set()
+    seen: set[Path] = set()
     for pattern in ("synthetic*.csv", "synthetic*.parquet", "synthetic*.json"):
         for path in dataset_dir.rglob(pattern):
             if not path.is_file() or path in seen:
@@ -276,8 +262,8 @@ def collect_distributions(
             seen.add(path)
             mime = mimetype_for(path)
             try:
-                modified = datetime.fromtimestamp(path.stat().st_mtime, tz=timezone.utc)
-                created = datetime.fromtimestamp(path.stat().st_ctime, tz=timezone.utc)
+                modified = datetime.fromtimestamp(path.stat().st_mtime, tz=UTC)
+                created = datetime.fromtimestamp(path.stat().st_ctime, tz=UTC)
                 size = path.stat().st_size
             except OSError:
                 continue
@@ -306,8 +292,8 @@ def collect_distributions(
         if not prov_path.is_file():
             continue
         try:
-            modified = datetime.fromtimestamp(prov_path.stat().st_mtime, tz=timezone.utc)
-            created = datetime.fromtimestamp(prov_path.stat().st_ctime, tz=timezone.utc)
+            modified = datetime.fromtimestamp(prov_path.stat().st_mtime, tz=UTC)
+            created = datetime.fromtimestamp(prov_path.stat().st_ctime, tz=UTC)
             size = prov_path.stat().st_size
         except OSError:
             continue
@@ -337,17 +323,17 @@ def collect_distributions(
 
 def collect_datasets(
     base_dir: Path, dataset_dirs: Sequence[Path], mapper: PathURLMapper
-) -> Tuple[List[CatalogDataset], Set[Path]]:
+) -> tuple[list[CatalogDataset], set[Path]]:
     """Build catalog dataset entries and gather provenance inputs."""
 
-    datasets: List[CatalogDataset] = []
-    inputs: Set[Path] = set()
+    datasets: list[CatalogDataset] = []
+    inputs: set[Path] = set()
 
     for dataset_dir in dataset_dirs:
         dataset_name = dataset_dir.name
         distributions, dist_inputs = collect_distributions(dataset_name, dataset_dir, mapper)
         if not distributions:
-            LOGGER.info("Skipping %s – no distributions detected", dataset_name)
+            LOGGER.info("Skipping %s - no distributions detected", dataset_name)
             continue
 
         inputs.update(dist_inputs)
@@ -356,14 +342,14 @@ def collect_datasets(
         landing = dataset_dir / "index.html"
         latest_modified = max(
             (datetime.fromisoformat(dist.modified) for dist in distributions if dist.modified),
-            default=datetime.now(timezone.utc),
+            default=datetime.now(UTC),
         )
         dataset = CatalogDataset(
             id=f"urn:dataset:{slug}",
             identifier=slug,
             title=dataset_name,
             description=build_description(dataset_name, dataset_dir / "report.md"),
-            keywords=[dataset_name, "synthetic data", "SemMap", "SemSynth"],
+            keywords=[dataset_name, "synthetic data", "codebook", "SemSynth"],
             landing_page=mapper.for_path(landing) if landing.exists() else None,
             modified=to_iso(latest_modified),
             issued=distributions[0].issued,
@@ -375,7 +361,7 @@ def collect_datasets(
     return datasets, inputs
 
 
-def read_packaged_sparql_queries() -> List[Dict[str, str]]:
+def read_packaged_sparql_queries() -> list[dict[str, str]]:
     """Load packaged SPARQL query templates.
 
     Returns:
@@ -383,7 +369,7 @@ def read_packaged_sparql_queries() -> List[Dict[str, str]]:
     """
 
     templates_dir = resources.files("semsynth.templates")
-    queries: List[Dict[str, str]] = []
+    queries: list[dict[str, str]] = []
     for definition in SPARQL_QUERY_DEFINITIONS:
         query_text = (templates_dir / definition.filename).read_text(encoding="utf-8").strip()
         queries.append(
@@ -397,7 +383,7 @@ def read_packaged_sparql_queries() -> List[Dict[str, str]]:
     return queries
 
 
-def write_sparql_query_files(base_dir: Path, mapper: PathURLMapper) -> List[CatalogDistribution]:
+def write_sparql_query_files(base_dir: Path, mapper: PathURLMapper) -> list[CatalogDistribution]:
     """Write packaged SPARQL query files under output/sparql and return distributions.
 
     Args:
@@ -411,8 +397,8 @@ def write_sparql_query_files(base_dir: Path, mapper: PathURLMapper) -> List[Cata
     query_dir = base_dir / "sparql"
     query_dir.mkdir(parents=True, exist_ok=True)
 
-    distributions: List[CatalogDistribution] = []
-    now_iso = to_iso(datetime.now(timezone.utc))
+    distributions: list[CatalogDistribution] = []
+    now_iso = to_iso(datetime.now(UTC))
     for query in read_packaged_sparql_queries():
         query_path = query_dir / query["filename"]
         query_path.write_text(query["query"] + "\n", encoding="utf-8")
@@ -438,7 +424,7 @@ def write_sparql_query_files(base_dir: Path, mapper: PathURLMapper) -> List[Cata
 def write_index(
     index_path: Path,
     dataset_dirs: Sequence[Path],
-    query_examples: Sequence[Dict[str, str]],
+    query_examples: Sequence[dict[str, str]],
 ) -> None:
     """Rewrite output/index.html with dataset links and a static SPARQL UI.
 
@@ -480,13 +466,12 @@ def write_index(
     LOGGER.info("Updated %s", index_path)
 
 
-@rule()
 def build_catalog(
-    base_dir: InPath = InPath("output"),
+    base_dir: Path | str = "output",
     base_url: str = "https://w3id.org/semsynth/demo#",
-    out_path: OutPath = OutPath("output/catalog.json"),
-    index_path: OutPath = OutPath("output/index.html"),
-):
+    out_path: Path | str = "output/catalog.json",
+    index_path: Path | str = "output/index.html",
+) -> None:
     """Construct the DCAT catalog.
 
     Args:
@@ -496,8 +481,7 @@ def build_catalog(
         index_path: Output path for the HTML index file.
     """
 
-    ProvenanceConfig.get().prov_dir = out_path.parent
-
+    base_dir, out_path, index_path = Path(base_dir), Path(out_path), Path(index_path)
     mapper = PathURLMapper(root_dir=base_dir.parent, base_url=base_url)
 
     dataset_dirs = []
@@ -513,7 +497,7 @@ def build_catalog(
     query_examples = read_packaged_sparql_queries()
     sparql_distributions = write_sparql_query_files(base_dir, mapper)
 
-    now = datetime.now(timezone.utc)
+    now = datetime.now(UTC)
     catalog = DataCatalog(
         id="urn:catalog:semsynth-demo",
         title="SemSynth Synthetic Data Catalog",
@@ -523,7 +507,7 @@ def build_catalog(
         distributions=sparql_distributions,
     )
     write_index(index_path, dataset_dirs, query_examples)
-    catalog_payload = normalize_jsonld_payload(catalog.to_jsonld())
+    catalog_payload = catalog.to_jsonld()
     catalog_json = json.dumps(catalog_payload, indent=2)
     out_path.write_text(catalog_json)
 
@@ -531,6 +515,3 @@ def build_catalog(
     jsonld_path.write_text(catalog_json)
     LOGGER.info("Updated %s", jsonld_path)
 
-
-if __name__ == "__main__":  # pragma: no cover - CLI bridge
-    main()

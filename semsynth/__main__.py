@@ -1,44 +1,43 @@
-"""Command-line entry points for SemSynth."""
+"""Command-line entry points for SemSynth.
+
+Each command is a thin wrapper over a function of the library (``semsynth.workflow``, ``semsynth.mappings``,
+``semsynth.catalog``, ``semsynth.app``, ``semsynth.downstream_fidelity``); makeprov records the provenance of the
+command here, not inside the library. Heavy modules are imported when a command runs, so ``--help`` stays fast.
+"""
 
 from __future__ import annotations
 
-import json
 import logging
-import re
-from dataclasses import fields
+from collections.abc import Sequence
 from pathlib import Path
-from typing import TYPE_CHECKING, Any, Dict, List, Optional, Sequence
 
-from makeprov import OutPath, main, rule
+from makeprov import InPath, OutPath, main, rule
 from makeprov.config import ProvenanceConfig
 
-from . import downstream_fidelity  # noqa: F401 - register build rules
-from .app import run_app
-from .catalog import build_catalog
-
-
 __all__ = [
-    "search",
-    "report",
-    "create_mapping",
-    "mappings",
-    "run_app",
     "build_catalog",
-    "build",
+    "create_mapping",
     "main",
+    "mappings",
+    "recompute_downstream",
+    "refresh_mapping_reports",
+    "report",
+    "run_app",
+    "search",
 ]
 
-if TYPE_CHECKING:  # pragma: no cover - imported for typing only
-    from .models import ModelConfigBundle, ModelSpec
-    from .specs import DatasetSpec
 
+def _set_prov_dir(dataset_outdir: Path) -> None:
+    """Write the provenance of a dataset's commands next to its reports."""
+
+    ProvenanceConfig.get().prov_dir = str(dataset_outdir / "prov")
 
 
 @rule(merge=True)
 def search(
     provider: str,
     *,
-    name_substr: Optional[str] = None,
+    name_substr: str | None = None,
     area: str = "Health and Medicine",
     cat_min: int = 1,
     num_min: int = 1,
@@ -55,24 +54,17 @@ def search(
         num_min: Minimum number of numeric columns.
         verbose: Whether to enable informational logging during execution.
     """
-    from .datasets import list_openml, list_uciml  # defer heavy imports
+    from .workflow import search_datasets
 
     if verbose:
         logging.root.setLevel(logging.INFO)
-
-    provider_key = provider.lower()
-    if provider_key == "openml":
-        df = list_openml(name_substr=name_substr, cat_min=cat_min, num_min=num_min)
-    elif provider_key == "uciml":
-        df = list_uciml(
-            area=area,
-            name_substr=name_substr,
-            cat_min=cat_min,
-            num_min=num_min,
+    try:
+        table = search_datasets(
+            provider, name_substr=name_substr, area=area, cat_min=cat_min, num_min=num_min
         )
-    else:
-        raise SystemExit("provider must be 'openml' or 'uciml'")
-    output_text = df.to_csv(sep="\t", index=None)
+    except ValueError as exc:
+        raise SystemExit(str(exc)) from exc
+    output_text = table.to_csv(sep="\t", index=None)
     print(output_text)
     with output.open("w", encoding="utf-8") as handle:
         handle.write(output_text)
@@ -82,7 +74,7 @@ def search(
 def report(
     provider: str = "openml",
     *,
-    datasets: List[str] | None = None,
+    datasets: list[str] | None = None,
     outdir: OutPath = OutPath("output/"),
     pipeline_configs: str = "",
     area: str = "Health and Medicine",
@@ -99,57 +91,18 @@ def report(
         area: Default topic area for UCI datasets.
         verbose: Whether to enable informational logging during execution.
     """
-    from .datasets import DatasetSpec, load_dataset, specs_from_input
-    from .models import ModelConfigBundle, load_model_configs, parse_toml_config
-    from .pipeline import PipelineConfig, process_dataset
-    from .utils import ensure_dir
+    from .workflow import run_reports
 
     if verbose:
         logging.root.setLevel(logging.INFO)
-
-    outdir_path = Path(outdir)
-    ensure_dir(str(outdir_path))
-
-    dataset_specs: List[DatasetSpec]
-    dataset_specs = specs_from_input(provider=provider, datasets=datasets, area=area)
-
-    config_text = pipeline_configs.strip()
-    config_data = parse_toml_config(config_text or None)
-    bundle: ModelConfigBundle = load_model_configs(config_data=config_data)
-
-    cfg = PipelineConfig()
-    if isinstance(config_data, dict):
-        section = config_data.get("pipeline") if isinstance(config_data.get("pipeline"), dict) else config_data
-        if isinstance(section, dict):
-            cfg.apply_mapping(section)
-    for field_def in fields(cfg):
-        if hasattr(bundle, field_def.name):
-            value = getattr(bundle, field_def.name)
-            if value is not None:
-                setattr(cfg, field_def.name, value)
-
-    failures: List[str] = []
-    for dataset_spec in dataset_specs:
-        logging.info("Loading dataset %s", dataset_spec)
-        try:
-            payload = load_dataset(dataset_spec)
-            resolved_spec = payload.spec
-            dataset_label = resolved_spec.name or str(resolved_spec.id)
-            dataset_outdir = outdir_path / str(dataset_label).replace("/", "_")
-            ProvenanceConfig.get().prov_dir = str(dataset_outdir / "prov")
-            process_dataset(
-                resolved_spec,
-                payload.frame,
-                payload.color,
-                str(outdir_path),
-                model_bundle=bundle,
-                pipeline_config=cfg,
-            )
-        except Exception as exc:  # pragma: no cover - surfaced to CLI
-            failures.append(f"{dataset_spec.provider}:{dataset_spec.name or dataset_spec.id}: {exc}")
-            logging.exception(
-                "Skipped %s:%s due to error", dataset_spec.provider, dataset_spec.name
-            )
+    failures = run_reports(
+        provider,
+        datasets=datasets,
+        outdir=Path(outdir),
+        pipeline_configs=pipeline_configs,
+        area=area,
+        on_dataset=_set_prov_dir,
+    )
     if failures:
         raise SystemExit("; ".join(failures))
 
@@ -158,9 +111,9 @@ def report(
 def create_mapping(
     provider: str,
     *,
-    datasets: Optional[List[str]] = None,
+    datasets: list[str] | None = None,
     codes_tsv: str = "map_columns/codes.tsv",
-    manual_overrides_dir: Optional[str] = "map_columns/manual",
+    manual_overrides_dir: str | None = None,
     systems: Sequence[str] = ("WD",),
     method: str = "lexical",
     datasette_url: str = "http://127.0.0.1:8001/terminology",
@@ -181,14 +134,14 @@ def create_mapping(
     version_tag: str = "",
     verbose: bool = False,
 ) -> None:
-    """Create SemMap-aware SSSOM mappings for one or more datasets.
+    """Create SSSOM mappings for one or more datasets and merge them into their codebooks.
 
     Args:
         provider: Dataset provider key (``"uciml"`` or ``"openml"``).
         datasets: Optional list of dataset identifiers; falls back to default
             provider catalog when omitted.
         codes_tsv: Path to the terminology TSV produced by
-            :mod:`map_columns.build_wikidata_medical_codes_table`.
+            `entailmap.match.build_wikidata_medical_codes_table`.
         manual_overrides_dir: Directory holding optional ``*.json`` overrides.
         systems: Terminology systems to consider during matching.
         method: Mapping strategy to use. Supported values are ``"lexical"``
@@ -213,177 +166,78 @@ def create_mapping(
         min_score: Minimum similarity score applied to automatic matches
             produced by the lexical strategy.
         top_k: Maximum number of automatic matches per column.
-        outdir: Output directory for SSSOM and merged SemMap metadata.
-        indent: JSON indentation for saved SemMap metadata.
+        outdir: Output directory for SSSOM and the merged codebooks.
+        indent: JSON indentation for the saved codebooks.
         version_tag: Optional version string recorded in the SSSOM header.
         verbose: Switch logging level to ``INFO`` when ``True``.
     """
-
-    from .datasets import load_dataset, specs_from_input
-    from .semmap import Metadata
-    from .utils import ensure_dir
-    from map_columns.codes_map_columns import (
-        build_manual_matches,
-        load_manual_overrides,
-        write_sssom,
-    )
-    from map_columns.shared import parse_columns
-    from map_columns.sssom_to_semmap import integrate_sssom
+    from .mappings import create_mappings
 
     if verbose:
         logging.root.setLevel(logging.INFO)
-
-    specs = specs_from_input(provider=provider, datasets=datasets)
-    overrides_dir = Path(manual_overrides_dir) if manual_overrides_dir else None
-    allowed_systems = tuple(system for system in systems if system)
-
-    codes_cache: Optional[Dict[str, Any]] = None
-    if method.lower() in {"lexical", "embed"} or overrides_dir:
-        from map_columns.codes_map_columns import load_codes
-
-        codes_cache = load_codes(
-            Path(codes_tsv), allowed_systems=allowed_systems or None
-        )
-
-    outdir_path = Path(outdir)
-    ensure_dir(str(outdir_path))
-
-    def _slug(text: str) -> str:
-        return re.sub(r"[^a-z0-9]+", "-", text.lower()).strip("-")
-
-    method_key = method.lower()
-
-    for spec in specs:
-        payload = load_dataset(spec)
-        dataset_label = payload.spec.name or str(payload.spec.id)
-        slug_parts = [spec.provider]
-        if spec.id is not None:
-            slug_parts.append(str(spec.id))
-        elif dataset_label:
-            slug_parts.append(_slug(dataset_label))
-        slug = "-".join(slug_parts)
-
-        metadata_payload = payload.metadata or payload.spec.meta
-        if isinstance(metadata_payload, Metadata):
-            metadata_payload = metadata_payload.to_jsonld()
-        if not isinstance(metadata_payload, dict):
-            raise RuntimeError(f"No metadata found for dataset {slug}")
-
-        columns, dataset_meta = parse_columns(metadata_payload)
-
-        manual_overrides_path: Optional[Path] = None
-        if overrides_dir:
-            candidate_names = [
-                f"{slug}.json",
-                f"{spec.provider}-{spec.id}.json" if spec.id is not None else "",
-            ]
-            for name in candidate_names:
-                if not name:
-                    continue
-                candidate = overrides_dir / name
-                if candidate.exists():
-                    manual_overrides_path = candidate
-                    break
-        overrides = load_manual_overrides(manual_overrides_path)
-
-        if method_key == "lexical":
-            from map_columns.codes_map_columns import generate_matches as lexical_generate_matches
-
-            matches = lexical_generate_matches(
-                columns,
-                codes_cache or {},
-                min_score=min_score,
-                top_k=top_k,
-                manual_overrides=overrides,
-            )
-        elif method_key == "keyword":
-            from map_columns.kwd_map_columns import generate_matches as keyword_generate_matches
-
-            matches = keyword_generate_matches(
-                columns,
-                dataset_meta,
-                datasette_db_url=datasette_url,
-                table=datasette_table,
-                limit=datasette_limit,
-                allowed_systems=allowed_systems,
-                lexical_threshold=lexical_threshold,
-                top_k=top_k,
-            )
-        elif method_key == "embed":
-            from map_columns.embed_map_columns import generate_matches as embed_generate_matches
-
-            if not codes_cache:
-                raise SystemExit(
-                    "Embedding-based mapping requires a terminology codes TSV."
-                )
-            matches = embed_generate_matches(
-                columns,
-                dataset_meta,
-                list(codes_cache.values()),
-                model_name=embed_model,
-                top_k=top_k,
-                candidate_pool_multiplier=candidate_pool_multiplier,
-                cosine_threshold=cosine_threshold,
-                lexical_threshold=lexical_threshold,
-            )
-        elif method_key == "llm":
-            from map_columns.llm_map_columns import generate_matches as llm_generate_matches
-
-            matches = llm_generate_matches(
-                columns,
-                dataset_meta,
-                datasette_url=datasette_url,
-                model=llm_model,
-                extra_prompt=llm_extra_prompt,
-                subject_prefix=llm_subject_prefix,
-                allowed_systems=allowed_systems,
-                top_k=top_k,
-                confidence_threshold=confidence_threshold,
-            )
-        else:
-            raise SystemExit(
-                f"Unknown mapping method '{method}'. Expected lexical, keyword, embed, or llm."
-            )
-
-        if overrides and method_key != "lexical":
-            if codes_cache is None:
-                from map_columns.codes_map_columns import load_codes
-
-                codes_cache = load_codes(
-                    Path(codes_tsv), allowed_systems=allowed_systems or None
-                )
-            manual_matches = []
-            overridden = set()
-            for column in columns:
-                manual = build_manual_matches(
-                    column, overrides, codes_cache, min_score=min_score
-                )
-                if manual:
-                    manual_matches.extend(manual)
-                    overridden.add(column)
-            if manual_matches:
-                matches = manual_matches + [
-                    match for match in matches if match.column not in overridden
-                ]
-
-        sssom_path = outdir_path / f"{slug}.sssom.tsv"
-        write_sssom(
-            matches,
-            sssom_path,
-            dataset_meta=dataset_meta,
+    try:
+        create_mappings(
+            provider,
+            datasets=datasets,
+            codes_tsv=codes_tsv,
+            manual_overrides_dir=manual_overrides_dir,
+            outdir=Path(outdir),
+            indent=indent,
             version_tag=version_tag,
+            method=method,
+            systems=systems,
+            datasette_url=datasette_url,
+            datasette_table=datasette_table,
+            datasette_limit=datasette_limit,
+            lexical_threshold=lexical_threshold,
+            embed_model=embed_model,
+            candidate_pool_multiplier=candidate_pool_multiplier,
+            cosine_threshold=cosine_threshold,
+            llm_model=llm_model,
+            llm_extra_prompt=llm_extra_prompt,
+            llm_subject_prefix=llm_subject_prefix,
+            confidence_threshold=confidence_threshold,
+            min_score=min_score,
+            top_k=top_k,
         )
+    except (ImportError, ValueError) as exc:
+        raise SystemExit(str(exc)) from exc
 
-        metadata = Metadata.from_dcat_dsv(metadata_payload)
-        mapping_rows = [match.to_sssom_row() for match in matches]
-        updated = integrate_sssom(metadata, mapping_rows)
-        metadata_path = outdir_path / f"{slug}.metadata.json"
-        metadata_path.write_text(
-            json.dumps(updated.to_jsonld(), indent=indent, ensure_ascii=False),
-            encoding="utf-8",
+
+def _reports_for_mappings(
+    mapping_root: str,
+    *,
+    outdir: str,
+    pipeline_configs: str,
+    verbose: bool,
+    base_url: str | None,
+) -> None:
+    """Run reports for the curated mappings and, if a ``base_url`` is given, rebuild the catalog."""
+
+    from .workflow import collect_mapping_targets, run_reports_for_targets
+
+    if verbose:
+        logging.root.setLevel(logging.INFO)
+    targets = collect_mapping_targets(mapping_root)
+    if not targets:
+        return
+    successes, failures = run_reports_for_targets(
+        targets, outdir=outdir, pipeline_configs=pipeline_configs, on_dataset=_set_prov_dir
+    )
+    if successes and base_url:
+        from .catalog import build_catalog as write_catalog
+
+        ProvenanceConfig.get().prov_dir = str(Path(outdir))
+        write_catalog(
+            base_dir=Path(outdir),
+            base_url=base_url,
+            out_path=Path(outdir) / "catalog.json",
+            index_path=Path(outdir) / "index.html",
         )
-
-        logging.info("Wrote mappings for %s -> %s", slug, sssom_path)
+    if failures:
+        logging.warning("Completed with skipped datasets: %s", "; ".join(failures))
+        if successes == 0:
+            raise SystemExit("; ".join(failures))
 
 
 @rule(phony=True)
@@ -402,14 +256,8 @@ def mappings(
         base_url: Base IRI used when rebuilding the catalog and HTML index.
         verbose: Whether to enable informational logging.
     """
-    provider_to_ids = _collect_mapping_targets(Path("mappings"))
-    _run_reports_for_targets(
-        provider_to_ids,
-        outdir=outdir,
-        pipeline_configs=pipeline_configs,
-        verbose=verbose,
-        rebuild_catalog=True,
-        base_url=base_url,
+    _reports_for_mappings(
+        "mappings", outdir=outdir, pipeline_configs=pipeline_configs, verbose=verbose, base_url=base_url
     )
 
 
@@ -431,87 +279,63 @@ def refresh_mapping_reports(
         mapping_root: Directory containing ``*.metadata.json`` mapping files.
         verbose: Whether to enable informational logging.
     """
-
-    provider_to_ids = _collect_mapping_targets(Path(mapping_root))
-    _run_reports_for_targets(
-        provider_to_ids,
-        outdir=outdir,
-        pipeline_configs=pipeline_configs,
-        verbose=verbose,
-        rebuild_catalog=False,
-        base_url=None,
+    _reports_for_mappings(
+        mapping_root, outdir=outdir, pipeline_configs=pipeline_configs, verbose=verbose, base_url=None
     )
 
 
-def _collect_mapping_targets(mapping_root: Path) -> Dict[str, List[str]]:
-    """Return provider→dataset_id mappings discovered under a mapping directory."""
-
-    provider_to_ids: Dict[str, List[str]] = {}
-    for path in sorted(mapping_root.glob("*.metadata.json")):
-        stem = path.stem
-        if "-" not in stem:
-            continue
-        provider, dataset_id = stem.split("-", maxsplit=1)
-        dataset_id = dataset_id.removesuffix(".metadata")
-        provider_to_ids.setdefault(provider, []).append(dataset_id)
-    if not provider_to_ids:
-        logging.info("No mapping metadata files found under %s", mapping_root)
-    return provider_to_ids
-
-
-def _run_reports_for_targets(
-    provider_to_ids: Dict[str, List[str]],
+@rule(merge=True)
+def recompute_downstream(
+    metrics: OutPath = OutPath("{metrics}"),
     *,
-    outdir: str,
-    pipeline_configs: str,
-    verbose: bool,
-    rebuild_catalog: bool,
-    base_url: Optional[str],
+    real: InPath | None = None,
+    synth: InPath | None = None,
+    meta: InPath | None = None,
+    target: str | None = None,
+    verbose: bool = False,
 ) -> None:
-    """Invoke the report pipeline for a provider→dataset mapping."""
+    """Recompute downstream metrics from existing real/synthetic CSVs."""
+    from .downstream_fidelity import recompute_downstream as recompute
 
-    if not provider_to_ids:
-        return
-
-    failures: List[str] = []
-    successes = 0
-    for provider, dataset_ids in provider_to_ids.items():
-        for dataset_id in sorted(set(dataset_ids)):
-            try:
-                report(
-                    provider=provider,
-                    datasets=[dataset_id],
-                    outdir=outdir,
-                    pipeline_configs=pipeline_configs,
-                    verbose=verbose,
-                )
-                successes += 1
-            except SystemExit as exc:
-                failures.append(f"{provider}:{dataset_id} ({exc})")
-
-    if successes and rebuild_catalog and base_url:
-        build_catalog(
-            base_dir=Path(outdir),
-            base_url=base_url,
-            out_path=Path(outdir) / "catalog.json",
-            index_path=Path(outdir) / "index.html",
-        )
-
-    if failures:
-        logging.warning("Completed with skipped datasets: %s", "; ".join(failures))
-        if successes == 0:
-            raise SystemExit("; ".join(failures))
+    recompute(metrics, real=real, synth=synth, meta=meta, target=target, verbose=verbose)
 
 
-def build(*args, **kwargs):  # pragma: no cover - passthrough to makeprov
-    """Expose makeprov build targets via ``python -m semsynth build ...``."""
+@rule()
+def build_catalog(
+    base_dir: InPath = InPath("output"),
+    base_url: str = "https://w3id.org/semsynth/demo#",
+    out_path: OutPath = OutPath("output/catalog.json"),
+    index_path: OutPath = OutPath("output/index.html"),
+) -> None:
+    """Construct the DCAT catalog.
 
-    from makeprov import main as makeprov_main
+    Args:
+        base_dir: The base directory that holds all SemSynth reports.
+        base_url: Base URL for creating IRIs.
+        out_path: Output path for the catalog JSON-LD.
+        index_path: Output path for the HTML index file.
+    """
+    from . import catalog
 
-    return makeprov_main(*args, **kwargs)
+    ProvenanceConfig.get().prov_dir = out_path.parent
+    catalog.build_catalog(base_dir, base_url, out_path, index_path)
+
+
+@rule(phony=True)
+def run_app(*, host: str = "127.0.0.1", port: int = 5000, debug: bool = False) -> None:
+    """Create and run the Flask development server.
+
+    Args:
+        host: Host interface for the server.
+        port: Port to bind the server to.
+        debug: Whether to enable Flask debug mode.
+    """
+    from .app import run_app as serve
+
+    serve(host=host, port=port, debug=debug)
 
 
 if __name__ == "__main__":
-    main(argparse_kwargs = dict(
-        prog='python -m semsynth',
-        description=__doc__), version=True)
+    from . import get_version
+
+    main(argparse_kwargs={"prog": "python -m semsynth", "description": __doc__}, version=get_version())

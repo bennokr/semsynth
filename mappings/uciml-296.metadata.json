@@ -1,125 +1,367 @@
 {
-  "@context": "https://w3id.org/semmap/context/v1",
+  "@context": {
+    "accessRights": "dct:accessRights",
+    "broadMatch": {
+      "@container": "@set",
+      "@id": "skos:broadMatch",
+      "@type": "@id"
+    },
+    "citation": "dct:bibliographicCitation",
+    "closeMatch": {
+      "@container": "@set",
+      "@id": "skos:closeMatch",
+      "@type": "@id"
+    },
+    "columnCompleteness": {
+      "@id": "dsv:columnCompleteness",
+      "@type": "xsd:float"
+    },
+    "columnProperty": {
+      "@id": "dsv:columnProperty",
+      "@type": "@id"
+    },
+    "columns": {
+      "@container": "@set",
+      "@id": "dsv:column"
+    },
+    "csvw": "http://www.w3.org/ns/csvw#",
+    "datasetSchema": {
+      "@id": "dsv:datasetSchema",
+      "@type": "@id"
+    },
+    "datatype": "csvw:datatype",
+    "dcat": "http://www.w3.org/ns/dcat#",
+    "dct": "http://purl.org/dc/terms/",
+    "description": "dct:description",
+    "dsv": "https://w3id.org/dsv-ontology#",
+    "exactMatch": {
+      "@container": "@set",
+      "@id": "skos:exactMatch",
+      "@type": "@id"
+    },
+    "hasCodeBook": {
+      "@id": "dsv:hasCodeBook",
+      "@type": "@id"
+    },
+    "hasUnit": {
+      "@id": "qudt:hasUnit",
+      "@type": "@id"
+    },
+    "hasVariable": {
+      "@id": "dsv:hasVariable",
+      "@type": "@id"
+    },
+    "identifier": "dct:identifier",
+    "landingPage": {
+      "@id": "dcat:landingPage",
+      "@type": "@id"
+    },
+    "license": {
+      "@id": "dct:license",
+      "@type": "@id"
+    },
+    "name": "csvw:name",
+    "narrowMatch": {
+      "@container": "@set",
+      "@id": "skos:narrowMatch",
+      "@type": "@id"
+    },
+    "nullValues": {
+      "@container": "@set",
+      "@id": "csvw:null"
+    },
+    "numberOfColumns": {
+      "@id": "dsv:numberOfColumns",
+      "@type": "xsd:integer"
+    },
+    "numberOfRows": {
+      "@id": "dsv:numberOfRows",
+      "@type": "xsd:integer"
+    },
+    "qudt": "http://qudt.org/schema/qudt/",
+    "relatedMatch": {
+      "@container": "@set",
+      "@id": "skos:relatedMatch",
+      "@type": "@id"
+    },
+    "rights": "dct:rights",
+    "schema": "https://schema.org/",
+    "skos": "http://www.w3.org/2004/02/skos/core#",
+    "statisticalDataType": {
+      "@id": "dsv:statisticalDataType",
+      "@type": "@id"
+    },
+    "summaryStatistics": {
+      "@id": "dsv:summaryStatistics",
+      "@type": "@id"
+    },
+    "title": "dct:title",
+    "titles": "csvw:title",
+    "unitText": "schema:unitText",
+    "xsd": "http://www.w3.org/2001/XMLSchema#",
+    "dcterms": "http://purl.org/dc/terms/",
+    "prov": "http://www.w3.org/ns/prov#"
+  },
+  "@id": "urn:linked-codebook:dataset:UCI%20Diabetes%20130-US%20hospitals%20(1999%E2%80%932008)",
+  "@type": [
+    "dcat:Dataset",
+    "dsv:Dataset"
+  ],
+  "landingPage": "https://archive.ics.uci.edu/dataset/296/diabetes+130-us+hospitals+for+years+1999-2008",
+  "title": "UCI Diabetes 130-US hospitals (1999–2008)",
   "datasetSchema": {
+    "@id": "urn:linked-codebook:dataset:UCI%20Diabetes%20130-US%20hospitals%20(1999%E2%80%932008)#schema",
+    "@type": "dsv:DatasetSchema",
     "columns": [
       {
-        "name": "age",
+        "@id": "urn:linked-codebook:dataset:UCI%20Diabetes%20130-US%20hospitals%20(1999%E2%80%932008)#column-age",
+        "@type": "dsv:Column",
         "titles": "Age (10-year bins)",
+        "name": "age",
         "columnProperty": {
+          "@id": "urn:linked-codebook:dataset:UCI%20Diabetes%20130-US%20hospitals%20(1999%E2%80%932008)#property-age",
+          "@type": "dsv:ColumnProperty",
+          "hasVariable": {
+            "@id": "urn:linked-codebook:dataset:UCI%20Diabetes%20130-US%20hospitals%20(1999%E2%80%932008)#variable-age",
+            "@type": "skos:Concept",
+            "skos:prefLabel": "Age (10-year bins)"
+          },
           "hasCodeBook": {
-            "hasTopConcept": [
+            "@id": "urn:linked-codebook:dataset:UCI%20Diabetes%20130-US%20hospitals%20(1999%E2%80%932008)#variable-age-codes",
+            "@type": "skos:ConceptScheme",
+            "skos:hasTopConcept": [
               {
-                "notation": "[0,10)",
-                "prefLabel": "[0\u201310) years"
+                "@id": "urn:linked-codebook:dataset:UCI%20Diabetes%20130-US%20hospitals%20(1999%E2%80%932008)#variable-age-codes-%5B0%2C10)",
+                "@type": "skos:Concept",
+                "skos:prefLabel": "[0–10) years",
+                "skos:inScheme": {
+                  "@id": "urn:linked-codebook:dataset:UCI%20Diabetes%20130-US%20hospitals%20(1999%E2%80%932008)#variable-age-codes"
+                },
+                "skos:notation": "[0,10)"
               },
               {
-                "notation": "[10,20)",
-                "prefLabel": "[10\u201320) years"
+                "@id": "urn:linked-codebook:dataset:UCI%20Diabetes%20130-US%20hospitals%20(1999%E2%80%932008)#variable-age-codes-%5B10%2C20)",
+                "@type": "skos:Concept",
+                "skos:prefLabel": "[10–20) years",
+                "skos:inScheme": {
+                  "@id": "urn:linked-codebook:dataset:UCI%20Diabetes%20130-US%20hospitals%20(1999%E2%80%932008)#variable-age-codes"
+                },
+                "skos:notation": "[10,20)"
               },
               {
-                "notation": "[20,30)",
-                "prefLabel": "[20\u201330) years"
+                "@id": "urn:linked-codebook:dataset:UCI%20Diabetes%20130-US%20hospitals%20(1999%E2%80%932008)#variable-age-codes-%5B20%2C30)",
+                "@type": "skos:Concept",
+                "skos:prefLabel": "[20–30) years",
+                "skos:inScheme": {
+                  "@id": "urn:linked-codebook:dataset:UCI%20Diabetes%20130-US%20hospitals%20(1999%E2%80%932008)#variable-age-codes"
+                },
+                "skos:notation": "[20,30)"
               },
               {
-                "notation": "[30,40)",
-                "prefLabel": "[30\u201340) years"
+                "@id": "urn:linked-codebook:dataset:UCI%20Diabetes%20130-US%20hospitals%20(1999%E2%80%932008)#variable-age-codes-%5B30%2C40)",
+                "@type": "skos:Concept",
+                "skos:prefLabel": "[30–40) years",
+                "skos:inScheme": {
+                  "@id": "urn:linked-codebook:dataset:UCI%20Diabetes%20130-US%20hospitals%20(1999%E2%80%932008)#variable-age-codes"
+                },
+                "skos:notation": "[30,40)"
               },
               {
-                "notation": "[40,50)",
-                "prefLabel": "[40\u201350) years"
+                "@id": "urn:linked-codebook:dataset:UCI%20Diabetes%20130-US%20hospitals%20(1999%E2%80%932008)#variable-age-codes-%5B40%2C50)",
+                "@type": "skos:Concept",
+                "skos:prefLabel": "[40–50) years",
+                "skos:inScheme": {
+                  "@id": "urn:linked-codebook:dataset:UCI%20Diabetes%20130-US%20hospitals%20(1999%E2%80%932008)#variable-age-codes"
+                },
+                "skos:notation": "[40,50)"
               },
               {
-                "notation": "[50,60)",
-                "prefLabel": "[50\u201360) years"
+                "@id": "urn:linked-codebook:dataset:UCI%20Diabetes%20130-US%20hospitals%20(1999%E2%80%932008)#variable-age-codes-%5B50%2C60)",
+                "@type": "skos:Concept",
+                "skos:prefLabel": "[50–60) years",
+                "skos:inScheme": {
+                  "@id": "urn:linked-codebook:dataset:UCI%20Diabetes%20130-US%20hospitals%20(1999%E2%80%932008)#variable-age-codes"
+                },
+                "skos:notation": "[50,60)"
               },
               {
-                "notation": "[60,70)",
-                "prefLabel": "[60\u201370) years"
+                "@id": "urn:linked-codebook:dataset:UCI%20Diabetes%20130-US%20hospitals%20(1999%E2%80%932008)#variable-age-codes-%5B60%2C70)",
+                "@type": "skos:Concept",
+                "skos:prefLabel": "[60–70) years",
+                "skos:inScheme": {
+                  "@id": "urn:linked-codebook:dataset:UCI%20Diabetes%20130-US%20hospitals%20(1999%E2%80%932008)#variable-age-codes"
+                },
+                "skos:notation": "[60,70)"
               },
               {
-                "notation": "[70,80)",
-                "prefLabel": "[70\u201380) years"
+                "@id": "urn:linked-codebook:dataset:UCI%20Diabetes%20130-US%20hospitals%20(1999%E2%80%932008)#variable-age-codes-%5B70%2C80)",
+                "@type": "skos:Concept",
+                "skos:prefLabel": "[70–80) years",
+                "skos:inScheme": {
+                  "@id": "urn:linked-codebook:dataset:UCI%20Diabetes%20130-US%20hospitals%20(1999%E2%80%932008)#variable-age-codes"
+                },
+                "skos:notation": "[70,80)"
               },
               {
-                "notation": "[80,90)",
-                "prefLabel": "[80\u201390) years"
+                "@id": "urn:linked-codebook:dataset:UCI%20Diabetes%20130-US%20hospitals%20(1999%E2%80%932008)#variable-age-codes-%5B80%2C90)",
+                "@type": "skos:Concept",
+                "skos:prefLabel": "[80–90) years",
+                "skos:inScheme": {
+                  "@id": "urn:linked-codebook:dataset:UCI%20Diabetes%20130-US%20hospitals%20(1999%E2%80%932008)#variable-age-codes"
+                },
+                "skos:notation": "[80,90)"
               },
               {
-                "notation": "[90,100)",
-                "prefLabel": "[90\u2013100) years"
+                "@id": "urn:linked-codebook:dataset:UCI%20Diabetes%20130-US%20hospitals%20(1999%E2%80%932008)#variable-age-codes-%5B90%2C100)",
+                "@type": "skos:Concept",
+                "skos:prefLabel": "[90–100) years",
+                "skos:inScheme": {
+                  "@id": "urn:linked-codebook:dataset:UCI%20Diabetes%20130-US%20hospitals%20(1999%E2%80%932008)#variable-age-codes"
+                },
+                "skos:notation": "[90,100)"
               }
             ]
-          },
+          }
+        },
+        "summaryStatistics": {
+          "@id": "urn:linked-codebook:dataset:UCI%20Diabetes%20130-US%20hospitals%20(1999%E2%80%932008)#statistics-age",
+          "@type": "dsv:SummaryStatistics",
           "statisticalDataType": "dsv:NominalDataType"
         }
       },
       {
-        "name": "race",
+        "@id": "urn:linked-codebook:dataset:UCI%20Diabetes%20130-US%20hospitals%20(1999%E2%80%932008)#column-race",
+        "@type": "dsv:Column",
         "titles": "Race",
+        "name": "race",
         "columnProperty": {
+          "@id": "urn:linked-codebook:dataset:UCI%20Diabetes%20130-US%20hospitals%20(1999%E2%80%932008)#property-race",
+          "@type": "dsv:ColumnProperty",
+          "hasVariable": {
+            "@id": "urn:linked-codebook:dataset:UCI%20Diabetes%20130-US%20hospitals%20(1999%E2%80%932008)#variable-race",
+            "@type": "skos:Concept",
+            "skos:prefLabel": "Race"
+          },
           "hasCodeBook": {
-            "hasTopConcept": [
+            "@id": "urn:linked-codebook:dataset:UCI%20Diabetes%20130-US%20hospitals%20(1999%E2%80%932008)#variable-race-codes",
+            "@type": "skos:ConceptScheme",
+            "skos:hasTopConcept": [
               {
-                "notation": "Caucasian",
-                "prefLabel": "Caucasian"
+                "@id": "urn:linked-codebook:dataset:UCI%20Diabetes%20130-US%20hospitals%20(1999%E2%80%932008)#variable-race-codes-Caucasian",
+                "@type": "skos:Concept",
+                "skos:prefLabel": "Caucasian",
+                "skos:inScheme": {
+                  "@id": "urn:linked-codebook:dataset:UCI%20Diabetes%20130-US%20hospitals%20(1999%E2%80%932008)#variable-race-codes"
+                },
+                "skos:notation": "Caucasian"
               },
               {
-                "notation": "AfricanAmerican",
-                "prefLabel": "African American"
+                "@id": "urn:linked-codebook:dataset:UCI%20Diabetes%20130-US%20hospitals%20(1999%E2%80%932008)#variable-race-codes-AfricanAmerican",
+                "@type": "skos:Concept",
+                "skos:prefLabel": "African American",
+                "skos:inScheme": {
+                  "@id": "urn:linked-codebook:dataset:UCI%20Diabetes%20130-US%20hospitals%20(1999%E2%80%932008)#variable-race-codes"
+                },
+                "skos:notation": "AfricanAmerican"
               },
               {
-                "notation": "Asian",
-                "prefLabel": "Asian"
+                "@id": "urn:linked-codebook:dataset:UCI%20Diabetes%20130-US%20hospitals%20(1999%E2%80%932008)#variable-race-codes-Asian",
+                "@type": "skos:Concept",
+                "skos:prefLabel": "Asian",
+                "skos:inScheme": {
+                  "@id": "urn:linked-codebook:dataset:UCI%20Diabetes%20130-US%20hospitals%20(1999%E2%80%932008)#variable-race-codes"
+                },
+                "skos:notation": "Asian"
               },
               {
-                "notation": "Hispanic",
-                "prefLabel": "Hispanic"
+                "@id": "urn:linked-codebook:dataset:UCI%20Diabetes%20130-US%20hospitals%20(1999%E2%80%932008)#variable-race-codes-Hispanic",
+                "@type": "skos:Concept",
+                "skos:prefLabel": "Hispanic",
+                "skos:inScheme": {
+                  "@id": "urn:linked-codebook:dataset:UCI%20Diabetes%20130-US%20hospitals%20(1999%E2%80%932008)#variable-race-codes"
+                },
+                "skos:notation": "Hispanic"
               },
               {
-                "notation": "Other",
-                "prefLabel": "Other"
+                "@id": "urn:linked-codebook:dataset:UCI%20Diabetes%20130-US%20hospitals%20(1999%E2%80%932008)#variable-race-codes-Other",
+                "@type": "skos:Concept",
+                "skos:prefLabel": "Other",
+                "skos:inScheme": {
+                  "@id": "urn:linked-codebook:dataset:UCI%20Diabetes%20130-US%20hospitals%20(1999%E2%80%932008)#variable-race-codes"
+                },
+                "skos:notation": "Other"
               },
               {
-                "notation": "Unknown/Invalid",
-                "prefLabel": "Unknown/Invalid"
+                "@id": "urn:linked-codebook:dataset:UCI%20Diabetes%20130-US%20hospitals%20(1999%E2%80%932008)#variable-race-codes-Unknown%2FInvalid",
+                "@type": "skos:Concept",
+                "skos:prefLabel": "Unknown/Invalid",
+                "skos:inScheme": {
+                  "@id": "urn:linked-codebook:dataset:UCI%20Diabetes%20130-US%20hospitals%20(1999%E2%80%932008)#variable-race-codes"
+                },
+                "skos:notation": "Unknown/Invalid"
               }
             ]
-          },
+          }
+        },
+        "summaryStatistics": {
+          "@id": "urn:linked-codebook:dataset:UCI%20Diabetes%20130-US%20hospitals%20(1999%E2%80%932008)#statistics-race",
+          "@type": "dsv:SummaryStatistics",
           "statisticalDataType": "dsv:NominalDataType"
         }
       },
       {
-        "name": "gender",
+        "@id": "urn:linked-codebook:dataset:UCI%20Diabetes%20130-US%20hospitals%20(1999%E2%80%932008)#column-gender",
+        "@type": "dsv:Column",
         "titles": "Administrative sex/gender",
+        "name": "gender",
         "columnProperty": {
+          "@id": "urn:linked-codebook:dataset:UCI%20Diabetes%20130-US%20hospitals%20(1999%E2%80%932008)#property-gender",
+          "@type": "dsv:ColumnProperty",
+          "hasVariable": {
+            "@id": "urn:linked-codebook:dataset:UCI%20Diabetes%20130-US%20hospitals%20(1999%E2%80%932008)#variable-gender",
+            "@type": "skos:Concept",
+            "skos:prefLabel": "Administrative sex/gender"
+          },
           "hasCodeBook": {
-            "hasTopConcept": [
+            "@id": "urn:linked-codebook:dataset:UCI%20Diabetes%20130-US%20hospitals%20(1999%E2%80%932008)#variable-gender-codes",
+            "@type": "skos:ConceptScheme",
+            "skos:hasTopConcept": [
               {
-                "notation": "Male",
-                "prefLabel": "Male"
+                "@id": "urn:linked-codebook:dataset:UCI%20Diabetes%20130-US%20hospitals%20(1999%E2%80%932008)#variable-gender-codes-Male",
+                "@type": "skos:Concept",
+                "skos:prefLabel": "Male",
+                "skos:inScheme": {
+                  "@id": "urn:linked-codebook:dataset:UCI%20Diabetes%20130-US%20hospitals%20(1999%E2%80%932008)#variable-gender-codes"
+                },
+                "skos:notation": "Male"
               },
               {
-                "notation": "Female",
-                "prefLabel": "Female"
+                "@id": "urn:linked-codebook:dataset:UCI%20Diabetes%20130-US%20hospitals%20(1999%E2%80%932008)#variable-gender-codes-Female",
+                "@type": "skos:Concept",
+                "skos:prefLabel": "Female",
+                "skos:inScheme": {
+                  "@id": "urn:linked-codebook:dataset:UCI%20Diabetes%20130-US%20hospitals%20(1999%E2%80%932008)#variable-gender-codes"
+                },
+                "skos:notation": "Female"
               },
               {
-                "notation": "Unknown/Invalid",
-                "prefLabel": "Unknown/Invalid"
+                "@id": "urn:linked-codebook:dataset:UCI%20Diabetes%20130-US%20hospitals%20(1999%E2%80%932008)#variable-gender-codes-Unknown%2FInvalid",
+                "@type": "skos:Concept",
+                "skos:prefLabel": "Unknown/Invalid",
+                "skos:inScheme": {
+                  "@id": "urn:linked-codebook:dataset:UCI%20Diabetes%20130-US%20hospitals%20(1999%E2%80%932008)#variable-gender-codes"
+                },
+                "skos:notation": "Unknown/Invalid"
               }
             ]
-          },
+          }
+        },
+        "summaryStatistics": {
+          "@id": "urn:linked-codebook:dataset:UCI%20Diabetes%20130-US%20hospitals%20(1999%E2%80%932008)#statistics-gender",
+          "@type": "dsv:SummaryStatistics",
           "statisticalDataType": "dsv:NominalDataType"
         }
       }
     ]
-  },
-  "dataset": {
-    "@type": [
-      "disco:LogicalDataSet",
-      "dsv:Dataset",
-      "dcat:Dataset"
-    ],
-    "title": "UCI Diabetes 130-US hospitals (1999\u20132008)",
-    "source": "https://archive.ics.uci.edu/dataset/296/diabetes+130-us+hospitals+for+years+1999-2008"
   }
 }

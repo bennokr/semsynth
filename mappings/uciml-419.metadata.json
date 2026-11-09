@@ -1,231 +1,554 @@
 {
-  "@context": "https://w3id.org/semmap/context/v1",
+  "@context": {
+    "accessRights": "dct:accessRights",
+    "broadMatch": {
+      "@container": "@set",
+      "@id": "skos:broadMatch",
+      "@type": "@id"
+    },
+    "citation": "dct:bibliographicCitation",
+    "closeMatch": {
+      "@container": "@set",
+      "@id": "skos:closeMatch",
+      "@type": "@id"
+    },
+    "columnCompleteness": {
+      "@id": "dsv:columnCompleteness",
+      "@type": "xsd:float"
+    },
+    "columnProperty": {
+      "@id": "dsv:columnProperty",
+      "@type": "@id"
+    },
+    "columns": {
+      "@container": "@set",
+      "@id": "dsv:column"
+    },
+    "csvw": "http://www.w3.org/ns/csvw#",
+    "datasetSchema": {
+      "@id": "dsv:datasetSchema",
+      "@type": "@id"
+    },
+    "datatype": "csvw:datatype",
+    "dcat": "http://www.w3.org/ns/dcat#",
+    "dct": "http://purl.org/dc/terms/",
+    "description": "dct:description",
+    "dsv": "https://w3id.org/dsv-ontology#",
+    "exactMatch": {
+      "@container": "@set",
+      "@id": "skos:exactMatch",
+      "@type": "@id"
+    },
+    "hasCodeBook": {
+      "@id": "dsv:hasCodeBook",
+      "@type": "@id"
+    },
+    "hasUnit": {
+      "@id": "qudt:hasUnit",
+      "@type": "@id"
+    },
+    "hasVariable": {
+      "@id": "dsv:hasVariable",
+      "@type": "@id"
+    },
+    "identifier": "dct:identifier",
+    "landingPage": {
+      "@id": "dcat:landingPage",
+      "@type": "@id"
+    },
+    "license": {
+      "@id": "dct:license",
+      "@type": "@id"
+    },
+    "name": "csvw:name",
+    "narrowMatch": {
+      "@container": "@set",
+      "@id": "skos:narrowMatch",
+      "@type": "@id"
+    },
+    "nullValues": {
+      "@container": "@set",
+      "@id": "csvw:null"
+    },
+    "numberOfColumns": {
+      "@id": "dsv:numberOfColumns",
+      "@type": "xsd:integer"
+    },
+    "numberOfRows": {
+      "@id": "dsv:numberOfRows",
+      "@type": "xsd:integer"
+    },
+    "qudt": "http://qudt.org/schema/qudt/",
+    "relatedMatch": {
+      "@container": "@set",
+      "@id": "skos:relatedMatch",
+      "@type": "@id"
+    },
+    "rights": "dct:rights",
+    "schema": "https://schema.org/",
+    "skos": "http://www.w3.org/2004/02/skos/core#",
+    "statisticalDataType": {
+      "@id": "dsv:statisticalDataType",
+      "@type": "@id"
+    },
+    "summaryStatistics": {
+      "@id": "dsv:summaryStatistics",
+      "@type": "@id"
+    },
+    "title": "dct:title",
+    "titles": "csvw:title",
+    "unitText": "schema:unitText",
+    "xsd": "http://www.w3.org/2001/XMLSchema#",
+    "dcterms": "http://purl.org/dc/terms/",
+    "prov": "http://www.w3.org/ns/prov#"
+  },
+  "@id": "urn:linked-codebook:dataset:Autistic%20Spectrum%20Disorder%20Screening%20Data%20for%20Children",
+  "@type": [
+    "dcat:Dataset",
+    "dsv:Dataset"
+  ],
+  "description": "see attached file for variables' description ",
+  "landingPage": "https://archive.ics.uci.edu/dataset/419/autistic+spectrum+disorder+screening+data+for+children",
+  "title": "Autistic Spectrum Disorder Screening Data for Children",
+  "summaryStatistics": {
+    "@id": "urn:linked-codebook:dataset:Autistic%20Spectrum%20Disorder%20Screening%20Data%20for%20Children#statistics",
+    "@type": "dsv:SummaryStatistics",
+    "numberOfRows": 292,
+    "numberOfColumns": 21
+  },
   "datasetSchema": {
+    "@id": "urn:linked-codebook:dataset:Autistic%20Spectrum%20Disorder%20Screening%20Data%20for%20Children#schema",
+    "@type": "dsv:DatasetSchema",
     "columns": [
       {
+        "@id": "urn:linked-codebook:dataset:Autistic%20Spectrum%20Disorder%20Screening%20Data%20for%20Children#column-A1_Score",
+        "@type": "dsv:Column",
         "name": "A1_Score",
-        "hadRole": "Feature",
-        "summaryStatistics": {
-          "statisticalDataType": "dsv:NumericalDataType",
-          "@type": "dsv:SummaryStatistics"
+        "titles": "A1_Score",
+        "columnProperty": {
+          "@id": "urn:linked-codebook:dataset:Autistic%20Spectrum%20Disorder%20Screening%20Data%20for%20Children#property-A1_Score",
+          "@type": "dsv:ColumnProperty",
+          "hasVariable": {
+            "@id": "urn:linked-codebook:dataset:Autistic%20Spectrum%20Disorder%20Screening%20Data%20for%20Children#variable-A1_Score",
+            "@type": "skos:Concept",
+            "skos:prefLabel": "A1_Score"
+          }
         },
-        "@type": "dsv:Column"
+        "summaryStatistics": {
+          "@id": "urn:linked-codebook:dataset:Autistic%20Spectrum%20Disorder%20Screening%20Data%20for%20Children#statistics-A1_Score",
+          "@type": "dsv:SummaryStatistics",
+          "statisticalDataType": "dsv:NumericalDataType"
+        },
+        "prov:hadRole": "Feature"
       },
       {
+        "@id": "urn:linked-codebook:dataset:Autistic%20Spectrum%20Disorder%20Screening%20Data%20for%20Children#column-A2_Score",
+        "@type": "dsv:Column",
         "name": "A2_Score",
-        "about": "\u0000",
-        "hadRole": "Feature",
-        "summaryStatistics": {
-          "statisticalDataType": "dsv:NumericalDataType",
-          "@type": "dsv:SummaryStatistics"
+        "titles": "A2_Score",
+        "columnProperty": {
+          "@id": "urn:linked-codebook:dataset:Autistic%20Spectrum%20Disorder%20Screening%20Data%20for%20Children#property-A2_Score",
+          "@type": "dsv:ColumnProperty",
+          "hasVariable": {
+            "@id": "urn:linked-codebook:dataset:Autistic%20Spectrum%20Disorder%20Screening%20Data%20for%20Children#variable-A2_Score",
+            "@type": "skos:Concept",
+            "skos:prefLabel": "A2_Score"
+          }
         },
-        "@type": "dsv:Column"
+        "summaryStatistics": {
+          "@id": "urn:linked-codebook:dataset:Autistic%20Spectrum%20Disorder%20Screening%20Data%20for%20Children#statistics-A2_Score",
+          "@type": "dsv:SummaryStatistics",
+          "statisticalDataType": "dsv:NumericalDataType"
+        },
+        "prov:hadRole": "Feature"
       },
       {
+        "@id": "urn:linked-codebook:dataset:Autistic%20Spectrum%20Disorder%20Screening%20Data%20for%20Children#column-A3_Score",
+        "@type": "dsv:Column",
         "name": "A3_Score",
-        "hadRole": "Feature",
-        "summaryStatistics": {
-          "statisticalDataType": "dsv:NumericalDataType",
-          "@type": "dsv:SummaryStatistics"
+        "titles": "A3_Score",
+        "columnProperty": {
+          "@id": "urn:linked-codebook:dataset:Autistic%20Spectrum%20Disorder%20Screening%20Data%20for%20Children#property-A3_Score",
+          "@type": "dsv:ColumnProperty",
+          "hasVariable": {
+            "@id": "urn:linked-codebook:dataset:Autistic%20Spectrum%20Disorder%20Screening%20Data%20for%20Children#variable-A3_Score",
+            "@type": "skos:Concept",
+            "skos:prefLabel": "A3_Score"
+          }
         },
-        "@type": "dsv:Column"
+        "summaryStatistics": {
+          "@id": "urn:linked-codebook:dataset:Autistic%20Spectrum%20Disorder%20Screening%20Data%20for%20Children#statistics-A3_Score",
+          "@type": "dsv:SummaryStatistics",
+          "statisticalDataType": "dsv:NumericalDataType"
+        },
+        "prov:hadRole": "Feature"
       },
       {
+        "@id": "urn:linked-codebook:dataset:Autistic%20Spectrum%20Disorder%20Screening%20Data%20for%20Children#column-A4_Score",
+        "@type": "dsv:Column",
         "name": "A4_Score",
-        "hadRole": "Feature",
-        "summaryStatistics": {
-          "statisticalDataType": "dsv:NumericalDataType",
-          "@type": "dsv:SummaryStatistics"
+        "titles": "A4_Score",
+        "columnProperty": {
+          "@id": "urn:linked-codebook:dataset:Autistic%20Spectrum%20Disorder%20Screening%20Data%20for%20Children#property-A4_Score",
+          "@type": "dsv:ColumnProperty",
+          "hasVariable": {
+            "@id": "urn:linked-codebook:dataset:Autistic%20Spectrum%20Disorder%20Screening%20Data%20for%20Children#variable-A4_Score",
+            "@type": "skos:Concept",
+            "skos:prefLabel": "A4_Score"
+          }
         },
-        "@type": "dsv:Column"
+        "summaryStatistics": {
+          "@id": "urn:linked-codebook:dataset:Autistic%20Spectrum%20Disorder%20Screening%20Data%20for%20Children#statistics-A4_Score",
+          "@type": "dsv:SummaryStatistics",
+          "statisticalDataType": "dsv:NumericalDataType"
+        },
+        "prov:hadRole": "Feature"
       },
       {
+        "@id": "urn:linked-codebook:dataset:Autistic%20Spectrum%20Disorder%20Screening%20Data%20for%20Children#column-A5_Score",
+        "@type": "dsv:Column",
         "name": "A5_Score",
-        "hadRole": "Feature",
-        "summaryStatistics": {
-          "statisticalDataType": "dsv:NumericalDataType",
-          "@type": "dsv:SummaryStatistics"
+        "titles": "A5_Score",
+        "columnProperty": {
+          "@id": "urn:linked-codebook:dataset:Autistic%20Spectrum%20Disorder%20Screening%20Data%20for%20Children#property-A5_Score",
+          "@type": "dsv:ColumnProperty",
+          "hasVariable": {
+            "@id": "urn:linked-codebook:dataset:Autistic%20Spectrum%20Disorder%20Screening%20Data%20for%20Children#variable-A5_Score",
+            "@type": "skos:Concept",
+            "skos:prefLabel": "A5_Score"
+          }
         },
-        "@type": "dsv:Column"
+        "summaryStatistics": {
+          "@id": "urn:linked-codebook:dataset:Autistic%20Spectrum%20Disorder%20Screening%20Data%20for%20Children#statistics-A5_Score",
+          "@type": "dsv:SummaryStatistics",
+          "statisticalDataType": "dsv:NumericalDataType"
+        },
+        "prov:hadRole": "Feature"
       },
       {
+        "@id": "urn:linked-codebook:dataset:Autistic%20Spectrum%20Disorder%20Screening%20Data%20for%20Children#column-A6_Score",
+        "@type": "dsv:Column",
         "name": "A6_Score",
-        "hadRole": "Feature",
-        "summaryStatistics": {
-          "statisticalDataType": "dsv:NumericalDataType",
-          "@type": "dsv:SummaryStatistics"
+        "titles": "A6_Score",
+        "columnProperty": {
+          "@id": "urn:linked-codebook:dataset:Autistic%20Spectrum%20Disorder%20Screening%20Data%20for%20Children#property-A6_Score",
+          "@type": "dsv:ColumnProperty",
+          "hasVariable": {
+            "@id": "urn:linked-codebook:dataset:Autistic%20Spectrum%20Disorder%20Screening%20Data%20for%20Children#variable-A6_Score",
+            "@type": "skos:Concept",
+            "skos:prefLabel": "A6_Score"
+          }
         },
-        "@type": "dsv:Column"
+        "summaryStatistics": {
+          "@id": "urn:linked-codebook:dataset:Autistic%20Spectrum%20Disorder%20Screening%20Data%20for%20Children#statistics-A6_Score",
+          "@type": "dsv:SummaryStatistics",
+          "statisticalDataType": "dsv:NumericalDataType"
+        },
+        "prov:hadRole": "Feature"
       },
       {
+        "@id": "urn:linked-codebook:dataset:Autistic%20Spectrum%20Disorder%20Screening%20Data%20for%20Children#column-A7_Score",
+        "@type": "dsv:Column",
         "name": "A7_Score",
-        "hadRole": "Feature",
-        "summaryStatistics": {
-          "statisticalDataType": "dsv:NumericalDataType",
-          "@type": "dsv:SummaryStatistics"
+        "titles": "A7_Score",
+        "columnProperty": {
+          "@id": "urn:linked-codebook:dataset:Autistic%20Spectrum%20Disorder%20Screening%20Data%20for%20Children#property-A7_Score",
+          "@type": "dsv:ColumnProperty",
+          "hasVariable": {
+            "@id": "urn:linked-codebook:dataset:Autistic%20Spectrum%20Disorder%20Screening%20Data%20for%20Children#variable-A7_Score",
+            "@type": "skos:Concept",
+            "skos:prefLabel": "A7_Score"
+          }
         },
-        "@type": "dsv:Column"
+        "summaryStatistics": {
+          "@id": "urn:linked-codebook:dataset:Autistic%20Spectrum%20Disorder%20Screening%20Data%20for%20Children#statistics-A7_Score",
+          "@type": "dsv:SummaryStatistics",
+          "statisticalDataType": "dsv:NumericalDataType"
+        },
+        "prov:hadRole": "Feature"
       },
       {
+        "@id": "urn:linked-codebook:dataset:Autistic%20Spectrum%20Disorder%20Screening%20Data%20for%20Children#column-A8_Score",
+        "@type": "dsv:Column",
         "name": "A8_Score",
-        "hadRole": "Feature",
-        "summaryStatistics": {
-          "statisticalDataType": "dsv:NumericalDataType",
-          "@type": "dsv:SummaryStatistics"
+        "titles": "A8_Score",
+        "columnProperty": {
+          "@id": "urn:linked-codebook:dataset:Autistic%20Spectrum%20Disorder%20Screening%20Data%20for%20Children#property-A8_Score",
+          "@type": "dsv:ColumnProperty",
+          "hasVariable": {
+            "@id": "urn:linked-codebook:dataset:Autistic%20Spectrum%20Disorder%20Screening%20Data%20for%20Children#variable-A8_Score",
+            "@type": "skos:Concept",
+            "skos:prefLabel": "A8_Score"
+          }
         },
-        "@type": "dsv:Column"
+        "summaryStatistics": {
+          "@id": "urn:linked-codebook:dataset:Autistic%20Spectrum%20Disorder%20Screening%20Data%20for%20Children#statistics-A8_Score",
+          "@type": "dsv:SummaryStatistics",
+          "statisticalDataType": "dsv:NumericalDataType"
+        },
+        "prov:hadRole": "Feature"
       },
       {
+        "@id": "urn:linked-codebook:dataset:Autistic%20Spectrum%20Disorder%20Screening%20Data%20for%20Children#column-A9_Score",
+        "@type": "dsv:Column",
         "name": "A9_Score",
-        "hadRole": "Feature",
-        "summaryStatistics": {
-          "statisticalDataType": "dsv:NumericalDataType",
-          "@type": "dsv:SummaryStatistics"
+        "titles": "A9_Score",
+        "columnProperty": {
+          "@id": "urn:linked-codebook:dataset:Autistic%20Spectrum%20Disorder%20Screening%20Data%20for%20Children#property-A9_Score",
+          "@type": "dsv:ColumnProperty",
+          "hasVariable": {
+            "@id": "urn:linked-codebook:dataset:Autistic%20Spectrum%20Disorder%20Screening%20Data%20for%20Children#variable-A9_Score",
+            "@type": "skos:Concept",
+            "skos:prefLabel": "A9_Score"
+          }
         },
-        "@type": "dsv:Column"
+        "summaryStatistics": {
+          "@id": "urn:linked-codebook:dataset:Autistic%20Spectrum%20Disorder%20Screening%20Data%20for%20Children#statistics-A9_Score",
+          "@type": "dsv:SummaryStatistics",
+          "statisticalDataType": "dsv:NumericalDataType"
+        },
+        "prov:hadRole": "Feature"
       },
       {
+        "@id": "urn:linked-codebook:dataset:Autistic%20Spectrum%20Disorder%20Screening%20Data%20for%20Children#column-A10_Score",
+        "@type": "dsv:Column",
         "name": "A10_Score",
-        "hadRole": "Feature",
-        "summaryStatistics": {
-          "statisticalDataType": "dsv:NumericalDataType",
-          "@type": "dsv:SummaryStatistics"
+        "titles": "A10_Score",
+        "columnProperty": {
+          "@id": "urn:linked-codebook:dataset:Autistic%20Spectrum%20Disorder%20Screening%20Data%20for%20Children#property-A10_Score",
+          "@type": "dsv:ColumnProperty",
+          "hasVariable": {
+            "@id": "urn:linked-codebook:dataset:Autistic%20Spectrum%20Disorder%20Screening%20Data%20for%20Children#variable-A10_Score",
+            "@type": "skos:Concept",
+            "skos:prefLabel": "A10_Score"
+          }
         },
-        "@type": "dsv:Column"
+        "summaryStatistics": {
+          "@id": "urn:linked-codebook:dataset:Autistic%20Spectrum%20Disorder%20Screening%20Data%20for%20Children#statistics-A10_Score",
+          "@type": "dsv:SummaryStatistics",
+          "statisticalDataType": "dsv:NumericalDataType"
+        },
+        "prov:hadRole": "Feature"
       },
       {
+        "@id": "urn:linked-codebook:dataset:Autistic%20Spectrum%20Disorder%20Screening%20Data%20for%20Children#column-age",
+        "@type": "dsv:Column",
         "name": "age",
-        "about": "Age",
-        "hadRole": "Feature",
-        "summaryStatistics": {
-          "statisticalDataType": "dsv:NumericalDataType",
-          "@type": "dsv:SummaryStatistics"
+        "titles": "age",
+        "columnProperty": {
+          "@id": "urn:linked-codebook:dataset:Autistic%20Spectrum%20Disorder%20Screening%20Data%20for%20Children#property-age",
+          "@type": "dsv:ColumnProperty",
+          "hasVariable": {
+            "@id": "urn:linked-codebook:dataset:Autistic%20Spectrum%20Disorder%20Screening%20Data%20for%20Children#variable-age",
+            "@type": "skos:Concept",
+            "skos:prefLabel": "age"
+          }
         },
-        "@type": "dsv:Column"
+        "summaryStatistics": {
+          "@id": "urn:linked-codebook:dataset:Autistic%20Spectrum%20Disorder%20Screening%20Data%20for%20Children#statistics-age",
+          "@type": "dsv:SummaryStatistics",
+          "statisticalDataType": "dsv:NumericalDataType"
+        },
+        "prov:hadRole": "Feature"
       },
       {
+        "@id": "urn:linked-codebook:dataset:Autistic%20Spectrum%20Disorder%20Screening%20Data%20for%20Children#column-gender",
+        "@type": "dsv:Column",
         "name": "gender",
-        "about": "Gender",
-        "hadRole": "Feature",
-        "summaryStatistics": {
-          "statisticalDataType": "dsv:CategoricalDataType",
-          "@type": "dsv:SummaryStatistics"
+        "titles": "gender",
+        "columnProperty": {
+          "@id": "urn:linked-codebook:dataset:Autistic%20Spectrum%20Disorder%20Screening%20Data%20for%20Children#property-gender",
+          "@type": "dsv:ColumnProperty",
+          "hasVariable": {
+            "@id": "urn:linked-codebook:dataset:Autistic%20Spectrum%20Disorder%20Screening%20Data%20for%20Children#variable-gender",
+            "@type": "skos:Concept",
+            "skos:prefLabel": "gender"
+          }
         },
-        "@type": "dsv:Column"
+        "summaryStatistics": {
+          "@id": "urn:linked-codebook:dataset:Autistic%20Spectrum%20Disorder%20Screening%20Data%20for%20Children#statistics-gender",
+          "@type": "dsv:SummaryStatistics",
+          "statisticalDataType": "dsv:CategoricalDataType"
+        },
+        "prov:hadRole": "Feature"
       },
       {
+        "@id": "urn:linked-codebook:dataset:Autistic%20Spectrum%20Disorder%20Screening%20Data%20for%20Children#column-ethnicity",
+        "@type": "dsv:Column",
         "name": "ethnicity",
-        "about": "Ethnicity",
-        "hadRole": "Feature",
-        "summaryStatistics": {
-          "statisticalDataType": "dsv:CategoricalDataType",
-          "missingValueFormat": "NaN",
-          "@type": "dsv:SummaryStatistics"
+        "titles": "ethnicity",
+        "nullValues": [
+          "NaN"
+        ],
+        "columnProperty": {
+          "@id": "urn:linked-codebook:dataset:Autistic%20Spectrum%20Disorder%20Screening%20Data%20for%20Children#property-ethnicity",
+          "@type": "dsv:ColumnProperty",
+          "hasVariable": {
+            "@id": "urn:linked-codebook:dataset:Autistic%20Spectrum%20Disorder%20Screening%20Data%20for%20Children#variable-ethnicity",
+            "@type": "skos:Concept",
+            "skos:prefLabel": "ethnicity"
+          }
         },
-        "@type": "dsv:Column"
+        "summaryStatistics": {
+          "@id": "urn:linked-codebook:dataset:Autistic%20Spectrum%20Disorder%20Screening%20Data%20for%20Children#statistics-ethnicity",
+          "@type": "dsv:SummaryStatistics",
+          "statisticalDataType": "dsv:CategoricalDataType"
+        },
+        "prov:hadRole": "Feature"
       },
       {
+        "@id": "urn:linked-codebook:dataset:Autistic%20Spectrum%20Disorder%20Screening%20Data%20for%20Children#column-jaundice",
+        "@type": "dsv:Column",
         "name": "jaundice",
-        "hadRole": "Feature",
-        "summaryStatistics": {
-          "statisticalDataType": "dsv:StatisticalDataType",
-          "@type": "dsv:SummaryStatistics"
+        "titles": "jaundice",
+        "columnProperty": {
+          "@id": "urn:linked-codebook:dataset:Autistic%20Spectrum%20Disorder%20Screening%20Data%20for%20Children#property-jaundice",
+          "@type": "dsv:ColumnProperty",
+          "hasVariable": {
+            "@id": "urn:linked-codebook:dataset:Autistic%20Spectrum%20Disorder%20Screening%20Data%20for%20Children#variable-jaundice",
+            "@type": "skos:Concept",
+            "skos:prefLabel": "jaundice"
+          }
         },
-        "@type": "dsv:Column"
+        "prov:hadRole": "Feature"
       },
       {
+        "@id": "urn:linked-codebook:dataset:Autistic%20Spectrum%20Disorder%20Screening%20Data%20for%20Children#column-autism",
+        "@type": "dsv:Column",
         "name": "autism",
-        "hadRole": "Feature",
-        "summaryStatistics": {
-          "statisticalDataType": "dsv:StatisticalDataType",
-          "@type": "dsv:SummaryStatistics"
+        "titles": "autism",
+        "columnProperty": {
+          "@id": "urn:linked-codebook:dataset:Autistic%20Spectrum%20Disorder%20Screening%20Data%20for%20Children#property-autism",
+          "@type": "dsv:ColumnProperty",
+          "hasVariable": {
+            "@id": "urn:linked-codebook:dataset:Autistic%20Spectrum%20Disorder%20Screening%20Data%20for%20Children#variable-autism",
+            "@type": "skos:Concept",
+            "skos:prefLabel": "autism"
+          }
         },
-        "@type": "dsv:Column"
+        "prov:hadRole": "Feature"
       },
       {
+        "@id": "urn:linked-codebook:dataset:Autistic%20Spectrum%20Disorder%20Screening%20Data%20for%20Children#column-country_of_res",
+        "@type": "dsv:Column",
         "name": "country_of_res",
-        "about": "Nationality",
-        "hadRole": "Feature",
-        "summaryStatistics": {
-          "statisticalDataType": "dsv:CategoricalDataType",
-          "@type": "dsv:SummaryStatistics"
+        "titles": "country_of_res",
+        "columnProperty": {
+          "@id": "urn:linked-codebook:dataset:Autistic%20Spectrum%20Disorder%20Screening%20Data%20for%20Children#property-country_of_res",
+          "@type": "dsv:ColumnProperty",
+          "hasVariable": {
+            "@id": "urn:linked-codebook:dataset:Autistic%20Spectrum%20Disorder%20Screening%20Data%20for%20Children#variable-country_of_res",
+            "@type": "skos:Concept",
+            "skos:prefLabel": "country_of_res"
+          }
         },
-        "@type": "dsv:Column"
+        "summaryStatistics": {
+          "@id": "urn:linked-codebook:dataset:Autistic%20Spectrum%20Disorder%20Screening%20Data%20for%20Children#statistics-country_of_res",
+          "@type": "dsv:SummaryStatistics",
+          "statisticalDataType": "dsv:CategoricalDataType"
+        },
+        "prov:hadRole": "Feature"
       },
       {
+        "@id": "urn:linked-codebook:dataset:Autistic%20Spectrum%20Disorder%20Screening%20Data%20for%20Children#column-used_app_before",
+        "@type": "dsv:Column",
         "name": "used_app_before",
-        "hadRole": "Feature",
-        "summaryStatistics": {
-          "statisticalDataType": "dsv:StatisticalDataType",
-          "@type": "dsv:SummaryStatistics"
+        "titles": "used_app_before",
+        "columnProperty": {
+          "@id": "urn:linked-codebook:dataset:Autistic%20Spectrum%20Disorder%20Screening%20Data%20for%20Children#property-used_app_before",
+          "@type": "dsv:ColumnProperty",
+          "hasVariable": {
+            "@id": "urn:linked-codebook:dataset:Autistic%20Spectrum%20Disorder%20Screening%20Data%20for%20Children#variable-used_app_before",
+            "@type": "skos:Concept",
+            "skos:prefLabel": "used_app_before"
+          }
         },
-        "@type": "dsv:Column"
+        "prov:hadRole": "Feature"
       },
       {
+        "@id": "urn:linked-codebook:dataset:Autistic%20Spectrum%20Disorder%20Screening%20Data%20for%20Children#column-result",
+        "@type": "dsv:Column",
         "name": "result",
-        "hadRole": "Feature",
-        "summaryStatistics": {
-          "statisticalDataType": "dsv:NumericalDataType",
-          "@type": "dsv:SummaryStatistics"
+        "titles": "result",
+        "columnProperty": {
+          "@id": "urn:linked-codebook:dataset:Autistic%20Spectrum%20Disorder%20Screening%20Data%20for%20Children#property-result",
+          "@type": "dsv:ColumnProperty",
+          "hasVariable": {
+            "@id": "urn:linked-codebook:dataset:Autistic%20Spectrum%20Disorder%20Screening%20Data%20for%20Children#variable-result",
+            "@type": "skos:Concept",
+            "skos:prefLabel": "result"
+          }
         },
-        "@type": "dsv:Column"
+        "summaryStatistics": {
+          "@id": "urn:linked-codebook:dataset:Autistic%20Spectrum%20Disorder%20Screening%20Data%20for%20Children#statistics-result",
+          "@type": "dsv:SummaryStatistics",
+          "statisticalDataType": "dsv:NumericalDataType"
+        },
+        "prov:hadRole": "Feature"
       },
       {
+        "@id": "urn:linked-codebook:dataset:Autistic%20Spectrum%20Disorder%20Screening%20Data%20for%20Children#column-age_desc",
+        "@type": "dsv:Column",
         "name": "age_desc",
-        "about": "Age",
-        "hadRole": "Feature",
-        "summaryStatistics": {
-          "statisticalDataType": "dsv:CategoricalDataType",
-          "@type": "dsv:SummaryStatistics"
+        "titles": "age_desc",
+        "columnProperty": {
+          "@id": "urn:linked-codebook:dataset:Autistic%20Spectrum%20Disorder%20Screening%20Data%20for%20Children#property-age_desc",
+          "@type": "dsv:ColumnProperty",
+          "hasVariable": {
+            "@id": "urn:linked-codebook:dataset:Autistic%20Spectrum%20Disorder%20Screening%20Data%20for%20Children#variable-age_desc",
+            "@type": "skos:Concept",
+            "skos:prefLabel": "age_desc"
+          }
         },
-        "@type": "dsv:Column"
+        "summaryStatistics": {
+          "@id": "urn:linked-codebook:dataset:Autistic%20Spectrum%20Disorder%20Screening%20Data%20for%20Children#statistics-age_desc",
+          "@type": "dsv:SummaryStatistics",
+          "statisticalDataType": "dsv:CategoricalDataType"
+        },
+        "prov:hadRole": "Feature"
       },
       {
+        "@id": "urn:linked-codebook:dataset:Autistic%20Spectrum%20Disorder%20Screening%20Data%20for%20Children#column-relation",
+        "@type": "dsv:Column",
         "name": "relation",
-        "hadRole": "Feature",
-        "summaryStatistics": {
-          "statisticalDataType": "dsv:CategoricalDataType",
-          "missingValueFormat": "NaN",
-          "@type": "dsv:SummaryStatistics"
+        "titles": "relation",
+        "nullValues": [
+          "NaN"
+        ],
+        "columnProperty": {
+          "@id": "urn:linked-codebook:dataset:Autistic%20Spectrum%20Disorder%20Screening%20Data%20for%20Children#property-relation",
+          "@type": "dsv:ColumnProperty",
+          "hasVariable": {
+            "@id": "urn:linked-codebook:dataset:Autistic%20Spectrum%20Disorder%20Screening%20Data%20for%20Children#variable-relation",
+            "@type": "skos:Concept",
+            "skos:prefLabel": "relation"
+          }
         },
-        "@type": "dsv:Column"
+        "summaryStatistics": {
+          "@id": "urn:linked-codebook:dataset:Autistic%20Spectrum%20Disorder%20Screening%20Data%20for%20Children#statistics-relation",
+          "@type": "dsv:SummaryStatistics",
+          "statisticalDataType": "dsv:CategoricalDataType"
+        },
+        "prov:hadRole": "Feature"
       },
       {
+        "@id": "urn:linked-codebook:dataset:Autistic%20Spectrum%20Disorder%20Screening%20Data%20for%20Children#column-class",
+        "@type": "dsv:Column",
         "name": "class",
-        "hadRole": "Target",
-        "summaryStatistics": {
-          "statisticalDataType": "dsv:StatisticalDataType",
-          "@type": "dsv:SummaryStatistics"
+        "titles": "class",
+        "columnProperty": {
+          "@id": "urn:linked-codebook:dataset:Autistic%20Spectrum%20Disorder%20Screening%20Data%20for%20Children#property-class",
+          "@type": "dsv:ColumnProperty",
+          "hasVariable": {
+            "@id": "urn:linked-codebook:dataset:Autistic%20Spectrum%20Disorder%20Screening%20Data%20for%20Children#variable-class",
+            "@type": "skos:Concept",
+            "skos:prefLabel": "class"
+          }
         },
-        "@type": "dsv:Column"
+        "prov:hadRole": "Target"
       }
-    ],
-    "@type": "dsv:DatasetSchema"
+    ]
   },
-  "summaryStatistics": {
-    "numberOfRows": 292,
-    "numberOfColumns": 20,
-    "missingValueFormat": "NaN",
-    "@type": "dsv:SummaryStatistics"
-  },
-  "title": "Autistic Spectrum Disorder Screening Data for Children",
-  "description": "see attached file for variables' description ",
-  "abstract": "Children screening data for autism suitable for classification and predictive tasks ",
-  "landingPage": "https://archive.ics.uci.edu/dataset/419/autistic+spectrum+disorder+screening+data+for+children",
-  "tableOfContents": "see attached file for variables' description ",
-  "identifier": [
-    {
-      "@type": "schema:PropertyValue",
-      "schema:propertyID": "uci",
-      "schema:value": 419
-    },
-    {
-      "@type": "schema:PropertyValue",
-      "schema:propertyID": "DOI",
-      "schema:value": "10.24432/C5659W"
-    }
-  ],
-  "@type": "dcat:Dataset",
   "dcterms:created": 2017,
   "dcterms:modified": "2024-04-03",
   "dcat:theme": "Health and Medicine",
@@ -252,6 +575,20 @@
       "dcat:downloadURL": "https://archive.ics.uci.edu/static/public/419/data.csv",
       "dcat:mediaType": "text/csv",
       "dcterms:format": "text/csv"
+    }
+  ],
+  "dcterms:abstract": "Children screening data for autism suitable for classification and predictive tasks ",
+  "dcterms:tableOfContents": "see attached file for variables' description ",
+  "schema:identifier": [
+    {
+      "@type": "schema:PropertyValue",
+      "schema:propertyID": "uci",
+      "schema:value": 419
+    },
+    {
+      "@type": "schema:PropertyValue",
+      "schema:propertyID": "DOI",
+      "schema:value": "10.24432/C5659W"
     }
   ]
 }

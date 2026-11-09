@@ -1,15 +1,10 @@
 from __future__ import annotations
 
-from dataclasses import dataclass, field
 import json
 import logging
+from collections.abc import Mapping
 from pathlib import Path
-from typing import Any, Dict, List, Optional, Mapping
-
-
-from makeprov import RDFMixin
-
-from .semmap import normalize_variable_descriptors
+from typing import Any
 
 JSONLD_CONTEXT = {
     "@context": {
@@ -33,30 +28,9 @@ JSONLD_CONTEXT = {
 }
 
 
-@dataclass
-class DCATDistribution(RDFMixin):
-    __context__ = JSONLD_CONTEXT
-    title: str
-    access_url: Optional[str] = None
-    download_url: Optional[str] = None
-    media_type: Optional[str] = None
 
 
-@dataclass
-class DCATDataset(RDFMixin):
-    __context__ = JSONLD_CONTEXT
-    identifier: str
-    title: str
-    description: str
-    publisher: Optional[str] = None
-    keywords: List[str] = field(default_factory=list)
-    issued: Optional[str] = None
-    modified: Optional[str] = None
-    language: Optional[str] = None
-    distributions: List[DCATDistribution] = field(default_factory=list)
-
-
-def get_uciml_variable_descriptions(dataset_id: int) -> Dict[str, str]:
+def get_uciml_variable_descriptions(dataset_id: int) -> dict[str, str]:
     """Best-effort retrieval of UCI ML variable descriptions.
 
     The lookup first checks for a cached UCI ML payload under
@@ -73,7 +47,7 @@ def get_uciml_variable_descriptions(dataset_id: int) -> Dict[str, str]:
         descriptions are filtered out.
     """
 
-    def _read_cached_variables(cache_path: Path) -> List[Any]:
+    def _read_cached_variables(cache_path: Path) -> list[Any]:
         try:
             payload = json.loads(cache_path.read_text())
         except Exception:
@@ -87,13 +61,14 @@ def get_uciml_variable_descriptions(dataset_id: int) -> Dict[str, str]:
         return variables if isinstance(variables, list) else []
 
     cache_path = Path("uciml-cache") / f"{int(dataset_id)}.json"
-    variables: List[Any] = []
+    variables: list[Any] = []
     if cache_path.exists():
         variables = _read_cached_variables(cache_path)
 
     if not variables:
         try:
             import ssl
+
             from ucimlrepo import fetch_ucirepo
 
             try:
@@ -132,11 +107,11 @@ def get_uciml_variable_descriptions(dataset_id: int) -> Dict[str, str]:
             )
             variables = []
 
-    descriptors = normalize_variable_descriptors(
-        var if isinstance(var, Mapping) else vars(var) for var in variables
-    )
-    return {
-        descriptor.name: descriptor.description or ""
-        for descriptor in descriptors
-        if descriptor.description
-    }
+    descriptions: dict[str, str] = {}
+    for var in variables:
+        entry = var if isinstance(var, Mapping) else vars(var)
+        name = entry.get("name")
+        description = entry.get("description")
+        if isinstance(name, str) and name and isinstance(description, str) and description:
+            descriptions[name] = description
+    return descriptions

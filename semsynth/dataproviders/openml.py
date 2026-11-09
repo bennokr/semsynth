@@ -6,16 +6,16 @@ import json
 import logging
 import pathlib
 import warnings
-from typing import Dict, List, Optional
+from pathlib import Path
 
 import pandas as pd
-from pathlib import Path
 
 from ..specs import DatasetSpec
 from ._helpers import (
     CachePaths,
     DatasetPayload,
     clean_dataset_frame,
+    import_provider,
     load_cached_payload,
     store_cached_payload,
 )
@@ -23,7 +23,7 @@ from ._helpers import (
 
 def get_default_openml(
     cache_dir: Path = Path("downloads-cache/openml/defaults"),
-) -> List[DatasetSpec]:
+) -> list[DatasetSpec]:
     return [
         DatasetSpec("openml", "adult", target="class"),
         DatasetSpec("openml", "credit-g", target="class"),
@@ -33,19 +33,19 @@ def get_default_openml(
 
 
 def list_openml(
-    name_substr: Optional[str] = None,
+    name_substr: str | None = None,
     cat_min: int = 1,
     num_min: int = 1,
     cache_dir: Path = Path("downloads-cache/openml/"),
 ) -> pd.DataFrame:
-    import openml
+    openml = import_provider("openml")
 
     with warnings.catch_warnings():
         warnings.simplefilter("ignore", category=FutureWarning)
         logging.info("Requesting OpenML datasets")
         df = openml.datasets.list_datasets(output_format="dataframe", status="active")
         numcols = df.select_dtypes(include="float").columns
-        df = df.astype({col: "Int64" for col in numcols})
+        df = df.astype(dict.fromkeys(numcols, "Int64"))
     need = (df["NumberOfSymbolicFeatures"].fillna(0) >= cat_min) & (
         df["NumberOfNumericFeatures"].fillna(0) >= num_min
     )
@@ -97,8 +97,8 @@ def load_openml_by_name(name: str, cache_dir: pathlib.Path | Path) -> DatasetPay
 
     spec = DatasetSpec(provider="openml", name=name)
     alias_path = alias_dir / f"{name}.json"
-    dataset_id: Optional[int] = None
-    alias_info: Dict[str, object] = {}
+    dataset_id: int | None = None
+    alias_info: dict[str, object] = {}
     if alias_path.exists():
         alias_info = json.loads(alias_path.read_text(encoding="utf-8")) or {}
         dataset_id_raw = alias_info.get("did") or alias_info.get("dataset_id") or alias_info.get("id")
@@ -130,7 +130,7 @@ def load_openml_by_name(name: str, cache_dir: pathlib.Path | Path) -> DatasetPay
             )
 
     # 2) Fallback to OpenML API and cache results
-    import openml
+    openml = import_provider("openml")
 
     with warnings.catch_warnings():
         warnings.simplefilter("ignore", category=FutureWarning)
@@ -152,7 +152,7 @@ def load_openml_by_name(name: str, cache_dir: pathlib.Path | Path) -> DatasetPay
     if detected_target:
         spec.target = detected_target
 
-    metadata_payload: Dict[str, object] = {
+    metadata_payload: dict[str, object] = {
         "id": dataset_id,
         "name": spec.name,
         "version": dataset.version,

@@ -1,7 +1,7 @@
 from __future__ import annotations
 
-from pathlib import Path
 import json
+from pathlib import Path
 
 import pandas as pd
 import pytest
@@ -10,6 +10,7 @@ pytest.importorskip("jinja2")
 
 from semsynth.models import ModelRun
 from semsynth.reporting import write_report_md
+
 
 def _touch(path: Path, content: str = "data") -> Path:
     path.parent.mkdir(parents=True, exist_ok=True)
@@ -36,7 +37,7 @@ def test_write_report_md_renders_expected_sections(tmp_path: Path) -> None:
         json.dumps({"formula": "status ~ age", "sign_match_rate": 0.9}),
     )
     umap_png = _touch(run_dir / "umap.png", "binary")
-    structure_png = _touch(run_dir / "structure.png", "binary")
+    _touch(run_dir / "structure.png", "binary")
 
     model_run = ModelRun(
         name="demo_model",
@@ -59,7 +60,7 @@ def test_write_report_md_renders_expected_sections(tmp_path: Path) -> None:
         downstream_metrics={"sign_match_rate": 0.9},
     )
 
-    semmap_payload = {
+    codebook_payload = {
         "@context": "https://schema.org",
         "@type": "Dataset",
         "name": "Demo dataset",
@@ -77,7 +78,7 @@ def test_write_report_md_renders_expected_sections(tmp_path: Path) -> None:
         declared_types={"age": "integer"},
         inferred_types={"status": "categorical"},
         variable_descriptions={"status": "Approval status"},
-        semmap_jsonld=semmap_payload,
+        codebook_jsonld=codebook_payload,
         model_runs=[model_run],
         missingness_summary={
             "random_state": 11,
@@ -92,18 +93,18 @@ def test_write_report_md_renders_expected_sections(tmp_path: Path) -> None:
 
     markdown_path = tmp_path / "report.md"
     html_path = tmp_path / "index.html"
-    semmap_json = tmp_path / "dataset.semmap.json"
-    semmap_html = tmp_path / "dataset.semmap.html"
+    codebook_json = tmp_path / "dataset.codebook.jsonld"
+    codebook_html = tmp_path / "dataset.codebook.html"
 
     assert markdown_path.exists()
     assert html_path.exists()
-    assert semmap_json.exists()
-    assert semmap_html.exists()
+    assert codebook_json.exists()
+    assert codebook_html.exists()
 
     md_text = markdown_path.read_text(encoding="utf-8")
     assert "# Data Report — Demo dataset" in md_text
     assert "**Source**: [OpenML dataset 42]" in md_text
-    assert "SemMap JSON-LD" in md_text
+    assert "Codebook JSON-LD" in md_text
     assert "## Variables and summary" in md_text
     assert "## Missingness model" in md_text
     assert "## Fidelity summary" in md_text

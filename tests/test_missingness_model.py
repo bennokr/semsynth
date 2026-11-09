@@ -57,3 +57,29 @@ def test_missingness_model_ignores_unknown_columns() -> None:
     applied = model.apply(pd.DataFrame({"b": ["x", "y", "z"]}))
     assert applied.shape[1] == 1
     assert applied.columns.tolist() == ["b"]
+
+
+def test_missingness_model_applies_to_nullable_dtypes() -> None:
+    """Synthetic data read back with ``convert_dtypes`` holds ``pd.NA``; the model must still apply."""
+
+    rng = np.random.default_rng(1)
+    n = 400
+    real = pd.DataFrame(
+        {
+            "count": rng.integers(0, 5, size=n).astype(float),
+            "group": rng.choice(["a", "b"], size=n),
+            "flag": rng.random(n) < 0.5,
+            "value": rng.normal(size=n),
+        }
+    )
+    real.loc[rng.random(n) < 0.3, "value"] = np.nan
+    model = DataFrameMissingnessModel(random_state=3).fit(real)
+
+    synth = real.drop(columns="value").copy()
+    synth.loc[::7, "count"] = np.nan
+    synth.loc[::11, "group"] = None
+    synth = synth.convert_dtypes()
+    assert str(synth["count"].dtype) == "Int64" and str(synth["flag"].dtype) == "boolean"
+
+    applied = model.apply(synth.assign(value=rng.normal(size=n)).convert_dtypes())
+    assert abs(applied["value"].isna().mean() - real["value"].isna().mean()) < 0.1

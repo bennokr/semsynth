@@ -1,28 +1,30 @@
-"""Signature compliance tests for backend modules."""
+"""Every backend module has the same ``synthesize``."""
 
 from __future__ import annotations
 
 import importlib
-from typing import Dict
+import inspect
+from types import ModuleType
 
 import pytest
 
-from semsynth.backends.base import ensure_backend_contract
+
+def ensure_synthesize_contract(module: ModuleType) -> None:
+    """Validate that a backend module exposes ``synthesize(df, codebook, *, rows, seed, **options)``."""
+
+    synthesize = getattr(module, "synthesize", None)
+    assert callable(synthesize), f"{module.__name__} must define a callable 'synthesize'"
+    params = list(inspect.signature(synthesize).parameters.values())
+    positional = [p.name for p in params if p.kind in (p.POSITIONAL_ONLY, p.POSITIONAL_OR_KEYWORD)]
+    assert positional[:2] == ["df", "codebook"], "synthesize takes the table and the codebook first"
+    keyword_only = {p.name for p in params if p.kind is p.KEYWORD_ONLY}
+    assert {"rows", "seed"} <= keyword_only, "synthesize takes rows and seed as keyword-only parameters"
 
 
-_BACKEND_DEPENDENCIES: Dict[str, str] = {
-    "semsynth.backends.pybnesian": "pybnesian",
-    "semsynth.backends.synthcity": "synthcity",
-    "semsynth.backends.metasyn": "metasyn",
-}
 
+@pytest.mark.parametrize("name", ["metasyn", "privbayes", "pybnesian", "synthcity"])
+def test_synthesize_contract(name: str) -> None:
+    """Every backend module imports without its engine and exposes ``synthesize``."""
 
-@pytest.mark.parametrize("module_name", sorted(_BACKEND_DEPENDENCIES))
-def test_backend_contract(module_name: str) -> None:
-    """Ensure each backend exposes a compliant ``run_experiment`` signature."""
-
-    dependency = _BACKEND_DEPENDENCIES[module_name]
-    pytest.importorskip(dependency)
-
-    module = importlib.import_module(module_name)
-    ensure_backend_contract(module)
+    module = importlib.import_module(f"semsynth.backends.{name}")
+    ensure_synthesize_contract(module)

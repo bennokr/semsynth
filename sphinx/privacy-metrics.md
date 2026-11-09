@@ -17,17 +17,16 @@ SemSynth summarizes disclosure risk by combining SynthCity's privacy and sanity 
 
 ```{code-cell} python
 # Build the privacy metadata frame derived from curated roles/types.
-import json
 import pandas as pd
-from semsynth.semmap import Metadata
+from semsynth.codebook import Codebook
 from semsynth.utils import infer_types
 
 heart = pd.read_csv("../downloads-cache/uciml/45.csv.gz")
 disc, cont = infer_types(heart)
 inferred = {c: ("discrete" if c in disc else "continuous") for c in heart.columns}
 
-meta = Metadata.from_dcat_dsv(json.load(open("../mappings/uciml-45.metadata.json")))
-privacy_frame = meta.to_privacy_frame(inferred)
+codebook = Codebook.read("../mappings/uciml-45.metadata.json")
+privacy_frame = codebook.privacy_frame(inferred)
 privacy_frame.head()
 ```
 

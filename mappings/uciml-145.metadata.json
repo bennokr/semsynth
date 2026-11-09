@@ -1,180 +1,412 @@
 {
-  "@context": "https://w3id.org/semmap/context/v1",
+  "@context": {
+    "accessRights": "dct:accessRights",
+    "broadMatch": {
+      "@container": "@set",
+      "@id": "skos:broadMatch",
+      "@type": "@id"
+    },
+    "citation": "dct:bibliographicCitation",
+    "closeMatch": {
+      "@container": "@set",
+      "@id": "skos:closeMatch",
+      "@type": "@id"
+    },
+    "columnCompleteness": {
+      "@id": "dsv:columnCompleteness",
+      "@type": "xsd:float"
+    },
+    "columnProperty": {
+      "@id": "dsv:columnProperty",
+      "@type": "@id"
+    },
+    "columns": {
+      "@container": "@set",
+      "@id": "dsv:column"
+    },
+    "csvw": "http://www.w3.org/ns/csvw#",
+    "datasetSchema": {
+      "@id": "dsv:datasetSchema",
+      "@type": "@id"
+    },
+    "datatype": "csvw:datatype",
+    "dcat": "http://www.w3.org/ns/dcat#",
+    "dct": "http://purl.org/dc/terms/",
+    "description": "dct:description",
+    "dsv": "https://w3id.org/dsv-ontology#",
+    "exactMatch": {
+      "@container": "@set",
+      "@id": "skos:exactMatch",
+      "@type": "@id"
+    },
+    "hasCodeBook": {
+      "@id": "dsv:hasCodeBook",
+      "@type": "@id"
+    },
+    "hasUnit": {
+      "@id": "qudt:hasUnit",
+      "@type": "@id"
+    },
+    "hasVariable": {
+      "@id": "dsv:hasVariable",
+      "@type": "@id"
+    },
+    "identifier": "dct:identifier",
+    "landingPage": {
+      "@id": "dcat:landingPage",
+      "@type": "@id"
+    },
+    "license": {
+      "@id": "dct:license",
+      "@type": "@id"
+    },
+    "name": "csvw:name",
+    "narrowMatch": {
+      "@container": "@set",
+      "@id": "skos:narrowMatch",
+      "@type": "@id"
+    },
+    "nullValues": {
+      "@container": "@set",
+      "@id": "csvw:null"
+    },
+    "numberOfColumns": {
+      "@id": "dsv:numberOfColumns",
+      "@type": "xsd:integer"
+    },
+    "numberOfRows": {
+      "@id": "dsv:numberOfRows",
+      "@type": "xsd:integer"
+    },
+    "qudt": "http://qudt.org/schema/qudt/",
+    "relatedMatch": {
+      "@container": "@set",
+      "@id": "skos:relatedMatch",
+      "@type": "@id"
+    },
+    "rights": "dct:rights",
+    "schema": "https://schema.org/",
+    "skos": "http://www.w3.org/2004/02/skos/core#",
+    "statisticalDataType": {
+      "@id": "dsv:statisticalDataType",
+      "@type": "@id"
+    },
+    "summaryStatistics": {
+      "@id": "dsv:summaryStatistics",
+      "@type": "@id"
+    },
+    "title": "dct:title",
+    "titles": "csvw:title",
+    "unitText": "schema:unitText",
+    "xsd": "http://www.w3.org/2001/XMLSchema#",
+    "dcterms": "http://purl.org/dc/terms/",
+    "prov": "http://www.w3.org/ns/prov#"
+  },
+  "@id": "urn:linked-codebook:dataset:Statlog%20(Heart)",
+  "@type": [
+    "dcat:Dataset",
+    "dsv:Dataset"
+  ],
+  "description": "Cost Matrix\r\n\r\n_______\t abse  pres\r\nabsence\t 0\t1\r\npresence  5\t0\r\n\r\nwhere the rows represent the true values and the columns the predicted.\r\n",
+  "landingPage": "https://archive.ics.uci.edu/dataset/145/statlog+heart",
+  "title": "Statlog (Heart)",
+  "summaryStatistics": {
+    "@id": "urn:linked-codebook:dataset:Statlog%20(Heart)#statistics",
+    "@type": "dsv:SummaryStatistics",
+    "numberOfRows": 270,
+    "numberOfColumns": 14
+  },
   "datasetSchema": {
+    "@id": "urn:linked-codebook:dataset:Statlog%20(Heart)#schema",
+    "@type": "dsv:DatasetSchema",
     "columns": [
       {
+        "@id": "urn:linked-codebook:dataset:Statlog%20(Heart)#column-age",
+        "@type": "dsv:Column",
         "name": "age",
-        "about": "Age",
-        "hadRole": "Feature",
-        "summaryStatistics": {
-          "statisticalDataType": "dsv:StatisticalDataType",
-          "@type": "dsv:SummaryStatistics"
-        }
+        "titles": "age",
+        "columnProperty": {
+          "@id": "urn:linked-codebook:dataset:Statlog%20(Heart)#property-age",
+          "@type": "dsv:ColumnProperty",
+          "hasVariable": {
+            "@id": "urn:linked-codebook:dataset:Statlog%20(Heart)#variable-age",
+            "@type": "skos:Concept",
+            "skos:prefLabel": "age"
+          }
+        },
+        "prov:hadRole": "Feature"
       },
       {
+        "@id": "urn:linked-codebook:dataset:Statlog%20(Heart)#column-sex",
+        "@type": "dsv:Column",
         "name": "sex",
-        "about": "Sex",
-        "hadRole": "Feature",
-        "summaryStatistics": {
-          "statisticalDataType": "dsv:StatisticalDataType",
-          "@type": "dsv:SummaryStatistics"
-        }
+        "titles": "sex",
+        "columnProperty": {
+          "@id": "urn:linked-codebook:dataset:Statlog%20(Heart)#property-sex",
+          "@type": "dsv:ColumnProperty",
+          "hasVariable": {
+            "@id": "urn:linked-codebook:dataset:Statlog%20(Heart)#variable-sex",
+            "@type": "skos:Concept",
+            "skos:prefLabel": "sex"
+          }
+        },
+        "prov:hadRole": "Feature"
       },
       {
+        "@id": "urn:linked-codebook:dataset:Statlog%20(Heart)#column-chest-pain",
+        "@type": "dsv:Column",
         "name": "chest-pain",
-        "description": "chest pain type",
-        "hadRole": "Feature",
+        "titles": "chest-pain",
         "columnProperty": {
-          "closeMatch": [
-            "https://www.wikidata.org/entity/Q180762"
-          ]
+          "@id": "urn:linked-codebook:dataset:Statlog%20(Heart)#property-chest-pain",
+          "@type": "dsv:ColumnProperty",
+          "hasVariable": {
+            "@id": "urn:linked-codebook:dataset:Statlog%20(Heart)#variable-chest-pain",
+            "@type": "skos:Concept",
+            "skos:prefLabel": "chest-pain",
+            "skos:definition": "chest pain type",
+            "closeMatch": [
+              "https://www.wikidata.org/entity/Q180762"
+            ]
+          }
         },
         "summaryStatistics": {
-          "statisticalDataType": "dsv:CategoricalDataType",
-          "@type": "dsv:SummaryStatistics"
-        }
+          "@id": "urn:linked-codebook:dataset:Statlog%20(Heart)#statistics-chest-pain",
+          "@type": "dsv:SummaryStatistics",
+          "statisticalDataType": "dsv:CategoricalDataType"
+        },
+        "prov:hadRole": "Feature"
       },
       {
+        "@id": "urn:linked-codebook:dataset:Statlog%20(Heart)#column-rest-bp",
+        "@type": "dsv:Column",
         "name": "rest-bp",
-        "description": "resting blood pressure",
-        "hadRole": "Feature",
+        "titles": "rest-bp",
         "columnProperty": {
-          "exactMatch": [
-            "https://www.wikidata.org/entity/Q4994431"
-          ]
+          "@id": "urn:linked-codebook:dataset:Statlog%20(Heart)#property-rest-bp",
+          "@type": "dsv:ColumnProperty",
+          "hasVariable": {
+            "@id": "urn:linked-codebook:dataset:Statlog%20(Heart)#variable-rest-bp",
+            "@type": "skos:Concept",
+            "skos:prefLabel": "rest-bp",
+            "skos:definition": "resting blood pressure",
+            "exactMatch": [
+              "https://www.wikidata.org/entity/Q4994431"
+            ]
+          }
         },
-        "summaryStatistics": {
-          "statisticalDataType": "dsv:StatisticalDataType",
-          "@type": "dsv:SummaryStatistics"
-        }
+        "prov:hadRole": "Feature"
       },
       {
+        "@id": "urn:linked-codebook:dataset:Statlog%20(Heart)#column-serum-chol",
+        "@type": "dsv:Column",
         "name": "serum-chol",
-        "description": "serum cholesterol",
-        "hadRole": "Feature",
+        "titles": "serum-chol",
         "columnProperty": {
-          "unitText": "mg/dl",
-          "closeMatch": [
-            "https://www.wikidata.org/entity/Q2723972"
-          ]
+          "@id": "urn:linked-codebook:dataset:Statlog%20(Heart)#property-serum-chol",
+          "@type": "dsv:ColumnProperty",
+          "hasVariable": {
+            "@id": "urn:linked-codebook:dataset:Statlog%20(Heart)#variable-serum-chol",
+            "@type": "skos:Concept",
+            "skos:prefLabel": "serum-chol",
+            "skos:definition": "serum cholesterol",
+            "closeMatch": [
+              "https://www.wikidata.org/entity/Q2723972"
+            ]
+          },
+          "unitText": "mg/dl"
         },
-        "summaryStatistics": {
-          "statisticalDataType": "dsv:StatisticalDataType",
-          "@type": "dsv:SummaryStatistics"
-        }
+        "prov:hadRole": "Feature"
       },
       {
+        "@id": "urn:linked-codebook:dataset:Statlog%20(Heart)#column-fasting-blood-sugar",
+        "@type": "dsv:Column",
         "name": "fasting-blood-sugar",
-        "description": "fasting blood sugar > 120 mg/dl",
-        "hadRole": "Feature",
+        "titles": "fasting-blood-sugar",
         "columnProperty": {
-          "closeMatch": [
-            "https://www.wikidata.org/entity/Q5572348"
-          ]
+          "@id": "urn:linked-codebook:dataset:Statlog%20(Heart)#property-fasting-blood-sugar",
+          "@type": "dsv:ColumnProperty",
+          "hasVariable": {
+            "@id": "urn:linked-codebook:dataset:Statlog%20(Heart)#variable-fasting-blood-sugar",
+            "@type": "skos:Concept",
+            "skos:prefLabel": "fasting-blood-sugar",
+            "skos:definition": "fasting blood sugar > 120 mg/dl",
+            "closeMatch": [
+              "https://www.wikidata.org/entity/Q5572348"
+            ]
+          }
         },
-        "summaryStatistics": {
-          "statisticalDataType": "dsv:StatisticalDataType",
-          "@type": "dsv:SummaryStatistics"
-        }
+        "prov:hadRole": "Feature"
       },
       {
+        "@id": "urn:linked-codebook:dataset:Statlog%20(Heart)#column-electrocardiographic",
+        "@type": "dsv:Column",
         "name": "electrocardiographic",
-        "description": "resting electrocardiographic results",
-        "hadRole": "Feature",
+        "titles": "electrocardiographic",
+        "columnProperty": {
+          "@id": "urn:linked-codebook:dataset:Statlog%20(Heart)#property-electrocardiographic",
+          "@type": "dsv:ColumnProperty",
+          "hasVariable": {
+            "@id": "urn:linked-codebook:dataset:Statlog%20(Heart)#variable-electrocardiographic",
+            "@type": "skos:Concept",
+            "skos:prefLabel": "electrocardiographic",
+            "skos:definition": "resting electrocardiographic results"
+          }
+        },
         "summaryStatistics": {
-          "statisticalDataType": "dsv:CategoricalDataType",
-          "@type": "dsv:SummaryStatistics"
-        }
+          "@id": "urn:linked-codebook:dataset:Statlog%20(Heart)#statistics-electrocardiographic",
+          "@type": "dsv:SummaryStatistics",
+          "statisticalDataType": "dsv:CategoricalDataType"
+        },
+        "prov:hadRole": "Feature"
       },
       {
+        "@id": "urn:linked-codebook:dataset:Statlog%20(Heart)#column-max-heart-rate",
+        "@type": "dsv:Column",
         "name": "max-heart-rate",
-        "description": "maximum heart rate achieved",
-        "hadRole": "Feature",
-        "summaryStatistics": {
-          "statisticalDataType": "dsv:StatisticalDataType",
-          "@type": "dsv:SummaryStatistics"
-        }
+        "titles": "max-heart-rate",
+        "columnProperty": {
+          "@id": "urn:linked-codebook:dataset:Statlog%20(Heart)#property-max-heart-rate",
+          "@type": "dsv:ColumnProperty",
+          "hasVariable": {
+            "@id": "urn:linked-codebook:dataset:Statlog%20(Heart)#variable-max-heart-rate",
+            "@type": "skos:Concept",
+            "skos:prefLabel": "max-heart-rate",
+            "skos:definition": "maximum heart rate achieved"
+          }
+        },
+        "prov:hadRole": "Feature"
       },
       {
+        "@id": "urn:linked-codebook:dataset:Statlog%20(Heart)#column-angina",
+        "@type": "dsv:Column",
         "name": "angina",
-        "description": "exercise induced anigna",
-        "hadRole": "Feature",
+        "titles": "angina",
         "columnProperty": {
-          "exactMatch": [
-            "https://www.wikidata.org/entity/Q180762"
-          ]
+          "@id": "urn:linked-codebook:dataset:Statlog%20(Heart)#property-angina",
+          "@type": "dsv:ColumnProperty",
+          "hasVariable": {
+            "@id": "urn:linked-codebook:dataset:Statlog%20(Heart)#variable-angina",
+            "@type": "skos:Concept",
+            "skos:prefLabel": "angina",
+            "skos:definition": "exercise induced anigna",
+            "exactMatch": [
+              "https://www.wikidata.org/entity/Q180762"
+            ]
+          }
         },
-        "summaryStatistics": {
-          "statisticalDataType": "dsv:StatisticalDataType",
-          "@type": "dsv:SummaryStatistics"
-        }
+        "prov:hadRole": "Feature"
       },
       {
+        "@id": "urn:linked-codebook:dataset:Statlog%20(Heart)#column-oldpeak",
+        "@type": "dsv:Column",
         "name": "oldpeak",
-        "description": "oldpeak = ST depression induced by exercise relative to rest",
-        "hadRole": "Feature",
-        "summaryStatistics": {
-          "statisticalDataType": "dsv:StatisticalDataType",
-          "@type": "dsv:SummaryStatistics"
-        }
+        "titles": "oldpeak",
+        "columnProperty": {
+          "@id": "urn:linked-codebook:dataset:Statlog%20(Heart)#property-oldpeak",
+          "@type": "dsv:ColumnProperty",
+          "hasVariable": {
+            "@id": "urn:linked-codebook:dataset:Statlog%20(Heart)#variable-oldpeak",
+            "@type": "skos:Concept",
+            "skos:prefLabel": "oldpeak",
+            "skos:definition": "oldpeak = ST depression induced by exercise relative to rest"
+          }
+        },
+        "prov:hadRole": "Feature"
       },
       {
+        "@id": "urn:linked-codebook:dataset:Statlog%20(Heart)#column-slope",
+        "@type": "dsv:Column",
         "name": "slope",
-        "description": "the slope of the peak exercise ST sgment",
-        "hadRole": "Feature",
+        "titles": "slope",
+        "columnProperty": {
+          "@id": "urn:linked-codebook:dataset:Statlog%20(Heart)#property-slope",
+          "@type": "dsv:ColumnProperty",
+          "hasVariable": {
+            "@id": "urn:linked-codebook:dataset:Statlog%20(Heart)#variable-slope",
+            "@type": "skos:Concept",
+            "skos:prefLabel": "slope",
+            "skos:definition": "the slope of the peak exercise ST sgment"
+          }
+        },
         "summaryStatistics": {
-          "statisticalDataType": "dsv:NumericalDataType",
-          "@type": "dsv:SummaryStatistics"
-        }
+          "@id": "urn:linked-codebook:dataset:Statlog%20(Heart)#statistics-slope",
+          "@type": "dsv:SummaryStatistics",
+          "statisticalDataType": "dsv:NumericalDataType"
+        },
+        "prov:hadRole": "Feature"
       },
       {
+        "@id": "urn:linked-codebook:dataset:Statlog%20(Heart)#column-major-vessels",
+        "@type": "dsv:Column",
         "name": "major-vessels",
-        "description": "number of major vessels (0-3) colored by fluorosopy",
-        "hadRole": "Feature",
+        "titles": "major-vessels",
         "columnProperty": {
-          "relatedMatch": [
-            "https://www.wikidata.org/entity/Q3815025"
-          ]
+          "@id": "urn:linked-codebook:dataset:Statlog%20(Heart)#property-major-vessels",
+          "@type": "dsv:ColumnProperty",
+          "hasVariable": {
+            "@id": "urn:linked-codebook:dataset:Statlog%20(Heart)#variable-major-vessels",
+            "@type": "skos:Concept",
+            "skos:prefLabel": "major-vessels",
+            "skos:definition": "number of major vessels (0-3) colored by fluorosopy",
+            "relatedMatch": [
+              "https://www.wikidata.org/entity/Q3815025"
+            ]
+          }
         },
-        "summaryStatistics": {
-          "statisticalDataType": "dsv:StatisticalDataType",
-          "@type": "dsv:SummaryStatistics"
-        }
+        "prov:hadRole": "Feature"
       },
       {
+        "@id": "urn:linked-codebook:dataset:Statlog%20(Heart)#column-thal",
+        "@type": "dsv:Column",
         "name": "thal",
-        "description": "thal: 3 = normal; 6 = fixed defect; 7 = reversable defect",
-        "hadRole": "Feature",
-        "summaryStatistics": {
-          "statisticalDataType": "dsv:CategoricalDataType",
-          "@type": "dsv:SummaryStatistics"
-        }
-      },
-      {
-        "name": "heart-disease",
-        "hadRole": "Target",
+        "titles": "thal",
         "columnProperty": {
-          "relatedMatch": [
-            "https://www.wikidata.org/entity/Q8775887"
-          ]
+          "@id": "urn:linked-codebook:dataset:Statlog%20(Heart)#property-thal",
+          "@type": "dsv:ColumnProperty",
+          "hasVariable": {
+            "@id": "urn:linked-codebook:dataset:Statlog%20(Heart)#variable-thal",
+            "@type": "skos:Concept",
+            "skos:prefLabel": "thal",
+            "skos:definition": "thal: 3 = normal; 6 = fixed defect; 7 = reversable defect"
+          }
         },
         "summaryStatistics": {
-          "statisticalDataType": "dsv:NumericalDataType",
-          "@type": "dsv:SummaryStatistics"
-        }
+          "@id": "urn:linked-codebook:dataset:Statlog%20(Heart)#statistics-thal",
+          "@type": "dsv:SummaryStatistics",
+          "statisticalDataType": "dsv:CategoricalDataType"
+        },
+        "prov:hadRole": "Feature"
+      },
+      {
+        "@id": "urn:linked-codebook:dataset:Statlog%20(Heart)#column-heart-disease",
+        "@type": "dsv:Column",
+        "name": "heart-disease",
+        "titles": "heart-disease",
+        "columnProperty": {
+          "@id": "urn:linked-codebook:dataset:Statlog%20(Heart)#property-heart-disease",
+          "@type": "dsv:ColumnProperty",
+          "hasVariable": {
+            "@id": "urn:linked-codebook:dataset:Statlog%20(Heart)#variable-heart-disease",
+            "@type": "skos:Concept",
+            "skos:prefLabel": "heart-disease",
+            "relatedMatch": [
+              "https://www.wikidata.org/entity/Q8775887"
+            ]
+          }
+        },
+        "summaryStatistics": {
+          "@id": "urn:linked-codebook:dataset:Statlog%20(Heart)#statistics-heart-disease",
+          "@type": "dsv:SummaryStatistics",
+          "statisticalDataType": "dsv:NumericalDataType"
+        },
+        "prov:hadRole": "Target"
       }
     ]
   },
-  "summaryStatistics": {
-    "numberOfRows": 270,
-    "numberOfColumns": 13
-  },
-  "title": "Statlog (Heart)",
-  "description": "Cost Matrix\r\n\r\n_______\t abse  pres\r\nabsence\t 0\t1\r\npresence  5\t0\r\n\r\nwhere the rows represent the true values and the columns the predicted.\r\n",
-  "abstract": "This dataset is a heart disease database similar to a database already present in the repository (Heart Disease databases) but in a slightly different form",
-  "landingPage": "https://archive.ics.uci.edu/dataset/145/statlog+heart",
-  "tableOfContents": "\r\nAttribute Information:\r\n------------------------\r\n      -- 1. age       \r\n      -- 2. sex       \r\n      -- 3. chest pain type  (4 values)       \r\n      -- 4. resting blood pressure  \r\n      -- 5. serum cholestoral in mg/dl      \r\n      -- 6. fasting blood sugar > 120 mg/dl       \r\n      -- 7. resting electrocardiographic results  (values 0,1,2) \r\n      -- 8. maximum heart rate achieved  \r\n      -- 9. exercise induced angina    \r\n      -- 10. oldpeak = ST depression induced by exercise relative to rest   \r\n      -- 11. the slope of the peak exercise ST segment     \r\n      -- 12. number of major vessels (0-3) colored by flourosopy        \r\n      -- 13.  thal: 3 = normal; 6 = fixed defect; 7 = reversable defect     \r\n\r\nAttributes types\r\n-----------------\r\n\r\nReal: 1,4,5,8,10,12\r\nOrdered:11,\r\nBinary: 2,6,9\r\nNominal:7,3,13\r\n\r\nVariable to be predicted\r\n------------------------\r\nAbsence (1) or presence (2) of heart disease\r\n",
-  "identifier": [
+  "dcterms:abstract": "This dataset is a heart disease database similar to a database already present in the repository (Heart Disease databases) but in a slightly different form",
+  "dcterms:tableOfContents": "\r\nAttribute Information:\r\n------------------------\r\n      -- 1. age       \r\n      -- 2. sex       \r\n      -- 3. chest pain type  (4 values)       \r\n      -- 4. resting blood pressure  \r\n      -- 5. serum cholestoral in mg/dl      \r\n      -- 6. fasting blood sugar > 120 mg/dl       \r\n      -- 7. resting electrocardiographic results  (values 0,1,2) \r\n      -- 8. maximum heart rate achieved  \r\n      -- 9. exercise induced angina    \r\n      -- 10. oldpeak = ST depression induced by exercise relative to rest   \r\n      -- 11. the slope of the peak exercise ST segment     \r\n      -- 12. number of major vessels (0-3) colored by flourosopy        \r\n      -- 13.  thal: 3 = normal; 6 = fixed defect; 7 = reversable defect     \r\n\r\nAttributes types\r\n-----------------\r\n\r\nReal: 1,4,5,8,10,12\r\nOrdered:11,\r\nBinary: 2,6,9\r\nNominal:7,3,13\r\n\r\nVariable to be predicted\r\n------------------------\r\nAbsence (1) or presence (2) of heart disease\r\n",
+  "schema:identifier": [
     {
       "@type": "schema:PropertyValue",
       "schema:propertyID": "uci",

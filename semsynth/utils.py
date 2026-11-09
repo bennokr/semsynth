@@ -1,8 +1,6 @@
 from __future__ import annotations
 
-import math
-import os
-from typing import Dict, List, Optional, Tuple
+from typing import Any
 
 import numpy as np
 import pandas as pd
@@ -13,22 +11,6 @@ except Exception:  # pragma: no cover - pint is optional
     PintType = None  # type: ignore[assignment]
 
 
-def ensure_dir(path: str) -> None:
-    """Create the directory at ``path`` if it is missing.
-
-    Args:
-        path: Filesystem location to create.
-
-    Examples:
-        >>> import os, tempfile
-        >>> base = tempfile.mkdtemp()
-        >>> target = os.path.join(base, "nested")
-        >>> ensure_dir(target)
-        >>> os.path.isdir(target)
-        True
-    """
-
-    os.makedirs(path, exist_ok=True)
 
 
 def seed_all(seed: int) -> np.random.Generator:
@@ -52,7 +34,7 @@ def seed_all(seed: int) -> np.random.Generator:
 def _preserve_series_attrs(source: pd.Series, target: pd.Series) -> pd.Series:
     attrs = getattr(source, "attrs", None)
     if isinstance(attrs, dict) and attrs:
-        target.attrs.update({k: v for k, v in attrs.items()})
+        target.attrs.update(dict(attrs.items()))
     return target
 
 
@@ -69,9 +51,7 @@ def is_numeric_series(s: pd.Series) -> bool:
         return True
     # PintArray columns (pint_pandas) are numeric even though pandas dtype
     # checks return False for them.
-    if PintType is not None and isinstance(getattr(s, "dtype", None), PintType):
-        return True
-    return False
+    return bool(PintType is not None and isinstance(getattr(s, "dtype", None), PintType))
 
 
 def is_discrete_series(s: pd.Series, cardinality_threshold: int = 20) -> bool:
@@ -92,7 +72,7 @@ def is_discrete_series(s: pd.Series, cardinality_threshold: int = 20) -> bool:
 
     if (
         pd.api.types.is_bool_dtype(s)
-        or pd.api.types.is_categorical_dtype(s)
+        or isinstance(s.dtype, pd.CategoricalDtype)
         or pd.api.types.is_object_dtype(s)
     ):
         return True
@@ -107,7 +87,7 @@ def is_discrete_series(s: pd.Series, cardinality_threshold: int = 20) -> bool:
 
 def infer_types(
     df: pd.DataFrame, cardinality_threshold: int = 20
-) -> Tuple[List[str], List[str]]:
+) -> tuple[list[str], list[str]]:
     """Split dataframe columns into discrete and continuous lists.
 
     Args:
@@ -136,8 +116,35 @@ def infer_types(
     return disc, cont
 
 
+def split_columns(
+    df: pd.DataFrame, codebook: Any = None, *, infer: Any = None
+) -> tuple[list[str], list[str]]:
+    """Split the columns into discrete and continuous ones, letting the codebook's levels override inference.
+
+    Args:
+        df: The table.
+        codebook: A :class:`semsynth.codebook.Codebook` (or ``None``); a column that it calls categorical is
+            discrete and one that it calls numeric is continuous, unless inference found it discrete.
+        infer: Replacement for :func:`infer_types`.
+
+    Returns:
+        Two lists of column names, each in the order of the table.
+    """
+
+    disc_cols, cont_cols = (infer or infer_types)(df)
+    discrete, continuous = set(disc_cols), set(cont_cols)
+    if codebook is not None:
+        kinds = {name: codebook.kind(str(name)) for name in df.columns}
+        declared_discrete = {name for name, kind in kinds.items() if kind == "categorical"}
+        declared_continuous = {name for name, kind in kinds.items() if kind == "numeric"}
+        discrete |= declared_discrete
+        continuous |= {name for name in declared_continuous if name not in discrete}
+        continuous -= {name for name in continuous if name in discrete and name not in declared_continuous}
+    return [name for name in df.columns if name in discrete], [name for name in df.columns if name in continuous]
+
+
 def coerce_discrete_to_category(
-    df: pd.DataFrame, discrete_cols: List[str]
+    df: pd.DataFrame, discrete_cols: list[str]
 ) -> pd.DataFrame:
     """Convert selected columns to the categorical dtype.
 
@@ -159,7 +166,7 @@ def coerce_discrete_to_category(
     df = df.copy()
     for c in discrete_cols:
         s = df[c]
-        if pd.api.types.is_categorical_dtype(s):
+        if isinstance(s.dtype, pd.CategoricalDtype):
             continue
         converted = s.astype("category")
         df[c] = _preserve_series_attrs(s, converted)
@@ -167,7 +174,7 @@ def coerce_discrete_to_category(
 
 
 def coerce_continuous_to_float(
-    df: pd.DataFrame, continuous_cols: List[str]
+    df: pd.DataFrame, continuous_cols: list[str]
 ) -> pd.DataFrame:
     """Convert continuous columns to floating point when possible.
 
@@ -182,7 +189,7 @@ def coerce_continuous_to_float(
     df = df.copy()
     for c in continuous_cols:
         s = df[c]
-        converted: Optional[pd.Series] = None
+        converted: pd.Series | None = None
         if pd.api.types.is_integer_dtype(s):
             numeric = pd.to_numeric(s, errors="coerce")
             converted = pd.Series(
@@ -207,7 +214,7 @@ def coerce_continuous_to_float(
 
 
 def rename_categorical_categories_to_str(
-    df: pd.DataFrame, discrete_cols: List[str]
+    df: pd.DataFrame, discrete_cols: list[str]
 ) -> pd.DataFrame:
     """Ensure categorical levels are strings to keep outputs JSON-friendly.
 
@@ -222,7 +229,7 @@ def rename_categorical_categories_to_str(
     df = df.copy()
     for c in discrete_cols:
         s = df[c]
-        if pd.api.types.is_categorical_dtype(s):
+        if isinstance(s.dtype, pd.CategoricalDtype):
             try:
                 new_cats = [str(cat) for cat in s.cat.categories]
                 # Build string-valued series preserving NA positions, then
@@ -233,7 +240,7 @@ def rename_categorical_categories_to_str(
                 # 3. CategoricalDtype(new_cats) + int-valued codes produces NaN.
                 na_mask = s.isna()
                 # Map each code to its new string category label.
-                code_to_str = {i: lbl for i, lbl in enumerate(new_cats)}
+                code_to_str = dict(enumerate(new_cats))
                 str_vals = s.cat.codes.map(code_to_str)  # -1 (NaN) → NaN
                 new_dtype = pd.CategoricalDtype(
                     categories=pd.Index(new_cats, dtype=object), ordered=s.cat.ordered
@@ -249,117 +256,5 @@ def rename_categorical_categories_to_str(
     return df
 
 
-def summarize_dataframe(
-    df: pd.DataFrame, discrete_cols: List[str], continuous_cols: List[str]
-) -> pd.DataFrame:
-    """Summarise dataframe columns with statistics tailored by type.
-
-    Args:
-        df: Dataframe to summarise.
-        discrete_cols: Columns considered discrete.
-        continuous_cols: Columns considered continuous.
-
-    Returns:
-        A dataframe with summary statistics per column.
-
-    Examples:
-        >>> import pandas as pd
-        >>> df = pd.DataFrame({"grade": ["A", "B", "A"], "score": [0.1, 0.2, 0.3]})
-        >>> summary = summarize_dataframe(df, ["grade"], ["score"])
-        >>> summary.loc[summary['variable'] == 'grade', 'top3'].iloc[0]
-        'A:2; B:1'
-    """
-
-    rows = []
-    for c in df.columns:
-        col = df[c]
-        na_frac = float(col.isna().mean())
-        uniq = int(col.nunique(dropna=True))
-        if c in continuous_cols:
-            desc = col.describe(percentiles=[0.25, 0.5, 0.75])
-            mean = (
-                float(desc.get("mean", np.nan))
-                if not isinstance(desc, float)
-                else float("nan")
-            )
-            std = (
-                float(desc.get("std", np.nan))
-                if not isinstance(desc, float)
-                else float("nan")
-            )
-            minv = (
-                float(desc.get("min", np.nan))
-                if not isinstance(desc, float)
-                else float("nan")
-            )
-            q25 = float(desc.get("25%", np.nan)) if "25%" in desc else float("nan")
-            q50 = float(desc.get("50%", np.nan)) if "50%" in desc else float("nan")
-            q75 = float(desc.get("75%", np.nan)) if "75%" in desc else float("nan")
-            maxv = (
-                float(desc.get("max", np.nan))
-                if not isinstance(desc, float)
-                else float("nan")
-            )
-            rows.append(
-                dict(
-                    variable=c,
-                    type="continuous",
-                    na_frac=na_frac,
-                    unique=uniq,
-                    mean=mean,
-                    std=std,
-                    min=minv,
-                    q25=q25,
-                    median=q50,
-                    q75=q75,
-                    max=maxv,
-                )
-            )
-        else:
-            top = col.value_counts(dropna=True).head(3)
-            top_items = "; ".join([f"{k}:{int(v)}" for k, v in top.items()])
-            rows.append(
-                dict(
-                    variable=c,
-                    type="discrete",
-                    na_frac=na_frac,
-                    unique=uniq,
-                    top3=top_items,
-                )
-            )
-    return pd.DataFrame(rows)
 
 
-def dataframe_to_markdown_table(df: pd.DataFrame, float_fmt: str = "{:.4f}") -> str:
-    """Render a dataframe as a GitHub-flavoured markdown table.
-
-    Args:
-        df: Table to render.
-        float_fmt: Format string applied to floating values.
-
-    Returns:
-        Markdown string representing the table.
-
-    Examples:
-        >>> import pandas as pd
-        >>> table = pd.DataFrame({"variable": ["grade"], "type": ["discrete"]})
-        >>> print(dataframe_to_markdown_table(table))
-        | variable | type |
-        | --- | --- |
-        | grade | discrete |
-    """
-
-    def fmt(x):
-        if isinstance(x, float):
-            if math.isnan(x):
-                return ""
-            return float_fmt.format(x)
-        return str(x)
-
-    cols = list(df.columns)
-    header = "| " + " | ".join(cols) + " |"
-    sep = "| " + " | ".join(["---"] * len(cols)) + " |"
-    lines = [header, sep]
-    for _, r in df.iterrows():
-        lines.append("| " + " | ".join(fmt(r[c]) for c in cols) + " |")
-    return "\n".join(lines)

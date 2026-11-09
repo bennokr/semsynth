@@ -3,9 +3,7 @@
 from __future__ import annotations
 
 import sys
-import types
 from pathlib import Path
-import makeprov
 
 PROJECT_ROOT = Path(__file__).resolve().parents[1]
 if str(PROJECT_ROOT) not in sys.path:

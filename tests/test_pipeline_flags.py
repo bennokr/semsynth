@@ -2,16 +2,17 @@
 
 from __future__ import annotations
 
+import sys
 from pathlib import Path
 from types import SimpleNamespace
-from typing import List
 
 import numpy as np
 import pandas as pd
 import pytest
 
+from semsynth.config import PipelineConfig
 from semsynth.models import ModelConfigBundle, ModelRun
-from semsynth.pipeline import PipelineConfig, process_dataset
+from semsynth.runner import PipelineDeps
 from semsynth.specs import DatasetSpec
 
 
@@ -23,21 +24,21 @@ class _DummyUtils:
         Path(path).mkdir(parents=True, exist_ok=True)
 
     @staticmethod
-    def infer_types(df: pd.DataFrame) -> tuple[List[str], List[str]]:
-        cont = [c for c in df.select_dtypes(include=["number"]).columns]
+    def infer_types(df: pd.DataFrame) -> tuple[list[str], list[str]]:
+        cont = list(df.select_dtypes(include=["number"]).columns)
         disc = [c for c in df.columns if c not in cont]
         return disc, cont
 
     @staticmethod
-    def coerce_discrete_to_category(df: pd.DataFrame, cols: List[str]) -> pd.DataFrame:
+    def coerce_discrete_to_category(df: pd.DataFrame, cols: list[str]) -> pd.DataFrame:
         return df
 
     @staticmethod
-    def rename_categorical_categories_to_str(df: pd.DataFrame, cols: List[str]) -> pd.DataFrame:
+    def rename_categorical_categories_to_str(df: pd.DataFrame, cols: list[str]) -> pd.DataFrame:
         return df
 
     @staticmethod
-    def coerce_continuous_to_float(df: pd.DataFrame, cols: List[str]) -> pd.DataFrame:
+    def coerce_continuous_to_float(df: pd.DataFrame, cols: list[str]) -> pd.DataFrame:
         return df
 
     @staticmethod
@@ -63,6 +64,15 @@ def dummy_reporting() -> _DummyReporting:
     return _DummyReporting()
 
 
+def _block_import(monkeypatch: pytest.MonkeyPatch, name: str) -> None:
+    """Make ``import semsynth.<name>`` raise, even if the module was imported by an earlier test."""
+
+    import semsynth
+
+    monkeypatch.setitem(sys.modules, f"semsynth.{name}", None)
+    monkeypatch.delattr(semsynth, name, raising=False)
+
+
 def test_process_dataset_skips_umap_when_disabled(
     tmp_path: Path,
     monkeypatch: pytest.MonkeyPatch,
@@ -71,17 +81,15 @@ def test_process_dataset_skips_umap_when_disabled(
 ) -> None:
     """Disable UMAP and ensure the heavy module is never imported."""
 
-    import semsynth.pipeline as pipeline_module
-    from semsynth.runtime import DEPENDENCIES
+    import semsynth.runner as runner_module
 
-    # Pre-populate cache with test doubles; umap_utils deliberately omitted so
-    # any attempt to load it would call importlib (and likely fail) rather than
-    # returning silently — proving the disabled-UMAP path never requests it.
-    monkeypatch.setitem(DEPENDENCIES._cache, "semsynth.utils", dummy_utils)
-    monkeypatch.setitem(DEPENDENCIES._cache, "semsynth.reporting", dummy_reporting)
-    monkeypatch.setattr(pipeline_module, "resolve_mapping_json", lambda *_: None)
-    monkeypatch.setattr(pipeline_module, "get_uciml_variable_descriptions", lambda *_: {})
-    monkeypatch.setattr(pipeline_module, "discover_model_runs", lambda *_: [])
+    # The doubles are injected; umap_utils is deliberately left out of the injected set and
+    # `semsynth.umap_utils` is blocked, so any attempt to import it fails the test.
+    deps = PipelineDeps(utils=dummy_utils, reporting=dummy_reporting)
+    _block_import(monkeypatch, "umap_utils")
+    monkeypatch.setattr(runner_module, "resolve_mapping_json", lambda *_: None)
+    monkeypatch.setattr(runner_module, "get_uciml_variable_descriptions", lambda *_: {})
+    monkeypatch.setattr(runner_module, "discover_model_runs", lambda *_: [])
     monkeypatch.setattr("semsynth.utils.coerce_discrete_to_category", lambda df, cols: df)
     monkeypatch.setattr("semsynth.utils.rename_categorical_categories_to_str", lambda df, cols: df)
     monkeypatch.setattr("semsynth.utils.coerce_continuous_to_float", lambda df, cols: df)
@@ -91,8 +99,8 @@ def test_process_dataset_skips_umap_when_disabled(
     cfg = PipelineConfig(generate_umap=False)
     bundle = ModelConfigBundle(specs=[])
 
-    pipeline_module.process_dataset(
-        spec, df, None, str(tmp_path), model_bundle=bundle, pipeline_config=cfg
+    runner_module.process_dataset(
+        spec, df, None, str(tmp_path), model_bundle=bundle, pipeline_config=cfg, deps=deps
     )
 
     assert dummy_reporting.calls, "reporting should still run"
@@ -123,19 +131,16 @@ def test_existing_umap_is_respected(
     def fake_transform_with_umap(_art, df: pd.DataFrame) -> np.ndarray:
         return np.zeros((len(df), 2))
 
-    import semsynth.pipeline as pipeline_module
-    from semsynth.runtime import DEPENDENCIES
+    import semsynth.runner as runner_module
 
     fake_umap_module = SimpleNamespace(
         build_umap=fake_build_umap,
         plot_umap=fake_plot_umap,
         transform_with_umap=fake_transform_with_umap,
     )
-    monkeypatch.setitem(DEPENDENCIES._cache, "semsynth.umap_utils", fake_umap_module)
-    monkeypatch.setitem(DEPENDENCIES._cache, "semsynth.utils", dummy_utils)
-    monkeypatch.setitem(DEPENDENCIES._cache, "semsynth.reporting", dummy_reporting)
-    monkeypatch.setattr(pipeline_module, "resolve_mapping_json", lambda *_: None)
-    monkeypatch.setattr(pipeline_module, "get_uciml_variable_descriptions", lambda *_: {})
+    deps = PipelineDeps(utils=dummy_utils, reporting=dummy_reporting, umap_utils=fake_umap_module)
+    monkeypatch.setattr(runner_module, "resolve_mapping_json", lambda *_: None)
+    monkeypatch.setattr(runner_module, "get_uciml_variable_descriptions", lambda *_: {})
     monkeypatch.setattr("semsynth.utils.coerce_discrete_to_category", lambda df, cols: df)
     monkeypatch.setattr("semsynth.utils.rename_categorical_categories_to_str", lambda df, cols: df)
     monkeypatch.setattr("semsynth.utils.coerce_continuous_to_float", lambda df, cols: df)
@@ -163,13 +168,15 @@ def test_existing_umap_is_respected(
         downstream_metrics={},
     )
 
-    monkeypatch.setattr("semsynth.pipeline.discover_model_runs", lambda *_: [run])
+    monkeypatch.setattr("semsynth.runner.discover_model_runs", lambda *_: [run])
 
     df = pd.DataFrame({"a": [1, 2, 3], "b": ["x", "y", "z"], "target": [0, 1, 0]})
     spec = DatasetSpec(provider="openml", name="demo", id=1, target="target")
     bundle = ModelConfigBundle(specs=[])
 
-    pipeline_module.process_dataset(spec, df, None, str(tmp_path), model_bundle=bundle)
+    runner_module.process_dataset(
+        spec, df, None, str(tmp_path), model_bundle=bundle, deps=deps
+    )
 
     assert len(calls) == 1, "only the real-data UMAP should be plotted"
 
@@ -182,27 +189,28 @@ def test_process_dataset_does_not_load_optional_metrics_when_disabled(
 ) -> None:
     """Avoid loading privacy/downstream dependencies during metadata-only runs."""
 
-    import semsynth.pipeline as pipeline_module
-    from semsynth.runtime import DEPENDENCIES
+    import semsynth.runner as runner_module
 
-    monkeypatch.setitem(DEPENDENCIES._cache, "semsynth.utils", dummy_utils)
-    monkeypatch.setitem(DEPENDENCIES._cache, "semsynth.reporting", dummy_reporting)
-    monkeypatch.setattr(pipeline_module, "resolve_mapping_json", lambda *_: None)
-    monkeypatch.setattr(pipeline_module, "get_uciml_variable_descriptions", lambda *_: {})
-    monkeypatch.setattr(pipeline_module, "discover_model_runs", lambda *_: [])
+    deps = PipelineDeps(utils=dummy_utils, reporting=dummy_reporting)
+    _block_import(monkeypatch, "downstream_fidelity")
+    _block_import(monkeypatch, "privacy_metrics")
+    monkeypatch.setattr(runner_module, "resolve_mapping_json", lambda *_: None)
+    monkeypatch.setattr(runner_module, "get_uciml_variable_descriptions", lambda *_: {})
+    monkeypatch.setattr(runner_module, "discover_model_runs", lambda *_: [])
 
     df = pd.DataFrame({"a": [1, 2, 3], "b": ["x", "y", "z"]})
     spec = DatasetSpec(provider="openml", name="demo", id=1, target=None)
     cfg = PipelineConfig(compute_privacy=False, compute_downstream=False)
     bundle = ModelConfigBundle(specs=[])
 
-    pipeline_module.process_dataset(
+    runner_module.process_dataset(
         spec,
         df,
         None,
         str(tmp_path),
         model_bundle=bundle,
         pipeline_config=cfg,
+        deps=deps,
     )
 
     assert dummy_reporting.calls, "reporting should complete for metadata-only runs"

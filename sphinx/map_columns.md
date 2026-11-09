@@ -15,9 +15,8 @@ Mapping helpers are easiest to demonstrate on the curated Heart Disease payload.
 
 This quick count shows which codelists appear most often, illustrating how curated mappings guide downstream roles and privacy handling.
 
-```{include} ../map_columns/README.md
-:relative-images:
-```
+Terminology matching moved to [entailmap](https://github.com/bennokr/entailmap) (`entailmap.match`). `semsynth create-mapping` calls it, and
+`semsynth.sssom_codebook.integrate_sssom` merges the resulting SSSOM rows into a codebook.
 
 ```{code-cell} python
 # Summarize the most common codebook notations in the curated mapping.

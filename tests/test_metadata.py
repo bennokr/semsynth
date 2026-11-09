@@ -3,20 +3,13 @@
 from __future__ import annotations
 
 import shutil
-import sys
-import types
 from pathlib import Path
 
 import pandas as pd
 
-dummy_makeprov = types.ModuleType("makeprov")
-dummy_makeprov.RDFMixin = object
-dummy_makeprov.OutPath = lambda path: path
-dummy_makeprov.rule = lambda *_args, **_kwargs: (lambda func: func)
-sys.modules.setdefault("makeprov", dummy_makeprov)
-
 from semsynth.metadata import get_uciml_variable_descriptions
-from semsynth.pipeline import PreprocessingResult, ReportWriter
+from semsynth.preprocess import PreprocessingResult
+from semsynth.runner import ReportWriter
 from semsynth.specs import DatasetSpec
 
 
@@ -56,8 +49,8 @@ def test_get_uciml_variable_descriptions_reads_cache(tmp_path, monkeypatch):
         disc_cols=[],
         cont_cols=list(df.columns),
         inferred_types={},
-        semmap_export=None,
-        semmap_metadata=None,
+        codebook_jsonld=None,
+        codebook=None,
         color_series=None,
         umap_png_real=None,
         umap_artifacts=None,

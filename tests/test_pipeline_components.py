@@ -3,28 +3,22 @@
 from __future__ import annotations
 
 import json
-from dataclasses import dataclass
 from pathlib import Path
 from types import SimpleNamespace
-from typing import Any, Dict, List, Optional
+from typing import Any
 
 import pandas as pd
 import pytest
 
+from semsynth.codebook import Codebook
+from semsynth.config import PipelineConfig
 from semsynth.dataproviders._helpers import clean_dataset_frame
 from semsynth.dataproviders.openml import load_openml_by_name
 from semsynth.dataproviders.uciml import load_uciml_by_id
 from semsynth.models import ModelConfigBundle, ModelSpec
-from semsynth.pipeline import (
-    BackendExecutor,
-    DatasetPreprocessor,
-    MetricWriter,
-    PipelineConfig,
-    PreprocessingResult,
-    ReportWriter,
-    UmapArtifacts,
-    _build_downstream_meta,
-)
+from semsynth.preprocess import DatasetPreprocessor, PreprocessingResult, UmapArtifacts
+from semsynth.result import SynthesisResult
+from semsynth.runner import BackendExecutor, ReportWriter, plot_real_umap
 from semsynth.specs import DatasetSpec
 
 
@@ -32,15 +26,15 @@ class _StubUtils:
     """Small helper mimicking the subset of utils used by the preprocessor."""
 
     def __init__(self) -> None:
-        self._dirs: List[str] = []
+        self._dirs: list[str] = []
 
     def ensure_dir(self, path: str) -> None:
         Path(path).mkdir(parents=True, exist_ok=True)
         self._dirs.append(path)
 
     def infer_types(self, df: pd.DataFrame) -> Any:
-        discrete: List[str] = []
-        continuous: List[str] = []
+        discrete: list[str] = []
+        continuous: list[str] = []
         for column in df.columns:
             series = df[column]
             if pd.api.types.is_numeric_dtype(series):
@@ -49,18 +43,18 @@ class _StubUtils:
                 discrete.append(column)
         return discrete, continuous
 
-    def coerce_discrete_to_category(self, df: pd.DataFrame, cols: List[str]) -> pd.DataFrame:
+    def coerce_discrete_to_category(self, df: pd.DataFrame, cols: list[str]) -> pd.DataFrame:
         df = df.copy()
         for column in cols:
             df[column] = pd.Categorical(df[column])
         return df
 
     def rename_categorical_categories_to_str(
-        self, df: pd.DataFrame, cols: List[str]
+        self, df: pd.DataFrame, cols: list[str]
     ) -> pd.DataFrame:
         return df
 
-    def coerce_continuous_to_float(self, df: pd.DataFrame, cols: List[str]) -> pd.DataFrame:
+    def coerce_continuous_to_float(self, df: pd.DataFrame, cols: list[str]) -> pd.DataFrame:
         df = df.copy()
         for column in cols:
             df[column] = df[column].astype(float)
@@ -76,15 +70,15 @@ class _StubUmapModule:
     """Simple module stub recording calls to UMAP helpers."""
 
     def __init__(self) -> None:
-        self.build_calls: List[Dict[str, Any]] = []
-        self.transform_calls: List[Dict[str, Any]] = []
-        self.plot_calls: List[Dict[str, Any]] = []
+        self.build_calls: list[dict[str, Any]] = []
+        self.transform_calls: list[dict[str, Any]] = []
+        self.plot_calls: list[dict[str, Any]] = []
 
     def build_umap(self, *args: Any, **kwargs: Any) -> Any:
         self.build_calls.append({"args": args, "kwargs": kwargs})
         return SimpleNamespace(embedding=[[0.0, 0.0]], color_labels=None)
 
-    def plot_umap(self, embedding: Any, path: str, **kwargs: Any) -> Dict[str, float]:
+    def plot_umap(self, embedding: Any, path: str, **kwargs: Any) -> dict[str, float]:
         self.plot_calls.append({"embedding": embedding, "path": path, "kwargs": kwargs})
         Path(path).write_text("png")
         return {"x": 1.0, "y": 2.0}
@@ -104,7 +98,7 @@ def _create_preprocessing_result(df: pd.DataFrame, tmp_path) -> PreprocessingRes
         disc_cols=["category"],
         cont_cols=["value"],
         inferred_types={"category": "discrete", "value": "continuous"},
-        semmap_export={"dummy": True},
+        codebook_jsonld={"dummy": True},
         color_series=target_series,
         umap_png_real=None,
         umap_artifacts=UmapArtifacts(transformer=None, real_png=tmp_path / "umap.png", limits=None),
@@ -128,14 +122,12 @@ def test_dataset_preprocessor_basic(tmp_path):
         spec,
         df,
         None,
-        tmp_path,
         cfg,
         rng,
         generate_umap=False,
         umap_utils=None,
     )
 
-    assert (tmp_path).exists()
     assert list(result.disc_cols) == ["category"]
     assert list(result.cont_cols) == ["value"]
     assert result.umap_artifacts is None
@@ -160,7 +152,6 @@ def test_dataset_preprocessor_with_umap(tmp_path):
         spec,
         df,
         None,
-        tmp_path,
         cfg,
         rng,
         generate_umap=True,
@@ -168,73 +159,14 @@ def test_dataset_preprocessor_with_umap(tmp_path):
     )
 
     assert result.umap_artifacts is not None
-    assert result.umap_png_real == tmp_path / "umap_real.png"
     assert umap_stub.build_calls, "UMAP build should be invoked"
+    assert not umap_stub.plot_calls, "preprocessing does not draw anything"
+
+    plot_real_umap(result, tmp_path, spec, umap_stub, generated=True)
+
+    assert result.umap_png_real == tmp_path / "umap_real.png"
+    assert result.umap_artifacts.limits == {"x": 1.0, "y": 2.0}
     assert umap_stub.plot_calls, "UMAP plot should be invoked"
-
-
-def test_metric_writer_writes_metrics(tmp_path):
-    real_df = pd.DataFrame({"value": [1.0, 2.0]})
-    synth_df = pd.DataFrame({"value": [1.1, 1.9]})
-
-    @dataclass
-    class Summary:
-        score: float
-
-    def summarizer(_: pd.DataFrame, __: pd.DataFrame, ___: pd.DataFrame) -> Summary:
-        return Summary(score=0.5)
-
-    def comparer(_: pd.DataFrame, __: pd.DataFrame, metadata: Dict[str, Any]) -> Dict[str, Any]:
-        schema = metadata.get("dsv:datasetSchema", {})
-        columns = schema.get("dsv:column", [])
-        assert columns and columns[0]["schema:name"] == "value"
-        stats = columns[0].get("dsv:summaryStatistics", {})
-        assert stats.get("dsv:statisticalDataType") == "dsv:QuantitativeDataType"
-        return {
-            "formula": {"metric": 1.0},
-            "compare": pd.DataFrame({"sign_match": [1, 1]}),
-        }
-
-    run_dir = tmp_path
-    synth_df.to_csv(run_dir / "synthetic.csv", index=False)
-
-    writer = MetricWriter(privacy_summarizer=summarizer, downstream_compare=comparer)
-
-    privacy_payload = writer.write_privacy(
-        run_dir, real_df, {"value": "continuous"}, synth_df=synth_df
-    )
-    downstream_payload = writer.write_downstream(
-        run_dir, real_df, synth_df, {"value": "continuous"}, target_series=None
-    )
-
-    assert privacy_payload == {"score": 0.5}
-    assert downstream_payload["sign_match_rate"] == 1.0
-    assert (run_dir / "metrics.privacy.json").exists()
-    assert (run_dir / "metrics.downstream.json").exists()
-
-
-def test_build_downstream_meta_matches_dsv_schema():
-    df = pd.DataFrame({"feature": ["a", "b", "a"], "target": [0, 1, 1]})
-    inferred = {"feature": "discrete", "target": "discrete"}
-    target_series = df["target"].copy()
-    target_series.attrs["prov:hadRole"] = "target"
-
-    meta = _build_downstream_meta(df, inferred, target_series)
-
-    schema = meta["dsv:datasetSchema"]
-    columns = schema["dsv:column"]
-    by_name = {col["schema:name"]: col for col in columns}
-
-    assert by_name["target"]["prov:hadRole"] == "target"
-    stats = by_name["target"]["dsv:summaryStatistics"]
-    assert stats["dsv:statisticalDataType"] == "dsv:NominalDataType"
-    assert by_name["target"]["schema:defaultValue"] == "0"
-
-    codebook = (
-        by_name["target"]["dsv:columnProperty"]["dsv:hasCodeBook"]["skos:hasTopConcept"]
-    )
-    assert {concept["skos:notation"] for concept in codebook} == {"0", "1"}
-    assert by_name["feature"]["prov:hadRole"] == "predictor"
 
 
 def test_clean_dataset_frame_detects_target_hint():
@@ -253,7 +185,7 @@ def test_clean_dataset_frame_detects_target_hint():
     assert color_series.attrs.get("prov:hadRole") == "target"
 
 
-def test_clean_dataset_frame_detects_semmap_role():
+def test_clean_dataset_frame_detects_role_in_metadata():
     df = pd.DataFrame(
         {
             "feature": [0.1, 0.2],
@@ -269,7 +201,7 @@ def test_clean_dataset_frame_detects_semmap_role():
         }
     }
 
-    cleaned, target_name, color_series = clean_dataset_frame(
+    _cleaned, target_name, color_series = clean_dataset_frame(
         df, metadata=metadata
     )
 
@@ -294,13 +226,13 @@ def test_openml_cached_uses_helper(monkeypatch: pytest.MonkeyPatch, tmp_path: Pa
     )
     df.to_csv(cache_dir / f"{dataset_id}.csv.gz", index=False, compression="infer")
 
-    called: Dict[str, Any] = {}
+    called: dict[str, Any] = {}
 
     def fake_helper(
         data: pd.DataFrame,
         *,
-        target: Optional[str] = None,
-        metadata: Optional[Dict[str, Any]] = None,
+        target: str | None = None,
+        metadata: dict[str, Any] | None = None,
     ) -> Any:
         cleaned = data.drop(columns=["id"], errors="ignore")
         series = cleaned["class"].copy()
@@ -343,13 +275,13 @@ def test_uciml_cached_uses_helper(monkeypatch: pytest.MonkeyPatch, tmp_path: Pat
     )
     df.to_csv(cache_dir / f"{dataset_id}.csv.gz", index=False, compression="infer")
 
-    called: Dict[str, Any] = {}
+    called: dict[str, Any] = {}
 
     def fake_helper(
         data: pd.DataFrame,
         *,
-        target: Optional[str] = None,
-        metadata: Optional[Dict[str, Any]] = None,
+        target: str | None = None,
+        metadata: dict[str, Any] | None = None,
     ) -> Any:
         cleaned = data.drop(columns=["index"], errors="ignore")
         series = cleaned["target"].copy()
@@ -378,7 +310,7 @@ def test_uciml_cached_uses_helper(monkeypatch: pytest.MonkeyPatch, tmp_path: Pat
     assert payload.spec.target == "target"
 
 
-def test_uciml_cached_semmap_metadata(tmp_path: Path):
+def test_uciml_cached_metadata_becomes_a_codebook(tmp_path: Path):
     dataset_id = 789
     cache_dir = tmp_path / "uciml"
     cache_dir.mkdir(parents=True, exist_ok=True)
@@ -448,26 +380,20 @@ def test_uciml_cached_semmap_metadata(tmp_path: Path):
         payload.spec,
         payload.frame,
         payload.color,
-        tmp_path / "out",
         cfg,
         rng,
         generate_umap=False,
         umap_utils=None,
     )
 
-    assert preprocessed.semmap_metadata is not None
-    assert preprocessed.semmap_metadata.datasetSchema.columns
-    assert any(
-        col.hadRole == "target" and col.name == "target"
-        for col in preprocessed.semmap_metadata.datasetSchema.columns
-    )
-    export_schema = preprocessed.semmap_export.get("dsv:datasetSchema") or preprocessed.semmap_export.get("datasetSchema")
-    assert export_schema
-    export_columns = export_schema.get("dsv:column") or export_schema.get("columns")
-    assert any(
-        col.get("prov:hadRole") == "target" or col.get("hadRole") == "target"
-        for col in export_columns
-    )
+    codebook = preprocessed.codebook
+    assert codebook is not None
+    assert [column["name"] for column in codebook.columns] == ["feature", "target"]
+    assert codebook.roles["target"] == "target"
+    assert codebook.kind("target") == "categorical"
+    export_columns = preprocessed.codebook_jsonld["datasetSchema"]["columns"]
+    assert any(col.get("prov:hadRole") == "target" and col["name"] == "target" for col in export_columns)
+    assert preprocessed.codebook_jsonld["title"] == "Demo UCI"
     assert any(
         (
             col.get("dsv:summaryStatistics", {}).get("dsv:statisticalDataType")
@@ -488,98 +414,85 @@ def test_uciml_cached_semmap_metadata(tmp_path: Path):
 
 
 def test_backend_executor_runs_models(tmp_path):
-    df = pd.DataFrame({"category": pd.Categorical(["a", "b"]), "value": [1.0, 2.0]})
+    df = pd.DataFrame({"category": pd.Categorical(["a", "b"] * 5), "value": [1.0, 2.0, 3.0, 4.0, 5.0] * 2})
     spec = DatasetSpec(provider="demo", name="example", target="value")
     preprocessed = _create_preprocessing_result(df, tmp_path)
+    seen: dict[str, Any] = {}
 
-    calls: Dict[str, Any] = {}
+    def fake_synthesize(frame: pd.DataFrame, codebook: Any, *, backend: str, rows: int, seed: int, **options: Any):
+        seen.update(frame=frame, codebook=codebook, backend=backend, rows=rows, seed=seed, options=options)
+        return SynthesisResult(
+            synthetic_data=frame.head(rows).copy(),
+            backend=backend,
+            parameters={"rows": rows, "seed": seed, "params": options},
+        )
 
-    class Backend:
-        def run_experiment(self, **kwargs: Any) -> str:
-            calls.update(kwargs)
-            run_dir = tmp_path / "models" / "test"
-            run_dir.mkdir(parents=True, exist_ok=True)
-            (run_dir / "synthetic.csv").write_text("value\n1.0\n")
-            return str(run_dir)
+    privacy_calls: list[pd.DataFrame] = []
 
-    def loader(name: str) -> Backend:
-        assert name == "dummy"
-        return Backend()
+    def summarizer(_real: pd.DataFrame, synth: pd.DataFrame, _meta: pd.DataFrame) -> dict[str, float]:
+        privacy_calls.append(synth)
+        return {"score": 0.5}
 
-    class DummyMetricWriter:
-        def __init__(self) -> None:
-            self.privacy_calls: List[Dict[str, Any]] = []
-            self.downstream_calls: List[Dict[str, Any]] = []
-
-        def write_privacy(
-            self,
-            run_dir: Any,
-            real_df: pd.DataFrame,
-            inferred: Dict[str, str],
-            synth_df: pd.DataFrame,
-            metadata: Any = None,
-            *,
-            target: Optional[str] = None,
-        ) -> Dict[str, Any]:
-            self.privacy_calls.append(
-                {
-                    "run_dir": run_dir,
-                    "real_df": real_df,
-                    "inferred": inferred,
-                    "synth_df": synth_df,
-                    "metadata": metadata,
-                    "target": target,
-                }
-            )
-            return {"ok": True}
-
-        def write_downstream(
-            self,
-            run_dir: Any,
-            real_df: pd.DataFrame,
-            synth_df: pd.DataFrame,
-            inferred: Dict[str, str],
-            target_series: Optional[pd.Series],
-            *,
-            metadata: Any = None,
-            target: Optional[str] = None,
-        ) -> Dict[str, Any]:
-            self.downstream_calls.append(
-                {
-                    "run_dir": run_dir,
-                    "real_df": real_df,
-                    "synth_df": synth_df,
-                    "inferred": inferred,
-                    "target": target_series,
-                    "metadata": metadata,
-                    "target_label": target,
-                }
-            )
-            return {"ok": True}
-
-    metric_writer = DummyMetricWriter()
+    def comparer(_real: pd.DataFrame, _synth: pd.DataFrame, _meta: Codebook) -> dict[str, Any]:
+        return {"formula": "value ~ category", "compare": pd.DataFrame({"sign_match": [1, 1]})}
 
     bundle = ModelConfigBundle(
-        specs=[ModelSpec(name="demo", backend="dummy", compute_privacy=True, compute_downstream=True)],
-        generate_umap=None,
-        compute_privacy=None,
-        compute_downstream=None,
+        specs=[
+            ModelSpec(
+                name="demo",
+                backend="dummy",
+                model={"epsilon": 2.0},
+                rows=4,
+                seed=3,
+                compute_privacy=True,
+                compute_downstream=True,
+            )
+        ]
     )
-
     executor = BackendExecutor(
         PipelineConfig(compute_privacy=True, compute_downstream=True),
-        load_backend=loader,
-        metric_writer=metric_writer,
+        synthesize_fn=fake_synthesize,
+        privacy_summarizer=summarizer,
+        downstream_compare=comparer,
     )
 
     executor.run_models(spec, bundle, preprocessed, tmp_path)
 
-    assert calls["semmap_export"] == {"dummy": True}
-    assert metric_writer.privacy_calls
-    assert metric_writer.downstream_calls
-    downstream_call = metric_writer.downstream_calls[0]
-    assert downstream_call["target_label"] == spec.target
-    assert downstream_call["target"].attrs.get("prov:hadRole") == "target"
+    assert seen["backend"] == "dummy" and seen["rows"] == 4 and seen["seed"] == 3
+    assert seen["options"] == {"epsilon": 2.0}
+    assert len(seen["frame"]) == 8, "the model is fitted on the training split only"
+    run_dir = tmp_path / "models" / "demo"
+    assert json.loads((run_dir / "metrics.privacy.json").read_text()) == {"score": 0.5}
+    downstream = json.loads((run_dir / "metrics.downstream.json").read_text())
+    assert downstream == {"formula": "value ~ category", "sign_match_rate": 1.0}
+    metrics = json.loads((run_dir / "metrics.json").read_text())
+    assert metrics["train_rows"] == 8 and metrics["test_rows"] == 2
+    manifest = json.loads((run_dir / "manifest.json").read_text())
+    assert manifest["backend"] == "dummy" and manifest["dataset_name"] == "example"
+    assert manifest["test_size"] == 0.2 and manifest["seed"] == 3
+    assert (run_dir / "synthetic.csv").exists() and (run_dir / "provenance.json").exists()
+    assert (run_dir / "synthetic.parquet").exists() or not preprocessed.codebook_jsonld
+    assert len(privacy_calls) == 1
+
+
+def test_a_failing_model_does_not_stop_the_others(tmp_path):
+    df = pd.DataFrame({"category": pd.Categorical(["a", "b"] * 5), "value": [1.0, 2.0, 3.0, 4.0, 5.0] * 2})
+    spec = DatasetSpec(provider="demo", name="example", target="value")
+    preprocessed = _create_preprocessing_result(df, tmp_path)
+
+    def flaky(frame: pd.DataFrame, codebook: Any, *, backend: str, rows: int, seed: int, **_options: Any):
+        if backend == "broken":
+            raise ImportError("needs the 'broken' extra")
+        return SynthesisResult(synthetic_data=frame.head(rows).copy(), backend=backend, parameters={"seed": seed})
+
+    bundle = ModelConfigBundle(
+        specs=[ModelSpec(name="a", backend="broken"), ModelSpec(name="b", backend="fine")]
+    )
+
+    BackendExecutor(PipelineConfig(), synthesize_fn=flaky).run_models(spec, bundle, preprocessed, tmp_path)
+
+    assert not (tmp_path / "models" / "a").exists()
+    assert (tmp_path / "models" / "b" / "synthetic.csv").exists()
 
 
 def test_report_writer_generates_outputs(tmp_path):
@@ -592,7 +505,7 @@ def test_report_writer_generates_outputs(tmp_path):
         disc_cols=preprocessed.disc_cols,
         cont_cols=preprocessed.cont_cols,
         inferred_types=preprocessed.inferred_types,
-        semmap_export=preprocessed.semmap_export,
+        codebook_jsonld=preprocessed.codebook_jsonld,
         color_series=None,
         umap_png_real=tmp_path / "umap_real.png",
         umap_artifacts=UmapArtifacts(
@@ -618,7 +531,7 @@ def test_report_writer_generates_outputs(tmp_path):
 
     class ReportingModule:
         def __init__(self) -> None:
-            self.calls: List[Dict[str, Any]] = []
+            self.calls: list[dict[str, Any]] = []
 
         def write_report_md(self, **kwargs: Any) -> None:
             self.calls.append(kwargs)

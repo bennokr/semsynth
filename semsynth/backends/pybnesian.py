@@ -1,39 +1,39 @@
 from __future__ import annotations
 
-import json
+import importlib.metadata
 import logging
+import tempfile
 from dataclasses import dataclass
 from pathlib import Path
-from typing import Any, Dict, List, Optional, Tuple, TYPE_CHECKING
-
-from makeprov import OutDir
+from typing import TYPE_CHECKING, Any
 
 if TYPE_CHECKING:  # pragma: no cover - typing only
     import pandas as pd
 
-from ..metrics import per_variable_distances, summarize_distance_metrics, heldout_loglik
+from ..result import SynthesisResult
 from ..utils import (
     coerce_continuous_to_float,
     coerce_discrete_to_category,
-    ensure_dir,
-    infer_types,
     rename_categorical_categories_to_str,
+    split_columns,
 )
-from ..models import model_run_root, write_manifest
+
+LOGGER = logging.getLogger(__name__)
+DEFAULT_ROOTS = ("age", "sex", "race")
 
 
 @dataclass
 class BNArtifacts:
     model: object
-    discrete_cols: List[str]
-    continuous_cols: List[str]
+    discrete_cols: list[str]
+    continuous_cols: list[str]
 
 
 def _load_pybnesian():
     try:
-        from pybnesian import hc, CLGNetworkType, SemiparametricBNType
+        from pybnesian import CLGNetworkType, SemiparametricBNType, hc
     except ImportError as exc:  # pragma: no cover - optional dependency
-        raise RuntimeError(
+        raise ImportError(
             "PyBNesian backend requires 'pybnesian'; install with pip install semsynth[pybnesian]"
         ) from exc
     return hc, CLGNetworkType, SemiparametricBNType
@@ -62,11 +62,11 @@ def learn_bn(
     train_df,
     bn_type: str = "clg",
     random_state: int = 42,
-    arc_blacklist: Optional[List[Tuple[str, str]]] = None,
+    arc_blacklist: list[tuple[str, str]] | None = None,
     *,
-    score: Optional[str] = None,
-    operators: Optional[List[str]] = None,
-    max_indegree: Optional[int] = None,
+    score: str | None = None,
+    operators: list[str] | None = None,
+    max_indegree: int | None = None,
 ) -> BNArtifacts:
     hc, _, _ = _load_pybnesian()
     bn_type_obj = _bn_type_from_str(bn_type)
@@ -97,7 +97,7 @@ def learn_bn(
 
 
 def bn_to_graphviz(
-    model, node_types: Dict[str, object], out_png: str, title: str = "Learned BN"
+    model, node_types: dict[str, object], out_png: str, title: str = "Learned BN"
 ) -> None:
     try:
         from graphviz import Digraph
@@ -122,7 +122,7 @@ def bn_to_graphviz(
 
 
 def save_graphml_structure(
-    model, node_types: Dict[str, object], out_graphml: str
+    model, node_types: dict[str, object], out_graphml: str
 ) -> None:
     try:
         import networkx as nx
@@ -139,140 +139,101 @@ def save_graphml_structure(
     nx.write_graphml(G, out_graphml)
 
 
-def run_experiment(
-    df: "pd.DataFrame",
-    *,
-    provider: Optional[str],
-    dataset_name: Optional[str],
-    provider_id: Optional[int],
-    outdir: str,
-    label: str,
-    model_info: Dict[str, Any] | None,
-    rows: Optional[int],
-    seed: int,
-    test_size: float,
-    semmap_export: Optional[Dict[str, Any]] = None,
-) -> Path:
-    """Fit/generate/evaluate a PyBNesian model and write artifacts under models/<label>.
+def _structure_artifacts(model: Any, title: str) -> tuple[dict[str, bytes | str], list[str]]:
+    """The GraphML, the picture and the pickle of the learned network; what cannot be made is named in the warnings."""
 
-    model_info keys: type ('clg' or 'semiparametric'), score, operators, max_indegree.
+    artifacts: dict[str, bytes | str] = {}
+    warnings: list[str] = []
+    node_types = model.node_types()
+    with tempfile.TemporaryDirectory(prefix="semsynth-pybnesian-") as directory:
+        folder = Path(directory)
+        steps = {
+            "structure.graphml": lambda: save_graphml_structure(model, node_types, str(folder / "structure.graphml")),
+            "structure.png": lambda: bn_to_graphviz(model, node_types, str(folder / "structure.png"), title=title),
+            "model.pickle": lambda: model.save(str(folder / "model.pickle")),
+        }
+        for name, step in steps.items():
+            try:
+                step()
+            except Exception as error:
+                warnings.append(f"{name} was not written: {error}")
+            if (folder / name).exists():
+                artifacts[name] = (folder / name).read_bytes()
+    return artifacts, warnings
+
+
+def _blacklist(columns: list[str], roots: list[str]) -> list[tuple[str, str]]:
+    """Arcs that may not be learned: nothing causes the roots (by default age, sex and race)."""
+
+    by_lower = {str(column).lower(): column for column in columns}
+    found = [by_lower[root.lower()] for root in roots if root.lower() in by_lower]
+    return [(column, root) for root in found for column in columns]
+
+
+def _version() -> str:
+    try:
+        return importlib.metadata.version("pybnesian")
+    except importlib.metadata.PackageNotFoundError:  # pragma: no cover - vendored copy
+        return "unknown"
+
+
+def synthesize(
+    df: pd.DataFrame,
+    codebook: Any = None,
+    *,
+    rows: int | None = None,
+    seed: int = 0,
+    **options: Any,
+) -> SynthesisResult:
+    """Learn a Bayesian network from ``df`` and draw ``rows`` rows from it.
+
+    Args:
+        df: The table to learn from.
+        codebook: Optional :class:`~semsynth.codebook.Codebook`; its levels decide which columns are discrete.
+        rows: Number of rows to draw; the rows of ``df`` when omitted.
+        seed: Random seed.
+        **options: ``type`` (``clg`` or ``semiparametric``), ``score``, ``operators``, ``max_indegree`` and ``roots``
+            (columns that no other column may cause; default age, sex, race).
+
+    Returns:
+        The synthetic table, with ``learned_model`` set to the network and its GraphML, picture and pickle as
+        artifacts.
     """
 
-    import pandas as pd
-    from sklearn.model_selection import train_test_split
-
-    model_info = dict(model_info or {})
-    bn_type = str(model_info.get("type", "clg"))
-    score = model_info.get("score")
-    operators = model_info.get("operators")
-    max_indegree = model_info.get("max_indegree")
-    logging.info("Starting PyBNesian run: %s (type=%s)", label, bn_type)
-
-    working = df.copy()
-    disc_cols, cont_cols = infer_types(working)
-    working = coerce_discrete_to_category(working, disc_cols)
+    bn_type = str(options.get("type", "clg"))
+    disc_cols, cont_cols = split_columns(df, codebook)
+    working = coerce_discrete_to_category(df.copy(), disc_cols)
     working = rename_categorical_categories_to_str(working, disc_cols)
-    working = coerce_continuous_to_float(working, cont_cols)
+    working = coerce_continuous_to_float(working, cont_cols).reset_index(drop=True)
 
-    train_df, test_df = train_test_split(
-        working, test_size=test_size, random_state=seed, shuffle=True
-    )
-    train_df = train_df.reset_index(drop=True)
-    test_df = test_df.reset_index(drop=True)
-
-    # Simple arc blacklist: common sensitive vars
-    roots = model_info.get("roots") or ["age", "sex", "race"]
-    cols = list(working.columns)
-    col_map = {str(c).lower(): c for c in cols}
-    sens_in_cols = [col_map[s] for s in [x.lower() for x in roots] if s in col_map]
-    arc_blacklist_pairs: List[Tuple[str, str]] = []
-    for u in sens_in_cols:
-        for v in cols:
-            arc_blacklist_pairs.append((v, u))
-
-    bn_art = learn_bn(
-        train_df,
+    LOGGER.info("Learning a %s network on %d rows", bn_type, len(working))
+    learned = learn_bn(
+        working,
         bn_type=bn_type,
         random_state=seed,
-        arc_blacklist=arc_blacklist_pairs,
-        score=score,
-        operators=operators,
-        max_indegree=max_indegree,
+        arc_blacklist=_blacklist(list(working.columns), list(options.get("roots") or DEFAULT_ROOTS)),
+        score=options.get("score"),
+        operators=options.get("operators"),
+        max_indegree=options.get("max_indegree"),
     )
-    model = bn_art.model
-    # Sample
-    n_rows = int(rows) if rows else len(train_df)
-    synth = model.sample(n_rows, seed=seed)
-    synth_df = synth.to_pandas().reindex(columns=working.columns)
-    for c in disc_cols:
-        if c in synth_df.columns:
-            synth_df[c] = synth_df[c].astype("category")
-
-    run_root = model_run_root(Path(outdir))
-    run_dir = OutDir(run_root / label)
-    ensure_dir(str(run_dir))
-    synth_csv = run_dir.file("synthetic.csv")
-    synth_df.to_csv(synth_csv, index=False)
-    logging.info("Wrote synthetic CSV: %s", synth_csv)
-
-    # Optional SemMap parquet
-    if semmap_export:
-        try:
-            import copy
-            import semsynth.semmap as semmap  # noqa: F401  # register accessor
-
-            sdf = synth_df.copy()
-            sdf.semmap.from_jsonld(
-                copy.deepcopy(semmap_export), convert_pint=False
-            )
-            sdf.semmap.to_parquet(str(run_dir.file("synthetic.semmap.parquet")), index=False)
-        except Exception as e:
-            logging.warning("SemMap parquet failed: %s", e)
-
-    # Distances and summary
-    dist_df = per_variable_distances(test_df, synth_df, disc_cols, cont_cols)
-    dist_df.to_csv(run_dir.file("per_variable_metrics.csv"), index=False)
-    metrics = {
-        "backend": "pybnesian",
-        "summary": summarize_distance_metrics(dist_df),
-        "train_rows": len(train_df),
-        "test_rows": len(test_df),
-        "synth_rows": len(synth_df),
-        "discrete_cols": len(disc_cols),
-        "continuous_cols": len(cont_cols),
-        "heldout_loglik": heldout_loglik(model, test_df),
-        "umap_png": None,
-    }
-    run_dir.file("metrics.json").write_text(json.dumps(metrics, indent=2), encoding="utf-8")
-
-    # BN visualizations and serialization inside model dir
-    try:
-        node_types = model.node_types()
-        bn_to_graphviz(
-            model,
-            node_types,
-            str(run_dir.file("structure.png")),
-            title=f"{dataset_name or 'dataset'} — {label} BN",
-        )
-        save_graphml_structure(model, node_types, run_dir.file("structure.graphml"))
-        model.save(str(run_dir.file("model.pickle")))
-    except Exception as e:
-        logging.warning("BN serialization failed: %s", e)
-
-    manifest = {
-        "backend": "pybnesian",
-        "name": label,
-        "provider": provider,
-        "dataset_name": dataset_name,
-        "provider_id": provider_id,
-        "type": bn_type,
-        "params": dict(
-            type=bn_type, score=score, operators=operators, max_indegree=max_indegree
-        ),
-        "seed": seed,
-        "rows": n_rows,
-        "test_size": test_size,
-    }
-    write_manifest(run_dir, manifest)
-    logging.info("Finished PyBNesian run: %s", label)
-    return run_dir
+    count = int(rows or len(working))
+    synthetic = learned.model.sample(count, seed=seed).to_pandas().reindex(columns=working.columns)  # type: ignore[attr-defined]
+    for column in disc_cols:
+        synthetic[column] = synthetic[column].astype("category")
+    artifacts, warnings = _structure_artifacts(learned.model, f"{bn_type} network")
+    return SynthesisResult(
+        synthetic_data=synthetic,
+        backend="pybnesian",
+        parameters={
+            "type": bn_type,
+            "score": options.get("score"),
+            "operators": options.get("operators"),
+            "max_indegree": options.get("max_indegree"),
+            "rows": count,
+            "seed": seed,
+        },
+        provenance={"engine": "pybnesian", "engine_version": _version()},
+        learned_model=learned.model,
+        warnings=warnings,
+        artifacts=artifacts,
+    )
