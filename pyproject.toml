@@ -62,12 +62,14 @@ metasyn = [
 ]
 pybnesian = [
   "numpy<2",  # not tested with NumPy 2
+  "pyarrow<26",  # pyarrow 26 needs NumPy 2; pip would take it and fail on import
   "graphviz",
   "networkx",
   "pybnesian"
 ]
 synthcity = [
   "numpy<2",  # not tested with NumPy 2
+  "pyarrow<26",  # pyarrow 26 needs NumPy 2; pip would take it and fail on import
   "synthcity>=0.2",
   "torch"
 ]
@@ -77,6 +79,7 @@ privbayes = [
 ]
 umap = [
   "numpy<2",  # not tested with NumPy 2
+  "pyarrow<26",  # pyarrow 26 needs NumPy 2; pip would take it and fail on import
   "numba<0.63",
   "llvmlite<0.46",
   "matplotlib",
