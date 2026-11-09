@@ -1573,7 +1573,7 @@ wheels = [
 [[package]]
 name = "entailmap"
 version = "0.1.0"
-source = { git = "https://github.com/bennokr/entailmap?rev=dda21fb#dda21fb4e36f9edd6ebf0faf9575d786d52a8331" }
+source = { git = "https://github.com/bennokr/entailmap?rev=bbfb008#bbfb008d12a7890bf95b2efa857722585de563c5" }
 
 [package.optional-dependencies]
 lexical = [
@@ -5899,7 +5899,7 @@ requires-dist = [
     { name = "datasynthesizer", marker = "extra == 'all'", specifier = "==0.1.13" },
     { name = "datasynthesizer", marker = "extra == 'privbayes'", specifier = "==0.1.13" },
     { name = "defopt" },
-    { name = "entailmap", extras = ["lexical"], marker = "extra == 'mapping'", git = "https://github.com/bennokr/entailmap?rev=dda21fb" },
+    { name = "entailmap", extras = ["lexical"], marker = "extra == 'mapping'", git = "https://github.com/bennokr/entailmap?rev=bbfb008" },
     { name = "flask", marker = "extra == 'all'" },
     { name = "flask", marker = "extra == 'app'" },
     { name = "graphviz", marker = "extra == 'all'" },

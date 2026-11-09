@@ -86,7 +86,7 @@ statsmodels = [
   "statsmodels"
 ]
 mapping = [
-  "entailmap[lexical] @ git+https://github.com/bennokr/entailmap@dda21fb",  # until entailmap is released
+  "entailmap[lexical] @ git+https://github.com/bennokr/entailmap@bbfb008",  # until entailmap is released
 ]
 all = [
   "flask",
