@@ -20,9 +20,11 @@ them. Everything else is an extra: `python -m pip install -e .[EXTRA]` with `EXT
 | `providers` | `openml`, `ucimlrepo`, `requests`: load and search OpenML and UCI ML datasets (all of `search`, `report`) |
 | `app` | `flask`: `python -m semsynth run-app` |
 | `metasyn`, `privbayes` | the MetaSyn and DataSynthesizer (PrivBayes) backends |
-| `pybnesian`, `synthcity` | the PyBNesian and SynthCity backends (they pin NumPy below 2) |
+| `pybnesian` | the PyBNesian backend (NumPy 2) |
+| `synthcity` | the SynthCity backend; heavy (PyTorch) and the one extra that needs NumPy below 2, so it cannot share an environment with `pybnesian`, `umap`, `language` or `all` (uv enforces this in `[tool.uv] conflicts`) |
 | `statsmodels` | the downstream coefficient comparison |
 | `umap` | UMAP plots |
+| `language` | `py3langid`: records the language of text columns in the profile (`dct:language`, linked-codebook 0.10), and MetaSyn then draws free text in that language instead of English |
 | `mapping` | `entailmap.match`, for `create-mapping` |
 
 A missing extra raises an `ImportError` that names it. `python -m semsynth report ...` therefore needs

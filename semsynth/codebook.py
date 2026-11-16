@@ -20,6 +20,8 @@ import pandas as pd
 from linked_codebook import build, infer, merge, parse
 from linked_codebook.types import Column, Profile
 
+from .language import detector
+
 PROV = "http://www.w3.org/ns/prov#"
 ROLE_KEY = "prov:hadRole"
 CATEGORICAL_LEVELS = frozenset({"categorical", "nominal", "ordinal"})
@@ -96,8 +98,8 @@ def _cell(value: Any) -> Any:
 
 
 def infer_profile(df: pd.DataFrame) -> Profile:
-    """Proposes the datatype, level and observed codes of every column with linked-codebook."""
-    return infer({str(name): [_cell(value) for value in df[name].tolist()] for name in df.columns})
+    """Proposes the datatype, level, observed codes and, with ``py3langid``, the language of every column."""
+    return infer({str(name): [_cell(value) for value in df[name].tolist()] for name in df.columns}, detector())
 
 
 def privacy_role(raw: str | None) -> str:

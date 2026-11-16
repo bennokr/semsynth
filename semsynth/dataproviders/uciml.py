@@ -24,7 +24,6 @@ from ._helpers import (
     store_cached_payload,
 )
 
-EMPTY = (None, "", [], {},)
 _SPACE_CLEANUP = str.strip
 
 
@@ -32,9 +31,10 @@ def _present(value: Any) -> bool:
     """Return True when a value is present and non-empty."""
 
     try:
-        return pd.notna(value) and value not in EMPTY
-    except Exception:
-        return value not in EMPTY
+        text_or_container = value is None or isinstance(value, str | list | dict | tuple | set)
+        return bool(value) if text_or_container else bool(pd.notna(value))
+    except (TypeError, ValueError):
+        return True
 
 
 def _put(target: Mapping[str, Any], key: str, value: Any) -> Mapping[str, Any]:

@@ -3,7 +3,7 @@
 const fs = require('fs');
 const path = require('path');
 
-const LINKED_CODEBOOK_WHEEL = 'https://bennokr.github.io/linked-codebook/linked_codebook-0.7.0-py3-none-any.whl';
+const LINKED_CODEBOOK_WHEEL = 'https://bennokr.github.io/linked-codebook/linked_codebook-0.10.0-py3-none-any.whl';
 
 (async () => {
   const { loadPyodide } = require(process.env.PYODIDE_DIR || 'pyodide');
