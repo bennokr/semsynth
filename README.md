@@ -20,7 +20,8 @@ them. Everything else is an extra: `python -m pip install -e .[EXTRA]` with `EXT
 | `providers` | `openml`, `ucimlrepo`, `requests`: load and search OpenML and UCI ML datasets (all of `search`, `report`) |
 | `app` | `flask`: `python -m semsynth run-app` |
 | `metasyn`, `privbayes` | the MetaSyn and DataSynthesizer (PrivBayes) backends |
-| `pybnesian`, `synthcity` | the PyBNesian and SynthCity backends (they pin NumPy below 2) |
+| `pybnesian` | the PyBNesian backend (NumPy 2) |
+| `synthcity` | the SynthCity backend; heavy (PyTorch) and the one extra that needs NumPy below 2, so it cannot share an environment with `pybnesian`, `umap` or `all` (uv enforces this in `[tool.uv] conflicts`) |
 | `statsmodels` | the downstream coefficient comparison |
 | `umap` | UMAP plots |
 | `mapping` | `entailmap.match`, for `create-mapping` |

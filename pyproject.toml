@@ -61,14 +61,15 @@ metasyn = [
   "metasyn"
 ]
 pybnesian = [
-  "numpy<2",  # not tested with NumPy 2
-  "pyarrow<26",  # pyarrow 26 needs NumPy 2; pip would take it and fail on import
+  "numpy>=2",  # tested on NumPy 2; pyarrow 26 needs it too but does not declare it, so say it here
   "graphviz",
   "networkx",
   "pybnesian"
 ]
 synthcity = [
-  "numpy<2",  # not tested with NumPy 2
+  # The one engine that still needs NumPy 1 (synthcity 0.2.12 requires numpy<2). It conflicts with the extras that
+  # need NumPy 2 (see [tool.uv] conflicts), so install it in its own environment.
+  "numpy<2",
   "pyarrow<26",  # pyarrow 26 needs NumPy 2; pip would take it and fail on import
   "synthcity>=0.2",
   "torch"
@@ -78,10 +79,7 @@ privbayes = [
   "scipy"
 ]
 umap = [
-  "numpy<2",  # not tested with NumPy 2
-  "pyarrow<26",  # pyarrow 26 needs NumPy 2; pip would take it and fail on import
-  "numba<0.63",
-  "llvmlite<0.46",
+  "numpy>=2",  # umap-learn 0.6 needs it; pyarrow 26 needs it too but does not declare it
   "matplotlib",
   "umap-learn"
 ]
@@ -101,12 +99,18 @@ all = [
   "graphviz",
   "networkx",
   "pybnesian",
-  "synthcity>=0.2",
-  "torch",
   "DataSynthesizer==0.1.13",
   "scipy",
   "matplotlib",
   "umap-learn"
+]
+
+[tool.uv]
+# synthcity needs NumPy 1, the other engines NumPy 2: uv resolves them as separate forks instead of failing.
+conflicts = [
+  [{ extra = "synthcity" }, { extra = "pybnesian" }],
+  [{ extra = "synthcity" }, { extra = "umap" }],
+  [{ extra = "synthcity" }, { extra = "all" }],
 ]
 
 [project.scripts]
