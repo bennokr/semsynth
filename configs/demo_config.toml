@@ -1,0 +1,30 @@
+# The demo site is built on NumPy 2, where SynthCity (NumPy 1) cannot be installed: advanced_config.toml without its two models.
+[pipeline]
+generate_umap = true
+compute_privacy = true
+compute_downstream = true
+enable_missingness_wrapping = true
+
+[[models]]
+name = "metasyn"
+backend = "metasyn"
+
+[[models]]
+name = "clg_mi2"
+backend = "pybnesian"
+seed = 42
+[models.model]
+type = "clg"
+score = "bic"
+operators = ["arcs"]
+max_indegree = 2
+
+[[models]]
+name = "semi_mi5"
+backend = "pybnesian"
+seed = 42
+[models.model]
+type = "semiparametric"
+score = "bic"
+operators = ["arcs"]
+max_indegree = 5

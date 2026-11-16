@@ -74,7 +74,8 @@ Dataset metadata is a [linked-codebook](https://bennokr.github.io/linked-codeboo
 
 ## 📄 TOML bundles
 - `configs/simple_config.toml` mixes MetaSyn with two PyBNesian baselines.
-- `configs/advanced_config.toml` extends the simple bundle with SynthCity generators.
+- `configs/advanced_config.toml` extends the simple bundle with SynthCity generators (install `.[synthcity]` in its own environment: it needs NumPy 1).
+- `configs/demo_config.toml` is the advanced bundle without SynthCity; the demo site is built with it.
 - `configs/maximal_config.toml` toggles every optional report hook (UMAP, privacy, downstream) but ships with a MetaSyn-only bundle so it continues to execute inside restricted environments.
 - `configs/only_metasyn_config.toml` keeps MetaSyn as the single synthetic data baseline.
 
