@@ -4,7 +4,7 @@ Synthetic-data generation and evaluation (PrivBayes, MetaSyn, PyBNesian, SynthCi
 linked-codebook profile; plus the report/catalog site. Target shape: python API + CLI + Pyodide app.
 
 ## Commands
-- Setup: `uv sync --locked --extra dev --extra app --extra privbayes --extra pybnesian --extra metasyn --extra statsmodels` (NumPy 2; `--extra synthcity` needs NumPy 1 and is installed alone, without `pybnesian`, `umap` or `all`).
+- Setup: `uv sync --locked --extra dev --extra app --extra privbayes --extra pybnesian --extra metasyn --extra statsmodels --extra language` (NumPy 2; `--extra synthcity` needs NumPy 1 and is installed alone, without `pybnesian`, `umap`, `language` or `all`).
 - Check (what CI runs): `uv run make check` = ruff, `mypy --strict` on the core, pytest, statement budgets.
 - After shrinking a module: `python scripts/check_size.py --update` (budgets only go down).
 - Golden safety net: `tests/test_golden_pipeline.py` runs MetaSyn + missingness + downstream end to end.

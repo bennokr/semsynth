@@ -10,6 +10,7 @@ import importlib.metadata
 import logging
 from typing import TYPE_CHECKING, Any
 
+from ..language import apply_free_text_locales
 from ..result import SynthesisResult
 from ..utils import coerce_continuous_to_float, split_columns
 
@@ -69,7 +70,8 @@ def synthesize(
 
     Args:
         df: The table to learn from.
-        codebook: Optional :class:`~semsynth.codebook.Codebook`; its levels decide which columns are discrete.
+        codebook: Optional :class:`~semsynth.codebook.Codebook`; its levels decide which columns are discrete and
+            its ``language`` decides the language of free text.
         rows: Number of rows to draw; the rows of ``df`` when omitted.
         seed: Random seed handed to MetaSyn.
         **options: Recorded as parameters of the run; MetaSyn has no settings that are used here.
@@ -85,6 +87,7 @@ def synthesize(
 
     LOGGER.info("Fitting MetaSyn on %d rows", len(working))
     frame = MetaFrame.fit_dataframe(working, progress_bar=False)
+    apply_free_text_locales(frame, codebook)
     drawn = frame.synthesize(n=count, seed=seed, progress_bar=False)
     synthetic = _restore_dtypes(_to_pandas(drawn), df, disc_cols, cont_cols)
 

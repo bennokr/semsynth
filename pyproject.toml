@@ -60,6 +60,9 @@ docs = [
 metasyn = [
   "metasyn"
 ]
+language = [
+  "py3langid"  # detects the language of text columns; needs NumPy 2 and linked-codebook 0.10
+]
 pybnesian = [
   "numpy>=2",  # tested on NumPy 2; pyarrow 26 needs it too but does not declare it, so say it here
   "graphviz",
@@ -99,6 +102,7 @@ all = [
   "graphviz",
   "networkx",
   "pybnesian",
+  "py3langid",
   "DataSynthesizer==0.1.13",
   "scipy",
   "matplotlib",
@@ -110,6 +114,7 @@ all = [
 conflicts = [
   [{ extra = "synthcity" }, { extra = "pybnesian" }],
   [{ extra = "synthcity" }, { extra = "umap" }],
+  [{ extra = "synthcity" }, { extra = "language" }],
   [{ extra = "synthcity" }, { extra = "all" }],
 ]
 
