@@ -5876,6 +5876,7 @@ pybnesian = [
     { name = "graphviz" },
     { name = "networkx" },
     { name = "numpy" },
+    { name = "pyarrow" },
     { name = "pybnesian" },
 ]
 statsmodels = [
@@ -5883,6 +5884,7 @@ statsmodels = [
 ]
 synthcity = [
     { name = "numpy" },
+    { name = "pyarrow" },
     { name = "synthcity" },
     { name = "torch" },
 ]
@@ -5891,6 +5893,7 @@ umap = [
     { name = "matplotlib" },
     { name = "numba" },
     { name = "numpy" },
+    { name = "pyarrow" },
     { name = "umap-learn" },
 ]
 
@@ -5930,6 +5933,9 @@ requires-dist = [
     { name = "pandas", specifier = ">=2.1,<3" },
     { name = "pandas-stubs", marker = "extra == 'dev'" },
     { name = "pyarrow", specifier = ">=15" },
+    { name = "pyarrow", marker = "extra == 'pybnesian'", specifier = "<26" },
+    { name = "pyarrow", marker = "extra == 'synthcity'", specifier = "<26" },
+    { name = "pyarrow", marker = "extra == 'umap'", specifier = "<26" },
     { name = "pybnesian", marker = "extra == 'all'" },
     { name = "pybnesian", marker = "extra == 'pybnesian'" },
     { name = "pytest", marker = "extra == 'dev'" },
