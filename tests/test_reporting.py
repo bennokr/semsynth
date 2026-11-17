@@ -30,7 +30,7 @@ def test_write_report_md_renders_expected_sections(tmp_path: Path) -> None:
     metrics_json = _touch(run_dir / "metrics.json", "{}")
     privacy_json = _touch(
         run_dir / "metrics.privacy.json",
-        json.dumps({"n_real": 3, "n_synth": 3, "exact_overlap_rate": 0.05}),
+        json.dumps({"n_train": 3, "n_synth": 3, "exact_match_rate": 0.05}),
     )
     downstream_json = _touch(
         run_dir / "metrics.downstream.json",
@@ -55,7 +55,7 @@ def test_write_report_md_renders_expected_sections(tmp_path: Path) -> None:
             "missingness": {"wrapped": True, "random_state": 11, "source": "pipeline"},
         },
         privacy_json=privacy_json,
-        privacy_metrics={"exact_overlap_rate": 0.05},
+        privacy_metrics={"n_train": 3, "n_synth": 3, "exact_match_rate": 0.05},
         downstream_json=downstream_json,
         downstream_metrics={"sign_match_rate": 0.9},
     )
@@ -118,7 +118,7 @@ def test_write_report_md_renders_expected_sections(tmp_path: Path) -> None:
     assert "Synthetic CSV" in md_text
     assert "Missingness: wrapped" in md_text
     assert "status" in md_text and "0.4" in md_text
-    assert "exact_overlap_rate" in md_text
+    assert "exact_match_rate" in md_text
 
     html_text = html_path.read_text(encoding="utf-8")
     assert "Data Report — Demo dataset" in html_text

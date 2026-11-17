@@ -182,27 +182,53 @@ def build_fidelity_table(*, model_runs: Sequence[ModelRun] | None) -> str | None
     return dataframe_to_markdown(out, index=False)
 
 
+_PRIVACY_KEYS = (
+    "n_train",
+    "n_holdout",
+    "n_synth",
+    "exact_match_rate",
+    "exact_match_rate_holdout",
+    "dcr_median",
+    "dcr_median_holdout",
+    "dcr_below_holdout_p05",
+    "rare_qi_reproduction_rate",
+    "disclosure_protection",
+    "dcr_baseline_protection",
+    "dcr_overfitting_protection",
+)
+
+
+def _sdmetrics_score(metrics: dict[str, Any], name: str) -> Any:
+    block = (metrics.get("sdmetrics") or {}).get(name)
+    return block.get("score") if isinstance(block, dict) and block.get("status") == "ok" else None
+
+
 def privacy_metrics_summary(metrics: dict[str, Any] | None) -> dict[str, Any]:
-    """Pick a consistent subset of privacy metrics for tabular reporting."""
+    """Pick a consistent subset of privacy metrics for tabular reporting.
+
+    A run whose privacy metrics were skipped or failed gives ``{"status": ..., "reason": ...}`` so that the report
+    shows why there are none.
+    """
 
     if not isinstance(metrics, dict) or not metrics:
         return {}
-    nn_stats = metrics.get("nn_distance_stats", {})
-    nn_mean = nn_stats.get("mean") if isinstance(nn_stats, dict) else None
+    if metrics.get("status") in ("skipped", "failed"):
+        return {"status": metrics["status"], "reason": metrics.get("reason")}
+    own = metrics.get("dcr_synthetic") or {}
+    reference = metrics.get("dcr_holdout") or {}
     summary = {
-        "n_real": coerce_numeric(metrics.get("n_real")),
+        "n_train": coerce_numeric(metrics.get("n_train")),
+        "n_holdout": coerce_numeric(metrics.get("n_holdout")),
         "n_synth": coerce_numeric(metrics.get("n_synth")),
-        "exact_overlap_rate": coerce_numeric(metrics.get("exact_overlap_rate")),
-        "near_duplicate_rate_eps": coerce_numeric(metrics.get("near_duplicate_rate_eps")),
-        "nn_distance_mean": coerce_numeric(nn_mean),
-        "k_min": coerce_numeric(metrics.get("k_min")),
-        "k_pct_lt5": coerce_numeric(metrics.get("k_pct_lt5")),
-        "k_map": coerce_numeric(metrics.get("k_map")),
+        "exact_match_rate": coerce_numeric(metrics.get("exact_match_rate")),
+        "exact_match_rate_holdout": coerce_numeric(metrics.get("exact_match_rate_holdout")),
+        "dcr_median": coerce_numeric(own.get("median")),
+        "dcr_median_holdout": coerce_numeric(reference.get("median")),
+        "dcr_below_holdout_p05": coerce_numeric(metrics.get("dcr_below_holdout_p05")),
         "rare_qi_reproduction_rate": coerce_numeric(metrics.get("rare_qi_reproduction_rate")),
-        "identifiability_score": coerce_numeric(metrics.get("identifiability_score")),
-        "delta_presence": coerce_numeric(metrics.get("delta_presence")),
+        **{name: coerce_numeric(_sdmetrics_score(metrics, name)) for name in _PRIVACY_KEYS[-3:]},
     }
-    values = [val for key, val in summary.items() if key not in ("n_real", "n_synth")]
+    values = [val for key, val in summary.items() if not key.startswith("n_")]
     if not any(val is not None for val in values):
         return {}
     return summary
@@ -218,26 +244,15 @@ def build_privacy_table(*, model_runs: Sequence[ModelRun] | None) -> str | None:
         if not summary:
             continue
         row = {"model": run.name, "backend": run.backend}
-        row.update({key: format_metric_cell(val) for key, val in summary.items()})
+        if "status" in summary:
+            row["status"] = f"{summary['status']}: {summary.get('reason')}"
+        else:
+            row.update({key: format_metric_cell(val) for key, val in summary.items()})
         rows.append(row)
     if not rows:
         return None
     out = pd.DataFrame(rows)
-    ordered_cols = [
-        "model",
-        "backend",
-        "n_real",
-        "n_synth",
-        "exact_overlap_rate",
-        "near_duplicate_rate_eps",
-        "nn_distance_mean",
-        "k_min",
-        "k_pct_lt5",
-        "k_map",
-        "rare_qi_reproduction_rate",
-        "identifiability_score",
-        "delta_presence",
-    ]
+    ordered_cols = ["model", "backend", "status", *_PRIVACY_KEYS]
     present_cols = [col for col in ordered_cols if col in out.columns]
     out = out[present_cols].fillna("")
     out.rename(columns=lambda col: col.replace("_", " "), inplace=True)
@@ -298,20 +313,9 @@ def privacy_metric_items(metrics: dict[str, Any] | None) -> list[tuple[str, Any]
     """Select a compact set of privacy metrics for per-model display."""
 
     summary = privacy_metrics_summary(metrics)
-    ordered = [
-        ("n_real", summary.get("n_real")),
-        ("n_synth", summary.get("n_synth")),
-        ("exact_overlap_rate", summary.get("exact_overlap_rate")),
-        ("near_duplicate_rate_eps", summary.get("near_duplicate_rate_eps")),
-        ("nn_distance_mean", summary.get("nn_distance_mean")),
-        ("k_min", summary.get("k_min")),
-        ("k_pct_lt5", summary.get("k_pct_lt5")),
-        ("k_map", summary.get("k_map")),
-        ("rare_qi_reproduction_rate", summary.get("rare_qi_reproduction_rate")),
-        ("identifiability_score", summary.get("identifiability_score")),
-        ("delta_presence", summary.get("delta_presence")),
-    ]
-    return [(label, value) for label, value in ordered if value is not None]
+    if "status" in summary:
+        return [("status", f"{summary['status']}: {summary.get('reason')}")]
+    return [(key, summary.get(key)) for key in _PRIVACY_KEYS if summary.get(key) is not None]
 
 
 def build_per_variable_table(per_variable_path: Path | None) -> str | None:

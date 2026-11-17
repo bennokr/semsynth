@@ -429,7 +429,9 @@ def test_backend_executor_runs_models(tmp_path):
 
     privacy_calls: list[pd.DataFrame] = []
 
-    def summarizer(_real: pd.DataFrame, synth: pd.DataFrame, _meta: pd.DataFrame) -> dict[str, float]:
+    def summarizer(
+        _real: pd.DataFrame, synth: pd.DataFrame, _meta: pd.DataFrame, _holdout: pd.DataFrame | None
+    ) -> dict[str, float]:
         privacy_calls.append(synth)
         return {"score": 0.5}
 

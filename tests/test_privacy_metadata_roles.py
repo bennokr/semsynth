@@ -17,7 +17,9 @@ class _PrivacyCapture:
     used: list[str]
 
 
-def _capture_privacy(real_df: pd.DataFrame, synth_df: pd.DataFrame, meta_df: pd.DataFrame) -> _PrivacyCapture:
+def _capture_privacy(
+    real_df: pd.DataFrame, synth_df: pd.DataFrame, meta_df: pd.DataFrame, _holdout: pd.DataFrame | None = None
+) -> _PrivacyCapture:
     use_meta = meta_df[~meta_df.role.isin(["ignore", "id"])]
     use_cols = [c for c in use_meta.variable if c in real_df.columns and c in synth_df.columns]
     qi_cols = [c for c in use_meta.loc[use_meta.role == "qi", "variable"] if c in use_cols]

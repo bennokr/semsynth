@@ -119,28 +119,33 @@ def privacy_scores(
     inferred: Mapping[str, str],
     metadata: Any | None = None,
     *,
+    holdout_df: pd.DataFrame | None = None,
     summarizer: Any | None = None,
     role_overrides: Mapping[str, str] | None = None,
     target: str | None = None,
+    seed: int = 0,
 ) -> dict[str, Any]:
-    """Privacy facts about a synthetic table (overlap, nearest neighbours, k-map, t-closeness).
+    """Privacy facts about a synthetic table: exact matches, distance to the closest record, attribute inference.
 
     Args:
-        real_df: Real table without missing values.
-        synth_df: Synthetic table.
+        real_df: The real rows the generator was fitted on.
+        synth_df: The synthetic table.
         inferred: Column names mapped to ``discrete`` or ``continuous``.
         metadata: A :class:`~semsynth.codebook.Codebook` or a document readable as one.
-        summarizer: Function ``(real, synthetic, metadata_frame)`` returning a dataclass or mapping; the
-            SynthCity-based :func:`semsynth.privacy_metrics.summarize_privacy_synthcity` when omitted.
+        holdout_df: Real rows the generator never saw, which give the reference for what "close" means.
+        summarizer: Function ``(real, synthetic, metadata_frame, holdout)`` returning a dataclass or mapping;
+            :func:`semsynth.privacy_metrics.summarize_privacy` when omitted.
         role_overrides: Privacy role by column name, applied over the metadata.
         target: Name of the target column, which gets the ``target`` role.
-
-    Raises:
-        ImportError: If the default summarizer is used and the ``synthcity`` extra is missing.
+        seed: Seed for subsampling.
     """
 
     if summarizer is None:
-        from .privacy_metrics import summarize_privacy_synthcity as summarizer
+        from functools import partial
+
+        from .privacy_metrics import summarize_privacy
+
+        summarizer = partial(summarize_privacy, seed=seed)
     if isinstance(metadata, Codebook):
         frame = metadata.privacy_frame(inferred)
     else:
@@ -149,7 +154,7 @@ def privacy_scores(
         )
     if target and target in frame.variable.values:
         frame.loc[frame.variable == target, "role"] = "target"
-    summary = summarizer(real_df, synth_df, frame)
+    summary = summarizer(real_df, synth_df, frame, holdout_df)
     if is_dataclass(summary) and not isinstance(summary, type):
         return asdict(summary)
     return dict(summary)

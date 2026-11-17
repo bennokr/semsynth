@@ -32,7 +32,7 @@ jobs:
       - name: Install Graphviz
         run: sudo apt-get install -y --no-install-recommends graphviz
       - name: Install
-        run: python -m pip install -e '.[docs,providers,metasyn,pybnesian,umap,statsmodels]'
+        run: python -m pip install -e '.[docs,providers,metasyn,pybnesian,umap,statsmodels,privacy]'
       - name: Cache downloaded datasets
         uses: actions/cache@v4
         with:
@@ -43,6 +43,16 @@ jobs:
           restore-keys: datasets-
       - name: Demo reports and catalog
         run: python -m semsynth mappings --pipeline-configs "${{ inputs.config || 'configs/demo_config.toml' }}" --outdir output/
+      - name: Check that the privacy metrics were computed
+        # A skipped metric (a missing extra) is recorded, not raised, so check the output.
+        run: |
+          python - <<'PY'
+          import json, pathlib
+          files = sorted(pathlib.Path("output").glob("*/models/*/metrics.privacy.json"))
+          bad = [str(f) for f in files if json.loads(f.read_text()).get("status", "ok") != "ok"]
+          assert files, "no privacy metrics in the demo output"
+          assert not bad, f"privacy metrics skipped or failed: {bad}"
+          PY
       - name: Documentation
         run: sphinx-build -b html sphinx _site/docs
       - name: Assemble the site

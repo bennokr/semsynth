@@ -4,14 +4,14 @@ Synthetic-data generation and evaluation (PrivBayes, MetaSyn, PyBNesian, SynthCi
 linked-codebook profile; plus the report/catalog site. Target shape: python API + CLI + Pyodide app.
 
 ## Commands
-- Setup: `uv sync --locked --extra dev --extra app --extra privbayes --extra pybnesian --extra metasyn --extra statsmodels --extra language` (NumPy 2; `--extra synthcity` needs NumPy 1 and is installed alone, without `pybnesian`, `umap`, `language` or `all`).
+- Setup: `uv sync --locked --extra dev --extra app --extra privbayes --extra pybnesian --extra metasyn --extra statsmodels --extra language --extra privacy` (NumPy 2; `--extra synthcity` needs NumPy 1 and is installed alone, without `pybnesian`, `umap`, `language`, `privacy` or `all`).
 - Check (what CI runs): `uv run make check` = ruff, `mypy --strict` on the core, pytest, statement budgets.
 - After shrinking a module: `python scripts/check_size.py --update` (budgets only go down).
 - Golden safety net: `tests/test_golden_pipeline.py` runs MetaSyn + missingness + downstream end to end.
 
 ## Layout
 - `semsynth/`: `codebook.py` (profile + roles), `backends/` (privbayes, metasyn, pybnesian, synthcity), `missingness.py`,
-  `metrics.py`, `downstream_fidelity.py`, `synthesis.py` (`synthesize` + `write_run`, the one backend contract),
+  `metrics.py`, `privacy_metrics.py` (exact matches, distance to closest record, sdmetrics), `downstream_fidelity.py`, `synthesis.py` (`synthesize` + `write_run`, the one backend contract),
   `preprocess.py`, `evaluate.py` (pure metrics), `runner.py` (`process_dataset`, the part that writes files),
   `workflow.py` (what the CLI and the app call), `reporting.py` + `report_tables.py`,
   `catalog.py`, `dataproviders/`. makeprov `@rule`s exist only in `__main__.py`.
@@ -31,7 +31,7 @@ linked-codebook profile; plus the report/catalog site. Target shape: python API 
 - Google-style docstrings, logging, dataclasses.
 
 ## Known debt
-- Functions over 60 lines remain in `dataproviders/`, `privacy_metrics.py`, `catalog.py`, `metadata.py`, `umap_utils.py`,
+- Functions over 60 lines remain in `dataproviders/`, `catalog.py`, `metadata.py`, `umap_utils.py`,
   `downstream_fidelity.py`, `utils.py`.
 - Missing-value policy and type inference heuristics are brittle; reproducibility is partial.
 - `map_columns/` data (codes.tsv, terminology.db) should become an entailmap release asset.

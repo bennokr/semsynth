@@ -75,7 +75,7 @@ def test_write_run_writes_the_files_of_a_run(tmp_path: Path) -> None:
         metrics={
             "summary": {"disc_jsd_mean": 0.1},
             "per_variable": [{"variable": "x", "type": "continuous", "KS": 0.1}],
-            "privacy": {"k_min": 5},
+            "privacy": {"exact_match_rate": 0.0},
             "downstream": {"sign_match_rate": 1.0},
         },
         privacy_report={"epsilon": 1.0},

@@ -51,7 +51,7 @@ def test_privacy_scores_turns_a_dataclass_into_a_dict() -> None:
 
     seen: dict[str, Any] = {}
 
-    def summarizer(_real: pd.DataFrame, _synth: pd.DataFrame, meta: pd.DataFrame) -> Summary:
+    def summarizer(_real: pd.DataFrame, _synth: pd.DataFrame, meta: pd.DataFrame, _holdout: None) -> Summary:
         seen["meta"] = meta
         return Summary(score=0.5)
 

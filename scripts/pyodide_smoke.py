@@ -1,4 +1,4 @@
-"""Runs inside Pyodide 0.27.x (see pyodide_smoke.cjs): PrivBayes, MetaSyn, missingness and downstream metrics."""
+"""Runs inside Pyodide 0.27.x (see pyodide_smoke.cjs): PrivBayes, MetaSyn, missingness, privacy and downstream metrics."""
 
 import json
 import sys
@@ -30,7 +30,7 @@ sys.path.insert(0, "/home/pyodide")
 async def install() -> None:
     await micropip.install(SEMSYNTH_WHEEL, deps=False)  # noqa: F821 - set by pyodide_smoke.cjs
     await micropip.install(LINKED_CODEBOOK_WHEEL)  # noqa: F821
-    await micropip.install(["makeprov", "tabulate", "markdown", "DataSynthesizer==0.1.13", "metasyn==3.0.0"])
+    await micropip.install(["makeprov", "tabulate", "markdown", "DataSynthesizer==0.1.13", "metasyn==3.0.0", "sdmetrics"])
 
 
 def table(n: int = 300) -> pd.DataFrame:
@@ -75,7 +75,7 @@ async def main() -> dict:
     spec = DatasetSpec("openml", name="smoke", target="disease")
     bundle = ModelConfigBundle(specs=[ModelSpec(name="metasyn", backend="metasyn", seed=1)])
     config = PipelineConfig(
-        generate_umap=False, compute_privacy=False, compute_downstream=True, enable_missingness_wrapping=True
+        generate_umap=False, compute_privacy=True, compute_downstream=True, enable_missingness_wrapping=True
     )
     process_dataset(spec, frame, frame["disease"], Path("/tmp/out"), model_bundle=bundle, pipeline_config=config)
     run = next(Path("/tmp/out/smoke/models").iterdir())
@@ -84,6 +84,9 @@ async def main() -> dict:
     out["metasyn_disc_jsd_mean"] = metrics["summary"]["disc_jsd_mean"]
     out["missingness_wrapped"] = metrics["missingness_wrapped"]
     out["sign_match_rate"] = downstream["sign_match_rate"]
+    privacy = json.loads((run / "metrics.privacy.json").read_text())
+    out["privacy_status"] = privacy.get("status", "ok")
+    out["sdmetrics_ok"] = all(block.get("status") == "ok" for block in privacy["sdmetrics"].values())
     return out
 
 

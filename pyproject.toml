@@ -89,6 +89,9 @@ umap = [
 statsmodels = [
   "statsmodels"
 ]
+privacy = [
+  "sdmetrics>=0.33"  # attribute-inference and distance-to-closest-record privacy metrics; needs NumPy 2
+]
 mapping = [
   "entailmap[lexical] @ git+https://github.com/bennokr/entailmap@1dba493",  # until entailmap is released
 ]
@@ -106,7 +109,8 @@ all = [
   "DataSynthesizer==0.1.13",
   "scipy",
   "matplotlib",
-  "umap-learn"
+  "umap-learn",
+  "sdmetrics>=0.33"
 ]
 
 [tool.uv]
@@ -115,6 +119,7 @@ conflicts = [
   [{ extra = "synthcity" }, { extra = "pybnesian" }],
   [{ extra = "synthcity" }, { extra = "umap" }],
   [{ extra = "synthcity" }, { extra = "language" }],
+  [{ extra = "synthcity" }, { extra = "privacy" }],
   [{ extra = "synthcity" }, { extra = "all" }],
 ]
 

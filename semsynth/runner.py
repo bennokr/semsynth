@@ -126,7 +126,7 @@ class BackendExecutor:
         preprocessed: PreprocessingResult,
         outdir: Path,
     ) -> None:
-        result = self._generate(spec, preprocessed)
+        result, train, holdout = self._generate(spec, preprocessed)
         pristine = result.synthetic_data.convert_dtypes()
         final, metrics, parameters, artifacts = self._wrap_missingness(label, result, pristine, preprocessed)
         privacy_flag = _resolve_flag(
@@ -136,11 +136,11 @@ class BackendExecutor:
             "downstream", self._cfg.compute_downstream, bundle.compute_downstream, spec.compute_downstream, label
         )
         if privacy_flag:
-            privacy = _attempt(
-                "privacy", label, self._privacy, final, preprocessed, dataset_spec.target
+            # The complete table, because the generator learned from complete rows; the released table with its
+            # learned missingness is not evaluated yet.
+            metrics["privacy"] = self._privacy(
+                pristine, train, holdout, preprocessed, dataset_spec.target, int(spec.seed or self._cfg.random_state), label
             )
-            if privacy is not None:
-                metrics["privacy"] = privacy
         if downstream_flag and self._has_target(preprocessed):
             downstream = _attempt(
                 "downstream", label, self._downstream, final, preprocessed, dataset_spec.target
@@ -163,8 +163,10 @@ class BackendExecutor:
             codebook_jsonld=preprocessed.codebook_jsonld,
         )
 
-    def _generate(self, spec: ModelSpec, preprocessed: PreprocessingResult) -> SynthesisResult:
-        """Synthesize with one model and evaluate it on held-out rows."""
+    def _generate(
+        self, spec: ModelSpec, preprocessed: PreprocessingResult
+    ) -> tuple[SynthesisResult, pd.DataFrame, pd.DataFrame]:
+        """Synthesize with one model and evaluate it on held-out rows; returns the result, the training and the held-out rows."""
 
         cfg = self._cfg
         seed = int(spec.seed if spec.seed is not None else cfg.random_state)
@@ -178,11 +180,12 @@ class BackendExecutor:
         metrics = holdout_metrics(
             test, result.synthetic_data, preprocessed.disc_cols, preprocessed.cont_cols, model=result.learned_model
         )
-        return replace(
+        result = replace(
             result,
             metrics={**result.metrics, **metrics, "train_rows": len(train)},
             parameters={**result.parameters, "test_size": cfg.test_size},
         )
+        return result, train, test
 
     @staticmethod
     def _wrap_missingness(
@@ -210,15 +213,37 @@ class BackendExecutor:
         parameters["missingness"] = missingness_manifest(model)
         return wrapped, metrics, parameters, artifacts
 
-    def _privacy(self, synth_df: pd.DataFrame, preprocessed: PreprocessingResult, target: str | None) -> dict[str, Any]:
-        return privacy_scores(
-            preprocessed.df_no_na,
-            synth_df,
-            preprocessed.inferred_types,
-            preprocessed.codebook,
-            summarizer=self._privacy_summarizer,
-            target=target,
-        )
+    def _privacy(
+        self,
+        synth_df: pd.DataFrame,
+        train: pd.DataFrame,
+        holdout: pd.DataFrame,
+        preprocessed: PreprocessingResult,
+        target: str | None,
+        seed: int,
+        label: str,
+    ) -> dict[str, Any]:
+        """Privacy scores, or a record of why there are none: a requested metric that is missing must show in the output."""
+
+        try:
+            scores = privacy_scores(
+                train,
+                synth_df,
+                preprocessed.inferred_types,
+                preprocessed.codebook,
+                holdout_df=holdout,
+                summarizer=self._privacy_summarizer,
+                target=target,
+                seed=seed,
+            )
+        except ImportError as exc:
+            LOGGER.warning("Privacy metrics unavailable; skipping: %s", exc, extra={"label": label})
+            return {"status": "skipped", "reason": str(exc)}
+        except Exception as exc:
+            LOGGER.exception("Failed to compute privacy metrics", extra={"label": label})
+            return {"status": "failed", "reason": f"{type(exc).__name__}: {exc}"}
+        LOGGER.info("Computed privacy metrics", extra={"label": label})
+        return scores
 
     def _downstream(
         self, synth_df: pd.DataFrame, preprocessed: PreprocessingResult, target: str | None
