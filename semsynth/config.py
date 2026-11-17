@@ -36,9 +36,13 @@ class PipelineConfig(Config):
     overwrite_umap: bool = False
     enable_missingness_wrapping: bool = False
     missingness_random_state: int | None = None
+    structure_aware: bool = False  # learn from rows complete over the cells a skip rule leaves applicable; enforce the rules
     compute_joint: bool = False  # joint fidelity: pairwise dependence, missingness, classifier two-sample test
     compute_baselines: bool = False  # score the synthetic table and two reference tables side by side
     bootstrap_reps: int = 200  # resamples for the intervals of the privacy, joint and baseline scores
+    compute_subgroups: bool = False  # per-subgroup fidelity and privacy (subgroups from the codebook and `subgroups`)
+    subgroups: list[dict[str, str]] = field(default_factory=list)  # extra named conditions: {name, condition, label?}
+    subgroup_min_size: int = 30  # fewest holdout and synthetic rows for a group to get scores
     privacy_missing: str | dict[str, str] = "category"  # missing values in distances: category, observed, asymmetric
 
     def apply_mapping(self, params: Mapping[str, Any]) -> PipelineConfig:

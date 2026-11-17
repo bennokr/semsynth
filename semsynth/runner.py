@@ -150,6 +150,8 @@ class BackendExecutor:
         result, train, holdout = self._generate(spec, preprocessed)
         pristine = result.synthetic_data.convert_dtypes()
         final, metrics, parameters, artifacts = self._wrap_missingness(label, result, pristine, preprocessed)
+        if self._cfg.structure_aware:
+            final = self._enforce_rules(final, metrics, parameters, preprocessed)
         privacy_flag = _resolve_flag(
             "privacy", self._cfg.compute_privacy, bundle.compute_privacy, spec.compute_privacy, label
         )
@@ -162,7 +164,7 @@ class BackendExecutor:
             metrics["privacy"] = self._privacy(
                 pristine, train, holdout, preprocessed, dataset_spec.target, int(spec.seed or self._cfg.random_state), label
             )
-        if self._cfg.compute_joint or self._cfg.compute_baselines:
+        if self._cfg.compute_joint or self._cfg.compute_baselines or self._cfg.compute_subgroups:
             self._add_evaluation(metrics, pristine, final, train, holdout, preprocessed, dataset_spec.target, spec, label)
         if downstream_flag and self._has_target(preprocessed):
             downstream = _attempt(
@@ -242,6 +244,19 @@ class BackendExecutor:
         parameters["missingness"] = missingness_manifest(model)
         return wrapped, metrics, parameters, artifacts
 
+    @staticmethod
+    def _enforce_rules(
+        final: pd.DataFrame, metrics: dict[str, Any], parameters: dict[str, Any], preprocessed: PreprocessingResult
+    ) -> pd.DataFrame:
+        """Empty the cells that the codebook's skip rules mark as not applicable, and record how many were filled."""
+
+        from .structure import enforce_applicability, structural_violations
+
+        violations = structural_violations(final, preprocessed.codebook)
+        metrics["structure"] = {"violation_rate_before_rules": violations["rate"], "columns": violations["columns"]}
+        parameters["structure_aware"] = True
+        return enforce_applicability(final, preprocessed.codebook)
+
     def _privacy(
         self,
         synth_df: pd.DataFrame,
@@ -298,6 +313,10 @@ class BackendExecutor:
             metrics["joint"] = _attempt_record(
                 "joint", label, self._joint, pristine, final, holdout, preprocessed, kinds, seed
             )
+        if cfg.compute_subgroups:
+            metrics["subgroups"] = _attempt_record(
+                "subgroups", label, self._subgroups, pristine, train, holdout, preprocessed, frame, seed
+            )
         if cfg.compute_baselines:
             metrics["baselines"] = _attempt_record(
                 "baselines",
@@ -313,6 +332,28 @@ class BackendExecutor:
                 reps=cfg.bootstrap_reps,
                 missing=cfg.privacy_missing,
             )
+
+    def _subgroups(
+        self,
+        pristine: pd.DataFrame,
+        train: pd.DataFrame,
+        holdout: pd.DataFrame,
+        preprocessed: PreprocessingResult,
+        frame: pd.DataFrame,
+        seed: int,
+    ) -> dict[str, Any]:
+        from .structure import check_subgroups, subgroups_of
+        from .subgroups import subgroup_scores
+
+        groups = subgroups_of(preprocessed.codebook, self._cfg.subgroups)
+        problems = check_subgroups(groups, train.columns)
+        if problems:
+            raise ValueError("; ".join(problems))
+        return subgroup_scores(
+            train, holdout, pristine, groups, privacy_frame=frame, disc_cols=preprocessed.disc_cols,
+            cont_cols=preprocessed.cont_cols, min_size=self._cfg.subgroup_min_size, seed=seed,
+            reps=min(self._cfg.bootstrap_reps, 100), missing=self._cfg.privacy_missing,
+        )
 
     def _joint(
         self,

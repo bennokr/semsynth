@@ -4,3 +4,5 @@ force = true
 dry_run = false
 merge = true
 context = true
+record_environment = true   # pin the versions of the packages a run imported (makeprov 0.8)
+stream = true               # append each finished command to a recovery .jsonl, so a crashed demo build keeps its record

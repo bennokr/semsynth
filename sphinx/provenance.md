@@ -38,3 +38,12 @@ The generated `output/index.html` includes a SPARQL/YASGUI panel wired to the st
 - [makeprov README](https://github.com/bennokr/makeprov#readme)
 - [makeprov SHACL shapes](https://raw.githubusercontent.com/bennokr/makeprov/refs/heads/main/tests/prov_shapes.ttl)
 - [PROV-O primer](https://www.w3.org/TR/prov-o/)
+
+## Run provenance (`provenance.json`)
+Since makeprov 0.7 a script is a `prov:Plan`, not an agent; `semsynth.provenance` writes a run in the same shape: the plan
+(semsynth at a version), the runtime (CPython), a qualified association tying them to the activity, the parameters as
+`schema:additionalProperty`, start, end and duration, and a sha256 for every file written. The scores are
+`dqv:QualityMeasurement` nodes of a `dqv:Metric` with an id and a version (`METRICS_VERSION`). The Data Quality Vocabulary has
+no property for uncertainty, so `ss:lowerBound` / `ss:upperBound` (bootstrap interval) and `ss:noiseLower` / `ss:noiseUpper` /
+`ss:pValue` (permutation noise floor) are used; the `ss:` namespace is a placeholder. The CLI's own records come from makeprov
+with `record_environment` and `stream` on (`prov-config.toml`).

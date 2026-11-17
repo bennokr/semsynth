@@ -118,6 +118,10 @@ compute_joint = true        # pairwise dependence, missingness structure, classi
 compute_baselines = true    # score the synthetic table next to a real sample and independent marginals
 bootstrap_reps = 200        # resamples and random splits behind the intervals and noise floors
 privacy_missing = "category"  # missing values in distances: category, observed or asymmetric (or a table by column)
+structure_aware = false     # learn across the codebook's skip rules (applies_when) and enforce them on the output
+compute_subgroups = false   # per-subgroup fidelity and privacy; subgroups come from the codebook and `subgroups`
+subgroups = [{ name = "older", condition = "[age] >= 65" }]
+subgroup_min_size = 30
 ```
 
 ## 📦 Outputs
@@ -127,7 +131,7 @@ privacy_missing = "category"  # missing values in distances: category, observed 
   - `umap_real.png` (when `--generate-umap` is enabled and UMAP dependencies are installed)
 - Per model (e.g., `output/Heart Disease/models/<name>/`):
   - `synthetic.csv`, `metrics.json`, and `umap.png`
-  - Optional metrics sidecars: `metrics.privacy.json`, `metrics.downstream.json`, `metrics.joint.json`, `metrics.baselines.json` (see the evaluation page of the documentation for what each score means and how to read it)
+  - Optional metrics sidecars: `metrics.privacy.json`, `metrics.downstream.json`, `metrics.joint.json`, `metrics.baselines.json`, `metrics.subgroups.json` (see the evaluation page of the documentation for what each score means and how to read it)
   - PyBNesian extras: `structure.png`, `structure.graphml`, `model.pickle`
   - `synthetic.parquet`, with the codebook JSON-LD in the Parquet schema metadata
 

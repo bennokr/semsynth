@@ -49,3 +49,8 @@ sampled.isna().mean()
 ## References
 - Logistic regression missingness modeling with scikit-learn: <https://scikit-learn.org/stable/modules/linear_model.html#logistic-regression>
 - One-hot encoding for categorical features: <https://scikit-learn.org/stable/modules/generated/sklearn.preprocessing.OneHotEncoder.html>
+
+## Declared structure
+The learned mask model above describes item nonresponse only. Skip logic and coded values are declared in the codebook and
+applied by `semsynth.structure` (see the evaluation page): `structure_aware = true` keeps the rows that skip rules would otherwise
+drop from learning, and enforces the rules afterwards. The injected-truth benchmark measures what the wrapper recovers.

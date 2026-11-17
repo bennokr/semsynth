@@ -1,5 +1,5 @@
 # The checks that CI runs. `make check` before every push.
-CORE = semsynth/codebook.py semsynth/metrics.py semsynth/privacy_metrics.py semsynth/distance.py semsynth/uncertainty.py semsynth/joint_fidelity.py semsynth/baselines.py semsynth/missingness.py semsynth/result.py \
+CORE = semsynth/codebook.py semsynth/structure.py semsynth/subgroups.py semsynth/benchmark.py semsynth/provenance.py semsynth/browser.py semsynth/metrics.py semsynth/privacy_metrics.py semsynth/distance.py semsynth/uncertainty.py semsynth/joint_fidelity.py semsynth/baselines.py semsynth/missingness.py semsynth/result.py \
 	semsynth/app.py semsynth/backends/metasyn.py semsynth/dataproviders/_helpers.py \
 	semsynth/dataproviders/uci_archive.py semsynth/datasets.py semsynth/mappings.py \
 	semsynth/specs.py semsynth/sssom_codebook.py semsynth/synthesis.py semsynth/workflow.py

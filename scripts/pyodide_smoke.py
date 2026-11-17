@@ -97,7 +97,40 @@ async def main() -> dict:
     out["joint_ok"] = joint["pairwise"]["status"] == "ok" and joint["classifier"]["status"] == "ok"
     out["baselines_ok"] = all("status" not in record for record in baselines["scores"].values())
     out["sdmetrics_ok"] = all(block.get("status") == "ok" for block in privacy["sdmetrics"].values())
+    out.update(browser_checks(frame))
     return out
+
+
+def browser_checks(frame: pd.DataFrame) -> dict:
+    """The browser entry points and the injected-truth benchmark, which a page would call."""
+    from semsynth import browser
+    from semsynth.benchmark import Mechanism, run_injected_benchmark
+
+    caps = browser.capabilities()
+    csv = frame.to_csv(index=False)
+    checked = browser.inspect_table(csv, None, [{"name": "older", "condition": "[age] >= 60"}])
+    ran = browser.run(
+        csv,
+        target="disease",
+        name="browser",
+        config={
+            "pipeline": {"compute_privacy": True, "compute_subgroups": True, "subgroups": [{"name": "older", "condition": "[age] >= 60"}], "subgroup_min_size": 10, "bootstrap_reps": 5},
+            "models": [{"name": "metasyn", "backend": "metasyn", "seed": 1}],
+        },
+    )
+    bench = run_injected_benchmark(
+        frame.dropna().reset_index(drop=True),
+        [Mechanism("chol", "mar", 0.3, driver="age"), Mechanism("age", "mcar", 0.05)],
+        seed=1,
+    )
+    subgroup_scores = ran["metrics"]["metasyn"].get("metrics.subgroups.json", {})
+    return {
+        "pyodide": caps["pyodide"],
+        "inspect_ok": checked["rows"] == len(frame) and checked["subgroups"]["problems"] == [],
+        "browser_ok": "report.md" in ran["files"] and "metrics.privacy.json" in ran["metrics"]["metasyn"],
+        "subgroups_ok": subgroup_scores.get("groups", {}).get("older", {}).get("status") == "ok",
+        "benchmark_ok": bench["learned"]["status"] == "ok" and bench["learned"]["mechanisms"][0]["kind"] == "mar",
+    }
 
 
 await main()  # noqa: F704

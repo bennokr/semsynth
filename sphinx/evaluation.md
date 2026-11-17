@@ -54,3 +54,25 @@ With few holdout rows these scores are noisy. That is what the reference tables 
 Numbers are scaled by the reference range (a larger difference counts as 1); there is no limit on the number of
 categories. The sdmetrics DCR scores use the `category` convention. Choosing the policy per column from the dataset
 profile (missingness kind: structural, item non-response, coded) is planned; until then it is set by `privacy_missing`.
+
+## Declared structure, subgroups and the injected-truth benchmark
+
+**Declared structure** (`semsynth.structure`). The codebook's `missing_values`, `missing_range` and `missing: true` values are
+recoded to missing when a table is loaded, so a refused answer coded 77 is no longer a number. `applies_when` rules (a
+REDCap-style condition such as `[smoker] == 'yes'`) say which cells a skip rule leaves empty; `structural_violations`
+counts values where the rule says the question does not apply. With `structure_aware = true` the generator learns from rows
+that are complete over the cells that apply (the others are filled with a neutral value), and the rules are enforced on the
+output. A pandas `NaN` is not blank for linked-codebook's evaluator, so tables go through `structure.as_rows` first.
+
+**Subgroups** (`semsynth.subgroups`). Named conditions in the same language, stored in the codebook under `ss:subgroups` or
+given in `subgroups`. For each group: its size in the training, holdout and synthetic table, marginal fidelity, exact-match
+rate and the share of synthetic rows closer to a training record than the 5th percentile of the group's holdout rows (with
+bootstrap intervals), the gap to the overall score and the worst group. A group with fewer than `subgroup_min_size` holdout or
+synthetic rows is listed with its sizes only. `inspect_table` (in `semsynth.browser`) reports misspelt fields and group
+sizes before anything is generated.
+
+**Injected-truth benchmark** (`semsynth.benchmark`). `inject` breaks a complete table with `mcar`, `mar`, `mnar`, `structural`,
+`coded` and `censored` mechanisms and returns the truth; `run_injected_benchmark` runs the pipeline's own steps and scores how
+much of each mechanism comes back (missing rates, and the gradient: the difference in missing rate between the top and bottom
+third of a driver). A MAR dependence on an observed column is recovered; an MNAR dependence on the column's own value is
+not, and nothing a mask model learned from observed columns could change that.

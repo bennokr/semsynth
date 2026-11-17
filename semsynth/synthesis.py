@@ -15,6 +15,7 @@ from pathlib import Path
 from types import ModuleType
 from typing import TYPE_CHECKING, Any
 
+from .provenance import run_provenance
 from .result import SynthesisResult
 
 if TYPE_CHECKING:  # pragma: no cover - typing only
@@ -27,7 +28,6 @@ __all__ = ["BACKENDS", "load_backend", "synthesize", "write_run"]
 BACKENDS = ("metasyn", "privbayes", "pybnesian", "synthcity")
 """The backend names; each is also the name of the extra that installs its engine."""
 
-_PROV = "http://www.w3.org/ns/prov#"
 
 
 def load_backend(name: str) -> ModuleType:
@@ -84,7 +84,9 @@ def synthesize(
         from .codebook import Codebook
 
         codebook = Codebook.read(codebook)
+    started = datetime.now(UTC).isoformat()
     result: SynthesisResult = module.synthesize(df, codebook, rows=count, seed=int(seed), **options)
+    result.provenance = {**result.provenance, "started_at": started, "ended_at": datetime.now(UTC).isoformat()}
     return result
 
 
@@ -122,7 +124,7 @@ def write_run(
     written += _write_artifacts(result, directory)
     manifest = _manifest(result, name, dataset or {})
     _write_json(directory / "manifest.json", manifest)
-    _write_json(directory / "provenance.json", _provenance(result, name, dataset or {}, written))
+    _write_json(directory / "provenance.json", run_provenance(result, name, dataset or {}, written, directory))
     LOGGER.info("Wrote run %s to %s", name, directory)
     return directory
 
@@ -151,7 +153,7 @@ def _write_metrics(result: SynthesisResult, directory: Path) -> list[str]:
     per_variable = metrics.pop("per_variable", None)
     privacy = metrics.pop("privacy", None)
     downstream = metrics.pop("downstream", None)
-    sidecars = {"joint": metrics.pop("joint", None), "baselines": metrics.pop("baselines", None)}
+    sidecars = {name: metrics.pop(name, None) for name in ("joint", "baselines", "subgroups")}
     written = ["metrics.json"]
     _write_json(directory / "metrics.json", {"backend": result.backend, **metrics})
     if per_variable is not None:
@@ -202,54 +204,3 @@ def _manifest(result: SynthesisResult, label: str, dataset: Mapping[str, Any]) -
     if result.warnings:
         manifest["warnings"] = list(result.warnings)
     return manifest
-
-
-def _provenance(
-    result: SynthesisResult, label: str, dataset: Mapping[str, Any], written: list[str]
-) -> dict[str, Any]:
-    """A small PROV-O description of the run: the dataset it used, the software, and the files it generated."""
-
-    from . import get_version
-
-    run = f"urn:semsynth:run:{dataset.get('dataset_name') or 'dataset'}:{label}"
-    agent = f"urn:software:semsynth:{get_version()}"
-    now = datetime.now(UTC).isoformat()
-    engine = str(result.provenance.get("engine", result.backend))
-    engine_iri = f"urn:engine:{engine}:{result.provenance.get('engine_version', 'unknown')}"
-    dataset_iri = f"urn:dataset:{dataset.get('provider') or 'local'}:{dataset.get('dataset_name') or 'dataset'}"
-    graph: list[dict[str, Any]] = [
-        {
-            "@id": run,
-            "@type": "prov:Activity",
-            "rdfs:label": f"{result.backend} synthesis {label}",
-            "prov:wasAssociatedWith": {"@id": agent},
-            "prov:used": [{"@id": dataset_iri}, {"@id": engine_iri}],
-            "prov:startedAtTime": now,
-            "dcterms:description": json.dumps(dict(result.parameters), default=str, sort_keys=True),
-        },
-        {
-            "@id": agent,
-            "@type": ["prov:Agent", "prov:SoftwareAgent"],
-            "schema:name": "semsynth",
-            "schema:softwareVersion": get_version(),
-        },
-        {"@id": engine_iri, "@type": ["prov:Entity", "schema:SoftwareApplication"], "schema:name": engine},
-        {"@id": dataset_iri, "@type": "prov:Entity", "dcterms:title": str(dataset.get("dataset_name") or "dataset")},
-    ]
-    graph.extend(
-        {
-            "@id": f"{run}:{name}",
-            "@type": "prov:Entity",
-            "dcterms:title": name,
-            "prov:wasGeneratedBy": {"@id": run},
-            "prov:generatedAtTime": now,
-        }
-        for name in ["synthetic.csv", *written]
-    )
-    context = {
-        "prov": _PROV,
-        "rdfs": "http://www.w3.org/2000/01/rdf-schema#",
-        "schema": "https://schema.org/",
-        "dcterms": "http://purl.org/dc/terms/",
-    }
-    return {"@context": context, "@graph": graph}

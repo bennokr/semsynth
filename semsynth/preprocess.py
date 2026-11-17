@@ -14,6 +14,7 @@ from typing import TYPE_CHECKING, Any
 from .codebook import Codebook
 from .config import PipelineConfig
 from .specs import DatasetSpec
+from .structure import fill_not_applicable, recode_declared_missing
 
 if TYPE_CHECKING:  # pragma: no cover - typing only
     import pandas as pd
@@ -94,12 +95,16 @@ class DatasetPreprocessor:
 
         LOGGER.info(str(cfg))
         codebook = Codebook.from_frame(df, self._declared_codebook(dataset_spec))
+        df, declared_missing = recode_declared_missing(df, codebook)
+        if declared_missing:
+            LOGGER.info("Declared missing codes recoded to missing: %s", declared_missing)
         disc_cols, cont_cols = self._split(df, codebook)
         df_processed = self._coerce(df, disc_cols, cont_cols)
         inferred = {
             column: ("discrete" if column in disc_cols else "continuous") for column in df_processed.columns
         }
-        df_no_na = df_processed.dropna(axis=0, how="any").reset_index(drop=True)
+        learnable = fill_not_applicable(df_processed, codebook) if cfg.structure_aware else df_processed
+        df_no_na = learnable.dropna(axis=0, how="any").reset_index(drop=True)
         if df_no_na.empty:
             df_no_na = df_processed.ffill().bfill().reset_index(drop=True)
 
