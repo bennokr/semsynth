@@ -53,6 +53,8 @@ class ModelRun:
     privacy_metrics: dict[str, Any] = field(default_factory=dict)
     downstream_json: Path | None = None
     downstream_metrics: dict[str, Any] = field(default_factory=dict)
+    joint_metrics: dict[str, Any] = field(default_factory=dict)
+    baselines_metrics: dict[str, Any] = field(default_factory=dict)
 
 
 def _as_list(data: Any) -> list[dict[str, Any]]:
@@ -182,10 +184,14 @@ def discover_model_runs(dataset_outdir: str | Path) -> list[ModelRun]:
         metrics: dict[str, Any] = {}
         privacy_metrics: dict[str, Any] = {}
         downstream_metrics: dict[str, Any] = {}
+        joint_metrics: dict[str, Any] = {}
+        baselines_metrics: dict[str, Any] = {}
         for path, target in (
             (metrics_json, metrics),
             (privacy_json, privacy_metrics),
             (downstream_json, downstream_metrics),
+            (run_dir / "metrics.joint.json", joint_metrics),
+            (run_dir / "metrics.baselines.json", baselines_metrics),
         ):
             if path.exists():
                 try:
@@ -212,6 +218,8 @@ def discover_model_runs(dataset_outdir: str | Path) -> list[ModelRun]:
                 privacy_metrics=privacy_metrics,
                 downstream_json=downstream_json if downstream_json.exists() else None,
                 downstream_metrics=downstream_metrics,
+                joint_metrics=joint_metrics,
+                baselines_metrics=baselines_metrics,
             )
         )
 

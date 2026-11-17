@@ -36,6 +36,10 @@ class PipelineConfig(Config):
     overwrite_umap: bool = False
     enable_missingness_wrapping: bool = False
     missingness_random_state: int | None = None
+    compute_joint: bool = False  # joint fidelity: pairwise dependence, missingness, classifier two-sample test
+    compute_baselines: bool = False  # score the synthetic table and two reference tables side by side
+    bootstrap_reps: int = 200  # resamples for the intervals of the privacy, joint and baseline scores
+    privacy_missing: str | dict[str, str] = "category"  # missing values in distances: category, observed, asymmetric
 
     def apply_mapping(self, params: Mapping[str, Any]) -> PipelineConfig:
         """Apply a mapping of overrides onto this config, recursing into nested dataclasses."""

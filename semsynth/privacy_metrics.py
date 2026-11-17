@@ -2,9 +2,10 @@
 
 Two layers:
 
-* The core (numpy, pandas, scikit-learn): exact matches and distance to the closest training record (DCR),
-  each with a reference taken from real rows the generator never saw, plus rare quasi-identifier reproduction and
-  t-closeness.
+* The core (numpy, pandas): exact matches and distance to the closest training record (DCR, a Gower distance
+  with a per-column policy for missing values, see :mod:`semsynth.distance`), each with a reference taken from real
+  rows the generator never saw, plus rare quasi-identifier reproduction and t-closeness. Rates and medians come with
+  bootstrap intervals.
 * The optional ``privacy`` extra (``sdmetrics``): attribute-inference risk with a random baseline, and two more DCR
   scores. They are recorded as ``skipped`` when the extra is missing.
 
@@ -16,6 +17,7 @@ random-data baseline stored beside it.
 from __future__ import annotations
 
 import logging
+from collections.abc import Mapping
 from dataclasses import dataclass, field
 from typing import TYPE_CHECKING, Any
 
@@ -25,8 +27,6 @@ if TYPE_CHECKING:  # pragma: no cover - typing only
 
 LOGGER = logging.getLogger(__name__)
 
-MAX_QUERY_ROWS = 5000
-MAX_LEVELS = 50
 _RESERVED_ROLES = ("ignore", "id")
 
 
@@ -47,6 +47,9 @@ class PrivacySummary:
     dcr_below_holdout_p05: float | None
     rare_qi_reproduction_rate: float | None
     t_closeness: dict[str, dict[str, float]]
+    dcr_reference_rows: int = 0
+    missing_policy: dict[str, str] = field(default_factory=dict)
+    intervals: dict[str, list[float]] = field(default_factory=dict)
     sdmetrics: dict[str, Any] = field(default_factory=dict)
     status: str = "ok"
 
@@ -60,7 +63,8 @@ def _usable_columns(meta: pd.DataFrame, *frames: pd.DataFrame) -> pd.DataFrame:
 
 
 def _clean(frame: pd.DataFrame, meta: pd.DataFrame) -> pd.DataFrame:
-    """Numeric columns as floats, everything else as strings; a missing value becomes its own category."""
+    """Numeric columns as floats and the others as string labels; a missing value stays ``NaN``."""
+    import numpy as np
     import pandas as pd
 
     kinds = dict(zip(meta.variable, meta.type, strict=False))
@@ -69,63 +73,23 @@ def _clean(frame: pd.DataFrame, meta: pd.DataFrame) -> pd.DataFrame:
         if kinds.get(column) == "numeric":
             out[column] = pd.to_numeric(frame[column], errors="coerce").astype(float)
         else:
-            out[column] = frame[column].astype("string").fillna("<MISSING>").astype(object)
+            labels = frame[column].astype("string")
+            out[column] = labels.astype(object).where(labels.notna(), np.nan)
     return out
 
 
-def _exact_match_rate(queries: pd.DataFrame, reference: pd.DataFrame) -> float:
-    """Share of ``queries`` rows that equal some row of ``reference``, over all columns."""
+def _row_matches(queries: pd.DataFrame, reference: pd.DataFrame) -> np.ndarray:
+    """For each query row, whether it equals some reference row over all columns (missing equals missing)."""
+    import numpy as np
+
+    def keyed(frame: pd.DataFrame) -> pd.DataFrame:
+        filled: pd.DataFrame = frame.apply(lambda c: c if c.dtype.kind == "f" else c.fillna("<MISSING>"))
+        return filled
+
     columns = list(reference.columns)
-    keys = reference.drop_duplicates()
-    flagged = queries.merge(keys.assign(_hit=True), on=columns, how="left")["_hit"]
-    return float(flagged.notna().mean()) if len(queries) else float("nan")
-
-
-class _Encoder:
-    """Gower-style encoding: the L1 distance between two encoded rows is the sum of per-column distances.
-
-    A numeric column contributes its absolute difference over the training range (clipped to 1) and a missing
-    indicator; a categorical column contributes 1 when the values differ. Levels beyond ``MAX_LEVELS`` share one
-    bucket, which makes rare categories look closer than they are.
-    """
-
-    def __init__(self, train: pd.DataFrame) -> None:
-        import numpy as np
-
-        self.numeric = [c for c in train.columns if train[c].dtype.kind == "f"]
-        self.categorical = [c for c in train.columns if c not in self.numeric]
-        self.lo = {c: float(np.nanmin(train[c])) if train[c].notna().any() else 0.0 for c in self.numeric}
-        hi = {c: float(np.nanmax(train[c])) if train[c].notna().any() else 0.0 for c in self.numeric}
-        self.span = {c: (hi[c] - self.lo[c]) or 1.0 for c in self.numeric}
-        self.levels = {c: set(train[c].value_counts().index[:MAX_LEVELS]) for c in self.categorical}
-
-    def transform(self, frame: pd.DataFrame) -> np.ndarray:
-        import numpy as np
-
-        parts: list[np.ndarray] = []
-        for column in self.numeric:
-            values = frame[column].to_numpy(float)
-            missing = np.isnan(values)
-            scaled = np.clip((values - self.lo[column]) / self.span[column], 0.0, 1.0)
-            parts.append(np.where(missing, 0.0, scaled)[:, None])
-            parts.append(missing.astype(float)[:, None])
-        for column in self.categorical:
-            codes = [*sorted(self.levels[column], key=str), "<OTHER>"]
-            seen = frame[column].where(frame[column].isin(self.levels[column]), "<OTHER>")
-            parts.append(np.stack([(seen == code).to_numpy(float) * 0.5 for code in codes], axis=1))
-        return np.concatenate(parts, axis=1) / max(len(self.numeric) + len(self.categorical), 1)
-
-
-def _dcr(queries: pd.DataFrame, reference: pd.DataFrame, seed: int) -> np.ndarray:
-    """Distance from each query row to its closest reference row, in [0, 1]."""
-    from sklearn.neighbors import NearestNeighbors
-
-    if len(queries) > MAX_QUERY_ROWS:
-        queries = queries.sample(MAX_QUERY_ROWS, random_state=seed)
-    encoder = _Encoder(reference)
-    index = NearestNeighbors(n_neighbors=1, metric="manhattan").fit(encoder.transform(reference))
-    distances, _ = index.kneighbors(encoder.transform(queries))
-    return distances[:, 0]  # type: ignore[no-any-return]
+    keys = keyed(reference).drop_duplicates()
+    flagged = keyed(queries).merge(keys.assign(_hit=True), on=columns, how="left")["_hit"]
+    return np.asarray(flagged.notna().to_numpy(), dtype=float)
 
 
 def _quantiles(values: np.ndarray) -> dict[str, float]:
@@ -139,22 +103,10 @@ def _quantiles(values: np.ndarray) -> dict[str, float]:
     }
 
 
-def _distance_block(
-    train: pd.DataFrame, holdout: pd.DataFrame | None, synth: pd.DataFrame, seed: int
-) -> tuple[dict[str, float], dict[str, float] | None, float | None]:
-    """DCR summaries of the synthetic and holdout rows, and how often synthetic rows beat the holdout's 5th percentile.
-
-    Both sets are measured against the same training rows, so their sizes need not match. A generator that
-    memorizes puts many synthetic rows below the holdout's 5th percentile; a faithful one puts about 5% there.
-    """
+def _share_below_p05(synthetic: np.ndarray, reference: np.ndarray) -> float:
     import numpy as np
 
-    synthetic = _dcr(synth, train, seed)
-    if holdout is None or len(holdout) == 0:
-        return _quantiles(synthetic), None, None
-    reference = _dcr(holdout, train, seed)
-    threshold = np.quantile(reference, 0.05)
-    return _quantiles(synthetic), _quantiles(reference), float((synthetic < threshold).mean())
+    return float((synthetic < np.quantile(reference, 0.05)).mean())
 
 
 def _rare_qi_reproduction(train: pd.DataFrame, synth: pd.DataFrame, qi: list[str]) -> float | None:
@@ -268,6 +220,48 @@ def _numbers(breakdown: dict[str, Any]) -> dict[str, Any]:
     return {k: convert(v) for k, v in breakdown.items() if k != "score"}
 
 
+def _distance_stats(
+    train: pd.DataFrame,
+    holdout: pd.DataFrame | None,
+    synth: pd.DataFrame,
+    missing: str | Mapping[str, str],
+    seed: int,
+    reps: int,
+) -> dict[str, Any]:
+    """Exact matches and DCR for the synthetic and holdout rows, with bootstrap intervals."""
+    import numpy as np
+
+    from .distance import GowerIndex
+    from .uncertainty import bootstrap_interval
+
+    index = GowerIndex(train, missing=missing, seed=seed)
+    own_dcr, own_match = index.nearest(synth), _row_matches(synth, train)
+    out: dict[str, Any] = {
+        "reference_rows": index.n_reference,
+        "policies": index.policies,
+        "dcr_synthetic": _quantiles(own_dcr),
+        "exact_match_rate": float(own_match.mean()),
+        "intervals": {
+            "exact_match_rate": bootstrap_interval(np.mean, own_match, reps=reps, seed=seed),
+            "dcr_median": bootstrap_interval(np.median, own_dcr, reps=reps, seed=seed),
+        },
+    }
+    if holdout is None or len(holdout) == 0:
+        return out
+    ref_dcr, ref_match = index.nearest(holdout), _row_matches(holdout, train)
+    out["dcr_holdout"] = _quantiles(ref_dcr)
+    out["exact_match_rate_holdout"] = float(ref_match.mean())
+    out["dcr_below_holdout_p05"] = _share_below_p05(own_dcr, ref_dcr)
+    out["intervals"].update(
+        {
+            "exact_match_rate_holdout": bootstrap_interval(np.mean, ref_match, reps=reps, seed=seed),
+            "dcr_median_holdout": bootstrap_interval(np.median, ref_dcr, reps=reps, seed=seed),
+            "dcr_below_holdout_p05": bootstrap_interval(_share_below_p05, own_dcr, ref_dcr, reps=reps, seed=seed),
+        }
+    )
+    return out
+
+
 def summarize_privacy(
     train: pd.DataFrame,
     synth: pd.DataFrame,
@@ -275,6 +269,9 @@ def summarize_privacy(
     holdout: pd.DataFrame | None = None,
     *,
     seed: int = 0,
+    missing: str | Mapping[str, str] = "category",
+    bootstrap_reps: int = 200,
+    use_sdmetrics: bool = True,
 ) -> PrivacySummary:
     """Compare a synthetic table with the real rows it was learned from.
 
@@ -285,13 +282,17 @@ def summarize_privacy(
             :meth:`semsynth.codebook.Codebook.privacy_frame`). Columns with the role ``id`` or ``ignore`` are left out.
         holdout: Real rows the generator never saw. They give the reference for the exact-match and distance
             numbers; without them only the synthetic side is reported and nothing can be called "too close".
-        seed: Seed for subsampling the query rows.
+        seed: Seed for subsampling and the bootstrap.
+        missing: How missing values enter the distance: ``category``, ``observed`` or ``asymmetric``, for all columns
+            or by column name (see :mod:`semsynth.distance`). The sdmetrics distances always use ``category``.
+        bootstrap_reps: Resamples for the intervals; 0 turns them off.
+        use_sdmetrics: Whether to run the optional sdmetrics scores.
 
     Returns:
         A :class:`PrivacySummary`.
 
     Raises:
-        ValueError: If no column is shared by the tables and usable.
+        ValueError: If no column is shared by the tables and usable, or a missing-value policy is unknown.
     """
     frames = [train, synth] + ([holdout] if holdout is not None else [])
     use = _usable_columns(meta, *frames)
@@ -300,7 +301,7 @@ def summarize_privacy(
     kinds = dict(zip(use.variable, use.type, strict=False))
     real, fake = _clean(train, use), _clean(synth, use)
     held = _clean(holdout, use) if holdout is not None else None
-    synthetic_dcr, holdout_dcr, below = _distance_block(real, held, fake, seed)
+    stats = _distance_stats(real, held, fake, missing, seed, bootstrap_reps)
     return PrivacySummary(
         n_train=len(real),
         n_holdout=len(held) if held is not None else 0,
@@ -308,12 +309,15 @@ def summarize_privacy(
         used_columns=list(use.variable),
         qi_columns=qi,
         sensitive_columns=sensitive,
-        exact_match_rate=_exact_match_rate(fake, real),
-        exact_match_rate_holdout=_exact_match_rate(held, real) if held is not None else None,
-        dcr_synthetic=synthetic_dcr,
-        dcr_holdout=holdout_dcr,
-        dcr_below_holdout_p05=below,
+        exact_match_rate=stats["exact_match_rate"],
+        exact_match_rate_holdout=stats.get("exact_match_rate_holdout"),
+        dcr_synthetic=stats["dcr_synthetic"],
+        dcr_holdout=stats.get("dcr_holdout"),
+        dcr_below_holdout_p05=stats.get("dcr_below_holdout_p05"),
         rare_qi_reproduction_rate=_rare_qi_reproduction(real, fake, qi),
         t_closeness=_t_closeness(real, fake, qi, sensitive, kinds),
-        sdmetrics=_sdmetrics_block(real, held, fake, use, qi, sensitive),
+        dcr_reference_rows=stats["reference_rows"],
+        missing_policy=stats["policies"],
+        intervals=stats["intervals"],
+        sdmetrics=_sdmetrics_block(real, held, fake, use, qi, sensitive) if use_sdmetrics else {},
     )

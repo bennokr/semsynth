@@ -3,6 +3,8 @@
 generate_umap = true
 compute_privacy = true
 compute_downstream = true
+compute_joint = true
+compute_baselines = true
 enable_missingness_wrapping = true
 
 [[models]]

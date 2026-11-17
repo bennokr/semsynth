@@ -51,6 +51,7 @@ jobs:
           files = sorted(pathlib.Path("output").glob("*/models/*/metrics.privacy.json"))
           bad = [str(f) for f in files if json.loads(f.read_text()).get("status", "ok") != "ok"]
           assert files, "no privacy metrics in the demo output"
+          assert list(pathlib.Path("output").glob("*/models/*/metrics.baselines.json")), "no baselines in the demo output"
           assert not bad, f"privacy metrics skipped or failed: {bad}"
           PY
       - name: Documentation

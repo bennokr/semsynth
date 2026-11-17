@@ -259,6 +259,58 @@ def build_privacy_table(*, model_runs: Sequence[ModelRun] | None) -> str | None:
     return dataframe_to_markdown(out, index=False)
 
 
+_BASELINE_COLUMNS = (
+    ("disc_jsd_mean", "disc JSD"),
+    ("cont_ks_mean", "cont KS"),
+    ("pairwise_tvd_mean", "pair TVD"),
+    ("classifier_auc", "classifier AUC"),
+    ("exact_match_rate", "exact match"),
+    ("dcr_median", "DCR median"),
+    ("dcr_below_holdout_p05", "DCR < holdout p05"),
+)
+_BASELINE_ORDER = ("synthetic", "real_sample", "independent_marginals")
+
+
+def _with_interval(value: Any, interval: Any, null: Any = None) -> str:
+    """A score with its 95% bootstrap interval ``[lo, hi]`` or, for a distance, its noise range ``(noise lo-hi)``."""
+    cell = format_metric_cell(value)
+
+    def pair(bounds: Any) -> str | None:
+        if isinstance(bounds, list) and len(bounds) == 2 and all(coerce_numeric(x) is not None for x in bounds):
+            return f"{format_metric_cell(bounds[0])}, {format_metric_cell(bounds[1])}"
+        return None
+
+    if cell and pair(interval):
+        return f"{cell} [{pair(interval)}]"
+    if cell and isinstance(null, dict) and pair(null.get("null_interval")):
+        return f"{cell} (noise {pair(null['null_interval'])})"
+    return cell
+
+
+def build_baselines_table(*, model_runs: Sequence[ModelRun] | None) -> str | None:
+    """Markdown table of the synthetic table next to its reference tables, scored the same way.
+
+    ``real_sample`` is the fidelity ceiling and the privacy worst case, ``independent_marginals`` the joint-fidelity
+    floor. Brackets hold 95% bootstrap intervals; "noise" is the range a distance takes when the synthetic rows are
+    exchangeable with real ones, so a value inside it cannot be told from a fresh real sample at this size.
+    """
+
+    rows: list[dict[str, Any]] = []
+    for run in sorted(model_runs or [], key=lambda r: (r.backend, r.name)):
+        scores = (getattr(run, "baselines_metrics", None) or {}).get("scores") or {}
+        for name in _BASELINE_ORDER:
+            record = scores.get(name)
+            if not isinstance(record, dict) or record.get("status") == "failed":
+                continue
+            intervals, nulls = record.get("intervals") or {}, record.get("null") or {}
+            row = {"model": run.name, "table": name}
+            row.update({label: _with_interval(record.get(key), intervals.get(key), nulls.get(key)) for key, label in _BASELINE_COLUMNS})
+            rows.append(row)
+    if not rows:
+        return None
+    return dataframe_to_markdown(pd.DataFrame(rows), index=False)
+
+
 def extract_downstream_sign_match(run: ModelRun) -> float | None:
     """Return the downstream sign match value using available sources."""
 

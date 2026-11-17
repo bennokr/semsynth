@@ -13,8 +13,15 @@ from dataclasses import dataclass, replace
 from pathlib import Path
 from typing import TYPE_CHECKING, Any
 
+from .baselines import evaluate_references
 from .config import PipelineConfig
-from .evaluate import downstream_scores, holdout_metrics, privacy_scores, split_train_test
+from .evaluate import (
+    downstream_scores,
+    holdout_metrics,
+    privacy_frame,
+    privacy_scores,
+    split_train_test,
+)
 from .mappings import load_mapping_json, resolve_mapping_json
 from .metadata import get_uciml_variable_descriptions
 from .models import ModelConfigBundle, ModelSpec, discover_model_runs, load_model_configs
@@ -74,6 +81,20 @@ def _attempt(kind: str, label: str, compute: Any, *args: Any, **kwargs: Any) -> 
         LOGGER.info("Computed %s metrics", kind, extra={"label": label})
         return payload
     return None
+
+
+def _attempt_record(kind: str, label: str, compute: Any, *args: Any, **kwargs: Any) -> dict[str, Any]:
+    """Like :func:`_attempt`, but a missing extra or a failure is returned as a ``status`` record, not dropped."""
+
+    try:
+        payload: dict[str, Any] = compute(*args, **kwargs)
+    except ImportError as exc:
+        LOGGER.warning("%s metrics unavailable; skipping: %s", kind.capitalize(), exc, extra={"label": label})
+        return {"status": "skipped", "reason": str(exc)}
+    except Exception as exc:
+        LOGGER.exception("Failed to compute %s metrics", kind, extra={"label": label})
+        return {"status": "failed", "reason": f"{type(exc).__name__}: {exc}"}
+    return payload
 
 
 class BackendExecutor:
@@ -141,6 +162,8 @@ class BackendExecutor:
             metrics["privacy"] = self._privacy(
                 pristine, train, holdout, preprocessed, dataset_spec.target, int(spec.seed or self._cfg.random_state), label
             )
+        if self._cfg.compute_joint or self._cfg.compute_baselines:
+            self._add_evaluation(metrics, pristine, final, train, holdout, preprocessed, dataset_spec.target, spec, label)
         if downstream_flag and self._has_target(preprocessed):
             downstream = _attempt(
                 "downstream", label, self._downstream, final, preprocessed, dataset_spec.target
@@ -178,7 +201,13 @@ class BackendExecutor:
             train, preprocessed.codebook, backend=spec.backend, rows=rows, seed=seed, **options
         )
         metrics = holdout_metrics(
-            test, result.synthetic_data, preprocessed.disc_cols, preprocessed.cont_cols, model=result.learned_model
+            test,
+            result.synthetic_data,
+            preprocessed.disc_cols,
+            preprocessed.cont_cols,
+            model=result.learned_model,
+            bootstrap_reps=cfg.bootstrap_reps,
+            seed=seed,
         )
         result = replace(
             result,
@@ -235,6 +264,8 @@ class BackendExecutor:
                 summarizer=self._privacy_summarizer,
                 target=target,
                 seed=seed,
+                missing=self._cfg.privacy_missing,
+                bootstrap_reps=self._cfg.bootstrap_reps,
             )
         except ImportError as exc:
             LOGGER.warning("Privacy metrics unavailable; skipping: %s", exc, extra={"label": label})
@@ -243,6 +274,61 @@ class BackendExecutor:
             LOGGER.exception("Failed to compute privacy metrics", extra={"label": label})
             return {"status": "failed", "reason": f"{type(exc).__name__}: {exc}"}
         LOGGER.info("Computed privacy metrics", extra={"label": label})
+        return scores
+
+    def _add_evaluation(
+        self,
+        metrics: dict[str, Any],
+        pristine: pd.DataFrame,
+        final: pd.DataFrame,
+        train: pd.DataFrame,
+        holdout: pd.DataFrame,
+        preprocessed: PreprocessingResult,
+        target: str | None,
+        spec: ModelSpec,
+        label: str,
+    ) -> None:
+        """Joint fidelity and the reference-table comparison, each recorded as failed rather than dropped."""
+
+        cfg = self._cfg
+        seed = int(spec.seed if spec.seed is not None else cfg.random_state)
+        frame = privacy_frame(train, preprocessed.inferred_types, preprocessed.codebook, target=target)
+        kinds = dict(zip(frame.variable, frame.type, strict=False))
+        if cfg.compute_joint:
+            metrics["joint"] = _attempt_record(
+                "joint", label, self._joint, pristine, final, holdout, preprocessed, kinds, seed
+            )
+        if cfg.compute_baselines:
+            metrics["baselines"] = _attempt_record(
+                "baselines",
+                label,
+                evaluate_references,
+                train,
+                holdout,
+                pristine,
+                disc_cols=preprocessed.disc_cols,
+                cont_cols=preprocessed.cont_cols,
+                privacy_frame=frame,
+                seed=seed,
+                reps=cfg.bootstrap_reps,
+                missing=cfg.privacy_missing,
+            )
+
+    def _joint(
+        self,
+        pristine: pd.DataFrame,
+        final: pd.DataFrame,
+        holdout: pd.DataFrame,
+        preprocessed: PreprocessingResult,
+        kinds: dict[str, str],
+        seed: int,
+    ) -> dict[str, Any]:
+        from .joint_fidelity import joint_fidelity, missingness_fidelity
+
+        scores = joint_fidelity(holdout, pristine, kinds, seed=seed, reps=min(self._cfg.bootstrap_reps, 50))
+        if preprocessed.missingness_model is not None:
+            # Real rows with their missing values against the released table; the model never saw these as such.
+            scores["missingness"] = missingness_fidelity(preprocessed.df_processed, final)
         return scores
 
     def _downstream(

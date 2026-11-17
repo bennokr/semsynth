@@ -31,6 +31,7 @@ import pandas as pd
 from .jsonld_to_rdfa import SCHEMA_ORG, render_rdfa
 from .models import ModelRun
 from .report_tables import (
+    build_baselines_table,
     build_fidelity_table,
     build_metasyn_gmf_table,
     build_metric_table,
@@ -210,6 +211,7 @@ def write_report_md(
         ),
         "fidelity_table": build_fidelity_table(model_runs=model_runs),
         "privacy_table": build_privacy_table(model_runs=model_runs),
+        "baselines_table": build_baselines_table(model_runs=model_runs),
         "missingness_table": build_missingness_table(missingness_summary),
     }
 
@@ -283,6 +285,8 @@ def _prepare_model_rows(model_runs: Iterable[ModelRun], base_dir: Path) -> list[
             ("Metrics JSON", run.metrics_json or run.run_dir / "metrics.json"),
             ("Privacy metrics", run.privacy_json),
             ("Downstream metrics", run.downstream_json),
+            ("Joint fidelity", run.run_dir / "metrics.joint.json"),
+            ("Reference comparison", run.run_dir / "metrics.baselines.json"),
         ):
             rel = _relative_path(target, base_dir)
             if rel:

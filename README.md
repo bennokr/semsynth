@@ -114,6 +114,10 @@ batch_size = 256
 generate_umap = true
 compute_privacy = true
 compute_downstream = true
+compute_joint = true        # pairwise dependence, missingness structure, classifier two-sample test
+compute_baselines = true    # score the synthetic table next to a real sample and independent marginals
+bootstrap_reps = 200        # resamples and random splits behind the intervals and noise floors
+privacy_missing = "category"  # missing values in distances: category, observed or asymmetric (or a table by column)
 ```
 
 ## 📦 Outputs
@@ -123,7 +127,7 @@ compute_downstream = true
   - `umap_real.png` (when `--generate-umap` is enabled and UMAP dependencies are installed)
 - Per model (e.g., `output/Heart Disease/models/<name>/`):
   - `synthetic.csv`, `metrics.json`, and `umap.png`
-  - Optional metrics sidecars: `metrics.privacy.json`, `metrics.downstream.json`
+  - Optional metrics sidecars: `metrics.privacy.json`, `metrics.downstream.json`, `metrics.joint.json`, `metrics.baselines.json` (see the evaluation page of the documentation for what each score means and how to read it)
   - PyBNesian extras: `structure.png`, `structure.graphml`, `model.pickle`
   - `synthetic.parquet`, with the codebook JSON-LD in the Parquet schema metadata
 

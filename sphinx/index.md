@@ -14,6 +14,7 @@ provenance
 backends
 missingness
 privacy-metrics
+evaluation
 downstream-fidelity
 api
 ```

@@ -11,7 +11,7 @@ linked-codebook profile; plus the report/catalog site. Target shape: python API 
 
 ## Layout
 - `semsynth/`: `codebook.py` (profile + roles), `backends/` (privbayes, metasyn, pybnesian, synthcity), `missingness.py`,
-  `metrics.py`, `privacy_metrics.py` (exact matches, distance to closest record, sdmetrics), `downstream_fidelity.py`, `synthesis.py` (`synthesize` + `write_run`, the one backend contract),
+  `metrics.py`, `privacy_metrics.py` (exact matches, distance to closest record, sdmetrics), `distance.py` (Gower with missing-value policies), `joint_fidelity.py`, `baselines.py` (real-sample and independent-marginals reference tables), `uncertainty.py` (bootstrap for row-level statistics, permutation null for distances; never a bootstrap interval of a distance), `downstream_fidelity.py`, `synthesis.py` (`synthesize` + `write_run`, the one backend contract),
   `preprocess.py`, `evaluate.py` (pure metrics), `runner.py` (`process_dataset`, the part that writes files),
   `workflow.py` (what the CLI and the app call), `reporting.py` + `report_tables.py`,
   `catalog.py`, `dataproviders/`. makeprov `@rule`s exist only in `__main__.py`.

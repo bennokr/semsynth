@@ -75,7 +75,13 @@ async def main() -> dict:
     spec = DatasetSpec("openml", name="smoke", target="disease")
     bundle = ModelConfigBundle(specs=[ModelSpec(name="metasyn", backend="metasyn", seed=1)])
     config = PipelineConfig(
-        generate_umap=False, compute_privacy=True, compute_downstream=True, enable_missingness_wrapping=True
+        generate_umap=False,
+        compute_privacy=True,
+        compute_downstream=True,
+        compute_joint=True,
+        compute_baselines=True,
+        bootstrap_reps=5,
+        enable_missingness_wrapping=True,
     )
     process_dataset(spec, frame, frame["disease"], Path("/tmp/out"), model_bundle=bundle, pipeline_config=config)
     run = next(Path("/tmp/out/smoke/models").iterdir())
@@ -86,6 +92,10 @@ async def main() -> dict:
     out["sign_match_rate"] = downstream["sign_match_rate"]
     privacy = json.loads((run / "metrics.privacy.json").read_text())
     out["privacy_status"] = privacy.get("status", "ok")
+    joint = json.loads((run / "metrics.joint.json").read_text())
+    baselines = json.loads((run / "metrics.baselines.json").read_text())
+    out["joint_ok"] = joint["pairwise"]["status"] == "ok" and joint["classifier"]["status"] == "ok"
+    out["baselines_ok"] = all("status" not in record for record in baselines["scores"].values())
     out["sdmetrics_ok"] = all(block.get("status") == "ok" for block in privacy["sdmetrics"].values())
     return out
 

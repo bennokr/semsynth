@@ -38,6 +38,14 @@
 
 {{ privacy_table }}
 
+{% endif %}{% if baselines_table %}## Reference comparison
+
+Each row is scored with the same functions on the same held-out rows. `real_sample` (rows of the training data) is the
+ceiling for fidelity and the worst case for privacy; `independent_marginals` (each column drawn on its own) is the floor
+for joint fidelity. A score means something only next to these.
+
+{{ baselines_table }}
+
 {% endif %}## Models
 
 <table>

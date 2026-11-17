@@ -32,6 +32,7 @@ privacy_frame.head()
 
 ## Metric suite
 Core (no extra needed):
+- All distances are Gower distances (the mean of per-column distances in [0, 1]) with a choice of how a missing value counts: `category` (shared absence agrees), `observed` (classic Gower: columns with a missing value are left out) or `asymmetric` (shared absence is ignored, one-sided absence is a difference), per column if needed. See {doc}`evaluation`. They come with 95% bootstrap intervals (`intervals`).
 - `exact_match_rate`: share of synthetic rows identical to a training row, next to `exact_match_rate_holdout` for real holdout rows. With coarse or few columns the holdout rate can be high, which is why it is reported.
 - `dcr_synthetic` and `dcr_holdout`: distance to the closest training record (Gower-style, 0 to 1; a missing value is its own category). `dcr_below_holdout_p05` is the share of synthetic rows closer to the training data than the 5th percentile of the holdout rows: about 0.05 for a faithful generator, near 1 for a copy.
 - `rare_qi_reproduction_rate`: share of rare real quasi-identifier combinations (at most 5 rows or 1%) that the synthetic table repeats.

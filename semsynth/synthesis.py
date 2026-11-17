@@ -151,6 +151,7 @@ def _write_metrics(result: SynthesisResult, directory: Path) -> list[str]:
     per_variable = metrics.pop("per_variable", None)
     privacy = metrics.pop("privacy", None)
     downstream = metrics.pop("downstream", None)
+    sidecars = {"joint": metrics.pop("joint", None), "baselines": metrics.pop("baselines", None)}
     written = ["metrics.json"]
     _write_json(directory / "metrics.json", {"backend": result.backend, **metrics})
     if per_variable is not None:
@@ -162,6 +163,10 @@ def _write_metrics(result: SynthesisResult, directory: Path) -> list[str]:
     if downstream is not None:
         _write_json(directory / "metrics.downstream.json", downstream)
         written.append("metrics.downstream.json")
+    for name, payload in sidecars.items():
+        if payload is not None:
+            _write_json(directory / f"metrics.{name}.json", payload)
+            written.append(f"metrics.{name}.json")
     return written
 
 

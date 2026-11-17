@@ -20,6 +20,7 @@ __all__ = [
     "build_privacy_metadata",
     "downstream_scores",
     "holdout_metrics",
+    "privacy_frame",
     "privacy_scores",
     "split_train_test",
 ]
@@ -41,6 +42,8 @@ def holdout_metrics(
     cont_cols: list[str],
     *,
     model: Any = None,
+    bootstrap_reps: int = 0,
+    seed: int = 0,
 ) -> dict[str, Any]:
     """Per-variable distances between real and synthetic columns, and their summary.
 
@@ -51,6 +54,10 @@ def holdout_metrics(
         cont_cols: Names of the continuous columns.
         model: The learned model; if it has a ``logl`` method (a PyBNesian network), the log-likelihood of the
             held-out rows is added as ``heldout_loglik``.
+        bootstrap_reps: Random splits of the pooled rows for ``summary_null``, the range each summary value takes
+            when the synthetic rows are exchangeable with real ones (see
+            :func:`semsynth.uncertainty.permutation_null`); 0 skips it. Costs this many extra scorings.
+        seed: Seed of the splits.
 
     Returns:
         ``summary`` (JSD for discrete, KS and Wasserstein for continuous columns), ``per_variable`` (one record
@@ -58,15 +65,43 @@ def holdout_metrics(
     """
 
     distances = per_variable_distances(real, synthetic, disc_cols, cont_cols)
+    summary = summarize_distance_metrics(distances)
+    null = _summary_null(real, synthetic, disc_cols, cont_cols, summary, bootstrap_reps, seed) if bootstrap_reps else {}
     return {
+        **({"summary_null": null} if null else {}),
         **({"heldout_loglik": heldout_loglik(model, real)} if hasattr(model, "logl") else {}),
-        "summary": summarize_distance_metrics(distances),
+        "summary": summary,
         "per_variable": distances.to_dict("records"),
         "test_rows": len(real),
         "synth_rows": len(synthetic),
         "discrete_cols": len(disc_cols),
         "continuous_cols": len(cont_cols),
     }
+
+
+def _summary_null(
+    real: pd.DataFrame,
+    synthetic: pd.DataFrame,
+    disc_cols: list[str],
+    cont_cols: list[str],
+    observed: dict[str, float],
+    reps: int,
+    seed: int,
+) -> dict[str, Any]:
+    """Noise floor of each marginal summary value: the real and synthetic rows are pooled and split at random."""
+    import pandas as pd
+
+    from .uncertainty import permutation_null
+
+    pooled = pd.concat([real, synthetic], ignore_index=True)
+
+    def split_summary(first: Any, second: Any) -> dict[str, float]:
+        return summarize_distance_metrics(
+            per_variable_distances(pooled.iloc[first], pooled.iloc[second], disc_cols, cont_cols)
+        )
+
+    names = {k: v for k, v in observed.items() if k in ("disc_jsd_mean", "cont_ks_mean", "cont_w1_mean")}
+    return permutation_null(split_summary, len(real), len(synthetic), names, reps=reps, seed=seed)
 
 
 def _type_name(inferred: Mapping[str, str], column: str) -> str:
@@ -113,6 +148,27 @@ def build_privacy_metadata(
     return frame
 
 
+def privacy_frame(
+    real_df: pd.DataFrame,
+    inferred: Mapping[str, str],
+    metadata: Any | None = None,
+    *,
+    role_overrides: Mapping[str, str] | None = None,
+    target: str | None = None,
+) -> pd.DataFrame:
+    """The ``variable``, ``role`` and ``type`` of each column for the privacy and joint-fidelity metrics."""
+
+    if isinstance(metadata, Codebook):
+        frame = metadata.privacy_frame(inferred)
+    else:
+        frame = build_privacy_metadata(
+            real_df, inferred, metadata=metadata, role_overrides=role_overrides, target=target
+        )
+    if target and target in frame.variable.values:
+        frame.loc[frame.variable == target, "role"] = "target"
+    return frame
+
+
 def privacy_scores(
     real_df: pd.DataFrame,
     synth_df: pd.DataFrame,
@@ -124,6 +180,8 @@ def privacy_scores(
     role_overrides: Mapping[str, str] | None = None,
     target: str | None = None,
     seed: int = 0,
+    missing: str | Mapping[str, str] = "category",
+    bootstrap_reps: int = 0,
 ) -> dict[str, Any]:
     """Privacy facts about a synthetic table: exact matches, distance to the closest record, attribute inference.
 
@@ -137,7 +195,10 @@ def privacy_scores(
             :func:`semsynth.privacy_metrics.summarize_privacy` when omitted.
         role_overrides: Privacy role by column name, applied over the metadata.
         target: Name of the target column, which gets the ``target`` role.
-        seed: Seed for subsampling.
+        seed: Seed for subsampling and the bootstrap.
+        missing: How missing values enter the distances (``category``, ``observed``, ``asymmetric``, or a mapping by
+            column); see :mod:`semsynth.distance`.
+        bootstrap_reps: Resamples for the intervals.
     """
 
     if summarizer is None:
@@ -145,15 +206,8 @@ def privacy_scores(
 
         from .privacy_metrics import summarize_privacy
 
-        summarizer = partial(summarize_privacy, seed=seed)
-    if isinstance(metadata, Codebook):
-        frame = metadata.privacy_frame(inferred)
-    else:
-        frame = build_privacy_metadata(
-            real_df, inferred, metadata=metadata, role_overrides=role_overrides, target=target
-        )
-    if target and target in frame.variable.values:
-        frame.loc[frame.variable == target, "role"] = "target"
+        summarizer = partial(summarize_privacy, seed=seed, missing=missing, bootstrap_reps=bootstrap_reps)
+    frame = privacy_frame(real_df, inferred, metadata, role_overrides=role_overrides, target=target)
     summary = summarizer(real_df, synth_df, frame, holdout_df)
     if is_dataclass(summary) and not isinstance(summary, type):
         return asdict(summary)
