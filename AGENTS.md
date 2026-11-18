@@ -25,7 +25,8 @@ Direction, decisions and status: `SPEC.md`.
     `catalog.py` (DCAT and the merged RDF), `iris.py`. makeprov `@rule`s exist only in `__main__.py`.
 - The SPARQL page is the data-catalog-sparql-playground, run as a step of the Pages workflow over `output/semsynth.ttl` (the merge
   of the catalog, codebooks and provenance) and `queries/*.rq`. All IRIs come from `semsynth/iris.py`: slugs, one base, no `urn:`.
-  Comunica does not deduplicate a triple that two source files both state, which is why the files are merged; keep queries free of
+  Comunica does not deduplicate a triple that two source files both state, which is why the files are merged. The catalog and a run's provenance are plain `.json` with an `@context` (a `.json` file counts as RDF exactly when its top
+  level has one, `catalog.is_rdf`); the codebook stays `.jsonld`. Keep queries free of
   string functions (`tests/test_catalog.py` checks) by modelling the link instead.
 - `mappings/` curated codebooks; `map_columns/` holds only terminology data (matchers live in entailmap).
 - Core modules listed in the `Makefile` (`CORE`) are `mypy --strict`; add a module there when it is clean.

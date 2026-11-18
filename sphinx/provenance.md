@@ -24,7 +24,7 @@ sorted(p.name for p in prov_dir.glob("*") if p.is_file())[:5]
 
 ## How it is wired
 - The CLI commands in `semsynth/__main__.py` are thin wrappers decorated with `@rule`, so makeprov tracks their inputs and outputs. The library (`semsynth.synthesis`, `semsynth.runner`, ...) does not use makeprov rules, which keeps it importable from a notebook or a browser; `ProvenanceConfig.prov_dir` is set per dataset before processing starts.
-- Every model run additionally gets a PROV-O `provenance.jsonld` (`semsynth.synthesis.write_run`): the synthesis activity, the dataset and engine it used, the software agent, and the files it generated. The catalog and its SPARQL queries read these files.
+- Every model run additionally gets a PROV-O `provenance.json` (`semsynth.synthesis.write_run`): the synthesis activity, the dataset and engine it used, the software agent, and the files it generated. The catalog and its SPARQL queries read these files.
 - Default settings live in `prov-config.toml` (base IRI and output directory). You can override them via CLI flags or config.
 
 ## SPARQL
@@ -39,7 +39,7 @@ The catalog, the codebooks and the run provenance use the same IRIs (`semsynth/i
 - [makeprov SHACL shapes](https://raw.githubusercontent.com/bennokr/makeprov/refs/heads/main/tests/prov_shapes.ttl)
 - [PROV-O primer](https://www.w3.org/TR/prov-o/)
 
-## Run provenance (`provenance.jsonld`)
+## Run provenance (`provenance.json`)
 Since makeprov 0.7 a script is a `prov:Plan`, not an agent; `semsynth.provenance` writes a run in the same shape: the plan
 (semsynth at a version), the runtime (CPython), a qualified association tying them to the activity, the parameters as
 `schema:additionalProperty`, start, end and duration, and a sha256 for every file written. The synthetic dataset

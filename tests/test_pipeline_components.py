@@ -460,7 +460,7 @@ def test_backend_executor_runs_models(tmp_path):
     manifest = json.loads((run_dir / "manifest.json").read_text())
     assert manifest["backend"] == "dummy" and manifest["dataset_name"] == "example"
     assert manifest["test_size"] == 0.2 and manifest["seed"] == 3
-    assert (run_dir / "synthetic.csv").exists() and (run_dir / "provenance.jsonld").exists()
+    assert (run_dir / "synthetic.csv").exists() and (run_dir / "provenance.json").exists()
     assert (run_dir / "synthetic.parquet").exists() or not preprocessed.codebook_jsonld
     assert len(privacy_calls) == 1
 

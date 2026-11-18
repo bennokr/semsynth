@@ -304,7 +304,7 @@ def recompute_downstream(
 def build_catalog(
     base_dir: InPath = InPath("output"),
     base_iri: str = DEFAULT_BASE,
-    out_path: OutPath = OutPath("output/catalog.jsonld"),
+    out_path: OutPath = OutPath("output/catalog.json"),
     index_path: OutPath = OutPath("output/index.html"),
     *,
     merge: bool = False,

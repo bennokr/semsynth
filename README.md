@@ -67,7 +67,7 @@ Dataset metadata is a [linked-codebook](https://bennokr.github.io/linked-codeboo
    Pipeline toggles (UMAP, privacy, downstream, missingness, etc.) now live in the TOML bundle under `[pipeline]` rather than separate CLI flags.
 
 4. Catalog + app helpers
-   - Build a DCAT catalog (`output/catalog.jsonld`), an index page and the merged RDF for the SPARQL explorer (`output/semsynth.ttl`, needs `.[rdf]`) from existing outputs: `python -m semsynth build-catalog --merge`
+   - Build a DCAT catalog (`output/catalog.json`), an index page and the merged RDF for the SPARQL explorer (`output/semsynth.ttl`, needs `.[rdf]`) from existing outputs: `python -m semsynth build-catalog --merge`
    - Regenerate metadata-only reports for all curated codebooks and refresh the catalog/index: `python -m semsynth mappings --pipeline-configs ""`
    - Re-render reports for all curated mappings using existing outputs (skip mappings and metrics): `python -m semsynth refresh-mapping-reports --pipeline-configs '{pipeline={generate_umap=false,compute_privacy=false,compute_downstream=false,overwrite_umap=false}}'`
    - Launch a minimal Flask UI for search and report actions (needs `.[app,providers]`): `python -m semsynth run-app --port 5000`. It calls the same functions as `search` and `report`, accepts inline TOML only, and binds to 127.0.0.1 unless you pass `--host`
@@ -214,7 +214,7 @@ write_run(result, "output/run-1")   # only if you want the files
 `synthesize(df, codebook, *, rows, seed, **options)` and returns a `semsynth.SynthesisResult`: the generated data
 and the learned model as Python objects, alongside parameters, utility metrics, privacy facts, provenance, semantic
 actions, and warnings. `write_run` is the one function that serializes a result (`synthetic.csv`, metrics,
-`manifest.json`, a PROV-O `provenance.jsonld`, ...); the report pipeline uses it.
+`manifest.json`, a PROV-O `provenance.json`, ...); the report pipeline uses it.
 
 MetaSyn learns one distribution per column and is the choice for dummy data with realistic types, ranges and
 missingness. It carries no privacy claim. PrivBayes (`pip install -e ".[privbayes]"`) is differentially private

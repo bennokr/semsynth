@@ -10,7 +10,7 @@
   "semsynth/baselines.py": 46,
   "semsynth/benchmark.py": 184,
   "semsynth/browser.py": 66,
-  "semsynth/catalog.py": 96,
+  "semsynth/catalog.py": 102,
   "semsynth/codebook.py": 154,
   "semsynth/config.py": 47,
   "semsynth/dataproviders/_helpers.py": 89,

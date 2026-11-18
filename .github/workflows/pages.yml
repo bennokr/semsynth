@@ -42,7 +42,7 @@ jobs:
           key: datasets-${{ hashFiles('mappings/*.metadata.json') }}
           restore-keys: datasets-
       - name: Demo reports and catalog
-        run: python -m semsynth mappings --pipeline-configs "${{ inputs.config || 'configs/demo_config.toml' }}" --outdir output/
+        run: python -m semsynth --conf @prov-config.toml mappings --pipeline-configs "${{ inputs.config || 'configs/demo_config.toml' }}" --outdir output/
       - name: Check that the privacy metrics were computed
         # A skipped metric (a missing extra) is recorded, not raised, so check the output.
         run: |

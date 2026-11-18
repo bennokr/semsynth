@@ -115,19 +115,19 @@ def output(tmp_path_factory: pytest.TempPathFactory) -> Path:
 
 def test_the_folder_layout_is_the_iri_layout(output: Path) -> None:
     assert sorted(p.name for p in output.iterdir()) == [
-        "catalog.jsonld",
+        "catalog.json",
         "chronic-kidney-disease",
         "heart-disease",
         "index.html",
         "semsynth.ttl",
     ]
-    assert (output / "heart-disease" / "models" / "metasyn" / "provenance.jsonld").exists()
+    assert (output / "heart-disease" / "models" / "metasyn" / "provenance.json").exists()
     index = (output / "index.html").read_text()
     assert 'href="heart-disease/"' in index and "Heart Disease" in index and "../explore/" in index
 
 
 def test_the_catalog_uses_dcat_terms_and_urls_that_are_iris(output: Path) -> None:
-    graph = {n["@id"]: n for n in json.loads((output / "catalog.jsonld").read_text())["@graph"]}
+    graph = {n["@id"]: n for n in json.loads((output / "catalog.json").read_text())["@graph"]}
     dataset = graph[f"{DEFAULT_BASE}heart-disease/"]
     assert dataset["@type"] == "dcat:Dataset" and dataset["dct:title"] == "Heart Disease"
     csv = graph[f"{DEFAULT_BASE}heart-disease/models/metasyn/#distribution-synthetic-csv"]
@@ -143,8 +143,11 @@ def test_the_catalog_uses_dcat_terms_and_urls_that_are_iris(output: Path) -> Non
 def test_every_iri_in_the_rdf_is_clean_and_the_merge_loses_nothing(output: Path) -> None:
     from rdflib import Graph, URIRef
 
+    from semsynth.catalog import is_rdf
+
     parts = Graph()
-    files = sorted(output.rglob("*.jsonld"))
+    files = sorted(p for p in output.rglob("*") if p.is_file() and is_rdf(p))
+    assert {p.name for p in files} >= {"catalog.json", "provenance.json", "dataset.codebook.jsonld"}
     for path in files:
         parts.parse(path, format="json-ld")
     merged = Graph().parse(output / "semsynth.ttl", format="turtle")
@@ -204,3 +207,14 @@ def test_the_queries_run_on_the_merged_file_and_join_across_the_three_views(outp
     assert scores and all(
         r.lower is not None and float(r.lower) <= float(r.value) <= float(r.upper) for r in scores
     )
+
+
+def test_a_json_file_is_rdf_only_with_a_context(tmp_path: Path) -> None:
+    from semsynth.catalog import is_rdf
+
+    (tmp_path / "a.json").write_text('{"@context": {}, "x": 1}')
+    (tmp_path / "b.json").write_text('{"x": 1}')
+    (tmp_path / "c.json").write_text("[1, 2]")
+    (tmp_path / "d.json").write_text("not json")
+    (tmp_path / "e.jsonld").write_text("{}")
+    assert [is_rdf(tmp_path / n) for n in ("a.json", "b.json", "c.json", "d.json", "e.jsonld")] == [True, False, False, False, True]

@@ -126,7 +126,7 @@ Still to ask for: `Value.missing_reason` (`refused`, `dont_know`, `not_applicabl
 ## Provenance
 - The CLI commands are makeprov rules (0.8.1, the newest release; floor raised from 0.4.4). `prov-config.toml` records the
   environment and streams a recovery file. `ProvMeta` (record rule arguments) cannot be used: defopt does not parse it.
-- A run's `provenance.jsonld` (`provenance.py`) has makeprov's shape: `prov:Plan`, runtime agent, qualified association,
+- A run's `provenance.json` (`provenance.py`) has makeprov's shape: `prov:Plan`, runtime agent, qualified association,
   parameters as `schema:additionalProperty`, duration, sha256 per file. Scores are `dqv:QualityMeasurement` of a
   `dqv:Metric` with a version (`dct:hasVersion`). Intervals, noise floors and p-values are measurements of derived metrics
   (`prov:wasDerivedFrom` the metric, in a `dqv:Dimension`); SemSynth defines no namespace, prefix or predicate of its own.

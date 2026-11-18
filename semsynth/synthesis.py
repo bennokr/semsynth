@@ -105,7 +105,7 @@ def write_run(
     Writes ``synthetic.csv`` and, when the pieces exist, ``synthetic.parquet`` (with the codebook in its
     metadata), ``metrics.json``, ``per_variable_metrics.csv`` (``metrics["per_variable"]``),
     ``metrics.privacy.json`` (``metrics["privacy"]``), ``metrics.downstream.json`` (``metrics["downstream"]``),
-    ``metasyn_gmf.json``, the result's ``artifacts``, ``manifest.json`` and a PROV-O ``provenance.jsonld``.
+    ``metasyn_gmf.json``, the result's ``artifacts``, ``manifest.json`` and a PROV-O ``provenance.json``.
 
     Args:
         result: What :func:`synthesize` returned, possibly with metrics added.
@@ -129,7 +129,7 @@ def write_run(
     manifest = _manifest(result, name, dataset or {})
     _write_json(directory / "manifest.json", manifest)
     _write_json(
-        directory / "provenance.jsonld",
+        directory / "provenance.json",
         run_provenance(result, name, dataset or {}, written, directory, base_iri=base_iri, codebook=bool(codebook_jsonld)),
     )
     LOGGER.info("Wrote run %s to %s", name, directory)

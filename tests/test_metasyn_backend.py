@@ -71,7 +71,7 @@ def test_write_run_writes_the_files_the_report_reads(tmp_path: Path, fake_metasy
     run_dir = write_run(result, tmp_path / "models" / "model_a", label="model_a", dataset=dataset, codebook_jsonld=None)
 
     assert run_dir == tmp_path / "models" / "model_a"
-    for name in ("synthetic.csv", "manifest.json", "provenance.jsonld"):
+    for name in ("synthetic.csv", "manifest.json", "provenance.json"):
         assert (run_dir / name).exists(), name
     assert len(pd.read_csv(run_dir / "synthetic.csv")) == 2
     manifest = json.loads((run_dir / "manifest.json").read_text(encoding="utf-8"))

@@ -52,7 +52,7 @@ def _graph(tmp_path: Path, **config: Any) -> tuple[dict[str, Any], Path]:
         pipeline_config=PipelineConfig(**settings),
     )
     run = next((tmp_path / "heart-disease-uci" / "models").iterdir())
-    return json.loads((run / "provenance.jsonld").read_text()), run
+    return json.loads((run / "provenance.json").read_text()), run
 
 
 def test_names_are_slugs_so_no_iri_has_a_space(tmp_path: Path) -> None:
