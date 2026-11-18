@@ -1,0 +1,26 @@
+# The scores of each synthetic dataset with the 95% bootstrap interval or the noise floor, where there is one.
+# The bounds are measurements of metrics that are derived from the metric of the score, each in its own dimension.
+PREFIX dct: <http://purl.org/dc/terms/>
+PREFIX dqv: <http://www.w3.org/ns/dqv#>
+PREFIX prov: <http://www.w3.org/ns/prov#>
+PREFIX rdfs: <http://www.w3.org/2000/01/rdf-schema#>
+PREFIX dim: <https://bennokr.github.io/semsynth/dimension/>
+
+SELECT ?title ?synthetic ?score ?value ?lower ?upper ?noiseLower ?noiseUpper
+WHERE {
+  ?synthetic dct:title ?title .
+  ?m dqv:computedOn ?synthetic ;
+     dqv:isMeasurementOf ?metric ;
+     dqv:value ?value .
+  ?metric rdfs:label ?score .
+  FILTER NOT EXISTS { ?metric prov:wasDerivedFrom ?parent }
+  OPTIONAL { ?l dqv:computedOn ?synthetic ; dqv:value ?lower ;
+             dqv:isMeasurementOf [ prov:wasDerivedFrom ?metric ; dqv:inDimension dim:lower95 ] }
+  OPTIONAL { ?u dqv:computedOn ?synthetic ; dqv:value ?upper ;
+             dqv:isMeasurementOf [ prov:wasDerivedFrom ?metric ; dqv:inDimension dim:upper95 ] }
+  OPTIONAL { ?nl dqv:computedOn ?synthetic ; dqv:value ?noiseLower ;
+             dqv:isMeasurementOf [ prov:wasDerivedFrom ?metric ; dqv:inDimension dim:noise-lower95 ] }
+  OPTIONAL { ?nu dqv:computedOn ?synthetic ; dqv:value ?noiseUpper ;
+             dqv:isMeasurementOf [ prov:wasDerivedFrom ?metric ; dqv:inDimension dim:noise-upper95 ] }
+}
+ORDER BY ?title ?score

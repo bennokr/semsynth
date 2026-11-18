@@ -1,0 +1,17 @@
+# The columns whose codebook says when they apply, or which values mean no value.
+PREFIX dct: <http://purl.org/dc/terms/>
+PREFIX dsvo: <https://w3id.org/dsv-ontology#>
+PREFIX csvw: <http://www.w3.org/ns/csvw#>
+PREFIX lc: <https://bennokr.github.io/linked-codebook/profile#>
+
+SELECT ?title ?column ?appliesWhen (GROUP_CONCAT(DISTINCT ?code; separator=", ") AS ?missingCodes)
+WHERE {
+  ?dataset dct:title ?title ;
+           dsvo:datasetSchema/dsvo:column ?columnNode .
+  ?columnNode csvw:name ?column .
+  OPTIONAL { ?columnNode lc:applies_when ?appliesWhen }
+  OPTIONAL { ?columnNode csvw:null ?code }
+  FILTER(BOUND(?appliesWhen) || BOUND(?code))
+}
+GROUP BY ?title ?column ?appliesWhen
+ORDER BY ?title ?column

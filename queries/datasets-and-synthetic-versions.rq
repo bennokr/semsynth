@@ -1,0 +1,19 @@
+# Each dataset with the synthetic datasets made from it, the generator, and the number of files.
+PREFIX dcat: <http://www.w3.org/ns/dcat#>
+PREFIX dct: <http://purl.org/dc/terms/>
+PREFIX prov: <http://www.w3.org/ns/prov#>
+PREFIX schema: <https://schema.org/>
+
+SELECT ?title ?synthetic ?generator (COUNT(DISTINCT ?distribution) AS ?files)
+WHERE {
+  ?dataset a dcat:Dataset ;
+           dct:title ?title .
+  ?synthetic prov:wasDerivedFrom ?dataset ;
+             prov:wasGeneratedBy ?run ;
+             dcat:distribution ?distribution .
+  ?run prov:used ?engine .
+  ?engine a schema:SoftwareApplication ;
+          schema:name ?generator .
+}
+GROUP BY ?title ?synthetic ?generator
+ORDER BY ?title ?generator

@@ -32,7 +32,7 @@ jobs:
       - name: Install Graphviz
         run: sudo apt-get install -y --no-install-recommends graphviz
       - name: Install
-        run: python -m pip install -e '.[docs,providers,metasyn,pybnesian,umap,statsmodels,privacy]'
+        run: python -m pip install -e '.[docs,providers,metasyn,pybnesian,umap,statsmodels,privacy,rdf]'
       - name: Cache downloaded datasets
         uses: actions/cache@v4
         with:
@@ -62,7 +62,16 @@ jobs:
           cp index.html _site/
           cp -r output _site/output
           cp semsynth/templates/*.css _site/templates/
-          scripts/fetch_site_assets.sh _site/templates
+      - name: SPARQL explorer
+        # The playground (Comunica and YASGUI in the browser, no server) over the merged RDF of the output and queries/.
+        # Pinned to a commit: the action and its bundled assets move together.
+        uses: bennokr/data-catalog-sparql-playground@79433855d547595b3d042cad82df121c2e6b6fa1
+        with:
+          data: output/semsynth.ttl
+          queries: queries/*.rq
+          output: _site/explore
+          title: SemSynth explorer
+          tagline: Query the datasets, codebooks and provenance of the demo with SPARQL.
       - uses: actions/upload-pages-artifact@v3
         with:
           path: _site

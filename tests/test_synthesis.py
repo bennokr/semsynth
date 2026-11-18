@@ -101,15 +101,15 @@ def test_write_run_writes_the_files_of_a_run(tmp_path: Path) -> None:
         "extra.txt",
         "extra.bin",
         "manifest.json",
-        "provenance.json",
+        "provenance.jsonld",
     }
     metrics = json.loads((run_dir / "metrics.json").read_text())
     assert metrics == {"backend": "example", "summary": {"disc_jsd_mean": 0.1}}
     manifest = json.loads((run_dir / "manifest.json").read_text())
     assert manifest["name"] == "a" and manifest["dataset_name"] == "demo" and manifest["seed"] == 3
     assert manifest["privacy_report"] == {"epsilon": 1.0} and manifest["warnings"] == ["careful"]
-    provenance = json.loads((run_dir / "provenance.json").read_text())
+    provenance = json.loads((run_dir / "provenance.jsonld").read_text())
     kinds = {node["@id"]: node["@type"] for node in provenance["@graph"]}
     assert "prov:Activity" in kinds.values()
     generated = [n for n in provenance["@graph"] if n.get("prov:wasGeneratedBy")]
-    assert {n["dcterms:title"] for n in generated} >= {"synthetic.csv", "metrics.json", "extra.txt"}
+    assert {n["dct:title"] for n in generated if "dct:title" in n} >= {"synthetic.csv", "metrics.json", "extra.txt"}

@@ -8,6 +8,8 @@ from typing import Any
 
 from makeprov.config import Config
 
+from .iris import DEFAULT_BASE
+
 __all__ = ["PipelineConfig", "UmapConfig"]
 
 
@@ -24,6 +26,7 @@ class UmapConfig(Config):
 class PipelineConfig(Config):
     """Configuration values controlling the reporting pipeline."""
 
+    iri_base: str = DEFAULT_BASE  # every published IRI is under this base (see semsynth.iris)
     random_state: int = 42
     max_umap_sample: int = 1000
     fit_on_sample: int | None = 1000

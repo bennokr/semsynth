@@ -52,7 +52,7 @@ jobs:
             "DataSynthesizer==0.1.13" "metasyn==3.0.0" \
             https://bennokr.github.io/linked-codebook/linked_codebook-0.10.0-py3-none-any.whl
           uv pip install --no-deps -e .
-          pytest -q --ignore=tests/test_sparql_playwright.py
+          pytest -q
 
   pyodide-smoke:
     # PrivBayes, MetaSyn, missingness, privacy (with sdmetrics) and the downstream comparison inside Pyodide 0.27.7 (Python 3.12).

@@ -108,6 +108,7 @@ def run_reports(
     """
 
     from .datasets import load_dataset, specs_from_input
+    from .iris import slug
     from .runner import process_dataset
 
     outdir_path = Path(outdir)
@@ -120,7 +121,7 @@ def run_reports(
             payload = load_dataset(spec)
             label = payload.spec.name or str(payload.spec.id)
             if on_dataset is not None:
-                on_dataset(outdir_path / str(label).replace("/", "_"))
+                on_dataset(outdir_path / slug(label))
             process_dataset(
                 payload.spec,
                 payload.frame,

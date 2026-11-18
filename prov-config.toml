@@ -1,4 +1,4 @@
-base_iri = "https://w3id.org/semsynth/demo#"
+base_iri = "https://bennokr.github.io/semsynth/output/"
 prov_dir = "output/provenance"
 force = true
 dry_run = false

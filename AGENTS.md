@@ -22,9 +22,11 @@ Direction, decisions and status: `SPEC.md`.
     `uncertainty.py` (bootstrap for row-level statistics, permutation null for distances), `benchmark.py` (injected truth).
   - Run and report: `runner.py` (`process_dataset`, the part that writes files), `workflow.py` (what the CLI and the app
     call), `browser.py` (entry points for Pyodide), `provenance.py` (run PROV-O and DQV), `reporting.py` + `report_tables.py`,
-    `catalog.py`. makeprov `@rule`s exist only in `__main__.py`.
-- The catalog page loads YASGUI and Comunica from `../templates/`. They are not in the repository or the wheel:
-  `scripts/fetch_site_assets.sh <dir>` downloads them with pinned SHA-256 checks (the Pages workflow runs it).
+    `catalog.py` (DCAT and the merged RDF), `iris.py`. makeprov `@rule`s exist only in `__main__.py`.
+- The SPARQL page is the data-catalog-sparql-playground, run as a step of the Pages workflow over `output/semsynth.ttl` (the merge
+  of the catalog, codebooks and provenance) and `queries/*.rq`. All IRIs come from `semsynth/iris.py`: slugs, one base, no `urn:`.
+  Comunica does not deduplicate a triple that two source files both state, which is why the files are merged; keep queries free of
+  string functions (`tests/test_catalog.py` checks) by modelling the link instead.
 - `mappings/` curated codebooks; `map_columns/` holds only terminology data (matchers live in entailmap).
 - Core modules listed in the `Makefile` (`CORE`) are `mypy --strict`; add a module there when it is clean.
 

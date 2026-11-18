@@ -1,0 +1,20 @@
+# Columns per dataset, and how many of them declare a skip rule (applies when) or codes that mean no value.
+PREFIX dcat: <http://www.w3.org/ns/dcat#>
+PREFIX dct: <http://purl.org/dc/terms/>
+PREFIX dsvo: <https://w3id.org/dsv-ontology#>
+PREFIX csvw: <http://www.w3.org/ns/csvw#>
+PREFIX lc: <https://bennokr.github.io/linked-codebook/profile#>
+
+SELECT ?title
+       (COUNT(DISTINCT ?column) AS ?columns)
+       (COUNT(DISTINCT ?ruled) AS ?withSkipRule)
+       (COUNT(DISTINCT ?coded) AS ?withMissingCodes)
+WHERE {
+  ?dataset a dcat:Dataset ;
+           dct:title ?title ;
+           dsvo:datasetSchema/dsvo:column ?column .
+  OPTIONAL { ?column lc:applies_when ?rule . BIND(?column AS ?ruled) }
+  OPTIONAL { ?column csvw:null ?code . BIND(?column AS ?coded) }
+}
+GROUP BY ?title
+ORDER BY DESC(?columns)

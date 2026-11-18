@@ -67,10 +67,9 @@ Dataset metadata is a [linked-codebook](https://bennokr.github.io/linked-codeboo
    Pipeline toggles (UMAP, privacy, downstream, missingness, etc.) now live in the TOML bundle under `[pipeline]` rather than separate CLI flags.
 
 4. Catalog + app helpers
-   - Build a DCAT catalog and HTML index from existing outputs: `python -m semsynth build-catalog`
+   - Build a DCAT catalog (`output/catalog.jsonld`), an index page and the merged RDF for the SPARQL explorer (`output/semsynth.ttl`, needs `.[rdf]`) from existing outputs: `python -m semsynth build-catalog --merge`
    - Regenerate metadata-only reports for all curated codebooks and refresh the catalog/index: `python -m semsynth mappings --pipeline-configs ""`
    - Re-render reports for all curated mappings using existing outputs (skip mappings and metrics): `python -m semsynth refresh-mapping-reports --pipeline-configs '{pipeline={generate_umap=false,compute_privacy=false,compute_downstream=false,overwrite_umap=false}}'`
-   - The generated `output/index.html` now embeds **YASGUI + Comunica (browser)** with a static endpoint identifier (`browser://semsynth-static-catalog`) and loads runnable query tabs from `output/sparql/*.rq` files for codebooks and provenance-linked synthetic artifacts.
    - Launch a minimal Flask UI for search and report actions (needs `.[app,providers]`): `python -m semsynth run-app --port 5000`. It calls the same functions as `search` and `report`, accepts inline TOML only, and binds to 127.0.0.1 unless you pass `--host`
 
 ## 📄 TOML bundles
@@ -191,15 +190,12 @@ subgroup_min_size = 30
 - Build the Sphinx site with `sphinx-build -b html sphinx docs`.
 - The published site (demo reports for the curated datasets, the catalog and the documentation) is built by `.github/workflows/pages.yml` on every push to `main`, or by hand with a model bundle of your choice. `output/` and `docs/` are not committed.
 
-## 🔎 Static SPARQL endpoint (demo index)
-- The YASGUI and Comunica scripts that the catalog page loads are not in the repository. To preview the catalog locally, run `scripts/fetch_site_assets.sh templates` next to `output/` (the page loads `../templates/`); the Pages workflow does the same.
-- `python -m semsynth build-catalog` writes `output/index.html`, `output/catalog.json`, `output/catalog.jsonld`, and `output/sparql/*.rq` with an embedded YASGUI editor and browser Comunica query engine targeting static files only.
-- The page advertises endpoint id `browser://semsynth-static-catalog` and includes ready-to-run query tabs covering:
-  - datasets that publish `dataset.codebook.jsonld`,
-  - provenance-linked synthetic artifacts,
-  - distribution counts per dataset.
-- This mirrors the static-browser pattern from `data-catalog-sparql-playground` (catalog + local query UI, no server-side SPARQL service required).
-- SPARQL query templates are also described as catalog distributions so tooling can discover and preload them as tabs.
+## 🔎 SPARQL over the output
+- Everything that is published has an IRI under one base (`iri_base`, default `https://bennokr.github.io/semsynth/output/`, see `semsynth/iris.py`): `<base><dataset>/` is the dataset (its codebook describes it), `<base><dataset>/models/<model>/` the synthetic dataset, `…/#run` the run that made it. Folder names are slugs, so no IRI has a space; titles are in `dct:title`.
+- The catalog (DCAT), the codebooks (DSV, written by linked-codebook) and the provenance of each run (PROV-O, with the scores as W3C DQV measurements) use those same IRIs, so SPARQL joins them directly. `queries/*.rq` holds the example queries; none of them takes a string apart.
+- The explorer at `explore/` is the [data-catalog-sparql-playground](https://github.com/bennokr/data-catalog-sparql-playground) (Comunica and YASGUI in the browser, no server), built in the Pages workflow from `output/semsynth.ttl` and `queries/`. The Turtle file is the merge of all JSON-LD files: Comunica queries each file as its own source and does not remove a triple that two sources both state, so joins over the separate files return duplicate rows.
+- To try it locally: `python -m semsynth build-catalog --merge`, then build the playground with its `make_catalog.py build --data output/semsynth.ttl --queries 'queries/*.rq'` and serve the result.
+
 
 
 ## Synthesizing from Python
@@ -218,7 +214,7 @@ write_run(result, "output/run-1")   # only if you want the files
 `synthesize(df, codebook, *, rows, seed, **options)` and returns a `semsynth.SynthesisResult`: the generated data
 and the learned model as Python objects, alongside parameters, utility metrics, privacy facts, provenance, semantic
 actions, and warnings. `write_run` is the one function that serializes a result (`synthetic.csv`, metrics,
-`manifest.json`, a PROV-O `provenance.json`, ...); the report pipeline uses it.
+`manifest.json`, a PROV-O `provenance.jsonld`, ...); the report pipeline uses it.
 
 MetaSyn learns one distribution per column and is the choice for dummy data with realistic types, ranges and
 missingness. It carries no privacy claim. PrivBayes (`pip install -e ".[privbayes]"`) is differentially private

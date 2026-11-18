@@ -14,6 +14,8 @@ from pathlib import Path
 from makeprov import InPath, OutPath, main, rule
 from makeprov.config import ProvenanceConfig
 
+from .iris import DEFAULT_BASE
+
 __all__ = [
     "build_catalog",
     "create_mapping",
@@ -210,11 +212,11 @@ def _reports_for_mappings(
     outdir: str,
     pipeline_configs: str,
     verbose: bool,
-    base_url: str | None,
+    rebuild_catalog: bool,
 ) -> None:
-    """Run reports for the curated mappings and, if a ``base_url`` is given, rebuild the catalog."""
+    """Run reports for the curated mappings and, if asked, rebuild the catalog (with the IRI base of the pipeline settings)."""
 
-    from .workflow import collect_mapping_targets, run_reports_for_targets
+    from .workflow import collect_mapping_targets, read_pipeline_config, run_reports_for_targets
 
     if verbose:
         logging.root.setLevel(logging.INFO)
@@ -224,16 +226,14 @@ def _reports_for_mappings(
     successes, failures = run_reports_for_targets(
         targets, outdir=outdir, pipeline_configs=pipeline_configs, on_dataset=_set_prov_dir
     )
-    if successes and base_url:
+    if successes and rebuild_catalog:
         from .catalog import build_catalog as write_catalog
 
         ProvenanceConfig.get().prov_dir = str(Path(outdir))
-        write_catalog(
-            base_dir=Path(outdir),
-            base_url=base_url,
-            out_path=Path(outdir) / "catalog.json",
-            index_path=Path(outdir) / "index.html",
-        )
+        try:
+            write_catalog(Path(outdir), read_pipeline_config(pipeline_configs)[1].iri_base, merge=True)
+        except ImportError as exc:
+            raise SystemExit(str(exc)) from exc
     if failures:
         logging.warning("Completed with skipped datasets: %s", "; ".join(failures))
         if successes == 0:
@@ -245,19 +245,19 @@ def mappings(
     *,
     pipeline_configs: str = "",
     outdir: str = "output/",
-    base_url: str = "https://w3id.org/semsynth/demo#",
     verbose: bool = False,
 ) -> None:
     """Generate reports for all curated mapping JSON files and rebuild the catalog.
 
+    The IRIs come from ``iri_base`` of the pipeline settings (see :mod:`semsynth.iris`).
+
     Args:
         pipeline_configs: Optional model configuration bundle (TOML); leave empty for metadata-only runs.
         outdir: Directory for report outputs.
-        base_url: Base IRI used when rebuilding the catalog and HTML index.
         verbose: Whether to enable informational logging.
     """
     _reports_for_mappings(
-        "mappings", outdir=outdir, pipeline_configs=pipeline_configs, verbose=verbose, base_url=base_url
+        "mappings", outdir=outdir, pipeline_configs=pipeline_configs, verbose=verbose, rebuild_catalog=True
     )
 
 
@@ -280,7 +280,7 @@ def refresh_mapping_reports(
         verbose: Whether to enable informational logging.
     """
     _reports_for_mappings(
-        mapping_root, outdir=outdir, pipeline_configs=pipeline_configs, verbose=verbose, base_url=None
+        mapping_root, outdir=outdir, pipeline_configs=pipeline_configs, verbose=verbose, rebuild_catalog=False
     )
 
 
@@ -303,22 +303,25 @@ def recompute_downstream(
 @rule()
 def build_catalog(
     base_dir: InPath = InPath("output"),
-    base_url: str = "https://w3id.org/semsynth/demo#",
-    out_path: OutPath = OutPath("output/catalog.json"),
+    base_iri: str = DEFAULT_BASE,
+    out_path: OutPath = OutPath("output/catalog.jsonld"),
     index_path: OutPath = OutPath("output/index.html"),
+    *,
+    merge: bool = False,
 ) -> None:
-    """Construct the DCAT catalog.
+    """Write the DCAT catalog and the index page of the datasets in the output folder.
 
     Args:
         base_dir: The base directory that holds all SemSynth reports.
-        base_url: Base URL for creating IRIs.
+        base_iri: Base of every IRI; the address that ``base_dir`` is served from.
         out_path: Output path for the catalog JSON-LD.
         index_path: Output path for the HTML index file.
+        merge: Also merge all RDF of the folder into one deduplicated Turtle file for the SPARQL page (needs rdflib).
     """
     from . import catalog
 
     ProvenanceConfig.get().prov_dir = out_path.parent
-    catalog.build_catalog(base_dir, base_url, out_path, index_path)
+    catalog.build_catalog(base_dir, base_iri, out_path, index_path, merge=merge)
 
 
 @rule(phony=True)

@@ -22,6 +22,7 @@ from .evaluate import (
     privacy_scores,
     split_train_test,
 )
+from .iris import slug
 from .mappings import load_mapping_json, resolve_mapping_json
 from .metadata import get_uciml_variable_descriptions
 from .models import ModelConfigBundle, ModelSpec, discover_model_runs, load_model_configs
@@ -182,10 +183,11 @@ class BackendExecutor:
         }
         write_run(
             result,
-            outdir / "models" / label,
+            outdir / "models" / slug(label, "model"),
             label=label,
             dataset=dataset,
             codebook_jsonld=preprocessed.codebook_jsonld,
+            base_iri=self._cfg.iri_base,
         )
 
     def _generate(
@@ -342,10 +344,10 @@ class BackendExecutor:
         frame: pd.DataFrame,
         seed: int,
     ) -> dict[str, Any]:
-        from .structure import check_subgroups, subgroups_of
+        from .structure import check_subgroups, subgroups_from
         from .subgroups import subgroup_scores
 
-        groups = subgroups_of(preprocessed.codebook, self._cfg.subgroups)
+        groups = subgroups_from(self._cfg.subgroups)
         problems = check_subgroups(groups, train.columns)
         if problems:
             raise ValueError("; ".join(problems))
@@ -611,7 +613,7 @@ def process_dataset(
     deps = deps or PipelineDeps()
     bundle = model_bundle or load_model_configs(None)
     cfg = pipeline_config or PipelineConfig()
-    outdir = Path(base_outdir) / str(dataset_spec.name).replace("/", "_")
+    outdir = Path(base_outdir) / slug(dataset_spec.name or dataset_spec.id)
     outdir.mkdir(parents=True, exist_ok=True)
 
     generate_umap = bundle.generate_umap if bundle.generate_umap is not None else cfg.generate_umap

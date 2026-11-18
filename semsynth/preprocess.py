@@ -6,13 +6,13 @@ Nothing here writes files; the UMAP plot of the real data is drawn by the runner
 from __future__ import annotations
 
 import logging
-import re
 from dataclasses import dataclass
 from pathlib import Path
 from typing import TYPE_CHECKING, Any
 
 from .codebook import Codebook
 from .config import PipelineConfig
+from .iris import Iris
 from .specs import DatasetSpec
 from .structure import fill_not_applicable, recode_declared_missing
 
@@ -115,7 +115,7 @@ class DatasetPreprocessor:
             else None
         )
         missingness_model = self._fit_missingness(dataset_spec, df_processed, cfg)
-        self._complete_codebook(codebook, dataset_spec, df_processed, target_column, missingness_model)
+        self._complete_codebook(codebook, dataset_spec, df_processed, target_column, missingness_model, cfg)
 
         return PreprocessingResult(
             df_processed=df_processed,
@@ -252,15 +252,17 @@ class DatasetPreprocessor:
         df_processed: pd.DataFrame,
         target_column: str | None,
         missingness_model: DataFrameMissingnessModel | None,
+        cfg: PipelineConfig,
     ) -> None:
-        """Record the target role, the statistics, an identifier and a title in the codebook."""
+        """Record the target role, the statistics, the IRI of the dataset and a title in the codebook.
+
+        The identifier is always the IRI of the dataset (:mod:`semsynth.iris`), because the codebook, the catalog and
+        the provenance must name the dataset by one IRI; an identifier that came with the data is not kept.
+        """
 
         if target_column and target_column in df_processed.columns:
             codebook.roles[str(target_column)] = "target"
         codebook.set_statistics(df_processed, missingness_model)
-        if "identifier" not in codebook.profile:
-            label = dataset_spec.name or str(dataset_spec.id)
-            slug = re.sub(r"[^a-z0-9]+", "-", str(label).lower()).strip("-") or "dataset"
-            codebook.profile["identifier"] = f"urn:dataset:{slug}"
+        codebook.profile["identifier"] = Iris(cfg.iri_base).dataset(dataset_spec.name or dataset_spec.id)
         if dataset_spec.name and "title" not in codebook.profile:
             codebook.profile["title"] = dataset_spec.name

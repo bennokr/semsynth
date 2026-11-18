@@ -36,7 +36,8 @@ dev = [
   "mypy",
   "pandas-stubs",
   "ty",
-  "statsmodels"
+  "statsmodels",
+  "rdflib"
 ]
 app = [
   "flask"  # `python -m semsynth run-app`
@@ -89,6 +90,9 @@ umap = [
 statsmodels = [
   "statsmodels"
 ]
+rdf = [
+  "rdflib"  # merges the catalog, codebooks and provenance into one Turtle file for the SPARQL page
+]
 privacy = [
   "sdmetrics>=0.33"  # attribute-inference and distance-to-closest-record privacy metrics; needs NumPy 2
 ]
@@ -110,7 +114,8 @@ all = [
   "scipy",
   "matplotlib",
   "umap-learn",
-  "sdmetrics>=0.33"
+  "sdmetrics>=0.33",
+  "rdflib"
 ]
 
 [tool.uv]

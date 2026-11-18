@@ -64,8 +64,8 @@ counts values where the rule says the question does not apply. With `structure_a
 that are complete over the cells that apply (the others are filled with a neutral value), and the rules are enforced on the
 output. A pandas `NaN` is not blank for linked-codebook's evaluator, so tables go through `structure.as_rows` first.
 
-**Subgroups** (`semsynth.subgroups`). Named conditions in the same language, stored in the codebook under `ss:subgroups` or
-given in `subgroups`. For each group: its size in the training, holdout and synthetic table, marginal fidelity, exact-match
+**Subgroups** (`semsynth.subgroups`). Named conditions in the same language, given in the settings (`subgroups`, a list of `name`, `condition` and
+optionally `label`); they are not part of the codebook. For each group: its size in the training, holdout and synthetic table, marginal fidelity, exact-match
 rate and the share of synthetic rows closer to a training record than the 5th percentile of the group's holdout rows (with
 bootstrap intervals), the gap to the overall score and the worst group. A group with fewer than `subgroup_min_size` holdout or
 synthetic rows is listed with its sizes only. `inspect_table` (in `semsynth.browser`) reports misspelt fields and group

@@ -24,11 +24,11 @@ sorted(p.name for p in prov_dir.glob("*") if p.is_file())[:5]
 
 ## How it is wired
 - The CLI commands in `semsynth/__main__.py` are thin wrappers decorated with `@rule`, so makeprov tracks their inputs and outputs. The library (`semsynth.synthesis`, `semsynth.runner`, ...) does not use makeprov rules, which keeps it importable from a notebook or a browser; `ProvenanceConfig.prov_dir` is set per dataset before processing starts.
-- Every model run additionally gets a PROV-O `provenance.json` (`semsynth.synthesis.write_run`): the synthesis activity, the dataset and engine it used, the software agent, and the files it generated. The catalog and its SPARQL queries read these files.
+- Every model run additionally gets a PROV-O `provenance.jsonld` (`semsynth.synthesis.write_run`): the synthesis activity, the dataset and engine it used, the software agent, and the files it generated. The catalog and its SPARQL queries read these files.
 - Default settings live in `prov-config.toml` (base IRI and output directory). You can override them via CLI flags or config.
 
-## Browser catalog
-The generated `output/index.html` includes a SPARQL/YASGUI panel wired to the static catalog and provenance files. Open it in a browser to explore datasets, mappings, and provenance artifacts without running a server.
+## SPARQL
+The catalog, the codebooks and the run provenance use the same IRIs (`semsynth/iris.py`), so `queries/*.rq` join them without string handling. The Pages workflow merges them into `output/semsynth.ttl` and builds the explorer at `explore/` with the data-catalog-sparql-playground. See the README.
 
 ## Handy commands
 - Regenerate a missing file: `python -m semsynth --build output/<dataset>/index.html`
@@ -39,11 +39,14 @@ The generated `output/index.html` includes a SPARQL/YASGUI panel wired to the st
 - [makeprov SHACL shapes](https://raw.githubusercontent.com/bennokr/makeprov/refs/heads/main/tests/prov_shapes.ttl)
 - [PROV-O primer](https://www.w3.org/TR/prov-o/)
 
-## Run provenance (`provenance.json`)
+## Run provenance (`provenance.jsonld`)
 Since makeprov 0.7 a script is a `prov:Plan`, not an agent; `semsynth.provenance` writes a run in the same shape: the plan
 (semsynth at a version), the runtime (CPython), a qualified association tying them to the activity, the parameters as
-`schema:additionalProperty`, start, end and duration, and a sha256 for every file written. The scores are
-`dqv:QualityMeasurement` nodes of a `dqv:Metric` with an id and a version (`METRICS_VERSION`). The Data Quality Vocabulary has
-no property for uncertainty, so `ss:lowerBound` / `ss:upperBound` (bootstrap interval) and `ss:noiseLower` / `ss:noiseUpper` /
-`ss:pValue` (permutation noise floor) are used; the `ss:` namespace is a placeholder. The CLI's own records come from makeprov
-with `record_environment` and `stream` on (`prov-config.toml`).
+`schema:additionalProperty`, start, end and duration, and a sha256 for every file written. The synthetic dataset
+(`<base><dataset>/models/<model>/`) `prov:wasDerivedFrom` the dataset and `prov:wasGeneratedBy` the run, which `prov:used` the
+dataset, its codebook and the engine. The scores are `dqv:QualityMeasurement` nodes of a `dqv:Metric` with an id and a version
+(`dct:hasVersion`). The Data Quality Vocabulary has no property for uncertainty, and no term of ours is used for it: a bound
+of the 95% bootstrap interval, the ends of the noise floor and the p-value are measurements of their own metrics, each
+`prov:wasDerivedFrom` the metric of the score and in a `dqv:Dimension` (`lower95`, `upper95`, `noise-lower95`, `noise-upper95`,
+`p-value`), so a query can pick them by IRI. The CLI's own records come from makeprov with `record_environment` and `stream` on
+(`prov-config.toml`).

@@ -201,9 +201,7 @@ def test_clean_dataset_frame_detects_role_in_metadata():
         }
     }
 
-    _cleaned, target_name, color_series = clean_dataset_frame(
-        df, metadata=metadata
-    )
+    _cleaned, target_name, color_series = clean_dataset_frame(df, metadata=metadata)
 
     assert target_name == "class"
     assert color_series.attrs.get("prov:hadRole") == "target"
@@ -246,9 +244,7 @@ def test_openml_cached_uses_helper(monkeypatch: pytest.MonkeyPatch, tmp_path: Pa
         )
         return cleaned, "class", series
 
-    monkeypatch.setattr(
-        "semsynth.dataproviders.openml.clean_dataset_frame", fake_helper
-    )
+    monkeypatch.setattr("semsynth.dataproviders.openml.clean_dataset_frame", fake_helper)
 
     payload = load_openml_by_name(dataset_name, cache_dir)
 
@@ -295,9 +291,7 @@ def test_uciml_cached_uses_helper(monkeypatch: pytest.MonkeyPatch, tmp_path: Pat
         )
         return cleaned, "target", series
 
-    monkeypatch.setattr(
-        "semsynth.dataproviders.uciml.clean_dataset_frame", fake_helper
-    )
+    monkeypatch.setattr("semsynth.dataproviders.uciml.clean_dataset_frame", fake_helper)
 
     payload = load_uciml_by_id(dataset_id, cache_dir)
 
@@ -340,16 +334,12 @@ def test_uciml_cached_metadata_becomes_a_codebook(tmp_path: Path):
                 {
                     "schema:name": "feature",
                     "prov:hadRole": "qi",
-                    "dsv:summaryStatistics": {
-                        "dsv:statisticalDataType": "dsv:NumericalDataType"
-                    },
+                    "dsv:summaryStatistics": {"dsv:statisticalDataType": "dsv:NumericalDataType"},
                 },
                 {
                     "schema:name": "target",
                     "prov:hadRole": "target",
-                    "dsv:summaryStatistics": {
-                        "dsv:statisticalDataType": "dsv:CategoricalDataType"
-                    },
+                    "dsv:summaryStatistics": {"dsv:statisticalDataType": "dsv:CategoricalDataType"},
                 },
             ]
         },
@@ -392,21 +382,13 @@ def test_uciml_cached_metadata_becomes_a_codebook(tmp_path: Path):
     assert codebook.roles["target"] == "target"
     assert codebook.kind("target") == "categorical"
     export_columns = preprocessed.codebook_jsonld["datasetSchema"]["columns"]
-    assert any(col.get("prov:hadRole") == "target" and col["name"] == "target" for col in export_columns)
+    assert any(
+        col.get("prov:hadRole") == "target" and col["name"] == "target" for col in export_columns
+    )
     assert preprocessed.codebook_jsonld["title"] == "Demo UCI"
     assert any(
-        (
-            col.get("dsv:summaryStatistics", {}).get("dsv:statisticalDataType")
-            == "dsv:NumericalDataType"
-        )
-        or (
-            col.get("summaryStatistics", {})
-            and (
-                col["summaryStatistics"].get("statisticalDataType")
-                == "dsv:NumericalDataType"
-                or col["summaryStatistics"].get("dsv:statisticalDataType")
-                == "dsv:NumericalDataType"
-            )
+        str(col.get("summaryStatistics", {}).get("statisticalDataType", "")).endswith(
+            ":NumericalDataType"
         )
         for col in export_columns
         if col.get("schema:name") == "feature" or col.get("name") == "feature"
@@ -414,13 +396,19 @@ def test_uciml_cached_metadata_becomes_a_codebook(tmp_path: Path):
 
 
 def test_backend_executor_runs_models(tmp_path):
-    df = pd.DataFrame({"category": pd.Categorical(["a", "b"] * 5), "value": [1.0, 2.0, 3.0, 4.0, 5.0] * 2})
+    df = pd.DataFrame(
+        {"category": pd.Categorical(["a", "b"] * 5), "value": [1.0, 2.0, 3.0, 4.0, 5.0] * 2}
+    )
     spec = DatasetSpec(provider="demo", name="example", target="value")
     preprocessed = _create_preprocessing_result(df, tmp_path)
     seen: dict[str, Any] = {}
 
-    def fake_synthesize(frame: pd.DataFrame, codebook: Any, *, backend: str, rows: int, seed: int, **options: Any):
-        seen.update(frame=frame, codebook=codebook, backend=backend, rows=rows, seed=seed, options=options)
+    def fake_synthesize(
+        frame: pd.DataFrame, codebook: Any, *, backend: str, rows: int, seed: int, **options: Any
+    ):
+        seen.update(
+            frame=frame, codebook=codebook, backend=backend, rows=rows, seed=seed, options=options
+        )
         return SynthesisResult(
             synthetic_data=frame.head(rows).copy(),
             backend=backend,
@@ -472,26 +460,34 @@ def test_backend_executor_runs_models(tmp_path):
     manifest = json.loads((run_dir / "manifest.json").read_text())
     assert manifest["backend"] == "dummy" and manifest["dataset_name"] == "example"
     assert manifest["test_size"] == 0.2 and manifest["seed"] == 3
-    assert (run_dir / "synthetic.csv").exists() and (run_dir / "provenance.json").exists()
+    assert (run_dir / "synthetic.csv").exists() and (run_dir / "provenance.jsonld").exists()
     assert (run_dir / "synthetic.parquet").exists() or not preprocessed.codebook_jsonld
     assert len(privacy_calls) == 1
 
 
 def test_a_failing_model_does_not_stop_the_others(tmp_path):
-    df = pd.DataFrame({"category": pd.Categorical(["a", "b"] * 5), "value": [1.0, 2.0, 3.0, 4.0, 5.0] * 2})
+    df = pd.DataFrame(
+        {"category": pd.Categorical(["a", "b"] * 5), "value": [1.0, 2.0, 3.0, 4.0, 5.0] * 2}
+    )
     spec = DatasetSpec(provider="demo", name="example", target="value")
     preprocessed = _create_preprocessing_result(df, tmp_path)
 
-    def flaky(frame: pd.DataFrame, codebook: Any, *, backend: str, rows: int, seed: int, **_options: Any):
+    def flaky(
+        frame: pd.DataFrame, codebook: Any, *, backend: str, rows: int, seed: int, **_options: Any
+    ):
         if backend == "broken":
             raise ImportError("needs the 'broken' extra")
-        return SynthesisResult(synthetic_data=frame.head(rows).copy(), backend=backend, parameters={"seed": seed})
+        return SynthesisResult(
+            synthetic_data=frame.head(rows).copy(), backend=backend, parameters={"seed": seed}
+        )
 
     bundle = ModelConfigBundle(
         specs=[ModelSpec(name="a", backend="broken"), ModelSpec(name="b", backend="fine")]
     )
 
-    BackendExecutor(PipelineConfig(), synthesize_fn=flaky).run_models(spec, bundle, preprocessed, tmp_path)
+    BackendExecutor(PipelineConfig(), synthesize_fn=flaky).run_models(
+        spec, bundle, preprocessed, tmp_path
+    )
 
     assert not (tmp_path / "models" / "a").exists()
     assert (tmp_path / "models" / "b" / "synthetic.csv").exists()
@@ -543,7 +539,9 @@ def test_report_writer_generates_outputs(tmp_path):
     reporter = ReportWriter(reporting_stub, umap_stub)
 
     cfg = PipelineConfig()
-    reporter.generate_synthetic_umaps([run], DatasetSpec(provider="demo", name="example"), preprocessed, cfg)
+    reporter.generate_synthetic_umaps(
+        [run], DatasetSpec(provider="demo", name="example"), preprocessed, cfg
+    )
     reporter.write_report(
         outdir=tmp_path,
         dataset_spec=DatasetSpec(provider="demo", name="example"),

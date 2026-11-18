@@ -87,32 +87,35 @@ def inspect_table(
     codebook: Mapping[str, Any] | str | None = None,
     subgroups: list[dict[str, str]] | None = None,
 ) -> dict[str, Any]:
-    """Check a table against its codebook without generating anything.
+    """Check a table against its codebook, and subgroup definitions against the table, without generating anything.
 
     Returns:
-        ``rows``, ``declared_missing`` (cells per column that hold a declared code), ``structural`` (cells that the skip
+        ``rows``, ``declared_missing`` (cells per column that hold a declared code), ``rule_problems`` (a skip rule that does not parse or refers
+        to a field that is no column), ``structural`` (cells that the skip
         rules mark as not applicable and how many of them hold a value anyway), ``incomplete_rows`` (rows with a missing
         cell, after recoding) and ``subgroups`` (``problems`` such as a field that is no column, and the size of each
         group).
     """
     from .structure import (
+        check_rules,
         check_subgroups,
         membership,
         recode_declared_missing,
         structural_violations,
-        subgroups_of,
+        subgroups_from,
     )
 
     frame = _table(csv_text)
     book = _codebook(codebook, frame)
     recoded, declared = recode_declared_missing(frame, book)
-    groups = subgroups_of(book, subgroups or [])
+    groups = subgroups_from(subgroups or [])
     problems = check_subgroups(groups, frame.columns)
     sizes = {} if problems else {g: int(n) for g, n in membership(recoded, groups).sum().items()}
     violations = structural_violations(recoded, book)
     return {
         "rows": len(frame),
         "declared_missing": declared,
+        "rule_problems": check_rules(book, frame.columns),
         "structural": {"violation_rate": None if violations["rate"] != violations["rate"] else violations["rate"], "columns": violations["columns"]},
         "incomplete_rows": int(recoded.isna().any(axis=1).sum()),
         "subgroups": {"problems": problems, "sizes": sizes},

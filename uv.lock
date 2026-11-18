@@ -5560,6 +5560,18 @@ wheels = [
 ]
 
 [[package]]
+name = "rdflib"
+version = "7.6.0"
+source = { registry = "https://pypi.org/simple" }
+dependencies = [
+    { name = "pyparsing" },
+]
+sdist = { url = "https://files.pythonhosted.org/packages/98/f5/18bb77b7af9526add0c727a3b2048959847dc5fb030913e2918bf384fec3/rdflib-7.6.0.tar.gz", hash = "sha256:6c831288d5e4a5a7ece85d0ccde9877d512a3d0f02d7c06455d00d6d0ea379df", size = 4943826, upload-time = "2026-02-13T07:15:55.938Z" }
+wheels = [
+    { url = "https://files.pythonhosted.org/packages/10/c2/6604a71269e0c1bd75656d5a001432d16f2cc5b8c057140ec797155c295e/rdflib-7.6.0-py3-none-any.whl", hash = "sha256:30c0a3ebf4c0e09215f066be7246794b6492e054e782d7ac2a34c9f70a15e0dd", size = 615416, upload-time = "2026-02-13T07:15:46.487Z" },
+]
+
+[[package]]
 name = "redis"
 version = "8.1.0"
 source = { registry = "https://pypi.org/simple" }
@@ -6139,6 +6151,7 @@ all = [
     { name = "openml" },
     { name = "py3langid" },
     { name = "pybnesian" },
+    { name = "rdflib" },
     { name = "requests" },
     { name = "scipy" },
     { name = "sdmetrics" },
@@ -6154,6 +6167,7 @@ dev = [
     { name = "pandas-stubs" },
     { name = "pytest" },
     { name = "pytest-cov" },
+    { name = "rdflib" },
     { name = "ruff" },
     { name = "statsmodels" },
     { name = "ty" },
@@ -6199,6 +6213,9 @@ pybnesian = [
     { name = "numpy", version = "2.5.5", source = { registry = "https://pypi.org/simple" }, marker = "(python_full_version >= '3.12' and extra == 'extra-8-semsynth-pybnesian') or (python_full_version < '3.12' and extra == 'extra-8-semsynth-all' and extra == 'extra-8-semsynth-synthcity') or (python_full_version < '3.12' and extra == 'extra-8-semsynth-language' and extra == 'extra-8-semsynth-synthcity') or (python_full_version < '3.12' and extra == 'extra-8-semsynth-privacy' and extra == 'extra-8-semsynth-synthcity') or (extra == 'extra-8-semsynth-all' and extra != 'extra-8-semsynth-pybnesian' and extra == 'extra-8-semsynth-synthcity') or (extra == 'extra-8-semsynth-language' and extra != 'extra-8-semsynth-pybnesian' and extra == 'extra-8-semsynth-synthcity') or (extra == 'extra-8-semsynth-privacy' and extra != 'extra-8-semsynth-pybnesian' and extra == 'extra-8-semsynth-synthcity') or (extra != 'extra-8-semsynth-pybnesian' and extra == 'extra-8-semsynth-synthcity' and extra == 'extra-8-semsynth-umap') or (extra != 'extra-8-semsynth-all' and extra != 'extra-8-semsynth-language' and extra != 'extra-8-semsynth-privacy' and extra == 'extra-8-semsynth-pybnesian' and extra == 'extra-8-semsynth-synthcity') or (extra != 'extra-8-semsynth-all' and extra != 'extra-8-semsynth-language' and extra != 'extra-8-semsynth-privacy' and extra == 'extra-8-semsynth-synthcity' and extra == 'extra-8-semsynth-umap')" },
     { name = "pybnesian" },
 ]
+rdf = [
+    { name = "rdflib" },
+]
 statsmodels = [
     { name = "statsmodels" },
 ]
@@ -6228,7 +6245,7 @@ requires-dist = [
     { name = "jinja2" },
     { name = "linked-codebook", url = "https://bennokr.github.io/linked-codebook/linked_codebook-0.10.0-py3-none-any.whl" },
     { name = "linkify-it-py", marker = "extra == 'docs'" },
-    { name = "makeprov", specifier = ">=0.4.4" },
+    { name = "makeprov", specifier = ">=0.8.1" },
     { name = "markdown" },
     { name = "matplotlib", marker = "extra == 'all'" },
     { name = "matplotlib", marker = "extra == 'umap'" },
@@ -6256,6 +6273,9 @@ requires-dist = [
     { name = "pybnesian", marker = "extra == 'pybnesian'" },
     { name = "pytest", marker = "extra == 'dev'" },
     { name = "pytest-cov", marker = "extra == 'dev'" },
+    { name = "rdflib", marker = "extra == 'all'" },
+    { name = "rdflib", marker = "extra == 'dev'" },
+    { name = "rdflib", marker = "extra == 'rdf'" },
     { name = "requests", marker = "extra == 'all'" },
     { name = "requests", marker = "extra == 'docs'" },
     { name = "requests", marker = "extra == 'providers'" },
@@ -6282,7 +6302,7 @@ requires-dist = [
     { name = "umap-learn", marker = "extra == 'all'" },
     { name = "umap-learn", marker = "extra == 'umap'" },
 ]
-provides-extras = ["dev", "app", "providers", "docs", "metasyn", "language", "pybnesian", "synthcity", "privbayes", "umap", "statsmodels", "privacy", "mapping", "all"]
+provides-extras = ["dev", "app", "providers", "docs", "metasyn", "language", "pybnesian", "synthcity", "privbayes", "umap", "statsmodels", "rdf", "privacy", "mapping", "all"]
 
 [[package]]
 name = "setuptools"

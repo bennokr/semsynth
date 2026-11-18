@@ -34,6 +34,8 @@ one code path.
 | Injected-truth benchmark | done: `benchmark.py` |
 | Provenance (PROV-O, makeprov 0.7 model, DQV measurements) | done: `provenance.py` |
 | Browser entry points | done: `browser.py`, in the Pyodide smoke test |
+| IRIs under one base, DCAT writer, merged RDF, SPARQL explorer | done: `iris.py`, `catalog.py`, `queries/`; the Pages step has not run on CI |
+| linked-codebook 0.11 (IRIs for the extension terms, `dsvo`, NaN is blank) | done in the local clone, committed and not pushed or released |
 | Missingness evaluation in the pipeline (violation rate, mask dependence on real incomplete data) | next |
 | Distance policy chosen per column from the codebook | next (needs `missing_reason`) |
 | Mechanism declared in the codebook; sensitivity analysis for MNAR | next |
@@ -55,10 +57,9 @@ Complete table, then MAR, MNAR, a skip rule and coded values injected (`run_inje
   `completeness`. SemSynth now reads them. The condition language is REDCap-style (`[var]`, comparisons, `in`,
   `is null`, `and`/`or`/`not`; no arithmetic, `between`, `like` or functions). Do not extend it: compute derived
   columns (BMI, age bands) at load time.
-- **Subgroups**: definitions are named conditions in that language, stored in the codebook under `ss:subgroups`
-  (`Codebook.extras`, written into the JSON-LD) until linked-codebook has a slot. Which groups to evaluate, the
-  minimum size and the intersections are run settings (`PipelineConfig.subgroups`, `subgroup_min_size`). A misspelt
-  field makes linked-codebook evaluate a condition as False without an error, so `check_subgroups` is required.
+- **Subgroups**: named conditions in that language, a setting of the evaluation (`PipelineConfig.subgroups`,
+  `subgroup_min_size`), not part of the codebook. A misspelt field makes linked-codebook evaluate a condition as False
+  without an error, so `check_subgroups` (and `check_rules` for skip rules) are required.
 - **NaN**: linked-codebook does not treat a pandas `NaN` as blank (`[x] < 60` is False, `missingness()` counts NaN as
   present). Everything passes through `structure.as_rows`, which makes it `None`.
 - **Detection-limit censoring** is SemSynth-first: value and flag column, `limit` or limit column, substitution rule
@@ -75,16 +76,34 @@ Complete table, then MAR, MNAR, a skip rule and coded values injected (`run_inje
 | Latent MNAR | mechanism, declared | not recoverable; needs stated sensitivity assumptions | injected-truth only |
 | Censoring below a limit | flag column (SemSynth) | flag plus distribution above the limit | flag rate, not distance on substituted values |
 
-## linked-codebook 0.11: the minimum to ask for
-1. `Value.missing_reason`: `refused`, `dont_know`, `not_applicable`, `not_collected` (only with `missing: true`); drives the
-   distance policy and the benchmark.
-2. `Column.missing_mechanism` (`mcar`, `mar`, `mnar`; absent means undeclared) and `missing_depends_on`, for blanks in rows
-   where the column applies.
-3. Treat float `NaN` as blank in `blank()`.
-4. Lint: a `[field]` in `applies_when` that is not a column; `missing_reason` only with `missing: true`.
+## linked-codebook
+Done in 0.11.0 (local clone, `make check` passes, not released): the extension keys (`appliesWhen`, `missingRange`, `codeBookClosed`,
+`columnGroup`, `identifying`, `minimumValue`, `maximumValue`, `columnFormat`) have IRIs, so skip rules and limits stay in the RDF;
+before, JSON-LD dropped them. `csvw:minInclusive`, `csvw:maxInclusive` and `csvw:format` (checked against the CSVW context and
+by `make pin`; `csvw:minimum` and `csvw:maximum` are not RDF properties) and the slots of linked-codebook's own data model
+(`lc:applies_when`, `lc:closed`, `lc:group`, `lc:identifying`, `lc:missing_range`, namespace
+`https://bennokr.github.io/linked-codebook/profile#`). The DSV prefix is `dsvo` (`dsv` is also the Data Specification
+Vocabulary); the IRIs are unchanged. A float `NaN` is blank. SemSynth tests that need this skip on 0.10.0; bump the pin after the release.
 
-Not now: subgroups slot, censoring, roles, survey weights (a SemSynth role), MNAR parameters. Release process, lint
-config and budgets of linked-codebook are *(unverified)*: the repository was not available.
+Still to ask for: `Value.missing_reason` (`refused`, `dont_know`, `not_applicable`, `not_collected`), `Column.missing_mechanism`
+(`mcar`, `mar`, `mnar`; absent means undeclared) with `missing_depends_on`, and a lint for a skip rule that names no column
+(SemSynth has `check_rules`). Not now: subgroups (a SemSynth setting), censoring, roles, survey weights, MNAR parameters.
+
+## Publishing and querying
+- **IRIs** (`semsynth/iris.py`): one base, `https://bennokr.github.io/semsynth/output/`, a setting (`iri_base`) so that it can move to
+  w3id.org later. `<base><dataset>/` is the dataset and its report page and the dataset node of its codebook;
+  `…/models/<model>/` the synthetic dataset; `…/#run` the run; a file's URL is its IRI. Slugs only: no space, capital or `urn:`.
+  The identity of a thing is its IRI whether or not the host serves it; renaming the GitHub user or repository breaks them.
+- **No terms of our own**: DCAT, DSV (`dsvo`), CSVW, PROV-O, DQV, schema.org, SKOS and linked-codebook's own `lc` slots.
+- **One merged file for the explorer** (`output/semsynth.ttl`, `merge_rdf`): Comunica federates files and does not
+  deduplicate a triple that two of them state, so queries over the separate files returned 1,920 rows where 108 are right.
+  Named graphs in TriG are invisible to a plain query in the playground (no `unionDefaultGraph`); there are none.
+- **Queries** (`queries/*.rq`) use no string functions; the links are modelled, and `tests/test_catalog.py` checks both that
+  and that the queries join the catalog, codebook and provenance.
+- **The explorer** is the data-catalog-sparql-playground's composite action as a step of the Pages job (pinned to a commit), not
+  its reusable workflow, which also deploys and cannot take generated files.
+- **SynthCity** is to be dropped: the backend, `torch_compat.py`, the extra and its `[tool.uv]` conflicts, two CI jobs, three configs,
+  docs and tests. Not done yet.
 
 ## Benchmarks
 1. **Injected truth** (done): any complete table; exact answers.
@@ -107,10 +126,10 @@ config and budgets of linked-codebook are *(unverified)*: the repository was not
 ## Provenance
 - The CLI commands are makeprov rules (0.8.1, the newest release; floor raised from 0.4.4). `prov-config.toml` records the
   environment and streams a recovery file. `ProvMeta` (record rule arguments) cannot be used: defopt does not parse it.
-- A run's `provenance.json` (`provenance.py`) has makeprov's shape: `prov:Plan`, runtime agent, qualified association,
+- A run's `provenance.jsonld` (`provenance.py`) has makeprov's shape: `prov:Plan`, runtime agent, qualified association,
   parameters as `schema:additionalProperty`, duration, sha256 per file. Scores are `dqv:QualityMeasurement` of a
-  `dqv:Metric` with a version. DQV has no uncertainty or metric-version property, so `ss:` terms carry intervals and
-  noise floors; the `ss` namespace (`https://w3id.org/semsynth/vocab#`) is a placeholder that is not registered.
+  `dqv:Metric` with a version (`dct:hasVersion`). Intervals, noise floors and p-values are measurements of derived metrics
+  (`prov:wasDerivedFrom` the metric, in a `dqv:Dimension`); SemSynth defines no namespace, prefix or predicate of its own.
 - Not done: the evaluation protocol (split, control size, quasi-identifiers) as its own node; `ArtifactRef.external` for
   the source dataset's landing page.
 

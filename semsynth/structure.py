@@ -7,8 +7,8 @@ module reads those declarations and applies them:
 * :func:`recode_declared_missing` turns declared codes (77 = refused, 9999 = unknown) into ``NaN``;
 * :func:`applicability` and :func:`structural_violations` say which cells a skip rule leaves empty, and where a table
   has a value that the rule forbids; :func:`enforce_applicability` empties them;
-* :class:`Subgroup` names a condition over rows (same language as ``applies_when``), kept in the codebook under
-  ``ss:subgroups`` until linked-codebook has a slot for it.
+* :class:`Subgroup` names a condition over rows (same language as ``applies_when``). Subgroups are a setting of the
+  evaluation (``PipelineConfig.subgroups``), not part of the codebook.
 
 linked-codebook does not treat a pandas ``NaN`` as blank (``[x] < 60`` is False, not unknown, and ``missingness()``
 counts it as present), so every table goes through :func:`as_rows` first, which turns ``NaN`` into ``None``.
@@ -28,9 +28,6 @@ if TYPE_CHECKING:  # pragma: no cover - typing only
     from .codebook import Codebook
 
 LOGGER = logging.getLogger(__name__)
-
-SUBGROUPS_KEY = "ss:subgroups"
-SEMSYNTH_VOCAB = "https://w3id.org/semsynth/vocab#"  # placeholder namespace; not registered anywhere yet
 
 
 def _is_blank(cell: Any) -> bool:
@@ -109,6 +106,28 @@ def _fields(node: Any) -> set[str]:
     return set()
 
 
+def check_rules(codebook: Codebook, columns: Iterable[str]) -> list[str]:
+    """Problems of the skip rules: one that does not parse, or one that refers to a field that is no column.
+
+    linked-codebook evaluates a condition on a missing field as False without an error, so a typo in a rule means that
+    its column is never applicable; this is the check that catches it.
+    """
+    from linked_codebook.condition import parse_condition
+
+    known, problems = set(columns), []
+    for column in codebook.columns:
+        rule = column.get("applies_when")
+        if not rule:
+            continue
+        try:
+            fields = _fields(parse_condition(rule))
+        except ValueError as error:
+            problems.append(f"{column.get('name')}: {error}")
+            continue
+        problems += [f"{column.get('name')}: [{f}] is not a column" for f in sorted(fields - known)]
+    return problems
+
+
 def applicability(df: pd.DataFrame, codebook: Codebook) -> pd.DataFrame:
     """For each column with an ``applies_when`` rule: True if it applies to the row, False if not, ``NA`` if unknown.
 
@@ -185,21 +204,9 @@ class Subgroup:
         return parse_condition(self.condition)
 
 
-def subgroups_of(codebook: Codebook, extra: Iterable[Mapping[str, Any]] = ()) -> list[Subgroup]:
-    """The subgroups defined in the codebook (``ss:subgroups``) and in ``extra`` (run settings win on a name clash)."""
-    found: dict[str, Subgroup] = {}
-    for item in [*codebook.extras.get(SUBGROUPS_KEY, []), *extra]:
-        found[str(item["name"])] = Subgroup(str(item["name"]), str(item["condition"]), item.get("label"))
-    return list(found.values())
-
-
-def with_subgroups(codebook: Codebook, groups: Iterable[Subgroup]) -> Codebook:
-    """The codebook with these subgroup definitions stored in it (they are written into its JSON-LD)."""
-    codebook.extras[SUBGROUPS_KEY] = [
-        {k: v for k, v in {"name": g.name, "label": g.label, "condition": g.condition}.items() if v} for g in groups
-    ]
-    codebook.prefixes.setdefault("ss", SEMSYNTH_VOCAB)
-    return codebook
+def subgroups_from(items: Iterable[Mapping[str, Any]]) -> list[Subgroup]:
+    """Subgroups from settings, each a mapping with ``name``, ``condition`` and optionally ``label``."""
+    return [Subgroup(str(item["name"]), str(item["condition"]), item.get("label")) for item in items]
 
 
 def check_subgroups(groups: Iterable[Subgroup], columns: Iterable[str]) -> list[str]:

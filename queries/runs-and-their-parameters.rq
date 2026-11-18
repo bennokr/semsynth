@@ -1,0 +1,19 @@
+# How each synthetic dataset was made: the generator, its version, the plan, the duration and the parameters.
+PREFIX dct: <http://purl.org/dc/terms/>
+PREFIX prov: <http://www.w3.org/ns/prov#>
+PREFIX schema: <https://schema.org/>
+
+SELECT ?title ?generator ?engineVersion ?semsynthVersion ?duration ?parameter ?value
+WHERE {
+  ?synthetic dct:title ?title ;
+             prov:wasGeneratedBy ?run .
+  ?run prov:used ?engine ;
+       prov:qualifiedAssociation/prov:hadPlan ?plan ;
+       schema:additionalProperty [ schema:name ?parameter ; schema:value ?value ] .
+  ?engine a schema:SoftwareApplication ;
+          schema:name ?generator ;
+          schema:softwareVersion ?engineVersion .
+  ?plan schema:softwareVersion ?semsynthVersion .
+  OPTIONAL { ?run schema:duration ?duration }
+}
+ORDER BY ?title ?parameter

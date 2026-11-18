@@ -15,6 +15,7 @@ from pathlib import Path
 from types import ModuleType
 from typing import TYPE_CHECKING, Any
 
+from .iris import DEFAULT_BASE
 from .provenance import run_provenance
 from .result import SynthesisResult
 
@@ -97,13 +98,14 @@ def write_run(
     label: str | None = None,
     dataset: Mapping[str, Any] | None = None,
     codebook_jsonld: Mapping[str, Any] | None = None,
+    base_iri: str = DEFAULT_BASE,
 ) -> Path:
     """Write a result as the files of a model run and return the directory.
 
     Writes ``synthetic.csv`` and, when the pieces exist, ``synthetic.parquet`` (with the codebook in its
     metadata), ``metrics.json``, ``per_variable_metrics.csv`` (``metrics["per_variable"]``),
     ``metrics.privacy.json`` (``metrics["privacy"]``), ``metrics.downstream.json`` (``metrics["downstream"]``),
-    ``metasyn_gmf.json``, the result's ``artifacts``, ``manifest.json`` and a PROV-O ``provenance.json``.
+    ``metasyn_gmf.json``, the result's ``artifacts``, ``manifest.json`` and a PROV-O ``provenance.jsonld``.
 
     Args:
         result: What :func:`synthesize` returned, possibly with metrics added.
@@ -111,6 +113,8 @@ def write_run(
         label: Name of the run; the backend name when omitted.
         dataset: ``provider``, ``dataset_name`` and ``provider_id`` of the real data, for the manifest.
         codebook_jsonld: DSV JSON-LD to store in the Parquet metadata.
+        base_iri: Base of the IRIs in the provenance (see :mod:`semsynth.iris`); ``run_dir`` is expected to be
+            ``<base>/<dataset>/models/<model>`` in the folder that the base is served from.
     """
 
     directory = Path(run_dir)
@@ -124,7 +128,10 @@ def write_run(
     written += _write_artifacts(result, directory)
     manifest = _manifest(result, name, dataset or {})
     _write_json(directory / "manifest.json", manifest)
-    _write_json(directory / "provenance.json", run_provenance(result, name, dataset or {}, written, directory))
+    _write_json(
+        directory / "provenance.jsonld",
+        run_provenance(result, name, dataset or {}, written, directory, base_iri=base_iri, codebook=bool(codebook_jsonld)),
+    )
     LOGGER.info("Wrote run %s to %s", name, directory)
     return directory
 
