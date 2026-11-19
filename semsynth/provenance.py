@@ -72,6 +72,22 @@ MEASURES: dict[str, _Path] = {
     "utility.recovered_cv": ("cv", "scores", "synthetic", "utility_recovered", "mean"),
 }
 # where the bootstrap interval of a score is, and where the noise floor of a distance is
+LABELS = {
+    "marginal.disc_jsd_mean": "Discrete columns: Jensen-Shannon distance",
+    "marginal.cont_ks_mean": "Numeric columns: Kolmogorov-Smirnov distance",
+    "marginal.cont_w1_mean": "Numeric columns: Wasserstein distance",
+    "privacy.exact_match_rate": "Synthetic rows that copy a real training row",
+    "privacy.exact_match_rate_holdout": "Unseen real rows that copy a training row",
+    "privacy.dcr_median": "Median distance to the closest real row",
+    "privacy.dcr_below_holdout_p05": "Synthetic rows closer to a real row than 95% of unseen real rows are",
+    "joint.pairwise_tvd_mean": "Relations between column pairs: distance",
+    "joint.classifier_auc": "Can a classifier tell real from synthetic rows (AUC)",
+    "downstream.sign_match_rate": "Regression coefficients with the same sign as on real data",
+    "utility.synthetic": "Prediction of the target, model trained on the synthetic rows (AUC or R-squared)",
+    "utility.ceiling": "Prediction of the target, model trained on real rows (ceiling)",
+    "utility.floor": "Prediction of the target, model trained on independent columns (floor)",
+    "utility.recovered": "Share of the real data's prediction gain that the synthetic rows keep",
+}
 _INTERVALS = {
     "privacy.exact_match_rate": ("privacy", "intervals", "exact_match_rate"),
     "privacy.exact_match_rate_holdout": ("privacy", "intervals", "exact_match_rate_holdout"),
@@ -88,6 +104,14 @@ _INTERVALS = {
     "utility.synthetic_cv": ("cv", "scores", "synthetic", "utility", "interval"),
     "utility.recovered_cv": ("cv", "scores", "synthetic", "utility_recovered", "interval"),
 }
+
+def label(metric_id: str) -> str:
+    """A readable name of a metric; a score averaged over cross-validation folds says so."""
+    base, folds = (metric_id[:-3], True) if metric_id.endswith("_cv") else (metric_id, False)
+    name = LABELS.get(base, base)
+    return f"{name}, mean over cross-validation folds" if folds else name
+
+
 _NULLS = {
     "marginal.disc_jsd_mean": ("summary_null", "disc_jsd_mean"),
     "marginal.cont_ks_mean": ("summary_null", "cont_ks_mean"),
@@ -129,6 +153,11 @@ def _number(value: Any) -> float | None:
     return float(value) if isinstance(value, (int, float)) and not isinstance(value, bool) and value == value else None
 
 
+def _significant(value: float) -> float:
+    """Six significant digits: a score is not known more precisely, and long numbers are hard to read in a table."""
+    return float(f"{value:.6g}")
+
+
 def _pair(value: Any) -> list[float] | None:
     ok = isinstance(value, list) and len(value) == 2 and all(_number(x) is not None for x in value)
     return [float(x) for x in value] if ok else None
@@ -141,16 +170,16 @@ def _values(metrics: Mapping[str, Any]) -> dict[str, float]:
         value = _number(_dig(metrics, path))
         if value is None:
             continue
-        found[metric_id] = value
+        found[metric_id] = _significant(value)
         bounds = _pair(_dig(metrics, _INTERVALS[metric_id])) if metric_id in _INTERVALS else None
         null = _dig(metrics, _NULLS[metric_id]) if metric_id in _NULLS else None
         noise = _pair(null.get("null_interval")) if isinstance(null, Mapping) else None
         for suffix, number in zip(("lower95", "upper95"), bounds or [], strict=False):
-            found[f"{metric_id}/{suffix}"] = number
+            found[f"{metric_id}/{suffix}"] = _significant(number)
         for suffix, number in zip(("noise-lower95", "noise-upper95"), noise or [], strict=False):
-            found[f"{metric_id}/{suffix}"] = number
+            found[f"{metric_id}/{suffix}"] = _significant(number)
         if isinstance(null, Mapping) and _number(null.get("p_value")) is not None:
-            found[f"{metric_id}/p-value"] = float(null["p_value"])
+            found[f"{metric_id}/p-value"] = _significant(float(null["p_value"]))
     return found
 
 
@@ -172,7 +201,7 @@ def measurements(metrics: Mapping[str, Any], subject: str) -> list[dict[str, Any
             node: dict[str, Any] = {
                 "@id": iri,
                 "@type": "dqv:Metric",
-                "rdfs:label": _DERIVED[suffix] if suffix else metric_id,
+                "rdfs:label": _DERIVED[suffix] if suffix else label(metric_id),
                 "dct:hasVersion": METRICS_VERSION,
             }
             node["dqv:inDimension"] = {"@id": dimension(suffix or _KINDS[root.split(".")[0]])}

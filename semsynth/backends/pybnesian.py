@@ -137,7 +137,7 @@ def graphml_text(nodes: dict[str, str], arcs: list[tuple[str, str]]) -> str:
 
 
 def save_graphml_structure(model, node_types: dict[str, object], out_graphml: str) -> None:
-    """Write the structure as GraphML. networkx 2 writes it with ``np.float_``, which NumPy 2 removed, so this does not use it."""
+    """Write the structure as GraphML without networkx. networkx 2, which synthcity pins, writes it with ``np.float_``, which NumPy 2 removed."""
     nodes = {str(n): type(node_types[n]).__name__ for n in model.nodes()}
     Path(out_graphml).write_text(graphml_text(nodes, [(str(u), str(v)) for u, v in model.arcs()]), encoding="utf-8")
 

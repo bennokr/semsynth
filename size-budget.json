@@ -1,6 +1,6 @@
 {
   "semsynth/__init__.py": 14,
-  "semsynth/__main__.py": 72,
+  "semsynth/__main__.py": 73,
   "semsynth/app.py": 51,
   "semsynth/backends/__init__.py": 0,
   "semsynth/backends/metasyn.py": 41,
@@ -33,7 +33,7 @@
   "semsynth/models.py": 141,
   "semsynth/preprocess.py": 120,
   "semsynth/privacy_metrics.py": 149,
-  "semsynth/provenance.py": 110,
+  "semsynth/provenance.py": 117,
   "semsynth/report_scorecard.py": 115,
   "semsynth/report_tables.py": 286,
   "semsynth/reporting.py": 135,

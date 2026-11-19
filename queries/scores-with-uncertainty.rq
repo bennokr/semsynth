@@ -6,7 +6,7 @@ PREFIX prov: <http://www.w3.org/ns/prov#>
 PREFIX rdfs: <http://www.w3.org/2000/01/rdf-schema#>
 PREFIX dim: <https://bennokr.github.io/semsynth/dimension/>
 
-SELECT ?title ?synthetic ?score ?value ?lower ?upper ?noiseLower ?noiseUpper
+SELECT ?title ?score ?value ?lower ?upper ?noiseLower ?noiseUpper
 WHERE {
   ?synthetic dct:title ?title .
   ?m dqv:computedOn ?synthetic ;

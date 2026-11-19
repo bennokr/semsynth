@@ -182,3 +182,13 @@ def test_a_run_refers_to_the_command_that_started_it(tmp_path: Path) -> None:
     assert activity["prov:wasInfluencedBy"] == {"@id": command}
     other, _ = _graph(tmp_path / "other")
     assert "prov:wasInfluencedBy" not in next(n for n in other["@graph"] if n["@id"].endswith("/#run"))
+
+
+def test_metrics_have_readable_labels_and_scores_have_six_digits() -> None:
+    from semsynth.provenance import MEASURES, label
+
+    assert label("marginal.disc_jsd_mean").startswith("Discrete columns")
+    assert label("utility.synthetic_cv").endswith("mean over cross-validation folds")
+    assert all(label(m) != m for m in MEASURES), "every metric has a label"
+    nodes = measurements({"summary": {"disc_jsd_mean": 0.123456789012}}, f"{BASE}d/models/m/")
+    assert next(n for n in nodes if n["@type"] == "dqv:QualityMeasurement")["dqv:value"] == 0.123457

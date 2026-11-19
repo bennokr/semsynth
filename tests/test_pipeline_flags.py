@@ -231,3 +231,16 @@ def test_a_long_inline_toml_snippet_is_parsed_not_looked_up_as_a_path(tmp_path) 
     path.write_text("compute_privacy = false\n")
     assert parse_toml_config(str(path)) == {"compute_privacy": False}
     assert parse_toml_config(f"@{path}") == {"compute_privacy": False}
+
+
+def test_the_makeprov_record_of_a_command_goes_to_one_folder_of_the_output(tmp_path) -> None:
+    from makeprov import ProvenanceConfig
+
+    from semsynth import __main__ as cli
+
+    before = ProvenanceConfig.get().prov_dir
+    try:
+        cli._provenance_dir(tmp_path / "output")
+        assert ProvenanceConfig.get().prov_dir == str(tmp_path / "output" / "provenance")
+    finally:
+        ProvenanceConfig.get().prov_dir = before

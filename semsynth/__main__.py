@@ -29,10 +29,13 @@ __all__ = [
 ]
 
 
-def _set_prov_dir(dataset_outdir: Path) -> None:
-    """Write the provenance of a dataset's commands next to its reports."""
+def _provenance_dir(outdir: str | Path) -> None:
+    """Write the makeprov record of the command to ``<outdir>/provenance``, where the explorer and the catalog expect it.
 
-    ProvenanceConfig.get().prov_dir = str(dataset_outdir / "prov")
+    The record of a command is written once, when it ends, so a folder per dataset would put it into the last one.
+    """
+
+    ProvenanceConfig.get().prov_dir = str(Path(outdir) / "provenance")
 
 
 @rule(merge=True)
@@ -97,13 +100,13 @@ def report(
 
     if verbose:
         logging.root.setLevel(logging.INFO)
+    _provenance_dir(outdir)
     failures = run_reports(
         provider,
         datasets=datasets,
         outdir=Path(outdir),
         pipeline_configs=pipeline_configs,
         area=area,
-        on_dataset=_set_prov_dir,
         parent_activity=_running_command(),
     )
     if failures:
@@ -233,6 +236,7 @@ def _reports_for_mappings(
 
     if verbose:
         logging.root.setLevel(logging.INFO)
+    _provenance_dir(outdir)
     targets = collect_mapping_targets(mapping_root)
     if not targets:
         return
@@ -240,13 +244,11 @@ def _reports_for_mappings(
         targets,
         outdir=outdir,
         pipeline_configs=pipeline_configs,
-        on_dataset=_set_prov_dir,
         parent_activity=_running_command(),
     )
     if successes and rebuild_catalog:
         from .catalog import build_catalog as write_catalog
 
-        ProvenanceConfig.get().prov_dir = str(Path(outdir))
         write_catalog(Path(outdir), read_pipeline_config(pipeline_configs)[1].iri_base)
     if failures:
         logging.warning("Completed with skipped datasets: %s", "; ".join(failures))
@@ -331,7 +333,7 @@ def build_catalog(
     """
     from . import catalog
 
-    ProvenanceConfig.get().prov_dir = out_path.parent
+    ProvenanceConfig.get().prov_dir = str(out_path.parent / "provenance")
     catalog.build_catalog(base_dir, base_iri, out_path, index_path)
 
 

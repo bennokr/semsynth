@@ -6151,7 +6151,6 @@ all = [
     { name = "graphviz" },
     { name = "matplotlib" },
     { name = "metasyn" },
-    { name = "networkx" },
     { name = "openml" },
     { name = "py3langid" },
     { name = "pybnesian" },
@@ -6211,7 +6210,6 @@ providers = [
 ]
 pybnesian = [
     { name = "graphviz" },
-    { name = "networkx" },
     { name = "numpy", version = "2.4.6", source = { registry = "https://pypi.org/simple" }, marker = "(python_full_version < '3.12' and extra == 'extra-8-semsynth-pybnesian') or (python_full_version >= '3.12' and extra == 'extra-8-semsynth-all' and extra == 'extra-8-semsynth-synthcity') or (python_full_version >= '3.12' and extra == 'extra-8-semsynth-language' and extra == 'extra-8-semsynth-synthcity') or (python_full_version >= '3.12' and extra == 'extra-8-semsynth-privacy' and extra == 'extra-8-semsynth-synthcity') or (extra == 'extra-8-semsynth-all' and extra != 'extra-8-semsynth-pybnesian' and extra == 'extra-8-semsynth-synthcity') or (extra == 'extra-8-semsynth-language' and extra != 'extra-8-semsynth-pybnesian' and extra == 'extra-8-semsynth-synthcity') or (extra == 'extra-8-semsynth-privacy' and extra != 'extra-8-semsynth-pybnesian' and extra == 'extra-8-semsynth-synthcity') or (extra != 'extra-8-semsynth-pybnesian' and extra == 'extra-8-semsynth-synthcity' and extra == 'extra-8-semsynth-umap') or (extra != 'extra-8-semsynth-all' and extra != 'extra-8-semsynth-language' and extra != 'extra-8-semsynth-privacy' and extra == 'extra-8-semsynth-pybnesian' and extra == 'extra-8-semsynth-synthcity')" },
     { name = "numpy", version = "2.5.5", source = { registry = "https://pypi.org/simple" }, marker = "(python_full_version >= '3.12' and extra == 'extra-8-semsynth-pybnesian') or (python_full_version < '3.12' and extra == 'extra-8-semsynth-all' and extra == 'extra-8-semsynth-synthcity') or (python_full_version < '3.12' and extra == 'extra-8-semsynth-language' and extra == 'extra-8-semsynth-synthcity') or (python_full_version < '3.12' and extra == 'extra-8-semsynth-privacy' and extra == 'extra-8-semsynth-synthcity') or (extra == 'extra-8-semsynth-all' and extra != 'extra-8-semsynth-pybnesian' and extra == 'extra-8-semsynth-synthcity') or (extra == 'extra-8-semsynth-language' and extra != 'extra-8-semsynth-pybnesian' and extra == 'extra-8-semsynth-synthcity') or (extra == 'extra-8-semsynth-privacy' and extra != 'extra-8-semsynth-pybnesian' and extra == 'extra-8-semsynth-synthcity') or (extra != 'extra-8-semsynth-pybnesian' and extra == 'extra-8-semsynth-synthcity' and extra == 'extra-8-semsynth-umap') or (extra != 'extra-8-semsynth-all' and extra != 'extra-8-semsynth-language' and extra != 'extra-8-semsynth-privacy' and extra == 'extra-8-semsynth-pybnesian' and extra == 'extra-8-semsynth-synthcity') or (extra != 'extra-8-semsynth-all' and extra != 'extra-8-semsynth-language' and extra != 'extra-8-semsynth-privacy' and extra == 'extra-8-semsynth-synthcity' and extra == 'extra-8-semsynth-umap')" },
     { name = "pybnesian" },
@@ -6254,8 +6252,6 @@ requires-dist = [
     { name = "mypy", marker = "extra == 'dev'" },
     { name = "myst-nb", marker = "extra == 'docs'" },
     { name = "myst-parser", marker = "extra == 'docs'" },
-    { name = "networkx", marker = "extra == 'all'" },
-    { name = "networkx", marker = "extra == 'pybnesian'" },
     { name = "numpy", specifier = ">=1.26" },
     { name = "numpy", marker = "extra == 'pybnesian'", specifier = ">=2" },
     { name = "numpy", marker = "extra == 'synthcity'", specifier = "<2" },

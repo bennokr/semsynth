@@ -67,7 +67,6 @@ language = [
 pybnesian = [
   "numpy>=2",  # tested on NumPy 2; pyarrow 26 needs it too but does not declare it, so say it here
   "graphviz",
-  "networkx",
   "pybnesian"
 ]
 synthcity = [
@@ -104,7 +103,6 @@ all = [
   "metasyn",
   "statsmodels",
   "graphviz",
-  "networkx",
   "pybnesian",
   "py3langid",
   "DataSynthesizer==0.1.13",

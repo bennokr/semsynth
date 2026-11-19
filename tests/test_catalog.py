@@ -11,6 +11,7 @@ import pandas as pd
 import pytest
 
 from semsynth.iris import DEFAULT_BASE, SITE, Iris, slug
+from semsynth.provenance import label
 
 PAGES = Path(__file__).resolve().parents[1] / ".github/workflows/pages.yml"
 QUERIES = sorted((Path(__file__).resolve().parents[1] / "queries").glob("*.rq"))
@@ -250,7 +251,7 @@ def test_the_queries_run_on_the_explorer_files_and_join_across_the_three_views(
     scores = [
         r
         for r in results["scores-with-uncertainty.rq"]
-        if str(r.score) == "privacy.dcr_below_holdout_p05"
+        if str(r.score) == label("privacy.dcr_below_holdout_p05")
     ]
     assert scores and all(
         r.lower is not None and float(r.lower) <= float(r.value) <= float(r.upper) for r in scores
