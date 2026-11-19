@@ -32,6 +32,20 @@ def _encoding_types(disc_cols: list[str], cont_cols: list[str]) -> dict[str, str
     return {**dict.fromkeys(disc_cols, "TABULAR_CATEGORICAL"), **dict.fromkeys(cont_cols, "TABULAR_NUMERIC_AUTO")}
 
 
+
+def _numbers_back(drawn: pd.Series, dtype: Any) -> pd.Series:
+    """The drawn column in the dtype of the real column when its labels are numbers.
+
+    A value that value protection replaced by the placeholder ``_RARE_`` is not a number: it becomes missing, and the
+    column keeps a dtype that can hold that.
+    """
+    import pandas as pd
+
+    if str(dtype).startswith(("object", "string", "category")):
+        return drawn
+    numbers = pd.to_numeric(drawn, errors="coerce").round()
+    return numbers if numbers.isna().any() else numbers.astype(dtype)
+
 def synthesize(
     df: pd.DataFrame,
     codebook: Any = None,
@@ -84,9 +98,8 @@ def synthesize(
     )
     model.fit(working)
     drawn = model.sample(n_samples=count).reindex(columns=df.columns)
-    for column in disc_cols:  # back to the dtype of the real column where the labels are numbers
-        if not str(df[column].dtype).startswith(("object", "string", "category")):
-            drawn[column] = drawn[column].astype(float).round().astype(df[column].dtype)
+    for column in disc_cols:
+        drawn[column] = _numbers_back(drawn[column], df[column].dtype)
     return SynthesisResult(
         synthetic_data=coerce_continuous_to_float(drawn, cont_cols),
         backend="mostlyai",

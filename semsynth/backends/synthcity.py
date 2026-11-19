@@ -32,6 +32,8 @@ def canonical_generator_name(name: str) -> str:
         "dp-gan": "dpgan",
         "dpgan": "dpgan",
         "tvae": "tvae",
+        "ddpm": "ddpm",
+        "tabddpm": "ddpm",
         "rtvae": "rtvae",
         "nflow": "nflow",
         "bn": "bayesian_network",
