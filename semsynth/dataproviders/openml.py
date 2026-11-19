@@ -116,9 +116,7 @@ def load_openml_by_name(name: str, cache_dir: pathlib.Path | Path) -> DatasetPay
                 spec.target = target_hint
             else:
                 spec.target = None
-            df_clean, detected_target, color_series = clean_dataset_frame(
-                df_cached, target=spec.target, metadata=meta_cached
-            )
+            df_clean, detected_target, color_series = clean_dataset_frame(df_cached, target=spec.target)
             spec.target = spec.target or detected_target
             spec.name = str(meta_cached.get("name") or name)
             spec.meta = meta_cached

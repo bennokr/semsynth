@@ -18,19 +18,17 @@ the name, label, description, datatype, level of measurement, unit, value labels
 mappings of every column. linked-codebook reads and writes the profile as
 [DSV](https://w3id.org/dsv-ontology) JSON-LD and as [SSSOM](https://w3id.org/sssom/) TSV.
 
-`semsynth.codebook.Codebook` adds what a codebook does not cover:
-
-- **Roles**: the role of each column (`target`, `Feature`, `id`, `sensitive`, ...), written as `prov:hadRole`
-  on the column nodes.
-- **Dataset properties**: properties that a profile has no slot for, such as the DCAT, Dublin Core and
-  schema.org fields that the UCI provider writes. They are kept as they are.
+`semsynth.codebook.Codebook` adds what a codebook does not cover: dataset properties that a profile has no slot
+for, such as the DCAT, Dublin Core and schema.org fields that the UCI provider writes. They are kept as they are.
+A codebook says nothing about how a column is used. The target is a setting of the dataset, and the columns of a
+privacy check are settings of the run.
 
 ```{code-cell} python
-# The first columns of a curated codebook, with their levels and roles.
+# The first columns of a curated codebook, with their levels.
 from semsynth.codebook import Codebook
 
 codebook = Codebook.read("../mappings/uciml-45.metadata.json")
-[(c["name"], c.get("level"), codebook.roles.get(c["name"])) for c in codebook.columns[:5]]
+[(c["name"], c.get("level")) for c in codebook.columns[:5]]
 ```
 
 ## Sources
@@ -50,8 +48,10 @@ codebook = Codebook.read("../mappings/uciml-45.metadata.json")
   categoricals stay categorical.
 - **Missingness**: `Codebook.set_statistics` sets the number of rows and the completeness of each column, from
   the fitted missingness model when there is one.
-- **Privacy metrics**: `Codebook.privacy_frame` maps roles to `qi`, `sensitive`, `id`, `ignore` and `target`,
-  and levels to `numeric` or `categorical`.
-- **Downstream fidelity**: roles pick the target and predictors; value codes become categorical levels.
+- **Privacy metrics**: `Codebook.privacy_frame` gives the target the role `target`, a column named like an
+  identifier `id` and every other column `qi`, and maps levels to `numeric` or `categorical`. The pipeline setting
+  `sensitive_columns` marks the columns that the attribute-inference check tries to infer.
+- **Downstream fidelity**: the target comes from the dataset, every other column is a predictor, and value
+  codes become categorical levels.
 - **Exports**: each report folder has `dataset.codebook.jsonld` and an RDFa rendering, `dataset.codebook.html`.
   Backends write `synthetic.parquet` with the JSON-LD in the Parquet schema metadata.

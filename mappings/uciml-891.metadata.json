@@ -141,8 +141,7 @@
             "@type": "skos:Concept",
             "skos:prefLabel": "Record identifier"
           }
-        },
-        "prov:hadRole": "id"
+        }
       },
       {
         "@id": "https://bennokr.github.io/semsynth/output/cdc-diabetes-health-indicators/#column-Diabetes_binary",
@@ -190,8 +189,7 @@
           "@id": "https://bennokr.github.io/semsynth/output/cdc-diabetes-health-indicators/#statistics-Diabetes_binary",
           "@type": "dsvo:SummaryStatistics",
           "statisticalDataType": "dsvo:NominalDataType"
-        },
-        "prov:hadRole": "target"
+        }
       },
       {
         "@id": "https://bennokr.github.io/semsynth/output/cdc-diabetes-health-indicators/#column-HighBP",

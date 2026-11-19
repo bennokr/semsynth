@@ -168,8 +168,7 @@
           "@id": "https://bennokr.github.io/semsynth/output/hepatitis/#statistics-Class",
           "@type": "dsvo:SummaryStatistics",
           "statisticalDataType": "dsvo:NominalDataType"
-        },
-        "prov:hadRole": "target"
+        }
       },
       {
         "@id": "https://bennokr.github.io/semsynth/output/hepatitis/#column-Age",

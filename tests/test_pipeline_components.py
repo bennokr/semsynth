@@ -90,7 +90,6 @@ class _StubUmapModule:
 
 def _create_preprocessing_result(df: pd.DataFrame, tmp_path) -> PreprocessingResult:
     target_series = df["value"].copy()
-    target_series.attrs["prov:hadRole"] = "target"
     return PreprocessingResult(
         df_processed=df,
         df_no_na=df,
@@ -100,6 +99,7 @@ def _create_preprocessing_result(df: pd.DataFrame, tmp_path) -> PreprocessingRes
         inferred_types={"category": "discrete", "value": "continuous"},
         codebook_jsonld={"dummy": True},
         color_series=target_series,
+        target="value",
         umap_png_real=None,
         umap_artifacts=UmapArtifacts(transformer=None, real_png=tmp_path / "umap.png", limits=None),
         missingness_model=None,
@@ -182,29 +182,15 @@ def test_clean_dataset_frame_detects_target_hint():
     assert list(cleaned.columns) == ["feature", "label"]
     assert target_name == "label"
     assert color_series.equals(cleaned["label"])
-    assert color_series.attrs.get("prov:hadRole") == "target"
 
 
-def test_clean_dataset_frame_detects_role_in_metadata():
-    df = pd.DataFrame(
-        {
-            "feature": [0.1, 0.2],
-            "class": ["a", "b"],
-        }
-    )
-    metadata = {
-        "dsv:datasetSchema": {
-            "dsv:column": [
-                {"schema:name": "class", "prov:hadRole": "target"},
-                {"schema:name": "feature"},
-            ]
-        }
-    }
+def test_clean_dataset_frame_has_no_target_when_the_hint_is_not_a_column():
+    df = pd.DataFrame({"feature": [0.1, 0.2], "class": ["a", "b"]})
 
-    _cleaned, target_name, color_series = clean_dataset_frame(df, metadata=metadata)
+    cleaned, target_name, color_series = clean_dataset_frame(df, target="missing")
 
-    assert target_name == "class"
-    assert color_series.attrs.get("prov:hadRole") == "target"
+    assert list(cleaned.columns) == ["feature", "class"]
+    assert target_name is None and color_series is None
 
 
 def test_openml_cached_uses_helper(monkeypatch: pytest.MonkeyPatch, tmp_path: Path):
@@ -230,7 +216,6 @@ def test_openml_cached_uses_helper(monkeypatch: pytest.MonkeyPatch, tmp_path: Pa
         data: pd.DataFrame,
         *,
         target: str | None = None,
-        metadata: dict[str, Any] | None = None,
     ) -> Any:
         cleaned = data.drop(columns=["id"], errors="ignore")
         series = cleaned["class"].copy()
@@ -238,7 +223,6 @@ def test_openml_cached_uses_helper(monkeypatch: pytest.MonkeyPatch, tmp_path: Pa
             {
                 "called": True,
                 "target": target,
-                "metadata": metadata,
                 "series_id": id(series),
             }
         )
@@ -250,7 +234,6 @@ def test_openml_cached_uses_helper(monkeypatch: pytest.MonkeyPatch, tmp_path: Pa
 
     assert called["called"] is True
     assert called["target"] is None
-    assert isinstance(called["metadata"], dict)
     assert "id" not in payload.frame.columns
     assert payload.color is not None
     assert id(payload.color) == called["series_id"]
@@ -277,7 +260,6 @@ def test_uciml_cached_uses_helper(monkeypatch: pytest.MonkeyPatch, tmp_path: Pat
         data: pd.DataFrame,
         *,
         target: str | None = None,
-        metadata: dict[str, Any] | None = None,
     ) -> Any:
         cleaned = data.drop(columns=["index"], errors="ignore")
         series = cleaned["target"].copy()
@@ -285,7 +267,6 @@ def test_uciml_cached_uses_helper(monkeypatch: pytest.MonkeyPatch, tmp_path: Pat
             {
                 "called": True,
                 "target": target,
-                "metadata": metadata,
                 "series_id": id(series),
             }
         )
@@ -297,7 +278,6 @@ def test_uciml_cached_uses_helper(monkeypatch: pytest.MonkeyPatch, tmp_path: Pat
 
     assert called["called"] is True
     assert called["target"] is None
-    assert isinstance(called["metadata"], dict)
     assert "index" not in payload.frame.columns
     assert payload.color is not None
     assert id(payload.color) == called["series_id"]
@@ -338,7 +318,6 @@ def test_uciml_cached_metadata_becomes_a_codebook(tmp_path: Path):
                 },
                 {
                     "schema:name": "target",
-                    "prov:hadRole": "target",
                     "dsv:summaryStatistics": {"dsv:statisticalDataType": "dsv:CategoricalDataType"},
                 },
             ]
@@ -379,12 +358,10 @@ def test_uciml_cached_metadata_becomes_a_codebook(tmp_path: Path):
     codebook = preprocessed.codebook
     assert codebook is not None
     assert [column["name"] for column in codebook.columns] == ["feature", "target"]
-    assert codebook.roles["target"] == "target"
+    assert preprocessed.target == "target"
     assert codebook.kind("target") == "categorical"
     export_columns = preprocessed.codebook_jsonld["datasetSchema"]["columns"]
-    assert any(
-        col.get("prov:hadRole") == "target" and col["name"] == "target" for col in export_columns
-    )
+    assert not any("prov:hadRole" in col for col in export_columns)
     assert preprocessed.codebook_jsonld["title"] == "Demo UCI"
     assert any(
         str(col.get("summaryStatistics", {}).get("statisticalDataType", "")).endswith(
@@ -423,7 +400,7 @@ def test_backend_executor_runs_models(tmp_path):
         privacy_calls.append(synth)
         return {"score": 0.5}
 
-    def comparer(_real: pd.DataFrame, _synth: pd.DataFrame, _meta: Codebook) -> dict[str, Any]:
+    def comparer(_real: pd.DataFrame, _synth: pd.DataFrame, _meta: Codebook, target: str | None = None) -> dict[str, Any]:
         return {"formula": "value ~ category", "compare": pd.DataFrame({"sign_match": [1, 1]})}
 
     bundle = ModelConfigBundle(

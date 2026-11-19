@@ -34,7 +34,7 @@ plt.tight_layout()
 ```
 
 ## Formula discovery
-- `auto_formula` builds a Patsy formula by inferring target roles from the dataset schema, coercing dtypes (including categorical levels from codebooks), and generating main effects plus interaction candidates. Cross-validated feature screening enforces strong heredity, keeping parents of any retained interactions to stabilize the model.
+- `auto_formula` builds a Patsy formula from the target of the dataset and the column types of the codebook, coercing dtypes (including categorical levels from codebooks), and generating main effects plus interaction candidates. Cross-validated feature screening enforces strong heredity, keeping parents of any retained interactions to stabilize the model.
 
 ```{code-cell} python
 # Create a target-aware formula straight from the codebook.

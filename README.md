@@ -121,6 +121,7 @@ bootstrap_reps = 200        # resamples and random splits behind the intervals a
 compute_utility = true      # train on the synthetic rows, predict the target of real rows; with ceiling, floor and interval
 cv_folds = 5                # k-fold cross-validation of every model: scores are the mean over the folds with an interval
 privacy_missing = "category"  # missing values in distances: category, observed or asymmetric (or a table by column)
+sensitive_columns = []          # columns that the attribute-inference privacy check tries to infer (needs the privacy extra)
 structure_aware = false     # learn across the codebook's skip rules (applies_when) and enforce them on the output
 compute_subgroups = false   # per-subgroup fidelity and privacy; subgroups come from the codebook and `subgroups`
 subgroups = [{ name = "older", condition = "[age] >= 65" }]
@@ -130,7 +131,7 @@ subgroup_min_size = 30
 ## 📦 Outputs
 - Per dataset (e.g., `output/Heart Disease/`):
   - `index.html` and `report.md`
-  - `dataset.codebook.jsonld` (DSV JSON-LD written by linked-codebook, with roles) and its RDFa rendering `dataset.codebook.html`
+  - `dataset.codebook.jsonld` (DSV JSON-LD written by linked-codebook) and its RDFa rendering `dataset.codebook.html`
   - `umap_real.png` (when `--generate-umap` is enabled and UMAP dependencies are installed)
 - Per model (e.g., `output/Heart Disease/models/<name>/`):
   - `synthetic.csv`, `metrics.json`, and `umap.png`
@@ -142,7 +143,7 @@ subgroup_min_size = 30
 - `semsynth/dataproviders/uciml.py` exposes a CLI that turns the JSON payloads cached under `uciml-cache/` (sometimes referenced as `uci-cache/` in earlier docs) into DCAT + DSV JSON-LD that downstream tools can ingest.
 - Terminology matching (lexical, Datasette keyword, embedding and LLM strategies) lives in [entailmap](https://github.com/bennokr/entailmap) as `entailmap.match`. Install it with `pip install "semsynth[mapping]"`. This repository keeps only the terminology data in `map_columns/` (`codes.tsv`, `terminology.db`) until it becomes a release asset of entailmap; `ENTAILMAP_MATCH_DATA` can point elsewhere.
 - `python -m semsynth create-mapping uciml --datasets 145 --method lexical` automates the end-to-end workflow (JSON-LD export → terminology scoring → SSSOM merge) and stores the results under `mappings/`.
-- Curated codebooks (`mappings/*.metadata.json`, DSV JSON-LD with roles) are repo-only under `mappings/` and are not bundled into wheels; when installing from PyPI, provide your own `mappings/` directory if you want curated mappings.
+- Curated codebooks (`mappings/*.metadata.json`, DSV JSON-LD) are repo-only under `mappings/` and are not bundled into wheels; when installing from PyPI, provide your own `mappings/` directory if you want curated mappings.
 
 ### Example: UCI dataset 45 (Heart Disease)
 1. Fetch the dataset metadata. Any command that touches the UCI provider will populate `uciml-cache/<id>.json`. For example:

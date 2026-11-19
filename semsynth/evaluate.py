@@ -7,7 +7,7 @@ from collections.abc import Mapping
 from dataclasses import asdict, is_dataclass
 from typing import TYPE_CHECKING, Any
 
-from .codebook import Codebook, privacy_role
+from .codebook import Codebook
 from .metrics import heldout_loglik, per_variable_distances, summarize_distance_metrics
 
 if TYPE_CHECKING:  # pragma: no cover - typing only
@@ -118,8 +118,9 @@ def build_privacy_metadata(
 ) -> pd.DataFrame:
     """The ``variable``, ``role`` and ``type`` of each column, as the privacy metrics expect them.
 
-    Roles come from ``metadata`` (a codebook or a document that can be read as one); columns without any
-    metadata are quasi-identifiers. ``role_overrides`` and ``target`` are applied last.
+    The columns come from ``metadata`` (a codebook or a document that can be read as one) or, without it, from ``df``.
+    The target has the role ``target``, a column named like an identifier ``id`` and every other column ``qi`` (a
+    quasi-identifier). ``role_overrides`` (column name to ``qi``, ``sensitive``, ``id`` or ``ignore``) are applied last.
     """
 
     import pandas as pd
@@ -127,17 +128,17 @@ def build_privacy_metadata(
     frame: pd.DataFrame | None
     try:
         codebook = Codebook.read(metadata) if metadata is not None else Codebook.from_frame(df)
-        frame = codebook.privacy_frame(inferred) if codebook.columns else None
+        frame = codebook.privacy_frame(inferred, target) if codebook.columns else None
     except Exception:
-        LOGGER.exception("Failed to read metadata for privacy roles")
+        LOGGER.exception("Failed to read the codebook for the privacy frame")
         frame = None
     if frame is None:
         frame = pd.DataFrame(
             [{"variable": c, "role": "qi", "type": _type_name(inferred, c)} for c in inferred]
         )
-    for column, raw_role in (role_overrides or {}).items():
+    for column, role in (role_overrides or {}).items():
         if column in frame.variable.values:
-            frame.loc[frame.variable == column, "role"] = privacy_role(raw_role)
+            frame.loc[frame.variable == column, "role"] = role
     if target:
         mask = frame.variable == target
         if mask.any():
@@ -158,15 +159,7 @@ def privacy_frame(
 ) -> pd.DataFrame:
     """The ``variable``, ``role`` and ``type`` of each column for the privacy and joint-fidelity metrics."""
 
-    if isinstance(metadata, Codebook):
-        frame = metadata.privacy_frame(inferred)
-    else:
-        frame = build_privacy_metadata(
-            real_df, inferred, metadata=metadata, role_overrides=role_overrides, target=target
-        )
-    if target and target in frame.variable.values:
-        frame.loc[frame.variable == target, "role"] = "target"
-    return frame
+    return build_privacy_metadata(real_df, inferred, metadata=metadata, role_overrides=role_overrides, target=target)
 
 
 def privacy_scores(
@@ -214,22 +207,8 @@ def privacy_scores(
     return dict(summary)
 
 
-def build_downstream_meta(
-    df: pd.DataFrame,
-    inferred: Mapping[str, str],
-    target_series: pd.Series | None,
-    *,
-    target: str | None = None,
-) -> Codebook:
-    """A codebook for downstream metrics when there is no metadata: levels from ``inferred`` and the target role."""
-
-    import pandas as pd
-
-    target_name: str | None = None
-    if isinstance(target_series, pd.Series) and target_series.attrs.get("prov:hadRole") == "target":
-        target_name = target_series.name if target_series.name in df.columns else None
-    if target_name is None and target and target in df.columns:
-        target_name = target
+def build_downstream_meta(df: pd.DataFrame, inferred: Mapping[str, str]) -> Codebook:
+    """A codebook for downstream metrics when there is no metadata: the levels of the columns from ``inferred``."""
 
     columns: list[dict[str, Any]] = []
     for column in df.columns:
@@ -241,19 +220,17 @@ def build_downstream_meta(
         if categories:
             entry["values"] = [{"code": cat} for cat in categories]
         columns.append(entry)
-    roles = {str(name): "target" if name == target_name else "predictor" for name in df.columns}
-    return Codebook({"columns": columns}, roles)  # type: ignore[arg-type]
+    return Codebook({"columns": columns})  # type: ignore[arg-type]
 
 
 def downstream_scores(
     real_df: pd.DataFrame,
     synth_df: pd.DataFrame,
     inferred: Mapping[str, str],
-    target_series: pd.Series | None,
+    target: str | None,
     metadata: Codebook | None = None,
     *,
     compare: Any | None = None,
-    target: str | None = None,
 ) -> dict[str, Any]:
     """How often a model fitted on the synthetic table has the same coefficient signs as one fitted on the real.
 
@@ -261,11 +238,10 @@ def downstream_scores(
         real_df: Real table.
         synth_df: Synthetic table.
         inferred: Column names mapped to ``discrete`` or ``continuous``.
-        target_series: The target column, annotated with ``prov:hadRole``.
-        metadata: Codebook with the levels and roles; built from ``inferred`` when omitted.
-        compare: Function ``(real, synthetic, codebook)`` returning ``formula`` and a ``compare`` table;
-            :func:`semsynth.downstream_fidelity.compute_downstream` when omitted.
         target: Name of the target column.
+        metadata: Codebook with the levels; built from ``inferred`` when omitted.
+        compare: Function ``(real, synthetic, codebook, target=...)`` returning ``formula`` and a ``compare`` table;
+            :func:`semsynth.downstream_fidelity.compute_downstream` when omitted.
 
     Raises:
         ImportError: If the default comparison is used and the ``statsmodels`` extra is missing.
@@ -273,10 +249,8 @@ def downstream_scores(
 
     if compare is None:
         from .downstream_fidelity import compute_downstream as compare
-    meta = metadata if isinstance(metadata, Codebook) else build_downstream_meta(
-        real_df, inferred, target_series, target=target
-    )
-    results = compare(real_df, synth_df, meta)
+    meta = metadata if isinstance(metadata, Codebook) else build_downstream_meta(real_df, inferred)
+    results = compare(real_df, synth_df, meta, target=target)
     sign_match_rate = float("nan")
     table = results.get("compare")
     if hasattr(table, "__getitem__"):

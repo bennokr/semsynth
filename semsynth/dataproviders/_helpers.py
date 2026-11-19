@@ -3,7 +3,7 @@
 from __future__ import annotations
 
 import json
-from collections.abc import Iterable, Mapping
+from collections.abc import Mapping
 from dataclasses import dataclass
 from pathlib import Path
 from typing import Any
@@ -78,82 +78,19 @@ def clean_dataset_frame(
     df: pd.DataFrame,
     *,
     target: str | None = None,
-    metadata: Mapping[str, object] | None = None,
 ) -> tuple[pd.DataFrame, str | None, pd.Series | None]:
-    """Return a cleaned dataframe plus detected target column and colour series.
+    """Return a cleaned dataframe, the target column if the table has it, and that column as the colour series.
 
-    The helper removes trivial identifier columns, then inspects the provided
-    ``target`` hint and metadata for ``prov:hadRole`` annotations to
-    identify the target column. When a target column is found, the returned
-    series is annotated with ``prov:hadRole = "target"`` for downstream
-    consumers.
+    The helper removes trivial identifier columns (``id`` and ``index``).
     """
 
     clean_df = df.copy()
     for column in list(clean_df.columns):
         if str(column).lower() in {"id", "index"}:
             clean_df = clean_df.drop(columns=[column])
-
-    candidates = []
-
-    def _append_candidate(name: str | None) -> None:
-        if isinstance(name, str) and name and name not in candidates:
-            candidates.append(name)
-
-    def _normalise_role(role: object) -> str | None:
-        if isinstance(role, str) and role:
-            role_lower = role.strip().lower()
-            if role_lower == "target":
-                return role_lower
-        return None
-
-    def _extract_named_role(node: object) -> None:
-        if isinstance(node, Mapping):
-            role_value = node.get("prov:hadRole")
-            role_items: Iterable[str]
-            if isinstance(role_value, str):
-                role_items = [role_value]
-            elif isinstance(role_value, Iterable) and not isinstance(
-                role_value, (str, bytes)
-            ):
-                role_items = [str(item) for item in role_value if isinstance(item, str)]
-            else:
-                role_items = []
-
-            if any(_normalise_role(r) for r in role_items):
-                possible_names = [
-                    node.get("schema:name"),
-                    node.get("name"),
-                    node.get("column"),
-                    node.get("column_name"),
-                    node.get("field"),
-                ]
-                for possible in possible_names:
-                    if isinstance(possible, str) and possible:
-                        _append_candidate(possible)
-                        break
-
-            for value in node.values():
-                _extract_named_role(value)
-        elif isinstance(node, Iterable) and not isinstance(node, (str, bytes)):
-            for value in node:
-                _extract_named_role(value)
-
-    _append_candidate(target)
-    if metadata and isinstance(metadata, Mapping):
-        _extract_named_role(metadata)
-
-    detected_target: str | None = None
-    color_series: pd.Series | None = None
-    for candidate in candidates:
-        if candidate in clean_df.columns:
-            detected_target = candidate
-            color_series = clean_df[candidate].copy()
-            color_series.attrs["prov:hadRole"] = "target"
-            clean_df[detected_target] = color_series
-            break
-
-    return clean_df, detected_target, color_series
+    if isinstance(target, str) and target in clean_df.columns:
+        return clean_df, target, clean_df[target].copy()
+    return clean_df, None, None
 
 
 __all__ = [

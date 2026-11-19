@@ -48,6 +48,7 @@ class PreprocessingResult:
     codebook_jsonld: dict[str, Any] | None = None
     codebook: Codebook | None = None
     color_series: pd.Series | None = None
+    target: str | None = None  # the target column, if it is a column of the table
     umap_png_real: Path | None = None
     umap_artifacts: UmapArtifacts | None = None
     missingness_model: DataFrameMissingnessModel | None = None
@@ -115,7 +116,7 @@ class DatasetPreprocessor:
             else None
         )
         missingness_model = self._fit_missingness(dataset_spec, df_processed, cfg)
-        self._complete_codebook(codebook, dataset_spec, df_processed, target_column, missingness_model, cfg)
+        self._complete_codebook(codebook, dataset_spec, df_processed, missingness_model, cfg)
 
         return PreprocessingResult(
             df_processed=df_processed,
@@ -127,6 +128,7 @@ class DatasetPreprocessor:
             codebook_jsonld=codebook.to_jsonld(),
             codebook=codebook,
             color_series=target_series,
+            target=target_column,
             umap_png_real=None,
             umap_artifacts=umap_artifacts,
             missingness_model=missingness_model,
@@ -168,22 +170,14 @@ class DatasetPreprocessor:
     def _target_series(
         dataset_spec: DatasetSpec, color_series: pd.Series | None, df_no_na: pd.DataFrame
     ) -> tuple[pd.Series | None, str | None]:
-        """The target column as a series annotated with ``prov:hadRole``, and the name of the target."""
+        """The series that colours the plots (the target unless ``color_series`` is given) and the name of the target."""
 
         import pandas as pd
 
-        target_column = dataset_spec.target
-        series = None
+        target_column = dataset_spec.target if dataset_spec.target in df_no_na.columns else None
         if isinstance(color_series, pd.Series) and color_series.name in df_no_na.columns:
-            series = df_no_na[color_series.name].copy()
-            series.attrs.update(color_series.attrs)
-            if target_column and series.attrs.get("prov:hadRole") != "target":
-                series.attrs["prov:hadRole"] = "target"
-                target_column = series.name
-        if series is None and target_column and target_column in df_no_na.columns:
-            series = df_no_na[target_column].copy()
-            series.attrs["prov:hadRole"] = "target"
-        return series, target_column
+            return df_no_na[color_series.name].copy(), target_column
+        return (df_no_na[target_column].copy() if target_column else None), target_column
 
     @staticmethod
     def _fit_umap(
@@ -250,18 +244,15 @@ class DatasetPreprocessor:
         codebook: Codebook,
         dataset_spec: DatasetSpec,
         df_processed: pd.DataFrame,
-        target_column: str | None,
         missingness_model: DataFrameMissingnessModel | None,
         cfg: PipelineConfig,
     ) -> None:
-        """Record the target role, the statistics, the IRI of the dataset and a title in the codebook.
+        """Record the statistics, the IRI of the dataset and a title in the codebook.
 
         The identifier is always the IRI of the dataset (:mod:`semsynth.iris`), because the codebook, the catalog and
         the provenance must name the dataset by one IRI; an identifier that came with the data is not kept.
         """
 
-        if target_column and target_column in df_processed.columns:
-            codebook.roles[str(target_column)] = "target"
         codebook.set_statistics(df_processed, missingness_model)
         codebook.profile["identifier"] = Iris(cfg.iri_base).dataset(dataset_spec.name or dataset_spec.id)
         if dataset_spec.name and "title" not in codebook.profile:

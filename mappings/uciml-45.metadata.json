@@ -727,8 +727,7 @@
           "@id": "https://bennokr.github.io/semsynth/output/heart-disease/#statistics-num",
           "@type": "dsvo:SummaryStatistics",
           "statisticalDataType": "dsvo:NominalDataType"
-        },
-        "prov:hadRole": "target"
+        }
       }
     ]
   }

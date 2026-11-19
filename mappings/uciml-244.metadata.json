@@ -115,211 +115,201 @@
     "dcterms": "http://purl.org/dc/terms/",
     "prov": "http://www.w3.org/ns/prov#"
   },
-  "@id": "https://bennokr.github.io/semsynth/output/fertility/",
+  "@id": "urn:linked-codebook:dataset:Fertility",
   "@type": [
     "dcat:Dataset",
     "dsvo:Dataset"
   ],
-  "identifier": "https://bennokr.github.io/semsynth/output/fertility/",
   "landingPage": "https://archive.ics.uci.edu/dataset/244/fertility",
   "title": "Fertility",
   "summaryStatistics": {
-    "@id": "https://bennokr.github.io/semsynth/output/fertility/#statistics",
+    "@id": "urn:linked-codebook:dataset:Fertility#statistics",
     "@type": "dsvo:SummaryStatistics",
     "numberOfRows": 100,
     "numberOfColumns": 10
   },
   "datasetSchema": {
-    "@id": "https://bennokr.github.io/semsynth/output/fertility/#schema",
+    "@id": "urn:linked-codebook:dataset:Fertility#schema",
     "@type": "dsvo:DatasetSchema",
     "columns": [
       {
-        "@id": "https://bennokr.github.io/semsynth/output/fertility/#column-season",
+        "@id": "urn:linked-codebook:dataset:Fertility#column-season",
         "@type": "dsvo:Column",
         "name": "season",
         "titles": "season",
         "columnProperty": {
-          "@id": "https://bennokr.github.io/semsynth/output/fertility/#property-season",
+          "@id": "urn:linked-codebook:dataset:Fertility#property-season",
           "@type": "dsvo:ColumnProperty",
           "hasVariable": {
-            "@id": "https://bennokr.github.io/semsynth/output/fertility/#variable-season",
+            "@id": "urn:linked-codebook:dataset:Fertility#variable-season",
             "@type": "skos:Concept",
             "skos:prefLabel": "season"
           }
-        },
-        "prov:hadRole": "Feature"
+        }
       },
       {
-        "@id": "https://bennokr.github.io/semsynth/output/fertility/#column-age",
+        "@id": "urn:linked-codebook:dataset:Fertility#column-age",
         "@type": "dsvo:Column",
         "name": "age",
         "titles": "age",
         "columnProperty": {
-          "@id": "https://bennokr.github.io/semsynth/output/fertility/#property-age",
+          "@id": "urn:linked-codebook:dataset:Fertility#property-age",
           "@type": "dsvo:ColumnProperty",
           "hasVariable": {
-            "@id": "https://bennokr.github.io/semsynth/output/fertility/#variable-age",
+            "@id": "urn:linked-codebook:dataset:Fertility#variable-age",
             "@type": "skos:Concept",
             "skos:prefLabel": "age"
           }
         },
         "summaryStatistics": {
-          "@id": "https://bennokr.github.io/semsynth/output/fertility/#statistics-age",
+          "@id": "urn:linked-codebook:dataset:Fertility#statistics-age",
           "@type": "dsvo:SummaryStatistics",
           "statisticalDataType": "dsvo:NumericalDataType"
-        },
-        "prov:hadRole": "Feature"
+        }
       },
       {
-        "@id": "https://bennokr.github.io/semsynth/output/fertility/#column-child_diseases",
+        "@id": "urn:linked-codebook:dataset:Fertility#column-child_diseases",
         "@type": "dsvo:Column",
         "name": "child_diseases",
         "titles": "child_diseases",
         "columnProperty": {
-          "@id": "https://bennokr.github.io/semsynth/output/fertility/#property-child_diseases",
+          "@id": "urn:linked-codebook:dataset:Fertility#property-child_diseases",
           "@type": "dsvo:ColumnProperty",
           "hasVariable": {
-            "@id": "https://bennokr.github.io/semsynth/output/fertility/#variable-child_diseases",
+            "@id": "urn:linked-codebook:dataset:Fertility#variable-child_diseases",
             "@type": "skos:Concept",
             "skos:prefLabel": "child_diseases"
           }
-        },
-        "prov:hadRole": "Feature"
+        }
       },
       {
-        "@id": "https://bennokr.github.io/semsynth/output/fertility/#column-accident",
+        "@id": "urn:linked-codebook:dataset:Fertility#column-accident",
         "@type": "dsvo:Column",
         "name": "accident",
         "titles": "accident",
         "columnProperty": {
-          "@id": "https://bennokr.github.io/semsynth/output/fertility/#property-accident",
+          "@id": "urn:linked-codebook:dataset:Fertility#property-accident",
           "@type": "dsvo:ColumnProperty",
           "hasVariable": {
-            "@id": "https://bennokr.github.io/semsynth/output/fertility/#variable-accident",
+            "@id": "urn:linked-codebook:dataset:Fertility#variable-accident",
             "@type": "skos:Concept",
             "skos:prefLabel": "accident"
           }
-        },
-        "prov:hadRole": "Feature"
+        }
       },
       {
-        "@id": "https://bennokr.github.io/semsynth/output/fertility/#column-surgical_intervention",
+        "@id": "urn:linked-codebook:dataset:Fertility#column-surgical_intervention",
         "@type": "dsvo:Column",
         "name": "surgical_intervention",
         "titles": "surgical_intervention",
         "columnProperty": {
-          "@id": "https://bennokr.github.io/semsynth/output/fertility/#property-surgical_intervention",
+          "@id": "urn:linked-codebook:dataset:Fertility#property-surgical_intervention",
           "@type": "dsvo:ColumnProperty",
           "hasVariable": {
-            "@id": "https://bennokr.github.io/semsynth/output/fertility/#variable-surgical_intervention",
+            "@id": "urn:linked-codebook:dataset:Fertility#variable-surgical_intervention",
             "@type": "skos:Concept",
             "skos:prefLabel": "surgical_intervention"
           }
-        },
-        "prov:hadRole": "Feature"
+        }
       },
       {
-        "@id": "https://bennokr.github.io/semsynth/output/fertility/#column-high_fevers",
+        "@id": "urn:linked-codebook:dataset:Fertility#column-high_fevers",
         "@type": "dsvo:Column",
         "name": "high_fevers",
         "titles": "high_fevers",
         "columnProperty": {
-          "@id": "https://bennokr.github.io/semsynth/output/fertility/#property-high_fevers",
+          "@id": "urn:linked-codebook:dataset:Fertility#property-high_fevers",
           "@type": "dsvo:ColumnProperty",
           "hasVariable": {
-            "@id": "https://bennokr.github.io/semsynth/output/fertility/#variable-high_fevers",
+            "@id": "urn:linked-codebook:dataset:Fertility#variable-high_fevers",
             "@type": "skos:Concept",
             "skos:prefLabel": "high_fevers"
           }
         },
         "summaryStatistics": {
-          "@id": "https://bennokr.github.io/semsynth/output/fertility/#statistics-high_fevers",
+          "@id": "urn:linked-codebook:dataset:Fertility#statistics-high_fevers",
           "@type": "dsvo:SummaryStatistics",
           "statisticalDataType": "dsvo:CategoricalDataType"
-        },
-        "prov:hadRole": "Feature"
+        }
       },
       {
-        "@id": "https://bennokr.github.io/semsynth/output/fertility/#column-alcohol",
+        "@id": "urn:linked-codebook:dataset:Fertility#column-alcohol",
         "@type": "dsvo:Column",
         "name": "alcohol",
         "titles": "alcohol",
         "columnProperty": {
-          "@id": "https://bennokr.github.io/semsynth/output/fertility/#property-alcohol",
+          "@id": "urn:linked-codebook:dataset:Fertility#property-alcohol",
           "@type": "dsvo:ColumnProperty",
           "hasVariable": {
-            "@id": "https://bennokr.github.io/semsynth/output/fertility/#variable-alcohol",
+            "@id": "urn:linked-codebook:dataset:Fertility#variable-alcohol",
             "@type": "skos:Concept",
             "skos:prefLabel": "alcohol"
           }
         },
         "summaryStatistics": {
-          "@id": "https://bennokr.github.io/semsynth/output/fertility/#statistics-alcohol",
+          "@id": "urn:linked-codebook:dataset:Fertility#statistics-alcohol",
           "@type": "dsvo:SummaryStatistics",
           "statisticalDataType": "dsvo:CategoricalDataType"
-        },
-        "prov:hadRole": "Feature"
+        }
       },
       {
-        "@id": "https://bennokr.github.io/semsynth/output/fertility/#column-smoking",
+        "@id": "urn:linked-codebook:dataset:Fertility#column-smoking",
         "@type": "dsvo:Column",
         "name": "smoking",
         "titles": "smoking",
         "columnProperty": {
-          "@id": "https://bennokr.github.io/semsynth/output/fertility/#property-smoking",
+          "@id": "urn:linked-codebook:dataset:Fertility#property-smoking",
           "@type": "dsvo:ColumnProperty",
           "hasVariable": {
-            "@id": "https://bennokr.github.io/semsynth/output/fertility/#variable-smoking",
+            "@id": "urn:linked-codebook:dataset:Fertility#variable-smoking",
             "@type": "skos:Concept",
             "skos:prefLabel": "smoking"
           }
         },
         "summaryStatistics": {
-          "@id": "https://bennokr.github.io/semsynth/output/fertility/#statistics-smoking",
+          "@id": "urn:linked-codebook:dataset:Fertility#statistics-smoking",
           "@type": "dsvo:SummaryStatistics",
           "statisticalDataType": "dsvo:CategoricalDataType"
-        },
-        "prov:hadRole": "Feature"
+        }
       },
       {
-        "@id": "https://bennokr.github.io/semsynth/output/fertility/#column-hrs_sitting",
+        "@id": "urn:linked-codebook:dataset:Fertility#column-hrs_sitting",
         "@type": "dsvo:Column",
         "name": "hrs_sitting",
         "titles": "hrs_sitting",
         "columnProperty": {
-          "@id": "https://bennokr.github.io/semsynth/output/fertility/#property-hrs_sitting",
+          "@id": "urn:linked-codebook:dataset:Fertility#property-hrs_sitting",
           "@type": "dsvo:ColumnProperty",
           "hasVariable": {
-            "@id": "https://bennokr.github.io/semsynth/output/fertility/#variable-hrs_sitting",
+            "@id": "urn:linked-codebook:dataset:Fertility#variable-hrs_sitting",
             "@type": "skos:Concept",
             "skos:prefLabel": "hrs_sitting"
           }
         },
         "summaryStatistics": {
-          "@id": "https://bennokr.github.io/semsynth/output/fertility/#statistics-hrs_sitting",
+          "@id": "urn:linked-codebook:dataset:Fertility#statistics-hrs_sitting",
           "@type": "dsvo:SummaryStatistics",
           "statisticalDataType": "dsvo:NumericalDataType"
-        },
-        "prov:hadRole": "Feature"
+        }
       },
       {
-        "@id": "https://bennokr.github.io/semsynth/output/fertility/#column-diagnosis",
+        "@id": "urn:linked-codebook:dataset:Fertility#column-diagnosis",
         "@type": "dsvo:Column",
         "name": "diagnosis",
         "titles": "diagnosis",
         "columnProperty": {
-          "@id": "https://bennokr.github.io/semsynth/output/fertility/#property-diagnosis",
+          "@id": "urn:linked-codebook:dataset:Fertility#property-diagnosis",
           "@type": "dsvo:ColumnProperty",
           "hasVariable": {
-            "@id": "https://bennokr.github.io/semsynth/output/fertility/#variable-diagnosis",
+            "@id": "urn:linked-codebook:dataset:Fertility#variable-diagnosis",
             "@type": "skos:Concept",
             "skos:prefLabel": "diagnosis"
           }
-        },
-        "prov:hadRole": "Target"
+        }
       }
     ]
   },
+  "identifier": "https://bennokr.github.io/semsynth/output/fertility/",
   "dcterms:created": 2012,
   "dcterms:modified": "2024-03-15",
   "dcat:theme": "Health and Medicine",

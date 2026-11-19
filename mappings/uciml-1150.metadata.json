@@ -171,8 +171,7 @@
           "@id": "https://bennokr.github.io/semsynth/output/gallstone/#statistics-Gallstone%20Status",
           "@type": "dsvo:SummaryStatistics",
           "statisticalDataType": "dsvo:NominalDataType"
-        },
-        "prov:hadRole": "target"
+        }
       },
       {
         "@id": "https://bennokr.github.io/semsynth/output/gallstone/#column-Age",

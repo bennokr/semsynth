@@ -64,22 +64,19 @@ def test_privacy_scores_turns_a_dataclass_into_a_dict() -> None:
 def test_downstream_scores_reports_the_sign_match_rate() -> None:
     real = pd.DataFrame({"value": [1.0, 2.0]})
 
-    def compare(_real: pd.DataFrame, _synth: pd.DataFrame, metadata: Codebook) -> dict[str, Any]:
-        assert metadata.kind("value") == "numeric"
+    def compare(_real: pd.DataFrame, _synth: pd.DataFrame, metadata: Codebook, target: str | None = None) -> dict[str, Any]:
+        assert metadata.kind("value") == "numeric" and target == "value"
         return {"formula": "y ~ x", "compare": pd.DataFrame({"sign_match": [True, False]})}
 
-    scores = downstream_scores(real, real, {"value": "continuous"}, None, compare=compare)
+    scores = downstream_scores(real, real, {"value": "continuous"}, "value", compare=compare)
 
     assert scores == {"formula": "y ~ x", "sign_match_rate": 0.5}
 
 
 def test_build_downstream_meta_is_a_codebook() -> None:
     df = pd.DataFrame({"feature": ["a", "b", "a"], "target": [0, 1, 1]})
-    target_series = df["target"].copy()
-    target_series.attrs["prov:hadRole"] = "target"
 
-    meta = build_downstream_meta(df, {"feature": "discrete", "target": "discrete"}, target_series)
+    meta = build_downstream_meta(df, {"feature": "discrete", "target": "discrete"})
 
-    assert meta.roles == {"feature": "predictor", "target": "target"}
     assert meta.column("target")["level"] == "nominal"
     assert meta.codes("target") == ["0", "1"]

@@ -17,7 +17,6 @@ def test_categorical_levels_no_missing_reference():
         [
             {
                 "schema:name": "sex",
-                "prov:hadRole": "predictor",
                 "dsv:summaryStatistics": {"dsv:statisticalDataType": "dsv:NominalDataType"},
                 "dsv:columnProperty": {
                     "dsv:hasCodeBook": {
@@ -30,7 +29,6 @@ def test_categorical_levels_no_missing_reference():
             },
             {
                 "schema:name": "outcome",
-                "prov:hadRole": "target",
                 "dsv:summaryStatistics": {"dsv:statisticalDataType": "dsv:NominalDataType"},
             },
         ]
@@ -48,7 +46,7 @@ def test_categorical_levels_no_missing_reference():
         }
     )
 
-    result = dfid.compute_downstream(df_real, df_synth, meta)
+    result = dfid.compute_downstream(df_real, df_synth, meta, target="outcome")
     assert result.get("skipped_reason") in (None, "no_predictors")
 
 
@@ -57,13 +55,12 @@ def test_intercept_only_when_no_predictors():
         [
             {
                 "schema:name": "target",
-                "prov:hadRole": "target",
                 "dsv:summaryStatistics": {"dsv:statisticalDataType": "dsv:NominalDataType"},
             }
         ]
     )
     df = pd.DataFrame({"target": [0, 1, 0]})
-    formula = dfid.auto_formula(df, meta, dfid.DownstreamConfig())
+    formula = dfid.auto_formula(df, meta, dfid.DownstreamConfig(), "target")
     assert formula == "target ~ 1"
 
 
@@ -72,13 +69,12 @@ def test_screen_terms_returns_intercept_on_design_error():
         [
             {
                 "schema:name": "y",
-                "prov:hadRole": "target",
                 "dsv:summaryStatistics": {"dsv:statisticalDataType": "dsv:NominalDataType"},
             }
         ]
     )
     df = pd.DataFrame({"y": [1, 0, 1]})
-    result = dfid.compute_downstream(df, df, meta)
+    result = dfid.compute_downstream(df, df, meta, target="y")
     assert result.get("skipped_reason") is not None
 
 
@@ -87,12 +83,10 @@ def test_imputation_failure_is_caught():
         [
             {
                 "schema:name": "all_missing",
-                "prov:hadRole": "predictor",
                 "dsv:summaryStatistics": {"dsv:statisticalDataType": "dsv:NumericalDataType"},
             },
             {
                 "schema:name": "target",
-                "prov:hadRole": "target",
                 "dsv:summaryStatistics": {"dsv:statisticalDataType": "dsv:NominalDataType"},
             },
         ]
@@ -100,7 +94,7 @@ def test_imputation_failure_is_caught():
     df_real = pd.DataFrame({"all_missing": [float("nan")] * 3, "target": [0, 1, 0]})
     df_synth = pd.DataFrame({"all_missing": [float("nan")] * 3, "target": [1, 0, 1]})
 
-    result = dfid.compute_downstream(df_real, df_synth, meta)
+    result = dfid.compute_downstream(df_real, df_synth, meta, target="target")
     assert "skipped_reason" in result
     assert result["compare"] is None
 
@@ -110,7 +104,6 @@ def test_multiclass_targets_supported():
         [
             {
                 "schema:name": "color",
-                "prov:hadRole": "target",
                 "dsv:summaryStatistics": {"dsv:statisticalDataType": "dsv:NominalDataType"},
                 "dsv:columnProperty": {
                     "dsv:hasCodeBook": {
@@ -124,7 +117,6 @@ def test_multiclass_targets_supported():
             },
             {
                 "schema:name": "length",
-                "prov:hadRole": "predictor",
                 "dsv:summaryStatistics": {"dsv:statisticalDataType": "dsv:NumericalDataType"},
             },
         ]
@@ -141,16 +133,14 @@ def test_multiclass_targets_supported():
             "length": [1.1, 1.2, 2.1, 3.1, 2.6, 3.4],
         }
     )
-    result = dfid.compute_downstream(df_real, df_synth, meta)
+    result = dfid.compute_downstream(df_real, df_synth, meta, target="color")
     assert result.get("skipped_reason") is None
     assert result["compare"] is not None
 
 
 def test_numeric_codes_match_declared_text_codes():
     meta = Codebook(
-        {"columns": [{"name": "y", "level": "nominal", "values": [{"code": "0"}, {"code": "1"}]}, {"name": "x"}]},
-        {"y": "target"},
-    )
+        {"columns": [{"name": "y", "level": "nominal", "values": [{"code": "0"}, {"code": "1"}]}, {"name": "x"}]})
     df = pd.DataFrame({"y": [0, 1, 2, 0], "x": [0.1, 0.2, 0.3, 0.4]})
     coerced = dfid._coerce_frame(df, meta)
     assert list(coerced["y"].astype(str)) == ["0", "1", "2", "0"]

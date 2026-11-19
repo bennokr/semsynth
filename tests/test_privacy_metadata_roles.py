@@ -1,4 +1,4 @@
-"""Privacy metadata role handling tests."""
+"""How a privacy check gets its roles: the target, identifier names and the roles that a run declares."""
 
 from __future__ import annotations
 
@@ -29,40 +29,31 @@ def _capture_privacy(
     return _PrivacyCapture(qi=qi_cols, sensitive=sensitive_cols, used=use_cols)
 
 
-def test_privacy_metadata_uses_roles_and_target():
+def test_privacy_metadata_gives_the_target_identifiers_and_the_rest_a_role():
     real_df = pd.DataFrame(
         {
-            "identifier": [1, 2, 3],
+            "patient_id": [1, 2, 3],
             "feature": ["a", "b", "c"],
             "sensitive_attr": ["x", "y", "x"],
             "target": [0, 1, 0],
-            "ignore_me": [9, 9, 8],
         }
     )
-    inferred = {
-        "identifier": "discrete",
-        "feature": "discrete",
-        "sensitive_attr": "discrete",
-        "target": "discrete",
-        "ignore_me": "continuous",
-    }
-    metadata = Codebook(
-        {"columns": [{"name": name} for name in ("identifier", "feature", "sensitive_attr", "target", "ignore_me")]},
-        {"identifier": "identifier", "feature": "predictor", "sensitive_attr": "Sensitive", "ignore_me": "ignore"},
-    )
+    inferred = dict.fromkeys(real_df.columns, "discrete")
+    metadata = Codebook({"columns": [{"name": name} for name in real_df.columns]})
     payload = privacy_scores(
         real_df,
         real_df.copy(),
         inferred,
         metadata,
         summarizer=_capture_privacy,
+        role_overrides={"sensitive_attr": "sensitive"},
         target="target",
     )
 
     assert payload["qi"] == ["feature"]
     assert payload["sensitive"] == ["sensitive_attr"]
     assert "target" not in payload["qi"]
-    assert "ignore_me" not in payload["used"]
+    assert "patient_id" not in payload["used"]
 
 
 def test_privacy_metadata_supports_role_overrides():

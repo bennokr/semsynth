@@ -171,11 +171,6 @@ def to_dcat_dsv(src: Mapping[str, Any]) -> Mapping[str, Any]:
         ]
 
     columns = [_column(variable, src.get("missing_values_symbol")) for variable in src.get("variables") or []]
-    roles = {
-        str(variable["name"]): str(variable["role"])
-        for variable in src.get("variables") or []
-        if _present(variable.get("name")) and _present(variable.get("role"))
-    }
 
     paper = src.get("intro_paper") or {}
     if paper:
@@ -235,7 +230,7 @@ def to_dcat_dsv(src: Mapping[str, Any]) -> Mapping[str, Any]:
     if _present(src.get("num_instances")):
         profile["rows"] = int(src["num_instances"])
     extras.pop("@type", None)
-    return Codebook(profile, roles, extras, context).to_jsonld()
+    return Codebook(profile, extras, context).to_jsonld()
 
 
 def _uciml_metadata_to_dcat_dsv(
@@ -385,9 +380,7 @@ def load_uciml_by_id(dataset_id: int, cache_dir: pathlib.Path) -> DatasetPayload
         target_hint = meta_cached.get("target")
         if isinstance(target_hint, str) and target_hint:
             spec.target = target_hint
-        df_clean, detected_target, color_series = clean_dataset_frame(
-            df_cached, target=spec.target, metadata=meta_cached
-        )
+        df_clean, detected_target, color_series = clean_dataset_frame(df_cached, target=spec.target)
         spec.target = spec.target or detected_target
         spec.name = _SPACE_CLEANUP(str(meta_cached.get("name") or f"UCI_{dataset_id}"))
         spec.meta = meta_cached.get("dcat_dsv") or meta_cached

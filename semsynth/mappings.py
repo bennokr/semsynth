@@ -61,7 +61,7 @@ def resolve_mapping_json(dataset_spec: DatasetSpec) -> Path | None:
 
 
 def load_mapping_json(path: Path) -> dict[str, Any]:
-    """Load a curated codebook: DSV JSON-LD written by linked-codebook, with roles."""
+    """Load a curated codebook: DSV JSON-LD written by linked-codebook."""
     if not path.exists():
         raise FileNotFoundError(path)
 

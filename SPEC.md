@@ -93,7 +93,7 @@ Vocabulary); the IRIs are unchanged. A float `NaN` is blank. SemSynth tests that
 
 Still to ask for: `Value.missing_reason` (`refused`, `dont_know`, `not_applicable`, `not_collected`), `Column.missing_mechanism`
 (`mcar`, `mar`, `mnar`; absent means undeclared) with `missing_depends_on`, and a lint for a skip rule that names no column
-(SemSynth has `check_rules`). Not now: subgroups (a SemSynth setting), censoring, roles, survey weights, MNAR parameters.
+(SemSynth has `check_rules`). Not now: subgroups (a SemSynth setting), censoring, column roles (the target and the privacy columns are settings of the run), survey weights, MNAR parameters.
 
 ## Publishing and querying
 - **IRIs** (`semsynth/iris.py`): one base, `https://bennokr.github.io/semsynth/output/`, a setting (`iri_base`) so that it can move to

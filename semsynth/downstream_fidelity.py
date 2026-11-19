@@ -16,7 +16,7 @@ import pandas as pd
 from makeprov import Config
 from pandas.api.types import CategoricalDtype
 
-from .codebook import Codebook, modeling_role
+from .codebook import Codebook
 
 LOGGER = logging.getLogger(__name__)
 
@@ -34,19 +34,13 @@ class DownstreamConfig(Config):
 Col = tuple
 
 
-def _infer_meta(df: pd.DataFrame, target: str | None) -> Codebook:
-    roles = {str(col): "target" if target and col == target else "predictor" for col in df.columns}
-    return Codebook({"columns": [{"name": str(col)} for col in df.columns]}, roles)  # type: ignore[arg-type]
+def _infer_meta(df: pd.DataFrame) -> Codebook:
+    return Codebook({"columns": [{"name": str(col)} for col in df.columns]})  # type: ignore[arg-type]
 
 
 def _column_lookup(meta: Any) -> dict[str, Col]:
     meta = meta if isinstance(meta, Codebook) else Codebook.read(meta)
     return {column["name"]: (meta, column["name"]) for column in meta.columns}
-
-
-def _role(col: Col) -> str:
-    meta, name = col
-    return modeling_role(meta.roles.get(name))
 
 
 def _is_cat(col: Col, series: pd.Series | None = None) -> bool:
@@ -82,8 +76,9 @@ def _levels(col: Col) -> list[str]:
 
 # --- data prep ----------------------------------------------------------------
 def _sanitize_for_formula(
-    df_real: pd.DataFrame, df_synth: pd.DataFrame, meta: Codebook
-) -> tuple[pd.DataFrame, pd.DataFrame, Codebook]:
+    df_real: pd.DataFrame, df_synth: pd.DataFrame, meta: Codebook, target: str | None
+) -> tuple[pd.DataFrame, pd.DataFrame, Codebook, str | None]:
+    """The tables and the codebook with column names that a formula accepts, and the new name of the target."""
     used: set[str] = set()
     rename: dict[str, str] = {}
     for col in df_real.columns:
@@ -103,7 +98,7 @@ def _sanitize_for_formula(
     def _renamed(df: pd.DataFrame) -> pd.DataFrame:
         return df.rename(columns=rename)
 
-    return _renamed(df_real), _renamed(df_synth), meta.rename(rename)
+    return _renamed(df_real), _renamed(df_synth), meta.rename(rename), rename.get(target, target) if target else None
 
 
 def _coerce_frame(df: pd.DataFrame, meta: Codebook) -> pd.DataFrame:
@@ -157,11 +152,11 @@ def _var_term(name: str, col_meta: Codebook, series: pd.Series | None = None) ->
     return f"C({quoted}, levels={_levels(col_meta)!r})" if _is_cat(col_meta, series) else quoted
 
 
-def _build_terms(df: pd.DataFrame, meta: Codebook, max_interactions: int) -> tuple[str, str]:
+def _build_terms(df: pd.DataFrame, meta: Codebook, target: str | None, max_interactions: int) -> tuple[str, str]:
     lookup = _column_lookup(meta)
     preds = []
     for n, col in lookup.items():
-        if _role(col) != "predictor" or n not in df.columns:
+        if n == target or n not in df.columns:
             continue
         is_cat = _is_cat(col, df[n])
         if is_cat and not _levels(col):
@@ -177,21 +172,21 @@ def _build_terms(df: pd.DataFrame, meta: Codebook, max_interactions: int) -> tup
     return mains, inters
 
 
-def _target_info(meta: Codebook, df: pd.DataFrame) -> tuple[str, str]:
-    for name, col_meta in _column_lookup(meta).items():
-        if _role(col_meta) == "target":
-            if _is_cat(col_meta, df[name]):
-                levels = _levels(col_meta) or list(pd.Series(df[name]).dropna().unique())
-                return name, "binary" if len(levels) <= 2 else "multiclass"
-            return name, "continuous"
-    raise ValueError("metadata must define a target column")
+def _target_info(meta: Codebook, df: pd.DataFrame, target: str | None) -> tuple[str, str]:
+    col_meta = _column_lookup(meta).get(target) if target else None
+    if col_meta is None or target not in df.columns:
+        raise ValueError("the target must be a column of the table")
+    if _is_cat(col_meta, df[target]):
+        levels = _levels(col_meta) or list(pd.Series(df[target]).dropna().unique())
+        return target, "binary" if len(levels) <= 2 else "multiclass"
+    return target, "continuous"
 
 
-def auto_formula(df: pd.DataFrame, meta: Codebook, cfg: DownstreamConfig) -> str:
+def auto_formula(df: pd.DataFrame, meta: Codebook, cfg: DownstreamConfig, target: str | None) -> str:
     df0 = _coerce_frame(df, meta)
     df0 = _impute(df0, meta)
-    mains, inters = _build_terms(df0, meta, cfg.max_interactions)
-    yname, _ = _target_info(meta, df0)
+    mains, inters = _build_terms(df0, meta, target, cfg.max_interactions)
+    yname, _ = _target_info(meta, df0, target)
     if not mains and not inters:
         return f"{yname} ~ 1"
     rhs = " + ".join(mains + inters) or "1"
@@ -264,13 +259,13 @@ def compute_downstream(
 ) -> Mapping[str, Any]:
     _statsmodels()  # fail early and loudly: a missing extra must not look like a skipped comparison
     cfg = cfg or DownstreamConfig()
-    meta_obj = Codebook.read(meta) if meta is not None else _infer_meta(df_real, target)
-    df_real, df_synth, meta_obj = _sanitize_for_formula(df_real, df_synth, meta_obj)
+    meta_obj = Codebook.read(meta) if meta is not None else _infer_meta(df_real)
+    df_real, df_synth, meta_obj, target = _sanitize_for_formula(df_real, df_synth, meta_obj, target)
     df_real = _coerce_frame(df_real, meta_obj)
     df_synth = _coerce_frame(df_synth, meta_obj)
 
     try:
-        formula = auto_formula(df_real, meta_obj, cfg)
+        formula = auto_formula(df_real, meta_obj, cfg, target)
     except Exception as exc:
         LOGGER.error("Auto-formula failed", exc_info=exc)
         return {"formula": None, "compare": None, "skipped_reason": f"formula_error:{exc.__class__.__name__}"}
@@ -278,7 +273,7 @@ def compute_downstream(
         return {"formula": formula, "compare": None, "skipped_reason": "no_predictors"}
 
     try:
-        yname, target_type = _target_info(meta_obj, df_real)
+        yname, target_type = _target_info(meta_obj, df_real, target)
         cols_in_formula = {yname}
         rhs_terms = [t.strip() for t in formula.split("~", 1)[1].split("+")]
         for term in rhs_terms:

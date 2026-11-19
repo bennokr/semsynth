@@ -16,7 +16,7 @@ kernelspec:
 SemSynth summarizes how close a synthetic table is to the real rows it was learned from, independently of the generator. `semsynth.privacy_metrics.summarize_privacy` returns a `PrivacySummary`; the pipeline writes it as `metrics.privacy.json`. Every number is read against a reference: real *holdout* rows that the generator never saw, or a random baseline. A synthetic table that is as close to the training rows as fresh real rows are is not leaking more than the population does; one that is much closer is memorizing.
 
 ```{code-cell} python
-# Build the privacy metadata frame derived from curated roles/types.
+# Build the privacy metadata frame: a role and a type for each column.
 import pandas as pd
 from semsynth.codebook import Codebook
 from semsynth.utils import infer_types
@@ -39,7 +39,7 @@ Core (no extra needed):
 - t-closeness per sensitive attribute: Wasserstein-1 for numeric and total variation for categorical columns, between each synthetic quasi-identifier group and the real distribution.
 
 With the `privacy` extra (`sdmetrics`), recorded under `sdmetrics`, 1 is safest:
-- `disclosure_protection`: attribute inference from the quasi-identifiers to the sensitive columns, against a random-guess baseline. It needs columns with the roles `qi` and `sensitive`; without them it is not computed.
+- `disclosure_protection`: attribute inference from the quasi-identifiers to the sensitive columns, against a random-guess baseline. It needs sensitive columns, which the pipeline setting `sensitive_columns` lists; without them it is not computed.
 - `dcr_baseline_protection` and `dcr_overfitting_protection`: distances against random data and against the holdout.
 
 A metric that is requested but cannot run is recorded (`status: skipped` or `failed`, with the reason), not dropped. The scores are evaluated on the complete synthetic table, before the learned missingness is applied.

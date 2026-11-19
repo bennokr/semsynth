@@ -1134,8 +1134,7 @@
           "@id": "https://bennokr.github.io/semsynth/output/chronic-kidney-disease/#statistics-class",
           "@type": "dsvo:SummaryStatistics",
           "statisticalDataType": "dsvo:NominalDataType"
-        },
-        "prov:hadRole": "target"
+        }
       }
     ]
   }

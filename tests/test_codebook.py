@@ -1,5 +1,6 @@
-"""Tests for the codebook: a linked-codebook profile and the role of each column."""
+"""Tests for the codebook: a linked-codebook profile and the properties around it."""
 
+import json
 from pathlib import Path
 
 import pandas as pd
@@ -9,14 +10,13 @@ from semsynth.codebook import Codebook, read_parquet, write_parquet
 FIXTURES = Path(__file__).resolve().parent / "fixtures"
 
 
-def test_curated_file_is_read_with_roles_and_survives_json_ld() -> None:
+def test_curated_file_is_read_and_survives_json_ld() -> None:
     codebook = Codebook.read(FIXTURES / "heart.metadata.json")
     names = [column["name"] for column in codebook.columns]
     assert "chol" in names
-    codebook.roles["chol"] = "target"
     again = Codebook.read(codebook.to_jsonld())
     assert again.profile == codebook.profile
-    assert again.roles == codebook.roles
+    assert "hadRole" not in json.dumps(codebook.to_jsonld())
 
 
 def test_parquet_carries_the_codebook(tmp_path: Path) -> None:
@@ -26,31 +26,30 @@ def test_parquet_carries_the_codebook(tmp_path: Path) -> None:
     write_parquet(df, path, codebook.to_jsonld())
     df2, read = read_parquet(path)
     pd.testing.assert_frame_equal(df, df2)
-    assert read is not None and read.profile == codebook.profile and read.roles == codebook.roles
+    assert read is not None and read.profile == codebook.profile
 
 
-def test_privacy_frame_normalizes_roles_and_types() -> None:
+def test_privacy_frame_gives_the_target_identifiers_and_the_rest_a_role() -> None:
     codebook = Codebook(
         {
             "columns": [
                 {"name": "age", "level": "interval"},
                 {"name": "disease", "values": [{"code": "yes", "label": "Yes"}, {"code": "no", "label": "No"}]},
-                {"name": "id_col"},
+                {"name": "patient_id"},
                 {"name": "notes"},
             ]
-        },
-        {"age": "predictor", "disease": "Sensitive", "id_col": "identifier"},
+        }
     )
-    inferred = {"age": "continuous", "disease": "discrete", "id_col": "discrete", "notes": "continuous"}
-    privacy_df = codebook.privacy_frame(inferred)
+    inferred = {"age": "continuous", "disease": "discrete", "patient_id": "discrete", "notes": "continuous"}
+    privacy_df = codebook.privacy_frame(inferred, target="disease")
     assert dict(zip(privacy_df.variable, privacy_df.role, strict=True)) == {
         "age": "qi",
-        "disease": "sensitive",
-        "id_col": "id",
+        "disease": "target",
+        "patient_id": "id",
         "notes": "qi",
     }
     types = dict(zip(privacy_df.variable, privacy_df.type, strict=True))
-    assert types == {"age": "numeric", "disease": "categorical", "id_col": "categorical", "notes": "numeric"}
+    assert types == {"age": "numeric", "disease": "categorical", "patient_id": "categorical", "notes": "numeric"}
 
 
 def test_declared_metadata_wins_over_inference() -> None:

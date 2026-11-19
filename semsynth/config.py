@@ -49,6 +49,7 @@ class PipelineConfig(Config):
     compute_subgroups: bool = False  # per-subgroup fidelity and privacy (subgroups from the codebook and `subgroups`)
     subgroups: list[dict[str, str]] = field(default_factory=list)  # extra named conditions: {name, condition, label?}
     subgroup_min_size: int = 30  # fewest holdout and synthetic rows for a group to get scores
+    sensitive_columns: list[str] = field(default_factory=list)  # columns that the attribute-inference privacy check tries to infer
     privacy_missing: str | dict[str, str] = "category"  # missing values in distances: category, observed, asymmetric
 
     def apply_mapping(self, params: Mapping[str, Any]) -> PipelineConfig:

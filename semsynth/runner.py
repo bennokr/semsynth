@@ -188,7 +188,7 @@ class BackendExecutor:
                 metrics["cv"] = self._cross_validate(
                     folds, pristine, preprocessed, dataset_spec.target, spec, label
                 )
-        if downstream_flag and self._has_target(preprocessed):
+        if downstream_flag and preprocessed.target:
             downstream = _attempt(
                 "downstream", label, self._downstream, final, preprocessed, dataset_spec.target
             )
@@ -325,6 +325,7 @@ class BackendExecutor:
                 preprocessed.codebook,
                 holdout_df=holdout,
                 summarizer=self._privacy_summarizer,
+                role_overrides=self._privacy_roles(),
                 target=target,
                 seed=seed,
                 missing=self._cfg.privacy_missing,
@@ -355,7 +356,9 @@ class BackendExecutor:
 
         cfg = self._cfg
         seed = int(spec.seed if spec.seed is not None else cfg.random_state)
-        frame = privacy_frame(train, preprocessed.inferred_types, preprocessed.codebook, target=target)
+        frame = privacy_frame(
+            train, preprocessed.inferred_types, preprocessed.codebook, role_overrides=self._privacy_roles(), target=target
+        )
         kinds = dict(zip(frame.variable, frame.type, strict=False))
         if cfg.compute_joint:
             metrics["joint"] = _attempt_record(
@@ -455,7 +458,7 @@ class BackendExecutor:
 
         cfg = self._cfg
         frame = privacy_frame(
-            train, preprocessed.inferred_types, preprocessed.codebook, target=target
+            train, preprocessed.inferred_types, preprocessed.codebook, role_overrides=self._privacy_roles(), target=target
         )
         references = evaluate_references(
             train,
@@ -523,18 +526,14 @@ class BackendExecutor:
             preprocessed.df_no_na,
             synth_df,
             preprocessed.inferred_types,
-            preprocessed.color_series,
+            target,
             preprocessed.codebook,
             compare=self._downstream_compare,
-            target=target,
         )
 
-    @staticmethod
-    def _has_target(preprocessed: PreprocessingResult) -> bool:
-        import pandas as pd
-
-        series = preprocessed.color_series
-        return isinstance(series, pd.Series) and series.attrs.get("prov:hadRole") == "target"
+    def _privacy_roles(self) -> dict[str, str]:
+        """The roles that the run declares (``sensitive_columns``); the other columns follow from the codebook and the target."""
+        return dict.fromkeys(self._cfg.sensitive_columns, "sensitive")
 
 
 def plot_real_umap(
