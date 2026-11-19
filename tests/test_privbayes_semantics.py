@@ -67,3 +67,20 @@ def test_privbayes_returns_neutral_result():
         "income",
     }
     assert result.privacy_report["epsilon"] == 1.0
+
+
+def test_integer_codes_do_not_break_generation_with_numpy_2() -> None:
+    """DataSynthesizer reads back keys written as repr text; NumPy 2 prints ``np.int64(1)``, which it cannot read."""
+    pytest.importorskip("DataSynthesizer")
+    import numpy as np
+    import pandas as pd
+
+    from semsynth.backends.privbayes import synthesize
+
+    rng = np.random.default_rng(0)
+    frame = pd.DataFrame({"a": rng.integers(0, 3, 200), "c": rng.normal(size=200), "d": rng.integers(0, 4, 200)})
+    frame["b"] = (frame["a"] > 0).astype(int)
+    result = synthesize(frame, None, rows=50, seed=1, epsilon=1.0, k=2)
+    assert result.synthetic_data.shape == (50, 4)
+    if int(np.__version__.split(".")[0]) >= 2:
+        assert repr(np.int64(1)) == "np.int64(1)", "the print mode is scoped to the call"

@@ -307,7 +307,9 @@ def _fit_and_generate(
         describer = DataDescriber(histogram_bins=histogram_bins, category_threshold=category_threshold)
         generator = DataGenerator()
         log_buffer = io.StringIO()
-        with contextlib.redirect_stdout(log_buffer):
+        # DataSynthesizer writes numbers into the keys of its tables as repr text and reads them back with eval. NumPy 2
+        # prints np.int64(1), which that eval cannot read; the 1.25 print mode prints 1, as before. The mode is scoped.
+        with contextlib.redirect_stdout(log_buffer), np.printoptions(legacy="1.25"):
             describer.describe_dataset_in_correlated_attribute_mode(
                 dataset_file=str(input_path),
                 k=k,

@@ -44,7 +44,8 @@ one code path.
 | Distance policy chosen per column from the codebook | next (needs `missing_reason`) |
 | Mechanism declared in the codebook; sensitivity analysis for MNAR | next |
 | NHANES provider and benchmark | next |
-| Backends (mostlyai-engine spike) | after the evaluation work |
+| Backends: `mostlyai` (TabularARGN) and `chain` (sequential MLP or gradient boosting, runs in Pyodide) | spiked, experimental: see `sphinx/evaluation.md` for the first comparison |
+| PrivBayes with NumPy 2 | fixed: DataSynthesizer reads back keys written as `np.int64(1)`; generation runs in the NumPy 1.25 print mode |
 
 ## What the injected-truth benchmark found
 Complete table, then MAR, MNAR, a skip rule and coded values injected (`run_injected_benchmark`, 1500 rows):

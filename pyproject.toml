@@ -77,6 +77,9 @@ synthcity = [
   "synthcity>=0.2",
   "torch"
 ]
+mostlyai = [
+  "mostlyai-engine>=2.7"  # TabularARGN; needs PyTorch (a CPU build is enough) and NumPy 2; not for Pyodide
+]
 privbayes = [
   "DataSynthesizer==0.1.13",
   "scipy"
@@ -122,6 +125,7 @@ conflicts = [
   [{ extra = "synthcity" }, { extra = "umap" }],
   [{ extra = "synthcity" }, { extra = "language" }],
   [{ extra = "synthcity" }, { extra = "privacy" }],
+  [{ extra = "synthcity" }, { extra = "mostlyai" }],
   [{ extra = "synthcity" }, { extra = "all" }],
 ]
 

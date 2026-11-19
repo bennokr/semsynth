@@ -21,6 +21,7 @@ them. Everything else is an extra: `python -m pip install -e .[EXTRA]` with `EXT
 | `app` | `flask`: `python -m semsynth run-app` |
 | `metasyn`, `privbayes` | the MetaSyn and DataSynthesizer (PrivBayes) backends |
 | `pybnesian` | the PyBNesian backend (NumPy 2) |
+| `mostlyai` | the MOSTLY AI TabularARGN backend (experimental): a neural model; needs PyTorch (a CPU build is enough), NumPy 2, and does not run in Pyodide |
 | `synthcity` | the SynthCity backend; heavy (PyTorch) and the one extra that needs NumPy below 2, so it cannot share an environment with `pybnesian`, `umap`, `language`, `privacy` or `all` (uv enforces this in `[tool.uv] conflicts`) |
 | `statsmodels` | the downstream coefficient comparison |
 | `privacy` | `sdmetrics`: attribute-inference and distance-to-closest-record scores (NumPy 2; runs in Pyodide). Without it the exact-match and distance statistics are still computed, and the sdmetrics block of `metrics.privacy.json` says `skipped` |
@@ -206,7 +207,7 @@ subgroup_min_size = 30
 from semsynth import synthesize
 from semsynth.synthesis import write_run
 
-result = synthesize(df, codebook, backend="metasyn", rows=500, seed=1)   # or "privbayes", "pybnesian", "synthcity"
+result = synthesize(df, codebook, backend="metasyn", rows=500, seed=1)   # or "privbayes", "pybnesian", "mostlyai", "chain", "synthcity"
 result.synthetic_data      # a pandas DataFrame
 result.learned_model       # backend-specific object
 write_run(result, "output/run-1")   # only if you want the files

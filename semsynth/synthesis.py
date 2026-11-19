@@ -26,7 +26,7 @@ LOGGER = logging.getLogger(__name__)
 
 __all__ = ["BACKENDS", "load_backend", "synthesize", "write_run"]
 
-BACKENDS = ("metasyn", "privbayes", "pybnesian", "synthcity")
+BACKENDS = ("chain", "metasyn", "mostlyai", "privbayes", "pybnesian", "synthcity")
 """The backend names; each is also the name of the extra that installs its engine."""
 
 
