@@ -19,14 +19,14 @@ Direction, decisions and status: `SPEC.md`.
     `write_run`, the one backend contract).
   - Evaluate (pure functions): `evaluate.py`, `metrics.py`, `privacy_metrics.py`, `distance.py` (Gower with missing-value
     policies), `joint_fidelity.py`, `downstream_fidelity.py`, `subgroups.py`, `baselines.py` (reference tables),
-    `uncertainty.py` (bootstrap for row-level statistics, permutation null for distances), `benchmark.py` (injected truth).
+    `uncertainty.py` (bootstrap for row-level statistics, permutation null for distances), `crossval.py` (k folds, corrected
+    intervals), `utility.py` (train on synthetic, test on real), `benchmark.py` (injected truth).
   - Run and report: `runner.py` (`process_dataset`, the part that writes files), `workflow.py` (what the CLI and the app
-    call), `browser.py` (entry points for Pyodide), `provenance.py` (run PROV-O and DQV), `reporting.py` + `report_tables.py`,
-    `catalog.py` (DCAT and the merged RDF), `iris.py`. makeprov `@rule`s exist only in `__main__.py`.
-- The SPARQL page is the data-catalog-sparql-playground, run as a step of the Pages workflow over `output/semsynth.ttl` (the merge
-  of the catalog, codebooks and provenance) and `queries/*.rq`. All IRIs come from `semsynth/iris.py`: slugs, one base, no `urn:`.
-  Comunica does not deduplicate a triple that two source files both state, which is why the files are merged. The catalog and a run's provenance are plain `.json` with an `@context` (a `.json` file counts as RDF exactly when its top
-  level has one, `catalog.is_rdf`); the codebook stays `.jsonld`. Keep queries free of
+    call), `browser.py` (entry points for Pyodide), `provenance.py` (run PROV-O and DQV), `reporting.py` + `report_tables.py` + `report_scorecard.py`,
+    `catalog.py` (DCAT), `iris.py`. makeprov `@rule`s exist only in `__main__.py`.
+- The SPARQL page is the data-catalog-sparql-playground, run as a step of the Pages workflow over the JSON-LD files of `output/` (the
+  catalog, codebooks, run provenance and makeprov record, listed in the `data` input) and `queries/*.rq`. All IRIs come from `semsynth/iris.py`: slugs, one base, no `urn:`.
+  Comunica does not deduplicate a triple that two source files both state, so the playground merges its sources into one graph; keep the `data` list to RDF files (`tests/test_catalog.py` checks it). The catalog and a run's provenance are plain `.json` with an `@context`; the codebook stays `.jsonld`. Keep queries free of
   string functions (`tests/test_catalog.py` checks) by modelling the link instead.
 - `mappings/` curated codebooks; `map_columns/` holds only terminology data (matchers live in entailmap).
 - Core modules listed in the `Makefile` (`CORE`) are `mypy --strict`; add a module there when it is clean.

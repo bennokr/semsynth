@@ -19,3 +19,12 @@ img { border-radius: 12px; box-shadow: 0 4px 28px rgba(15, 23, 42, 0.12); }
 blockquote { border-left: 4px solid #cbd5f5; margin: 1.5rem 0; padding: 0.75rem 1.25rem; background: #f8fafc; color: #1e293b; }
 table.per-var-dist { margin-top: 2.25rem; }
 table.per-var-dist thead th { text-align: center; }
+div.scroll { overflow-x: auto; }
+div.scroll > table { margin: 1rem 0; }
+details { margin: 1.25rem 0; border: 1px solid #e2e8f0; border-radius: 10px; padding: 0.25rem 1rem; background: #fcfdff; }
+details[open] { padding-bottom: 0.75rem; }
+summary { cursor: pointer; padding: 0.5rem 0; font-size: 1.05rem; color: #1e293b; }
+summary strong { font-weight: 600; }
+details table { font-size: 0.9rem; }
+.model-head { display: flex; gap: 1.5rem; align-items: flex-start; flex-wrap: wrap; }
+.model-head ul { flex: 1 1 18rem; }

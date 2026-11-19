@@ -44,8 +44,13 @@ MEDIA_TYPES = {
     ".jsonld": "application/ld+json",
     ".parquet": "application/vnd.apache.parquet",
 }
-MERGED_FILE = "semsynth.ttl"
-DATA_FILES = ("synthetic*.csv", "synthetic*.parquet", "provenance.json", "metrics*.json", "per_variable_metrics.csv")
+DATA_FILES = (
+    "synthetic*.csv",
+    "synthetic*.parquet",
+    "provenance.json",
+    "metrics*.json",
+    "per_variable_metrics.csv",
+)
 
 
 def _iso(timestamp: float) -> dict[str, str]:
@@ -76,7 +81,9 @@ def _description(report: Path, title: str) -> str:
 
 def _distribution(iri: str, url: str, path: Path) -> dict[str, Any]:
     stat = path.stat()
-    media = MEDIA_TYPES.get(".jsonld" if path.name == "provenance.json" else path.suffix.lower())  # plain JSON-LD, see is_rdf
+    media = MEDIA_TYPES.get(
+        ".jsonld" if path.name == "provenance.json" else path.suffix.lower()
+    )  # JSON-LD with a plain extension
     return {
         "@id": iri,
         "@type": "dcat:Distribution",
@@ -141,8 +148,6 @@ def build_catalog(
     base_iri: str = DEFAULT_BASE,
     out_path: Path | str | None = None,
     index_path: Path | str | None = None,
-    *,
-    merge: bool = False,
 ) -> dict[str, Any]:
     """Write the DCAT catalog (``catalog.json``) and a plain index page of the datasets in ``base_dir``.
 
@@ -151,7 +156,6 @@ def build_catalog(
         base_iri: Base of every IRI (see :mod:`semsynth.iris`).
         out_path: Where to write the catalog; ``<base_dir>/catalog.json`` when omitted.
         index_path: Where to write the index page; ``<base_dir>/index.html`` when omitted.
-        merge: Also merge all the RDF of ``base_dir`` into ``semsynth.ttl`` (see :func:`merge_rdf`; needs ``rdflib``).
 
     Returns:
         The catalog as JSON-LD.
@@ -175,50 +179,7 @@ def build_catalog(
     Path(out_path or base_dir / "catalog.json").write_text(json.dumps(document, indent=2) + "\n", encoding="utf-8")
     write_index(Path(index_path or base_dir / "index.html"), [(f.name, _title(f)) for f in folders])
     LOGGER.info("Wrote the catalog of %d datasets", len(folders))
-    if merge:
-        LOGGER.info("Merged %d triples into %s", merge_rdf(base_dir), MERGED_FILE)
     return document
-
-
-def is_rdf(path: Path) -> bool:
-    """Whether a file is JSON-LD: a ``.jsonld`` file, or a ``.json`` file whose top level has an ``@context``.
-
-    The files that people are meant to read (the catalog, a run's provenance) are plain ``.json`` with a context, so
-    that they can be used without knowing RDF; the other ``.json`` files (metrics, manifests) have no ``@context``.
-    """
-    if path.suffix != ".json":
-        return path.suffix == ".jsonld"
-    try:
-        return "@context" in json.loads(path.read_text(encoding="utf-8"))
-    except (OSError, ValueError, TypeError):
-        return False
-
-
-def merge_rdf(base_dir: Path | str = "output", out_path: Path | str | None = None) -> int:
-    """Merge the catalog, the codebooks and the provenance of the output folder into one Turtle file, and return its size in triples.
-
-    The playground queries each file as a source of its own, and a query engine that federates sources does not
-    remove a triple that two sources both state (the type and the title of a dataset are in the catalog and in its codebook;
-    the link from a synthetic dataset to its run is in the catalog and the provenance), so every join through it would
-    multiply. One merged file is a single source and holds each triple once. The JSON-LD files stay what they are.
-
-    Raises:
-        ImportError: If ``rdflib`` is missing (extra ``rdf``).
-    """
-    try:
-        from rdflib import Graph
-    except ImportError as exc:  # pragma: no cover - depends on the environment
-        raise ImportError("Merging the RDF needs 'rdflib'; install with pip install semsynth[rdf]") from exc
-
-    base_dir = Path(base_dir)
-    graph = Graph()
-    for path in sorted(p for p in base_dir.rglob("*") if p.is_file() and is_rdf(p)):
-        graph.parse(path, format="json-ld")
-    for prefix, namespace in {**CONTEXT, "dsvo": "https://w3id.org/dsv-ontology#", "csvw": "http://www.w3.org/ns/csvw#"}.items():
-        graph.bind(prefix, namespace)
-    destination = Path(out_path or base_dir / MERGED_FILE)
-    graph.serialize(destination, format="turtle")
-    return len(graph)
 
 
 def write_index(path: Path, datasets: list[tuple[str, str]]) -> None:

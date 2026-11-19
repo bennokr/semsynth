@@ -155,3 +155,30 @@ def test_only_present_scores_are_measured_and_nan_is_skipped() -> None:
     assert kinds.count("dqv:QualityMeasurement") == 1 and "dqv:Metric" in kinds
     assert next(n for n in nodes if n["@type"] == "dqv:QualityMeasurement")["dqv:value"] == 0.1
     assert set(MEASURES) > {"marginal.disc_jsd_mean"}
+
+
+def test_utility_and_cross_validation_are_measured_with_their_intervals() -> None:
+    metrics = {
+        "utility": {
+            "scores": {"synthetic": 0.7, "real_sample": 0.8, "independent_marginals": 0.5},
+            "recovered": 0.67,
+            "intervals": {"synthetic": [0.6, 0.8], "recovered": [0.4, 0.9]},
+        },
+        "cv": {"scores": {"synthetic": {"disc_jsd_mean": {"mean": 0.1, "interval": [0.05, 0.15]}}}},
+    }
+    nodes = measurements(metrics, f"{BASE}d/models/m/")
+    values = {n["@id"].rsplit("#measurement-", 1)[1]: n["dqv:value"] for n in nodes if n["@type"] == "dqv:QualityMeasurement"}
+    assert values["utility-synthetic"] == 0.7 and values["utility-ceiling"] == 0.8 and values["utility-floor"] == 0.5
+    assert values["utility-synthetic-lower95"] == 0.6 and values["utility-recovered-upper95"] == 0.9
+    assert values["marginal-disc-jsd-mean-cv"] == 0.1 and values["marginal-disc-jsd-mean-cv-lower95"] == 0.05
+    dimensions = {n["@id"].rsplit("/", 1)[1] for n in nodes if "dqv:Dimension" in n["@type"]}
+    assert {"utility", "fidelity"} <= dimensions
+
+
+def test_a_run_refers_to_the_command_that_started_it(tmp_path: Path) -> None:
+    command = f"{BASE}__main__.py#mappings-job-7"
+    document, _ = _graph(tmp_path, parent_activity=command)
+    activity = next(n for n in document["@graph"] if n["@id"].endswith("/#run"))
+    assert activity["prov:wasInfluencedBy"] == {"@id": command}
+    other, _ = _graph(tmp_path / "other")
+    assert "prov:wasInfluencedBy" not in next(n for n in other["@graph"] if n["@id"].endswith("/#run"))

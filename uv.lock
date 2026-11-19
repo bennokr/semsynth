@@ -25,6 +25,9 @@ conflicts = [[
     { package = "semsynth", extra = "synthcity" },
 ]]
 
+[manifest]
+overrides = [{ name = "linked-codebook", specifier = ">=0.11,<0.12" }]
+
 [[package]]
 name = "absl-py"
 version = "2.5.1"
@@ -2951,10 +2954,11 @@ wheels = [
 
 [[package]]
 name = "linked-codebook"
-version = "0.10.0"
-source = { url = "https://bennokr.github.io/linked-codebook/linked_codebook-0.10.0-py3-none-any.whl" }
+version = "0.11.0"
+source = { registry = "https://pypi.org/simple" }
+sdist = { url = "https://files.pythonhosted.org/packages/1a/06/d32277d12becd24c46d8464b8999ce070fedf291d5291b7805e72e7e59e7/linked_codebook-0.11.0.tar.gz", hash = "sha256:94b9215a7fa925bb868b37108e96ae4d05d803981b451e192fc637c7d59ca70e", size = 34918, upload-time = "2026-11-18T21:42:05.371Z" }
 wheels = [
-    { url = "https://bennokr.github.io/linked-codebook/linked_codebook-0.10.0-py3-none-any.whl", hash = "sha256:8fb282dc8629f187646ae357d1eec59a7c8526fc3701eb78964334375792c9f3" },
+    { url = "https://files.pythonhosted.org/packages/01/e7/6b18d9e99625e9535614f3553a80db64015c837150b22ecc4a6baeddfec5/linked_codebook-0.11.0-py3-none-any.whl", hash = "sha256:5d893fe6c55db435103f88a44d7b2e897ff29a4e39bffa18dcd4d3297d61d586", size = 39900, upload-time = "2026-11-18T21:42:04.139Z" },
 ]
 
 [[package]]
@@ -6151,7 +6155,6 @@ all = [
     { name = "openml" },
     { name = "py3langid" },
     { name = "pybnesian" },
-    { name = "rdflib" },
     { name = "requests" },
     { name = "scipy" },
     { name = "sdmetrics" },
@@ -6213,9 +6216,6 @@ pybnesian = [
     { name = "numpy", version = "2.5.5", source = { registry = "https://pypi.org/simple" }, marker = "(python_full_version >= '3.12' and extra == 'extra-8-semsynth-pybnesian') or (python_full_version < '3.12' and extra == 'extra-8-semsynth-all' and extra == 'extra-8-semsynth-synthcity') or (python_full_version < '3.12' and extra == 'extra-8-semsynth-language' and extra == 'extra-8-semsynth-synthcity') or (python_full_version < '3.12' and extra == 'extra-8-semsynth-privacy' and extra == 'extra-8-semsynth-synthcity') or (extra == 'extra-8-semsynth-all' and extra != 'extra-8-semsynth-pybnesian' and extra == 'extra-8-semsynth-synthcity') or (extra == 'extra-8-semsynth-language' and extra != 'extra-8-semsynth-pybnesian' and extra == 'extra-8-semsynth-synthcity') or (extra == 'extra-8-semsynth-privacy' and extra != 'extra-8-semsynth-pybnesian' and extra == 'extra-8-semsynth-synthcity') or (extra != 'extra-8-semsynth-pybnesian' and extra == 'extra-8-semsynth-synthcity' and extra == 'extra-8-semsynth-umap') or (extra != 'extra-8-semsynth-all' and extra != 'extra-8-semsynth-language' and extra != 'extra-8-semsynth-privacy' and extra == 'extra-8-semsynth-pybnesian' and extra == 'extra-8-semsynth-synthcity') or (extra != 'extra-8-semsynth-all' and extra != 'extra-8-semsynth-language' and extra != 'extra-8-semsynth-privacy' and extra == 'extra-8-semsynth-synthcity' and extra == 'extra-8-semsynth-umap')" },
     { name = "pybnesian" },
 ]
-rdf = [
-    { name = "rdflib" },
-]
 statsmodels = [
     { name = "statsmodels" },
 ]
@@ -6243,7 +6243,7 @@ requires-dist = [
     { name = "graphviz", marker = "extra == 'all'" },
     { name = "graphviz", marker = "extra == 'pybnesian'" },
     { name = "jinja2" },
-    { name = "linked-codebook", url = "https://bennokr.github.io/linked-codebook/linked_codebook-0.10.0-py3-none-any.whl" },
+    { name = "linked-codebook", specifier = ">=0.11,<0.12" },
     { name = "linkify-it-py", marker = "extra == 'docs'" },
     { name = "makeprov", specifier = ">=0.8.1" },
     { name = "markdown" },
@@ -6273,9 +6273,7 @@ requires-dist = [
     { name = "pybnesian", marker = "extra == 'pybnesian'" },
     { name = "pytest", marker = "extra == 'dev'" },
     { name = "pytest-cov", marker = "extra == 'dev'" },
-    { name = "rdflib", marker = "extra == 'all'" },
     { name = "rdflib", marker = "extra == 'dev'" },
-    { name = "rdflib", marker = "extra == 'rdf'" },
     { name = "requests", marker = "extra == 'all'" },
     { name = "requests", marker = "extra == 'docs'" },
     { name = "requests", marker = "extra == 'providers'" },
@@ -6302,7 +6300,7 @@ requires-dist = [
     { name = "umap-learn", marker = "extra == 'all'" },
     { name = "umap-learn", marker = "extra == 'umap'" },
 ]
-provides-extras = ["dev", "app", "providers", "docs", "metasyn", "language", "pybnesian", "synthcity", "privbayes", "umap", "statsmodels", "rdf", "privacy", "mapping", "all"]
+provides-extras = ["dev", "app", "providers", "docs", "metasyn", "language", "pybnesian", "synthcity", "privbayes", "umap", "statsmodels", "privacy", "mapping", "all"]
 
 [[package]]
 name = "setuptools"

@@ -1,6 +1,6 @@
 """What the codebook declares about missing values and subgroups, applied to a table.
 
-The codebook (linked-codebook 0.10) already says which codes mean "no value" (``missing_values``, ``missing_range``,
+The codebook (linked-codebook 0.11) already says which codes mean "no value" (``missing_values``, ``missing_range``,
 a value with ``missing: true``) and when a column applies at all (``applies_when``, a REDCap-style condition). This
 module reads those declarations and applies them:
 

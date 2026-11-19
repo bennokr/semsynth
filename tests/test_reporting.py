@@ -105,13 +105,13 @@ def test_write_report_md_renders_expected_sections(tmp_path: Path) -> None:
     assert "# Data Report — Demo dataset" in md_text
     assert "**Source**: [OpenML dataset 42]" in md_text
     assert "Codebook JSON-LD" in md_text
-    assert "## Variables and summary" in md_text
-    assert "## Missingness model" in md_text
-    assert "## Fidelity summary" in md_text
-    assert "## Privacy summary" in md_text
+    assert "<strong>Variables and summary</strong>" in md_text
+    assert "<strong>Missingness model</strong>" in md_text
+    assert "<strong>Fidelity of each column, summarized</strong>" in md_text
+    assert "<strong>Privacy checks in detail</strong>" in md_text
     assert "## Models" in md_text
     assert "sign_match_rate" in md_text
-    assert "Per-variable fidelity" in md_text
+    assert "<strong>Fidelity of each column</strong>" in md_text
     assert "Privacy metrics" in md_text
     assert "models/demo/umap.png" in md_text
     assert "models/demo/structure.png" in md_text

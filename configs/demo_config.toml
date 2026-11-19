@@ -1,25 +1,19 @@
 # The demo site is built on NumPy 2, where SynthCity (NumPy 1) cannot be installed: advanced_config.toml without its two models.
+# One PyBNesian model is enough: on small tables the conditional linear Gaussian and the semiparametric network learn the
+# same (often empty) structure and give the same rows. Every model is cross-validated in 5 folds.
 [pipeline]
 generate_umap = true
 compute_privacy = true
 compute_downstream = true
 compute_joint = true
 compute_baselines = true
+compute_utility = true
+cv_folds = 5
 enable_missingness_wrapping = true
 
 [[models]]
 name = "metasyn"
 backend = "metasyn"
-
-[[models]]
-name = "clg_mi2"
-backend = "pybnesian"
-seed = 42
-[models.model]
-type = "clg"
-score = "bic"
-operators = ["arcs"]
-max_indegree = 2
 
 [[models]]
 name = "semi_mi5"

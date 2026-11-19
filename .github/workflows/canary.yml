@@ -31,15 +31,6 @@ jobs:
         run: |
           gh issue create --title "Canary: checks fail with the newest dependencies" \
             --body "The weekly run with unpinned dependencies failed: $GITHUB_SERVER_URL/$GITHUB_REPOSITORY/actions/runs/$GITHUB_RUN_ID"
-      - name: Warn if the linked-codebook pin is not the latest release
-        env:
-          GH_TOKEN: ${{ github.token }}
-        run: |
-          pinned=$(grep -o 'linked_codebook-[0-9.]*' pyproject.toml | head -1 | sed 's/linked_codebook-//')
-          latest=$(gh api repos/bennokr/linked-codebook/contents/releases --jq '.[].name' \
-            | grep -o 'linked_codebook-[0-9.]*[0-9]' | sed 's/linked_codebook-//' | sort -V | tail -1)
-          echo "pinned $pinned, latest $latest"
-          if [ "$pinned" != "$latest" ]; then echo "::warning::linked-codebook $pinned is pinned, $latest is released"; fi
 
   engines:
     # PyBNesian (NumPy 2) and SynthCity (NumPy 1, and PyTorch: several gigabytes) cannot share an environment.

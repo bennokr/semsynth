@@ -30,8 +30,15 @@ import pandas as pd
 
 from .jsonld_to_rdfa import SCHEMA_ORG, render_rdfa
 from .models import ModelRun
+from .report_scorecard import (
+    build_scorecard,
+    citation_text,
+    documentation_items,
+    joint_items,
+    scorecard_note,
+    structure_summary,
+)
 from .report_tables import (
-    build_baselines_table,
     build_fidelity_table,
     build_metasyn_gmf_table,
     build_metric_table,
@@ -85,6 +92,8 @@ class _ModelRow:
     downstream_table: str | None = None
     privacy_table: str | None = None
     structure_table: str | None = None
+    structure_text: str | None = None
+    joint_table: str | None = None
 
 
 def _jinja_environment() -> Environment:
@@ -211,7 +220,8 @@ def write_report_md(
         ),
         "fidelity_table": build_fidelity_table(model_runs=model_runs),
         "privacy_table": build_privacy_table(model_runs=model_runs),
-        "baselines_table": build_baselines_table(model_runs=model_runs),
+        "scorecard_table": build_scorecard(model_runs),
+        "scorecard_note": scorecard_note(model_runs or []),
         "missingness_table": build_missingness_table(missingness_summary),
     }
 
@@ -223,8 +233,8 @@ def write_report_md(
         missingness_summary=missingness_summary,
         dataset_description=properties["description"],
         dataset_purpose=properties["purpose"],
-        dataset_table=properties["table"],
-        dataset_citation=properties["citation"],
+        documentation_items=documentation_items(properties["table"]),
+        citation_text=citation_text(properties["citation"]),
         **links,
         **counts,
         **tables,
@@ -260,6 +270,7 @@ def _write_html(env: Environment, md_text: str, html_path: Path, title: str) -> 
     from markupsafe import Markup
 
     html_body = markdown.markdown(md_text, extensions=["extra", "md_in_html"])
+    html_body = html_body.replace("<table", '<div class="scroll"><table').replace("</table>", "</table></div>")
     html_out = _load_html_template(env).render(
         TITLE=title,
         CSS=Markup(_read_template_text("report_style.css")),
@@ -312,6 +323,8 @@ def _prepare_model_rows(model_runs: Iterable[ModelRun], base_dir: Path) -> list[
                 downstream_table=downstream_table,
                 privacy_table=privacy_table,
                 structure_table=structure_table,
+                structure_text=structure_summary(run.run_dir),
+                joint_table=build_metric_table(joint_items(run.joint_metrics)),
             )
         )
     return prepared

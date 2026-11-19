@@ -104,6 +104,7 @@ def report(
         pipeline_configs=pipeline_configs,
         area=area,
         on_dataset=_set_prov_dir,
+        parent_activity=_running_command(),
     )
     if failures:
         raise SystemExit("; ".join(failures))
@@ -206,6 +207,18 @@ def create_mapping(
         raise SystemExit(str(exc)) from exc
 
 
+def _running_command() -> str | None:
+    """IRI of the makeprov activity of the command that is running, so that the provenance of each run can refer to it.
+
+    It is ``None`` when makeprov does not stream (activities then have no IRI yet) or is older than 0.8.2.
+    """
+
+    import makeprov
+
+    current = getattr(makeprov, "current_activity", None)
+    return current() if current else None
+
+
 def _reports_for_mappings(
     mapping_root: str,
     *,
@@ -224,16 +237,17 @@ def _reports_for_mappings(
     if not targets:
         return
     successes, failures = run_reports_for_targets(
-        targets, outdir=outdir, pipeline_configs=pipeline_configs, on_dataset=_set_prov_dir
+        targets,
+        outdir=outdir,
+        pipeline_configs=pipeline_configs,
+        on_dataset=_set_prov_dir,
+        parent_activity=_running_command(),
     )
     if successes and rebuild_catalog:
         from .catalog import build_catalog as write_catalog
 
         ProvenanceConfig.get().prov_dir = str(Path(outdir))
-        try:
-            write_catalog(Path(outdir), read_pipeline_config(pipeline_configs)[1].iri_base, merge=True)
-        except ImportError as exc:
-            raise SystemExit(str(exc)) from exc
+        write_catalog(Path(outdir), read_pipeline_config(pipeline_configs)[1].iri_base)
     if failures:
         logging.warning("Completed with skipped datasets: %s", "; ".join(failures))
         if successes == 0:
@@ -306,8 +320,6 @@ def build_catalog(
     base_iri: str = DEFAULT_BASE,
     out_path: OutPath = OutPath("output/catalog.json"),
     index_path: OutPath = OutPath("output/index.html"),
-    *,
-    merge: bool = False,
 ) -> None:
     """Write the DCAT catalog and the index page of the datasets in the output folder.
 
@@ -316,12 +328,11 @@ def build_catalog(
         base_iri: Base of every IRI; the address that ``base_dir`` is served from.
         out_path: Output path for the catalog JSON-LD.
         index_path: Output path for the HTML index file.
-        merge: Also merge all RDF of the folder into one deduplicated Turtle file for the SPARQL page (needs rdflib).
     """
     from . import catalog
 
     ProvenanceConfig.get().prov_dir = out_path.parent
-    catalog.build_catalog(base_dir, base_iri, out_path, index_path, merge=merge)
+    catalog.build_catalog(base_dir, base_iri, out_path, index_path)
 
 
 @rule(phony=True)

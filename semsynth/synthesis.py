@@ -99,6 +99,7 @@ def write_run(
     dataset: Mapping[str, Any] | None = None,
     codebook_jsonld: Mapping[str, Any] | None = None,
     base_iri: str = DEFAULT_BASE,
+    parent_activity: str | None = None,
 ) -> Path:
     """Write a result as the files of a model run and return the directory.
 
@@ -130,7 +131,16 @@ def write_run(
     _write_json(directory / "manifest.json", manifest)
     _write_json(
         directory / "provenance.json",
-        run_provenance(result, name, dataset or {}, written, directory, base_iri=base_iri, codebook=bool(codebook_jsonld)),
+        run_provenance(
+            result,
+            name,
+            dataset or {},
+            written,
+            directory,
+            base_iri=base_iri,
+            codebook=bool(codebook_jsonld),
+            parent_activity=parent_activity,
+        ),
     )
     LOGGER.info("Wrote run %s to %s", name, directory)
     return directory

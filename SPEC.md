@@ -34,8 +34,12 @@ one code path.
 | Injected-truth benchmark | done: `benchmark.py` |
 | Provenance (PROV-O, makeprov 0.7 model, DQV measurements) | done: `provenance.py` |
 | Browser entry points | done: `browser.py`, in the Pyodide smoke test |
-| IRIs under one base, DCAT writer, merged RDF, SPARQL explorer | done: `iris.py`, `catalog.py`, `queries/`; the Pages step has not run on CI |
-| linked-codebook 0.11 (IRIs for the extension terms, `dsvo`, NaN is blank) | done in the local clone, committed and not pushed or released |
+| IRIs under one base, DCAT writer, SPARQL explorer | done: `iris.py`, `catalog.py`, `queries/`; the Pages step has not run on CI |
+| linked-codebook 0.11 (IRIs for the extension terms, `dsvo`, NaN is blank) | done, released on PyPI and npm; semsynth depends on it from PyPI |
+| Utility (train on synthetic, test on real) with ceiling, floor and interval | done: `utility.py`; the share recovered needs a ceiling above the floor |
+| k-fold cross-validation with corrected intervals | done: `crossval.py`, `cv_folds`; the demo uses 5 folds |
+| Report page: scorecard between floor and ceiling, details sections | done: `report_scorecard.py`, `templates/report.md.j2` |
+| makeprov record linked to run provenance (`prov:wasInfluencedBy`) | done: needs makeprov 0.8.2 (`current_activity`), not released |
 | Missingness evaluation in the pipeline (violation rate, mask dependence on real incomplete data) | next |
 | Distance policy chosen per column from the codebook | next (needs `missing_reason`) |
 | Mechanism declared in the codebook; sensitivity analysis for MNAR | next |
@@ -53,7 +57,7 @@ Complete table, then MAR, MNAR, a skip rule and coded values injected (`run_inje
   Learning from observed values per column is the next fix.
 
 ## Decisions
-- **Codebook (linked-codebook 0.10) already has** `applies_when`, `missing_values`, `missing_range`, `Value.missing`,
+- **Codebook (linked-codebook 0.11) already has** `applies_when`, `missing_values`, `missing_range`, `Value.missing`,
   `completeness`. SemSynth now reads them. The condition language is REDCap-style (`[var]`, comparisons, `in`,
   `is null`, `and`/`or`/`not`; no arithmetic, `between`, `like` or functions). Do not extend it: compute derived
   columns (BMI, age bands) at load time.
@@ -95,8 +99,10 @@ Still to ask for: `Value.missing_reason` (`refused`, `dont_know`, `not_applicabl
   `…/models/<model>/` the synthetic dataset; `…/#run` the run; a file's URL is its IRI. Slugs only: no space, capital or `urn:`.
   The identity of a thing is its IRI whether or not the host serves it; renaming the GitHub user or repository breaks them.
 - **No terms of our own**: DCAT, DSV (`dsvo`), CSVW, PROV-O, DQV, schema.org, SKOS and linked-codebook's own `lc` slots.
-- **One merged file for the explorer** (`output/semsynth.ttl`, `merge_rdf`): Comunica federates files and does not
+- **The explorer loads the RDF files and the playground merges them**: Comunica federates sources and does not
   deduplicate a triple that two of them state, so queries over the separate files returned 1,920 rows where 108 are right.
+  The playground now reads each source and queries their union as one source (`data-merge-sources="false"` turns that off).
+  The `data` patterns of the Pages step list the RDF files only, and `tests/test_catalog.py` checks the list.
   Named graphs in TriG are invisible to a plain query in the playground (no `unionDefaultGraph`); there are none.
 - **Queries** (`queries/*.rq`) use no string functions; the links are modelled, and `tests/test_catalog.py` checks both that
   and that the queries join the catalog, codebook and provenance.

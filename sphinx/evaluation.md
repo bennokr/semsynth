@@ -16,6 +16,34 @@ functions and the same holdout, for two stand-ins (`metrics.baselines.json`, the
 
 The privacy scores have a third reference built in: the holdout rows, "other real people", against the training rows.
 
+## Utility: train on synthetic, test on real
+
+`compute_utility` trains a gradient-boosting model on the synthetic rows to predict the dataset's target and scores it on real rows
+that no table was learned from (`utility` in `metrics.json`; `semsynth.utility`). The score is the area under the ROC curve for a
+categorical target (balanced accuracy when the held-out rows have one class) and R² for a numeric one. Three references use
+the same model and the same number of training rows:
+
+- the **ceiling**: a model trained on real training rows (`real_sample`);
+- the **floor**: a model trained on `independent_marginals`, which has no relation between columns to learn;
+- the **prior**: the class frequencies or the mean, with no model (AUC 0.5, R² 0).
+
+`recovered` is `(synthetic - floor) / (ceiling - floor)`, the share of what real data gains over the floor that the synthetic table
+keeps. It is left out when the ceiling and the floor are less than 0.02 apart. The interval of a single split comes from
+resampling the held-out rows (paired across the tables); it does not include the variation of the training rows.
+
+## Cross-validation (`cv_folds`)
+
+With `cv_folds = k` (2 or more) the rows are split into k folds, stratified by the target where there is a categorical one. The
+first fold produces the released synthetic table, and the model is fitted again on the other k - 1 training sets. Every fold scores
+the synthetic table and both references with the same functions, and `cv` in `metrics.json` has the mean and an interval of each
+score. The interval is the corrected resampled t interval of Nadeau and Bengio (2003): the k scores share most of their
+training rows, so the plain interval is too narrow, and the correction multiplies the variance by `(1/k + n_test/n_train)` in
+place of `1/k`. The interval keeps the range of the score (a share never goes below 0). It covers other samples of rows from the
+same population and not the seed of the generator. `recovered` is computed from the mean scores and has no interval, because the
+ratio of two close numbers in one fold is unstable. The report's scorecard shows these cells; without folds it shows the one split.
+
+Cost: a model is fitted k times, so keep `fit_on_sample` modest for slow generators.
+
 ## Joint fidelity (`metrics.joint.json`)
 
 - `pairwise`: total variation distance between the real and synthetic contingency tables of each column pair (numbers cut
@@ -38,8 +66,8 @@ With few holdout rows these scores are noisy. That is what the reference tables 
   its own estimate). They get a **noise floor** instead: the pooled real and synthetic rows are split at random into
   samples of the original sizes, and the score is recomputed (`null_interval`, `p_value`). A score inside the interval
   cannot be told from a fresh real sample at this sample size. Scores above it are a real difference.
-- Neither covers the randomness of the generator or of the train/holdout split. Repeat with several seeds for that
-  (`semsynth.uncertainty.mean_and_interval` summarizes the results).
+- A single split does not cover the randomness of the generator or of the train/holdout split; cross-validation covers the
+  split, and only repeated seeds cover the generator (`semsynth.uncertainty.mean_and_interval` summarizes the results).
 
 ## Distances with missing values
 

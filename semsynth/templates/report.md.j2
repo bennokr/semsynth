@@ -4,77 +4,115 @@
 
 {% endif %}{% if dataset_purpose %}**Purpose**: {{ dataset_purpose }}
 
-{% endif %}{% if dataset_table %}**Documentation**: {{ dataset_table }}
+{% endif %}{% if citation_text %}**Citation**: {{ citation_text }}
 
-{% endif %}{% if dataset_citation %}**Citation**: {{ dataset_citation }}
-
-{% endif %}
-{% if provider_link %}**Source**: [{{ provider_link.text }}]({{ provider_link.url }})
+{% endif %}{% if provider_link %}**Source**: [{{ provider_link.text }}]({{ provider_link.url }})
 
 {% endif %}{% if codebook_json_name %}**Codebook JSON-LD**: [{{ codebook_json_name }}]({{ codebook_json_name }}){% if codebook_html_name %} · [RDFa HTML]({{ codebook_html_name }}){% endif %}
 
-{% endif %}
-## Overview
+{% endif %}{% if documentation_items %}<details markdown="1"><summary><strong>Documentation of the variables</strong> (from the source)</summary>
+
+{% for item in documentation_items %}- {{ item }}
+{% endfor %}
+
+</details>
+
+{% endif %}## Overview
 
 {{ overview_table }}
 
-## Variables and summary
+<details markdown="1"><summary><strong>Variables and summary</strong> ({{ num_cols }} columns)</summary>
 
 {{ variable_table }}
 
-{% if missingness_summary %}## Missingness model
+</details>
+
+{% if missingness_summary %}<details markdown="1"><summary><strong>Missingness model</strong> ({{ missingness_summary.nonzero_count }} of {{ missingness_summary.total_columns }} columns have missing values)</summary>
 
 - Columns with learned missingness: {{ missingness_summary.nonzero_count }} of {{ missingness_summary.total_columns }}
-{% if missingness_summary.zero_count %}- Columns without missingness: {{ missingness_summary.zero_count }}{% endif %}
-{% if missingness_table %}{{ missingness_table }}{% else %}No columns required missingness injection.
+{% if missingness_summary.zero_count %}- Columns without missingness: {{ missingness_summary.zero_count }}
 {% endif %}
 
-{% endif %}
-{% if fidelity_table %}## Fidelity summary
+{% if missingness_table %}{{ missingness_table }}{% else %}No columns required missingness injection.{% endif %}
+
+</details>
+
+{% endif %}{% if scorecard_table %}## Scorecard
+
+Every model is scored with the same functions on real rows that it did not learn from. A score means something only
+between two reference tables of the same size. The floor (independent columns) keeps each column's distribution and
+destroys every relation between columns, so it shows what the marginals alone give. The ceiling (real rows) is a fresh
+sample of the training data, so it shows what a perfect generator would score. For privacy the ceiling is the worst case,
+because it copies real rows.
+
+{{ scorecard_table }}
+
+{% if scorecard_note %}{{ scorecard_note }}
+
+{% endif %}{% endif %}{% if fidelity_table %}<details markdown="1"><summary><strong>Fidelity of each column, summarized</strong></summary>
 
 {{ fidelity_table }}
 
-{% endif %}{% if privacy_table %}## Privacy summary
+</details>
+
+{% endif %}{% if privacy_table %}<details markdown="1"><summary><strong>Privacy checks in detail</strong></summary>
 
 {{ privacy_table }}
 
-{% endif %}{% if baselines_table %}## Reference comparison
-
-Each row is scored with the same functions on the same held-out rows. `real_sample` (rows of the training data) is the
-ceiling for fidelity and the worst case for privacy; `independent_marginals` (each column drawn on its own) is the floor
-for joint fidelity. A score means something only next to these.
-
-{{ baselines_table }}
+</details>
 
 {% endif %}## Models
 
-<table>
-<tr><th>UMAP</th><th>Details</th><th>Structure</th></tr>
-{% if real_umap %}<tr><td><img src='{{ real_umap }}' width='280'/></td><td>
-<h3>Real data</h3></td><td></td></tr>
-{% endif %}{% for model in model_rows %}<tr><td>{% if model.umap_rel %}<img src='{{ model.umap_rel }}' width='280'/>{% endif %}</td><td>
+{% if real_umap %}<details markdown="1"><summary><strong>Real data</strong></summary>
 
-<h3>Model: {{ model.name }} ({{ model.backend }})</h3>
-<ul>
+<img src='{{ real_umap }}' width='280'/>
+
+</details>
+
+{% endif %}{% for model in model_rows %}### {{ model.name }} ({{ model.backend }})
+
+<div class="model-head">
+{% if model.umap_rel %}<img src='{{ model.umap_rel }}' width='280'/>
+{% endif %}<ul>
 <li>Seed: {{ model.seed }}, rows: {{ model.rows }}</li>
-{% if model.params_json %}<li> Params: <tt>{{ model.params_json }}</tt></li>{% endif %}
-{% if model.missingness %}<li> Missingness: {% if model.missingness.wrapped %}wrapped{% else %}{{ model.missingness }}{% endif %}{% if model.missingness.random_state is not none %} (random state {{ model.missingness.random_state }}){% endif %}{% if model.missingness.source %} via {{ model.missingness.source }}{% endif %}</li>{% endif %}
-{% for link in model.links %}<li> <a href="{{ link.href }}">{{ link.label }}</a></li>
-{% endfor %}
-</ul>
-{% if model.per_variable_table %}<details class="model-subtable"><summary><strong>Per-variable fidelity</strong></summary>
+{% if model.params_json %}<li>Parameters: <tt>{{ model.params_json }}</tt></li>
+{% endif %}{% if model.missingness %}<li>Missingness: {% if model.missingness.wrapped %}wrapped{% else %}{{ model.missingness }}{% endif %}{% if model.missingness.random_state is not none %} (random state {{ model.missingness.random_state }}){% endif %}{% if model.missingness.source %} via {{ model.missingness.source }}{% endif %}</li>
+{% endif %}{% for link in model.links %}<li><a href="{{ link.href }}">{{ link.label }}</a></li>
+{% endfor %}</ul>
+</div>
+
+{% if model.structure_text or model.structure_table or model.structure_rel %}<details markdown="1"><summary><strong>What the model learned</strong></summary>
+
+{% if model.structure_text %}{{ model.structure_text }}
+
+{% endif %}{% if model.structure_rel %}<a href='{{ model.structure_rel }}'><img src='{{ model.structure_rel }}' width='420'/></a>
+
+{% endif %}{% if model.structure_table %}{{ model.structure_table }}
+{% endif %}
+</details>
+
+{% endif %}{% if model.joint_table %}<details markdown="1"><summary><strong>Relations between columns</strong> (joint fidelity)</summary>
+
+{{ model.joint_table }}
+
+</details>
+
+{% endif %}{% if model.per_variable_table %}<details markdown="1"><summary><strong>Fidelity of each column</strong></summary>
+
 {{ model.per_variable_table }}
-</details>{% endif %}
-{% if model.downstream_table %}<details class="model-subtable"><summary><strong>Downstream metrics</strong></summary>
+
+</details>
+
+{% endif %}{% if model.downstream_table %}<details markdown="1"><summary><strong>Downstream metrics</strong></summary>
+
 {{ model.downstream_table }}
-</details>{% endif %}
-{% if model.privacy_table %}<details class="model-subtable"><summary><strong>Privacy metrics</strong></summary>
+
+</details>
+
+{% endif %}{% if model.privacy_table %}<details markdown="1"><summary><strong>Privacy metrics</strong></summary>
+
 {{ model.privacy_table }}
-</details>{% endif %}
 
-</td><td>
-{% if model.structure_rel %}<a href='{{ model.structure_rel }}'><img src='{{ model.structure_rel }}' width='280'/></a>{% endif %}
-{% if model.structure_table %}{{ model.structure_table }}{% endif %}
-</td></tr>
+</details>
 
-{% endfor %}</table>
+{% endif %}{% endfor %}

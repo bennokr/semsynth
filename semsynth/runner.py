@@ -15,6 +15,7 @@ from typing import TYPE_CHECKING, Any
 
 from .baselines import evaluate_references
 from .config import PipelineConfig
+from .crossval import fold_record, fold_splits, summarize_folds
 from .evaluate import (
     downstream_scores,
     holdout_metrics,
@@ -30,6 +31,7 @@ from .preprocess import DatasetPreprocessor, PreprocessingResult
 from .result import SynthesisResult
 from .specs import DatasetSpec
 from .synthesis import synthesize, write_run
+from .utility import tstr_utility, utility_tables
 
 if TYPE_CHECKING:  # pragma: no cover - typing only
     import pandas as pd
@@ -148,7 +150,7 @@ class BackendExecutor:
         preprocessed: PreprocessingResult,
         outdir: Path,
     ) -> None:
-        result, train, holdout = self._generate(spec, preprocessed)
+        result, train, holdout, folds = self._generate(spec, preprocessed, dataset_spec.target)
         pristine = result.synthetic_data.convert_dtypes()
         final, metrics, parameters, artifacts = self._wrap_missingness(label, result, pristine, preprocessed)
         if self._cfg.structure_aware:
@@ -165,8 +167,27 @@ class BackendExecutor:
             metrics["privacy"] = self._privacy(
                 pristine, train, holdout, preprocessed, dataset_spec.target, int(spec.seed or self._cfg.random_state), label
             )
-        if self._cfg.compute_joint or self._cfg.compute_baselines or self._cfg.compute_subgroups:
-            self._add_evaluation(metrics, pristine, final, train, holdout, preprocessed, dataset_spec.target, spec, label)
+        if (
+            self._cfg.compute_joint
+            or self._cfg.compute_baselines
+            or self._cfg.compute_subgroups
+            or self._cfg.compute_utility
+        ):
+            self._add_evaluation(
+                metrics,
+                pristine,
+                final,
+                train,
+                holdout,
+                preprocessed,
+                dataset_spec.target,
+                spec,
+                label,
+            )
+            if len(folds) > 1:
+                metrics["cv"] = self._cross_validate(
+                    folds, pristine, preprocessed, dataset_spec.target, spec, label
+                )
         if downstream_flag and self._has_target(preprocessed):
             downstream = _attempt(
                 "downstream", label, self._downstream, final, preprocessed, dataset_spec.target
@@ -188,19 +209,40 @@ class BackendExecutor:
             dataset=dataset,
             codebook_jsonld=preprocessed.codebook_jsonld,
             base_iri=self._cfg.iri_base,
+            parent_activity=self._cfg.parent_activity,
         )
 
+    def _folds(
+        self, preprocessed: PreprocessingResult, seed: int, target: str | None
+    ) -> list[tuple[pd.DataFrame, pd.DataFrame]]:
+        """The (training, held-out) pairs: the folds of a cross-validation, or one split of ``test_size``."""
+
+        cfg, frame = self._cfg, preprocessed.df_fit_sample
+        if cfg.cv_folds < 2 or len(frame) < 2 * cfg.cv_folds:
+            return [split_train_test(frame, cfg.test_size, seed)]
+        discrete = (
+            target in frame.columns and preprocessed.inferred_types.get(str(target)) == "discrete"
+        )
+        return fold_splits(frame, cfg.cv_folds, seed, frame[target] if discrete else None)
+
     def _generate(
-        self, spec: ModelSpec, preprocessed: PreprocessingResult
-    ) -> tuple[SynthesisResult, pd.DataFrame, pd.DataFrame]:
-        """Synthesize with one model and evaluate it on held-out rows; returns the result, the training and the held-out rows."""
+        self, spec: ModelSpec, preprocessed: PreprocessingResult, target: str | None
+    ) -> tuple[
+        SynthesisResult, pd.DataFrame, pd.DataFrame, list[tuple[pd.DataFrame, pd.DataFrame]]
+    ]:
+        """Synthesize with one model and evaluate it on held-out rows.
+
+        Returns the result, the training and the held-out rows of the first fold, and all the folds. The released table
+        is the one of the first fold.
+        """
 
         cfg = self._cfg
         seed = int(spec.seed if spec.seed is not None else cfg.random_state)
         wanted = spec.rows if spec.rows is not None else cfg.synthetic_sample
         rows = min(wanted, len(preprocessed.df_processed))
         options = dict(spec.model or {})
-        train, test = split_train_test(preprocessed.df_fit_sample, cfg.test_size, seed)
+        folds = self._folds(preprocessed, seed, target)
+        train, test = folds[0]
         result: SynthesisResult = self._synthesize(
             train, preprocessed.codebook, backend=spec.backend, rows=rows, seed=seed, **options
         )
@@ -216,9 +258,13 @@ class BackendExecutor:
         result = replace(
             result,
             metrics={**result.metrics, **metrics, "train_rows": len(train)},
-            parameters={**result.parameters, "test_size": cfg.test_size},
+            parameters={
+                **result.parameters,
+                "test_size": cfg.test_size,
+                "cv_folds": len(folds) if len(folds) > 1 else 1,
+            },
         )
-        return result, train, test
+        return result, train, test, folds
 
     @staticmethod
     def _wrap_missingness(
@@ -315,6 +361,20 @@ class BackendExecutor:
             metrics["joint"] = _attempt_record(
                 "joint", label, self._joint, pristine, final, holdout, preprocessed, kinds, seed
             )
+        if cfg.compute_utility:
+            tables = utility_tables(train, pristine, seed)
+            metrics["utility"] = _attempt_record(
+                "utility",
+                label,
+                tstr_utility,
+                train,
+                holdout,
+                tables,
+                target,
+                kinds,
+                seed=seed,
+                reps=cfg.bootstrap_reps,
+            )
         if cfg.compute_subgroups:
             metrics["subgroups"] = _attempt_record(
                 "subgroups", label, self._subgroups, pristine, train, holdout, preprocessed, frame, seed
@@ -334,6 +394,88 @@ class BackendExecutor:
                 reps=cfg.bootstrap_reps,
                 missing=cfg.privacy_missing,
             )
+
+    def _cross_validate(
+        self,
+        folds: list[tuple[pd.DataFrame, pd.DataFrame]],
+        pristine: pd.DataFrame,
+        preprocessed: PreprocessingResult,
+        target: str | None,
+        spec: ModelSpec,
+        label: str,
+    ) -> dict[str, Any]:
+        """Scores of every fold, with the mean and an interval over the folds.
+
+        The first fold is the one that produced the released table. The others fit the same model on their own training
+        rows, so the scores show how much they depend on which rows were learned from. A fold that fails is logged and
+        left out.
+        """
+
+        cfg = self._cfg
+        seed = int(spec.seed if spec.seed is not None else cfg.random_state)
+        records = []
+        for index, (train, test) in enumerate(folds):
+            synthetic = pristine
+            if index:
+                try:
+                    fitted = self._synthesize(
+                        train,
+                        preprocessed.codebook,
+                        backend=spec.backend,
+                        rows=len(pristine),
+                        seed=seed + index,
+                        **dict(spec.model or {}),
+                    )
+                except Exception:
+                    LOGGER.exception(
+                        "Cross-validation fold failed", extra={"label": label, "fold": index}
+                    )
+                    continue
+                synthetic = fitted.synthetic_data.convert_dtypes()
+            records.append(
+                self._fold_record(train, test, synthetic, preprocessed, target, seed + index)
+            )
+        sizes = [(len(train), len(test)) for train, test in folds]
+        return summarize_folds(
+            records,
+            round(sum(a for a, _ in sizes) / len(sizes)),
+            round(sum(b for _, b in sizes) / len(sizes)),
+        )
+
+    def _fold_record(
+        self,
+        train: pd.DataFrame,
+        test: pd.DataFrame,
+        synthetic: pd.DataFrame,
+        preprocessed: PreprocessingResult,
+        target: str | None,
+        seed: int,
+    ) -> dict[str, dict[str, float]]:
+        """The scalar scores of one fold: fidelity, joint fidelity and privacy for the table and its references, and utility."""
+
+        cfg = self._cfg
+        frame = privacy_frame(
+            train, preprocessed.inferred_types, preprocessed.codebook, target=target
+        )
+        references = evaluate_references(
+            train,
+            test,
+            synthetic,
+            disc_cols=preprocessed.disc_cols,
+            cont_cols=preprocessed.cont_cols,
+            privacy_frame=frame,
+            seed=seed,
+            reps=0,
+            missing=cfg.privacy_missing,
+        )
+        utility = None
+        if cfg.compute_utility:
+            kinds = dict(zip(frame.variable, frame.type, strict=False))
+            tables = utility_tables(train, synthetic, seed)
+            utility = _attempt_record(
+                "utility", "fold", tstr_utility, train, test, tables, target, kinds, seed=seed
+            )
+        return fold_record(references, utility)
 
     def _subgroups(
         self,

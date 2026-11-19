@@ -1,10 +1,9 @@
-"""IRIs, the catalog, the merged RDF and the packaged queries, checked as RDF (rdflib) and not only as JSON."""
+"""IRIs, the catalog, the RDF files that the explorer loads and the packaged queries, checked as RDF (rdflib)."""
 
 from __future__ import annotations
 
 import json
 import re
-from importlib.metadata import version
 from pathlib import Path
 
 import numpy as np
@@ -13,10 +12,7 @@ import pytest
 
 from semsynth.iris import DEFAULT_BASE, SITE, Iris, slug
 
-LC11 = tuple(int(n) for n in version("linked-codebook").split(".")[:2]) >= (0, 11)
-needs_lc11 = pytest.mark.skipif(
-    not LC11, reason="linked-codebook 0.11 writes the skip rules and limits into the RDF"
-)
+PAGES = Path(__file__).resolve().parents[1] / ".github/workflows/pages.yml"
 QUERIES = sorted((Path(__file__).resolve().parents[1] / "queries").glob("*.rq"))
 STRING_FUNCTIONS = re.compile(
     r"\b(STRBEFORE|STRAFTER|SUBSTR|REPLACE|CONTAINS|REGEX|LCASE|UCASE|STRSTARTS|STRENDS|STR)\s*\(",
@@ -70,6 +66,29 @@ def _table(n: int, seed: int) -> pd.DataFrame:
     return frame
 
 
+def explorer_files(output: Path) -> list[Path]:
+    """The files that the Pages workflow gives to the playground: the patterns of the ``data`` input of its step."""
+    block = re.search(r"data: \|\n((?:[ ]+output/\S+\n)+)", PAGES.read_text())
+    assert block, "the Pages step lists its data files in a block"
+    patterns = block.group(1)
+    found = [
+        p
+        for line in patterns.split()
+        for p in sorted(output.parent.glob(line.replace("output/", f"{output.name}/", 1)))
+    ]
+    return sorted(set(found))
+
+
+def explorer_graph(output: Path):  # type: ignore[no-untyped-def]
+    """All the triples of the explorer's files: what the playground queries once it has merged its sources."""
+    from rdflib import Graph
+
+    graph = Graph()
+    for path in explorer_files(output):
+        graph.parse(path, format="json-ld")
+    return graph
+
+
 @pytest.fixture(scope="module")
 def output(tmp_path_factory: pytest.TempPathFactory) -> Path:
     pytest.importorskip("metasyn")
@@ -97,29 +116,57 @@ def output(tmp_path_factory: pytest.TempPathFactory) -> Path:
             ]
         }
     )
-    config = PipelineConfig(
-        generate_umap=False,
-        compute_privacy=True,
-        compute_joint=True,
-        bootstrap_reps=20,
-        structure_aware=True,
+
+    def build(parent: str | None) -> None:
+        config = PipelineConfig(
+            generate_umap=False,
+            compute_privacy=True,
+            compute_joint=True,
+            compute_utility=True,
+            cv_folds=3,
+            bootstrap_reps=20,
+            structure_aware=True,
+            parent_activity=parent,
+        )
+        for name, seed in (("Heart Disease", 1), ("Chronic Kidney Disease", 2)):
+            spec = DatasetSpec("openml", name=name, id=seed, target="dx", meta=codebook.to_jsonld())
+            bundle = ModelConfigBundle(specs=[ModelSpec(name="metasyn", backend="metasyn", seed=1)])
+            frame = _table(400, seed)
+            process_dataset(
+                spec, frame, frame["dx"], out, model_bundle=bundle, pipeline_config=config
+            )
+        build_catalog(out)
+
+    import makeprov
+
+    if not hasattr(
+        makeprov, "current_activity"
+    ):  # makeprov before 0.8.2: the runs have no command to refer to
+        build(None)
+        return out
+    session = makeprov.new_session()
+    cfg = makeprov.ProvenanceConfig(
+        prov_path=str(out / "provenance" / "command"),
+        stream=True,
+        context=True,
+        base_iri=DEFAULT_BASE,
+        run_id="test",
     )
-    for name, seed in (("Heart Disease", 1), ("Chronic Kidney Disease", 2)):
-        spec = DatasetSpec("openml", name=name, id=seed, target="dx", meta=codebook.to_jsonld())
-        bundle = ModelConfigBundle(specs=[ModelSpec(name="metasyn", backend="metasyn", seed=1)])
-        frame = _table(400, seed)
-        process_dataset(spec, frame, frame["dx"], out, model_bundle=bundle, pipeline_config=config)
-    build_catalog(out, merge=True)
+
+    @makeprov.rule(config=cfg, session=session, phony=True)
+    def command() -> None:
+        build(makeprov.current_activity(session))
+
+    command()
     return out
 
 
 def test_the_folder_layout_is_the_iri_layout(output: Path) -> None:
-    assert sorted(p.name for p in output.iterdir()) == [
+    assert sorted(p.name for p in output.iterdir() if p.name != "provenance") == [
         "catalog.json",
         "chronic-kidney-disease",
         "heart-disease",
         "index.html",
-        "semsynth.ttl",
     ]
     assert (output / "heart-disease" / "models" / "metasyn" / "provenance.json").exists()
     index = (output / "index.html").read_text()
@@ -140,29 +187,29 @@ def test_the_catalog_uses_dcat_terms_and_urls_that_are_iris(output: Path) -> Non
     )
 
 
-def test_every_iri_in_the_rdf_is_clean_and_the_merge_loses_nothing(output: Path) -> None:
+def test_the_explorer_loads_every_rdf_file_and_only_those(output: Path) -> None:
     from rdflib import Graph, URIRef
 
-    from semsynth.catalog import is_rdf
-
-    parts = Graph()
-    files = sorted(p for p in output.rglob("*") if p.is_file() and is_rdf(p))
+    files = explorer_files(output)
     assert {p.name for p in files} >= {"catalog.json", "provenance.json", "dataset.codebook.jsonld"}
-    for path in files:
-        parts.parse(path, format="json-ld")
-    merged = Graph().parse(output / "semsynth.ttl", format="turtle")
-    assert len(merged) == len(parts) > 500
-    iris = {t for triple in merged for t in triple if isinstance(t, URIRef)}
+    with_context = {
+        p
+        for p in output.rglob("*.json*")
+        if p.suffix == ".jsonld"
+        or (isinstance(json.loads(p.read_text()), dict) and "@context" in json.loads(p.read_text()))
+    }
+    assert set(files) == with_context, (
+        "a JSON-LD file is missing from the data patterns, or one that is no RDF is listed"
+    )
+    graph = explorer_graph(output)
+    assert len(graph) > 500
+    iris = {t for triple in graph for t in triple if isinstance(t, URIRef)}
     assert not [i for i in iris if re.search(r"\s", str(i)) or str(i).startswith("urn:")]
-    lost = [f.name for f in files if len(Graph().parse(f, format="json-ld")) == 0]
-    assert not lost
+    assert not [f.name for f in files if len(Graph().parse(f, format="json-ld")) == 0]
 
 
-@needs_lc11
 def test_the_declarations_of_the_codebook_are_in_the_rdf(output: Path) -> None:
-    from rdflib import Graph
-
-    merged = Graph().parse(output / "semsynth.ttl", format="turtle")
+    merged = explorer_graph(output)
     rows = list(
         merged.query(
             (
@@ -179,15 +226,16 @@ def test_the_declarations_of_the_codebook_are_in_the_rdf(output: Path) -> None:
     assert list(limits)
 
 
-def test_the_queries_run_on_the_merged_file_and_join_across_the_three_views(output: Path) -> None:
-    from rdflib import Graph
-
-    merged = Graph().parse(output / "semsynth.ttl", format="turtle")
+def test_the_queries_run_on_the_explorer_files_and_join_across_the_three_views(
+    output: Path,
+) -> None:
+    merged = explorer_graph(output)
     results = {q.name: list(merged.query(q.read_text())) for q in QUERIES}
-    skipped = {"skip-rules-and-missing-codes.rq"} if not LC11 else set()
-    assert all(rows for name, rows in results.items() if name not in skipped), {
-        n: len(r) for n, r in results.items()
-    }
+    import makeprov
+
+    # the runs refer to the command only if makeprov can say which activity runs (0.8.2 and later)
+    waiting = set() if hasattr(makeprov, "current_activity") else {"runs-and-the-commands-that-made-them.rq"}
+    assert all(rows for name, rows in results.items() if name not in waiting), {n: len(r) for n, r in results.items()}
     versions = results["datasets-and-synthetic-versions.rq"]
     assert {(str(r.title), str(r.generator)) for r in versions} == {
         ("Heart Disease", "metasyn"),
@@ -198,7 +246,7 @@ def test_the_queries_run_on_the_merged_file_and_join_across_the_three_views(outp
         str(r.title): (int(r.columns), int(r.withSkipRule), int(r.withMissingCodes))
         for r in results["codebook-coverage.rq"]
     }
-    assert coverage["Heart Disease"][1:] == ((1, 1) if LC11 else (0, 1))
+    assert coverage["Heart Disease"][1:] == (1, 1)
     scores = [
         r
         for r in results["scores-with-uncertainty.rq"]
@@ -209,12 +257,17 @@ def test_the_queries_run_on_the_merged_file_and_join_across_the_three_views(outp
     )
 
 
-def test_a_json_file_is_rdf_only_with_a_context(tmp_path: Path) -> None:
-    from semsynth.catalog import is_rdf
+def test_the_command_that_ran_the_pipeline_is_linked_to_its_runs(output: Path) -> None:
+    import makeprov
 
-    (tmp_path / "a.json").write_text('{"@context": {}, "x": 1}')
-    (tmp_path / "b.json").write_text('{"x": 1}')
-    (tmp_path / "c.json").write_text("[1, 2]")
-    (tmp_path / "d.json").write_text("not json")
-    (tmp_path / "e.jsonld").write_text("{}")
-    assert [is_rdf(tmp_path / n) for n in ("a.json", "b.json", "c.json", "d.json", "e.jsonld")] == [True, False, False, False, True]
+    if not hasattr(makeprov, "current_activity"):
+        pytest.skip("makeprov before 0.8.2 gives code that a rule calls no IRI of the rule")
+    graph = explorer_graph(output)
+    rows = list(
+        graph.query((QUERIES[0].parent / "runs-and-the-commands-that-made-them.rq").read_text())
+    )
+    assert {str(r.title) for r in rows} == {
+        "Heart Disease (synthetic, metasyn)",
+        "Chronic Kidney Disease (synthetic, metasyn)",
+    }
+    assert all(str(r.command).endswith("#command-test") and r.started and r.ended for r in rows)

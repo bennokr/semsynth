@@ -67,7 +67,7 @@ Dataset metadata is a [linked-codebook](https://bennokr.github.io/linked-codeboo
    Pipeline toggles (UMAP, privacy, downstream, missingness, etc.) now live in the TOML bundle under `[pipeline]` rather than separate CLI flags.
 
 4. Catalog + app helpers
-   - Build a DCAT catalog (`output/catalog.json`), an index page and the merged RDF for the SPARQL explorer (`output/semsynth.ttl`, needs `.[rdf]`) from existing outputs: `python -m semsynth build-catalog --merge`
+   - Build a DCAT catalog (`output/catalog.json`) and an index page from existing outputs: `python -m semsynth build-catalog`
    - Regenerate metadata-only reports for all curated codebooks and refresh the catalog/index: `python -m semsynth mappings --pipeline-configs ""`
    - Re-render reports for all curated mappings using existing outputs (skip mappings and metrics): `python -m semsynth refresh-mapping-reports --pipeline-configs '{pipeline={generate_umap=false,compute_privacy=false,compute_downstream=false,overwrite_umap=false}}'`
    - Launch a minimal Flask UI for search and report actions (needs `.[app,providers]`): `python -m semsynth run-app --port 5000`. It calls the same functions as `search` and `report`, accepts inline TOML only, and binds to 127.0.0.1 unless you pass `--host`
@@ -116,6 +116,8 @@ compute_downstream = true
 compute_joint = true        # pairwise dependence, missingness structure, classifier two-sample test
 compute_baselines = true    # score the synthetic table next to a real sample and independent marginals
 bootstrap_reps = 200        # resamples and random splits behind the intervals and noise floors
+compute_utility = true      # train on the synthetic rows, predict the target of real rows; with ceiling, floor and interval
+cv_folds = 5                # k-fold cross-validation of every model: scores are the mean over the folds with an interval
 privacy_missing = "category"  # missing values in distances: category, observed or asymmetric (or a table by column)
 structure_aware = false     # learn across the codebook's skip rules (applies_when) and enforce them on the output
 compute_subgroups = false   # per-subgroup fidelity and privacy; subgroups come from the codebook and `subgroups`
@@ -130,7 +132,7 @@ subgroup_min_size = 30
   - `umap_real.png` (when `--generate-umap` is enabled and UMAP dependencies are installed)
 - Per model (e.g., `output/Heart Disease/models/<name>/`):
   - `synthetic.csv`, `metrics.json`, and `umap.png`
-  - Optional metrics sidecars: `metrics.privacy.json`, `metrics.downstream.json`, `metrics.joint.json`, `metrics.baselines.json`, `metrics.subgroups.json` (see the evaluation page of the documentation for what each score means and how to read it)
+  - Optional metrics sidecars: `metrics.privacy.json`, `metrics.downstream.json`, `metrics.joint.json`, `metrics.baselines.json`, `metrics.subgroups.json`; `metrics.json` holds `utility` and `cv` (see the evaluation page of the documentation for what each score means and how to read it)
   - PyBNesian extras: `structure.png`, `structure.graphml`, `model.pickle`
   - `synthetic.parquet`, with the codebook JSON-LD in the Parquet schema metadata
 
@@ -193,8 +195,8 @@ subgroup_min_size = 30
 ## 🔎 SPARQL over the output
 - Everything that is published has an IRI under one base (`iri_base`, default `https://bennokr.github.io/semsynth/output/`, see `semsynth/iris.py`): `<base><dataset>/` is the dataset (its codebook describes it), `<base><dataset>/models/<model>/` the synthetic dataset, `…/#run` the run that made it. Folder names are slugs, so no IRI has a space; titles are in `dct:title`.
 - The catalog (DCAT), the codebooks (DSV, written by linked-codebook) and the provenance of each run (PROV-O, with the scores as W3C DQV measurements) use those same IRIs, so SPARQL joins them directly. `queries/*.rq` holds the example queries; none of them takes a string apart.
-- The explorer at `explore/` is the [data-catalog-sparql-playground](https://github.com/bennokr/data-catalog-sparql-playground) (Comunica and YASGUI in the browser, no server), built in the Pages workflow from `output/semsynth.ttl` and `queries/`. The Turtle file is the merge of all JSON-LD files: Comunica queries each file as its own source and does not remove a triple that two sources both state, so joins over the separate files return duplicate rows.
-- To try it locally: `python -m semsynth build-catalog --merge`, then build the playground with its `make_catalog.py build --data output/semsynth.ttl --queries 'queries/*.rq'` and serve the result.
+- The explorer at `explore/` is the [data-catalog-sparql-playground](https://github.com/bennokr/data-catalog-sparql-playground) (Comunica and YASGUI in the browser, no server), built in the Pages workflow from the JSON-LD files of `output/` (the catalog, the codebooks, the provenance of each run and the makeprov record) and `queries/`. The playground merges its sources into one graph in the browser, so a triple that two files state is returned once.
+- To try it locally: `python -m semsynth build-catalog`, then build the playground with its `make_catalog.py build --data 'output/catalog.json' --data 'output/*/dataset.codebook.jsonld' --data 'output/*/models/*/provenance.json' --queries 'queries/*.rq'` and serve the result.
 
 
 

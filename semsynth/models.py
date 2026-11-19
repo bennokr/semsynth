@@ -82,6 +82,21 @@ def _coerce_optional_bool(value: Any) -> bool | None:
     raise ValueError(f"Cannot coerce value {value!r} to boolean")
 
 
+def _read_if_file(candidate: str) -> str:
+    """The contents of the file that ``candidate`` names, or ``candidate`` itself if it is inline TOML.
+
+    Inline TOML has a line break or an ``=``, and a long snippet is not a valid path, so it is not looked up as one.
+    """
+
+    if "\n" in candidate or "=" in candidate:
+        return candidate
+    try:
+        path = Path(candidate).expanduser()
+        return path.read_text(encoding="utf-8") if path.is_file() else candidate
+    except OSError:
+        return candidate
+
+
 def parse_toml_config(config_input: str | None) -> dict[str, Any]:
     """Parse a TOML configuration from a file (prefixed with ``@``) or inline snippet."""
 
@@ -93,8 +108,7 @@ def parse_toml_config(config_input: str | None) -> dict[str, Any]:
         path = Path(candidate[1:]).expanduser()
         text = path.read_text(encoding="utf-8")
     else:
-        maybe_path = Path(candidate).expanduser()
-        text = maybe_path.read_text(encoding="utf-8") if maybe_path.exists() else candidate
+        text = _read_if_file(candidate)
     data = tomllib.loads(text)
     return data or {}
 

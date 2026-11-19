@@ -59,6 +59,17 @@ MEASURES: dict[str, _Path] = {
     "joint.pairwise_tvd_mean": ("joint", "pairwise", "tvd_mean"),
     "joint.classifier_auc": ("joint", "classifier", "auc"),
     "downstream.sign_match_rate": ("downstream", "sign_match_rate"),
+    # train on the synthetic table, test on real rows (the ceiling is a model trained on real rows, the floor one trained
+    # on independent marginals), and the same scores averaged over the folds of a cross-validation
+    "utility.synthetic": ("utility", "scores", "synthetic"),
+    "utility.ceiling": ("utility", "scores", "real_sample"),
+    "utility.floor": ("utility", "scores", "independent_marginals"),
+    "utility.recovered": ("utility", "recovered"),
+    "marginal.disc_jsd_mean_cv": ("cv", "scores", "synthetic", "disc_jsd_mean", "mean"),
+    "joint.pairwise_tvd_mean_cv": ("cv", "scores", "synthetic", "pairwise_tvd_mean", "mean"),
+    "joint.classifier_auc_cv": ("cv", "scores", "synthetic", "classifier_auc", "mean"),
+    "utility.synthetic_cv": ("cv", "scores", "synthetic", "utility", "mean"),
+    "utility.recovered_cv": ("cv", "scores", "synthetic", "utility_recovered", "mean"),
 }
 # where the bootstrap interval of a score is, and where the noise floor of a distance is
 _INTERVALS = {
@@ -67,6 +78,15 @@ _INTERVALS = {
     "privacy.dcr_median": ("privacy", "intervals", "dcr_median"),
     "privacy.dcr_below_holdout_p05": ("privacy", "intervals", "dcr_below_holdout_p05"),
     "joint.classifier_auc": ("joint", "classifier", "auc_interval"),
+    "utility.synthetic": ("utility", "intervals", "synthetic"),
+    "utility.ceiling": ("utility", "intervals", "real_sample"),
+    "utility.floor": ("utility", "intervals", "independent_marginals"),
+    "utility.recovered": ("utility", "intervals", "recovered"),
+    "marginal.disc_jsd_mean_cv": ("cv", "scores", "synthetic", "disc_jsd_mean", "interval"),
+    "joint.pairwise_tvd_mean_cv": ("cv", "scores", "synthetic", "pairwise_tvd_mean", "interval"),
+    "joint.classifier_auc_cv": ("cv", "scores", "synthetic", "classifier_auc", "interval"),
+    "utility.synthetic_cv": ("cv", "scores", "synthetic", "utility", "interval"),
+    "utility.recovered_cv": ("cv", "scores", "synthetic", "utility_recovered", "interval"),
 }
 _NULLS = {
     "marginal.disc_jsd_mean": ("summary_null", "disc_jsd_mean"),
@@ -83,7 +103,7 @@ _DERIVED = {
 }
 
 
-_KINDS = {"marginal": "fidelity", "joint": "fidelity", "privacy": "privacy", "downstream": "utility"}
+_KINDS = {"marginal": "fidelity", "joint": "fidelity", "privacy": "privacy", "downstream": "utility", "utility": "utility"}
 _DIMENSIONS = {
     "fidelity": "how closely the synthetic rows resemble real ones",
     "privacy": "how close the synthetic rows are to the real rows they were learned from",
@@ -223,8 +243,13 @@ def run_provenance(
     *,
     base_iri: str = DEFAULT_BASE,
     codebook: bool = False,
+    parent_activity: str | None = None,
 ) -> dict[str, Any]:
-    """The PROV-O graph of one run: what ran, with which parameters, on what, and what it wrote and measured."""
+    """The PROV-O graph of one run: what ran, with which parameters, on what, and what it wrote and measured.
+
+    ``parent_activity`` is the IRI of the command that started the run (an activity in the makeprov record of the
+    command). The run refers to it with ``prov:wasInfluencedBy``, as makeprov does for a rule that another rule calls.
+    """
     from . import get_version
 
     iris = Iris(base_iri)
@@ -245,6 +270,7 @@ def run_provenance(
         "prov:used": used,
         "prov:endedAtTime": ended,
         "schema:additionalProperty": properties,
+        **({"prov:wasInfluencedBy": {"@id": parent_activity}} if parent_activity else {}),
     }
     if started:
         activity |= {"prov:startedAtTime": started, "schema:duration": _duration(started, ended)}

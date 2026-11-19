@@ -1,0 +1,17 @@
+# The command that started each run (its time and the script that ran it), from the makeprov record, joined to the run provenance.
+PREFIX dcat: <http://www.w3.org/ns/dcat#>
+PREFIX dct: <http://purl.org/dc/terms/>
+PREFIX prov: <http://www.w3.org/ns/prov#>
+
+SELECT ?title ?run ?command ?started ?ended ?plan
+WHERE {
+  ?synthetic a dcat:Dataset ;
+             dct:title ?title ;
+             prov:wasGeneratedBy ?run .
+  ?run prov:wasInfluencedBy ?command .
+  ?command a prov:Activity ;
+           prov:startedAtTime ?started ;
+           prov:endedAtTime ?ended .
+  OPTIONAL { ?command prov:qualifiedAssociation/prov:hadPlan ?plan }
+}
+ORDER BY ?title ?started

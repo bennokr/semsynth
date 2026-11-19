@@ -92,6 +92,7 @@ def run_reports(
     pipeline_configs: str = "",
     area: str = "Health and Medicine",
     on_dataset: Callable[[Path], None] | None = None,
+    parent_activity: str | None = None,
 ) -> list[str]:
     """Run the report pipeline on datasets of a provider; a dataset that fails is skipped.
 
@@ -102,6 +103,7 @@ def run_reports(
         pipeline_configs: TOML snippet or ``@file.toml`` with the model bundle and pipeline settings.
         area: Topic area for the default UCI ML datasets.
         on_dataset: Called with the output directory of each dataset before it is processed.
+        parent_activity: IRI of the command that runs this (a makeprov activity); the provenance of each run refers to it.
 
     Returns:
         One message per dataset that failed; empty when all succeeded.
@@ -114,6 +116,7 @@ def run_reports(
     outdir_path = Path(outdir)
     outdir_path.mkdir(parents=True, exist_ok=True)
     bundle, cfg = read_pipeline_config(pipeline_configs)
+    cfg.parent_activity = parent_activity or cfg.parent_activity
     failures: list[str] = []
     for spec in specs_from_input(provider=provider, datasets=datasets, area=area):
         LOGGER.info("Loading dataset %s", spec)
@@ -157,6 +160,7 @@ def run_reports_for_targets(
     outdir: str | Path,
     pipeline_configs: str,
     on_dataset: Callable[[Path], None] | None = None,
+    parent_activity: str | None = None,
 ) -> tuple[int, list[str]]:
     """Run the report pipeline for each dataset of a provider-to-ids mapping.
 
@@ -174,6 +178,7 @@ def run_reports_for_targets(
                 outdir=outdir,
                 pipeline_configs=pipeline_configs,
                 on_dataset=on_dataset,
+                parent_activity=parent_activity,
             )
             if problems:
                 failures.extend(problems)

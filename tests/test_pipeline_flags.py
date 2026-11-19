@@ -214,3 +214,20 @@ def test_process_dataset_does_not_load_optional_metrics_when_disabled(
     )
 
     assert dummy_reporting.calls, "reporting should complete for metadata-only runs"
+
+
+def test_a_long_inline_toml_snippet_is_parsed_not_looked_up_as_a_path(tmp_path) -> None:
+    from semsynth.models import parse_toml_config
+
+    snippet = (
+        "[pipeline]\n"
+        + "".join(f"# comment {i} " + "x" * 40 + "\n" for i in range(20))
+        + "compute_privacy = false\n"
+    )
+    assert len(snippet) > 1000
+    assert parse_toml_config(snippet) == {"pipeline": {"compute_privacy": False}}
+    assert parse_toml_config("compute_privacy = true") == {"compute_privacy": True}
+    path = tmp_path / "c.toml"
+    path.write_text("compute_privacy = false\n")
+    assert parse_toml_config(str(path)) == {"compute_privacy": False}
+    assert parse_toml_config(f"@{path}") == {"compute_privacy": False}

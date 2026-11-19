@@ -50,7 +50,7 @@ jobs:
           uv pip install -c constraints/pyodide-0.27.txt numpy pandas scipy scikit-learn statsmodels pyarrow polars \
             jinja2 markdown pyyaml defopt makeprov tabulate pytest \
             "DataSynthesizer==0.1.13" "metasyn==3.0.0" \
-            https://bennokr.github.io/linked-codebook/linked_codebook-0.10.0-py3-none-any.whl
+            "linked-codebook>=0.11,<0.12"
           uv pip install --no-deps -e .
           pytest -q
 

@@ -27,6 +27,7 @@ class PipelineConfig(Config):
     """Configuration values controlling the reporting pipeline."""
 
     iri_base: str = DEFAULT_BASE  # every published IRI is under this base (see semsynth.iris)
+    parent_activity: str | None = None  # IRI of the command (a makeprov activity) that runs the pipeline; runs refer to it
     random_state: int = 42
     max_umap_sample: int = 1000
     fit_on_sample: int | None = 1000
@@ -43,6 +44,8 @@ class PipelineConfig(Config):
     compute_joint: bool = False  # joint fidelity: pairwise dependence, missingness, classifier two-sample test
     compute_baselines: bool = False  # score the synthetic table and two reference tables side by side
     bootstrap_reps: int = 200  # resamples for the intervals of the privacy, joint and baseline scores
+    compute_utility: bool = False  # train on the synthetic rows, predict the target of real rows; with ceiling, floor and interval
+    cv_folds: int = 1  # k-fold cross-validation of every model, with intervals over the folds (1: one split of `test_size`)
     compute_subgroups: bool = False  # per-subgroup fidelity and privacy (subgroups from the codebook and `subgroups`)
     subgroups: list[dict[str, str]] = field(default_factory=list)  # extra named conditions: {name, condition, label?}
     subgroup_min_size: int = 30  # fewest holdout and synthetic rows for a group to get scores

@@ -121,22 +121,25 @@ def bn_to_graphviz(
     dot.render(filename=out_png.replace(".png", ""), cleanup=True)
 
 
-def save_graphml_structure(
-    model, node_types: dict[str, object], out_graphml: str
-) -> None:
-    try:
-        import networkx as nx
-    except Exception:  # pragma: no cover - optional dependency
-        logging.warning("networkx not installed; skipping GraphML export")
-        return
+def graphml_text(nodes: dict[str, str], arcs: list[tuple[str, str]]) -> str:
+    """A GraphML document of the learned network: each node has its type as ``bn_type``, each arc a source and a target."""
+    from xml.sax.saxutils import quoteattr
 
-    G = nx.DiGraph()
-    for n in model.nodes():
-        ftype = node_types[n]
-        G.add_node(n, bn_type=type(ftype).__name__)
-    for u, v in model.arcs():
-        G.add_edge(u, v)
-    nx.write_graphml(G, out_graphml)
+    lines = [
+        '<?xml version="1.0" encoding="UTF-8"?>',
+        '<graphml xmlns="http://graphml.graphdrawing.org/xmlns">',
+        '  <key id="bn_type" for="node" attr.name="bn_type" attr.type="string"/>',
+        '  <graph edgedefault="directed">',
+    ]
+    lines += [f"    <node id={quoteattr(str(n))}><data key=\"bn_type\">{t}</data></node>" for n, t in nodes.items()]
+    lines += [f"    <edge source={quoteattr(str(u))} target={quoteattr(str(v))}/>" for u, v in arcs]
+    return "\n".join([*lines, "  </graph>", "</graphml>", ""])
+
+
+def save_graphml_structure(model, node_types: dict[str, object], out_graphml: str) -> None:
+    """Write the structure as GraphML. networkx 2 writes it with ``np.float_``, which NumPy 2 removed, so this does not use it."""
+    nodes = {str(n): type(node_types[n]).__name__ for n in model.nodes()}
+    Path(out_graphml).write_text(graphml_text(nodes, [(str(u), str(v)) for u, v in model.arcs()]), encoding="utf-8")
 
 
 def _structure_artifacts(model: Any, title: str) -> tuple[dict[str, bytes | str], list[str]]:
@@ -157,7 +160,7 @@ def _structure_artifacts(model: Any, title: str) -> tuple[dict[str, bytes | str]
                 step()
             except Exception as error:
                 warnings.append(f"{name} was not written: {error}")
-            if (folder / name).exists():
+            if (folder / name).exists() and (folder / name).stat().st_size:
                 artifacts[name] = (folder / name).read_bytes()
     return artifacts, warnings
 

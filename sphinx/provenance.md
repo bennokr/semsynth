@@ -28,7 +28,7 @@ sorted(p.name for p in prov_dir.glob("*") if p.is_file())[:5]
 - Default settings live in `prov-config.toml` (base IRI and output directory). You can override them via CLI flags or config.
 
 ## SPARQL
-The catalog, the codebooks and the run provenance use the same IRIs (`semsynth/iris.py`), so `queries/*.rq` join them without string handling. The Pages workflow merges them into `output/semsynth.ttl` and builds the explorer at `explore/` with the data-catalog-sparql-playground. See the README.
+The catalog, the codebooks and the run provenance use the same IRIs (`semsynth/iris.py`), so `queries/*.rq` join them without string handling. The Pages workflow builds the explorer at `explore/` from those files with the data-catalog-sparql-playground, which queries them as one graph. See the README.
 
 ## Handy commands
 - Regenerate a missing file: `python -m semsynth --build output/<dataset>/index.html`
