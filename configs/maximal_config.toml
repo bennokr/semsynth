@@ -11,6 +11,13 @@ compute_privacy = true
 compute_downstream = true
 
 [[models]]
+name = "chain"
+backend = "chain"
+seed = 42
+compute_privacy = true
+compute_downstream = true
+
+[[models]]
 name = "pybnesian_clg_mi3"
 backend = "pybnesian"
 seed = 42

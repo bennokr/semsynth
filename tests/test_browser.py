@@ -39,8 +39,9 @@ def test_capabilities_is_plain_json_and_names_the_installed_backends() -> None:
     caps = capabilities()
     assert json.loads(json.dumps(caps)) == caps
     assert caps["pyodide"] is False and caps["row_limit"] is None
-    assert set(caps["backends"]) == {"metasyn", "privbayes", "pybnesian", "synthcity"}
+    assert set(caps["backends"]) == {"chain", "metasyn", "privbayes", "pybnesian", "synthcity"}
     assert caps["backends"]["synthcity"] is False  # needs NumPy 1, never in this environment
+    assert caps["backends"]["chain"] is True  # scikit-learn is a core dependency
 
 
 def test_inspect_reports_codes_rule_breaks_and_subgroup_problems_before_generating() -> None:

@@ -51,7 +51,7 @@ def capabilities() -> dict[str, Any]:
     """What this runtime can do; every value is a plain JSON type."""
     from . import get_version
 
-    engines = {"metasyn": "metasyn", "privbayes": "DataSynthesizer", "pybnesian": "pybnesian", "synthcity": "synthcity"}
+    engines = {"chain": "sklearn", "metasyn": "metasyn", "privbayes": "DataSynthesizer", "pybnesian": "pybnesian", "synthcity": "synthcity"}
     return {
         "version": get_version(),
         "python": sys.version.split()[0],

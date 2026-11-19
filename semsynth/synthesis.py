@@ -27,7 +27,8 @@ LOGGER = logging.getLogger(__name__)
 __all__ = ["BACKENDS", "load_backend", "synthesize", "write_run"]
 
 BACKENDS = ("chain", "metasyn", "mostlyai", "privbayes", "pybnesian", "synthcity")
-"""The backend names; each is also the name of the extra that installs its engine."""
+"""The backend names; each is also the name of the extra that installs its engine. ``chain`` has no extra: it uses
+scikit-learn, which is a core dependency."""
 
 
 

@@ -9,6 +9,11 @@ name = "metasyn"
 backend = "metasyn"
 
 [[models]]
+name = "chain"
+backend = "chain"
+seed = 42
+
+[[models]]
 name = "clg_mi2"
 backend = "pybnesian"
 seed = 42

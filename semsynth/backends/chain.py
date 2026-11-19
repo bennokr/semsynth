@@ -1,4 +1,4 @@
-"""Sequential generator: each column is predicted from the columns before it (experimental).
+"""Sequential generator: each column is predicted from the columns before it.
 
 The first column is drawn from its own values. Every later column is drawn from a model of that column given the columns
 before it, fitted on the real rows and applied to the synthetic rows drawn so far:

@@ -44,7 +44,7 @@ CONTEXT = {
 }
 
 REPOSITORY = "https://github.com/bennokr/semsynth"
-PYPI = {"metasyn": "metasyn", "privbayes": "DataSynthesizer", "datasynthesizer": "DataSynthesizer", "pybnesian": "pybnesian", "synthcity": "synthcity"}
+PYPI = {"chain": "scikit-learn", "metasyn": "metasyn", "privbayes": "DataSynthesizer", "datasynthesizer": "DataSynthesizer", "pybnesian": "pybnesian", "synthcity": "synthcity"}
 
 _Path = tuple[str, ...]
 # metric id -> where its score is in the metrics of a run
