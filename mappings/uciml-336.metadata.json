@@ -1,6 +1,7 @@
 {
   "@context": {
     "accessRights": "dct:accessRights",
+    "appliesWhen": "lc:applies_when",
     "broadMatch": {
       "@container": "@set",
       "@id": "skos:broadMatch",
@@ -12,35 +13,38 @@
       "@id": "skos:closeMatch",
       "@type": "@id"
     },
+    "codeBookClosed": "lc:closed",
     "columnCompleteness": {
-      "@id": "dsv:columnCompleteness",
+      "@id": "dsvo:columnCompleteness",
       "@type": "xsd:float"
     },
+    "columnFormat": "csvw:format",
+    "columnGroup": "lc:group",
     "columnProperty": {
-      "@id": "dsv:columnProperty",
+      "@id": "dsvo:columnProperty",
       "@type": "@id"
     },
     "columns": {
       "@container": "@set",
-      "@id": "dsv:column"
+      "@id": "dsvo:column"
     },
     "csvw": "http://www.w3.org/ns/csvw#",
     "datasetSchema": {
-      "@id": "dsv:datasetSchema",
+      "@id": "dsvo:datasetSchema",
       "@type": "@id"
     },
     "datatype": "csvw:datatype",
     "dcat": "http://www.w3.org/ns/dcat#",
     "dct": "http://purl.org/dc/terms/",
     "description": "dct:description",
-    "dsv": "https://w3id.org/dsv-ontology#",
+    "dsvo": "https://w3id.org/dsv-ontology#",
     "exactMatch": {
       "@container": "@set",
       "@id": "skos:exactMatch",
       "@type": "@id"
     },
     "hasCodeBook": {
-      "@id": "dsv:hasCodeBook",
+      "@id": "dsvo:hasCodeBook",
       "@type": "@id"
     },
     "hasUnit": {
@@ -48,18 +52,26 @@
       "@type": "@id"
     },
     "hasVariable": {
-      "@id": "dsv:hasVariable",
+      "@id": "dsvo:hasVariable",
       "@type": "@id"
     },
+    "high": "csvw:maxInclusive",
     "identifier": "dct:identifier",
+    "identifying": "lc:identifying",
     "landingPage": {
       "@id": "dcat:landingPage",
       "@type": "@id"
     },
+    "language": "dct:language",
+    "lc": "https://bennokr.github.io/linked-codebook/profile#",
     "license": {
       "@id": "dct:license",
       "@type": "@id"
     },
+    "low": "csvw:minInclusive",
+    "maximumValue": "csvw:maxInclusive",
+    "minimumValue": "csvw:minInclusive",
+    "missingRange": "lc:missing_range",
     "name": "csvw:name",
     "narrowMatch": {
       "@container": "@set",
@@ -71,11 +83,11 @@
       "@id": "csvw:null"
     },
     "numberOfColumns": {
-      "@id": "dsv:numberOfColumns",
+      "@id": "dsvo:numberOfColumns",
       "@type": "xsd:integer"
     },
     "numberOfRows": {
-      "@id": "dsv:numberOfRows",
+      "@id": "dsvo:numberOfRows",
       "@type": "xsd:integer"
     },
     "qudt": "http://qudt.org/schema/qudt/",
@@ -88,42 +100,44 @@
     "schema": "https://schema.org/",
     "skos": "http://www.w3.org/2004/02/skos/core#",
     "statisticalDataType": {
-      "@id": "dsv:statisticalDataType",
+      "@id": "dsvo:statisticalDataType",
       "@type": "@id"
     },
     "summaryStatistics": {
-      "@id": "dsv:summaryStatistics",
+      "@id": "dsvo:summaryStatistics",
       "@type": "@id"
     },
     "title": "dct:title",
     "titles": "csvw:title",
     "unitText": "schema:unitText",
     "xsd": "http://www.w3.org/2001/XMLSchema#",
+    "dsv": "https://w3id.org/dsv-ontology#",
     "dcterms": "http://purl.org/dc/terms/",
     "prov": "http://www.w3.org/ns/prov#"
   },
-  "@id": "urn:linked-codebook:dataset:Chronic%20Kidney%20Disease%20(UCI%20id%20336)",
+  "@id": "https://bennokr.github.io/semsynth/output/chronic-kidney-disease/",
   "@type": [
     "dcat:Dataset",
-    "dsv:Dataset"
+    "dsvo:Dataset"
   ],
   "description": "Clinical records for early detection of CKD (subset of variables ped).",
+  "identifier": "https://bennokr.github.io/semsynth/output/chronic-kidney-disease/",
   "title": "Chronic Kidney Disease (UCI id 336)",
   "datasetSchema": {
-    "@id": "urn:linked-codebook:dataset:Chronic%20Kidney%20Disease%20(UCI%20id%20336)#schema",
-    "@type": "dsv:DatasetSchema",
+    "@id": "https://bennokr.github.io/semsynth/output/chronic-kidney-disease/#schema",
+    "@type": "dsvo:DatasetSchema",
     "columns": [
       {
-        "@id": "urn:linked-codebook:dataset:Chronic%20Kidney%20Disease%20(UCI%20id%20336)#column-age",
-        "@type": "dsv:Column",
+        "@id": "https://bennokr.github.io/semsynth/output/chronic-kidney-disease/#column-age",
+        "@type": "dsvo:Column",
         "datatype": "number",
         "titles": "Participant age in years",
         "name": "age",
         "columnProperty": {
-          "@id": "urn:linked-codebook:dataset:Chronic%20Kidney%20Disease%20(UCI%20id%20336)#property-age",
-          "@type": "dsv:ColumnProperty",
+          "@id": "https://bennokr.github.io/semsynth/output/chronic-kidney-disease/#property-age",
+          "@type": "dsvo:ColumnProperty",
           "hasVariable": {
-            "@id": "urn:linked-codebook:dataset:Chronic%20Kidney%20Disease%20(UCI%20id%20336)#variable-age",
+            "@id": "https://bennokr.github.io/semsynth/output/chronic-kidney-disease/#variable-age",
             "@type": "skos:Concept",
             "skos:prefLabel": "Participant age in years",
             "exactMatch": [
@@ -134,22 +148,22 @@
           "unitText": "years"
         },
         "summaryStatistics": {
-          "@id": "urn:linked-codebook:dataset:Chronic%20Kidney%20Disease%20(UCI%20id%20336)#statistics-age",
-          "@type": "dsv:SummaryStatistics",
-          "statisticalDataType": "dsv:NumericalDataType"
+          "@id": "https://bennokr.github.io/semsynth/output/chronic-kidney-disease/#statistics-age",
+          "@type": "dsvo:SummaryStatistics",
+          "statisticalDataType": "dsvo:NumericalDataType"
         }
       },
       {
-        "@id": "urn:linked-codebook:dataset:Chronic%20Kidney%20Disease%20(UCI%20id%20336)#column-bp",
-        "@type": "dsv:Column",
+        "@id": "https://bennokr.github.io/semsynth/output/chronic-kidney-disease/#column-bp",
+        "@type": "dsvo:Column",
         "datatype": "number",
         "titles": "Blood pressure reading (mmHg)",
         "name": "bp",
         "columnProperty": {
-          "@id": "urn:linked-codebook:dataset:Chronic%20Kidney%20Disease%20(UCI%20id%20336)#property-bp",
-          "@type": "dsv:ColumnProperty",
+          "@id": "https://bennokr.github.io/semsynth/output/chronic-kidney-disease/#property-bp",
+          "@type": "dsvo:ColumnProperty",
           "hasVariable": {
-            "@id": "urn:linked-codebook:dataset:Chronic%20Kidney%20Disease%20(UCI%20id%20336)#variable-bp",
+            "@id": "https://bennokr.github.io/semsynth/output/chronic-kidney-disease/#variable-bp",
             "@type": "skos:Concept",
             "skos:prefLabel": "Blood pressure reading (mmHg)",
             "closeMatch": [
@@ -160,22 +174,22 @@
           "unitText": "mmHg"
         },
         "summaryStatistics": {
-          "@id": "urn:linked-codebook:dataset:Chronic%20Kidney%20Disease%20(UCI%20id%20336)#statistics-bp",
-          "@type": "dsv:SummaryStatistics",
-          "statisticalDataType": "dsv:NumericalDataType"
+          "@id": "https://bennokr.github.io/semsynth/output/chronic-kidney-disease/#statistics-bp",
+          "@type": "dsvo:SummaryStatistics",
+          "statisticalDataType": "dsvo:NumericalDataType"
         }
       },
       {
-        "@id": "urn:linked-codebook:dataset:Chronic%20Kidney%20Disease%20(UCI%20id%20336)#column-sg",
-        "@type": "dsv:Column",
+        "@id": "https://bennokr.github.io/semsynth/output/chronic-kidney-disease/#column-sg",
+        "@type": "dsvo:Column",
         "datatype": "number",
         "titles": "Urine specific gravity",
         "name": "sg",
         "columnProperty": {
-          "@id": "urn:linked-codebook:dataset:Chronic%20Kidney%20Disease%20(UCI%20id%20336)#property-sg",
-          "@type": "dsv:ColumnProperty",
+          "@id": "https://bennokr.github.io/semsynth/output/chronic-kidney-disease/#property-sg",
+          "@type": "dsvo:ColumnProperty",
           "hasVariable": {
-            "@id": "urn:linked-codebook:dataset:Chronic%20Kidney%20Disease%20(UCI%20id%20336)#variable-sg",
+            "@id": "https://bennokr.github.io/semsynth/output/chronic-kidney-disease/#variable-sg",
             "@type": "skos:Concept",
             "skos:prefLabel": "Urine specific gravity",
             "exactMatch": [
@@ -184,22 +198,22 @@
           }
         },
         "summaryStatistics": {
-          "@id": "urn:linked-codebook:dataset:Chronic%20Kidney%20Disease%20(UCI%20id%20336)#statistics-sg",
-          "@type": "dsv:SummaryStatistics",
-          "statisticalDataType": "dsv:NumericalDataType"
+          "@id": "https://bennokr.github.io/semsynth/output/chronic-kidney-disease/#statistics-sg",
+          "@type": "dsvo:SummaryStatistics",
+          "statisticalDataType": "dsvo:NumericalDataType"
         }
       },
       {
-        "@id": "urn:linked-codebook:dataset:Chronic%20Kidney%20Disease%20(UCI%20id%20336)#column-al",
-        "@type": "dsv:Column",
+        "@id": "https://bennokr.github.io/semsynth/output/chronic-kidney-disease/#column-al",
+        "@type": "dsvo:Column",
         "datatype": "integer",
         "titles": "Urine albumin dipstick grade",
         "name": "al",
         "columnProperty": {
-          "@id": "urn:linked-codebook:dataset:Chronic%20Kidney%20Disease%20(UCI%20id%20336)#property-al",
-          "@type": "dsv:ColumnProperty",
+          "@id": "https://bennokr.github.io/semsynth/output/chronic-kidney-disease/#property-al",
+          "@type": "dsvo:ColumnProperty",
           "hasVariable": {
-            "@id": "urn:linked-codebook:dataset:Chronic%20Kidney%20Disease%20(UCI%20id%20336)#variable-al",
+            "@id": "https://bennokr.github.io/semsynth/output/chronic-kidney-disease/#variable-al",
             "@type": "skos:Concept",
             "skos:prefLabel": "Urine albumin dipstick grade",
             "closeMatch": [
@@ -207,65 +221,65 @@
             ]
           },
           "hasCodeBook": {
-            "@id": "urn:linked-codebook:dataset:Chronic%20Kidney%20Disease%20(UCI%20id%20336)#variable-al-codes",
+            "@id": "https://bennokr.github.io/semsynth/output/chronic-kidney-disease/#variable-al-codes",
             "@type": "skos:ConceptScheme",
             "skos:hasTopConcept": [
               {
-                "@id": "urn:linked-codebook:dataset:Chronic%20Kidney%20Disease%20(UCI%20id%20336)#variable-al-codes-0",
+                "@id": "https://bennokr.github.io/semsynth/output/chronic-kidney-disease/#variable-al-codes-0",
                 "@type": "skos:Concept",
                 "skos:prefLabel": "Albumin negative",
                 "skos:inScheme": {
-                  "@id": "urn:linked-codebook:dataset:Chronic%20Kidney%20Disease%20(UCI%20id%20336)#variable-al-codes"
+                  "@id": "https://bennokr.github.io/semsynth/output/chronic-kidney-disease/#variable-al-codes"
                 },
                 "skos:notation": "0",
                 "schema:position": 1
               },
               {
-                "@id": "urn:linked-codebook:dataset:Chronic%20Kidney%20Disease%20(UCI%20id%20336)#variable-al-codes-1",
+                "@id": "https://bennokr.github.io/semsynth/output/chronic-kidney-disease/#variable-al-codes-1",
                 "@type": "skos:Concept",
                 "skos:prefLabel": "Trace albumin",
                 "skos:inScheme": {
-                  "@id": "urn:linked-codebook:dataset:Chronic%20Kidney%20Disease%20(UCI%20id%20336)#variable-al-codes"
+                  "@id": "https://bennokr.github.io/semsynth/output/chronic-kidney-disease/#variable-al-codes"
                 },
                 "skos:notation": "1",
                 "schema:position": 2
               },
               {
-                "@id": "urn:linked-codebook:dataset:Chronic%20Kidney%20Disease%20(UCI%20id%20336)#variable-al-codes-2",
+                "@id": "https://bennokr.github.io/semsynth/output/chronic-kidney-disease/#variable-al-codes-2",
                 "@type": "skos:Concept",
                 "skos:prefLabel": "Albumin 1+",
                 "skos:inScheme": {
-                  "@id": "urn:linked-codebook:dataset:Chronic%20Kidney%20Disease%20(UCI%20id%20336)#variable-al-codes"
+                  "@id": "https://bennokr.github.io/semsynth/output/chronic-kidney-disease/#variable-al-codes"
                 },
                 "skos:notation": "2",
                 "schema:position": 3
               },
               {
-                "@id": "urn:linked-codebook:dataset:Chronic%20Kidney%20Disease%20(UCI%20id%20336)#variable-al-codes-3",
+                "@id": "https://bennokr.github.io/semsynth/output/chronic-kidney-disease/#variable-al-codes-3",
                 "@type": "skos:Concept",
                 "skos:prefLabel": "Albumin 2+",
                 "skos:inScheme": {
-                  "@id": "urn:linked-codebook:dataset:Chronic%20Kidney%20Disease%20(UCI%20id%20336)#variable-al-codes"
+                  "@id": "https://bennokr.github.io/semsynth/output/chronic-kidney-disease/#variable-al-codes"
                 },
                 "skos:notation": "3",
                 "schema:position": 4
               },
               {
-                "@id": "urn:linked-codebook:dataset:Chronic%20Kidney%20Disease%20(UCI%20id%20336)#variable-al-codes-4",
+                "@id": "https://bennokr.github.io/semsynth/output/chronic-kidney-disease/#variable-al-codes-4",
                 "@type": "skos:Concept",
                 "skos:prefLabel": "Albumin 3+",
                 "skos:inScheme": {
-                  "@id": "urn:linked-codebook:dataset:Chronic%20Kidney%20Disease%20(UCI%20id%20336)#variable-al-codes"
+                  "@id": "https://bennokr.github.io/semsynth/output/chronic-kidney-disease/#variable-al-codes"
                 },
                 "skos:notation": "4",
                 "schema:position": 5
               },
               {
-                "@id": "urn:linked-codebook:dataset:Chronic%20Kidney%20Disease%20(UCI%20id%20336)#variable-al-codes-5",
+                "@id": "https://bennokr.github.io/semsynth/output/chronic-kidney-disease/#variable-al-codes-5",
                 "@type": "skos:Concept",
                 "skos:prefLabel": "Albumin 4+",
                 "skos:inScheme": {
-                  "@id": "urn:linked-codebook:dataset:Chronic%20Kidney%20Disease%20(UCI%20id%20336)#variable-al-codes"
+                  "@id": "https://bennokr.github.io/semsynth/output/chronic-kidney-disease/#variable-al-codes"
                 },
                 "skos:notation": "5",
                 "schema:position": 6
@@ -274,22 +288,22 @@
           }
         },
         "summaryStatistics": {
-          "@id": "urn:linked-codebook:dataset:Chronic%20Kidney%20Disease%20(UCI%20id%20336)#statistics-al",
-          "@type": "dsv:SummaryStatistics",
-          "statisticalDataType": "dsv:OrdinalDataType"
+          "@id": "https://bennokr.github.io/semsynth/output/chronic-kidney-disease/#statistics-al",
+          "@type": "dsvo:SummaryStatistics",
+          "statisticalDataType": "dsvo:OrdinalDataType"
         }
       },
       {
-        "@id": "urn:linked-codebook:dataset:Chronic%20Kidney%20Disease%20(UCI%20id%20336)#column-su",
-        "@type": "dsv:Column",
+        "@id": "https://bennokr.github.io/semsynth/output/chronic-kidney-disease/#column-su",
+        "@type": "dsvo:Column",
         "datatype": "integer",
         "titles": "Urine sugar dipstick grade",
         "name": "su",
         "columnProperty": {
-          "@id": "urn:linked-codebook:dataset:Chronic%20Kidney%20Disease%20(UCI%20id%20336)#property-su",
-          "@type": "dsv:ColumnProperty",
+          "@id": "https://bennokr.github.io/semsynth/output/chronic-kidney-disease/#property-su",
+          "@type": "dsvo:ColumnProperty",
           "hasVariable": {
-            "@id": "urn:linked-codebook:dataset:Chronic%20Kidney%20Disease%20(UCI%20id%20336)#variable-su",
+            "@id": "https://bennokr.github.io/semsynth/output/chronic-kidney-disease/#variable-su",
             "@type": "skos:Concept",
             "skos:prefLabel": "Urine sugar dipstick grade",
             "closeMatch": [
@@ -297,65 +311,65 @@
             ]
           },
           "hasCodeBook": {
-            "@id": "urn:linked-codebook:dataset:Chronic%20Kidney%20Disease%20(UCI%20id%20336)#variable-su-codes",
+            "@id": "https://bennokr.github.io/semsynth/output/chronic-kidney-disease/#variable-su-codes",
             "@type": "skos:ConceptScheme",
             "skos:hasTopConcept": [
               {
-                "@id": "urn:linked-codebook:dataset:Chronic%20Kidney%20Disease%20(UCI%20id%20336)#variable-su-codes-0",
+                "@id": "https://bennokr.github.io/semsynth/output/chronic-kidney-disease/#variable-su-codes-0",
                 "@type": "skos:Concept",
                 "skos:prefLabel": "Sugar negative",
                 "skos:inScheme": {
-                  "@id": "urn:linked-codebook:dataset:Chronic%20Kidney%20Disease%20(UCI%20id%20336)#variable-su-codes"
+                  "@id": "https://bennokr.github.io/semsynth/output/chronic-kidney-disease/#variable-su-codes"
                 },
                 "skos:notation": "0",
                 "schema:position": 1
               },
               {
-                "@id": "urn:linked-codebook:dataset:Chronic%20Kidney%20Disease%20(UCI%20id%20336)#variable-su-codes-1",
+                "@id": "https://bennokr.github.io/semsynth/output/chronic-kidney-disease/#variable-su-codes-1",
                 "@type": "skos:Concept",
                 "skos:prefLabel": "Trace sugar",
                 "skos:inScheme": {
-                  "@id": "urn:linked-codebook:dataset:Chronic%20Kidney%20Disease%20(UCI%20id%20336)#variable-su-codes"
+                  "@id": "https://bennokr.github.io/semsynth/output/chronic-kidney-disease/#variable-su-codes"
                 },
                 "skos:notation": "1",
                 "schema:position": 2
               },
               {
-                "@id": "urn:linked-codebook:dataset:Chronic%20Kidney%20Disease%20(UCI%20id%20336)#variable-su-codes-2",
+                "@id": "https://bennokr.github.io/semsynth/output/chronic-kidney-disease/#variable-su-codes-2",
                 "@type": "skos:Concept",
                 "skos:prefLabel": "Sugar 1+",
                 "skos:inScheme": {
-                  "@id": "urn:linked-codebook:dataset:Chronic%20Kidney%20Disease%20(UCI%20id%20336)#variable-su-codes"
+                  "@id": "https://bennokr.github.io/semsynth/output/chronic-kidney-disease/#variable-su-codes"
                 },
                 "skos:notation": "2",
                 "schema:position": 3
               },
               {
-                "@id": "urn:linked-codebook:dataset:Chronic%20Kidney%20Disease%20(UCI%20id%20336)#variable-su-codes-3",
+                "@id": "https://bennokr.github.io/semsynth/output/chronic-kidney-disease/#variable-su-codes-3",
                 "@type": "skos:Concept",
                 "skos:prefLabel": "Sugar 2+",
                 "skos:inScheme": {
-                  "@id": "urn:linked-codebook:dataset:Chronic%20Kidney%20Disease%20(UCI%20id%20336)#variable-su-codes"
+                  "@id": "https://bennokr.github.io/semsynth/output/chronic-kidney-disease/#variable-su-codes"
                 },
                 "skos:notation": "3",
                 "schema:position": 4
               },
               {
-                "@id": "urn:linked-codebook:dataset:Chronic%20Kidney%20Disease%20(UCI%20id%20336)#variable-su-codes-4",
+                "@id": "https://bennokr.github.io/semsynth/output/chronic-kidney-disease/#variable-su-codes-4",
                 "@type": "skos:Concept",
                 "skos:prefLabel": "Sugar 3+",
                 "skos:inScheme": {
-                  "@id": "urn:linked-codebook:dataset:Chronic%20Kidney%20Disease%20(UCI%20id%20336)#variable-su-codes"
+                  "@id": "https://bennokr.github.io/semsynth/output/chronic-kidney-disease/#variable-su-codes"
                 },
                 "skos:notation": "4",
                 "schema:position": 5
               },
               {
-                "@id": "urn:linked-codebook:dataset:Chronic%20Kidney%20Disease%20(UCI%20id%20336)#variable-su-codes-5",
+                "@id": "https://bennokr.github.io/semsynth/output/chronic-kidney-disease/#variable-su-codes-5",
                 "@type": "skos:Concept",
                 "skos:prefLabel": "Sugar 4+",
                 "skos:inScheme": {
-                  "@id": "urn:linked-codebook:dataset:Chronic%20Kidney%20Disease%20(UCI%20id%20336)#variable-su-codes"
+                  "@id": "https://bennokr.github.io/semsynth/output/chronic-kidney-disease/#variable-su-codes"
                 },
                 "skos:notation": "5",
                 "schema:position": 6
@@ -364,22 +378,22 @@
           }
         },
         "summaryStatistics": {
-          "@id": "urn:linked-codebook:dataset:Chronic%20Kidney%20Disease%20(UCI%20id%20336)#statistics-su",
-          "@type": "dsv:SummaryStatistics",
-          "statisticalDataType": "dsv:OrdinalDataType"
+          "@id": "https://bennokr.github.io/semsynth/output/chronic-kidney-disease/#statistics-su",
+          "@type": "dsvo:SummaryStatistics",
+          "statisticalDataType": "dsvo:OrdinalDataType"
         }
       },
       {
-        "@id": "urn:linked-codebook:dataset:Chronic%20Kidney%20Disease%20(UCI%20id%20336)#column-rbc",
-        "@type": "dsv:Column",
+        "@id": "https://bennokr.github.io/semsynth/output/chronic-kidney-disease/#column-rbc",
+        "@type": "dsvo:Column",
         "datatype": "string",
         "titles": "Urine red blood cells (microscopy)",
         "name": "rbc",
         "columnProperty": {
-          "@id": "urn:linked-codebook:dataset:Chronic%20Kidney%20Disease%20(UCI%20id%20336)#property-rbc",
-          "@type": "dsv:ColumnProperty",
+          "@id": "https://bennokr.github.io/semsynth/output/chronic-kidney-disease/#property-rbc",
+          "@type": "dsvo:ColumnProperty",
           "hasVariable": {
-            "@id": "urn:linked-codebook:dataset:Chronic%20Kidney%20Disease%20(UCI%20id%20336)#variable-rbc",
+            "@id": "https://bennokr.github.io/semsynth/output/chronic-kidney-disease/#variable-rbc",
             "@type": "skos:Concept",
             "skos:prefLabel": "Urine red blood cells (microscopy)",
             "closeMatch": [
@@ -387,24 +401,24 @@
             ]
           },
           "hasCodeBook": {
-            "@id": "urn:linked-codebook:dataset:Chronic%20Kidney%20Disease%20(UCI%20id%20336)#variable-rbc-codes",
+            "@id": "https://bennokr.github.io/semsynth/output/chronic-kidney-disease/#variable-rbc-codes",
             "@type": "skos:ConceptScheme",
             "skos:hasTopConcept": [
               {
-                "@id": "urn:linked-codebook:dataset:Chronic%20Kidney%20Disease%20(UCI%20id%20336)#variable-rbc-codes-normal",
+                "@id": "https://bennokr.github.io/semsynth/output/chronic-kidney-disease/#variable-rbc-codes-normal",
                 "@type": "skos:Concept",
                 "skos:prefLabel": "Normal",
                 "skos:inScheme": {
-                  "@id": "urn:linked-codebook:dataset:Chronic%20Kidney%20Disease%20(UCI%20id%20336)#variable-rbc-codes"
+                  "@id": "https://bennokr.github.io/semsynth/output/chronic-kidney-disease/#variable-rbc-codes"
                 },
                 "skos:notation": "normal"
               },
               {
-                "@id": "urn:linked-codebook:dataset:Chronic%20Kidney%20Disease%20(UCI%20id%20336)#variable-rbc-codes-abnormal",
+                "@id": "https://bennokr.github.io/semsynth/output/chronic-kidney-disease/#variable-rbc-codes-abnormal",
                 "@type": "skos:Concept",
                 "skos:prefLabel": "Abnormal",
                 "skos:inScheme": {
-                  "@id": "urn:linked-codebook:dataset:Chronic%20Kidney%20Disease%20(UCI%20id%20336)#variable-rbc-codes"
+                  "@id": "https://bennokr.github.io/semsynth/output/chronic-kidney-disease/#variable-rbc-codes"
                 },
                 "skos:notation": "abnormal"
               }
@@ -412,22 +426,22 @@
           }
         },
         "summaryStatistics": {
-          "@id": "urn:linked-codebook:dataset:Chronic%20Kidney%20Disease%20(UCI%20id%20336)#statistics-rbc",
-          "@type": "dsv:SummaryStatistics",
-          "statisticalDataType": "dsv:NominalDataType"
+          "@id": "https://bennokr.github.io/semsynth/output/chronic-kidney-disease/#statistics-rbc",
+          "@type": "dsvo:SummaryStatistics",
+          "statisticalDataType": "dsvo:NominalDataType"
         }
       },
       {
-        "@id": "urn:linked-codebook:dataset:Chronic%20Kidney%20Disease%20(UCI%20id%20336)#column-pc",
-        "@type": "dsv:Column",
+        "@id": "https://bennokr.github.io/semsynth/output/chronic-kidney-disease/#column-pc",
+        "@type": "dsvo:Column",
         "datatype": "string",
         "titles": "Urine pus cells (leukocytes)",
         "name": "pc",
         "columnProperty": {
-          "@id": "urn:linked-codebook:dataset:Chronic%20Kidney%20Disease%20(UCI%20id%20336)#property-pc",
-          "@type": "dsv:ColumnProperty",
+          "@id": "https://bennokr.github.io/semsynth/output/chronic-kidney-disease/#property-pc",
+          "@type": "dsvo:ColumnProperty",
           "hasVariable": {
-            "@id": "urn:linked-codebook:dataset:Chronic%20Kidney%20Disease%20(UCI%20id%20336)#variable-pc",
+            "@id": "https://bennokr.github.io/semsynth/output/chronic-kidney-disease/#variable-pc",
             "@type": "skos:Concept",
             "skos:prefLabel": "Urine pus cells (leukocytes)",
             "closeMatch": [
@@ -435,24 +449,24 @@
             ]
           },
           "hasCodeBook": {
-            "@id": "urn:linked-codebook:dataset:Chronic%20Kidney%20Disease%20(UCI%20id%20336)#variable-pc-codes",
+            "@id": "https://bennokr.github.io/semsynth/output/chronic-kidney-disease/#variable-pc-codes",
             "@type": "skos:ConceptScheme",
             "skos:hasTopConcept": [
               {
-                "@id": "urn:linked-codebook:dataset:Chronic%20Kidney%20Disease%20(UCI%20id%20336)#variable-pc-codes-normal",
+                "@id": "https://bennokr.github.io/semsynth/output/chronic-kidney-disease/#variable-pc-codes-normal",
                 "@type": "skos:Concept",
                 "skos:prefLabel": "Normal",
                 "skos:inScheme": {
-                  "@id": "urn:linked-codebook:dataset:Chronic%20Kidney%20Disease%20(UCI%20id%20336)#variable-pc-codes"
+                  "@id": "https://bennokr.github.io/semsynth/output/chronic-kidney-disease/#variable-pc-codes"
                 },
                 "skos:notation": "normal"
               },
               {
-                "@id": "urn:linked-codebook:dataset:Chronic%20Kidney%20Disease%20(UCI%20id%20336)#variable-pc-codes-abnormal",
+                "@id": "https://bennokr.github.io/semsynth/output/chronic-kidney-disease/#variable-pc-codes-abnormal",
                 "@type": "skos:Concept",
                 "skos:prefLabel": "Abnormal",
                 "skos:inScheme": {
-                  "@id": "urn:linked-codebook:dataset:Chronic%20Kidney%20Disease%20(UCI%20id%20336)#variable-pc-codes"
+                  "@id": "https://bennokr.github.io/semsynth/output/chronic-kidney-disease/#variable-pc-codes"
                 },
                 "skos:notation": "abnormal"
               }
@@ -460,22 +474,22 @@
           }
         },
         "summaryStatistics": {
-          "@id": "urn:linked-codebook:dataset:Chronic%20Kidney%20Disease%20(UCI%20id%20336)#statistics-pc",
-          "@type": "dsv:SummaryStatistics",
-          "statisticalDataType": "dsv:NominalDataType"
+          "@id": "https://bennokr.github.io/semsynth/output/chronic-kidney-disease/#statistics-pc",
+          "@type": "dsvo:SummaryStatistics",
+          "statisticalDataType": "dsvo:NominalDataType"
         }
       },
       {
-        "@id": "urn:linked-codebook:dataset:Chronic%20Kidney%20Disease%20(UCI%20id%20336)#column-pcc",
-        "@type": "dsv:Column",
+        "@id": "https://bennokr.github.io/semsynth/output/chronic-kidney-disease/#column-pcc",
+        "@type": "dsvo:Column",
         "datatype": "string",
         "titles": "Pus cell clumps in urine",
         "name": "pcc",
         "columnProperty": {
-          "@id": "urn:linked-codebook:dataset:Chronic%20Kidney%20Disease%20(UCI%20id%20336)#property-pcc",
-          "@type": "dsv:ColumnProperty",
+          "@id": "https://bennokr.github.io/semsynth/output/chronic-kidney-disease/#property-pcc",
+          "@type": "dsvo:ColumnProperty",
           "hasVariable": {
-            "@id": "urn:linked-codebook:dataset:Chronic%20Kidney%20Disease%20(UCI%20id%20336)#variable-pcc",
+            "@id": "https://bennokr.github.io/semsynth/output/chronic-kidney-disease/#variable-pcc",
             "@type": "skos:Concept",
             "skos:prefLabel": "Pus cell clumps in urine",
             "exactMatch": [
@@ -483,24 +497,24 @@
             ]
           },
           "hasCodeBook": {
-            "@id": "urn:linked-codebook:dataset:Chronic%20Kidney%20Disease%20(UCI%20id%20336)#variable-pcc-codes",
+            "@id": "https://bennokr.github.io/semsynth/output/chronic-kidney-disease/#variable-pcc-codes",
             "@type": "skos:ConceptScheme",
             "skos:hasTopConcept": [
               {
-                "@id": "urn:linked-codebook:dataset:Chronic%20Kidney%20Disease%20(UCI%20id%20336)#variable-pcc-codes-present",
+                "@id": "https://bennokr.github.io/semsynth/output/chronic-kidney-disease/#variable-pcc-codes-present",
                 "@type": "skos:Concept",
                 "skos:prefLabel": "Present",
                 "skos:inScheme": {
-                  "@id": "urn:linked-codebook:dataset:Chronic%20Kidney%20Disease%20(UCI%20id%20336)#variable-pcc-codes"
+                  "@id": "https://bennokr.github.io/semsynth/output/chronic-kidney-disease/#variable-pcc-codes"
                 },
                 "skos:notation": "present"
               },
               {
-                "@id": "urn:linked-codebook:dataset:Chronic%20Kidney%20Disease%20(UCI%20id%20336)#variable-pcc-codes-notpresent",
+                "@id": "https://bennokr.github.io/semsynth/output/chronic-kidney-disease/#variable-pcc-codes-notpresent",
                 "@type": "skos:Concept",
                 "skos:prefLabel": "Not present",
                 "skos:inScheme": {
-                  "@id": "urn:linked-codebook:dataset:Chronic%20Kidney%20Disease%20(UCI%20id%20336)#variable-pcc-codes"
+                  "@id": "https://bennokr.github.io/semsynth/output/chronic-kidney-disease/#variable-pcc-codes"
                 },
                 "skos:notation": "notpresent"
               }
@@ -508,22 +522,22 @@
           }
         },
         "summaryStatistics": {
-          "@id": "urn:linked-codebook:dataset:Chronic%20Kidney%20Disease%20(UCI%20id%20336)#statistics-pcc",
-          "@type": "dsv:SummaryStatistics",
-          "statisticalDataType": "dsv:NominalDataType"
+          "@id": "https://bennokr.github.io/semsynth/output/chronic-kidney-disease/#statistics-pcc",
+          "@type": "dsvo:SummaryStatistics",
+          "statisticalDataType": "dsvo:NominalDataType"
         }
       },
       {
-        "@id": "urn:linked-codebook:dataset:Chronic%20Kidney%20Disease%20(UCI%20id%20336)#column-ba",
-        "@type": "dsv:Column",
+        "@id": "https://bennokr.github.io/semsynth/output/chronic-kidney-disease/#column-ba",
+        "@type": "dsvo:Column",
         "datatype": "string",
         "titles": "Bacteria in urine",
         "name": "ba",
         "columnProperty": {
-          "@id": "urn:linked-codebook:dataset:Chronic%20Kidney%20Disease%20(UCI%20id%20336)#property-ba",
-          "@type": "dsv:ColumnProperty",
+          "@id": "https://bennokr.github.io/semsynth/output/chronic-kidney-disease/#property-ba",
+          "@type": "dsvo:ColumnProperty",
           "hasVariable": {
-            "@id": "urn:linked-codebook:dataset:Chronic%20Kidney%20Disease%20(UCI%20id%20336)#variable-ba",
+            "@id": "https://bennokr.github.io/semsynth/output/chronic-kidney-disease/#variable-ba",
             "@type": "skos:Concept",
             "skos:prefLabel": "Bacteria in urine",
             "closeMatch": [
@@ -531,24 +545,24 @@
             ]
           },
           "hasCodeBook": {
-            "@id": "urn:linked-codebook:dataset:Chronic%20Kidney%20Disease%20(UCI%20id%20336)#variable-ba-codes",
+            "@id": "https://bennokr.github.io/semsynth/output/chronic-kidney-disease/#variable-ba-codes",
             "@type": "skos:ConceptScheme",
             "skos:hasTopConcept": [
               {
-                "@id": "urn:linked-codebook:dataset:Chronic%20Kidney%20Disease%20(UCI%20id%20336)#variable-ba-codes-present",
+                "@id": "https://bennokr.github.io/semsynth/output/chronic-kidney-disease/#variable-ba-codes-present",
                 "@type": "skos:Concept",
                 "skos:prefLabel": "Present",
                 "skos:inScheme": {
-                  "@id": "urn:linked-codebook:dataset:Chronic%20Kidney%20Disease%20(UCI%20id%20336)#variable-ba-codes"
+                  "@id": "https://bennokr.github.io/semsynth/output/chronic-kidney-disease/#variable-ba-codes"
                 },
                 "skos:notation": "present"
               },
               {
-                "@id": "urn:linked-codebook:dataset:Chronic%20Kidney%20Disease%20(UCI%20id%20336)#variable-ba-codes-notpresent",
+                "@id": "https://bennokr.github.io/semsynth/output/chronic-kidney-disease/#variable-ba-codes-notpresent",
                 "@type": "skos:Concept",
                 "skos:prefLabel": "Not present",
                 "skos:inScheme": {
-                  "@id": "urn:linked-codebook:dataset:Chronic%20Kidney%20Disease%20(UCI%20id%20336)#variable-ba-codes"
+                  "@id": "https://bennokr.github.io/semsynth/output/chronic-kidney-disease/#variable-ba-codes"
                 },
                 "skos:notation": "notpresent"
               }
@@ -556,22 +570,22 @@
           }
         },
         "summaryStatistics": {
-          "@id": "urn:linked-codebook:dataset:Chronic%20Kidney%20Disease%20(UCI%20id%20336)#statistics-ba",
-          "@type": "dsv:SummaryStatistics",
-          "statisticalDataType": "dsv:NominalDataType"
+          "@id": "https://bennokr.github.io/semsynth/output/chronic-kidney-disease/#statistics-ba",
+          "@type": "dsvo:SummaryStatistics",
+          "statisticalDataType": "dsvo:NominalDataType"
         }
       },
       {
-        "@id": "urn:linked-codebook:dataset:Chronic%20Kidney%20Disease%20(UCI%20id%20336)#column-bgr",
-        "@type": "dsv:Column",
+        "@id": "https://bennokr.github.io/semsynth/output/chronic-kidney-disease/#column-bgr",
+        "@type": "dsvo:Column",
         "datatype": "number",
         "titles": "Blood glucose (random)",
         "name": "bgr",
         "columnProperty": {
-          "@id": "urn:linked-codebook:dataset:Chronic%20Kidney%20Disease%20(UCI%20id%20336)#property-bgr",
-          "@type": "dsv:ColumnProperty",
+          "@id": "https://bennokr.github.io/semsynth/output/chronic-kidney-disease/#property-bgr",
+          "@type": "dsvo:ColumnProperty",
           "hasVariable": {
-            "@id": "urn:linked-codebook:dataset:Chronic%20Kidney%20Disease%20(UCI%20id%20336)#variable-bgr",
+            "@id": "https://bennokr.github.io/semsynth/output/chronic-kidney-disease/#variable-bgr",
             "@type": "skos:Concept",
             "skos:prefLabel": "Blood glucose (random)",
             "exactMatch": [
@@ -581,22 +595,22 @@
           "unitText": "mg/dL"
         },
         "summaryStatistics": {
-          "@id": "urn:linked-codebook:dataset:Chronic%20Kidney%20Disease%20(UCI%20id%20336)#statistics-bgr",
-          "@type": "dsv:SummaryStatistics",
-          "statisticalDataType": "dsv:NumericalDataType"
+          "@id": "https://bennokr.github.io/semsynth/output/chronic-kidney-disease/#statistics-bgr",
+          "@type": "dsvo:SummaryStatistics",
+          "statisticalDataType": "dsvo:NumericalDataType"
         }
       },
       {
-        "@id": "urn:linked-codebook:dataset:Chronic%20Kidney%20Disease%20(UCI%20id%20336)#column-bu",
-        "@type": "dsv:Column",
+        "@id": "https://bennokr.github.io/semsynth/output/chronic-kidney-disease/#column-bu",
+        "@type": "dsvo:Column",
         "datatype": "number",
         "titles": "Blood urea nitrogen",
         "name": "bu",
         "columnProperty": {
-          "@id": "urn:linked-codebook:dataset:Chronic%20Kidney%20Disease%20(UCI%20id%20336)#property-bu",
-          "@type": "dsv:ColumnProperty",
+          "@id": "https://bennokr.github.io/semsynth/output/chronic-kidney-disease/#property-bu",
+          "@type": "dsvo:ColumnProperty",
           "hasVariable": {
-            "@id": "urn:linked-codebook:dataset:Chronic%20Kidney%20Disease%20(UCI%20id%20336)#variable-bu",
+            "@id": "https://bennokr.github.io/semsynth/output/chronic-kidney-disease/#variable-bu",
             "@type": "skos:Concept",
             "skos:prefLabel": "Blood urea nitrogen",
             "exactMatch": [
@@ -606,22 +620,22 @@
           "unitText": "mg/dL"
         },
         "summaryStatistics": {
-          "@id": "urn:linked-codebook:dataset:Chronic%20Kidney%20Disease%20(UCI%20id%20336)#statistics-bu",
-          "@type": "dsv:SummaryStatistics",
-          "statisticalDataType": "dsv:NumericalDataType"
+          "@id": "https://bennokr.github.io/semsynth/output/chronic-kidney-disease/#statistics-bu",
+          "@type": "dsvo:SummaryStatistics",
+          "statisticalDataType": "dsvo:NumericalDataType"
         }
       },
       {
-        "@id": "urn:linked-codebook:dataset:Chronic%20Kidney%20Disease%20(UCI%20id%20336)#column-sc",
-        "@type": "dsv:Column",
+        "@id": "https://bennokr.github.io/semsynth/output/chronic-kidney-disease/#column-sc",
+        "@type": "dsvo:Column",
         "datatype": "number",
         "titles": "Serum creatinine",
         "name": "sc",
         "columnProperty": {
-          "@id": "urn:linked-codebook:dataset:Chronic%20Kidney%20Disease%20(UCI%20id%20336)#property-sc",
-          "@type": "dsv:ColumnProperty",
+          "@id": "https://bennokr.github.io/semsynth/output/chronic-kidney-disease/#property-sc",
+          "@type": "dsvo:ColumnProperty",
           "hasVariable": {
-            "@id": "urn:linked-codebook:dataset:Chronic%20Kidney%20Disease%20(UCI%20id%20336)#variable-sc",
+            "@id": "https://bennokr.github.io/semsynth/output/chronic-kidney-disease/#variable-sc",
             "@type": "skos:Concept",
             "skos:prefLabel": "Serum creatinine",
             "exactMatch": [
@@ -631,22 +645,22 @@
           "unitText": "mg/dL"
         },
         "summaryStatistics": {
-          "@id": "urn:linked-codebook:dataset:Chronic%20Kidney%20Disease%20(UCI%20id%20336)#statistics-sc",
-          "@type": "dsv:SummaryStatistics",
-          "statisticalDataType": "dsv:NumericalDataType"
+          "@id": "https://bennokr.github.io/semsynth/output/chronic-kidney-disease/#statistics-sc",
+          "@type": "dsvo:SummaryStatistics",
+          "statisticalDataType": "dsvo:NumericalDataType"
         }
       },
       {
-        "@id": "urn:linked-codebook:dataset:Chronic%20Kidney%20Disease%20(UCI%20id%20336)#column-sod",
-        "@type": "dsv:Column",
+        "@id": "https://bennokr.github.io/semsynth/output/chronic-kidney-disease/#column-sod",
+        "@type": "dsvo:Column",
         "datatype": "number",
         "titles": "Serum sodium",
         "name": "sod",
         "columnProperty": {
-          "@id": "urn:linked-codebook:dataset:Chronic%20Kidney%20Disease%20(UCI%20id%20336)#property-sod",
-          "@type": "dsv:ColumnProperty",
+          "@id": "https://bennokr.github.io/semsynth/output/chronic-kidney-disease/#property-sod",
+          "@type": "dsvo:ColumnProperty",
           "hasVariable": {
-            "@id": "urn:linked-codebook:dataset:Chronic%20Kidney%20Disease%20(UCI%20id%20336)#variable-sod",
+            "@id": "https://bennokr.github.io/semsynth/output/chronic-kidney-disease/#variable-sod",
             "@type": "skos:Concept",
             "skos:prefLabel": "Serum sodium",
             "exactMatch": [
@@ -656,22 +670,22 @@
           "unitText": "mmol/L"
         },
         "summaryStatistics": {
-          "@id": "urn:linked-codebook:dataset:Chronic%20Kidney%20Disease%20(UCI%20id%20336)#statistics-sod",
-          "@type": "dsv:SummaryStatistics",
-          "statisticalDataType": "dsv:NumericalDataType"
+          "@id": "https://bennokr.github.io/semsynth/output/chronic-kidney-disease/#statistics-sod",
+          "@type": "dsvo:SummaryStatistics",
+          "statisticalDataType": "dsvo:NumericalDataType"
         }
       },
       {
-        "@id": "urn:linked-codebook:dataset:Chronic%20Kidney%20Disease%20(UCI%20id%20336)#column-pot",
-        "@type": "dsv:Column",
+        "@id": "https://bennokr.github.io/semsynth/output/chronic-kidney-disease/#column-pot",
+        "@type": "dsvo:Column",
         "datatype": "number",
         "titles": "Serum potassium",
         "name": "pot",
         "columnProperty": {
-          "@id": "urn:linked-codebook:dataset:Chronic%20Kidney%20Disease%20(UCI%20id%20336)#property-pot",
-          "@type": "dsv:ColumnProperty",
+          "@id": "https://bennokr.github.io/semsynth/output/chronic-kidney-disease/#property-pot",
+          "@type": "dsvo:ColumnProperty",
           "hasVariable": {
-            "@id": "urn:linked-codebook:dataset:Chronic%20Kidney%20Disease%20(UCI%20id%20336)#variable-pot",
+            "@id": "https://bennokr.github.io/semsynth/output/chronic-kidney-disease/#variable-pot",
             "@type": "skos:Concept",
             "skos:prefLabel": "Serum potassium",
             "exactMatch": [
@@ -681,22 +695,22 @@
           "unitText": "mmol/L"
         },
         "summaryStatistics": {
-          "@id": "urn:linked-codebook:dataset:Chronic%20Kidney%20Disease%20(UCI%20id%20336)#statistics-pot",
-          "@type": "dsv:SummaryStatistics",
-          "statisticalDataType": "dsv:NumericalDataType"
+          "@id": "https://bennokr.github.io/semsynth/output/chronic-kidney-disease/#statistics-pot",
+          "@type": "dsvo:SummaryStatistics",
+          "statisticalDataType": "dsvo:NumericalDataType"
         }
       },
       {
-        "@id": "urn:linked-codebook:dataset:Chronic%20Kidney%20Disease%20(UCI%20id%20336)#column-hemo",
-        "@type": "dsv:Column",
+        "@id": "https://bennokr.github.io/semsynth/output/chronic-kidney-disease/#column-hemo",
+        "@type": "dsvo:Column",
         "datatype": "number",
         "titles": "Hemoglobin",
         "name": "hemo",
         "columnProperty": {
-          "@id": "urn:linked-codebook:dataset:Chronic%20Kidney%20Disease%20(UCI%20id%20336)#property-hemo",
-          "@type": "dsv:ColumnProperty",
+          "@id": "https://bennokr.github.io/semsynth/output/chronic-kidney-disease/#property-hemo",
+          "@type": "dsvo:ColumnProperty",
           "hasVariable": {
-            "@id": "urn:linked-codebook:dataset:Chronic%20Kidney%20Disease%20(UCI%20id%20336)#variable-hemo",
+            "@id": "https://bennokr.github.io/semsynth/output/chronic-kidney-disease/#variable-hemo",
             "@type": "skos:Concept",
             "skos:prefLabel": "Hemoglobin",
             "exactMatch": [
@@ -706,22 +720,22 @@
           "unitText": "g/dL"
         },
         "summaryStatistics": {
-          "@id": "urn:linked-codebook:dataset:Chronic%20Kidney%20Disease%20(UCI%20id%20336)#statistics-hemo",
-          "@type": "dsv:SummaryStatistics",
-          "statisticalDataType": "dsv:NumericalDataType"
+          "@id": "https://bennokr.github.io/semsynth/output/chronic-kidney-disease/#statistics-hemo",
+          "@type": "dsvo:SummaryStatistics",
+          "statisticalDataType": "dsvo:NumericalDataType"
         }
       },
       {
-        "@id": "urn:linked-codebook:dataset:Chronic%20Kidney%20Disease%20(UCI%20id%20336)#column-pcv",
-        "@type": "dsv:Column",
+        "@id": "https://bennokr.github.io/semsynth/output/chronic-kidney-disease/#column-pcv",
+        "@type": "dsvo:Column",
         "datatype": "number",
         "titles": "Packed cell volume (hematocrit)",
         "name": "pcv",
         "columnProperty": {
-          "@id": "urn:linked-codebook:dataset:Chronic%20Kidney%20Disease%20(UCI%20id%20336)#property-pcv",
-          "@type": "dsv:ColumnProperty",
+          "@id": "https://bennokr.github.io/semsynth/output/chronic-kidney-disease/#property-pcv",
+          "@type": "dsvo:ColumnProperty",
           "hasVariable": {
-            "@id": "urn:linked-codebook:dataset:Chronic%20Kidney%20Disease%20(UCI%20id%20336)#variable-pcv",
+            "@id": "https://bennokr.github.io/semsynth/output/chronic-kidney-disease/#variable-pcv",
             "@type": "skos:Concept",
             "skos:prefLabel": "Packed cell volume (hematocrit)",
             "exactMatch": [
@@ -731,22 +745,22 @@
           "unitText": "percent"
         },
         "summaryStatistics": {
-          "@id": "urn:linked-codebook:dataset:Chronic%20Kidney%20Disease%20(UCI%20id%20336)#statistics-pcv",
-          "@type": "dsv:SummaryStatistics",
-          "statisticalDataType": "dsv:NumericalDataType"
+          "@id": "https://bennokr.github.io/semsynth/output/chronic-kidney-disease/#statistics-pcv",
+          "@type": "dsvo:SummaryStatistics",
+          "statisticalDataType": "dsvo:NumericalDataType"
         }
       },
       {
-        "@id": "urn:linked-codebook:dataset:Chronic%20Kidney%20Disease%20(UCI%20id%20336)#column-wbcc",
-        "@type": "dsv:Column",
+        "@id": "https://bennokr.github.io/semsynth/output/chronic-kidney-disease/#column-wbcc",
+        "@type": "dsvo:Column",
         "datatype": "number",
         "titles": "White blood cell count",
         "name": "wbcc",
         "columnProperty": {
-          "@id": "urn:linked-codebook:dataset:Chronic%20Kidney%20Disease%20(UCI%20id%20336)#property-wbcc",
-          "@type": "dsv:ColumnProperty",
+          "@id": "https://bennokr.github.io/semsynth/output/chronic-kidney-disease/#property-wbcc",
+          "@type": "dsvo:ColumnProperty",
           "hasVariable": {
-            "@id": "urn:linked-codebook:dataset:Chronic%20Kidney%20Disease%20(UCI%20id%20336)#variable-wbcc",
+            "@id": "https://bennokr.github.io/semsynth/output/chronic-kidney-disease/#variable-wbcc",
             "@type": "skos:Concept",
             "skos:prefLabel": "White blood cell count",
             "exactMatch": [
@@ -756,22 +770,22 @@
           "unitText": "10^3 cells/µL"
         },
         "summaryStatistics": {
-          "@id": "urn:linked-codebook:dataset:Chronic%20Kidney%20Disease%20(UCI%20id%20336)#statistics-wbcc",
-          "@type": "dsv:SummaryStatistics",
-          "statisticalDataType": "dsv:NumericalDataType"
+          "@id": "https://bennokr.github.io/semsynth/output/chronic-kidney-disease/#statistics-wbcc",
+          "@type": "dsvo:SummaryStatistics",
+          "statisticalDataType": "dsvo:NumericalDataType"
         }
       },
       {
-        "@id": "urn:linked-codebook:dataset:Chronic%20Kidney%20Disease%20(UCI%20id%20336)#column-rbcc",
-        "@type": "dsv:Column",
+        "@id": "https://bennokr.github.io/semsynth/output/chronic-kidney-disease/#column-rbcc",
+        "@type": "dsvo:Column",
         "datatype": "number",
         "titles": "Red blood cell count",
         "name": "rbcc",
         "columnProperty": {
-          "@id": "urn:linked-codebook:dataset:Chronic%20Kidney%20Disease%20(UCI%20id%20336)#property-rbcc",
-          "@type": "dsv:ColumnProperty",
+          "@id": "https://bennokr.github.io/semsynth/output/chronic-kidney-disease/#property-rbcc",
+          "@type": "dsvo:ColumnProperty",
           "hasVariable": {
-            "@id": "urn:linked-codebook:dataset:Chronic%20Kidney%20Disease%20(UCI%20id%20336)#variable-rbcc",
+            "@id": "https://bennokr.github.io/semsynth/output/chronic-kidney-disease/#variable-rbcc",
             "@type": "skos:Concept",
             "skos:prefLabel": "Red blood cell count",
             "exactMatch": [
@@ -781,22 +795,22 @@
           "unitText": "10^6 cells/µL"
         },
         "summaryStatistics": {
-          "@id": "urn:linked-codebook:dataset:Chronic%20Kidney%20Disease%20(UCI%20id%20336)#statistics-rbcc",
-          "@type": "dsv:SummaryStatistics",
-          "statisticalDataType": "dsv:NumericalDataType"
+          "@id": "https://bennokr.github.io/semsynth/output/chronic-kidney-disease/#statistics-rbcc",
+          "@type": "dsvo:SummaryStatistics",
+          "statisticalDataType": "dsvo:NumericalDataType"
         }
       },
       {
-        "@id": "urn:linked-codebook:dataset:Chronic%20Kidney%20Disease%20(UCI%20id%20336)#column-htn",
-        "@type": "dsv:Column",
+        "@id": "https://bennokr.github.io/semsynth/output/chronic-kidney-disease/#column-htn",
+        "@type": "dsvo:Column",
         "datatype": "string",
         "titles": "Hypertension history",
         "name": "htn",
         "columnProperty": {
-          "@id": "urn:linked-codebook:dataset:Chronic%20Kidney%20Disease%20(UCI%20id%20336)#property-htn",
-          "@type": "dsv:ColumnProperty",
+          "@id": "https://bennokr.github.io/semsynth/output/chronic-kidney-disease/#property-htn",
+          "@type": "dsvo:ColumnProperty",
           "hasVariable": {
-            "@id": "urn:linked-codebook:dataset:Chronic%20Kidney%20Disease%20(UCI%20id%20336)#variable-htn",
+            "@id": "https://bennokr.github.io/semsynth/output/chronic-kidney-disease/#variable-htn",
             "@type": "skos:Concept",
             "skos:prefLabel": "Hypertension history",
             "closeMatch": [
@@ -804,24 +818,24 @@
             ]
           },
           "hasCodeBook": {
-            "@id": "urn:linked-codebook:dataset:Chronic%20Kidney%20Disease%20(UCI%20id%20336)#variable-htn-codes",
+            "@id": "https://bennokr.github.io/semsynth/output/chronic-kidney-disease/#variable-htn-codes",
             "@type": "skos:ConceptScheme",
             "skos:hasTopConcept": [
               {
-                "@id": "urn:linked-codebook:dataset:Chronic%20Kidney%20Disease%20(UCI%20id%20336)#variable-htn-codes-yes",
+                "@id": "https://bennokr.github.io/semsynth/output/chronic-kidney-disease/#variable-htn-codes-yes",
                 "@type": "skos:Concept",
                 "skos:prefLabel": "Yes",
                 "skos:inScheme": {
-                  "@id": "urn:linked-codebook:dataset:Chronic%20Kidney%20Disease%20(UCI%20id%20336)#variable-htn-codes"
+                  "@id": "https://bennokr.github.io/semsynth/output/chronic-kidney-disease/#variable-htn-codes"
                 },
                 "skos:notation": "yes"
               },
               {
-                "@id": "urn:linked-codebook:dataset:Chronic%20Kidney%20Disease%20(UCI%20id%20336)#variable-htn-codes-no",
+                "@id": "https://bennokr.github.io/semsynth/output/chronic-kidney-disease/#variable-htn-codes-no",
                 "@type": "skos:Concept",
                 "skos:prefLabel": "No",
                 "skos:inScheme": {
-                  "@id": "urn:linked-codebook:dataset:Chronic%20Kidney%20Disease%20(UCI%20id%20336)#variable-htn-codes"
+                  "@id": "https://bennokr.github.io/semsynth/output/chronic-kidney-disease/#variable-htn-codes"
                 },
                 "skos:notation": "no"
               }
@@ -829,22 +843,22 @@
           }
         },
         "summaryStatistics": {
-          "@id": "urn:linked-codebook:dataset:Chronic%20Kidney%20Disease%20(UCI%20id%20336)#statistics-htn",
-          "@type": "dsv:SummaryStatistics",
-          "statisticalDataType": "dsv:NominalDataType"
+          "@id": "https://bennokr.github.io/semsynth/output/chronic-kidney-disease/#statistics-htn",
+          "@type": "dsvo:SummaryStatistics",
+          "statisticalDataType": "dsvo:NominalDataType"
         }
       },
       {
-        "@id": "urn:linked-codebook:dataset:Chronic%20Kidney%20Disease%20(UCI%20id%20336)#column-dm",
-        "@type": "dsv:Column",
+        "@id": "https://bennokr.github.io/semsynth/output/chronic-kidney-disease/#column-dm",
+        "@type": "dsvo:Column",
         "datatype": "string",
         "titles": "Diabetes mellitus history",
         "name": "dm",
         "columnProperty": {
-          "@id": "urn:linked-codebook:dataset:Chronic%20Kidney%20Disease%20(UCI%20id%20336)#property-dm",
-          "@type": "dsv:ColumnProperty",
+          "@id": "https://bennokr.github.io/semsynth/output/chronic-kidney-disease/#property-dm",
+          "@type": "dsvo:ColumnProperty",
           "hasVariable": {
-            "@id": "urn:linked-codebook:dataset:Chronic%20Kidney%20Disease%20(UCI%20id%20336)#variable-dm",
+            "@id": "https://bennokr.github.io/semsynth/output/chronic-kidney-disease/#variable-dm",
             "@type": "skos:Concept",
             "skos:prefLabel": "Diabetes mellitus history",
             "closeMatch": [
@@ -852,24 +866,24 @@
             ]
           },
           "hasCodeBook": {
-            "@id": "urn:linked-codebook:dataset:Chronic%20Kidney%20Disease%20(UCI%20id%20336)#variable-dm-codes",
+            "@id": "https://bennokr.github.io/semsynth/output/chronic-kidney-disease/#variable-dm-codes",
             "@type": "skos:ConceptScheme",
             "skos:hasTopConcept": [
               {
-                "@id": "urn:linked-codebook:dataset:Chronic%20Kidney%20Disease%20(UCI%20id%20336)#variable-dm-codes-yes",
+                "@id": "https://bennokr.github.io/semsynth/output/chronic-kidney-disease/#variable-dm-codes-yes",
                 "@type": "skos:Concept",
                 "skos:prefLabel": "Yes",
                 "skos:inScheme": {
-                  "@id": "urn:linked-codebook:dataset:Chronic%20Kidney%20Disease%20(UCI%20id%20336)#variable-dm-codes"
+                  "@id": "https://bennokr.github.io/semsynth/output/chronic-kidney-disease/#variable-dm-codes"
                 },
                 "skos:notation": "yes"
               },
               {
-                "@id": "urn:linked-codebook:dataset:Chronic%20Kidney%20Disease%20(UCI%20id%20336)#variable-dm-codes-no",
+                "@id": "https://bennokr.github.io/semsynth/output/chronic-kidney-disease/#variable-dm-codes-no",
                 "@type": "skos:Concept",
                 "skos:prefLabel": "No",
                 "skos:inScheme": {
-                  "@id": "urn:linked-codebook:dataset:Chronic%20Kidney%20Disease%20(UCI%20id%20336)#variable-dm-codes"
+                  "@id": "https://bennokr.github.io/semsynth/output/chronic-kidney-disease/#variable-dm-codes"
                 },
                 "skos:notation": "no"
               }
@@ -877,22 +891,22 @@
           }
         },
         "summaryStatistics": {
-          "@id": "urn:linked-codebook:dataset:Chronic%20Kidney%20Disease%20(UCI%20id%20336)#statistics-dm",
-          "@type": "dsv:SummaryStatistics",
-          "statisticalDataType": "dsv:NominalDataType"
+          "@id": "https://bennokr.github.io/semsynth/output/chronic-kidney-disease/#statistics-dm",
+          "@type": "dsvo:SummaryStatistics",
+          "statisticalDataType": "dsvo:NominalDataType"
         }
       },
       {
-        "@id": "urn:linked-codebook:dataset:Chronic%20Kidney%20Disease%20(UCI%20id%20336)#column-cad",
-        "@type": "dsv:Column",
+        "@id": "https://bennokr.github.io/semsynth/output/chronic-kidney-disease/#column-cad",
+        "@type": "dsvo:Column",
         "datatype": "string",
         "titles": "Coronary artery disease history",
         "name": "cad",
         "columnProperty": {
-          "@id": "urn:linked-codebook:dataset:Chronic%20Kidney%20Disease%20(UCI%20id%20336)#property-cad",
-          "@type": "dsv:ColumnProperty",
+          "@id": "https://bennokr.github.io/semsynth/output/chronic-kidney-disease/#property-cad",
+          "@type": "dsvo:ColumnProperty",
           "hasVariable": {
-            "@id": "urn:linked-codebook:dataset:Chronic%20Kidney%20Disease%20(UCI%20id%20336)#variable-cad",
+            "@id": "https://bennokr.github.io/semsynth/output/chronic-kidney-disease/#variable-cad",
             "@type": "skos:Concept",
             "skos:prefLabel": "Coronary artery disease history",
             "closeMatch": [
@@ -900,24 +914,24 @@
             ]
           },
           "hasCodeBook": {
-            "@id": "urn:linked-codebook:dataset:Chronic%20Kidney%20Disease%20(UCI%20id%20336)#variable-cad-codes",
+            "@id": "https://bennokr.github.io/semsynth/output/chronic-kidney-disease/#variable-cad-codes",
             "@type": "skos:ConceptScheme",
             "skos:hasTopConcept": [
               {
-                "@id": "urn:linked-codebook:dataset:Chronic%20Kidney%20Disease%20(UCI%20id%20336)#variable-cad-codes-yes",
+                "@id": "https://bennokr.github.io/semsynth/output/chronic-kidney-disease/#variable-cad-codes-yes",
                 "@type": "skos:Concept",
                 "skos:prefLabel": "Yes",
                 "skos:inScheme": {
-                  "@id": "urn:linked-codebook:dataset:Chronic%20Kidney%20Disease%20(UCI%20id%20336)#variable-cad-codes"
+                  "@id": "https://bennokr.github.io/semsynth/output/chronic-kidney-disease/#variable-cad-codes"
                 },
                 "skos:notation": "yes"
               },
               {
-                "@id": "urn:linked-codebook:dataset:Chronic%20Kidney%20Disease%20(UCI%20id%20336)#variable-cad-codes-no",
+                "@id": "https://bennokr.github.io/semsynth/output/chronic-kidney-disease/#variable-cad-codes-no",
                 "@type": "skos:Concept",
                 "skos:prefLabel": "No",
                 "skos:inScheme": {
-                  "@id": "urn:linked-codebook:dataset:Chronic%20Kidney%20Disease%20(UCI%20id%20336)#variable-cad-codes"
+                  "@id": "https://bennokr.github.io/semsynth/output/chronic-kidney-disease/#variable-cad-codes"
                 },
                 "skos:notation": "no"
               }
@@ -925,22 +939,22 @@
           }
         },
         "summaryStatistics": {
-          "@id": "urn:linked-codebook:dataset:Chronic%20Kidney%20Disease%20(UCI%20id%20336)#statistics-cad",
-          "@type": "dsv:SummaryStatistics",
-          "statisticalDataType": "dsv:NominalDataType"
+          "@id": "https://bennokr.github.io/semsynth/output/chronic-kidney-disease/#statistics-cad",
+          "@type": "dsvo:SummaryStatistics",
+          "statisticalDataType": "dsvo:NominalDataType"
         }
       },
       {
-        "@id": "urn:linked-codebook:dataset:Chronic%20Kidney%20Disease%20(UCI%20id%20336)#column-appet",
-        "@type": "dsv:Column",
+        "@id": "https://bennokr.github.io/semsynth/output/chronic-kidney-disease/#column-appet",
+        "@type": "dsvo:Column",
         "datatype": "string",
         "titles": "Reported appetite",
         "name": "appet",
         "columnProperty": {
-          "@id": "urn:linked-codebook:dataset:Chronic%20Kidney%20Disease%20(UCI%20id%20336)#property-appet",
-          "@type": "dsv:ColumnProperty",
+          "@id": "https://bennokr.github.io/semsynth/output/chronic-kidney-disease/#property-appet",
+          "@type": "dsvo:ColumnProperty",
           "hasVariable": {
-            "@id": "urn:linked-codebook:dataset:Chronic%20Kidney%20Disease%20(UCI%20id%20336)#variable-appet",
+            "@id": "https://bennokr.github.io/semsynth/output/chronic-kidney-disease/#variable-appet",
             "@type": "skos:Concept",
             "skos:prefLabel": "Reported appetite",
             "closeMatch": [
@@ -948,24 +962,24 @@
             ]
           },
           "hasCodeBook": {
-            "@id": "urn:linked-codebook:dataset:Chronic%20Kidney%20Disease%20(UCI%20id%20336)#variable-appet-codes",
+            "@id": "https://bennokr.github.io/semsynth/output/chronic-kidney-disease/#variable-appet-codes",
             "@type": "skos:ConceptScheme",
             "skos:hasTopConcept": [
               {
-                "@id": "urn:linked-codebook:dataset:Chronic%20Kidney%20Disease%20(UCI%20id%20336)#variable-appet-codes-good",
+                "@id": "https://bennokr.github.io/semsynth/output/chronic-kidney-disease/#variable-appet-codes-good",
                 "@type": "skos:Concept",
                 "skos:prefLabel": "Good appetite",
                 "skos:inScheme": {
-                  "@id": "urn:linked-codebook:dataset:Chronic%20Kidney%20Disease%20(UCI%20id%20336)#variable-appet-codes"
+                  "@id": "https://bennokr.github.io/semsynth/output/chronic-kidney-disease/#variable-appet-codes"
                 },
                 "skos:notation": "good"
               },
               {
-                "@id": "urn:linked-codebook:dataset:Chronic%20Kidney%20Disease%20(UCI%20id%20336)#variable-appet-codes-poor",
+                "@id": "https://bennokr.github.io/semsynth/output/chronic-kidney-disease/#variable-appet-codes-poor",
                 "@type": "skos:Concept",
                 "skos:prefLabel": "Poor appetite",
                 "skos:inScheme": {
-                  "@id": "urn:linked-codebook:dataset:Chronic%20Kidney%20Disease%20(UCI%20id%20336)#variable-appet-codes"
+                  "@id": "https://bennokr.github.io/semsynth/output/chronic-kidney-disease/#variable-appet-codes"
                 },
                 "skos:notation": "poor"
               }
@@ -973,22 +987,22 @@
           }
         },
         "summaryStatistics": {
-          "@id": "urn:linked-codebook:dataset:Chronic%20Kidney%20Disease%20(UCI%20id%20336)#statistics-appet",
-          "@type": "dsv:SummaryStatistics",
-          "statisticalDataType": "dsv:NominalDataType"
+          "@id": "https://bennokr.github.io/semsynth/output/chronic-kidney-disease/#statistics-appet",
+          "@type": "dsvo:SummaryStatistics",
+          "statisticalDataType": "dsvo:NominalDataType"
         }
       },
       {
-        "@id": "urn:linked-codebook:dataset:Chronic%20Kidney%20Disease%20(UCI%20id%20336)#column-pe",
-        "@type": "dsv:Column",
+        "@id": "https://bennokr.github.io/semsynth/output/chronic-kidney-disease/#column-pe",
+        "@type": "dsvo:Column",
         "datatype": "string",
         "titles": "Pedal edema",
         "name": "pe",
         "columnProperty": {
-          "@id": "urn:linked-codebook:dataset:Chronic%20Kidney%20Disease%20(UCI%20id%20336)#property-pe",
-          "@type": "dsv:ColumnProperty",
+          "@id": "https://bennokr.github.io/semsynth/output/chronic-kidney-disease/#property-pe",
+          "@type": "dsvo:ColumnProperty",
           "hasVariable": {
-            "@id": "urn:linked-codebook:dataset:Chronic%20Kidney%20Disease%20(UCI%20id%20336)#variable-pe",
+            "@id": "https://bennokr.github.io/semsynth/output/chronic-kidney-disease/#variable-pe",
             "@type": "skos:Concept",
             "skos:prefLabel": "Pedal edema",
             "closeMatch": [
@@ -996,24 +1010,24 @@
             ]
           },
           "hasCodeBook": {
-            "@id": "urn:linked-codebook:dataset:Chronic%20Kidney%20Disease%20(UCI%20id%20336)#variable-pe-codes",
+            "@id": "https://bennokr.github.io/semsynth/output/chronic-kidney-disease/#variable-pe-codes",
             "@type": "skos:ConceptScheme",
             "skos:hasTopConcept": [
               {
-                "@id": "urn:linked-codebook:dataset:Chronic%20Kidney%20Disease%20(UCI%20id%20336)#variable-pe-codes-yes",
+                "@id": "https://bennokr.github.io/semsynth/output/chronic-kidney-disease/#variable-pe-codes-yes",
                 "@type": "skos:Concept",
                 "skos:prefLabel": "Yes",
                 "skos:inScheme": {
-                  "@id": "urn:linked-codebook:dataset:Chronic%20Kidney%20Disease%20(UCI%20id%20336)#variable-pe-codes"
+                  "@id": "https://bennokr.github.io/semsynth/output/chronic-kidney-disease/#variable-pe-codes"
                 },
                 "skos:notation": "yes"
               },
               {
-                "@id": "urn:linked-codebook:dataset:Chronic%20Kidney%20Disease%20(UCI%20id%20336)#variable-pe-codes-no",
+                "@id": "https://bennokr.github.io/semsynth/output/chronic-kidney-disease/#variable-pe-codes-no",
                 "@type": "skos:Concept",
                 "skos:prefLabel": "No",
                 "skos:inScheme": {
-                  "@id": "urn:linked-codebook:dataset:Chronic%20Kidney%20Disease%20(UCI%20id%20336)#variable-pe-codes"
+                  "@id": "https://bennokr.github.io/semsynth/output/chronic-kidney-disease/#variable-pe-codes"
                 },
                 "skos:notation": "no"
               }
@@ -1021,22 +1035,22 @@
           }
         },
         "summaryStatistics": {
-          "@id": "urn:linked-codebook:dataset:Chronic%20Kidney%20Disease%20(UCI%20id%20336)#statistics-pe",
-          "@type": "dsv:SummaryStatistics",
-          "statisticalDataType": "dsv:NominalDataType"
+          "@id": "https://bennokr.github.io/semsynth/output/chronic-kidney-disease/#statistics-pe",
+          "@type": "dsvo:SummaryStatistics",
+          "statisticalDataType": "dsvo:NominalDataType"
         }
       },
       {
-        "@id": "urn:linked-codebook:dataset:Chronic%20Kidney%20Disease%20(UCI%20id%20336)#column-ane",
-        "@type": "dsv:Column",
+        "@id": "https://bennokr.github.io/semsynth/output/chronic-kidney-disease/#column-ane",
+        "@type": "dsvo:Column",
         "datatype": "string",
         "titles": "Anemia",
         "name": "ane",
         "columnProperty": {
-          "@id": "urn:linked-codebook:dataset:Chronic%20Kidney%20Disease%20(UCI%20id%20336)#property-ane",
-          "@type": "dsv:ColumnProperty",
+          "@id": "https://bennokr.github.io/semsynth/output/chronic-kidney-disease/#property-ane",
+          "@type": "dsvo:ColumnProperty",
           "hasVariable": {
-            "@id": "urn:linked-codebook:dataset:Chronic%20Kidney%20Disease%20(UCI%20id%20336)#variable-ane",
+            "@id": "https://bennokr.github.io/semsynth/output/chronic-kidney-disease/#variable-ane",
             "@type": "skos:Concept",
             "skos:prefLabel": "Anemia",
             "closeMatch": [
@@ -1044,24 +1058,24 @@
             ]
           },
           "hasCodeBook": {
-            "@id": "urn:linked-codebook:dataset:Chronic%20Kidney%20Disease%20(UCI%20id%20336)#variable-ane-codes",
+            "@id": "https://bennokr.github.io/semsynth/output/chronic-kidney-disease/#variable-ane-codes",
             "@type": "skos:ConceptScheme",
             "skos:hasTopConcept": [
               {
-                "@id": "urn:linked-codebook:dataset:Chronic%20Kidney%20Disease%20(UCI%20id%20336)#variable-ane-codes-yes",
+                "@id": "https://bennokr.github.io/semsynth/output/chronic-kidney-disease/#variable-ane-codes-yes",
                 "@type": "skos:Concept",
                 "skos:prefLabel": "Yes",
                 "skos:inScheme": {
-                  "@id": "urn:linked-codebook:dataset:Chronic%20Kidney%20Disease%20(UCI%20id%20336)#variable-ane-codes"
+                  "@id": "https://bennokr.github.io/semsynth/output/chronic-kidney-disease/#variable-ane-codes"
                 },
                 "skos:notation": "yes"
               },
               {
-                "@id": "urn:linked-codebook:dataset:Chronic%20Kidney%20Disease%20(UCI%20id%20336)#variable-ane-codes-no",
+                "@id": "https://bennokr.github.io/semsynth/output/chronic-kidney-disease/#variable-ane-codes-no",
                 "@type": "skos:Concept",
                 "skos:prefLabel": "No",
                 "skos:inScheme": {
-                  "@id": "urn:linked-codebook:dataset:Chronic%20Kidney%20Disease%20(UCI%20id%20336)#variable-ane-codes"
+                  "@id": "https://bennokr.github.io/semsynth/output/chronic-kidney-disease/#variable-ane-codes"
                 },
                 "skos:notation": "no"
               }
@@ -1069,22 +1083,22 @@
           }
         },
         "summaryStatistics": {
-          "@id": "urn:linked-codebook:dataset:Chronic%20Kidney%20Disease%20(UCI%20id%20336)#statistics-ane",
-          "@type": "dsv:SummaryStatistics",
-          "statisticalDataType": "dsv:NominalDataType"
+          "@id": "https://bennokr.github.io/semsynth/output/chronic-kidney-disease/#statistics-ane",
+          "@type": "dsvo:SummaryStatistics",
+          "statisticalDataType": "dsvo:NominalDataType"
         }
       },
       {
-        "@id": "urn:linked-codebook:dataset:Chronic%20Kidney%20Disease%20(UCI%20id%20336)#column-class",
-        "@type": "dsv:Column",
+        "@id": "https://bennokr.github.io/semsynth/output/chronic-kidney-disease/#column-class",
+        "@type": "dsvo:Column",
         "datatype": "string",
         "titles": "Chronic kidney disease class label",
         "name": "class",
         "columnProperty": {
-          "@id": "urn:linked-codebook:dataset:Chronic%20Kidney%20Disease%20(UCI%20id%20336)#property-class",
-          "@type": "dsv:ColumnProperty",
+          "@id": "https://bennokr.github.io/semsynth/output/chronic-kidney-disease/#property-class",
+          "@type": "dsvo:ColumnProperty",
           "hasVariable": {
-            "@id": "urn:linked-codebook:dataset:Chronic%20Kidney%20Disease%20(UCI%20id%20336)#variable-class",
+            "@id": "https://bennokr.github.io/semsynth/output/chronic-kidney-disease/#variable-class",
             "@type": "skos:Concept",
             "skos:prefLabel": "Chronic kidney disease class label",
             "closeMatch": [
@@ -1092,24 +1106,24 @@
             ]
           },
           "hasCodeBook": {
-            "@id": "urn:linked-codebook:dataset:Chronic%20Kidney%20Disease%20(UCI%20id%20336)#variable-class-codes",
+            "@id": "https://bennokr.github.io/semsynth/output/chronic-kidney-disease/#variable-class-codes",
             "@type": "skos:ConceptScheme",
             "skos:hasTopConcept": [
               {
-                "@id": "urn:linked-codebook:dataset:Chronic%20Kidney%20Disease%20(UCI%20id%20336)#variable-class-codes-ckd",
+                "@id": "https://bennokr.github.io/semsynth/output/chronic-kidney-disease/#variable-class-codes-ckd",
                 "@type": "skos:Concept",
                 "skos:prefLabel": "Chronic kidney disease",
                 "skos:inScheme": {
-                  "@id": "urn:linked-codebook:dataset:Chronic%20Kidney%20Disease%20(UCI%20id%20336)#variable-class-codes"
+                  "@id": "https://bennokr.github.io/semsynth/output/chronic-kidney-disease/#variable-class-codes"
                 },
                 "skos:notation": "ckd"
               },
               {
-                "@id": "urn:linked-codebook:dataset:Chronic%20Kidney%20Disease%20(UCI%20id%20336)#variable-class-codes-notckd",
+                "@id": "https://bennokr.github.io/semsynth/output/chronic-kidney-disease/#variable-class-codes-notckd",
                 "@type": "skos:Concept",
                 "skos:prefLabel": "Not chronic kidney disease",
                 "skos:inScheme": {
-                  "@id": "urn:linked-codebook:dataset:Chronic%20Kidney%20Disease%20(UCI%20id%20336)#variable-class-codes"
+                  "@id": "https://bennokr.github.io/semsynth/output/chronic-kidney-disease/#variable-class-codes"
                 },
                 "skos:notation": "notckd"
               }
@@ -1117,9 +1131,9 @@
           }
         },
         "summaryStatistics": {
-          "@id": "urn:linked-codebook:dataset:Chronic%20Kidney%20Disease%20(UCI%20id%20336)#statistics-class",
-          "@type": "dsv:SummaryStatistics",
-          "statisticalDataType": "dsv:NominalDataType"
+          "@id": "https://bennokr.github.io/semsynth/output/chronic-kidney-disease/#statistics-class",
+          "@type": "dsvo:SummaryStatistics",
+          "statisticalDataType": "dsvo:NominalDataType"
         },
         "prov:hadRole": "target"
       }

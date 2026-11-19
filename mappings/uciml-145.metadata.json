@@ -1,6 +1,7 @@
 {
   "@context": {
     "accessRights": "dct:accessRights",
+    "appliesWhen": "lc:applies_when",
     "broadMatch": {
       "@container": "@set",
       "@id": "skos:broadMatch",
@@ -12,35 +13,38 @@
       "@id": "skos:closeMatch",
       "@type": "@id"
     },
+    "codeBookClosed": "lc:closed",
     "columnCompleteness": {
-      "@id": "dsv:columnCompleteness",
+      "@id": "dsvo:columnCompleteness",
       "@type": "xsd:float"
     },
+    "columnFormat": "csvw:format",
+    "columnGroup": "lc:group",
     "columnProperty": {
-      "@id": "dsv:columnProperty",
+      "@id": "dsvo:columnProperty",
       "@type": "@id"
     },
     "columns": {
       "@container": "@set",
-      "@id": "dsv:column"
+      "@id": "dsvo:column"
     },
     "csvw": "http://www.w3.org/ns/csvw#",
     "datasetSchema": {
-      "@id": "dsv:datasetSchema",
+      "@id": "dsvo:datasetSchema",
       "@type": "@id"
     },
     "datatype": "csvw:datatype",
     "dcat": "http://www.w3.org/ns/dcat#",
     "dct": "http://purl.org/dc/terms/",
     "description": "dct:description",
-    "dsv": "https://w3id.org/dsv-ontology#",
+    "dsvo": "https://w3id.org/dsv-ontology#",
     "exactMatch": {
       "@container": "@set",
       "@id": "skos:exactMatch",
       "@type": "@id"
     },
     "hasCodeBook": {
-      "@id": "dsv:hasCodeBook",
+      "@id": "dsvo:hasCodeBook",
       "@type": "@id"
     },
     "hasUnit": {
@@ -48,18 +52,26 @@
       "@type": "@id"
     },
     "hasVariable": {
-      "@id": "dsv:hasVariable",
+      "@id": "dsvo:hasVariable",
       "@type": "@id"
     },
+    "high": "csvw:maxInclusive",
     "identifier": "dct:identifier",
+    "identifying": "lc:identifying",
     "landingPage": {
       "@id": "dcat:landingPage",
       "@type": "@id"
     },
+    "language": "dct:language",
+    "lc": "https://bennokr.github.io/linked-codebook/profile#",
     "license": {
       "@id": "dct:license",
       "@type": "@id"
     },
+    "low": "csvw:minInclusive",
+    "maximumValue": "csvw:maxInclusive",
+    "minimumValue": "csvw:minInclusive",
+    "missingRange": "lc:missing_range",
     "name": "csvw:name",
     "narrowMatch": {
       "@container": "@set",
@@ -71,11 +83,11 @@
       "@id": "csvw:null"
     },
     "numberOfColumns": {
-      "@id": "dsv:numberOfColumns",
+      "@id": "dsvo:numberOfColumns",
       "@type": "xsd:integer"
     },
     "numberOfRows": {
-      "@id": "dsv:numberOfRows",
+      "@id": "dsvo:numberOfRows",
       "@type": "xsd:integer"
     },
     "qudt": "http://qudt.org/schema/qudt/",
@@ -88,48 +100,50 @@
     "schema": "https://schema.org/",
     "skos": "http://www.w3.org/2004/02/skos/core#",
     "statisticalDataType": {
-      "@id": "dsv:statisticalDataType",
+      "@id": "dsvo:statisticalDataType",
       "@type": "@id"
     },
     "summaryStatistics": {
-      "@id": "dsv:summaryStatistics",
+      "@id": "dsvo:summaryStatistics",
       "@type": "@id"
     },
     "title": "dct:title",
     "titles": "csvw:title",
     "unitText": "schema:unitText",
     "xsd": "http://www.w3.org/2001/XMLSchema#",
+    "dsv": "https://w3id.org/dsv-ontology#",
     "dcterms": "http://purl.org/dc/terms/",
     "prov": "http://www.w3.org/ns/prov#"
   },
-  "@id": "urn:linked-codebook:dataset:Statlog%20(Heart)",
+  "@id": "https://bennokr.github.io/semsynth/output/statlog-heart/",
   "@type": [
     "dcat:Dataset",
-    "dsv:Dataset"
+    "dsvo:Dataset"
   ],
   "description": "Cost Matrix\r\n\r\n_______\t abse  pres\r\nabsence\t 0\t1\r\npresence  5\t0\r\n\r\nwhere the rows represent the true values and the columns the predicted.\r\n",
+  "identifier": "https://bennokr.github.io/semsynth/output/statlog-heart/",
   "landingPage": "https://archive.ics.uci.edu/dataset/145/statlog+heart",
   "title": "Statlog (Heart)",
   "summaryStatistics": {
-    "@id": "urn:linked-codebook:dataset:Statlog%20(Heart)#statistics",
-    "@type": "dsv:SummaryStatistics",
+    "@id": "https://bennokr.github.io/semsynth/output/statlog-heart/#statistics",
+    "@type": "dsvo:SummaryStatistics",
     "numberOfRows": 270,
     "numberOfColumns": 14
   },
   "datasetSchema": {
-    "@id": "urn:linked-codebook:dataset:Statlog%20(Heart)#schema",
-    "@type": "dsv:DatasetSchema",
+    "@id": "https://bennokr.github.io/semsynth/output/statlog-heart/#schema",
+    "@type": "dsvo:DatasetSchema",
     "columns": [
       {
-        "@id": "urn:linked-codebook:dataset:Statlog%20(Heart)#column-age",
-        "@type": "dsv:Column",
+        "@id": "https://bennokr.github.io/semsynth/output/statlog-heart/#column-age",
+        "@type": "dsvo:Column",
         "name": "age",
         "titles": "age",
         "columnProperty": {
-          "@id": "urn:linked-codebook:dataset:Statlog%20(Heart)#property-age",
-          "@type": "dsv:ColumnProperty",
+          "@id": "https://bennokr.github.io/semsynth/output/statlog-heart/#property-age",
+          "@type": "dsvo:ColumnProperty",
           "hasVariable": {
-            "@id": "urn:linked-codebook:dataset:Statlog%20(Heart)#variable-age",
+            "@id": "https://bennokr.github.io/semsynth/output/statlog-heart/#variable-age",
             "@type": "skos:Concept",
             "skos:prefLabel": "age"
           }
@@ -137,15 +151,15 @@
         "prov:hadRole": "Feature"
       },
       {
-        "@id": "urn:linked-codebook:dataset:Statlog%20(Heart)#column-sex",
-        "@type": "dsv:Column",
+        "@id": "https://bennokr.github.io/semsynth/output/statlog-heart/#column-sex",
+        "@type": "dsvo:Column",
         "name": "sex",
         "titles": "sex",
         "columnProperty": {
-          "@id": "urn:linked-codebook:dataset:Statlog%20(Heart)#property-sex",
-          "@type": "dsv:ColumnProperty",
+          "@id": "https://bennokr.github.io/semsynth/output/statlog-heart/#property-sex",
+          "@type": "dsvo:ColumnProperty",
           "hasVariable": {
-            "@id": "urn:linked-codebook:dataset:Statlog%20(Heart)#variable-sex",
+            "@id": "https://bennokr.github.io/semsynth/output/statlog-heart/#variable-sex",
             "@type": "skos:Concept",
             "skos:prefLabel": "sex"
           }
@@ -153,15 +167,15 @@
         "prov:hadRole": "Feature"
       },
       {
-        "@id": "urn:linked-codebook:dataset:Statlog%20(Heart)#column-chest-pain",
-        "@type": "dsv:Column",
+        "@id": "https://bennokr.github.io/semsynth/output/statlog-heart/#column-chest-pain",
+        "@type": "dsvo:Column",
         "name": "chest-pain",
         "titles": "chest-pain",
         "columnProperty": {
-          "@id": "urn:linked-codebook:dataset:Statlog%20(Heart)#property-chest-pain",
-          "@type": "dsv:ColumnProperty",
+          "@id": "https://bennokr.github.io/semsynth/output/statlog-heart/#property-chest-pain",
+          "@type": "dsvo:ColumnProperty",
           "hasVariable": {
-            "@id": "urn:linked-codebook:dataset:Statlog%20(Heart)#variable-chest-pain",
+            "@id": "https://bennokr.github.io/semsynth/output/statlog-heart/#variable-chest-pain",
             "@type": "skos:Concept",
             "skos:prefLabel": "chest-pain",
             "skos:definition": "chest pain type",
@@ -171,22 +185,22 @@
           }
         },
         "summaryStatistics": {
-          "@id": "urn:linked-codebook:dataset:Statlog%20(Heart)#statistics-chest-pain",
-          "@type": "dsv:SummaryStatistics",
-          "statisticalDataType": "dsv:CategoricalDataType"
+          "@id": "https://bennokr.github.io/semsynth/output/statlog-heart/#statistics-chest-pain",
+          "@type": "dsvo:SummaryStatistics",
+          "statisticalDataType": "dsvo:CategoricalDataType"
         },
         "prov:hadRole": "Feature"
       },
       {
-        "@id": "urn:linked-codebook:dataset:Statlog%20(Heart)#column-rest-bp",
-        "@type": "dsv:Column",
+        "@id": "https://bennokr.github.io/semsynth/output/statlog-heart/#column-rest-bp",
+        "@type": "dsvo:Column",
         "name": "rest-bp",
         "titles": "rest-bp",
         "columnProperty": {
-          "@id": "urn:linked-codebook:dataset:Statlog%20(Heart)#property-rest-bp",
-          "@type": "dsv:ColumnProperty",
+          "@id": "https://bennokr.github.io/semsynth/output/statlog-heart/#property-rest-bp",
+          "@type": "dsvo:ColumnProperty",
           "hasVariable": {
-            "@id": "urn:linked-codebook:dataset:Statlog%20(Heart)#variable-rest-bp",
+            "@id": "https://bennokr.github.io/semsynth/output/statlog-heart/#variable-rest-bp",
             "@type": "skos:Concept",
             "skos:prefLabel": "rest-bp",
             "skos:definition": "resting blood pressure",
@@ -198,15 +212,15 @@
         "prov:hadRole": "Feature"
       },
       {
-        "@id": "urn:linked-codebook:dataset:Statlog%20(Heart)#column-serum-chol",
-        "@type": "dsv:Column",
+        "@id": "https://bennokr.github.io/semsynth/output/statlog-heart/#column-serum-chol",
+        "@type": "dsvo:Column",
         "name": "serum-chol",
         "titles": "serum-chol",
         "columnProperty": {
-          "@id": "urn:linked-codebook:dataset:Statlog%20(Heart)#property-serum-chol",
-          "@type": "dsv:ColumnProperty",
+          "@id": "https://bennokr.github.io/semsynth/output/statlog-heart/#property-serum-chol",
+          "@type": "dsvo:ColumnProperty",
           "hasVariable": {
-            "@id": "urn:linked-codebook:dataset:Statlog%20(Heart)#variable-serum-chol",
+            "@id": "https://bennokr.github.io/semsynth/output/statlog-heart/#variable-serum-chol",
             "@type": "skos:Concept",
             "skos:prefLabel": "serum-chol",
             "skos:definition": "serum cholesterol",
@@ -219,15 +233,15 @@
         "prov:hadRole": "Feature"
       },
       {
-        "@id": "urn:linked-codebook:dataset:Statlog%20(Heart)#column-fasting-blood-sugar",
-        "@type": "dsv:Column",
+        "@id": "https://bennokr.github.io/semsynth/output/statlog-heart/#column-fasting-blood-sugar",
+        "@type": "dsvo:Column",
         "name": "fasting-blood-sugar",
         "titles": "fasting-blood-sugar",
         "columnProperty": {
-          "@id": "urn:linked-codebook:dataset:Statlog%20(Heart)#property-fasting-blood-sugar",
-          "@type": "dsv:ColumnProperty",
+          "@id": "https://bennokr.github.io/semsynth/output/statlog-heart/#property-fasting-blood-sugar",
+          "@type": "dsvo:ColumnProperty",
           "hasVariable": {
-            "@id": "urn:linked-codebook:dataset:Statlog%20(Heart)#variable-fasting-blood-sugar",
+            "@id": "https://bennokr.github.io/semsynth/output/statlog-heart/#variable-fasting-blood-sugar",
             "@type": "skos:Concept",
             "skos:prefLabel": "fasting-blood-sugar",
             "skos:definition": "fasting blood sugar > 120 mg/dl",
@@ -239,37 +253,37 @@
         "prov:hadRole": "Feature"
       },
       {
-        "@id": "urn:linked-codebook:dataset:Statlog%20(Heart)#column-electrocardiographic",
-        "@type": "dsv:Column",
+        "@id": "https://bennokr.github.io/semsynth/output/statlog-heart/#column-electrocardiographic",
+        "@type": "dsvo:Column",
         "name": "electrocardiographic",
         "titles": "electrocardiographic",
         "columnProperty": {
-          "@id": "urn:linked-codebook:dataset:Statlog%20(Heart)#property-electrocardiographic",
-          "@type": "dsv:ColumnProperty",
+          "@id": "https://bennokr.github.io/semsynth/output/statlog-heart/#property-electrocardiographic",
+          "@type": "dsvo:ColumnProperty",
           "hasVariable": {
-            "@id": "urn:linked-codebook:dataset:Statlog%20(Heart)#variable-electrocardiographic",
+            "@id": "https://bennokr.github.io/semsynth/output/statlog-heart/#variable-electrocardiographic",
             "@type": "skos:Concept",
             "skos:prefLabel": "electrocardiographic",
             "skos:definition": "resting electrocardiographic results"
           }
         },
         "summaryStatistics": {
-          "@id": "urn:linked-codebook:dataset:Statlog%20(Heart)#statistics-electrocardiographic",
-          "@type": "dsv:SummaryStatistics",
-          "statisticalDataType": "dsv:CategoricalDataType"
+          "@id": "https://bennokr.github.io/semsynth/output/statlog-heart/#statistics-electrocardiographic",
+          "@type": "dsvo:SummaryStatistics",
+          "statisticalDataType": "dsvo:CategoricalDataType"
         },
         "prov:hadRole": "Feature"
       },
       {
-        "@id": "urn:linked-codebook:dataset:Statlog%20(Heart)#column-max-heart-rate",
-        "@type": "dsv:Column",
+        "@id": "https://bennokr.github.io/semsynth/output/statlog-heart/#column-max-heart-rate",
+        "@type": "dsvo:Column",
         "name": "max-heart-rate",
         "titles": "max-heart-rate",
         "columnProperty": {
-          "@id": "urn:linked-codebook:dataset:Statlog%20(Heart)#property-max-heart-rate",
-          "@type": "dsv:ColumnProperty",
+          "@id": "https://bennokr.github.io/semsynth/output/statlog-heart/#property-max-heart-rate",
+          "@type": "dsvo:ColumnProperty",
           "hasVariable": {
-            "@id": "urn:linked-codebook:dataset:Statlog%20(Heart)#variable-max-heart-rate",
+            "@id": "https://bennokr.github.io/semsynth/output/statlog-heart/#variable-max-heart-rate",
             "@type": "skos:Concept",
             "skos:prefLabel": "max-heart-rate",
             "skos:definition": "maximum heart rate achieved"
@@ -278,15 +292,15 @@
         "prov:hadRole": "Feature"
       },
       {
-        "@id": "urn:linked-codebook:dataset:Statlog%20(Heart)#column-angina",
-        "@type": "dsv:Column",
+        "@id": "https://bennokr.github.io/semsynth/output/statlog-heart/#column-angina",
+        "@type": "dsvo:Column",
         "name": "angina",
         "titles": "angina",
         "columnProperty": {
-          "@id": "urn:linked-codebook:dataset:Statlog%20(Heart)#property-angina",
-          "@type": "dsv:ColumnProperty",
+          "@id": "https://bennokr.github.io/semsynth/output/statlog-heart/#property-angina",
+          "@type": "dsvo:ColumnProperty",
           "hasVariable": {
-            "@id": "urn:linked-codebook:dataset:Statlog%20(Heart)#variable-angina",
+            "@id": "https://bennokr.github.io/semsynth/output/statlog-heart/#variable-angina",
             "@type": "skos:Concept",
             "skos:prefLabel": "angina",
             "skos:definition": "exercise induced anigna",
@@ -298,15 +312,15 @@
         "prov:hadRole": "Feature"
       },
       {
-        "@id": "urn:linked-codebook:dataset:Statlog%20(Heart)#column-oldpeak",
-        "@type": "dsv:Column",
+        "@id": "https://bennokr.github.io/semsynth/output/statlog-heart/#column-oldpeak",
+        "@type": "dsvo:Column",
         "name": "oldpeak",
         "titles": "oldpeak",
         "columnProperty": {
-          "@id": "urn:linked-codebook:dataset:Statlog%20(Heart)#property-oldpeak",
-          "@type": "dsv:ColumnProperty",
+          "@id": "https://bennokr.github.io/semsynth/output/statlog-heart/#property-oldpeak",
+          "@type": "dsvo:ColumnProperty",
           "hasVariable": {
-            "@id": "urn:linked-codebook:dataset:Statlog%20(Heart)#variable-oldpeak",
+            "@id": "https://bennokr.github.io/semsynth/output/statlog-heart/#variable-oldpeak",
             "@type": "skos:Concept",
             "skos:prefLabel": "oldpeak",
             "skos:definition": "oldpeak = ST depression induced by exercise relative to rest"
@@ -315,37 +329,37 @@
         "prov:hadRole": "Feature"
       },
       {
-        "@id": "urn:linked-codebook:dataset:Statlog%20(Heart)#column-slope",
-        "@type": "dsv:Column",
+        "@id": "https://bennokr.github.io/semsynth/output/statlog-heart/#column-slope",
+        "@type": "dsvo:Column",
         "name": "slope",
         "titles": "slope",
         "columnProperty": {
-          "@id": "urn:linked-codebook:dataset:Statlog%20(Heart)#property-slope",
-          "@type": "dsv:ColumnProperty",
+          "@id": "https://bennokr.github.io/semsynth/output/statlog-heart/#property-slope",
+          "@type": "dsvo:ColumnProperty",
           "hasVariable": {
-            "@id": "urn:linked-codebook:dataset:Statlog%20(Heart)#variable-slope",
+            "@id": "https://bennokr.github.io/semsynth/output/statlog-heart/#variable-slope",
             "@type": "skos:Concept",
             "skos:prefLabel": "slope",
             "skos:definition": "the slope of the peak exercise ST sgment"
           }
         },
         "summaryStatistics": {
-          "@id": "urn:linked-codebook:dataset:Statlog%20(Heart)#statistics-slope",
-          "@type": "dsv:SummaryStatistics",
-          "statisticalDataType": "dsv:NumericalDataType"
+          "@id": "https://bennokr.github.io/semsynth/output/statlog-heart/#statistics-slope",
+          "@type": "dsvo:SummaryStatistics",
+          "statisticalDataType": "dsvo:NumericalDataType"
         },
         "prov:hadRole": "Feature"
       },
       {
-        "@id": "urn:linked-codebook:dataset:Statlog%20(Heart)#column-major-vessels",
-        "@type": "dsv:Column",
+        "@id": "https://bennokr.github.io/semsynth/output/statlog-heart/#column-major-vessels",
+        "@type": "dsvo:Column",
         "name": "major-vessels",
         "titles": "major-vessels",
         "columnProperty": {
-          "@id": "urn:linked-codebook:dataset:Statlog%20(Heart)#property-major-vessels",
-          "@type": "dsv:ColumnProperty",
+          "@id": "https://bennokr.github.io/semsynth/output/statlog-heart/#property-major-vessels",
+          "@type": "dsvo:ColumnProperty",
           "hasVariable": {
-            "@id": "urn:linked-codebook:dataset:Statlog%20(Heart)#variable-major-vessels",
+            "@id": "https://bennokr.github.io/semsynth/output/statlog-heart/#variable-major-vessels",
             "@type": "skos:Concept",
             "skos:prefLabel": "major-vessels",
             "skos:definition": "number of major vessels (0-3) colored by fluorosopy",
@@ -357,37 +371,37 @@
         "prov:hadRole": "Feature"
       },
       {
-        "@id": "urn:linked-codebook:dataset:Statlog%20(Heart)#column-thal",
-        "@type": "dsv:Column",
+        "@id": "https://bennokr.github.io/semsynth/output/statlog-heart/#column-thal",
+        "@type": "dsvo:Column",
         "name": "thal",
         "titles": "thal",
         "columnProperty": {
-          "@id": "urn:linked-codebook:dataset:Statlog%20(Heart)#property-thal",
-          "@type": "dsv:ColumnProperty",
+          "@id": "https://bennokr.github.io/semsynth/output/statlog-heart/#property-thal",
+          "@type": "dsvo:ColumnProperty",
           "hasVariable": {
-            "@id": "urn:linked-codebook:dataset:Statlog%20(Heart)#variable-thal",
+            "@id": "https://bennokr.github.io/semsynth/output/statlog-heart/#variable-thal",
             "@type": "skos:Concept",
             "skos:prefLabel": "thal",
             "skos:definition": "thal: 3 = normal; 6 = fixed defect; 7 = reversable defect"
           }
         },
         "summaryStatistics": {
-          "@id": "urn:linked-codebook:dataset:Statlog%20(Heart)#statistics-thal",
-          "@type": "dsv:SummaryStatistics",
-          "statisticalDataType": "dsv:CategoricalDataType"
+          "@id": "https://bennokr.github.io/semsynth/output/statlog-heart/#statistics-thal",
+          "@type": "dsvo:SummaryStatistics",
+          "statisticalDataType": "dsvo:CategoricalDataType"
         },
         "prov:hadRole": "Feature"
       },
       {
-        "@id": "urn:linked-codebook:dataset:Statlog%20(Heart)#column-heart-disease",
-        "@type": "dsv:Column",
+        "@id": "https://bennokr.github.io/semsynth/output/statlog-heart/#column-heart-disease",
+        "@type": "dsvo:Column",
         "name": "heart-disease",
         "titles": "heart-disease",
         "columnProperty": {
-          "@id": "urn:linked-codebook:dataset:Statlog%20(Heart)#property-heart-disease",
-          "@type": "dsv:ColumnProperty",
+          "@id": "https://bennokr.github.io/semsynth/output/statlog-heart/#property-heart-disease",
+          "@type": "dsvo:ColumnProperty",
           "hasVariable": {
-            "@id": "urn:linked-codebook:dataset:Statlog%20(Heart)#variable-heart-disease",
+            "@id": "https://bennokr.github.io/semsynth/output/statlog-heart/#variable-heart-disease",
             "@type": "skos:Concept",
             "skos:prefLabel": "heart-disease",
             "relatedMatch": [
@@ -396,9 +410,9 @@
           }
         },
         "summaryStatistics": {
-          "@id": "urn:linked-codebook:dataset:Statlog%20(Heart)#statistics-heart-disease",
-          "@type": "dsv:SummaryStatistics",
-          "statisticalDataType": "dsv:NumericalDataType"
+          "@id": "https://bennokr.github.io/semsynth/output/statlog-heart/#statistics-heart-disease",
+          "@type": "dsvo:SummaryStatistics",
+          "statisticalDataType": "dsvo:NumericalDataType"
         },
         "prov:hadRole": "Target"
       }

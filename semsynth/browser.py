@@ -146,6 +146,7 @@ def run(
         out), ``metrics`` (the parsed ``metrics*.json`` of each model, by model name) and ``capabilities``.
     """
     from .config import PipelineConfig
+    from .iris import slug
     from .models import load_model_configs
     from .runner import process_dataset
     from .specs import DatasetSpec
@@ -161,7 +162,7 @@ def run(
     spec = DatasetSpec("browser", name=name, target=target, meta=book.to_jsonld())
     with tempfile.TemporaryDirectory() as folder:
         process_dataset(spec, frame, frame[target] if target in frame.columns else None, folder, model_bundle=bundle, pipeline_config=cfg)
-        root = Path(folder) / name
+        root = Path(folder) / slug(name)  # the runner writes the folder under the slug of the name
         files = {
             str(p.relative_to(root)): p.read_text(encoding="utf-8")
             for p in sorted(root.rglob("*"))

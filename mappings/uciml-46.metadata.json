@@ -1,6 +1,7 @@
 {
   "@context": {
     "accessRights": "dct:accessRights",
+    "appliesWhen": "lc:applies_when",
     "broadMatch": {
       "@container": "@set",
       "@id": "skos:broadMatch",
@@ -12,35 +13,38 @@
       "@id": "skos:closeMatch",
       "@type": "@id"
     },
+    "codeBookClosed": "lc:closed",
     "columnCompleteness": {
-      "@id": "dsv:columnCompleteness",
+      "@id": "dsvo:columnCompleteness",
       "@type": "xsd:float"
     },
+    "columnFormat": "csvw:format",
+    "columnGroup": "lc:group",
     "columnProperty": {
-      "@id": "dsv:columnProperty",
+      "@id": "dsvo:columnProperty",
       "@type": "@id"
     },
     "columns": {
       "@container": "@set",
-      "@id": "dsv:column"
+      "@id": "dsvo:column"
     },
     "csvw": "http://www.w3.org/ns/csvw#",
     "datasetSchema": {
-      "@id": "dsv:datasetSchema",
+      "@id": "dsvo:datasetSchema",
       "@type": "@id"
     },
     "datatype": "csvw:datatype",
     "dcat": "http://www.w3.org/ns/dcat#",
     "dct": "http://purl.org/dc/terms/",
     "description": "dct:description",
-    "dsv": "https://w3id.org/dsv-ontology#",
+    "dsvo": "https://w3id.org/dsv-ontology#",
     "exactMatch": {
       "@container": "@set",
       "@id": "skos:exactMatch",
       "@type": "@id"
     },
     "hasCodeBook": {
-      "@id": "dsv:hasCodeBook",
+      "@id": "dsvo:hasCodeBook",
       "@type": "@id"
     },
     "hasUnit": {
@@ -48,18 +52,26 @@
       "@type": "@id"
     },
     "hasVariable": {
-      "@id": "dsv:hasVariable",
+      "@id": "dsvo:hasVariable",
       "@type": "@id"
     },
+    "high": "csvw:maxInclusive",
     "identifier": "dct:identifier",
+    "identifying": "lc:identifying",
     "landingPage": {
       "@id": "dcat:landingPage",
       "@type": "@id"
     },
+    "language": "dct:language",
+    "lc": "https://bennokr.github.io/linked-codebook/profile#",
     "license": {
       "@id": "dct:license",
       "@type": "@id"
     },
+    "low": "csvw:minInclusive",
+    "maximumValue": "csvw:maxInclusive",
+    "minimumValue": "csvw:minInclusive",
+    "missingRange": "lc:missing_range",
     "name": "csvw:name",
     "narrowMatch": {
       "@container": "@set",
@@ -71,11 +83,11 @@
       "@id": "csvw:null"
     },
     "numberOfColumns": {
-      "@id": "dsv:numberOfColumns",
+      "@id": "dsvo:numberOfColumns",
       "@type": "xsd:integer"
     },
     "numberOfRows": {
-      "@id": "dsv:numberOfRows",
+      "@id": "dsvo:numberOfRows",
       "@type": "xsd:integer"
     },
     "qudt": "http://qudt.org/schema/qudt/",
@@ -88,62 +100,64 @@
     "schema": "https://schema.org/",
     "skos": "http://www.w3.org/2004/02/skos/core#",
     "statisticalDataType": {
-      "@id": "dsv:statisticalDataType",
+      "@id": "dsvo:statisticalDataType",
       "@type": "@id"
     },
     "summaryStatistics": {
-      "@id": "dsv:summaryStatistics",
+      "@id": "dsvo:summaryStatistics",
       "@type": "@id"
     },
     "title": "dct:title",
     "titles": "csvw:title",
     "unitText": "schema:unitText",
     "xsd": "http://www.w3.org/2001/XMLSchema#",
+    "dsv": "https://w3id.org/dsv-ontology#",
     "dcterms": "http://purl.org/dc/terms/",
     "prov": "http://www.w3.org/ns/prov#"
   },
-  "@id": "urn:linked-codebook:dataset:unnamed",
+  "@id": "https://bennokr.github.io/semsynth/output/hepatitis/",
   "@type": [
     "dcat:Dataset",
-    "dsv:Dataset"
+    "dsvo:Dataset"
   ],
+  "identifier": "https://bennokr.github.io/semsynth/output/hepatitis/",
   "datasetSchema": {
-    "@id": "urn:linked-codebook:dataset:unnamed#schema",
-    "@type": "dsv:DatasetSchema",
+    "@id": "https://bennokr.github.io/semsynth/output/hepatitis/#schema",
+    "@type": "dsvo:DatasetSchema",
     "columns": [
       {
-        "@id": "urn:linked-codebook:dataset:unnamed#column-Class",
-        "@type": "dsv:Column",
+        "@id": "https://bennokr.github.io/semsynth/output/hepatitis/#column-Class",
+        "@type": "dsvo:Column",
         "datatype": "string",
         "titles": "Patient outcome class (1=die, 2=live)",
         "name": "Class",
         "columnProperty": {
-          "@id": "urn:linked-codebook:dataset:unnamed#property-Class",
-          "@type": "dsv:ColumnProperty",
+          "@id": "https://bennokr.github.io/semsynth/output/hepatitis/#property-Class",
+          "@type": "dsvo:ColumnProperty",
           "hasVariable": {
-            "@id": "urn:linked-codebook:dataset:unnamed#variable-Class",
+            "@id": "https://bennokr.github.io/semsynth/output/hepatitis/#variable-Class",
             "@type": "skos:Concept",
             "skos:prefLabel": "Patient outcome class (1=die, 2=live)"
           },
           "hasCodeBook": {
-            "@id": "urn:linked-codebook:dataset:unnamed#variable-Class-codes",
+            "@id": "https://bennokr.github.io/semsynth/output/hepatitis/#variable-Class-codes",
             "@type": "skos:ConceptScheme",
             "skos:hasTopConcept": [
               {
-                "@id": "urn:linked-codebook:dataset:unnamed#variable-Class-codes-DIE",
+                "@id": "https://bennokr.github.io/semsynth/output/hepatitis/#variable-Class-codes-DIE",
                 "@type": "skos:Concept",
                 "skos:prefLabel": "Outcome recorded as death",
                 "skos:inScheme": {
-                  "@id": "urn:linked-codebook:dataset:unnamed#variable-Class-codes"
+                  "@id": "https://bennokr.github.io/semsynth/output/hepatitis/#variable-Class-codes"
                 },
                 "skos:notation": "DIE"
               },
               {
-                "@id": "urn:linked-codebook:dataset:unnamed#variable-Class-codes-LIVE",
+                "@id": "https://bennokr.github.io/semsynth/output/hepatitis/#variable-Class-codes-LIVE",
                 "@type": "skos:Concept",
                 "skos:prefLabel": "Outcome recorded as survival",
                 "skos:inScheme": {
-                  "@id": "urn:linked-codebook:dataset:unnamed#variable-Class-codes"
+                  "@id": "https://bennokr.github.io/semsynth/output/hepatitis/#variable-Class-codes"
                 },
                 "skos:notation": "LIVE"
               }
@@ -151,23 +165,23 @@
           }
         },
         "summaryStatistics": {
-          "@id": "urn:linked-codebook:dataset:unnamed#statistics-Class",
-          "@type": "dsv:SummaryStatistics",
-          "statisticalDataType": "dsv:NominalDataType"
+          "@id": "https://bennokr.github.io/semsynth/output/hepatitis/#statistics-Class",
+          "@type": "dsvo:SummaryStatistics",
+          "statisticalDataType": "dsvo:NominalDataType"
         },
         "prov:hadRole": "target"
       },
       {
-        "@id": "urn:linked-codebook:dataset:unnamed#column-Age",
-        "@type": "dsv:Column",
+        "@id": "https://bennokr.github.io/semsynth/output/hepatitis/#column-Age",
+        "@type": "dsvo:Column",
         "datatype": "integer",
         "titles": "Age in years",
         "name": "Age",
         "columnProperty": {
-          "@id": "urn:linked-codebook:dataset:unnamed#property-Age",
-          "@type": "dsv:ColumnProperty",
+          "@id": "https://bennokr.github.io/semsynth/output/hepatitis/#property-Age",
+          "@type": "dsvo:ColumnProperty",
           "hasVariable": {
-            "@id": "urn:linked-codebook:dataset:unnamed#variable-Age",
+            "@id": "https://bennokr.github.io/semsynth/output/hepatitis/#variable-Age",
             "@type": "skos:Concept",
             "skos:prefLabel": "Age in years",
             "exactMatch": [
@@ -178,22 +192,22 @@
           "unitText": "years"
         },
         "summaryStatistics": {
-          "@id": "urn:linked-codebook:dataset:unnamed#statistics-Age",
-          "@type": "dsv:SummaryStatistics",
-          "statisticalDataType": "dsv:NumericalDataType"
+          "@id": "https://bennokr.github.io/semsynth/output/hepatitis/#statistics-Age",
+          "@type": "dsvo:SummaryStatistics",
+          "statisticalDataType": "dsvo:NumericalDataType"
         }
       },
       {
-        "@id": "urn:linked-codebook:dataset:unnamed#column-Sex",
-        "@type": "dsv:Column",
+        "@id": "https://bennokr.github.io/semsynth/output/hepatitis/#column-Sex",
+        "@type": "dsvo:Column",
         "datatype": "string",
         "titles": "Sex recorded for participant",
         "name": "Sex",
         "columnProperty": {
-          "@id": "urn:linked-codebook:dataset:unnamed#property-Sex",
-          "@type": "dsv:ColumnProperty",
+          "@id": "https://bennokr.github.io/semsynth/output/hepatitis/#property-Sex",
+          "@type": "dsvo:ColumnProperty",
           "hasVariable": {
-            "@id": "urn:linked-codebook:dataset:unnamed#variable-Sex",
+            "@id": "https://bennokr.github.io/semsynth/output/hepatitis/#variable-Sex",
             "@type": "skos:Concept",
             "skos:prefLabel": "Sex recorded for participant",
             "exactMatch": [
@@ -201,24 +215,24 @@
             ]
           },
           "hasCodeBook": {
-            "@id": "urn:linked-codebook:dataset:unnamed#variable-Sex-codes",
+            "@id": "https://bennokr.github.io/semsynth/output/hepatitis/#variable-Sex-codes",
             "@type": "skos:ConceptScheme",
             "skos:hasTopConcept": [
               {
-                "@id": "urn:linked-codebook:dataset:unnamed#variable-Sex-codes-male",
+                "@id": "https://bennokr.github.io/semsynth/output/hepatitis/#variable-Sex-codes-male",
                 "@type": "skos:Concept",
                 "skos:prefLabel": "Male",
                 "skos:inScheme": {
-                  "@id": "urn:linked-codebook:dataset:unnamed#variable-Sex-codes"
+                  "@id": "https://bennokr.github.io/semsynth/output/hepatitis/#variable-Sex-codes"
                 },
                 "skos:notation": "male"
               },
               {
-                "@id": "urn:linked-codebook:dataset:unnamed#variable-Sex-codes-female",
+                "@id": "https://bennokr.github.io/semsynth/output/hepatitis/#variable-Sex-codes-female",
                 "@type": "skos:Concept",
                 "skos:prefLabel": "Female",
                 "skos:inScheme": {
-                  "@id": "urn:linked-codebook:dataset:unnamed#variable-Sex-codes"
+                  "@id": "https://bennokr.github.io/semsynth/output/hepatitis/#variable-Sex-codes"
                 },
                 "skos:notation": "female"
               }
@@ -226,44 +240,44 @@
           }
         },
         "summaryStatistics": {
-          "@id": "urn:linked-codebook:dataset:unnamed#statistics-Sex",
-          "@type": "dsv:SummaryStatistics",
-          "statisticalDataType": "dsv:NominalDataType"
+          "@id": "https://bennokr.github.io/semsynth/output/hepatitis/#statistics-Sex",
+          "@type": "dsvo:SummaryStatistics",
+          "statisticalDataType": "dsvo:NominalDataType"
         }
       },
       {
-        "@id": "urn:linked-codebook:dataset:unnamed#column-Steroid",
-        "@type": "dsv:Column",
+        "@id": "https://bennokr.github.io/semsynth/output/hepatitis/#column-Steroid",
+        "@type": "dsvo:Column",
         "datatype": "string",
         "titles": "Systemic corticosteroid therapy indicator",
         "name": "Steroid",
         "columnProperty": {
-          "@id": "urn:linked-codebook:dataset:unnamed#property-Steroid",
-          "@type": "dsv:ColumnProperty",
+          "@id": "https://bennokr.github.io/semsynth/output/hepatitis/#property-Steroid",
+          "@type": "dsvo:ColumnProperty",
           "hasVariable": {
-            "@id": "urn:linked-codebook:dataset:unnamed#variable-Steroid",
+            "@id": "https://bennokr.github.io/semsynth/output/hepatitis/#variable-Steroid",
             "@type": "skos:Concept",
             "skos:prefLabel": "Systemic corticosteroid therapy indicator"
           },
           "hasCodeBook": {
-            "@id": "urn:linked-codebook:dataset:unnamed#variable-Steroid-codes",
+            "@id": "https://bennokr.github.io/semsynth/output/hepatitis/#variable-Steroid-codes",
             "@type": "skos:ConceptScheme",
             "skos:hasTopConcept": [
               {
-                "@id": "urn:linked-codebook:dataset:unnamed#variable-Steroid-codes-yes",
+                "@id": "https://bennokr.github.io/semsynth/output/hepatitis/#variable-Steroid-codes-yes",
                 "@type": "skos:Concept",
                 "skos:prefLabel": "Yes",
                 "skos:inScheme": {
-                  "@id": "urn:linked-codebook:dataset:unnamed#variable-Steroid-codes"
+                  "@id": "https://bennokr.github.io/semsynth/output/hepatitis/#variable-Steroid-codes"
                 },
                 "skos:notation": "yes"
               },
               {
-                "@id": "urn:linked-codebook:dataset:unnamed#variable-Steroid-codes-no",
+                "@id": "https://bennokr.github.io/semsynth/output/hepatitis/#variable-Steroid-codes-no",
                 "@type": "skos:Concept",
                 "skos:prefLabel": "No",
                 "skos:inScheme": {
-                  "@id": "urn:linked-codebook:dataset:unnamed#variable-Steroid-codes"
+                  "@id": "https://bennokr.github.io/semsynth/output/hepatitis/#variable-Steroid-codes"
                 },
                 "skos:notation": "no"
               }
@@ -271,44 +285,44 @@
           }
         },
         "summaryStatistics": {
-          "@id": "urn:linked-codebook:dataset:unnamed#statistics-Steroid",
-          "@type": "dsv:SummaryStatistics",
-          "statisticalDataType": "dsv:NominalDataType"
+          "@id": "https://bennokr.github.io/semsynth/output/hepatitis/#statistics-Steroid",
+          "@type": "dsvo:SummaryStatistics",
+          "statisticalDataType": "dsvo:NominalDataType"
         }
       },
       {
-        "@id": "urn:linked-codebook:dataset:unnamed#column-Antivirals",
-        "@type": "dsv:Column",
+        "@id": "https://bennokr.github.io/semsynth/output/hepatitis/#column-Antivirals",
+        "@type": "dsvo:Column",
         "datatype": "string",
         "titles": "Antiviral therapy indicator",
         "name": "Antivirals",
         "columnProperty": {
-          "@id": "urn:linked-codebook:dataset:unnamed#property-Antivirals",
-          "@type": "dsv:ColumnProperty",
+          "@id": "https://bennokr.github.io/semsynth/output/hepatitis/#property-Antivirals",
+          "@type": "dsvo:ColumnProperty",
           "hasVariable": {
-            "@id": "urn:linked-codebook:dataset:unnamed#variable-Antivirals",
+            "@id": "https://bennokr.github.io/semsynth/output/hepatitis/#variable-Antivirals",
             "@type": "skos:Concept",
             "skos:prefLabel": "Antiviral therapy indicator"
           },
           "hasCodeBook": {
-            "@id": "urn:linked-codebook:dataset:unnamed#variable-Antivirals-codes",
+            "@id": "https://bennokr.github.io/semsynth/output/hepatitis/#variable-Antivirals-codes",
             "@type": "skos:ConceptScheme",
             "skos:hasTopConcept": [
               {
-                "@id": "urn:linked-codebook:dataset:unnamed#variable-Antivirals-codes-yes",
+                "@id": "https://bennokr.github.io/semsynth/output/hepatitis/#variable-Antivirals-codes-yes",
                 "@type": "skos:Concept",
                 "skos:prefLabel": "Yes",
                 "skos:inScheme": {
-                  "@id": "urn:linked-codebook:dataset:unnamed#variable-Antivirals-codes"
+                  "@id": "https://bennokr.github.io/semsynth/output/hepatitis/#variable-Antivirals-codes"
                 },
                 "skos:notation": "yes"
               },
               {
-                "@id": "urn:linked-codebook:dataset:unnamed#variable-Antivirals-codes-no",
+                "@id": "https://bennokr.github.io/semsynth/output/hepatitis/#variable-Antivirals-codes-no",
                 "@type": "skos:Concept",
                 "skos:prefLabel": "No",
                 "skos:inScheme": {
-                  "@id": "urn:linked-codebook:dataset:unnamed#variable-Antivirals-codes"
+                  "@id": "https://bennokr.github.io/semsynth/output/hepatitis/#variable-Antivirals-codes"
                 },
                 "skos:notation": "no"
               }
@@ -316,22 +330,22 @@
           }
         },
         "summaryStatistics": {
-          "@id": "urn:linked-codebook:dataset:unnamed#statistics-Antivirals",
-          "@type": "dsv:SummaryStatistics",
-          "statisticalDataType": "dsv:NominalDataType"
+          "@id": "https://bennokr.github.io/semsynth/output/hepatitis/#statistics-Antivirals",
+          "@type": "dsvo:SummaryStatistics",
+          "statisticalDataType": "dsvo:NominalDataType"
         }
       },
       {
-        "@id": "urn:linked-codebook:dataset:unnamed#column-Fatigue",
-        "@type": "dsv:Column",
+        "@id": "https://bennokr.github.io/semsynth/output/hepatitis/#column-Fatigue",
+        "@type": "dsvo:Column",
         "datatype": "string",
         "titles": "Reported fatigue",
         "name": "Fatigue",
         "columnProperty": {
-          "@id": "urn:linked-codebook:dataset:unnamed#property-Fatigue",
-          "@type": "dsv:ColumnProperty",
+          "@id": "https://bennokr.github.io/semsynth/output/hepatitis/#property-Fatigue",
+          "@type": "dsvo:ColumnProperty",
           "hasVariable": {
-            "@id": "urn:linked-codebook:dataset:unnamed#variable-Fatigue",
+            "@id": "https://bennokr.github.io/semsynth/output/hepatitis/#variable-Fatigue",
             "@type": "skos:Concept",
             "skos:prefLabel": "Reported fatigue",
             "closeMatch": [
@@ -339,24 +353,24 @@
             ]
           },
           "hasCodeBook": {
-            "@id": "urn:linked-codebook:dataset:unnamed#variable-Fatigue-codes",
+            "@id": "https://bennokr.github.io/semsynth/output/hepatitis/#variable-Fatigue-codes",
             "@type": "skos:ConceptScheme",
             "skos:hasTopConcept": [
               {
-                "@id": "urn:linked-codebook:dataset:unnamed#variable-Fatigue-codes-yes",
+                "@id": "https://bennokr.github.io/semsynth/output/hepatitis/#variable-Fatigue-codes-yes",
                 "@type": "skos:Concept",
                 "skos:prefLabel": "Yes",
                 "skos:inScheme": {
-                  "@id": "urn:linked-codebook:dataset:unnamed#variable-Fatigue-codes"
+                  "@id": "https://bennokr.github.io/semsynth/output/hepatitis/#variable-Fatigue-codes"
                 },
                 "skos:notation": "yes"
               },
               {
-                "@id": "urn:linked-codebook:dataset:unnamed#variable-Fatigue-codes-no",
+                "@id": "https://bennokr.github.io/semsynth/output/hepatitis/#variable-Fatigue-codes-no",
                 "@type": "skos:Concept",
                 "skos:prefLabel": "No",
                 "skos:inScheme": {
-                  "@id": "urn:linked-codebook:dataset:unnamed#variable-Fatigue-codes"
+                  "@id": "https://bennokr.github.io/semsynth/output/hepatitis/#variable-Fatigue-codes"
                 },
                 "skos:notation": "no"
               }
@@ -364,22 +378,22 @@
           }
         },
         "summaryStatistics": {
-          "@id": "urn:linked-codebook:dataset:unnamed#statistics-Fatigue",
-          "@type": "dsv:SummaryStatistics",
-          "statisticalDataType": "dsv:NominalDataType"
+          "@id": "https://bennokr.github.io/semsynth/output/hepatitis/#statistics-Fatigue",
+          "@type": "dsvo:SummaryStatistics",
+          "statisticalDataType": "dsvo:NominalDataType"
         }
       },
       {
-        "@id": "urn:linked-codebook:dataset:unnamed#column-Malaise",
-        "@type": "dsv:Column",
+        "@id": "https://bennokr.github.io/semsynth/output/hepatitis/#column-Malaise",
+        "@type": "dsvo:Column",
         "datatype": "string",
         "titles": "Reported malaise",
         "name": "Malaise",
         "columnProperty": {
-          "@id": "urn:linked-codebook:dataset:unnamed#property-Malaise",
-          "@type": "dsv:ColumnProperty",
+          "@id": "https://bennokr.github.io/semsynth/output/hepatitis/#property-Malaise",
+          "@type": "dsvo:ColumnProperty",
           "hasVariable": {
-            "@id": "urn:linked-codebook:dataset:unnamed#variable-Malaise",
+            "@id": "https://bennokr.github.io/semsynth/output/hepatitis/#variable-Malaise",
             "@type": "skos:Concept",
             "skos:prefLabel": "Reported malaise",
             "closeMatch": [
@@ -387,24 +401,24 @@
             ]
           },
           "hasCodeBook": {
-            "@id": "urn:linked-codebook:dataset:unnamed#variable-Malaise-codes",
+            "@id": "https://bennokr.github.io/semsynth/output/hepatitis/#variable-Malaise-codes",
             "@type": "skos:ConceptScheme",
             "skos:hasTopConcept": [
               {
-                "@id": "urn:linked-codebook:dataset:unnamed#variable-Malaise-codes-yes",
+                "@id": "https://bennokr.github.io/semsynth/output/hepatitis/#variable-Malaise-codes-yes",
                 "@type": "skos:Concept",
                 "skos:prefLabel": "Yes",
                 "skos:inScheme": {
-                  "@id": "urn:linked-codebook:dataset:unnamed#variable-Malaise-codes"
+                  "@id": "https://bennokr.github.io/semsynth/output/hepatitis/#variable-Malaise-codes"
                 },
                 "skos:notation": "yes"
               },
               {
-                "@id": "urn:linked-codebook:dataset:unnamed#variable-Malaise-codes-no",
+                "@id": "https://bennokr.github.io/semsynth/output/hepatitis/#variable-Malaise-codes-no",
                 "@type": "skos:Concept",
                 "skos:prefLabel": "No",
                 "skos:inScheme": {
-                  "@id": "urn:linked-codebook:dataset:unnamed#variable-Malaise-codes"
+                  "@id": "https://bennokr.github.io/semsynth/output/hepatitis/#variable-Malaise-codes"
                 },
                 "skos:notation": "no"
               }
@@ -412,22 +426,22 @@
           }
         },
         "summaryStatistics": {
-          "@id": "urn:linked-codebook:dataset:unnamed#statistics-Malaise",
-          "@type": "dsv:SummaryStatistics",
-          "statisticalDataType": "dsv:NominalDataType"
+          "@id": "https://bennokr.github.io/semsynth/output/hepatitis/#statistics-Malaise",
+          "@type": "dsvo:SummaryStatistics",
+          "statisticalDataType": "dsvo:NominalDataType"
         }
       },
       {
-        "@id": "urn:linked-codebook:dataset:unnamed#column-Anorexia",
-        "@type": "dsv:Column",
+        "@id": "https://bennokr.github.io/semsynth/output/hepatitis/#column-Anorexia",
+        "@type": "dsvo:Column",
         "datatype": "string",
         "titles": "Loss of appetite indicator",
         "name": "Anorexia",
         "columnProperty": {
-          "@id": "urn:linked-codebook:dataset:unnamed#property-Anorexia",
-          "@type": "dsv:ColumnProperty",
+          "@id": "https://bennokr.github.io/semsynth/output/hepatitis/#property-Anorexia",
+          "@type": "dsvo:ColumnProperty",
           "hasVariable": {
-            "@id": "urn:linked-codebook:dataset:unnamed#variable-Anorexia",
+            "@id": "https://bennokr.github.io/semsynth/output/hepatitis/#variable-Anorexia",
             "@type": "skos:Concept",
             "skos:prefLabel": "Loss of appetite indicator",
             "closeMatch": [
@@ -435,24 +449,24 @@
             ]
           },
           "hasCodeBook": {
-            "@id": "urn:linked-codebook:dataset:unnamed#variable-Anorexia-codes",
+            "@id": "https://bennokr.github.io/semsynth/output/hepatitis/#variable-Anorexia-codes",
             "@type": "skos:ConceptScheme",
             "skos:hasTopConcept": [
               {
-                "@id": "urn:linked-codebook:dataset:unnamed#variable-Anorexia-codes-yes",
+                "@id": "https://bennokr.github.io/semsynth/output/hepatitis/#variable-Anorexia-codes-yes",
                 "@type": "skos:Concept",
                 "skos:prefLabel": "Yes",
                 "skos:inScheme": {
-                  "@id": "urn:linked-codebook:dataset:unnamed#variable-Anorexia-codes"
+                  "@id": "https://bennokr.github.io/semsynth/output/hepatitis/#variable-Anorexia-codes"
                 },
                 "skos:notation": "yes"
               },
               {
-                "@id": "urn:linked-codebook:dataset:unnamed#variable-Anorexia-codes-no",
+                "@id": "https://bennokr.github.io/semsynth/output/hepatitis/#variable-Anorexia-codes-no",
                 "@type": "skos:Concept",
                 "skos:prefLabel": "No",
                 "skos:inScheme": {
-                  "@id": "urn:linked-codebook:dataset:unnamed#variable-Anorexia-codes"
+                  "@id": "https://bennokr.github.io/semsynth/output/hepatitis/#variable-Anorexia-codes"
                 },
                 "skos:notation": "no"
               }
@@ -460,22 +474,22 @@
           }
         },
         "summaryStatistics": {
-          "@id": "urn:linked-codebook:dataset:unnamed#statistics-Anorexia",
-          "@type": "dsv:SummaryStatistics",
-          "statisticalDataType": "dsv:NominalDataType"
+          "@id": "https://bennokr.github.io/semsynth/output/hepatitis/#statistics-Anorexia",
+          "@type": "dsvo:SummaryStatistics",
+          "statisticalDataType": "dsvo:NominalDataType"
         }
       },
       {
-        "@id": "urn:linked-codebook:dataset:unnamed#column-Liver%20Big",
-        "@type": "dsv:Column",
+        "@id": "https://bennokr.github.io/semsynth/output/hepatitis/#column-Liver%20Big",
+        "@type": "dsvo:Column",
         "datatype": "string",
         "titles": "Clinically enlarged liver",
         "name": "Liver Big",
         "columnProperty": {
-          "@id": "urn:linked-codebook:dataset:unnamed#property-Liver%20Big",
-          "@type": "dsv:ColumnProperty",
+          "@id": "https://bennokr.github.io/semsynth/output/hepatitis/#property-Liver%20Big",
+          "@type": "dsvo:ColumnProperty",
           "hasVariable": {
-            "@id": "urn:linked-codebook:dataset:unnamed#variable-Liver%20Big",
+            "@id": "https://bennokr.github.io/semsynth/output/hepatitis/#variable-Liver%20Big",
             "@type": "skos:Concept",
             "skos:prefLabel": "Clinically enlarged liver",
             "closeMatch": [
@@ -483,24 +497,24 @@
             ]
           },
           "hasCodeBook": {
-            "@id": "urn:linked-codebook:dataset:unnamed#variable-Liver%20Big-codes",
+            "@id": "https://bennokr.github.io/semsynth/output/hepatitis/#variable-Liver%20Big-codes",
             "@type": "skos:ConceptScheme",
             "skos:hasTopConcept": [
               {
-                "@id": "urn:linked-codebook:dataset:unnamed#variable-Liver%20Big-codes-yes",
+                "@id": "https://bennokr.github.io/semsynth/output/hepatitis/#variable-Liver%20Big-codes-yes",
                 "@type": "skos:Concept",
                 "skos:prefLabel": "Yes",
                 "skos:inScheme": {
-                  "@id": "urn:linked-codebook:dataset:unnamed#variable-Liver%20Big-codes"
+                  "@id": "https://bennokr.github.io/semsynth/output/hepatitis/#variable-Liver%20Big-codes"
                 },
                 "skos:notation": "yes"
               },
               {
-                "@id": "urn:linked-codebook:dataset:unnamed#variable-Liver%20Big-codes-no",
+                "@id": "https://bennokr.github.io/semsynth/output/hepatitis/#variable-Liver%20Big-codes-no",
                 "@type": "skos:Concept",
                 "skos:prefLabel": "No",
                 "skos:inScheme": {
-                  "@id": "urn:linked-codebook:dataset:unnamed#variable-Liver%20Big-codes"
+                  "@id": "https://bennokr.github.io/semsynth/output/hepatitis/#variable-Liver%20Big-codes"
                 },
                 "skos:notation": "no"
               }
@@ -508,44 +522,44 @@
           }
         },
         "summaryStatistics": {
-          "@id": "urn:linked-codebook:dataset:unnamed#statistics-Liver%20Big",
-          "@type": "dsv:SummaryStatistics",
-          "statisticalDataType": "dsv:NominalDataType"
+          "@id": "https://bennokr.github.io/semsynth/output/hepatitis/#statistics-Liver%20Big",
+          "@type": "dsvo:SummaryStatistics",
+          "statisticalDataType": "dsvo:NominalDataType"
         }
       },
       {
-        "@id": "urn:linked-codebook:dataset:unnamed#column-Liver%20Firm",
-        "@type": "dsv:Column",
+        "@id": "https://bennokr.github.io/semsynth/output/hepatitis/#column-Liver%20Firm",
+        "@type": "dsvo:Column",
         "datatype": "string",
         "titles": "Palpable firm liver",
         "name": "Liver Firm",
         "columnProperty": {
-          "@id": "urn:linked-codebook:dataset:unnamed#property-Liver%20Firm",
-          "@type": "dsv:ColumnProperty",
+          "@id": "https://bennokr.github.io/semsynth/output/hepatitis/#property-Liver%20Firm",
+          "@type": "dsvo:ColumnProperty",
           "hasVariable": {
-            "@id": "urn:linked-codebook:dataset:unnamed#variable-Liver%20Firm",
+            "@id": "https://bennokr.github.io/semsynth/output/hepatitis/#variable-Liver%20Firm",
             "@type": "skos:Concept",
             "skos:prefLabel": "Palpable firm liver"
           },
           "hasCodeBook": {
-            "@id": "urn:linked-codebook:dataset:unnamed#variable-Liver%20Firm-codes",
+            "@id": "https://bennokr.github.io/semsynth/output/hepatitis/#variable-Liver%20Firm-codes",
             "@type": "skos:ConceptScheme",
             "skos:hasTopConcept": [
               {
-                "@id": "urn:linked-codebook:dataset:unnamed#variable-Liver%20Firm-codes-yes",
+                "@id": "https://bennokr.github.io/semsynth/output/hepatitis/#variable-Liver%20Firm-codes-yes",
                 "@type": "skos:Concept",
                 "skos:prefLabel": "Yes",
                 "skos:inScheme": {
-                  "@id": "urn:linked-codebook:dataset:unnamed#variable-Liver%20Firm-codes"
+                  "@id": "https://bennokr.github.io/semsynth/output/hepatitis/#variable-Liver%20Firm-codes"
                 },
                 "skos:notation": "yes"
               },
               {
-                "@id": "urn:linked-codebook:dataset:unnamed#variable-Liver%20Firm-codes-no",
+                "@id": "https://bennokr.github.io/semsynth/output/hepatitis/#variable-Liver%20Firm-codes-no",
                 "@type": "skos:Concept",
                 "skos:prefLabel": "No",
                 "skos:inScheme": {
-                  "@id": "urn:linked-codebook:dataset:unnamed#variable-Liver%20Firm-codes"
+                  "@id": "https://bennokr.github.io/semsynth/output/hepatitis/#variable-Liver%20Firm-codes"
                 },
                 "skos:notation": "no"
               }
@@ -553,22 +567,22 @@
           }
         },
         "summaryStatistics": {
-          "@id": "urn:linked-codebook:dataset:unnamed#statistics-Liver%20Firm",
-          "@type": "dsv:SummaryStatistics",
-          "statisticalDataType": "dsv:NominalDataType"
+          "@id": "https://bennokr.github.io/semsynth/output/hepatitis/#statistics-Liver%20Firm",
+          "@type": "dsvo:SummaryStatistics",
+          "statisticalDataType": "dsvo:NominalDataType"
         }
       },
       {
-        "@id": "urn:linked-codebook:dataset:unnamed#column-Spleen%20Palpable",
-        "@type": "dsv:Column",
+        "@id": "https://bennokr.github.io/semsynth/output/hepatitis/#column-Spleen%20Palpable",
+        "@type": "dsvo:Column",
         "datatype": "string",
         "titles": "Palpable spleen",
         "name": "Spleen Palpable",
         "columnProperty": {
-          "@id": "urn:linked-codebook:dataset:unnamed#property-Spleen%20Palpable",
-          "@type": "dsv:ColumnProperty",
+          "@id": "https://bennokr.github.io/semsynth/output/hepatitis/#property-Spleen%20Palpable",
+          "@type": "dsvo:ColumnProperty",
           "hasVariable": {
-            "@id": "urn:linked-codebook:dataset:unnamed#variable-Spleen%20Palpable",
+            "@id": "https://bennokr.github.io/semsynth/output/hepatitis/#variable-Spleen%20Palpable",
             "@type": "skos:Concept",
             "skos:prefLabel": "Palpable spleen",
             "closeMatch": [
@@ -576,24 +590,24 @@
             ]
           },
           "hasCodeBook": {
-            "@id": "urn:linked-codebook:dataset:unnamed#variable-Spleen%20Palpable-codes",
+            "@id": "https://bennokr.github.io/semsynth/output/hepatitis/#variable-Spleen%20Palpable-codes",
             "@type": "skos:ConceptScheme",
             "skos:hasTopConcept": [
               {
-                "@id": "urn:linked-codebook:dataset:unnamed#variable-Spleen%20Palpable-codes-yes",
+                "@id": "https://bennokr.github.io/semsynth/output/hepatitis/#variable-Spleen%20Palpable-codes-yes",
                 "@type": "skos:Concept",
                 "skos:prefLabel": "Yes",
                 "skos:inScheme": {
-                  "@id": "urn:linked-codebook:dataset:unnamed#variable-Spleen%20Palpable-codes"
+                  "@id": "https://bennokr.github.io/semsynth/output/hepatitis/#variable-Spleen%20Palpable-codes"
                 },
                 "skos:notation": "yes"
               },
               {
-                "@id": "urn:linked-codebook:dataset:unnamed#variable-Spleen%20Palpable-codes-no",
+                "@id": "https://bennokr.github.io/semsynth/output/hepatitis/#variable-Spleen%20Palpable-codes-no",
                 "@type": "skos:Concept",
                 "skos:prefLabel": "No",
                 "skos:inScheme": {
-                  "@id": "urn:linked-codebook:dataset:unnamed#variable-Spleen%20Palpable-codes"
+                  "@id": "https://bennokr.github.io/semsynth/output/hepatitis/#variable-Spleen%20Palpable-codes"
                 },
                 "skos:notation": "no"
               }
@@ -601,22 +615,22 @@
           }
         },
         "summaryStatistics": {
-          "@id": "urn:linked-codebook:dataset:unnamed#statistics-Spleen%20Palpable",
-          "@type": "dsv:SummaryStatistics",
-          "statisticalDataType": "dsv:NominalDataType"
+          "@id": "https://bennokr.github.io/semsynth/output/hepatitis/#statistics-Spleen%20Palpable",
+          "@type": "dsvo:SummaryStatistics",
+          "statisticalDataType": "dsvo:NominalDataType"
         }
       },
       {
-        "@id": "urn:linked-codebook:dataset:unnamed#column-Spiders",
-        "@type": "dsv:Column",
+        "@id": "https://bennokr.github.io/semsynth/output/hepatitis/#column-Spiders",
+        "@type": "dsvo:Column",
         "datatype": "string",
         "titles": "Spider angioma observed",
         "name": "Spiders",
         "columnProperty": {
-          "@id": "urn:linked-codebook:dataset:unnamed#property-Spiders",
-          "@type": "dsv:ColumnProperty",
+          "@id": "https://bennokr.github.io/semsynth/output/hepatitis/#property-Spiders",
+          "@type": "dsvo:ColumnProperty",
           "hasVariable": {
-            "@id": "urn:linked-codebook:dataset:unnamed#variable-Spiders",
+            "@id": "https://bennokr.github.io/semsynth/output/hepatitis/#variable-Spiders",
             "@type": "skos:Concept",
             "skos:prefLabel": "Spider angioma observed",
             "closeMatch": [
@@ -624,24 +638,24 @@
             ]
           },
           "hasCodeBook": {
-            "@id": "urn:linked-codebook:dataset:unnamed#variable-Spiders-codes",
+            "@id": "https://bennokr.github.io/semsynth/output/hepatitis/#variable-Spiders-codes",
             "@type": "skos:ConceptScheme",
             "skos:hasTopConcept": [
               {
-                "@id": "urn:linked-codebook:dataset:unnamed#variable-Spiders-codes-yes",
+                "@id": "https://bennokr.github.io/semsynth/output/hepatitis/#variable-Spiders-codes-yes",
                 "@type": "skos:Concept",
                 "skos:prefLabel": "Yes",
                 "skos:inScheme": {
-                  "@id": "urn:linked-codebook:dataset:unnamed#variable-Spiders-codes"
+                  "@id": "https://bennokr.github.io/semsynth/output/hepatitis/#variable-Spiders-codes"
                 },
                 "skos:notation": "yes"
               },
               {
-                "@id": "urn:linked-codebook:dataset:unnamed#variable-Spiders-codes-no",
+                "@id": "https://bennokr.github.io/semsynth/output/hepatitis/#variable-Spiders-codes-no",
                 "@type": "skos:Concept",
                 "skos:prefLabel": "No",
                 "skos:inScheme": {
-                  "@id": "urn:linked-codebook:dataset:unnamed#variable-Spiders-codes"
+                  "@id": "https://bennokr.github.io/semsynth/output/hepatitis/#variable-Spiders-codes"
                 },
                 "skos:notation": "no"
               }
@@ -649,22 +663,22 @@
           }
         },
         "summaryStatistics": {
-          "@id": "urn:linked-codebook:dataset:unnamed#statistics-Spiders",
-          "@type": "dsv:SummaryStatistics",
-          "statisticalDataType": "dsv:NominalDataType"
+          "@id": "https://bennokr.github.io/semsynth/output/hepatitis/#statistics-Spiders",
+          "@type": "dsvo:SummaryStatistics",
+          "statisticalDataType": "dsvo:NominalDataType"
         }
       },
       {
-        "@id": "urn:linked-codebook:dataset:unnamed#column-Ascites",
-        "@type": "dsv:Column",
+        "@id": "https://bennokr.github.io/semsynth/output/hepatitis/#column-Ascites",
+        "@type": "dsvo:Column",
         "datatype": "string",
         "titles": "Ascites observed",
         "name": "Ascites",
         "columnProperty": {
-          "@id": "urn:linked-codebook:dataset:unnamed#property-Ascites",
-          "@type": "dsv:ColumnProperty",
+          "@id": "https://bennokr.github.io/semsynth/output/hepatitis/#property-Ascites",
+          "@type": "dsvo:ColumnProperty",
           "hasVariable": {
-            "@id": "urn:linked-codebook:dataset:unnamed#variable-Ascites",
+            "@id": "https://bennokr.github.io/semsynth/output/hepatitis/#variable-Ascites",
             "@type": "skos:Concept",
             "skos:prefLabel": "Ascites observed",
             "closeMatch": [
@@ -672,24 +686,24 @@
             ]
           },
           "hasCodeBook": {
-            "@id": "urn:linked-codebook:dataset:unnamed#variable-Ascites-codes",
+            "@id": "https://bennokr.github.io/semsynth/output/hepatitis/#variable-Ascites-codes",
             "@type": "skos:ConceptScheme",
             "skos:hasTopConcept": [
               {
-                "@id": "urn:linked-codebook:dataset:unnamed#variable-Ascites-codes-yes",
+                "@id": "https://bennokr.github.io/semsynth/output/hepatitis/#variable-Ascites-codes-yes",
                 "@type": "skos:Concept",
                 "skos:prefLabel": "Yes",
                 "skos:inScheme": {
-                  "@id": "urn:linked-codebook:dataset:unnamed#variable-Ascites-codes"
+                  "@id": "https://bennokr.github.io/semsynth/output/hepatitis/#variable-Ascites-codes"
                 },
                 "skos:notation": "yes"
               },
               {
-                "@id": "urn:linked-codebook:dataset:unnamed#variable-Ascites-codes-no",
+                "@id": "https://bennokr.github.io/semsynth/output/hepatitis/#variable-Ascites-codes-no",
                 "@type": "skos:Concept",
                 "skos:prefLabel": "No",
                 "skos:inScheme": {
-                  "@id": "urn:linked-codebook:dataset:unnamed#variable-Ascites-codes"
+                  "@id": "https://bennokr.github.io/semsynth/output/hepatitis/#variable-Ascites-codes"
                 },
                 "skos:notation": "no"
               }
@@ -697,22 +711,22 @@
           }
         },
         "summaryStatistics": {
-          "@id": "urn:linked-codebook:dataset:unnamed#statistics-Ascites",
-          "@type": "dsv:SummaryStatistics",
-          "statisticalDataType": "dsv:NominalDataType"
+          "@id": "https://bennokr.github.io/semsynth/output/hepatitis/#statistics-Ascites",
+          "@type": "dsvo:SummaryStatistics",
+          "statisticalDataType": "dsvo:NominalDataType"
         }
       },
       {
-        "@id": "urn:linked-codebook:dataset:unnamed#column-Varices",
-        "@type": "dsv:Column",
+        "@id": "https://bennokr.github.io/semsynth/output/hepatitis/#column-Varices",
+        "@type": "dsvo:Column",
         "datatype": "string",
         "titles": "Esophageal varices observed",
         "name": "Varices",
         "columnProperty": {
-          "@id": "urn:linked-codebook:dataset:unnamed#property-Varices",
-          "@type": "dsv:ColumnProperty",
+          "@id": "https://bennokr.github.io/semsynth/output/hepatitis/#property-Varices",
+          "@type": "dsvo:ColumnProperty",
           "hasVariable": {
-            "@id": "urn:linked-codebook:dataset:unnamed#variable-Varices",
+            "@id": "https://bennokr.github.io/semsynth/output/hepatitis/#variable-Varices",
             "@type": "skos:Concept",
             "skos:prefLabel": "Esophageal varices observed",
             "closeMatch": [
@@ -720,24 +734,24 @@
             ]
           },
           "hasCodeBook": {
-            "@id": "urn:linked-codebook:dataset:unnamed#variable-Varices-codes",
+            "@id": "https://bennokr.github.io/semsynth/output/hepatitis/#variable-Varices-codes",
             "@type": "skos:ConceptScheme",
             "skos:hasTopConcept": [
               {
-                "@id": "urn:linked-codebook:dataset:unnamed#variable-Varices-codes-yes",
+                "@id": "https://bennokr.github.io/semsynth/output/hepatitis/#variable-Varices-codes-yes",
                 "@type": "skos:Concept",
                 "skos:prefLabel": "Yes",
                 "skos:inScheme": {
-                  "@id": "urn:linked-codebook:dataset:unnamed#variable-Varices-codes"
+                  "@id": "https://bennokr.github.io/semsynth/output/hepatitis/#variable-Varices-codes"
                 },
                 "skos:notation": "yes"
               },
               {
-                "@id": "urn:linked-codebook:dataset:unnamed#variable-Varices-codes-no",
+                "@id": "https://bennokr.github.io/semsynth/output/hepatitis/#variable-Varices-codes-no",
                 "@type": "skos:Concept",
                 "skos:prefLabel": "No",
                 "skos:inScheme": {
-                  "@id": "urn:linked-codebook:dataset:unnamed#variable-Varices-codes"
+                  "@id": "https://bennokr.github.io/semsynth/output/hepatitis/#variable-Varices-codes"
                 },
                 "skos:notation": "no"
               }
@@ -745,22 +759,22 @@
           }
         },
         "summaryStatistics": {
-          "@id": "urn:linked-codebook:dataset:unnamed#statistics-Varices",
-          "@type": "dsv:SummaryStatistics",
-          "statisticalDataType": "dsv:NominalDataType"
+          "@id": "https://bennokr.github.io/semsynth/output/hepatitis/#statistics-Varices",
+          "@type": "dsvo:SummaryStatistics",
+          "statisticalDataType": "dsvo:NominalDataType"
         }
       },
       {
-        "@id": "urn:linked-codebook:dataset:unnamed#column-Bilirubin",
-        "@type": "dsv:Column",
+        "@id": "https://bennokr.github.io/semsynth/output/hepatitis/#column-Bilirubin",
+        "@type": "dsvo:Column",
         "datatype": "number",
         "titles": "Total bilirubin concentration",
         "name": "Bilirubin",
         "columnProperty": {
-          "@id": "urn:linked-codebook:dataset:unnamed#property-Bilirubin",
-          "@type": "dsv:ColumnProperty",
+          "@id": "https://bennokr.github.io/semsynth/output/hepatitis/#property-Bilirubin",
+          "@type": "dsvo:ColumnProperty",
           "hasVariable": {
-            "@id": "urn:linked-codebook:dataset:unnamed#variable-Bilirubin",
+            "@id": "https://bennokr.github.io/semsynth/output/hepatitis/#variable-Bilirubin",
             "@type": "skos:Concept",
             "skos:prefLabel": "Total bilirubin concentration",
             "exactMatch": [
@@ -770,22 +784,22 @@
           "unitText": "mg/dL"
         },
         "summaryStatistics": {
-          "@id": "urn:linked-codebook:dataset:unnamed#statistics-Bilirubin",
-          "@type": "dsv:SummaryStatistics",
-          "statisticalDataType": "dsv:NumericalDataType"
+          "@id": "https://bennokr.github.io/semsynth/output/hepatitis/#statistics-Bilirubin",
+          "@type": "dsvo:SummaryStatistics",
+          "statisticalDataType": "dsvo:NumericalDataType"
         }
       },
       {
-        "@id": "urn:linked-codebook:dataset:unnamed#column-Alk%20Phosphate",
-        "@type": "dsv:Column",
+        "@id": "https://bennokr.github.io/semsynth/output/hepatitis/#column-Alk%20Phosphate",
+        "@type": "dsvo:Column",
         "datatype": "number",
         "titles": "Alkaline phosphatase activity",
         "name": "Alk Phosphate",
         "columnProperty": {
-          "@id": "urn:linked-codebook:dataset:unnamed#property-Alk%20Phosphate",
-          "@type": "dsv:ColumnProperty",
+          "@id": "https://bennokr.github.io/semsynth/output/hepatitis/#property-Alk%20Phosphate",
+          "@type": "dsvo:ColumnProperty",
           "hasVariable": {
-            "@id": "urn:linked-codebook:dataset:unnamed#variable-Alk%20Phosphate",
+            "@id": "https://bennokr.github.io/semsynth/output/hepatitis/#variable-Alk%20Phosphate",
             "@type": "skos:Concept",
             "skos:prefLabel": "Alkaline phosphatase activity",
             "exactMatch": [
@@ -795,22 +809,22 @@
           "unitText": "U/L"
         },
         "summaryStatistics": {
-          "@id": "urn:linked-codebook:dataset:unnamed#statistics-Alk%20Phosphate",
-          "@type": "dsv:SummaryStatistics",
-          "statisticalDataType": "dsv:NumericalDataType"
+          "@id": "https://bennokr.github.io/semsynth/output/hepatitis/#statistics-Alk%20Phosphate",
+          "@type": "dsvo:SummaryStatistics",
+          "statisticalDataType": "dsvo:NumericalDataType"
         }
       },
       {
-        "@id": "urn:linked-codebook:dataset:unnamed#column-Sgot",
-        "@type": "dsv:Column",
+        "@id": "https://bennokr.github.io/semsynth/output/hepatitis/#column-Sgot",
+        "@type": "dsvo:Column",
         "datatype": "number",
         "titles": "Aspartate aminotransferase activity",
         "name": "Sgot",
         "columnProperty": {
-          "@id": "urn:linked-codebook:dataset:unnamed#property-Sgot",
-          "@type": "dsv:ColumnProperty",
+          "@id": "https://bennokr.github.io/semsynth/output/hepatitis/#property-Sgot",
+          "@type": "dsvo:ColumnProperty",
           "hasVariable": {
-            "@id": "urn:linked-codebook:dataset:unnamed#variable-Sgot",
+            "@id": "https://bennokr.github.io/semsynth/output/hepatitis/#variable-Sgot",
             "@type": "skos:Concept",
             "skos:prefLabel": "Aspartate aminotransferase activity",
             "exactMatch": [
@@ -820,22 +834,22 @@
           "unitText": "U/L"
         },
         "summaryStatistics": {
-          "@id": "urn:linked-codebook:dataset:unnamed#statistics-Sgot",
-          "@type": "dsv:SummaryStatistics",
-          "statisticalDataType": "dsv:NumericalDataType"
+          "@id": "https://bennokr.github.io/semsynth/output/hepatitis/#statistics-Sgot",
+          "@type": "dsvo:SummaryStatistics",
+          "statisticalDataType": "dsvo:NumericalDataType"
         }
       },
       {
-        "@id": "urn:linked-codebook:dataset:unnamed#column-Albumin",
-        "@type": "dsv:Column",
+        "@id": "https://bennokr.github.io/semsynth/output/hepatitis/#column-Albumin",
+        "@type": "dsvo:Column",
         "datatype": "number",
         "titles": "Serum albumin concentration",
         "name": "Albumin",
         "columnProperty": {
-          "@id": "urn:linked-codebook:dataset:unnamed#property-Albumin",
-          "@type": "dsv:ColumnProperty",
+          "@id": "https://bennokr.github.io/semsynth/output/hepatitis/#property-Albumin",
+          "@type": "dsvo:ColumnProperty",
           "hasVariable": {
-            "@id": "urn:linked-codebook:dataset:unnamed#variable-Albumin",
+            "@id": "https://bennokr.github.io/semsynth/output/hepatitis/#variable-Albumin",
             "@type": "skos:Concept",
             "skos:prefLabel": "Serum albumin concentration",
             "exactMatch": [
@@ -845,22 +859,22 @@
           "unitText": "g/dL"
         },
         "summaryStatistics": {
-          "@id": "urn:linked-codebook:dataset:unnamed#statistics-Albumin",
-          "@type": "dsv:SummaryStatistics",
-          "statisticalDataType": "dsv:NumericalDataType"
+          "@id": "https://bennokr.github.io/semsynth/output/hepatitis/#statistics-Albumin",
+          "@type": "dsvo:SummaryStatistics",
+          "statisticalDataType": "dsvo:NumericalDataType"
         }
       },
       {
-        "@id": "urn:linked-codebook:dataset:unnamed#column-Protime",
-        "@type": "dsv:Column",
+        "@id": "https://bennokr.github.io/semsynth/output/hepatitis/#column-Protime",
+        "@type": "dsvo:Column",
         "datatype": "number",
         "titles": "Prothrombin time",
         "name": "Protime",
         "columnProperty": {
-          "@id": "urn:linked-codebook:dataset:unnamed#property-Protime",
-          "@type": "dsv:ColumnProperty",
+          "@id": "https://bennokr.github.io/semsynth/output/hepatitis/#property-Protime",
+          "@type": "dsvo:ColumnProperty",
           "hasVariable": {
-            "@id": "urn:linked-codebook:dataset:unnamed#variable-Protime",
+            "@id": "https://bennokr.github.io/semsynth/output/hepatitis/#variable-Protime",
             "@type": "skos:Concept",
             "skos:prefLabel": "Prothrombin time",
             "exactMatch": [
@@ -870,44 +884,44 @@
           "unitText": "seconds"
         },
         "summaryStatistics": {
-          "@id": "urn:linked-codebook:dataset:unnamed#statistics-Protime",
-          "@type": "dsv:SummaryStatistics",
-          "statisticalDataType": "dsv:NumericalDataType"
+          "@id": "https://bennokr.github.io/semsynth/output/hepatitis/#statistics-Protime",
+          "@type": "dsvo:SummaryStatistics",
+          "statisticalDataType": "dsvo:NumericalDataType"
         }
       },
       {
-        "@id": "urn:linked-codebook:dataset:unnamed#column-Histology",
-        "@type": "dsv:Column",
+        "@id": "https://bennokr.github.io/semsynth/output/hepatitis/#column-Histology",
+        "@type": "dsvo:Column",
         "datatype": "string",
         "titles": "Histology result available",
         "name": "Histology",
         "columnProperty": {
-          "@id": "urn:linked-codebook:dataset:unnamed#property-Histology",
-          "@type": "dsv:ColumnProperty",
+          "@id": "https://bennokr.github.io/semsynth/output/hepatitis/#property-Histology",
+          "@type": "dsvo:ColumnProperty",
           "hasVariable": {
-            "@id": "urn:linked-codebook:dataset:unnamed#variable-Histology",
+            "@id": "https://bennokr.github.io/semsynth/output/hepatitis/#variable-Histology",
             "@type": "skos:Concept",
             "skos:prefLabel": "Histology result available"
           },
           "hasCodeBook": {
-            "@id": "urn:linked-codebook:dataset:unnamed#variable-Histology-codes",
+            "@id": "https://bennokr.github.io/semsynth/output/hepatitis/#variable-Histology-codes",
             "@type": "skos:ConceptScheme",
             "skos:hasTopConcept": [
               {
-                "@id": "urn:linked-codebook:dataset:unnamed#variable-Histology-codes-yes",
+                "@id": "https://bennokr.github.io/semsynth/output/hepatitis/#variable-Histology-codes-yes",
                 "@type": "skos:Concept",
                 "skos:prefLabel": "Yes",
                 "skos:inScheme": {
-                  "@id": "urn:linked-codebook:dataset:unnamed#variable-Histology-codes"
+                  "@id": "https://bennokr.github.io/semsynth/output/hepatitis/#variable-Histology-codes"
                 },
                 "skos:notation": "yes"
               },
               {
-                "@id": "urn:linked-codebook:dataset:unnamed#variable-Histology-codes-no",
+                "@id": "https://bennokr.github.io/semsynth/output/hepatitis/#variable-Histology-codes-no",
                 "@type": "skos:Concept",
                 "skos:prefLabel": "No",
                 "skos:inScheme": {
-                  "@id": "urn:linked-codebook:dataset:unnamed#variable-Histology-codes"
+                  "@id": "https://bennokr.github.io/semsynth/output/hepatitis/#variable-Histology-codes"
                 },
                 "skos:notation": "no"
               }
@@ -915,9 +929,9 @@
           }
         },
         "summaryStatistics": {
-          "@id": "urn:linked-codebook:dataset:unnamed#statistics-Histology",
-          "@type": "dsv:SummaryStatistics",
-          "statisticalDataType": "dsv:NominalDataType"
+          "@id": "https://bennokr.github.io/semsynth/output/hepatitis/#statistics-Histology",
+          "@type": "dsvo:SummaryStatistics",
+          "statisticalDataType": "dsvo:NominalDataType"
         }
       }
     ]

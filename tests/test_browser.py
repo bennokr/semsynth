@@ -75,3 +75,10 @@ def test_run_returns_text_files_and_metrics_and_leaves_nothing_behind(tmp_path, 
     assert result["metrics"]["metasyn"]["metrics.json"]["structure"]["columns"]["cigs"]["not_applicable"] > 0
     assert list(tmp_path.iterdir()) == [], "everything is written to a temporary folder"
     json.dumps(result)
+
+
+def test_run_finds_the_files_of_a_name_that_is_not_a_slug(tmp_path, monkeypatch) -> None:  # type: ignore[no-untyped-def]
+    monkeypatch.chdir(tmp_path)
+    result = run(_csv(), codebook=CODEBOOK, target="smoker", name="Heart Disease (UCI)", config={})
+    assert "report.md" in result["files"]
+    assert json.loads(result["files"]["dataset.codebook.jsonld"])["@id"].endswith("/heart-disease-uci/")

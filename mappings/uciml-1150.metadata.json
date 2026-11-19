@@ -1,6 +1,7 @@
 {
   "@context": {
     "accessRights": "dct:accessRights",
+    "appliesWhen": "lc:applies_when",
     "broadMatch": {
       "@container": "@set",
       "@id": "skos:broadMatch",
@@ -12,35 +13,38 @@
       "@id": "skos:closeMatch",
       "@type": "@id"
     },
+    "codeBookClosed": "lc:closed",
     "columnCompleteness": {
-      "@id": "dsv:columnCompleteness",
+      "@id": "dsvo:columnCompleteness",
       "@type": "xsd:float"
     },
+    "columnFormat": "csvw:format",
+    "columnGroup": "lc:group",
     "columnProperty": {
-      "@id": "dsv:columnProperty",
+      "@id": "dsvo:columnProperty",
       "@type": "@id"
     },
     "columns": {
       "@container": "@set",
-      "@id": "dsv:column"
+      "@id": "dsvo:column"
     },
     "csvw": "http://www.w3.org/ns/csvw#",
     "datasetSchema": {
-      "@id": "dsv:datasetSchema",
+      "@id": "dsvo:datasetSchema",
       "@type": "@id"
     },
     "datatype": "csvw:datatype",
     "dcat": "http://www.w3.org/ns/dcat#",
     "dct": "http://purl.org/dc/terms/",
     "description": "dct:description",
-    "dsv": "https://w3id.org/dsv-ontology#",
+    "dsvo": "https://w3id.org/dsv-ontology#",
     "exactMatch": {
       "@container": "@set",
       "@id": "skos:exactMatch",
       "@type": "@id"
     },
     "hasCodeBook": {
-      "@id": "dsv:hasCodeBook",
+      "@id": "dsvo:hasCodeBook",
       "@type": "@id"
     },
     "hasUnit": {
@@ -48,18 +52,26 @@
       "@type": "@id"
     },
     "hasVariable": {
-      "@id": "dsv:hasVariable",
+      "@id": "dsvo:hasVariable",
       "@type": "@id"
     },
+    "high": "csvw:maxInclusive",
     "identifier": "dct:identifier",
+    "identifying": "lc:identifying",
     "landingPage": {
       "@id": "dcat:landingPage",
       "@type": "@id"
     },
+    "language": "dct:language",
+    "lc": "https://bennokr.github.io/linked-codebook/profile#",
     "license": {
       "@id": "dct:license",
       "@type": "@id"
     },
+    "low": "csvw:minInclusive",
+    "maximumValue": "csvw:maxInclusive",
+    "minimumValue": "csvw:minInclusive",
+    "missingRange": "lc:missing_range",
     "name": "csvw:name",
     "narrowMatch": {
       "@container": "@set",
@@ -71,11 +83,11 @@
       "@id": "csvw:null"
     },
     "numberOfColumns": {
-      "@id": "dsv:numberOfColumns",
+      "@id": "dsvo:numberOfColumns",
       "@type": "xsd:integer"
     },
     "numberOfRows": {
-      "@id": "dsv:numberOfRows",
+      "@id": "dsvo:numberOfRows",
       "@type": "xsd:integer"
     },
     "qudt": "http://qudt.org/schema/qudt/",
@@ -88,65 +100,67 @@
     "schema": "https://schema.org/",
     "skos": "http://www.w3.org/2004/02/skos/core#",
     "statisticalDataType": {
-      "@id": "dsv:statisticalDataType",
+      "@id": "dsvo:statisticalDataType",
       "@type": "@id"
     },
     "summaryStatistics": {
-      "@id": "dsv:summaryStatistics",
+      "@id": "dsvo:summaryStatistics",
       "@type": "@id"
     },
     "title": "dct:title",
     "titles": "csvw:title",
     "unitText": "schema:unitText",
     "xsd": "http://www.w3.org/2001/XMLSchema#",
+    "dsv": "https://w3id.org/dsv-ontology#",
     "dcterms": "http://purl.org/dc/terms/",
     "prov": "http://www.w3.org/ns/prov#"
   },
-  "@id": "urn:linked-codebook:dataset:Gallstone-1%20(UCI%20ML%20Repository%2C%20ID%201150)",
+  "@id": "https://bennokr.github.io/semsynth/output/gallstone/",
   "@type": [
     "dcat:Dataset",
-    "dsv:Dataset"
+    "dsvo:Dataset"
   ],
+  "identifier": "https://bennokr.github.io/semsynth/output/gallstone/",
   "title": "Gallstone-1 (UCI ML Repository, ID 1150)",
   "datasetSchema": {
-    "@id": "urn:linked-codebook:dataset:Gallstone-1%20(UCI%20ML%20Repository%2C%20ID%201150)#schema",
-    "@type": "dsv:DatasetSchema",
+    "@id": "https://bennokr.github.io/semsynth/output/gallstone/#schema",
+    "@type": "dsvo:DatasetSchema",
     "columns": [
       {
-        "@id": "urn:linked-codebook:dataset:Gallstone-1%20(UCI%20ML%20Repository%2C%20ID%201150)#column-Gallstone%20Status",
-        "@type": "dsv:Column",
+        "@id": "https://bennokr.github.io/semsynth/output/gallstone/#column-Gallstone%20Status",
+        "@type": "dsvo:Column",
         "titles": "0=Yes (gallstones present), 1=No",
         "name": "Gallstone Status",
         "columnProperty": {
-          "@id": "urn:linked-codebook:dataset:Gallstone-1%20(UCI%20ML%20Repository%2C%20ID%201150)#property-Gallstone%20Status",
-          "@type": "dsv:ColumnProperty",
+          "@id": "https://bennokr.github.io/semsynth/output/gallstone/#property-Gallstone%20Status",
+          "@type": "dsvo:ColumnProperty",
           "hasVariable": {
-            "@id": "urn:linked-codebook:dataset:Gallstone-1%20(UCI%20ML%20Repository%2C%20ID%201150)#variable-Gallstone%20Status",
+            "@id": "https://bennokr.github.io/semsynth/output/gallstone/#variable-Gallstone%20Status",
             "@type": "skos:Concept",
             "skos:prefLabel": "0=Yes (gallstones present), 1=No"
           },
           "hasCodeBook": {
-            "@id": "urn:linked-codebook:dataset:Gallstone-1%20(UCI%20ML%20Repository%2C%20ID%201150)#variable-Gallstone%20Status-codes",
+            "@id": "https://bennokr.github.io/semsynth/output/gallstone/#variable-Gallstone%20Status-codes",
             "@type": "skos:ConceptScheme",
             "skos:hasTopConcept": [
               {
-                "@id": "urn:linked-codebook:dataset:Gallstone-1%20(UCI%20ML%20Repository%2C%20ID%201150)#variable-Gallstone%20Status-codes-0",
+                "@id": "https://bennokr.github.io/semsynth/output/gallstone/#variable-Gallstone%20Status-codes-0",
                 "@type": "skos:Concept",
                 "skos:prefLabel": "Gallstones present",
                 "exactMatch": [
                   "sct:235919008"
                 ],
                 "skos:inScheme": {
-                  "@id": "urn:linked-codebook:dataset:Gallstone-1%20(UCI%20ML%20Repository%2C%20ID%201150)#variable-Gallstone%20Status-codes"
+                  "@id": "https://bennokr.github.io/semsynth/output/gallstone/#variable-Gallstone%20Status-codes"
                 },
                 "skos:notation": "0"
               },
               {
-                "@id": "urn:linked-codebook:dataset:Gallstone-1%20(UCI%20ML%20Repository%2C%20ID%201150)#variable-Gallstone%20Status-codes-1",
+                "@id": "https://bennokr.github.io/semsynth/output/gallstone/#variable-Gallstone%20Status-codes-1",
                 "@type": "skos:Concept",
                 "skos:prefLabel": "Gallstones absent",
                 "skos:inScheme": {
-                  "@id": "urn:linked-codebook:dataset:Gallstone-1%20(UCI%20ML%20Repository%2C%20ID%201150)#variable-Gallstone%20Status-codes"
+                  "@id": "https://bennokr.github.io/semsynth/output/gallstone/#variable-Gallstone%20Status-codes"
                 },
                 "skos:notation": "1"
               }
@@ -154,72 +168,72 @@
           }
         },
         "summaryStatistics": {
-          "@id": "urn:linked-codebook:dataset:Gallstone-1%20(UCI%20ML%20Repository%2C%20ID%201150)#statistics-Gallstone%20Status",
-          "@type": "dsv:SummaryStatistics",
-          "statisticalDataType": "dsv:NominalDataType"
+          "@id": "https://bennokr.github.io/semsynth/output/gallstone/#statistics-Gallstone%20Status",
+          "@type": "dsvo:SummaryStatistics",
+          "statisticalDataType": "dsvo:NominalDataType"
         },
         "prov:hadRole": "target"
       },
       {
-        "@id": "urn:linked-codebook:dataset:Gallstone-1%20(UCI%20ML%20Repository%2C%20ID%201150)#column-Age",
-        "@type": "dsv:Column",
+        "@id": "https://bennokr.github.io/semsynth/output/gallstone/#column-Age",
+        "@type": "dsvo:Column",
         "datatype": "integer",
         "name": "Age",
         "titles": "Age",
         "columnProperty": {
-          "@id": "urn:linked-codebook:dataset:Gallstone-1%20(UCI%20ML%20Repository%2C%20ID%201150)#property-Age",
-          "@type": "dsv:ColumnProperty",
+          "@id": "https://bennokr.github.io/semsynth/output/gallstone/#property-Age",
+          "@type": "dsvo:ColumnProperty",
           "hasVariable": {
-            "@id": "urn:linked-codebook:dataset:Gallstone-1%20(UCI%20ML%20Repository%2C%20ID%201150)#variable-Age",
+            "@id": "https://bennokr.github.io/semsynth/output/gallstone/#variable-Age",
             "@type": "skos:Concept",
             "skos:prefLabel": "Age"
           },
           "hasUnit": "http://qudt.org/vocab/unit/YR"
         },
         "summaryStatistics": {
-          "@id": "urn:linked-codebook:dataset:Gallstone-1%20(UCI%20ML%20Repository%2C%20ID%201150)#statistics-Age",
-          "@type": "dsv:SummaryStatistics",
-          "statisticalDataType": "dsv:NumericalDataType"
+          "@id": "https://bennokr.github.io/semsynth/output/gallstone/#statistics-Age",
+          "@type": "dsvo:SummaryStatistics",
+          "statisticalDataType": "dsvo:NumericalDataType"
         }
       },
       {
-        "@id": "urn:linked-codebook:dataset:Gallstone-1%20(UCI%20ML%20Repository%2C%20ID%201150)#column-Gender",
-        "@type": "dsv:Column",
+        "@id": "https://bennokr.github.io/semsynth/output/gallstone/#column-Gender",
+        "@type": "dsvo:Column",
         "name": "Gender",
         "titles": "Gender",
         "columnProperty": {
-          "@id": "urn:linked-codebook:dataset:Gallstone-1%20(UCI%20ML%20Repository%2C%20ID%201150)#property-Gender",
-          "@type": "dsv:ColumnProperty",
+          "@id": "https://bennokr.github.io/semsynth/output/gallstone/#property-Gender",
+          "@type": "dsvo:ColumnProperty",
           "hasVariable": {
-            "@id": "urn:linked-codebook:dataset:Gallstone-1%20(UCI%20ML%20Repository%2C%20ID%201150)#variable-Gender",
+            "@id": "https://bennokr.github.io/semsynth/output/gallstone/#variable-Gender",
             "@type": "skos:Concept",
             "skos:prefLabel": "Gender"
           },
           "hasCodeBook": {
-            "@id": "urn:linked-codebook:dataset:Gallstone-1%20(UCI%20ML%20Repository%2C%20ID%201150)#variable-Gender-codes",
+            "@id": "https://bennokr.github.io/semsynth/output/gallstone/#variable-Gender-codes",
             "@type": "skos:ConceptScheme",
             "skos:hasTopConcept": [
               {
-                "@id": "urn:linked-codebook:dataset:Gallstone-1%20(UCI%20ML%20Repository%2C%20ID%201150)#variable-Gender-codes-0",
+                "@id": "https://bennokr.github.io/semsynth/output/gallstone/#variable-Gender-codes-0",
                 "@type": "skos:Concept",
                 "skos:prefLabel": "Male",
                 "exactMatch": [
                   "sct:248153007"
                 ],
                 "skos:inScheme": {
-                  "@id": "urn:linked-codebook:dataset:Gallstone-1%20(UCI%20ML%20Repository%2C%20ID%201150)#variable-Gender-codes"
+                  "@id": "https://bennokr.github.io/semsynth/output/gallstone/#variable-Gender-codes"
                 },
                 "skos:notation": "0"
               },
               {
-                "@id": "urn:linked-codebook:dataset:Gallstone-1%20(UCI%20ML%20Repository%2C%20ID%201150)#variable-Gender-codes-1",
+                "@id": "https://bennokr.github.io/semsynth/output/gallstone/#variable-Gender-codes-1",
                 "@type": "skos:Concept",
                 "skos:prefLabel": "Female",
                 "exactMatch": [
                   "sct:248152002"
                 ],
                 "skos:inScheme": {
-                  "@id": "urn:linked-codebook:dataset:Gallstone-1%20(UCI%20ML%20Repository%2C%20ID%201150)#variable-Gender-codes"
+                  "@id": "https://bennokr.github.io/semsynth/output/gallstone/#variable-Gender-codes"
                 },
                 "skos:notation": "1"
               }
@@ -227,22 +241,22 @@
           }
         },
         "summaryStatistics": {
-          "@id": "urn:linked-codebook:dataset:Gallstone-1%20(UCI%20ML%20Repository%2C%20ID%201150)#statistics-Gender",
-          "@type": "dsv:SummaryStatistics",
-          "statisticalDataType": "dsv:NominalDataType"
+          "@id": "https://bennokr.github.io/semsynth/output/gallstone/#statistics-Gender",
+          "@type": "dsvo:SummaryStatistics",
+          "statisticalDataType": "dsvo:NominalDataType"
         }
       },
       {
-        "@id": "urn:linked-codebook:dataset:Gallstone-1%20(UCI%20ML%20Repository%2C%20ID%201150)#column-BMI",
-        "@type": "dsv:Column",
+        "@id": "https://bennokr.github.io/semsynth/output/gallstone/#column-BMI",
+        "@type": "dsvo:Column",
         "datatype": "number",
         "name": "BMI",
         "titles": "BMI",
         "columnProperty": {
-          "@id": "urn:linked-codebook:dataset:Gallstone-1%20(UCI%20ML%20Repository%2C%20ID%201150)#property-BMI",
-          "@type": "dsv:ColumnProperty",
+          "@id": "https://bennokr.github.io/semsynth/output/gallstone/#property-BMI",
+          "@type": "dsvo:ColumnProperty",
           "hasVariable": {
-            "@id": "urn:linked-codebook:dataset:Gallstone-1%20(UCI%20ML%20Repository%2C%20ID%201150)#variable-BMI",
+            "@id": "https://bennokr.github.io/semsynth/output/gallstone/#variable-BMI",
             "@type": "skos:Concept",
             "skos:prefLabel": "BMI",
             "dct:source": {
@@ -252,22 +266,22 @@
           "hasUnit": "http://qudt.org/vocab/unit/KiloGM-PER-M2"
         },
         "summaryStatistics": {
-          "@id": "urn:linked-codebook:dataset:Gallstone-1%20(UCI%20ML%20Repository%2C%20ID%201150)#statistics-BMI",
-          "@type": "dsv:SummaryStatistics",
-          "statisticalDataType": "dsv:NumericalDataType"
+          "@id": "https://bennokr.github.io/semsynth/output/gallstone/#statistics-BMI",
+          "@type": "dsvo:SummaryStatistics",
+          "statisticalDataType": "dsvo:NumericalDataType"
         }
       },
       {
-        "@id": "urn:linked-codebook:dataset:Gallstone-1%20(UCI%20ML%20Repository%2C%20ID%201150)#column-Glucose",
-        "@type": "dsv:Column",
+        "@id": "https://bennokr.github.io/semsynth/output/gallstone/#column-Glucose",
+        "@type": "dsvo:Column",
         "datatype": "number",
         "name": "Glucose",
         "titles": "Glucose",
         "columnProperty": {
-          "@id": "urn:linked-codebook:dataset:Gallstone-1%20(UCI%20ML%20Repository%2C%20ID%201150)#property-Glucose",
-          "@type": "dsv:ColumnProperty",
+          "@id": "https://bennokr.github.io/semsynth/output/gallstone/#property-Glucose",
+          "@type": "dsvo:ColumnProperty",
           "hasVariable": {
-            "@id": "urn:linked-codebook:dataset:Gallstone-1%20(UCI%20ML%20Repository%2C%20ID%201150)#variable-Glucose",
+            "@id": "https://bennokr.github.io/semsynth/output/gallstone/#variable-Glucose",
             "@type": "skos:Concept",
             "skos:prefLabel": "Glucose",
             "dct:source": {
@@ -278,9 +292,9 @@
           "unitText": "mg/dL"
         },
         "summaryStatistics": {
-          "@id": "urn:linked-codebook:dataset:Gallstone-1%20(UCI%20ML%20Repository%2C%20ID%201150)#statistics-Glucose",
-          "@type": "dsv:SummaryStatistics",
-          "statisticalDataType": "dsv:NumericalDataType"
+          "@id": "https://bennokr.github.io/semsynth/output/gallstone/#statistics-Glucose",
+          "@type": "dsvo:SummaryStatistics",
+          "statisticalDataType": "dsvo:NumericalDataType"
         }
       }
     ]

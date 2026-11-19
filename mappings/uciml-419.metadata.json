@@ -1,6 +1,7 @@
 {
   "@context": {
     "accessRights": "dct:accessRights",
+    "appliesWhen": "lc:applies_when",
     "broadMatch": {
       "@container": "@set",
       "@id": "skos:broadMatch",
@@ -12,35 +13,38 @@
       "@id": "skos:closeMatch",
       "@type": "@id"
     },
+    "codeBookClosed": "lc:closed",
     "columnCompleteness": {
-      "@id": "dsv:columnCompleteness",
+      "@id": "dsvo:columnCompleteness",
       "@type": "xsd:float"
     },
+    "columnFormat": "csvw:format",
+    "columnGroup": "lc:group",
     "columnProperty": {
-      "@id": "dsv:columnProperty",
+      "@id": "dsvo:columnProperty",
       "@type": "@id"
     },
     "columns": {
       "@container": "@set",
-      "@id": "dsv:column"
+      "@id": "dsvo:column"
     },
     "csvw": "http://www.w3.org/ns/csvw#",
     "datasetSchema": {
-      "@id": "dsv:datasetSchema",
+      "@id": "dsvo:datasetSchema",
       "@type": "@id"
     },
     "datatype": "csvw:datatype",
     "dcat": "http://www.w3.org/ns/dcat#",
     "dct": "http://purl.org/dc/terms/",
     "description": "dct:description",
-    "dsv": "https://w3id.org/dsv-ontology#",
+    "dsvo": "https://w3id.org/dsv-ontology#",
     "exactMatch": {
       "@container": "@set",
       "@id": "skos:exactMatch",
       "@type": "@id"
     },
     "hasCodeBook": {
-      "@id": "dsv:hasCodeBook",
+      "@id": "dsvo:hasCodeBook",
       "@type": "@id"
     },
     "hasUnit": {
@@ -48,18 +52,26 @@
       "@type": "@id"
     },
     "hasVariable": {
-      "@id": "dsv:hasVariable",
+      "@id": "dsvo:hasVariable",
       "@type": "@id"
     },
+    "high": "csvw:maxInclusive",
     "identifier": "dct:identifier",
+    "identifying": "lc:identifying",
     "landingPage": {
       "@id": "dcat:landingPage",
       "@type": "@id"
     },
+    "language": "dct:language",
+    "lc": "https://bennokr.github.io/linked-codebook/profile#",
     "license": {
       "@id": "dct:license",
       "@type": "@id"
     },
+    "low": "csvw:minInclusive",
+    "maximumValue": "csvw:maxInclusive",
+    "minimumValue": "csvw:minInclusive",
+    "missingRange": "lc:missing_range",
     "name": "csvw:name",
     "narrowMatch": {
       "@container": "@set",
@@ -71,11 +83,11 @@
       "@id": "csvw:null"
     },
     "numberOfColumns": {
-      "@id": "dsv:numberOfColumns",
+      "@id": "dsvo:numberOfColumns",
       "@type": "xsd:integer"
     },
     "numberOfRows": {
-      "@id": "dsv:numberOfRows",
+      "@id": "dsvo:numberOfRows",
       "@type": "xsd:integer"
     },
     "qudt": "http://qudt.org/schema/qudt/",
@@ -88,324 +100,326 @@
     "schema": "https://schema.org/",
     "skos": "http://www.w3.org/2004/02/skos/core#",
     "statisticalDataType": {
-      "@id": "dsv:statisticalDataType",
+      "@id": "dsvo:statisticalDataType",
       "@type": "@id"
     },
     "summaryStatistics": {
-      "@id": "dsv:summaryStatistics",
+      "@id": "dsvo:summaryStatistics",
       "@type": "@id"
     },
     "title": "dct:title",
     "titles": "csvw:title",
     "unitText": "schema:unitText",
     "xsd": "http://www.w3.org/2001/XMLSchema#",
+    "dsv": "https://w3id.org/dsv-ontology#",
     "dcterms": "http://purl.org/dc/terms/",
     "prov": "http://www.w3.org/ns/prov#"
   },
-  "@id": "urn:linked-codebook:dataset:Autistic%20Spectrum%20Disorder%20Screening%20Data%20for%20Children",
+  "@id": "https://bennokr.github.io/semsynth/output/autistic-spectrum-disorder-screening-data-for-children/",
   "@type": [
     "dcat:Dataset",
-    "dsv:Dataset"
+    "dsvo:Dataset"
   ],
   "description": "see attached file for variables' description ",
+  "identifier": "https://bennokr.github.io/semsynth/output/autistic-spectrum-disorder-screening-data-for-children/",
   "landingPage": "https://archive.ics.uci.edu/dataset/419/autistic+spectrum+disorder+screening+data+for+children",
   "title": "Autistic Spectrum Disorder Screening Data for Children",
   "summaryStatistics": {
-    "@id": "urn:linked-codebook:dataset:Autistic%20Spectrum%20Disorder%20Screening%20Data%20for%20Children#statistics",
-    "@type": "dsv:SummaryStatistics",
+    "@id": "https://bennokr.github.io/semsynth/output/autistic-spectrum-disorder-screening-data-for-children/#statistics",
+    "@type": "dsvo:SummaryStatistics",
     "numberOfRows": 292,
     "numberOfColumns": 21
   },
   "datasetSchema": {
-    "@id": "urn:linked-codebook:dataset:Autistic%20Spectrum%20Disorder%20Screening%20Data%20for%20Children#schema",
-    "@type": "dsv:DatasetSchema",
+    "@id": "https://bennokr.github.io/semsynth/output/autistic-spectrum-disorder-screening-data-for-children/#schema",
+    "@type": "dsvo:DatasetSchema",
     "columns": [
       {
-        "@id": "urn:linked-codebook:dataset:Autistic%20Spectrum%20Disorder%20Screening%20Data%20for%20Children#column-A1_Score",
-        "@type": "dsv:Column",
+        "@id": "https://bennokr.github.io/semsynth/output/autistic-spectrum-disorder-screening-data-for-children/#column-A1_Score",
+        "@type": "dsvo:Column",
         "name": "A1_Score",
         "titles": "A1_Score",
         "columnProperty": {
-          "@id": "urn:linked-codebook:dataset:Autistic%20Spectrum%20Disorder%20Screening%20Data%20for%20Children#property-A1_Score",
-          "@type": "dsv:ColumnProperty",
+          "@id": "https://bennokr.github.io/semsynth/output/autistic-spectrum-disorder-screening-data-for-children/#property-A1_Score",
+          "@type": "dsvo:ColumnProperty",
           "hasVariable": {
-            "@id": "urn:linked-codebook:dataset:Autistic%20Spectrum%20Disorder%20Screening%20Data%20for%20Children#variable-A1_Score",
+            "@id": "https://bennokr.github.io/semsynth/output/autistic-spectrum-disorder-screening-data-for-children/#variable-A1_Score",
             "@type": "skos:Concept",
             "skos:prefLabel": "A1_Score"
           }
         },
         "summaryStatistics": {
-          "@id": "urn:linked-codebook:dataset:Autistic%20Spectrum%20Disorder%20Screening%20Data%20for%20Children#statistics-A1_Score",
-          "@type": "dsv:SummaryStatistics",
-          "statisticalDataType": "dsv:NumericalDataType"
+          "@id": "https://bennokr.github.io/semsynth/output/autistic-spectrum-disorder-screening-data-for-children/#statistics-A1_Score",
+          "@type": "dsvo:SummaryStatistics",
+          "statisticalDataType": "dsvo:NumericalDataType"
         },
         "prov:hadRole": "Feature"
       },
       {
-        "@id": "urn:linked-codebook:dataset:Autistic%20Spectrum%20Disorder%20Screening%20Data%20for%20Children#column-A2_Score",
-        "@type": "dsv:Column",
+        "@id": "https://bennokr.github.io/semsynth/output/autistic-spectrum-disorder-screening-data-for-children/#column-A2_Score",
+        "@type": "dsvo:Column",
         "name": "A2_Score",
         "titles": "A2_Score",
         "columnProperty": {
-          "@id": "urn:linked-codebook:dataset:Autistic%20Spectrum%20Disorder%20Screening%20Data%20for%20Children#property-A2_Score",
-          "@type": "dsv:ColumnProperty",
+          "@id": "https://bennokr.github.io/semsynth/output/autistic-spectrum-disorder-screening-data-for-children/#property-A2_Score",
+          "@type": "dsvo:ColumnProperty",
           "hasVariable": {
-            "@id": "urn:linked-codebook:dataset:Autistic%20Spectrum%20Disorder%20Screening%20Data%20for%20Children#variable-A2_Score",
+            "@id": "https://bennokr.github.io/semsynth/output/autistic-spectrum-disorder-screening-data-for-children/#variable-A2_Score",
             "@type": "skos:Concept",
             "skos:prefLabel": "A2_Score"
           }
         },
         "summaryStatistics": {
-          "@id": "urn:linked-codebook:dataset:Autistic%20Spectrum%20Disorder%20Screening%20Data%20for%20Children#statistics-A2_Score",
-          "@type": "dsv:SummaryStatistics",
-          "statisticalDataType": "dsv:NumericalDataType"
+          "@id": "https://bennokr.github.io/semsynth/output/autistic-spectrum-disorder-screening-data-for-children/#statistics-A2_Score",
+          "@type": "dsvo:SummaryStatistics",
+          "statisticalDataType": "dsvo:NumericalDataType"
         },
         "prov:hadRole": "Feature"
       },
       {
-        "@id": "urn:linked-codebook:dataset:Autistic%20Spectrum%20Disorder%20Screening%20Data%20for%20Children#column-A3_Score",
-        "@type": "dsv:Column",
+        "@id": "https://bennokr.github.io/semsynth/output/autistic-spectrum-disorder-screening-data-for-children/#column-A3_Score",
+        "@type": "dsvo:Column",
         "name": "A3_Score",
         "titles": "A3_Score",
         "columnProperty": {
-          "@id": "urn:linked-codebook:dataset:Autistic%20Spectrum%20Disorder%20Screening%20Data%20for%20Children#property-A3_Score",
-          "@type": "dsv:ColumnProperty",
+          "@id": "https://bennokr.github.io/semsynth/output/autistic-spectrum-disorder-screening-data-for-children/#property-A3_Score",
+          "@type": "dsvo:ColumnProperty",
           "hasVariable": {
-            "@id": "urn:linked-codebook:dataset:Autistic%20Spectrum%20Disorder%20Screening%20Data%20for%20Children#variable-A3_Score",
+            "@id": "https://bennokr.github.io/semsynth/output/autistic-spectrum-disorder-screening-data-for-children/#variable-A3_Score",
             "@type": "skos:Concept",
             "skos:prefLabel": "A3_Score"
           }
         },
         "summaryStatistics": {
-          "@id": "urn:linked-codebook:dataset:Autistic%20Spectrum%20Disorder%20Screening%20Data%20for%20Children#statistics-A3_Score",
-          "@type": "dsv:SummaryStatistics",
-          "statisticalDataType": "dsv:NumericalDataType"
+          "@id": "https://bennokr.github.io/semsynth/output/autistic-spectrum-disorder-screening-data-for-children/#statistics-A3_Score",
+          "@type": "dsvo:SummaryStatistics",
+          "statisticalDataType": "dsvo:NumericalDataType"
         },
         "prov:hadRole": "Feature"
       },
       {
-        "@id": "urn:linked-codebook:dataset:Autistic%20Spectrum%20Disorder%20Screening%20Data%20for%20Children#column-A4_Score",
-        "@type": "dsv:Column",
+        "@id": "https://bennokr.github.io/semsynth/output/autistic-spectrum-disorder-screening-data-for-children/#column-A4_Score",
+        "@type": "dsvo:Column",
         "name": "A4_Score",
         "titles": "A4_Score",
         "columnProperty": {
-          "@id": "urn:linked-codebook:dataset:Autistic%20Spectrum%20Disorder%20Screening%20Data%20for%20Children#property-A4_Score",
-          "@type": "dsv:ColumnProperty",
+          "@id": "https://bennokr.github.io/semsynth/output/autistic-spectrum-disorder-screening-data-for-children/#property-A4_Score",
+          "@type": "dsvo:ColumnProperty",
           "hasVariable": {
-            "@id": "urn:linked-codebook:dataset:Autistic%20Spectrum%20Disorder%20Screening%20Data%20for%20Children#variable-A4_Score",
+            "@id": "https://bennokr.github.io/semsynth/output/autistic-spectrum-disorder-screening-data-for-children/#variable-A4_Score",
             "@type": "skos:Concept",
             "skos:prefLabel": "A4_Score"
           }
         },
         "summaryStatistics": {
-          "@id": "urn:linked-codebook:dataset:Autistic%20Spectrum%20Disorder%20Screening%20Data%20for%20Children#statistics-A4_Score",
-          "@type": "dsv:SummaryStatistics",
-          "statisticalDataType": "dsv:NumericalDataType"
+          "@id": "https://bennokr.github.io/semsynth/output/autistic-spectrum-disorder-screening-data-for-children/#statistics-A4_Score",
+          "@type": "dsvo:SummaryStatistics",
+          "statisticalDataType": "dsvo:NumericalDataType"
         },
         "prov:hadRole": "Feature"
       },
       {
-        "@id": "urn:linked-codebook:dataset:Autistic%20Spectrum%20Disorder%20Screening%20Data%20for%20Children#column-A5_Score",
-        "@type": "dsv:Column",
+        "@id": "https://bennokr.github.io/semsynth/output/autistic-spectrum-disorder-screening-data-for-children/#column-A5_Score",
+        "@type": "dsvo:Column",
         "name": "A5_Score",
         "titles": "A5_Score",
         "columnProperty": {
-          "@id": "urn:linked-codebook:dataset:Autistic%20Spectrum%20Disorder%20Screening%20Data%20for%20Children#property-A5_Score",
-          "@type": "dsv:ColumnProperty",
+          "@id": "https://bennokr.github.io/semsynth/output/autistic-spectrum-disorder-screening-data-for-children/#property-A5_Score",
+          "@type": "dsvo:ColumnProperty",
           "hasVariable": {
-            "@id": "urn:linked-codebook:dataset:Autistic%20Spectrum%20Disorder%20Screening%20Data%20for%20Children#variable-A5_Score",
+            "@id": "https://bennokr.github.io/semsynth/output/autistic-spectrum-disorder-screening-data-for-children/#variable-A5_Score",
             "@type": "skos:Concept",
             "skos:prefLabel": "A5_Score"
           }
         },
         "summaryStatistics": {
-          "@id": "urn:linked-codebook:dataset:Autistic%20Spectrum%20Disorder%20Screening%20Data%20for%20Children#statistics-A5_Score",
-          "@type": "dsv:SummaryStatistics",
-          "statisticalDataType": "dsv:NumericalDataType"
+          "@id": "https://bennokr.github.io/semsynth/output/autistic-spectrum-disorder-screening-data-for-children/#statistics-A5_Score",
+          "@type": "dsvo:SummaryStatistics",
+          "statisticalDataType": "dsvo:NumericalDataType"
         },
         "prov:hadRole": "Feature"
       },
       {
-        "@id": "urn:linked-codebook:dataset:Autistic%20Spectrum%20Disorder%20Screening%20Data%20for%20Children#column-A6_Score",
-        "@type": "dsv:Column",
+        "@id": "https://bennokr.github.io/semsynth/output/autistic-spectrum-disorder-screening-data-for-children/#column-A6_Score",
+        "@type": "dsvo:Column",
         "name": "A6_Score",
         "titles": "A6_Score",
         "columnProperty": {
-          "@id": "urn:linked-codebook:dataset:Autistic%20Spectrum%20Disorder%20Screening%20Data%20for%20Children#property-A6_Score",
-          "@type": "dsv:ColumnProperty",
+          "@id": "https://bennokr.github.io/semsynth/output/autistic-spectrum-disorder-screening-data-for-children/#property-A6_Score",
+          "@type": "dsvo:ColumnProperty",
           "hasVariable": {
-            "@id": "urn:linked-codebook:dataset:Autistic%20Spectrum%20Disorder%20Screening%20Data%20for%20Children#variable-A6_Score",
+            "@id": "https://bennokr.github.io/semsynth/output/autistic-spectrum-disorder-screening-data-for-children/#variable-A6_Score",
             "@type": "skos:Concept",
             "skos:prefLabel": "A6_Score"
           }
         },
         "summaryStatistics": {
-          "@id": "urn:linked-codebook:dataset:Autistic%20Spectrum%20Disorder%20Screening%20Data%20for%20Children#statistics-A6_Score",
-          "@type": "dsv:SummaryStatistics",
-          "statisticalDataType": "dsv:NumericalDataType"
+          "@id": "https://bennokr.github.io/semsynth/output/autistic-spectrum-disorder-screening-data-for-children/#statistics-A6_Score",
+          "@type": "dsvo:SummaryStatistics",
+          "statisticalDataType": "dsvo:NumericalDataType"
         },
         "prov:hadRole": "Feature"
       },
       {
-        "@id": "urn:linked-codebook:dataset:Autistic%20Spectrum%20Disorder%20Screening%20Data%20for%20Children#column-A7_Score",
-        "@type": "dsv:Column",
+        "@id": "https://bennokr.github.io/semsynth/output/autistic-spectrum-disorder-screening-data-for-children/#column-A7_Score",
+        "@type": "dsvo:Column",
         "name": "A7_Score",
         "titles": "A7_Score",
         "columnProperty": {
-          "@id": "urn:linked-codebook:dataset:Autistic%20Spectrum%20Disorder%20Screening%20Data%20for%20Children#property-A7_Score",
-          "@type": "dsv:ColumnProperty",
+          "@id": "https://bennokr.github.io/semsynth/output/autistic-spectrum-disorder-screening-data-for-children/#property-A7_Score",
+          "@type": "dsvo:ColumnProperty",
           "hasVariable": {
-            "@id": "urn:linked-codebook:dataset:Autistic%20Spectrum%20Disorder%20Screening%20Data%20for%20Children#variable-A7_Score",
+            "@id": "https://bennokr.github.io/semsynth/output/autistic-spectrum-disorder-screening-data-for-children/#variable-A7_Score",
             "@type": "skos:Concept",
             "skos:prefLabel": "A7_Score"
           }
         },
         "summaryStatistics": {
-          "@id": "urn:linked-codebook:dataset:Autistic%20Spectrum%20Disorder%20Screening%20Data%20for%20Children#statistics-A7_Score",
-          "@type": "dsv:SummaryStatistics",
-          "statisticalDataType": "dsv:NumericalDataType"
+          "@id": "https://bennokr.github.io/semsynth/output/autistic-spectrum-disorder-screening-data-for-children/#statistics-A7_Score",
+          "@type": "dsvo:SummaryStatistics",
+          "statisticalDataType": "dsvo:NumericalDataType"
         },
         "prov:hadRole": "Feature"
       },
       {
-        "@id": "urn:linked-codebook:dataset:Autistic%20Spectrum%20Disorder%20Screening%20Data%20for%20Children#column-A8_Score",
-        "@type": "dsv:Column",
+        "@id": "https://bennokr.github.io/semsynth/output/autistic-spectrum-disorder-screening-data-for-children/#column-A8_Score",
+        "@type": "dsvo:Column",
         "name": "A8_Score",
         "titles": "A8_Score",
         "columnProperty": {
-          "@id": "urn:linked-codebook:dataset:Autistic%20Spectrum%20Disorder%20Screening%20Data%20for%20Children#property-A8_Score",
-          "@type": "dsv:ColumnProperty",
+          "@id": "https://bennokr.github.io/semsynth/output/autistic-spectrum-disorder-screening-data-for-children/#property-A8_Score",
+          "@type": "dsvo:ColumnProperty",
           "hasVariable": {
-            "@id": "urn:linked-codebook:dataset:Autistic%20Spectrum%20Disorder%20Screening%20Data%20for%20Children#variable-A8_Score",
+            "@id": "https://bennokr.github.io/semsynth/output/autistic-spectrum-disorder-screening-data-for-children/#variable-A8_Score",
             "@type": "skos:Concept",
             "skos:prefLabel": "A8_Score"
           }
         },
         "summaryStatistics": {
-          "@id": "urn:linked-codebook:dataset:Autistic%20Spectrum%20Disorder%20Screening%20Data%20for%20Children#statistics-A8_Score",
-          "@type": "dsv:SummaryStatistics",
-          "statisticalDataType": "dsv:NumericalDataType"
+          "@id": "https://bennokr.github.io/semsynth/output/autistic-spectrum-disorder-screening-data-for-children/#statistics-A8_Score",
+          "@type": "dsvo:SummaryStatistics",
+          "statisticalDataType": "dsvo:NumericalDataType"
         },
         "prov:hadRole": "Feature"
       },
       {
-        "@id": "urn:linked-codebook:dataset:Autistic%20Spectrum%20Disorder%20Screening%20Data%20for%20Children#column-A9_Score",
-        "@type": "dsv:Column",
+        "@id": "https://bennokr.github.io/semsynth/output/autistic-spectrum-disorder-screening-data-for-children/#column-A9_Score",
+        "@type": "dsvo:Column",
         "name": "A9_Score",
         "titles": "A9_Score",
         "columnProperty": {
-          "@id": "urn:linked-codebook:dataset:Autistic%20Spectrum%20Disorder%20Screening%20Data%20for%20Children#property-A9_Score",
-          "@type": "dsv:ColumnProperty",
+          "@id": "https://bennokr.github.io/semsynth/output/autistic-spectrum-disorder-screening-data-for-children/#property-A9_Score",
+          "@type": "dsvo:ColumnProperty",
           "hasVariable": {
-            "@id": "urn:linked-codebook:dataset:Autistic%20Spectrum%20Disorder%20Screening%20Data%20for%20Children#variable-A9_Score",
+            "@id": "https://bennokr.github.io/semsynth/output/autistic-spectrum-disorder-screening-data-for-children/#variable-A9_Score",
             "@type": "skos:Concept",
             "skos:prefLabel": "A9_Score"
           }
         },
         "summaryStatistics": {
-          "@id": "urn:linked-codebook:dataset:Autistic%20Spectrum%20Disorder%20Screening%20Data%20for%20Children#statistics-A9_Score",
-          "@type": "dsv:SummaryStatistics",
-          "statisticalDataType": "dsv:NumericalDataType"
+          "@id": "https://bennokr.github.io/semsynth/output/autistic-spectrum-disorder-screening-data-for-children/#statistics-A9_Score",
+          "@type": "dsvo:SummaryStatistics",
+          "statisticalDataType": "dsvo:NumericalDataType"
         },
         "prov:hadRole": "Feature"
       },
       {
-        "@id": "urn:linked-codebook:dataset:Autistic%20Spectrum%20Disorder%20Screening%20Data%20for%20Children#column-A10_Score",
-        "@type": "dsv:Column",
+        "@id": "https://bennokr.github.io/semsynth/output/autistic-spectrum-disorder-screening-data-for-children/#column-A10_Score",
+        "@type": "dsvo:Column",
         "name": "A10_Score",
         "titles": "A10_Score",
         "columnProperty": {
-          "@id": "urn:linked-codebook:dataset:Autistic%20Spectrum%20Disorder%20Screening%20Data%20for%20Children#property-A10_Score",
-          "@type": "dsv:ColumnProperty",
+          "@id": "https://bennokr.github.io/semsynth/output/autistic-spectrum-disorder-screening-data-for-children/#property-A10_Score",
+          "@type": "dsvo:ColumnProperty",
           "hasVariable": {
-            "@id": "urn:linked-codebook:dataset:Autistic%20Spectrum%20Disorder%20Screening%20Data%20for%20Children#variable-A10_Score",
+            "@id": "https://bennokr.github.io/semsynth/output/autistic-spectrum-disorder-screening-data-for-children/#variable-A10_Score",
             "@type": "skos:Concept",
             "skos:prefLabel": "A10_Score"
           }
         },
         "summaryStatistics": {
-          "@id": "urn:linked-codebook:dataset:Autistic%20Spectrum%20Disorder%20Screening%20Data%20for%20Children#statistics-A10_Score",
-          "@type": "dsv:SummaryStatistics",
-          "statisticalDataType": "dsv:NumericalDataType"
+          "@id": "https://bennokr.github.io/semsynth/output/autistic-spectrum-disorder-screening-data-for-children/#statistics-A10_Score",
+          "@type": "dsvo:SummaryStatistics",
+          "statisticalDataType": "dsvo:NumericalDataType"
         },
         "prov:hadRole": "Feature"
       },
       {
-        "@id": "urn:linked-codebook:dataset:Autistic%20Spectrum%20Disorder%20Screening%20Data%20for%20Children#column-age",
-        "@type": "dsv:Column",
+        "@id": "https://bennokr.github.io/semsynth/output/autistic-spectrum-disorder-screening-data-for-children/#column-age",
+        "@type": "dsvo:Column",
         "name": "age",
         "titles": "age",
         "columnProperty": {
-          "@id": "urn:linked-codebook:dataset:Autistic%20Spectrum%20Disorder%20Screening%20Data%20for%20Children#property-age",
-          "@type": "dsv:ColumnProperty",
+          "@id": "https://bennokr.github.io/semsynth/output/autistic-spectrum-disorder-screening-data-for-children/#property-age",
+          "@type": "dsvo:ColumnProperty",
           "hasVariable": {
-            "@id": "urn:linked-codebook:dataset:Autistic%20Spectrum%20Disorder%20Screening%20Data%20for%20Children#variable-age",
+            "@id": "https://bennokr.github.io/semsynth/output/autistic-spectrum-disorder-screening-data-for-children/#variable-age",
             "@type": "skos:Concept",
             "skos:prefLabel": "age"
           }
         },
         "summaryStatistics": {
-          "@id": "urn:linked-codebook:dataset:Autistic%20Spectrum%20Disorder%20Screening%20Data%20for%20Children#statistics-age",
-          "@type": "dsv:SummaryStatistics",
-          "statisticalDataType": "dsv:NumericalDataType"
+          "@id": "https://bennokr.github.io/semsynth/output/autistic-spectrum-disorder-screening-data-for-children/#statistics-age",
+          "@type": "dsvo:SummaryStatistics",
+          "statisticalDataType": "dsvo:NumericalDataType"
         },
         "prov:hadRole": "Feature"
       },
       {
-        "@id": "urn:linked-codebook:dataset:Autistic%20Spectrum%20Disorder%20Screening%20Data%20for%20Children#column-gender",
-        "@type": "dsv:Column",
+        "@id": "https://bennokr.github.io/semsynth/output/autistic-spectrum-disorder-screening-data-for-children/#column-gender",
+        "@type": "dsvo:Column",
         "name": "gender",
         "titles": "gender",
         "columnProperty": {
-          "@id": "urn:linked-codebook:dataset:Autistic%20Spectrum%20Disorder%20Screening%20Data%20for%20Children#property-gender",
-          "@type": "dsv:ColumnProperty",
+          "@id": "https://bennokr.github.io/semsynth/output/autistic-spectrum-disorder-screening-data-for-children/#property-gender",
+          "@type": "dsvo:ColumnProperty",
           "hasVariable": {
-            "@id": "urn:linked-codebook:dataset:Autistic%20Spectrum%20Disorder%20Screening%20Data%20for%20Children#variable-gender",
+            "@id": "https://bennokr.github.io/semsynth/output/autistic-spectrum-disorder-screening-data-for-children/#variable-gender",
             "@type": "skos:Concept",
             "skos:prefLabel": "gender"
           }
         },
         "summaryStatistics": {
-          "@id": "urn:linked-codebook:dataset:Autistic%20Spectrum%20Disorder%20Screening%20Data%20for%20Children#statistics-gender",
-          "@type": "dsv:SummaryStatistics",
-          "statisticalDataType": "dsv:CategoricalDataType"
+          "@id": "https://bennokr.github.io/semsynth/output/autistic-spectrum-disorder-screening-data-for-children/#statistics-gender",
+          "@type": "dsvo:SummaryStatistics",
+          "statisticalDataType": "dsvo:CategoricalDataType"
         },
         "prov:hadRole": "Feature"
       },
       {
-        "@id": "urn:linked-codebook:dataset:Autistic%20Spectrum%20Disorder%20Screening%20Data%20for%20Children#column-ethnicity",
-        "@type": "dsv:Column",
+        "@id": "https://bennokr.github.io/semsynth/output/autistic-spectrum-disorder-screening-data-for-children/#column-ethnicity",
+        "@type": "dsvo:Column",
         "name": "ethnicity",
         "titles": "ethnicity",
         "nullValues": [
           "NaN"
         ],
         "columnProperty": {
-          "@id": "urn:linked-codebook:dataset:Autistic%20Spectrum%20Disorder%20Screening%20Data%20for%20Children#property-ethnicity",
-          "@type": "dsv:ColumnProperty",
+          "@id": "https://bennokr.github.io/semsynth/output/autistic-spectrum-disorder-screening-data-for-children/#property-ethnicity",
+          "@type": "dsvo:ColumnProperty",
           "hasVariable": {
-            "@id": "urn:linked-codebook:dataset:Autistic%20Spectrum%20Disorder%20Screening%20Data%20for%20Children#variable-ethnicity",
+            "@id": "https://bennokr.github.io/semsynth/output/autistic-spectrum-disorder-screening-data-for-children/#variable-ethnicity",
             "@type": "skos:Concept",
             "skos:prefLabel": "ethnicity"
           }
         },
         "summaryStatistics": {
-          "@id": "urn:linked-codebook:dataset:Autistic%20Spectrum%20Disorder%20Screening%20Data%20for%20Children#statistics-ethnicity",
-          "@type": "dsv:SummaryStatistics",
-          "statisticalDataType": "dsv:CategoricalDataType"
+          "@id": "https://bennokr.github.io/semsynth/output/autistic-spectrum-disorder-screening-data-for-children/#statistics-ethnicity",
+          "@type": "dsvo:SummaryStatistics",
+          "statisticalDataType": "dsvo:CategoricalDataType"
         },
         "prov:hadRole": "Feature"
       },
       {
-        "@id": "urn:linked-codebook:dataset:Autistic%20Spectrum%20Disorder%20Screening%20Data%20for%20Children#column-jaundice",
-        "@type": "dsv:Column",
+        "@id": "https://bennokr.github.io/semsynth/output/autistic-spectrum-disorder-screening-data-for-children/#column-jaundice",
+        "@type": "dsvo:Column",
         "name": "jaundice",
         "titles": "jaundice",
         "columnProperty": {
-          "@id": "urn:linked-codebook:dataset:Autistic%20Spectrum%20Disorder%20Screening%20Data%20for%20Children#property-jaundice",
-          "@type": "dsv:ColumnProperty",
+          "@id": "https://bennokr.github.io/semsynth/output/autistic-spectrum-disorder-screening-data-for-children/#property-jaundice",
+          "@type": "dsvo:ColumnProperty",
           "hasVariable": {
-            "@id": "urn:linked-codebook:dataset:Autistic%20Spectrum%20Disorder%20Screening%20Data%20for%20Children#variable-jaundice",
+            "@id": "https://bennokr.github.io/semsynth/output/autistic-spectrum-disorder-screening-data-for-children/#variable-jaundice",
             "@type": "skos:Concept",
             "skos:prefLabel": "jaundice"
           }
@@ -413,15 +427,15 @@
         "prov:hadRole": "Feature"
       },
       {
-        "@id": "urn:linked-codebook:dataset:Autistic%20Spectrum%20Disorder%20Screening%20Data%20for%20Children#column-autism",
-        "@type": "dsv:Column",
+        "@id": "https://bennokr.github.io/semsynth/output/autistic-spectrum-disorder-screening-data-for-children/#column-autism",
+        "@type": "dsvo:Column",
         "name": "autism",
         "titles": "autism",
         "columnProperty": {
-          "@id": "urn:linked-codebook:dataset:Autistic%20Spectrum%20Disorder%20Screening%20Data%20for%20Children#property-autism",
-          "@type": "dsv:ColumnProperty",
+          "@id": "https://bennokr.github.io/semsynth/output/autistic-spectrum-disorder-screening-data-for-children/#property-autism",
+          "@type": "dsvo:ColumnProperty",
           "hasVariable": {
-            "@id": "urn:linked-codebook:dataset:Autistic%20Spectrum%20Disorder%20Screening%20Data%20for%20Children#variable-autism",
+            "@id": "https://bennokr.github.io/semsynth/output/autistic-spectrum-disorder-screening-data-for-children/#variable-autism",
             "@type": "skos:Concept",
             "skos:prefLabel": "autism"
           }
@@ -429,36 +443,36 @@
         "prov:hadRole": "Feature"
       },
       {
-        "@id": "urn:linked-codebook:dataset:Autistic%20Spectrum%20Disorder%20Screening%20Data%20for%20Children#column-country_of_res",
-        "@type": "dsv:Column",
+        "@id": "https://bennokr.github.io/semsynth/output/autistic-spectrum-disorder-screening-data-for-children/#column-country_of_res",
+        "@type": "dsvo:Column",
         "name": "country_of_res",
         "titles": "country_of_res",
         "columnProperty": {
-          "@id": "urn:linked-codebook:dataset:Autistic%20Spectrum%20Disorder%20Screening%20Data%20for%20Children#property-country_of_res",
-          "@type": "dsv:ColumnProperty",
+          "@id": "https://bennokr.github.io/semsynth/output/autistic-spectrum-disorder-screening-data-for-children/#property-country_of_res",
+          "@type": "dsvo:ColumnProperty",
           "hasVariable": {
-            "@id": "urn:linked-codebook:dataset:Autistic%20Spectrum%20Disorder%20Screening%20Data%20for%20Children#variable-country_of_res",
+            "@id": "https://bennokr.github.io/semsynth/output/autistic-spectrum-disorder-screening-data-for-children/#variable-country_of_res",
             "@type": "skos:Concept",
             "skos:prefLabel": "country_of_res"
           }
         },
         "summaryStatistics": {
-          "@id": "urn:linked-codebook:dataset:Autistic%20Spectrum%20Disorder%20Screening%20Data%20for%20Children#statistics-country_of_res",
-          "@type": "dsv:SummaryStatistics",
-          "statisticalDataType": "dsv:CategoricalDataType"
+          "@id": "https://bennokr.github.io/semsynth/output/autistic-spectrum-disorder-screening-data-for-children/#statistics-country_of_res",
+          "@type": "dsvo:SummaryStatistics",
+          "statisticalDataType": "dsvo:CategoricalDataType"
         },
         "prov:hadRole": "Feature"
       },
       {
-        "@id": "urn:linked-codebook:dataset:Autistic%20Spectrum%20Disorder%20Screening%20Data%20for%20Children#column-used_app_before",
-        "@type": "dsv:Column",
+        "@id": "https://bennokr.github.io/semsynth/output/autistic-spectrum-disorder-screening-data-for-children/#column-used_app_before",
+        "@type": "dsvo:Column",
         "name": "used_app_before",
         "titles": "used_app_before",
         "columnProperty": {
-          "@id": "urn:linked-codebook:dataset:Autistic%20Spectrum%20Disorder%20Screening%20Data%20for%20Children#property-used_app_before",
-          "@type": "dsv:ColumnProperty",
+          "@id": "https://bennokr.github.io/semsynth/output/autistic-spectrum-disorder-screening-data-for-children/#property-used_app_before",
+          "@type": "dsvo:ColumnProperty",
           "hasVariable": {
-            "@id": "urn:linked-codebook:dataset:Autistic%20Spectrum%20Disorder%20Screening%20Data%20for%20Children#variable-used_app_before",
+            "@id": "https://bennokr.github.io/semsynth/output/autistic-spectrum-disorder-screening-data-for-children/#variable-used_app_before",
             "@type": "skos:Concept",
             "skos:prefLabel": "used_app_before"
           }
@@ -466,81 +480,81 @@
         "prov:hadRole": "Feature"
       },
       {
-        "@id": "urn:linked-codebook:dataset:Autistic%20Spectrum%20Disorder%20Screening%20Data%20for%20Children#column-result",
-        "@type": "dsv:Column",
+        "@id": "https://bennokr.github.io/semsynth/output/autistic-spectrum-disorder-screening-data-for-children/#column-result",
+        "@type": "dsvo:Column",
         "name": "result",
         "titles": "result",
         "columnProperty": {
-          "@id": "urn:linked-codebook:dataset:Autistic%20Spectrum%20Disorder%20Screening%20Data%20for%20Children#property-result",
-          "@type": "dsv:ColumnProperty",
+          "@id": "https://bennokr.github.io/semsynth/output/autistic-spectrum-disorder-screening-data-for-children/#property-result",
+          "@type": "dsvo:ColumnProperty",
           "hasVariable": {
-            "@id": "urn:linked-codebook:dataset:Autistic%20Spectrum%20Disorder%20Screening%20Data%20for%20Children#variable-result",
+            "@id": "https://bennokr.github.io/semsynth/output/autistic-spectrum-disorder-screening-data-for-children/#variable-result",
             "@type": "skos:Concept",
             "skos:prefLabel": "result"
           }
         },
         "summaryStatistics": {
-          "@id": "urn:linked-codebook:dataset:Autistic%20Spectrum%20Disorder%20Screening%20Data%20for%20Children#statistics-result",
-          "@type": "dsv:SummaryStatistics",
-          "statisticalDataType": "dsv:NumericalDataType"
+          "@id": "https://bennokr.github.io/semsynth/output/autistic-spectrum-disorder-screening-data-for-children/#statistics-result",
+          "@type": "dsvo:SummaryStatistics",
+          "statisticalDataType": "dsvo:NumericalDataType"
         },
         "prov:hadRole": "Feature"
       },
       {
-        "@id": "urn:linked-codebook:dataset:Autistic%20Spectrum%20Disorder%20Screening%20Data%20for%20Children#column-age_desc",
-        "@type": "dsv:Column",
+        "@id": "https://bennokr.github.io/semsynth/output/autistic-spectrum-disorder-screening-data-for-children/#column-age_desc",
+        "@type": "dsvo:Column",
         "name": "age_desc",
         "titles": "age_desc",
         "columnProperty": {
-          "@id": "urn:linked-codebook:dataset:Autistic%20Spectrum%20Disorder%20Screening%20Data%20for%20Children#property-age_desc",
-          "@type": "dsv:ColumnProperty",
+          "@id": "https://bennokr.github.io/semsynth/output/autistic-spectrum-disorder-screening-data-for-children/#property-age_desc",
+          "@type": "dsvo:ColumnProperty",
           "hasVariable": {
-            "@id": "urn:linked-codebook:dataset:Autistic%20Spectrum%20Disorder%20Screening%20Data%20for%20Children#variable-age_desc",
+            "@id": "https://bennokr.github.io/semsynth/output/autistic-spectrum-disorder-screening-data-for-children/#variable-age_desc",
             "@type": "skos:Concept",
             "skos:prefLabel": "age_desc"
           }
         },
         "summaryStatistics": {
-          "@id": "urn:linked-codebook:dataset:Autistic%20Spectrum%20Disorder%20Screening%20Data%20for%20Children#statistics-age_desc",
-          "@type": "dsv:SummaryStatistics",
-          "statisticalDataType": "dsv:CategoricalDataType"
+          "@id": "https://bennokr.github.io/semsynth/output/autistic-spectrum-disorder-screening-data-for-children/#statistics-age_desc",
+          "@type": "dsvo:SummaryStatistics",
+          "statisticalDataType": "dsvo:CategoricalDataType"
         },
         "prov:hadRole": "Feature"
       },
       {
-        "@id": "urn:linked-codebook:dataset:Autistic%20Spectrum%20Disorder%20Screening%20Data%20for%20Children#column-relation",
-        "@type": "dsv:Column",
+        "@id": "https://bennokr.github.io/semsynth/output/autistic-spectrum-disorder-screening-data-for-children/#column-relation",
+        "@type": "dsvo:Column",
         "name": "relation",
         "titles": "relation",
         "nullValues": [
           "NaN"
         ],
         "columnProperty": {
-          "@id": "urn:linked-codebook:dataset:Autistic%20Spectrum%20Disorder%20Screening%20Data%20for%20Children#property-relation",
-          "@type": "dsv:ColumnProperty",
+          "@id": "https://bennokr.github.io/semsynth/output/autistic-spectrum-disorder-screening-data-for-children/#property-relation",
+          "@type": "dsvo:ColumnProperty",
           "hasVariable": {
-            "@id": "urn:linked-codebook:dataset:Autistic%20Spectrum%20Disorder%20Screening%20Data%20for%20Children#variable-relation",
+            "@id": "https://bennokr.github.io/semsynth/output/autistic-spectrum-disorder-screening-data-for-children/#variable-relation",
             "@type": "skos:Concept",
             "skos:prefLabel": "relation"
           }
         },
         "summaryStatistics": {
-          "@id": "urn:linked-codebook:dataset:Autistic%20Spectrum%20Disorder%20Screening%20Data%20for%20Children#statistics-relation",
-          "@type": "dsv:SummaryStatistics",
-          "statisticalDataType": "dsv:CategoricalDataType"
+          "@id": "https://bennokr.github.io/semsynth/output/autistic-spectrum-disorder-screening-data-for-children/#statistics-relation",
+          "@type": "dsvo:SummaryStatistics",
+          "statisticalDataType": "dsvo:CategoricalDataType"
         },
         "prov:hadRole": "Feature"
       },
       {
-        "@id": "urn:linked-codebook:dataset:Autistic%20Spectrum%20Disorder%20Screening%20Data%20for%20Children#column-class",
-        "@type": "dsv:Column",
+        "@id": "https://bennokr.github.io/semsynth/output/autistic-spectrum-disorder-screening-data-for-children/#column-class",
+        "@type": "dsvo:Column",
         "name": "class",
         "titles": "class",
         "columnProperty": {
-          "@id": "urn:linked-codebook:dataset:Autistic%20Spectrum%20Disorder%20Screening%20Data%20for%20Children#property-class",
-          "@type": "dsv:ColumnProperty",
+          "@id": "https://bennokr.github.io/semsynth/output/autistic-spectrum-disorder-screening-data-for-children/#property-class",
+          "@type": "dsvo:ColumnProperty",
           "hasVariable": {
-            "@id": "urn:linked-codebook:dataset:Autistic%20Spectrum%20Disorder%20Screening%20Data%20for%20Children#variable-class",
+            "@id": "https://bennokr.github.io/semsynth/output/autistic-spectrum-disorder-screening-data-for-children/#variable-class",
             "@type": "skos:Concept",
             "skos:prefLabel": "class"
           }

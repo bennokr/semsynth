@@ -1,6 +1,7 @@
 {
   "@context": {
     "accessRights": "dct:accessRights",
+    "appliesWhen": "lc:applies_when",
     "broadMatch": {
       "@container": "@set",
       "@id": "skos:broadMatch",
@@ -12,35 +13,38 @@
       "@id": "skos:closeMatch",
       "@type": "@id"
     },
+    "codeBookClosed": "lc:closed",
     "columnCompleteness": {
-      "@id": "dsv:columnCompleteness",
+      "@id": "dsvo:columnCompleteness",
       "@type": "xsd:float"
     },
+    "columnFormat": "csvw:format",
+    "columnGroup": "lc:group",
     "columnProperty": {
-      "@id": "dsv:columnProperty",
+      "@id": "dsvo:columnProperty",
       "@type": "@id"
     },
     "columns": {
       "@container": "@set",
-      "@id": "dsv:column"
+      "@id": "dsvo:column"
     },
     "csvw": "http://www.w3.org/ns/csvw#",
     "datasetSchema": {
-      "@id": "dsv:datasetSchema",
+      "@id": "dsvo:datasetSchema",
       "@type": "@id"
     },
     "datatype": "csvw:datatype",
     "dcat": "http://www.w3.org/ns/dcat#",
     "dct": "http://purl.org/dc/terms/",
     "description": "dct:description",
-    "dsv": "https://w3id.org/dsv-ontology#",
+    "dsvo": "https://w3id.org/dsv-ontology#",
     "exactMatch": {
       "@container": "@set",
       "@id": "skos:exactMatch",
       "@type": "@id"
     },
     "hasCodeBook": {
-      "@id": "dsv:hasCodeBook",
+      "@id": "dsvo:hasCodeBook",
       "@type": "@id"
     },
     "hasUnit": {
@@ -48,18 +52,26 @@
       "@type": "@id"
     },
     "hasVariable": {
-      "@id": "dsv:hasVariable",
+      "@id": "dsvo:hasVariable",
       "@type": "@id"
     },
+    "high": "csvw:maxInclusive",
     "identifier": "dct:identifier",
+    "identifying": "lc:identifying",
     "landingPage": {
       "@id": "dcat:landingPage",
       "@type": "@id"
     },
+    "language": "dct:language",
+    "lc": "https://bennokr.github.io/linked-codebook/profile#",
     "license": {
       "@id": "dct:license",
       "@type": "@id"
     },
+    "low": "csvw:minInclusive",
+    "maximumValue": "csvw:maxInclusive",
+    "minimumValue": "csvw:minInclusive",
+    "missingRange": "lc:missing_range",
     "name": "csvw:name",
     "narrowMatch": {
       "@container": "@set",
@@ -71,11 +83,11 @@
       "@id": "csvw:null"
     },
     "numberOfColumns": {
-      "@id": "dsv:numberOfColumns",
+      "@id": "dsvo:numberOfColumns",
       "@type": "xsd:integer"
     },
     "numberOfRows": {
-      "@id": "dsv:numberOfRows",
+      "@id": "dsvo:numberOfRows",
       "@type": "xsd:integer"
     },
     "qudt": "http://qudt.org/schema/qudt/",
@@ -88,135 +100,137 @@
     "schema": "https://schema.org/",
     "skos": "http://www.w3.org/2004/02/skos/core#",
     "statisticalDataType": {
-      "@id": "dsv:statisticalDataType",
+      "@id": "dsvo:statisticalDataType",
       "@type": "@id"
     },
     "summaryStatistics": {
-      "@id": "dsv:summaryStatistics",
+      "@id": "dsvo:summaryStatistics",
       "@type": "@id"
     },
     "title": "dct:title",
     "titles": "csvw:title",
     "unitText": "schema:unitText",
     "xsd": "http://www.w3.org/2001/XMLSchema#",
+    "dsv": "https://w3id.org/dsv-ontology#",
     "dcterms": "http://purl.org/dc/terms/",
     "prov": "http://www.w3.org/ns/prov#"
   },
-  "@id": "urn:linked-codebook:dataset:UCI%20Diabetes%20130-US%20hospitals%20(1999%E2%80%932008)",
+  "@id": "https://bennokr.github.io/semsynth/output/diabetes-130-us-hospitals-for-years-1999-2008/",
   "@type": [
     "dcat:Dataset",
-    "dsv:Dataset"
+    "dsvo:Dataset"
   ],
+  "identifier": "https://bennokr.github.io/semsynth/output/diabetes-130-us-hospitals-for-years-1999-2008/",
   "landingPage": "https://archive.ics.uci.edu/dataset/296/diabetes+130-us+hospitals+for+years+1999-2008",
   "title": "UCI Diabetes 130-US hospitals (1999–2008)",
   "datasetSchema": {
-    "@id": "urn:linked-codebook:dataset:UCI%20Diabetes%20130-US%20hospitals%20(1999%E2%80%932008)#schema",
-    "@type": "dsv:DatasetSchema",
+    "@id": "https://bennokr.github.io/semsynth/output/diabetes-130-us-hospitals-for-years-1999-2008/#schema",
+    "@type": "dsvo:DatasetSchema",
     "columns": [
       {
-        "@id": "urn:linked-codebook:dataset:UCI%20Diabetes%20130-US%20hospitals%20(1999%E2%80%932008)#column-age",
-        "@type": "dsv:Column",
+        "@id": "https://bennokr.github.io/semsynth/output/diabetes-130-us-hospitals-for-years-1999-2008/#column-age",
+        "@type": "dsvo:Column",
         "titles": "Age (10-year bins)",
         "name": "age",
         "columnProperty": {
-          "@id": "urn:linked-codebook:dataset:UCI%20Diabetes%20130-US%20hospitals%20(1999%E2%80%932008)#property-age",
-          "@type": "dsv:ColumnProperty",
+          "@id": "https://bennokr.github.io/semsynth/output/diabetes-130-us-hospitals-for-years-1999-2008/#property-age",
+          "@type": "dsvo:ColumnProperty",
           "hasVariable": {
-            "@id": "urn:linked-codebook:dataset:UCI%20Diabetes%20130-US%20hospitals%20(1999%E2%80%932008)#variable-age",
+            "@id": "https://bennokr.github.io/semsynth/output/diabetes-130-us-hospitals-for-years-1999-2008/#variable-age",
             "@type": "skos:Concept",
             "skos:prefLabel": "Age (10-year bins)"
           },
           "hasCodeBook": {
-            "@id": "urn:linked-codebook:dataset:UCI%20Diabetes%20130-US%20hospitals%20(1999%E2%80%932008)#variable-age-codes",
+            "@id": "https://bennokr.github.io/semsynth/output/diabetes-130-us-hospitals-for-years-1999-2008/#variable-age-codes",
             "@type": "skos:ConceptScheme",
             "skos:hasTopConcept": [
               {
-                "@id": "urn:linked-codebook:dataset:UCI%20Diabetes%20130-US%20hospitals%20(1999%E2%80%932008)#variable-age-codes-%5B0%2C10)",
+                "@id": "https://bennokr.github.io/semsynth/output/diabetes-130-us-hospitals-for-years-1999-2008/#variable-age-codes-%5B0%2C10)",
                 "@type": "skos:Concept",
                 "skos:prefLabel": "[0–10) years",
                 "skos:inScheme": {
-                  "@id": "urn:linked-codebook:dataset:UCI%20Diabetes%20130-US%20hospitals%20(1999%E2%80%932008)#variable-age-codes"
+                  "@id": "https://bennokr.github.io/semsynth/output/diabetes-130-us-hospitals-for-years-1999-2008/#variable-age-codes"
                 },
                 "skos:notation": "[0,10)"
               },
               {
-                "@id": "urn:linked-codebook:dataset:UCI%20Diabetes%20130-US%20hospitals%20(1999%E2%80%932008)#variable-age-codes-%5B10%2C20)",
+                "@id": "https://bennokr.github.io/semsynth/output/diabetes-130-us-hospitals-for-years-1999-2008/#variable-age-codes-%5B10%2C20)",
                 "@type": "skos:Concept",
                 "skos:prefLabel": "[10–20) years",
                 "skos:inScheme": {
-                  "@id": "urn:linked-codebook:dataset:UCI%20Diabetes%20130-US%20hospitals%20(1999%E2%80%932008)#variable-age-codes"
+                  "@id": "https://bennokr.github.io/semsynth/output/diabetes-130-us-hospitals-for-years-1999-2008/#variable-age-codes"
                 },
                 "skos:notation": "[10,20)"
               },
               {
-                "@id": "urn:linked-codebook:dataset:UCI%20Diabetes%20130-US%20hospitals%20(1999%E2%80%932008)#variable-age-codes-%5B20%2C30)",
+                "@id": "https://bennokr.github.io/semsynth/output/diabetes-130-us-hospitals-for-years-1999-2008/#variable-age-codes-%5B20%2C30)",
                 "@type": "skos:Concept",
                 "skos:prefLabel": "[20–30) years",
                 "skos:inScheme": {
-                  "@id": "urn:linked-codebook:dataset:UCI%20Diabetes%20130-US%20hospitals%20(1999%E2%80%932008)#variable-age-codes"
+                  "@id": "https://bennokr.github.io/semsynth/output/diabetes-130-us-hospitals-for-years-1999-2008/#variable-age-codes"
                 },
                 "skos:notation": "[20,30)"
               },
               {
-                "@id": "urn:linked-codebook:dataset:UCI%20Diabetes%20130-US%20hospitals%20(1999%E2%80%932008)#variable-age-codes-%5B30%2C40)",
+                "@id": "https://bennokr.github.io/semsynth/output/diabetes-130-us-hospitals-for-years-1999-2008/#variable-age-codes-%5B30%2C40)",
                 "@type": "skos:Concept",
                 "skos:prefLabel": "[30–40) years",
                 "skos:inScheme": {
-                  "@id": "urn:linked-codebook:dataset:UCI%20Diabetes%20130-US%20hospitals%20(1999%E2%80%932008)#variable-age-codes"
+                  "@id": "https://bennokr.github.io/semsynth/output/diabetes-130-us-hospitals-for-years-1999-2008/#variable-age-codes"
                 },
                 "skos:notation": "[30,40)"
               },
               {
-                "@id": "urn:linked-codebook:dataset:UCI%20Diabetes%20130-US%20hospitals%20(1999%E2%80%932008)#variable-age-codes-%5B40%2C50)",
+                "@id": "https://bennokr.github.io/semsynth/output/diabetes-130-us-hospitals-for-years-1999-2008/#variable-age-codes-%5B40%2C50)",
                 "@type": "skos:Concept",
                 "skos:prefLabel": "[40–50) years",
                 "skos:inScheme": {
-                  "@id": "urn:linked-codebook:dataset:UCI%20Diabetes%20130-US%20hospitals%20(1999%E2%80%932008)#variable-age-codes"
+                  "@id": "https://bennokr.github.io/semsynth/output/diabetes-130-us-hospitals-for-years-1999-2008/#variable-age-codes"
                 },
                 "skos:notation": "[40,50)"
               },
               {
-                "@id": "urn:linked-codebook:dataset:UCI%20Diabetes%20130-US%20hospitals%20(1999%E2%80%932008)#variable-age-codes-%5B50%2C60)",
+                "@id": "https://bennokr.github.io/semsynth/output/diabetes-130-us-hospitals-for-years-1999-2008/#variable-age-codes-%5B50%2C60)",
                 "@type": "skos:Concept",
                 "skos:prefLabel": "[50–60) years",
                 "skos:inScheme": {
-                  "@id": "urn:linked-codebook:dataset:UCI%20Diabetes%20130-US%20hospitals%20(1999%E2%80%932008)#variable-age-codes"
+                  "@id": "https://bennokr.github.io/semsynth/output/diabetes-130-us-hospitals-for-years-1999-2008/#variable-age-codes"
                 },
                 "skos:notation": "[50,60)"
               },
               {
-                "@id": "urn:linked-codebook:dataset:UCI%20Diabetes%20130-US%20hospitals%20(1999%E2%80%932008)#variable-age-codes-%5B60%2C70)",
+                "@id": "https://bennokr.github.io/semsynth/output/diabetes-130-us-hospitals-for-years-1999-2008/#variable-age-codes-%5B60%2C70)",
                 "@type": "skos:Concept",
                 "skos:prefLabel": "[60–70) years",
                 "skos:inScheme": {
-                  "@id": "urn:linked-codebook:dataset:UCI%20Diabetes%20130-US%20hospitals%20(1999%E2%80%932008)#variable-age-codes"
+                  "@id": "https://bennokr.github.io/semsynth/output/diabetes-130-us-hospitals-for-years-1999-2008/#variable-age-codes"
                 },
                 "skos:notation": "[60,70)"
               },
               {
-                "@id": "urn:linked-codebook:dataset:UCI%20Diabetes%20130-US%20hospitals%20(1999%E2%80%932008)#variable-age-codes-%5B70%2C80)",
+                "@id": "https://bennokr.github.io/semsynth/output/diabetes-130-us-hospitals-for-years-1999-2008/#variable-age-codes-%5B70%2C80)",
                 "@type": "skos:Concept",
                 "skos:prefLabel": "[70–80) years",
                 "skos:inScheme": {
-                  "@id": "urn:linked-codebook:dataset:UCI%20Diabetes%20130-US%20hospitals%20(1999%E2%80%932008)#variable-age-codes"
+                  "@id": "https://bennokr.github.io/semsynth/output/diabetes-130-us-hospitals-for-years-1999-2008/#variable-age-codes"
                 },
                 "skos:notation": "[70,80)"
               },
               {
-                "@id": "urn:linked-codebook:dataset:UCI%20Diabetes%20130-US%20hospitals%20(1999%E2%80%932008)#variable-age-codes-%5B80%2C90)",
+                "@id": "https://bennokr.github.io/semsynth/output/diabetes-130-us-hospitals-for-years-1999-2008/#variable-age-codes-%5B80%2C90)",
                 "@type": "skos:Concept",
                 "skos:prefLabel": "[80–90) years",
                 "skos:inScheme": {
-                  "@id": "urn:linked-codebook:dataset:UCI%20Diabetes%20130-US%20hospitals%20(1999%E2%80%932008)#variable-age-codes"
+                  "@id": "https://bennokr.github.io/semsynth/output/diabetes-130-us-hospitals-for-years-1999-2008/#variable-age-codes"
                 },
                 "skos:notation": "[80,90)"
               },
               {
-                "@id": "urn:linked-codebook:dataset:UCI%20Diabetes%20130-US%20hospitals%20(1999%E2%80%932008)#variable-age-codes-%5B90%2C100)",
+                "@id": "https://bennokr.github.io/semsynth/output/diabetes-130-us-hospitals-for-years-1999-2008/#variable-age-codes-%5B90%2C100)",
                 "@type": "skos:Concept",
                 "skos:prefLabel": "[90–100) years",
                 "skos:inScheme": {
-                  "@id": "urn:linked-codebook:dataset:UCI%20Diabetes%20130-US%20hospitals%20(1999%E2%80%932008)#variable-age-codes"
+                  "@id": "https://bennokr.github.io/semsynth/output/diabetes-130-us-hospitals-for-years-1999-2008/#variable-age-codes"
                 },
                 "skos:notation": "[90,100)"
               }
@@ -224,79 +238,79 @@
           }
         },
         "summaryStatistics": {
-          "@id": "urn:linked-codebook:dataset:UCI%20Diabetes%20130-US%20hospitals%20(1999%E2%80%932008)#statistics-age",
-          "@type": "dsv:SummaryStatistics",
-          "statisticalDataType": "dsv:NominalDataType"
+          "@id": "https://bennokr.github.io/semsynth/output/diabetes-130-us-hospitals-for-years-1999-2008/#statistics-age",
+          "@type": "dsvo:SummaryStatistics",
+          "statisticalDataType": "dsvo:NominalDataType"
         }
       },
       {
-        "@id": "urn:linked-codebook:dataset:UCI%20Diabetes%20130-US%20hospitals%20(1999%E2%80%932008)#column-race",
-        "@type": "dsv:Column",
+        "@id": "https://bennokr.github.io/semsynth/output/diabetes-130-us-hospitals-for-years-1999-2008/#column-race",
+        "@type": "dsvo:Column",
         "titles": "Race",
         "name": "race",
         "columnProperty": {
-          "@id": "urn:linked-codebook:dataset:UCI%20Diabetes%20130-US%20hospitals%20(1999%E2%80%932008)#property-race",
-          "@type": "dsv:ColumnProperty",
+          "@id": "https://bennokr.github.io/semsynth/output/diabetes-130-us-hospitals-for-years-1999-2008/#property-race",
+          "@type": "dsvo:ColumnProperty",
           "hasVariable": {
-            "@id": "urn:linked-codebook:dataset:UCI%20Diabetes%20130-US%20hospitals%20(1999%E2%80%932008)#variable-race",
+            "@id": "https://bennokr.github.io/semsynth/output/diabetes-130-us-hospitals-for-years-1999-2008/#variable-race",
             "@type": "skos:Concept",
             "skos:prefLabel": "Race"
           },
           "hasCodeBook": {
-            "@id": "urn:linked-codebook:dataset:UCI%20Diabetes%20130-US%20hospitals%20(1999%E2%80%932008)#variable-race-codes",
+            "@id": "https://bennokr.github.io/semsynth/output/diabetes-130-us-hospitals-for-years-1999-2008/#variable-race-codes",
             "@type": "skos:ConceptScheme",
             "skos:hasTopConcept": [
               {
-                "@id": "urn:linked-codebook:dataset:UCI%20Diabetes%20130-US%20hospitals%20(1999%E2%80%932008)#variable-race-codes-Caucasian",
+                "@id": "https://bennokr.github.io/semsynth/output/diabetes-130-us-hospitals-for-years-1999-2008/#variable-race-codes-Caucasian",
                 "@type": "skos:Concept",
                 "skos:prefLabel": "Caucasian",
                 "skos:inScheme": {
-                  "@id": "urn:linked-codebook:dataset:UCI%20Diabetes%20130-US%20hospitals%20(1999%E2%80%932008)#variable-race-codes"
+                  "@id": "https://bennokr.github.io/semsynth/output/diabetes-130-us-hospitals-for-years-1999-2008/#variable-race-codes"
                 },
                 "skos:notation": "Caucasian"
               },
               {
-                "@id": "urn:linked-codebook:dataset:UCI%20Diabetes%20130-US%20hospitals%20(1999%E2%80%932008)#variable-race-codes-AfricanAmerican",
+                "@id": "https://bennokr.github.io/semsynth/output/diabetes-130-us-hospitals-for-years-1999-2008/#variable-race-codes-AfricanAmerican",
                 "@type": "skos:Concept",
                 "skos:prefLabel": "African American",
                 "skos:inScheme": {
-                  "@id": "urn:linked-codebook:dataset:UCI%20Diabetes%20130-US%20hospitals%20(1999%E2%80%932008)#variable-race-codes"
+                  "@id": "https://bennokr.github.io/semsynth/output/diabetes-130-us-hospitals-for-years-1999-2008/#variable-race-codes"
                 },
                 "skos:notation": "AfricanAmerican"
               },
               {
-                "@id": "urn:linked-codebook:dataset:UCI%20Diabetes%20130-US%20hospitals%20(1999%E2%80%932008)#variable-race-codes-Asian",
+                "@id": "https://bennokr.github.io/semsynth/output/diabetes-130-us-hospitals-for-years-1999-2008/#variable-race-codes-Asian",
                 "@type": "skos:Concept",
                 "skos:prefLabel": "Asian",
                 "skos:inScheme": {
-                  "@id": "urn:linked-codebook:dataset:UCI%20Diabetes%20130-US%20hospitals%20(1999%E2%80%932008)#variable-race-codes"
+                  "@id": "https://bennokr.github.io/semsynth/output/diabetes-130-us-hospitals-for-years-1999-2008/#variable-race-codes"
                 },
                 "skos:notation": "Asian"
               },
               {
-                "@id": "urn:linked-codebook:dataset:UCI%20Diabetes%20130-US%20hospitals%20(1999%E2%80%932008)#variable-race-codes-Hispanic",
+                "@id": "https://bennokr.github.io/semsynth/output/diabetes-130-us-hospitals-for-years-1999-2008/#variable-race-codes-Hispanic",
                 "@type": "skos:Concept",
                 "skos:prefLabel": "Hispanic",
                 "skos:inScheme": {
-                  "@id": "urn:linked-codebook:dataset:UCI%20Diabetes%20130-US%20hospitals%20(1999%E2%80%932008)#variable-race-codes"
+                  "@id": "https://bennokr.github.io/semsynth/output/diabetes-130-us-hospitals-for-years-1999-2008/#variable-race-codes"
                 },
                 "skos:notation": "Hispanic"
               },
               {
-                "@id": "urn:linked-codebook:dataset:UCI%20Diabetes%20130-US%20hospitals%20(1999%E2%80%932008)#variable-race-codes-Other",
+                "@id": "https://bennokr.github.io/semsynth/output/diabetes-130-us-hospitals-for-years-1999-2008/#variable-race-codes-Other",
                 "@type": "skos:Concept",
                 "skos:prefLabel": "Other",
                 "skos:inScheme": {
-                  "@id": "urn:linked-codebook:dataset:UCI%20Diabetes%20130-US%20hospitals%20(1999%E2%80%932008)#variable-race-codes"
+                  "@id": "https://bennokr.github.io/semsynth/output/diabetes-130-us-hospitals-for-years-1999-2008/#variable-race-codes"
                 },
                 "skos:notation": "Other"
               },
               {
-                "@id": "urn:linked-codebook:dataset:UCI%20Diabetes%20130-US%20hospitals%20(1999%E2%80%932008)#variable-race-codes-Unknown%2FInvalid",
+                "@id": "https://bennokr.github.io/semsynth/output/diabetes-130-us-hospitals-for-years-1999-2008/#variable-race-codes-Unknown%2FInvalid",
                 "@type": "skos:Concept",
                 "skos:prefLabel": "Unknown/Invalid",
                 "skos:inScheme": {
-                  "@id": "urn:linked-codebook:dataset:UCI%20Diabetes%20130-US%20hospitals%20(1999%E2%80%932008)#variable-race-codes"
+                  "@id": "https://bennokr.github.io/semsynth/output/diabetes-130-us-hospitals-for-years-1999-2008/#variable-race-codes"
                 },
                 "skos:notation": "Unknown/Invalid"
               }
@@ -304,52 +318,52 @@
           }
         },
         "summaryStatistics": {
-          "@id": "urn:linked-codebook:dataset:UCI%20Diabetes%20130-US%20hospitals%20(1999%E2%80%932008)#statistics-race",
-          "@type": "dsv:SummaryStatistics",
-          "statisticalDataType": "dsv:NominalDataType"
+          "@id": "https://bennokr.github.io/semsynth/output/diabetes-130-us-hospitals-for-years-1999-2008/#statistics-race",
+          "@type": "dsvo:SummaryStatistics",
+          "statisticalDataType": "dsvo:NominalDataType"
         }
       },
       {
-        "@id": "urn:linked-codebook:dataset:UCI%20Diabetes%20130-US%20hospitals%20(1999%E2%80%932008)#column-gender",
-        "@type": "dsv:Column",
+        "@id": "https://bennokr.github.io/semsynth/output/diabetes-130-us-hospitals-for-years-1999-2008/#column-gender",
+        "@type": "dsvo:Column",
         "titles": "Administrative sex/gender",
         "name": "gender",
         "columnProperty": {
-          "@id": "urn:linked-codebook:dataset:UCI%20Diabetes%20130-US%20hospitals%20(1999%E2%80%932008)#property-gender",
-          "@type": "dsv:ColumnProperty",
+          "@id": "https://bennokr.github.io/semsynth/output/diabetes-130-us-hospitals-for-years-1999-2008/#property-gender",
+          "@type": "dsvo:ColumnProperty",
           "hasVariable": {
-            "@id": "urn:linked-codebook:dataset:UCI%20Diabetes%20130-US%20hospitals%20(1999%E2%80%932008)#variable-gender",
+            "@id": "https://bennokr.github.io/semsynth/output/diabetes-130-us-hospitals-for-years-1999-2008/#variable-gender",
             "@type": "skos:Concept",
             "skos:prefLabel": "Administrative sex/gender"
           },
           "hasCodeBook": {
-            "@id": "urn:linked-codebook:dataset:UCI%20Diabetes%20130-US%20hospitals%20(1999%E2%80%932008)#variable-gender-codes",
+            "@id": "https://bennokr.github.io/semsynth/output/diabetes-130-us-hospitals-for-years-1999-2008/#variable-gender-codes",
             "@type": "skos:ConceptScheme",
             "skos:hasTopConcept": [
               {
-                "@id": "urn:linked-codebook:dataset:UCI%20Diabetes%20130-US%20hospitals%20(1999%E2%80%932008)#variable-gender-codes-Male",
+                "@id": "https://bennokr.github.io/semsynth/output/diabetes-130-us-hospitals-for-years-1999-2008/#variable-gender-codes-Male",
                 "@type": "skos:Concept",
                 "skos:prefLabel": "Male",
                 "skos:inScheme": {
-                  "@id": "urn:linked-codebook:dataset:UCI%20Diabetes%20130-US%20hospitals%20(1999%E2%80%932008)#variable-gender-codes"
+                  "@id": "https://bennokr.github.io/semsynth/output/diabetes-130-us-hospitals-for-years-1999-2008/#variable-gender-codes"
                 },
                 "skos:notation": "Male"
               },
               {
-                "@id": "urn:linked-codebook:dataset:UCI%20Diabetes%20130-US%20hospitals%20(1999%E2%80%932008)#variable-gender-codes-Female",
+                "@id": "https://bennokr.github.io/semsynth/output/diabetes-130-us-hospitals-for-years-1999-2008/#variable-gender-codes-Female",
                 "@type": "skos:Concept",
                 "skos:prefLabel": "Female",
                 "skos:inScheme": {
-                  "@id": "urn:linked-codebook:dataset:UCI%20Diabetes%20130-US%20hospitals%20(1999%E2%80%932008)#variable-gender-codes"
+                  "@id": "https://bennokr.github.io/semsynth/output/diabetes-130-us-hospitals-for-years-1999-2008/#variable-gender-codes"
                 },
                 "skos:notation": "Female"
               },
               {
-                "@id": "urn:linked-codebook:dataset:UCI%20Diabetes%20130-US%20hospitals%20(1999%E2%80%932008)#variable-gender-codes-Unknown%2FInvalid",
+                "@id": "https://bennokr.github.io/semsynth/output/diabetes-130-us-hospitals-for-years-1999-2008/#variable-gender-codes-Unknown%2FInvalid",
                 "@type": "skos:Concept",
                 "skos:prefLabel": "Unknown/Invalid",
                 "skos:inScheme": {
-                  "@id": "urn:linked-codebook:dataset:UCI%20Diabetes%20130-US%20hospitals%20(1999%E2%80%932008)#variable-gender-codes"
+                  "@id": "https://bennokr.github.io/semsynth/output/diabetes-130-us-hospitals-for-years-1999-2008/#variable-gender-codes"
                 },
                 "skos:notation": "Unknown/Invalid"
               }
@@ -357,9 +371,9 @@
           }
         },
         "summaryStatistics": {
-          "@id": "urn:linked-codebook:dataset:UCI%20Diabetes%20130-US%20hospitals%20(1999%E2%80%932008)#statistics-gender",
-          "@type": "dsv:SummaryStatistics",
-          "statisticalDataType": "dsv:NominalDataType"
+          "@id": "https://bennokr.github.io/semsynth/output/diabetes-130-us-hospitals-for-years-1999-2008/#statistics-gender",
+          "@type": "dsvo:SummaryStatistics",
+          "statisticalDataType": "dsvo:NominalDataType"
         }
       }
     ]

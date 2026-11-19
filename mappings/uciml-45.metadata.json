@@ -1,6 +1,7 @@
 {
   "@context": {
     "accessRights": "dct:accessRights",
+    "appliesWhen": "lc:applies_when",
     "broadMatch": {
       "@container": "@set",
       "@id": "skos:broadMatch",
@@ -12,35 +13,38 @@
       "@id": "skos:closeMatch",
       "@type": "@id"
     },
+    "codeBookClosed": "lc:closed",
     "columnCompleteness": {
-      "@id": "dsv:columnCompleteness",
+      "@id": "dsvo:columnCompleteness",
       "@type": "xsd:float"
     },
+    "columnFormat": "csvw:format",
+    "columnGroup": "lc:group",
     "columnProperty": {
-      "@id": "dsv:columnProperty",
+      "@id": "dsvo:columnProperty",
       "@type": "@id"
     },
     "columns": {
       "@container": "@set",
-      "@id": "dsv:column"
+      "@id": "dsvo:column"
     },
     "csvw": "http://www.w3.org/ns/csvw#",
     "datasetSchema": {
-      "@id": "dsv:datasetSchema",
+      "@id": "dsvo:datasetSchema",
       "@type": "@id"
     },
     "datatype": "csvw:datatype",
     "dcat": "http://www.w3.org/ns/dcat#",
     "dct": "http://purl.org/dc/terms/",
     "description": "dct:description",
-    "dsv": "https://w3id.org/dsv-ontology#",
+    "dsvo": "https://w3id.org/dsv-ontology#",
     "exactMatch": {
       "@container": "@set",
       "@id": "skos:exactMatch",
       "@type": "@id"
     },
     "hasCodeBook": {
-      "@id": "dsv:hasCodeBook",
+      "@id": "dsvo:hasCodeBook",
       "@type": "@id"
     },
     "hasUnit": {
@@ -48,18 +52,26 @@
       "@type": "@id"
     },
     "hasVariable": {
-      "@id": "dsv:hasVariable",
+      "@id": "dsvo:hasVariable",
       "@type": "@id"
     },
+    "high": "csvw:maxInclusive",
     "identifier": "dct:identifier",
+    "identifying": "lc:identifying",
     "landingPage": {
       "@id": "dcat:landingPage",
       "@type": "@id"
     },
+    "language": "dct:language",
+    "lc": "https://bennokr.github.io/linked-codebook/profile#",
     "license": {
       "@id": "dct:license",
       "@type": "@id"
     },
+    "low": "csvw:minInclusive",
+    "maximumValue": "csvw:maxInclusive",
+    "minimumValue": "csvw:minInclusive",
+    "missingRange": "lc:missing_range",
     "name": "csvw:name",
     "narrowMatch": {
       "@container": "@set",
@@ -71,11 +83,11 @@
       "@id": "csvw:null"
     },
     "numberOfColumns": {
-      "@id": "dsv:numberOfColumns",
+      "@id": "dsvo:numberOfColumns",
       "@type": "xsd:integer"
     },
     "numberOfRows": {
-      "@id": "dsv:numberOfRows",
+      "@id": "dsvo:numberOfRows",
       "@type": "xsd:integer"
     },
     "qudt": "http://qudt.org/schema/qudt/",
@@ -88,43 +100,45 @@
     "schema": "https://schema.org/",
     "skos": "http://www.w3.org/2004/02/skos/core#",
     "statisticalDataType": {
-      "@id": "dsv:statisticalDataType",
+      "@id": "dsvo:statisticalDataType",
       "@type": "@id"
     },
     "summaryStatistics": {
-      "@id": "dsv:summaryStatistics",
+      "@id": "dsvo:summaryStatistics",
       "@type": "@id"
     },
     "title": "dct:title",
     "titles": "csvw:title",
     "unitText": "schema:unitText",
     "xsd": "http://www.w3.org/2001/XMLSchema#",
+    "dsv": "https://w3id.org/dsv-ontology#",
     "dcterms": "http://purl.org/dc/terms/",
     "prov": "http://www.w3.org/ns/prov#"
   },
-  "@id": "urn:linked-codebook:dataset:Heart%20Disease%20(UCI%20id%2045)",
+  "@id": "https://bennokr.github.io/semsynth/output/heart-disease/",
   "@type": [
     "dcat:Dataset",
-    "dsv:Dataset"
+    "dsvo:Dataset"
   ],
   "description": "4 databases: Cleveland, Hungary, Switzerland, and the VA Long Beach",
+  "identifier": "https://bennokr.github.io/semsynth/output/heart-disease/",
   "title": "Heart Disease (UCI id 45)",
   "license": "https://creativecommons.org/publicdomain/zero/1.0/",
   "datasetSchema": {
-    "@id": "urn:linked-codebook:dataset:Heart%20Disease%20(UCI%20id%2045)#schema",
-    "@type": "dsv:DatasetSchema",
+    "@id": "https://bennokr.github.io/semsynth/output/heart-disease/#schema",
+    "@type": "dsvo:DatasetSchema",
     "columns": [
       {
-        "@id": "urn:linked-codebook:dataset:Heart%20Disease%20(UCI%20id%2045)#column-age",
-        "@type": "dsv:Column",
+        "@id": "https://bennokr.github.io/semsynth/output/heart-disease/#column-age",
+        "@type": "dsvo:Column",
         "datatype": "integer",
         "titles": "Age",
         "name": "age",
         "columnProperty": {
-          "@id": "urn:linked-codebook:dataset:Heart%20Disease%20(UCI%20id%2045)#property-age",
-          "@type": "dsv:ColumnProperty",
+          "@id": "https://bennokr.github.io/semsynth/output/heart-disease/#property-age",
+          "@type": "dsvo:ColumnProperty",
           "hasVariable": {
-            "@id": "urn:linked-codebook:dataset:Heart%20Disease%20(UCI%20id%2045)#variable-age",
+            "@id": "https://bennokr.github.io/semsynth/output/heart-disease/#variable-age",
             "@type": "skos:Concept",
             "skos:prefLabel": "Age",
             "dct:source": {
@@ -135,21 +149,21 @@
           "unitText": "a"
         },
         "summaryStatistics": {
-          "@id": "urn:linked-codebook:dataset:Heart%20Disease%20(UCI%20id%2045)#statistics-age",
-          "@type": "dsv:SummaryStatistics",
-          "statisticalDataType": "dsv:NumericalDataType"
+          "@id": "https://bennokr.github.io/semsynth/output/heart-disease/#statistics-age",
+          "@type": "dsvo:SummaryStatistics",
+          "statisticalDataType": "dsvo:NumericalDataType"
         }
       },
       {
-        "@id": "urn:linked-codebook:dataset:Heart%20Disease%20(UCI%20id%2045)#column-sex",
-        "@type": "dsv:Column",
+        "@id": "https://bennokr.github.io/semsynth/output/heart-disease/#column-sex",
+        "@type": "dsvo:Column",
         "titles": "Administrative sex",
         "name": "sex",
         "columnProperty": {
-          "@id": "urn:linked-codebook:dataset:Heart%20Disease%20(UCI%20id%2045)#property-sex",
-          "@type": "dsv:ColumnProperty",
+          "@id": "https://bennokr.github.io/semsynth/output/heart-disease/#property-sex",
+          "@type": "dsvo:ColumnProperty",
           "hasVariable": {
-            "@id": "urn:linked-codebook:dataset:Heart%20Disease%20(UCI%20id%2045)#variable-sex",
+            "@id": "https://bennokr.github.io/semsynth/output/heart-disease/#variable-sex",
             "@type": "skos:Concept",
             "skos:prefLabel": "Administrative sex",
             "dct:source": {
@@ -157,30 +171,30 @@
             }
           },
           "hasCodeBook": {
-            "@id": "urn:linked-codebook:dataset:Heart%20Disease%20(UCI%20id%2045)#variable-sex-codes",
+            "@id": "https://bennokr.github.io/semsynth/output/heart-disease/#variable-sex-codes",
             "@type": "skos:ConceptScheme",
             "skos:hasTopConcept": [
               {
-                "@id": "urn:linked-codebook:dataset:Heart%20Disease%20(UCI%20id%2045)#variable-sex-codes-0",
+                "@id": "https://bennokr.github.io/semsynth/output/heart-disease/#variable-sex-codes-0",
                 "@type": "skos:Concept",
                 "skos:prefLabel": "female",
                 "exactMatch": [
                   "http://snomed.info/id/248152002"
                 ],
                 "skos:inScheme": {
-                  "@id": "urn:linked-codebook:dataset:Heart%20Disease%20(UCI%20id%2045)#variable-sex-codes"
+                  "@id": "https://bennokr.github.io/semsynth/output/heart-disease/#variable-sex-codes"
                 },
                 "skos:notation": "0"
               },
               {
-                "@id": "urn:linked-codebook:dataset:Heart%20Disease%20(UCI%20id%2045)#variable-sex-codes-1",
+                "@id": "https://bennokr.github.io/semsynth/output/heart-disease/#variable-sex-codes-1",
                 "@type": "skos:Concept",
                 "skos:prefLabel": "male",
                 "exactMatch": [
                   "http://snomed.info/id/248153007"
                 ],
                 "skos:inScheme": {
-                  "@id": "urn:linked-codebook:dataset:Heart%20Disease%20(UCI%20id%2045)#variable-sex-codes"
+                  "@id": "https://bennokr.github.io/semsynth/output/heart-disease/#variable-sex-codes"
                 },
                 "skos:notation": "1"
               }
@@ -188,21 +202,21 @@
           }
         },
         "summaryStatistics": {
-          "@id": "urn:linked-codebook:dataset:Heart%20Disease%20(UCI%20id%2045)#statistics-sex",
-          "@type": "dsv:SummaryStatistics",
-          "statisticalDataType": "dsv:NominalDataType"
+          "@id": "https://bennokr.github.io/semsynth/output/heart-disease/#statistics-sex",
+          "@type": "dsvo:SummaryStatistics",
+          "statisticalDataType": "dsvo:NominalDataType"
         }
       },
       {
-        "@id": "urn:linked-codebook:dataset:Heart%20Disease%20(UCI%20id%2045)#column-cp",
-        "@type": "dsv:Column",
+        "@id": "https://bennokr.github.io/semsynth/output/heart-disease/#column-cp",
+        "@type": "dsvo:Column",
         "titles": "Chest pain type",
         "name": "cp",
         "columnProperty": {
-          "@id": "urn:linked-codebook:dataset:Heart%20Disease%20(UCI%20id%2045)#property-cp",
-          "@type": "dsv:ColumnProperty",
+          "@id": "https://bennokr.github.io/semsynth/output/heart-disease/#property-cp",
+          "@type": "dsvo:ColumnProperty",
           "hasVariable": {
-            "@id": "urn:linked-codebook:dataset:Heart%20Disease%20(UCI%20id%2045)#variable-cp",
+            "@id": "https://bennokr.github.io/semsynth/output/heart-disease/#variable-cp",
             "@type": "skos:Concept",
             "skos:prefLabel": "Chest pain type",
             "dct:source": {
@@ -210,54 +224,54 @@
             }
           },
           "hasCodeBook": {
-            "@id": "urn:linked-codebook:dataset:Heart%20Disease%20(UCI%20id%2045)#variable-cp-codes",
+            "@id": "https://bennokr.github.io/semsynth/output/heart-disease/#variable-cp-codes",
             "@type": "skos:ConceptScheme",
             "skos:hasTopConcept": [
               {
-                "@id": "urn:linked-codebook:dataset:Heart%20Disease%20(UCI%20id%2045)#variable-cp-codes-1",
+                "@id": "https://bennokr.github.io/semsynth/output/heart-disease/#variable-cp-codes-1",
                 "@type": "skos:Concept",
                 "skos:prefLabel": "Typical angina",
                 "exactMatch": [
                   "http://snomed.info/id/429559004"
                 ],
                 "skos:inScheme": {
-                  "@id": "urn:linked-codebook:dataset:Heart%20Disease%20(UCI%20id%2045)#variable-cp-codes"
+                  "@id": "https://bennokr.github.io/semsynth/output/heart-disease/#variable-cp-codes"
                 },
                 "skos:notation": "1"
               },
               {
-                "@id": "urn:linked-codebook:dataset:Heart%20Disease%20(UCI%20id%2045)#variable-cp-codes-2",
+                "@id": "https://bennokr.github.io/semsynth/output/heart-disease/#variable-cp-codes-2",
                 "@type": "skos:Concept",
                 "skos:prefLabel": "Atypical angina",
                 "exactMatch": [
                   "http://snomed.info/id/371807002"
                 ],
                 "skos:inScheme": {
-                  "@id": "urn:linked-codebook:dataset:Heart%20Disease%20(UCI%20id%2045)#variable-cp-codes"
+                  "@id": "https://bennokr.github.io/semsynth/output/heart-disease/#variable-cp-codes"
                 },
                 "skos:notation": "2"
               },
               {
-                "@id": "urn:linked-codebook:dataset:Heart%20Disease%20(UCI%20id%2045)#variable-cp-codes-3",
+                "@id": "https://bennokr.github.io/semsynth/output/heart-disease/#variable-cp-codes-3",
                 "@type": "skos:Concept",
                 "skos:prefLabel": "Non-cardiac chest pain",
                 "exactMatch": [
                   "http://snomed.info/id/274668005"
                 ],
                 "skos:inScheme": {
-                  "@id": "urn:linked-codebook:dataset:Heart%20Disease%20(UCI%20id%2045)#variable-cp-codes"
+                  "@id": "https://bennokr.github.io/semsynth/output/heart-disease/#variable-cp-codes"
                 },
                 "skos:notation": "3"
               },
               {
-                "@id": "urn:linked-codebook:dataset:Heart%20Disease%20(UCI%20id%2045)#variable-cp-codes-4",
+                "@id": "https://bennokr.github.io/semsynth/output/heart-disease/#variable-cp-codes-4",
                 "@type": "skos:Concept",
                 "skos:prefLabel": "Asymptomatic",
                 "exactMatch": [
                   "http://snomed.info/id/161971004"
                 ],
                 "skos:inScheme": {
-                  "@id": "urn:linked-codebook:dataset:Heart%20Disease%20(UCI%20id%2045)#variable-cp-codes"
+                  "@id": "https://bennokr.github.io/semsynth/output/heart-disease/#variable-cp-codes"
                 },
                 "skos:notation": "4"
               }
@@ -265,21 +279,21 @@
           }
         },
         "summaryStatistics": {
-          "@id": "urn:linked-codebook:dataset:Heart%20Disease%20(UCI%20id%2045)#statistics-cp",
-          "@type": "dsv:SummaryStatistics",
-          "statisticalDataType": "dsv:NominalDataType"
+          "@id": "https://bennokr.github.io/semsynth/output/heart-disease/#statistics-cp",
+          "@type": "dsvo:SummaryStatistics",
+          "statisticalDataType": "dsvo:NominalDataType"
         }
       },
       {
-        "@id": "urn:linked-codebook:dataset:Heart%20Disease%20(UCI%20id%2045)#column-fbs",
-        "@type": "dsv:Column",
+        "@id": "https://bennokr.github.io/semsynth/output/heart-disease/#column-fbs",
+        "@type": "dsvo:Column",
         "titles": "Fasting blood sugar >120 mg/dL (indicator)",
         "name": "fbs",
         "columnProperty": {
-          "@id": "urn:linked-codebook:dataset:Heart%20Disease%20(UCI%20id%2045)#property-fbs",
-          "@type": "dsv:ColumnProperty",
+          "@id": "https://bennokr.github.io/semsynth/output/heart-disease/#property-fbs",
+          "@type": "dsvo:ColumnProperty",
           "hasVariable": {
-            "@id": "urn:linked-codebook:dataset:Heart%20Disease%20(UCI%20id%2045)#variable-fbs",
+            "@id": "https://bennokr.github.io/semsynth/output/heart-disease/#variable-fbs",
             "@type": "skos:Concept",
             "skos:prefLabel": "Fasting blood sugar >120 mg/dL (indicator)",
             "dct:source": {
@@ -287,24 +301,24 @@
             }
           },
           "hasCodeBook": {
-            "@id": "urn:linked-codebook:dataset:Heart%20Disease%20(UCI%20id%2045)#variable-fbs-codes",
+            "@id": "https://bennokr.github.io/semsynth/output/heart-disease/#variable-fbs-codes",
             "@type": "skos:ConceptScheme",
             "skos:hasTopConcept": [
               {
-                "@id": "urn:linked-codebook:dataset:Heart%20Disease%20(UCI%20id%2045)#variable-fbs-codes-0",
+                "@id": "https://bennokr.github.io/semsynth/output/heart-disease/#variable-fbs-codes-0",
                 "@type": "skos:Concept",
                 "skos:prefLabel": "≤120 mg/dL",
                 "skos:inScheme": {
-                  "@id": "urn:linked-codebook:dataset:Heart%20Disease%20(UCI%20id%2045)#variable-fbs-codes"
+                  "@id": "https://bennokr.github.io/semsynth/output/heart-disease/#variable-fbs-codes"
                 },
                 "skos:notation": "0"
               },
               {
-                "@id": "urn:linked-codebook:dataset:Heart%20Disease%20(UCI%20id%2045)#variable-fbs-codes-1",
+                "@id": "https://bennokr.github.io/semsynth/output/heart-disease/#variable-fbs-codes-1",
                 "@type": "skos:Concept",
                 "skos:prefLabel": ">120 mg/dL",
                 "skos:inScheme": {
-                  "@id": "urn:linked-codebook:dataset:Heart%20Disease%20(UCI%20id%2045)#variable-fbs-codes"
+                  "@id": "https://bennokr.github.io/semsynth/output/heart-disease/#variable-fbs-codes"
                 },
                 "skos:notation": "1"
               }
@@ -312,22 +326,22 @@
           }
         },
         "summaryStatistics": {
-          "@id": "urn:linked-codebook:dataset:Heart%20Disease%20(UCI%20id%2045)#statistics-fbs",
-          "@type": "dsv:SummaryStatistics",
-          "statisticalDataType": "dsv:NominalDataType"
+          "@id": "https://bennokr.github.io/semsynth/output/heart-disease/#statistics-fbs",
+          "@type": "dsvo:SummaryStatistics",
+          "statisticalDataType": "dsvo:NominalDataType"
         }
       },
       {
-        "@id": "urn:linked-codebook:dataset:Heart%20Disease%20(UCI%20id%2045)#column-trestbps",
-        "@type": "dsv:Column",
+        "@id": "https://bennokr.github.io/semsynth/output/heart-disease/#column-trestbps",
+        "@type": "dsvo:Column",
         "datatype": "integer",
         "titles": "Resting systolic blood pressure",
         "name": "trestbps",
         "columnProperty": {
-          "@id": "urn:linked-codebook:dataset:Heart%20Disease%20(UCI%20id%2045)#property-trestbps",
-          "@type": "dsv:ColumnProperty",
+          "@id": "https://bennokr.github.io/semsynth/output/heart-disease/#property-trestbps",
+          "@type": "dsvo:ColumnProperty",
           "hasVariable": {
-            "@id": "urn:linked-codebook:dataset:Heart%20Disease%20(UCI%20id%2045)#variable-trestbps",
+            "@id": "https://bennokr.github.io/semsynth/output/heart-disease/#variable-trestbps",
             "@type": "skos:Concept",
             "skos:prefLabel": "Resting systolic blood pressure",
             "dct:source": {
@@ -338,22 +352,22 @@
           "unitText": "mm[Hg]"
         },
         "summaryStatistics": {
-          "@id": "urn:linked-codebook:dataset:Heart%20Disease%20(UCI%20id%2045)#statistics-trestbps",
-          "@type": "dsv:SummaryStatistics",
-          "statisticalDataType": "dsv:NumericalDataType"
+          "@id": "https://bennokr.github.io/semsynth/output/heart-disease/#statistics-trestbps",
+          "@type": "dsvo:SummaryStatistics",
+          "statisticalDataType": "dsvo:NumericalDataType"
         }
       },
       {
-        "@id": "urn:linked-codebook:dataset:Heart%20Disease%20(UCI%20id%2045)#column-chol",
-        "@type": "dsv:Column",
+        "@id": "https://bennokr.github.io/semsynth/output/heart-disease/#column-chol",
+        "@type": "dsvo:Column",
         "datatype": "integer",
         "titles": "Total cholesterol",
         "name": "chol",
         "columnProperty": {
-          "@id": "urn:linked-codebook:dataset:Heart%20Disease%20(UCI%20id%2045)#property-chol",
-          "@type": "dsv:ColumnProperty",
+          "@id": "https://bennokr.github.io/semsynth/output/heart-disease/#property-chol",
+          "@type": "dsvo:ColumnProperty",
           "hasVariable": {
-            "@id": "urn:linked-codebook:dataset:Heart%20Disease%20(UCI%20id%2045)#variable-chol",
+            "@id": "https://bennokr.github.io/semsynth/output/heart-disease/#variable-chol",
             "@type": "skos:Concept",
             "skos:prefLabel": "Total cholesterol",
             "dct:source": {
@@ -364,21 +378,21 @@
           "unitText": "mg/dL"
         },
         "summaryStatistics": {
-          "@id": "urn:linked-codebook:dataset:Heart%20Disease%20(UCI%20id%2045)#statistics-chol",
-          "@type": "dsv:SummaryStatistics",
-          "statisticalDataType": "dsv:NumericalDataType"
+          "@id": "https://bennokr.github.io/semsynth/output/heart-disease/#statistics-chol",
+          "@type": "dsvo:SummaryStatistics",
+          "statisticalDataType": "dsvo:NumericalDataType"
         }
       },
       {
-        "@id": "urn:linked-codebook:dataset:Heart%20Disease%20(UCI%20id%2045)#column-restecg",
-        "@type": "dsv:Column",
+        "@id": "https://bennokr.github.io/semsynth/output/heart-disease/#column-restecg",
+        "@type": "dsvo:Column",
         "titles": "Resting ECG result",
         "name": "restecg",
         "columnProperty": {
-          "@id": "urn:linked-codebook:dataset:Heart%20Disease%20(UCI%20id%2045)#property-restecg",
-          "@type": "dsv:ColumnProperty",
+          "@id": "https://bennokr.github.io/semsynth/output/heart-disease/#property-restecg",
+          "@type": "dsvo:ColumnProperty",
           "hasVariable": {
-            "@id": "urn:linked-codebook:dataset:Heart%20Disease%20(UCI%20id%2045)#variable-restecg",
+            "@id": "https://bennokr.github.io/semsynth/output/heart-disease/#variable-restecg",
             "@type": "skos:Concept",
             "skos:prefLabel": "Resting ECG result",
             "dct:source": {
@@ -386,42 +400,42 @@
             }
           },
           "hasCodeBook": {
-            "@id": "urn:linked-codebook:dataset:Heart%20Disease%20(UCI%20id%2045)#variable-restecg-codes",
+            "@id": "https://bennokr.github.io/semsynth/output/heart-disease/#variable-restecg-codes",
             "@type": "skos:ConceptScheme",
             "skos:hasTopConcept": [
               {
-                "@id": "urn:linked-codebook:dataset:Heart%20Disease%20(UCI%20id%2045)#variable-restecg-codes-0",
+                "@id": "https://bennokr.github.io/semsynth/output/heart-disease/#variable-restecg-codes-0",
                 "@type": "skos:Concept",
                 "skos:prefLabel": "normal",
                 "exactMatch": [
                   "http://snomed.info/id/164854000"
                 ],
                 "skos:inScheme": {
-                  "@id": "urn:linked-codebook:dataset:Heart%20Disease%20(UCI%20id%2045)#variable-restecg-codes"
+                  "@id": "https://bennokr.github.io/semsynth/output/heart-disease/#variable-restecg-codes"
                 },
                 "skos:notation": "0"
               },
               {
-                "@id": "urn:linked-codebook:dataset:Heart%20Disease%20(UCI%20id%2045)#variable-restecg-codes-1",
+                "@id": "https://bennokr.github.io/semsynth/output/heart-disease/#variable-restecg-codes-1",
                 "@type": "skos:Concept",
                 "skos:prefLabel": "ST-T abnormality",
                 "exactMatch": [
                   "http://snomed.info/id/428750005"
                 ],
                 "skos:inScheme": {
-                  "@id": "urn:linked-codebook:dataset:Heart%20Disease%20(UCI%20id%2045)#variable-restecg-codes"
+                  "@id": "https://bennokr.github.io/semsynth/output/heart-disease/#variable-restecg-codes"
                 },
                 "skos:notation": "1"
               },
               {
-                "@id": "urn:linked-codebook:dataset:Heart%20Disease%20(UCI%20id%2045)#variable-restecg-codes-2",
+                "@id": "https://bennokr.github.io/semsynth/output/heart-disease/#variable-restecg-codes-2",
                 "@type": "skos:Concept",
                 "skos:prefLabel": "LVH (Estes)",
                 "exactMatch": [
                   "http://snomed.info/id/25488008"
                 ],
                 "skos:inScheme": {
-                  "@id": "urn:linked-codebook:dataset:Heart%20Disease%20(UCI%20id%2045)#variable-restecg-codes"
+                  "@id": "https://bennokr.github.io/semsynth/output/heart-disease/#variable-restecg-codes"
                 },
                 "skos:notation": "2"
               }
@@ -429,22 +443,22 @@
           }
         },
         "summaryStatistics": {
-          "@id": "urn:linked-codebook:dataset:Heart%20Disease%20(UCI%20id%2045)#statistics-restecg",
-          "@type": "dsv:SummaryStatistics",
-          "statisticalDataType": "dsv:NominalDataType"
+          "@id": "https://bennokr.github.io/semsynth/output/heart-disease/#statistics-restecg",
+          "@type": "dsvo:SummaryStatistics",
+          "statisticalDataType": "dsvo:NominalDataType"
         }
       },
       {
-        "@id": "urn:linked-codebook:dataset:Heart%20Disease%20(UCI%20id%2045)#column-thalach",
-        "@type": "dsv:Column",
+        "@id": "https://bennokr.github.io/semsynth/output/heart-disease/#column-thalach",
+        "@type": "dsvo:Column",
         "datatype": "integer",
         "titles": "Maximum heart rate achieved",
         "name": "thalach",
         "columnProperty": {
-          "@id": "urn:linked-codebook:dataset:Heart%20Disease%20(UCI%20id%2045)#property-thalach",
-          "@type": "dsv:ColumnProperty",
+          "@id": "https://bennokr.github.io/semsynth/output/heart-disease/#property-thalach",
+          "@type": "dsvo:ColumnProperty",
           "hasVariable": {
-            "@id": "urn:linked-codebook:dataset:Heart%20Disease%20(UCI%20id%2045)#variable-thalach",
+            "@id": "https://bennokr.github.io/semsynth/output/heart-disease/#variable-thalach",
             "@type": "skos:Concept",
             "skos:prefLabel": "Maximum heart rate achieved",
             "dct:source": {
@@ -453,21 +467,21 @@
           }
         },
         "summaryStatistics": {
-          "@id": "urn:linked-codebook:dataset:Heart%20Disease%20(UCI%20id%2045)#statistics-thalach",
-          "@type": "dsv:SummaryStatistics",
-          "statisticalDataType": "dsv:NumericalDataType"
+          "@id": "https://bennokr.github.io/semsynth/output/heart-disease/#statistics-thalach",
+          "@type": "dsvo:SummaryStatistics",
+          "statisticalDataType": "dsvo:NumericalDataType"
         }
       },
       {
-        "@id": "urn:linked-codebook:dataset:Heart%20Disease%20(UCI%20id%2045)#column-exang",
-        "@type": "dsv:Column",
+        "@id": "https://bennokr.github.io/semsynth/output/heart-disease/#column-exang",
+        "@type": "dsvo:Column",
         "titles": "Exercise-induced angina",
         "name": "exang",
         "columnProperty": {
-          "@id": "urn:linked-codebook:dataset:Heart%20Disease%20(UCI%20id%2045)#property-exang",
-          "@type": "dsv:ColumnProperty",
+          "@id": "https://bennokr.github.io/semsynth/output/heart-disease/#property-exang",
+          "@type": "dsvo:ColumnProperty",
           "hasVariable": {
-            "@id": "urn:linked-codebook:dataset:Heart%20Disease%20(UCI%20id%2045)#variable-exang",
+            "@id": "https://bennokr.github.io/semsynth/output/heart-disease/#variable-exang",
             "@type": "skos:Concept",
             "skos:prefLabel": "Exercise-induced angina",
             "dct:source": {
@@ -475,24 +489,24 @@
             }
           },
           "hasCodeBook": {
-            "@id": "urn:linked-codebook:dataset:Heart%20Disease%20(UCI%20id%2045)#variable-exang-codes",
+            "@id": "https://bennokr.github.io/semsynth/output/heart-disease/#variable-exang-codes",
             "@type": "skos:ConceptScheme",
             "skos:hasTopConcept": [
               {
-                "@id": "urn:linked-codebook:dataset:Heart%20Disease%20(UCI%20id%2045)#variable-exang-codes-0",
+                "@id": "https://bennokr.github.io/semsynth/output/heart-disease/#variable-exang-codes-0",
                 "@type": "skos:Concept",
                 "skos:prefLabel": "no",
                 "skos:inScheme": {
-                  "@id": "urn:linked-codebook:dataset:Heart%20Disease%20(UCI%20id%2045)#variable-exang-codes"
+                  "@id": "https://bennokr.github.io/semsynth/output/heart-disease/#variable-exang-codes"
                 },
                 "skos:notation": "0"
               },
               {
-                "@id": "urn:linked-codebook:dataset:Heart%20Disease%20(UCI%20id%2045)#variable-exang-codes-1",
+                "@id": "https://bennokr.github.io/semsynth/output/heart-disease/#variable-exang-codes-1",
                 "@type": "skos:Concept",
                 "skos:prefLabel": "yes",
                 "skos:inScheme": {
-                  "@id": "urn:linked-codebook:dataset:Heart%20Disease%20(UCI%20id%2045)#variable-exang-codes"
+                  "@id": "https://bennokr.github.io/semsynth/output/heart-disease/#variable-exang-codes"
                 },
                 "skos:notation": "1"
               }
@@ -500,22 +514,22 @@
           }
         },
         "summaryStatistics": {
-          "@id": "urn:linked-codebook:dataset:Heart%20Disease%20(UCI%20id%2045)#statistics-exang",
-          "@type": "dsv:SummaryStatistics",
-          "statisticalDataType": "dsv:NominalDataType"
+          "@id": "https://bennokr.github.io/semsynth/output/heart-disease/#statistics-exang",
+          "@type": "dsvo:SummaryStatistics",
+          "statisticalDataType": "dsvo:NominalDataType"
         }
       },
       {
-        "@id": "urn:linked-codebook:dataset:Heart%20Disease%20(UCI%20id%2045)#column-oldpeak",
-        "@type": "dsv:Column",
+        "@id": "https://bennokr.github.io/semsynth/output/heart-disease/#column-oldpeak",
+        "@type": "dsvo:Column",
         "datatype": "number",
         "titles": "ST depression vs rest (max during study)",
         "name": "oldpeak",
         "columnProperty": {
-          "@id": "urn:linked-codebook:dataset:Heart%20Disease%20(UCI%20id%2045)#property-oldpeak",
-          "@type": "dsv:ColumnProperty",
+          "@id": "https://bennokr.github.io/semsynth/output/heart-disease/#property-oldpeak",
+          "@type": "dsvo:ColumnProperty",
           "hasVariable": {
-            "@id": "urn:linked-codebook:dataset:Heart%20Disease%20(UCI%20id%2045)#variable-oldpeak",
+            "@id": "https://bennokr.github.io/semsynth/output/heart-disease/#variable-oldpeak",
             "@type": "skos:Concept",
             "skos:prefLabel": "ST depression vs rest (max during study)",
             "dct:source": {
@@ -524,21 +538,21 @@
           }
         },
         "summaryStatistics": {
-          "@id": "urn:linked-codebook:dataset:Heart%20Disease%20(UCI%20id%2045)#statistics-oldpeak",
-          "@type": "dsv:SummaryStatistics",
-          "statisticalDataType": "dsv:NumericalDataType"
+          "@id": "https://bennokr.github.io/semsynth/output/heart-disease/#statistics-oldpeak",
+          "@type": "dsvo:SummaryStatistics",
+          "statisticalDataType": "dsvo:NumericalDataType"
         }
       },
       {
-        "@id": "urn:linked-codebook:dataset:Heart%20Disease%20(UCI%20id%2045)#column-slope",
-        "@type": "dsv:Column",
+        "@id": "https://bennokr.github.io/semsynth/output/heart-disease/#column-slope",
+        "@type": "dsvo:Column",
         "titles": "Slope of peak exercise ST segment",
         "name": "slope",
         "columnProperty": {
-          "@id": "urn:linked-codebook:dataset:Heart%20Disease%20(UCI%20id%2045)#property-slope",
-          "@type": "dsv:ColumnProperty",
+          "@id": "https://bennokr.github.io/semsynth/output/heart-disease/#property-slope",
+          "@type": "dsvo:ColumnProperty",
           "hasVariable": {
-            "@id": "urn:linked-codebook:dataset:Heart%20Disease%20(UCI%20id%2045)#variable-slope",
+            "@id": "https://bennokr.github.io/semsynth/output/heart-disease/#variable-slope",
             "@type": "skos:Concept",
             "skos:prefLabel": "Slope of peak exercise ST segment",
             "dct:source": {
@@ -546,33 +560,33 @@
             }
           },
           "hasCodeBook": {
-            "@id": "urn:linked-codebook:dataset:Heart%20Disease%20(UCI%20id%2045)#variable-slope-codes",
+            "@id": "https://bennokr.github.io/semsynth/output/heart-disease/#variable-slope-codes",
             "@type": "skos:ConceptScheme",
             "skos:hasTopConcept": [
               {
-                "@id": "urn:linked-codebook:dataset:Heart%20Disease%20(UCI%20id%2045)#variable-slope-codes-1",
+                "@id": "https://bennokr.github.io/semsynth/output/heart-disease/#variable-slope-codes-1",
                 "@type": "skos:Concept",
                 "skos:prefLabel": "upsloping",
                 "skos:inScheme": {
-                  "@id": "urn:linked-codebook:dataset:Heart%20Disease%20(UCI%20id%2045)#variable-slope-codes"
+                  "@id": "https://bennokr.github.io/semsynth/output/heart-disease/#variable-slope-codes"
                 },
                 "skos:notation": "1"
               },
               {
-                "@id": "urn:linked-codebook:dataset:Heart%20Disease%20(UCI%20id%2045)#variable-slope-codes-2",
+                "@id": "https://bennokr.github.io/semsynth/output/heart-disease/#variable-slope-codes-2",
                 "@type": "skos:Concept",
                 "skos:prefLabel": "flat",
                 "skos:inScheme": {
-                  "@id": "urn:linked-codebook:dataset:Heart%20Disease%20(UCI%20id%2045)#variable-slope-codes"
+                  "@id": "https://bennokr.github.io/semsynth/output/heart-disease/#variable-slope-codes"
                 },
                 "skos:notation": "2"
               },
               {
-                "@id": "urn:linked-codebook:dataset:Heart%20Disease%20(UCI%20id%2045)#variable-slope-codes-3",
+                "@id": "https://bennokr.github.io/semsynth/output/heart-disease/#variable-slope-codes-3",
                 "@type": "skos:Concept",
                 "skos:prefLabel": "downsloping",
                 "skos:inScheme": {
-                  "@id": "urn:linked-codebook:dataset:Heart%20Disease%20(UCI%20id%2045)#variable-slope-codes"
+                  "@id": "https://bennokr.github.io/semsynth/output/heart-disease/#variable-slope-codes"
                 },
                 "skos:notation": "3"
               }
@@ -580,82 +594,82 @@
           }
         },
         "summaryStatistics": {
-          "@id": "urn:linked-codebook:dataset:Heart%20Disease%20(UCI%20id%2045)#statistics-slope",
-          "@type": "dsv:SummaryStatistics",
-          "statisticalDataType": "dsv:NominalDataType"
+          "@id": "https://bennokr.github.io/semsynth/output/heart-disease/#statistics-slope",
+          "@type": "dsvo:SummaryStatistics",
+          "statisticalDataType": "dsvo:NominalDataType"
         }
       },
       {
-        "@id": "urn:linked-codebook:dataset:Heart%20Disease%20(UCI%20id%2045)#column-ca",
-        "@type": "dsv:Column",
+        "@id": "https://bennokr.github.io/semsynth/output/heart-disease/#column-ca",
+        "@type": "dsvo:Column",
         "datatype": "integer",
         "titles": "Number of major vessels (colored by fluoroscopy)",
         "name": "ca",
         "columnProperty": {
-          "@id": "urn:linked-codebook:dataset:Heart%20Disease%20(UCI%20id%2045)#property-ca",
-          "@type": "dsv:ColumnProperty",
+          "@id": "https://bennokr.github.io/semsynth/output/heart-disease/#property-ca",
+          "@type": "dsvo:ColumnProperty",
           "hasVariable": {
-            "@id": "urn:linked-codebook:dataset:Heart%20Disease%20(UCI%20id%2045)#variable-ca",
+            "@id": "https://bennokr.github.io/semsynth/output/heart-disease/#variable-ca",
             "@type": "skos:Concept",
             "skos:prefLabel": "Number of major vessels (colored by fluoroscopy)"
           }
         },
         "summaryStatistics": {
-          "@id": "urn:linked-codebook:dataset:Heart%20Disease%20(UCI%20id%2045)#statistics-ca",
-          "@type": "dsv:SummaryStatistics",
-          "statisticalDataType": "dsv:NumericalDataType"
+          "@id": "https://bennokr.github.io/semsynth/output/heart-disease/#statistics-ca",
+          "@type": "dsvo:SummaryStatistics",
+          "statisticalDataType": "dsvo:NumericalDataType"
         }
       },
       {
-        "@id": "urn:linked-codebook:dataset:Heart%20Disease%20(UCI%20id%2045)#column-thal",
-        "@type": "dsv:Column",
+        "@id": "https://bennokr.github.io/semsynth/output/heart-disease/#column-thal",
+        "@type": "dsvo:Column",
         "titles": "Thallium perfusion test",
         "name": "thal",
         "columnProperty": {
-          "@id": "urn:linked-codebook:dataset:Heart%20Disease%20(UCI%20id%2045)#property-thal",
-          "@type": "dsv:ColumnProperty",
+          "@id": "https://bennokr.github.io/semsynth/output/heart-disease/#property-thal",
+          "@type": "dsvo:ColumnProperty",
           "hasVariable": {
-            "@id": "urn:linked-codebook:dataset:Heart%20Disease%20(UCI%20id%2045)#variable-thal",
+            "@id": "https://bennokr.github.io/semsynth/output/heart-disease/#variable-thal",
             "@type": "skos:Concept",
             "skos:prefLabel": "Thallium perfusion test"
           },
           "hasCodeBook": {
-            "@id": "urn:linked-codebook:dataset:Heart%20Disease%20(UCI%20id%2045)#variable-thal-codes",
+            "@id": "https://bennokr.github.io/semsynth/output/heart-disease/#variable-thal-codes",
             "@type": "skos:ConceptScheme",
             "skos:hasTopConcept": [
               {
-                "@id": "urn:linked-codebook:dataset:Heart%20Disease%20(UCI%20id%2045)#variable-thal-codes-3",
+                "@id": "https://bennokr.github.io/semsynth/output/heart-disease/#variable-thal-codes-3",
                 "@type": "skos:Concept",
                 "skos:prefLabel": "normal",
                 "exactMatch": [
                   "http://snomed.info/id/371801000"
                 ],
                 "skos:inScheme": {
-                  "@id": "urn:linked-codebook:dataset:Heart%20Disease%20(UCI%20id%2045)#variable-thal-codes"
+                  "@id": "https://bennokr.github.io/semsynth/output/heart-disease/#variable-thal-codes"
                 },
                 "skos:notation": "3"
               },
               {
-                "@id": "urn:linked-codebook:dataset:Heart%20Disease%20(UCI%20id%2045)#variable-thal-codes-6",
+                "@id": "https://bennokr.github.io/semsynth/output/heart-disease/#variable-thal-codes-6",
                 "@type": "skos:Concept",
                 "skos:prefLabel": "fixed defect",
                 "exactMatch": [
                   "http://snomed.info/id/371918009"
                 ],
                 "skos:inScheme": {
-                  "@id": "urn:linked-codebook:dataset:Heart%20Disease%20(UCI%20id%2045)#variable-thal-codes"
+                  "@id": "https://bennokr.github.io/semsynth/output/heart-disease/#variable-thal-codes"
                 },
                 "skos:notation": "6"
               },
               {
-                "@id": "urn:linked-codebook:dataset:Heart%20Disease%20(UCI%20id%2045)#variable-thal-codes-7",
+                "@id": "https://bennokr.github.io/semsynth/output/heart-disease/#variable-thal-codes-7",
                 "@type": "skos:Concept",
                 "skos:prefLabel": "reversible defect",
                 "exactMatch": [
                   "http://snomed.info/id/371920002"
                 ],
                 "skos:inScheme": {
-                  "@id": "urn:linked-codebook:dataset:Heart%20Disease%20(UCI%20id%2045)#variable-thal-codes"
+                  "@id": "https://bennokr.github.io/semsynth/output/heart-disease/#variable-thal-codes"
                 },
                 "skos:notation": "7"
               }
@@ -663,21 +677,21 @@
           }
         },
         "summaryStatistics": {
-          "@id": "urn:linked-codebook:dataset:Heart%20Disease%20(UCI%20id%2045)#statistics-thal",
-          "@type": "dsv:SummaryStatistics",
-          "statisticalDataType": "dsv:NominalDataType"
+          "@id": "https://bennokr.github.io/semsynth/output/heart-disease/#statistics-thal",
+          "@type": "dsvo:SummaryStatistics",
+          "statisticalDataType": "dsvo:NominalDataType"
         }
       },
       {
-        "@id": "urn:linked-codebook:dataset:Heart%20Disease%20(UCI%20id%2045)#column-num",
-        "@type": "dsv:Column",
+        "@id": "https://bennokr.github.io/semsynth/output/heart-disease/#column-num",
+        "@type": "dsvo:Column",
         "titles": "Angiographic disease status",
         "name": "num",
         "columnProperty": {
-          "@id": "urn:linked-codebook:dataset:Heart%20Disease%20(UCI%20id%2045)#property-num",
-          "@type": "dsv:ColumnProperty",
+          "@id": "https://bennokr.github.io/semsynth/output/heart-disease/#property-num",
+          "@type": "dsvo:ColumnProperty",
           "hasVariable": {
-            "@id": "urn:linked-codebook:dataset:Heart%20Disease%20(UCI%20id%2045)#variable-num",
+            "@id": "https://bennokr.github.io/semsynth/output/heart-disease/#variable-num",
             "@type": "skos:Concept",
             "skos:prefLabel": "Angiographic disease status",
             "dct:source": {
@@ -685,24 +699,24 @@
             }
           },
           "hasCodeBook": {
-            "@id": "urn:linked-codebook:dataset:Heart%20Disease%20(UCI%20id%2045)#variable-num-codes",
+            "@id": "https://bennokr.github.io/semsynth/output/heart-disease/#variable-num-codes",
             "@type": "skos:ConceptScheme",
             "skos:hasTopConcept": [
               {
-                "@id": "urn:linked-codebook:dataset:Heart%20Disease%20(UCI%20id%2045)#variable-num-codes-0",
+                "@id": "https://bennokr.github.io/semsynth/output/heart-disease/#variable-num-codes-0",
                 "@type": "skos:Concept",
                 "skos:prefLabel": "<50% narrowing",
                 "skos:inScheme": {
-                  "@id": "urn:linked-codebook:dataset:Heart%20Disease%20(UCI%20id%2045)#variable-num-codes"
+                  "@id": "https://bennokr.github.io/semsynth/output/heart-disease/#variable-num-codes"
                 },
                 "skos:notation": "0"
               },
               {
-                "@id": "urn:linked-codebook:dataset:Heart%20Disease%20(UCI%20id%2045)#variable-num-codes-1",
+                "@id": "https://bennokr.github.io/semsynth/output/heart-disease/#variable-num-codes-1",
                 "@type": "skos:Concept",
                 "skos:prefLabel": "≥50% narrowing",
                 "skos:inScheme": {
-                  "@id": "urn:linked-codebook:dataset:Heart%20Disease%20(UCI%20id%2045)#variable-num-codes"
+                  "@id": "https://bennokr.github.io/semsynth/output/heart-disease/#variable-num-codes"
                 },
                 "skos:notation": "1"
               }
@@ -710,9 +724,9 @@
           }
         },
         "summaryStatistics": {
-          "@id": "urn:linked-codebook:dataset:Heart%20Disease%20(UCI%20id%2045)#statistics-num",
-          "@type": "dsv:SummaryStatistics",
-          "statisticalDataType": "dsv:NominalDataType"
+          "@id": "https://bennokr.github.io/semsynth/output/heart-disease/#statistics-num",
+          "@type": "dsvo:SummaryStatistics",
+          "statisticalDataType": "dsvo:NominalDataType"
         },
         "prov:hadRole": "target"
       }
