@@ -138,7 +138,7 @@ What to take from it, and what not:
   with numeric distributions at the noise level of the ceiling. The numeric KS ceiling is small because it is the distance between
   two samples of one distribution: about 0.03 for 1,000 against 4,000 rows and 0.12 for 59 against 238, which is what the Heart and
   CDC ceilings show (CDC's numbers take few distinct values, which lowers it a little).
-- `mostlyai` copies some rows: 0.7% and 2.8% of the synthetic rows equal a training row, against 0.3% for independent columns. The
+- `mostlyai` copies some rows: 0.7% and 2.8% of the synthetic rows equal a training row, against 0.1% to 0.3% for independent columns. The
   rate at which unseen real rows equal a training row (the chance rate for a table of mostly binary columns) was not computed in
   the cross-validation, so this is a flag and not a finding of leakage.
 - PrivBayes at epsilon 1 is worse than MetaSyn on every fidelity score and takes 91 s for 4,000 rows. That is the price of the
