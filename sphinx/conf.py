@@ -35,9 +35,10 @@ myst_enable_extensions = [
 # Auto-anchor headings for internal cross-references in included docs
 myst_heading_anchors = 3
 
-# Execute notebooks automatically and fail on cell errors
+# Execute notebooks automatically and fail the build when a cell fails (without raise_on_error a failed notebook is only a warning)
 nb_execution_mode = "auto"
 nb_execution_allow_errors = False
+nb_execution_raise_on_error = True
 
 # Automatically generate autosummary stub files
 autosummary_generate = True

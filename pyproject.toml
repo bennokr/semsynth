@@ -57,6 +57,7 @@ docs = [
   "sphinx-rtd-theme",
   "statsmodels",
   "linkify-it-py",
+  "matplotlib",  # the notebooks plot with it; the umap extra used to bring it in
 ]
 metasyn = [
   "metasyn"

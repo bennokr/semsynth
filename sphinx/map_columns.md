@@ -11,6 +11,8 @@ kernelspec:
   display_name: Python 3
 ---
 
+# Column mappings
+
 Mapping helpers are easiest to demonstrate on the curated Heart Disease payload.
 
 This quick count shows which codelists appear most often, illustrating which terminologies the curated mappings use.

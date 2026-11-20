@@ -4,18 +4,18 @@ Every IRI is under one base, by default ``https://bennokr.github.io/semsynth/out
 folder is served, so an IRI that names a document is its URL. Nothing contains a space, a capital or a character that
 needs escaping: names are slugs, and the human title stays in ``dct:title``.
 
-=========================  ==================================================  ====================================
-what                       IRI                                                 note
-=========================  ==================================================  ====================================
-catalog                    ``<base>#catalog``
-dataset (the real one)     ``<base><dataset>/``                                the report page; the codebook describes it
-codebook                   ``<base><dataset>/dataset.codebook.jsonld``         its columns are ``<dataset>/#column-<name>``
-synthetic dataset          ``<base><dataset>/models/<model>/``                 one per model run
-run                        ``<base><dataset>/models/<model>/#run``
-file                       ``<base><dataset>/models/<model>/<file>``           the URL of the file is its IRI
-measurement                ``<base><dataset>/models/<model>/#measurement-<metric>``
-metric                     ``https://bennokr.github.io/semsynth/metric/<id>``  shared by all datasets
-=========================  ==================================================  ====================================
+======================  ========================================================  ============================================
+what                    IRI                                                       note
+======================  ========================================================  ============================================
+catalog                 ``<base>#catalog``
+dataset (the real one)  ``<base><dataset>/``                                      the report page; the codebook describes it
+codebook                ``<base><dataset>/dataset.codebook.jsonld``               its columns are ``<dataset>/#column-<name>``
+synthetic dataset       ``<base><dataset>/models/<model>/``                       one per model run
+run                     ``<base><dataset>/models/<model>/#run``
+file                    ``<base><dataset>/models/<model>/<file>``                 the URL of the file is its IRI
+measurement             ``<base><dataset>/models/<model>/#measurement-<metric>``
+metric                  ``https://bennokr.github.io/semsynth/metric/<id>``        shared by all datasets
+======================  ========================================================  ============================================
 
 The identity of a thing is its IRI, whether or not the host still serves it. The base is one setting
 (``PipelineConfig.iri_base``) so that it can move, for example to a w3id.org address that redirects here.

@@ -9,6 +9,7 @@ Direction, decisions and status: `SPEC.md`.
 - Setup: `uv sync --locked --extra dev --extra app --extra privbayes --extra pybnesian --extra metasyn --extra statsmodels --extra language --extra privacy` (NumPy 2; `--extra synthcity` needs NumPy 1 and is installed alone, without `pybnesian`, `umap`, `language`, `privacy` or `all`).
 - Check (what CI runs): `uv run make check` = ruff, `mypy --strict` on the core, pytest, statement budgets.
 - After shrinking a module: `python scripts/check_size.py --update` (budgets only go down).
+- Site: the reports are built by hand (`make site`) and uploaded to a release; `.github/workflows/pages.yml` pulls them (`scripts/site_bundle.py`, `scripts/check_output.py`; see README "Publishing the site").
 - Golden safety net: `tests/test_golden_pipeline.py` runs MetaSyn + missingness + downstream end to end.
 
 ## Layout

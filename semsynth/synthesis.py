@@ -40,13 +40,12 @@ PLUGIN_GROUP = "semsynth.backends"
 class Capabilities:
     """What a backend can do, so that a configuration or an app can choose one without fitting it first.
 
-    Attributes:
-        nulls: The backend accepts a table with blanks without failing (``tests/test_backend_contract.py`` checks it). What it
-            does with them differs: MetaSyn and PrivBayes reproduce blanks, while PyBNesian's output has none. The pipeline
-            learns the missingness separately (``enable_missingness_wrapping``) and gives complete rows to the other backends.
-        categoricals: Text and low-cardinality columns are learned as categories.
-        browser: The backend runs in Pyodide (no PyTorch, no compiled engine outside Pyodide's packages).
-        dp: The backend has an option that gives a differential-privacy guarantee.
+    - ``nulls``: The backend accepts a table with blanks without failing (``tests/test_backend_contract.py`` checks it). What it
+      does with them differs: MetaSyn and PrivBayes reproduce blanks, while PyBNesian's output has none. The pipeline learns the
+      missingness separately (``enable_missingness_wrapping``) and gives complete rows to the other backends.
+    - ``categoricals``: Text and low-cardinality columns are learned as categories.
+    - ``browser``: The backend runs in Pyodide (no PyTorch, no compiled engine outside Pyodide's packages).
+    - ``dp``: The backend has an option that gives a differential-privacy guarantee.
     """
 
     nulls: bool = False

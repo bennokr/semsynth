@@ -196,7 +196,18 @@ subgroup_min_size = 30
 - Install dev and documentation deps with `python -m pip install -e .[dev,docs]` (use `.[dev]` if you do not need to build docs).
 - Run tests with `python -m pytest`
 - Build the Sphinx site with `sphinx-build -b html sphinx docs`.
-- The published site (demo reports for the curated datasets, the catalog and the documentation) is built by `.github/workflows/pages.yml` on every push to `main`, or by hand with a model bundle of your choice. `output/` and `docs/` are not committed.
+- The published site (demo reports for the curated datasets, the catalog, the explorer and the documentation) is built by `.github/workflows/pages.yml` on every push to `main`. The reports take hours, so they are not built there: see "Publishing the site" below. `output/`, `dist-site/` and `docs/` are not committed.
+
+### Publishing the site
+The workflow pulls the reports from the latest release, so publishing is a build on your machine and an upload:
+
+```bash
+make site                      # builds output/ with configs/demo_config.toml, checks it and writes dist-site/ (needs a clean commit)
+gh release create site-2026-11-20 dist-site/semsynth-site.tar.gz dist-site/semsynth-site.tar.gz.sha256 \
+  --title "Demo reports 2026-11-20" --notes "Built from $(git rev-parse --short HEAD) with configs/demo_config.toml"
+```
+
+Then push to `main`, or run the `pages` workflow by hand (`gh workflow run pages.yml`; give `-f tag=<release>` for a release that is not the latest). The workflow downloads `semsynth-site.tar.gz`, unpacks it only if it matches its checksum and holds nothing but `output/`, `downloads-cache/` and `site-manifest.json` (`scripts/site_bundle.py`), checks that every model has its privacy, baseline and provenance files (`scripts/check_output.py`), builds the documentation and the explorer around it, and publishes the manifest (commit, date, configuration) at `site-manifest.json`. A notebook of the documentation that fails to run fails the build. `make site-bundle` packs an existing `output/` without building it again; the documentation notebooks read `downloads-cache/uciml/45.csv.gz`, which the bundle carries.
 
 ## 🔎 SPARQL over the output
 - Everything that is published has an IRI under one base (`iri_base`, default `https://bennokr.github.io/semsynth/output/`, see `semsynth/iris.py`): `<base><dataset>/` is the dataset (its codebook describes it), `<base><dataset>/models/<model>/` the synthetic dataset, `…/#run` the run that made it. Folder names are slugs, so no IRI has a space; titles are in `dct:title`.

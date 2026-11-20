@@ -160,7 +160,7 @@ def structure_summary(run_dir: Path) -> str | None:
 
 
 def citation_text(value: Any) -> str | None:
-    """A citation as text: a string as it is, a schema.org article as ``Authors (year). Title. Venue. URL``."""
+    """A citation as text. A string stays as it is; a schema.org article becomes ``Authors (year). Title. Venue. URL``."""
     if not value:
         return None
     if isinstance(value, str):

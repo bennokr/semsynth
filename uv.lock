@@ -6786,6 +6786,7 @@ dev = [
 ]
 docs = [
     { name = "linkify-it-py" },
+    { name = "matplotlib" },
     { name = "myst-nb" },
     { name = "myst-parser" },
     { name = "openml" },
@@ -6863,6 +6864,7 @@ requires-dist = [
     { name = "makeprov", specifier = ">=0.8.1" },
     { name = "markdown" },
     { name = "matplotlib", marker = "extra == 'all'" },
+    { name = "matplotlib", marker = "extra == 'docs'" },
     { name = "matplotlib", marker = "extra == 'umap'" },
     { name = "metasyn", marker = "extra == 'all'" },
     { name = "metasyn", marker = "extra == 'metasyn'" },
@@ -8079,8 +8081,8 @@ name = "triton"
 version = "2.2.0"
 source = { registry = "https://pypi.org/simple" }
 resolution-markers = [
-    "python_full_version < '3.12'",
     "python_full_version >= '3.15'",
+    "python_full_version < '3.12'",
 ]
 dependencies = [
     { name = "filelock", marker = "(python_full_version < '3.12' and extra == 'extra-8-semsynth-synthcity') or (python_full_version >= '3.15' and extra == 'extra-8-semsynth-all') or (python_full_version >= '3.15' and extra == 'extra-8-semsynth-dp-cgans') or (python_full_version >= '3.15' and extra == 'extra-8-semsynth-language') or (python_full_version >= '3.15' and extra == 'extra-8-semsynth-mostlyai') or (python_full_version >= '3.15' and extra == 'extra-8-semsynth-privacy') or (python_full_version >= '3.15' and extra == 'extra-8-semsynth-pybnesian') or (python_full_version >= '3.15' and extra != 'extra-8-semsynth-synthcity') or (extra == 'extra-8-semsynth-all' and extra == 'extra-8-semsynth-synthcity') or (extra == 'extra-8-semsynth-dp-cgans' and extra == 'extra-8-semsynth-synthcity') or (extra == 'extra-8-semsynth-language' and extra == 'extra-8-semsynth-synthcity') or (extra == 'extra-8-semsynth-mostlyai' and extra == 'extra-8-semsynth-synthcity') or (extra == 'extra-8-semsynth-privacy' and extra == 'extra-8-semsynth-synthcity') or (extra == 'extra-8-semsynth-pybnesian' and extra == 'extra-8-semsynth-synthcity') or (extra == 'extra-8-semsynth-synthcity' and extra == 'extra-8-semsynth-umap')" },

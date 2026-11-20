@@ -1,16 +1,19 @@
 name: pages
 
-# Builds the site (demo reports for the curated datasets, the catalog and the Sphinx documentation)
-# and publishes it on GitHub Pages. Nothing it builds is committed.
+# Publishes the site: the documentation, the SPARQL explorer and the reports of the demo datasets.
+#
+# The reports take hours to build, so they are not built here. They are built by hand (`make site`), uploaded to a release as
+# semsynth-site.tar.gz with its .sha256, and pulled in by this workflow, which checks them and builds everything around them.
+# Nothing it builds is committed.
 
 on:
   push:
     branches: [main]
   workflow_dispatch:
     inputs:
-      config:
-        description: Model bundle for the demo reports
-        default: configs/demo_config.toml
+      tag:
+        description: 'Release that holds the built reports (empty: the latest release)'
+        default: ''
 
 permissions:
   contents: read
@@ -22,44 +25,45 @@ concurrency:
 jobs:
   build:
     runs-on: ubuntu-latest
-    timeout-minutes: 300
+    timeout-minutes: 30
     steps:
       - uses: actions/checkout@v4
       - uses: actions/setup-python@v5
         with:
           python-version: '3.11'
           cache: pip
-      - name: Install Graphviz
-        run: sudo apt-get install -y --no-install-recommends graphviz
-      - name: Install
-        run: python -m pip install -e '.[docs,providers,metasyn,pybnesian,umap,statsmodels,privacy]'
-      - name: Cache downloaded datasets
-        uses: actions/cache@v4
-        with:
-          path: |
-            downloads-cache
-            uciml-cache
-          key: datasets-${{ hashFiles('mappings/*.metadata.json') }}
-          restore-keys: datasets-
-      - name: Demo reports and catalog
-        run: python -m semsynth --conf @prov-config.toml mappings --pipeline-configs "${{ inputs.config || 'configs/demo_config.toml' }}" --outdir output/
-      - name: Check that the privacy metrics were computed
-        # A skipped metric (a missing extra) is recorded, not raised, so check the output.
+      - name: Fetch the built reports from the release
+        # gh is on the runner. Without a tag it takes the latest release. The bundle is unpacked only if it matches its
+        # checksum and holds nothing but output/, downloads-cache/ and its manifest (scripts/site_bundle.py).
+        env:
+          GH_TOKEN: ${{ github.token }}
+          TAG: ${{ inputs.tag }}
         run: |
-          python - <<'PY'
-          import json, pathlib
-          files = sorted(pathlib.Path("output").glob("*/models/*/metrics.privacy.json"))
-          bad = [str(f) for f in files if json.loads(f.read_text()).get("status", "ok") != "ok"]
-          assert files, "no privacy metrics in the demo output"
-          assert list(pathlib.Path("output").glob("*/models/*/metrics.baselines.json")), "no baselines in the demo output"
-          assert not bad, f"privacy metrics skipped or failed: {bad}"
-          PY
+          mkdir -p _release
+          if ! gh release download ${TAG:+"$TAG"} --repo "$GITHUB_REPOSITORY" --dir _release \
+              --pattern semsynth-site.tar.gz --pattern semsynth-site.tar.gz.sha256; then
+            echo "::error::No release has the built reports. Build them with 'make site' and upload dist-site/semsynth-site.tar.gz and its .sha256 to a release."
+            exit 1
+          fi
+          python scripts/site_bundle.py unpack _release/semsynth-site.tar.gz --dest .
+          python scripts/check_output.py output
+          {
+            echo "### Reports"
+            echo '```json'
+            cat site-manifest.json
+            echo '```'
+          } >> "$GITHUB_STEP_SUMMARY"
+      - name: Install
+        # What the documentation notebooks import: the docs extra (it holds matplotlib and statsmodels).
+        run: python -m pip install -e '.[docs]'
       - name: Documentation
-        run: sphinx-build -b html sphinx _site/docs
+        # A notebook that fails to run fails the build (nb_execution_raise_on_error in sphinx/conf.py). The doctrees (a pickle)
+        # stay outside the site.
+        run: sphinx-build -b html -d _doctrees sphinx _site/docs
       - name: Assemble the site
         run: |
           mkdir -p _site/templates
-          cp index.html _site/
+          cp index.html site-manifest.json _site/
           cp -r output _site/output
           cp semsynth/templates/*.css _site/templates/
       - name: SPARQL explorer
@@ -78,6 +82,14 @@ jobs:
           output: _site/explore
           title: SemSynth explorer
           tagline: Query the datasets, codebooks and provenance of the demo with SPARQL.
+      - name: Check the site
+        # Nothing that loads code may be published: not a pickle of a model, not one of Sphinx.
+        run: |
+          if find _site \( -name '*.pickle' -o -name '*.pkl' \) | grep -q .; then
+            echo "::error::the site would publish a pickle:"
+            find _site \( -name '*.pickle' -o -name '*.pkl' \)
+            exit 1
+          fi
       - uses: actions/upload-pages-artifact@v3
         with:
           path: _site

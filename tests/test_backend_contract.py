@@ -7,7 +7,8 @@ true. A backend whose engine is not installed is skipped, so this runs everywher
 
 from __future__ import annotations
 
-from types import SimpleNamespace
+import inspect
+from types import ModuleType, SimpleNamespace
 from typing import Any
 
 import numpy as np
@@ -66,6 +67,26 @@ def test_every_builtin_backend_declares_capabilities_and_a_fast_setting() -> Non
     assert all(isinstance(value, Capabilities) for value in CAPABILITIES.values())
     assert set(BACKENDS) <= set(available_backends())
 
+
+
+def ensure_synthesize_contract(module: ModuleType) -> None:
+    """A backend module exposes ``synthesize(df, codebook, *, rows, seed, **options)``."""
+    synthesize_ = getattr(module, "synthesize", None)
+    assert callable(synthesize_), f"{module.__name__} must define a callable 'synthesize'"
+    params = list(inspect.signature(synthesize_).parameters.values())
+    positional = [p.name for p in params if p.kind in (p.POSITIONAL_ONLY, p.POSITIONAL_OR_KEYWORD)]
+    assert positional[:2] == ["df", "codebook"], "synthesize takes the table and the codebook first"
+    keyword_only = {p.name for p in params if p.kind is p.KEYWORD_ONLY}
+    assert {"rows", "seed"} <= keyword_only, "synthesize takes rows and seed as keyword-only parameters"
+
+
+@pytest.mark.parametrize("name", BACKENDS)
+def test_every_backend_module_has_the_same_synthesize(name: str) -> None:
+    try:
+        module = load_backend(name)
+    except ImportError as exc:
+        pytest.skip(f"the {name!r} backend is not installed: {exc}")
+    ensure_synthesize_contract(module)
 
 @pytest.mark.parametrize("name", BACKENDS)
 def test_a_backend_returns_the_columns_rows_and_kinds_of_the_table(name: str, table: pd.DataFrame) -> None:
