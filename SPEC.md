@@ -45,6 +45,7 @@ one code path.
 | Mechanism declared in the codebook; sensitivity analysis for MNAR | next |
 | NHANES provider and benchmark | next |
 | Backend `chain` (a tree, gradient boosting or a small network per column; default learner `cart`; no extra, runs in Pyodide) | default in the demo and the other configs |
+| Backend `dp_cgans` (DP-CGANS, optional DP-SGD with its budget in the privacy report) and backends from other packages (entry-point group `semsynth.backends`), each with declared capabilities and one contract test | done; the ontology variant (`Onto_DP_CGAN`) is not wired in |
 | Backend `mostlyai` (TabularARGN) | spiked, experimental: see `sphinx/evaluation.md` for the first comparison |
 | PrivBayes with NumPy 2 | fixed: DataSynthesizer reads back keys written as `np.int64(1)`; generation runs in the NumPy 1.25 print mode |
 

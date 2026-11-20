@@ -256,5 +256,13 @@ def rename_categorical_categories_to_str(
     return df
 
 
+def numbers_back(drawn: pd.Series, dtype: Any) -> pd.Series:
+    """A drawn column in the dtype of the real column, when the labels of the real column are numbers.
 
-
+    A label that is not a number, such as the placeholder ``_RARE_`` that a backend puts in place of a rare value, becomes
+    missing, and the column then keeps a dtype that can hold that.
+    """
+    if str(dtype).startswith(("object", "string", "category")):
+        return drawn
+    numbers = pd.to_numeric(drawn, errors="coerce").round()
+    return numbers if numbers.isna().any() else numbers.astype(dtype)

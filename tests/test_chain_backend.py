@@ -43,8 +43,8 @@ def test_the_mostlyai_backend_names_its_extra_when_the_engine_is_missing(table: 
         pytest.skip("mostlyai-engine is installed")
 
 
-def test_mostlyai_numbers_back_turns_a_protected_value_into_a_missing_one() -> None:
-    from semsynth.backends.mostlyai import _numbers_back
+def test_numbers_back_turns_a_protected_value_into_a_missing_one() -> None:
+    from semsynth.utils import numbers_back as _numbers_back
 
     assert _numbers_back(pd.Series(["1", "2", "2"]), "int64").tolist() == [1, 2, 2]
     protected = _numbers_back(pd.Series(["1", "_RARE_", "2"]), "int64")

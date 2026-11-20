@@ -7,9 +7,11 @@ never touches the disk, so it can run in a browser. ``write_run`` is the only fu
 from __future__ import annotations
 
 import importlib
+import importlib.metadata
 import json
 import logging
 from collections.abc import Mapping
+from dataclasses import dataclass
 from datetime import UTC, datetime
 from pathlib import Path
 from types import ModuleType
@@ -24,34 +26,104 @@ if TYPE_CHECKING:  # pragma: no cover - typing only
 
 LOGGER = logging.getLogger(__name__)
 
-__all__ = ["BACKENDS", "load_backend", "synthesize", "write_run"]
+__all__ = ["BACKENDS", "CAPABILITIES", "Capabilities", "available_backends", "capabilities", "load_backend", "synthesize", "write_run"]
 
-BACKENDS = ("chain", "metasyn", "mostlyai", "privbayes", "pybnesian", "synthcity")
-"""The backend names; each is also the name of the extra that installs its engine. ``chain`` has no extra: it uses
-scikit-learn, which is a core dependency."""
+BACKENDS = ("chain", "dp_cgans", "metasyn", "mostlyai", "privbayes", "pybnesian", "synthcity")
+"""The built-in backend names; each (``chain`` excepted) is also the name of the extra that installs its engine. ``chain``
+has no extra: it uses scikit-learn, which is a core dependency."""
 
+PLUGIN_GROUP = "semsynth.backends"
+"""The entry-point group of backends that another package provides (see :func:`load_backend`)."""
+
+
+@dataclass(frozen=True)
+class Capabilities:
+    """What a backend can do, so that a configuration or an app can choose one without fitting it first.
+
+    Attributes:
+        nulls: The backend accepts a table with blanks without failing (``tests/test_backend_contract.py`` checks it). What it
+            does with them differs: MetaSyn and PrivBayes reproduce blanks, while PyBNesian's output has none. The pipeline
+            learns the missingness separately (``enable_missingness_wrapping``) and gives complete rows to the other backends.
+        categoricals: Text and low-cardinality columns are learned as categories.
+        browser: The backend runs in Pyodide (no PyTorch, no compiled engine outside Pyodide's packages).
+        dp: The backend has an option that gives a differential-privacy guarantee.
+    """
+
+    nulls: bool = False
+    categoricals: bool = True
+    browser: bool = False
+    dp: bool = False
+
+
+CAPABILITIES: dict[str, Capabilities] = {
+    "chain": Capabilities(browser=True),
+    "dp_cgans": Capabilities(nulls=True, dp=True),
+    "metasyn": Capabilities(nulls=True, browser=True),
+    "mostlyai": Capabilities(nulls=True, dp=True),
+    "privbayes": Capabilities(nulls=True, browser=True, dp=True),
+    "pybnesian": Capabilities(nulls=True),
+    "synthcity": Capabilities(dp=True),
+}
+"""The capabilities of the built-in backends. ``tests/test_backend_contract.py`` checks them against the backends that are
+installed."""
+
+
+def _plugins() -> dict[str, Any]:
+    """The entry points of :data:`PLUGIN_GROUP` by name, without importing them."""
+    return {entry.name.lower(): entry for entry in importlib.metadata.entry_points(group=PLUGIN_GROUP)}
+
+
+def available_backends() -> tuple[str, ...]:
+    """The built-in backends and the plugins that are installed, by name. Nothing is imported."""
+    return tuple(sorted({*BACKENDS, *_plugins()}))
 
 
 def load_backend(name: str) -> ModuleType:
     """Import the module of a backend.
 
+    A backend is a module (or an object) with a function ``synthesize(df, codebook, *, rows, seed, **options)`` that returns a
+    :class:`~semsynth.result.SynthesisResult`, and optionally ``CAPABILITIES`` (a :class:`Capabilities`). The built-in
+    backends are in ``semsynth.backends``. Another package provides one with an entry point::
+
+        [project.entry-points."semsynth.backends"]
+        mygan = "mypackage.semsynth_backend"   # a module, or ``module:object``
+
     Args:
-        name: One of :data:`BACKENDS`.
+        name: One of :data:`BACKENDS`, or the name of an entry point of the group :data:`PLUGIN_GROUP`.
 
     Raises:
-        ValueError: For an unknown name.
+        ValueError: For an unknown name, or a plugin without ``synthesize``.
         ImportError: If the backend cannot be imported; the message names the extra to install.
     """
 
-    key = str(name).strip().lower()
-    if key not in BACKENDS:
-        raise ValueError(f"Unknown backend {name!r}; choose one of {', '.join(BACKENDS)}.")
-    try:
-        return importlib.import_module(f"semsynth.backends.{key}")
-    except ImportError as exc:
-        raise ImportError(
-            f"The {key!r} backend could not be imported ({exc}); install it with `pip install 'semsynth[{key}]'`."
-        ) from exc
+    key = str(name).strip().lower().replace("-", "_")
+    if key in BACKENDS:
+        try:
+            return importlib.import_module(f"semsynth.backends.{key}")
+        except ImportError as exc:
+            raise ImportError(
+                f"The {key!r} backend could not be imported ({exc}); install it with `pip install 'semsynth[{key}]'`."
+            ) from exc
+    plugin = _plugins().get(key) or _plugins().get(str(name).strip().lower())
+    if plugin is None:
+        raise ValueError(f"Unknown backend {name!r}; choose one of {', '.join(available_backends())}.")
+    loaded = plugin.load()
+    if not callable(getattr(loaded, "synthesize", None)):
+        raise ValueError(f"The plugin {plugin.name!r} ({plugin.value}) has no function 'synthesize'.")
+    return loaded  # type: ignore[no-any-return]
+
+
+def capabilities(name: str) -> Capabilities:
+    """What a backend can do. A built-in is read from :data:`CAPABILITIES` without importing it; a plugin is loaded and its
+    ``CAPABILITIES`` is read (a plugin that declares none can do nothing in particular: all ``False`` except ``categoricals``)."""
+
+    key = str(name).strip().lower().replace("-", "_")
+    if key in CAPABILITIES:
+        return CAPABILITIES[key]
+    declared = getattr(load_backend(name), "CAPABILITIES", None)
+    if isinstance(declared, Capabilities):
+        return declared
+    return Capabilities(**declared) if isinstance(declared, Mapping) else Capabilities()
 
 
 def synthesize(
@@ -69,7 +141,7 @@ def synthesize(
         df: The real table.
         codebook: A :class:`~semsynth.codebook.Codebook` (or a document that it can read) that tells which
             columns are categorical and which are numeric; inferred from ``df`` when omitted.
-        backend: One of :data:`BACKENDS`.
+        backend: One of :func:`available_backends`: a built-in (:data:`BACKENDS`) or an installed plugin.
         rows: Number of synthetic rows; the number of rows of ``df`` when omitted.
         seed: Random seed.
         **options: Settings of the backend, such as ``epsilon`` for ``privbayes``.

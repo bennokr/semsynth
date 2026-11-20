@@ -22,6 +22,7 @@ them. Everything else is an extra: `python -m pip install -e .[EXTRA]` with `EXT
 | `metasyn`, `privbayes` | the MetaSyn and DataSynthesizer (PrivBayes) backends |
 | (none) | the `chain` backend (a tree per column given the columns before it, as in synthpop) needs only scikit-learn, which is a core dependency, and runs in Pyodide |
 | `pybnesian` | the PyBNesian backend (NumPy 2) |
+| `dp_cgans` | the DP-CGANS backend (a conditional GAN with optional DP-SGD, with its privacy budget in `privacy_report`): needs PyTorch (a CPU build is enough), NumPy 2, and does not run in Pyodide; its dependency `copulas` is BUSL-1.1 |
 | `mostlyai` | the MOSTLY AI TabularARGN backend (experimental): a neural model; needs PyTorch (a CPU build is enough), NumPy 2, and does not run in Pyodide |
 | `synthcity` | the SynthCity backend; heavy (PyTorch) and the one extra that needs NumPy below 2, so it cannot share an environment with `pybnesian`, `umap`, `language`, `privacy` or `all` (uv enforces this in `[tool.uv] conflicts`) |
 | `statsmodels` | the downstream coefficient comparison |
@@ -209,11 +210,24 @@ subgroup_min_size = 30
 from semsynth import synthesize
 from semsynth.synthesis import write_run
 
-result = synthesize(df, codebook, backend="metasyn", rows=500, seed=1)   # or "privbayes", "pybnesian", "mostlyai", "chain", "synthcity"
+result = synthesize(df, codebook, backend="metasyn", rows=500, seed=1)   # or "privbayes", "pybnesian", "mostlyai", "chain", "synthcity", "dp_cgans"
 result.synthetic_data      # a pandas DataFrame
 result.learned_model       # backend-specific object
 write_run(result, "output/run-1")   # only if you want the files
 ```
+
+What a backend can do is listed in `semsynth.synthesis.CAPABILITIES` (`capabilities("chain")`): whether it accepts blanks, whether
+it learns categories, whether it runs in Pyodide, and whether it has a differential-privacy option. A package can add a backend
+without a change here: it provides a module (or `module:object`) with `synthesize(df, codebook, *, rows, seed, **options)`, which
+returns a `SynthesisResult` and may declare `CAPABILITIES`, and registers it as an entry point:
+
+```toml
+[project.entry-points."semsynth.backends"]
+mygan = "mypackage.semsynth_backend"
+```
+
+`backend="mygan"` then works in `synthesize` and in a TOML config. `tests/test_backend_contract.py` shows what every backend has to do
+(the columns, the rows, the kinds of values); copy its check into the tests of the plugin.
 
 `synthesize` never touches the disk, so it also runs in a browser (Pyodide). Every backend module defines
 `synthesize(df, codebook, *, rows, seed, **options)` and returns a `semsynth.SynthesisResult`: the generated data

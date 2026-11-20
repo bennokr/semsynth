@@ -80,6 +80,9 @@ synthcity = [
 mostlyai = [
   "mostlyai-engine>=2.7"  # TabularARGN; needs PyTorch (a CPU build is enough) and NumPy 2; not for Pyodide
 ]
+dp_cgans = [
+  "dp-cgans>=0.3"  # conditional GAN with optional DP-SGD; needs PyTorch (a CPU build is enough) and NumPy 2; depends on copulas (BUSL-1.1); not for Pyodide
+]
 privbayes = [
   "DataSynthesizer==0.1.13",
   "scipy"
@@ -126,6 +129,7 @@ conflicts = [
   [{ extra = "synthcity" }, { extra = "language" }],
   [{ extra = "synthcity" }, { extra = "privacy" }],
   [{ extra = "synthcity" }, { extra = "mostlyai" }],
+  [{ extra = "synthcity" }, { extra = "dp_cgans" }],
   [{ extra = "synthcity" }, { extra = "all" }],
 ]
 

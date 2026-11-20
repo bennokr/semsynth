@@ -22,8 +22,11 @@ import json
 import sys
 import tempfile
 from collections.abc import Mapping
+from dataclasses import asdict
 from pathlib import Path
 from typing import TYPE_CHECKING, Any
+
+from .synthesis import CAPABILITIES
 
 if TYPE_CHECKING:  # pragma: no cover - typing only
     import pandas as pd
@@ -57,6 +60,7 @@ def capabilities() -> dict[str, Any]:
         "python": sys.version.split()[0],
         "pyodide": is_pyodide(),
         "backends": {name: _available(module) for name, module in engines.items()},
+        "backend_capabilities": {name: asdict(caps) for name, caps in CAPABILITIES.items()},
         "metrics": {
             "sdmetrics": _available("sdmetrics"),
             "statsmodels": _available("statsmodels"),

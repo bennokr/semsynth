@@ -15,7 +15,8 @@ Direction, decisions and status: `SPEC.md`.
 - `semsynth/`, by job:
   - Data and codebook: `codebook.py` (profile + roles), `structure.py` (declared codes, skip rules, subgroup definitions),
     `preprocess.py`, `dataproviders/`, `mappings/` (curated codebooks).
-  - Generate: `backends/` (privbayes, metasyn, pybnesian, synthcity), `missingness.py`, `synthesis.py` (`synthesize` +
+  - Generate: `backends/` (chain, metasyn, privbayes, pybnesian, synthcity, mostlyai, dp_cgans; others register through the
+    `semsynth.backends` entry point; `CAPABILITIES` in `synthesis.py`; `tests/test_backend_contract.py` fits every installed one), `missingness.py`, `synthesis.py` (`synthesize` +
     `write_run`, the one backend contract).
   - Evaluate (pure functions): `evaluate.py`, `metrics.py`, `privacy_metrics.py`, `distance.py` (Gower with missing-value
     policies), `joint_fidelity.py`, `downstream_fidelity.py`, `subgroups.py`, `baselines.py` (reference tables),

@@ -12,7 +12,7 @@ from typing import TYPE_CHECKING, Any
 
 from ..language import apply_free_text_locales
 from ..result import SynthesisResult
-from ..utils import coerce_continuous_to_float, split_columns
+from ..utils import coerce_continuous_to_float, coerce_discrete_to_category, split_columns
 
 if TYPE_CHECKING:  # pragma: no cover - typing only
     import pandas as pd
@@ -83,7 +83,7 @@ def synthesize(
     MetaFrame = _load_metasyn()
     count = int(rows or len(df))
     disc_cols, cont_cols = split_columns(df, codebook)
-    working = coerce_continuous_to_float(df.copy(), cont_cols)
+    working = coerce_discrete_to_category(coerce_continuous_to_float(df.copy(), cont_cols), disc_cols)  # MetaSyn draws random text for a column that is not categorical
 
     LOGGER.info("Fitting MetaSyn on %d rows", len(working))
     frame = MetaFrame.fit_dataframe(working, progress_bar=False)
