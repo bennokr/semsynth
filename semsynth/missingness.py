@@ -3,7 +3,7 @@
 from __future__ import annotations
 
 import logging
-from collections.abc import Callable, Iterable
+from collections.abc import Iterable
 from dataclasses import dataclass, field
 from typing import TYPE_CHECKING, Any
 
@@ -172,52 +172,6 @@ class DataFrameMissingnessModel:
             mask = model.sample_mask(out, rng)
             out.loc[mask, col] = np.nan
         return out
-
-
-class MissingnessWrappedGenerator:
-    """Wrap a base generator to inject realistic missing values."""
-
-    def __init__(
-        self,
-        base_generator: Callable[..., pd.DataFrame],
-        missingness_model: DataFrameMissingnessModel,
-    ) -> None:
-        """Initialize the wrapper.
-
-        Args:
-            base_generator: Callable that returns a dataframe when invoked with ``n``.
-            missingness_model: Learned missingness model to apply to generated data.
-        """
-
-        self.base_generator = base_generator
-        self.missingness_model = missingness_model
-
-    @classmethod
-    def from_real_data(
-        cls,
-        base_generator: Callable[..., pd.DataFrame],
-        real_df: pd.DataFrame,
-        random_state: int | None = None,
-    ) -> MissingnessWrappedGenerator:
-        """Create a wrapper by fitting missingness to real data.
-
-        Args:
-            base_generator: Callable producing synthetic samples.
-            real_df: Real dataframe used to estimate missingness.
-            random_state: Optional RNG seed for reproducibility.
-
-        Returns:
-            Configured ``MissingnessWrappedGenerator`` instance.
-        """
-
-        miss_model = DataFrameMissingnessModel(random_state=random_state).fit(real_df)
-        return cls(base_generator=base_generator, missingness_model=miss_model)
-
-    def sample(self, n: int, **kwargs: Any) -> pd.DataFrame:
-        """Generate ``n`` samples with realistic missing values applied."""
-
-        df_syn = self.base_generator(n, **kwargs)
-        return self.missingness_model.apply(df_syn)
 
 
 def fit_missingness_model(

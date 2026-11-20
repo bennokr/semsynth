@@ -61,12 +61,12 @@ and point `ENTAILMAP_MATCH_DATA` at the directory that holds the result.
 ## Generate reports
 
 With mappings in place, execute the reporting pipeline. The
-`configs/only_metasyn_config.yaml` keeps MetaSyn as the primary backend to ensure
-runs complete even without GPU or shared-memory support:
+`configs/simple_config.toml` bundle fits MetaSyn and the chain generator, which run without a GPU or an extra beyond
+`metasyn`:
 
 ```bash
 python -m semsynth report uciml --datasets 145 \
-    --configs-yaml configs/only_metasyn_config.yaml \
+    --pipeline-configs configs/simple_config.toml \
     --verbose
 ```
 

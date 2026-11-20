@@ -48,6 +48,7 @@ LOGGER = logging.getLogger(__name__)
 KINDS = ("mcar", "mar", "mnar", "structural", "coded", "censored")
 LOD_SUFFIX = "_below_lod"
 MIN_LEARNABLE_ROWS = 30
+VARIANTS = ("learned", "learned_with_rules", "structure_aware")
 
 
 @dataclass(frozen=True)
@@ -290,9 +291,9 @@ def run_injected_benchmark(
     cont = [c for c in incomplete.columns if c not in disc]
     out: dict[str, Any] = {"status": "ok", "recoded_codes": recoded, "truth": injection.truth}
     for variant, learn_from, rules in (
-        ("learned", incomplete, False),
-        ("learned_with_rules", incomplete, True),
-        ("structure_aware", fill_not_applicable(incomplete, injection.codebook), True),
+        (VARIANTS[0], incomplete, False),
+        (VARIANTS[1], incomplete, True),
+        (VARIANTS[2], fill_not_applicable(incomplete, injection.codebook), True),
     ):
         learnable = learn_from.dropna().reset_index(drop=True)
         record: dict[str, Any] = {"complete_rows": len(learnable), "complete_share": len(learnable) / len(incomplete)}
@@ -345,3 +346,73 @@ def _generate(
         raise RuntimeError("the missingness model could not be fitted")
     released, _ = apply_missingness(model, pristine, learnable, disc, cont)
     return pristine, released
+
+
+DEMO_MECHANISMS = (
+    Mechanism("chol", "mar", 0.3, driver="age", strength=2.5),
+    Mechanism("bmi", "mnar", 0.25, strength=2.5),
+    Mechanism("cigs", "structural", rule="[smoker] == 'yes'"),
+    Mechanism("sbp", "coded", 0.05),
+)
+"""One mechanism of each kind that matters in a clinical table, for the table of :func:`demo_table`."""
+
+
+def demo_table(n: int = 1500, seed: int = 0) -> pd.DataFrame:
+    """A complete table (age, sex, bmi, chol, sbp, smoker, cigs) with relations between its columns, for the benchmark demo."""
+    import numpy as np
+    import pandas as pd
+
+    rng = np.random.default_rng(seed)
+    age = rng.normal(55, 12, n)
+    return pd.DataFrame(
+        {
+            "age": age,
+            "sex": rng.choice(["f", "m"], n),
+            "bmi": 24 + 0.05 * (age - 55) + rng.normal(0, 3, n),
+            "chol": 180 + 0.8 * age + rng.normal(0, 20, n),
+            "sbp": 110 + 0.5 * age + rng.normal(0, 10, n),
+            "smoker": rng.choice(["yes", "no"], n, p=[0.3, 0.7]),
+            "cigs": rng.poisson(12, n).astype(float),
+        }
+    )
+
+
+def mechanisms_from(items: Sequence[dict[str, Any]]) -> list[Mechanism]:
+    """The mechanisms of a configuration: one dictionary per mechanism, with the fields of :class:`Mechanism`.
+
+    Raises:
+        ValueError: For a mechanism with an unknown ``kind`` or an unknown field.
+    """
+    found = []
+    for item in items:
+        try:
+            mechanism = Mechanism(**item)
+        except TypeError as exc:
+            raise ValueError(f"not a mechanism: {item!r} ({exc})") from exc
+        if mechanism.kind not in KINDS:
+            raise ValueError(f"unknown kind {mechanism.kind!r}; choose one of {', '.join(KINDS)}")
+        found.append(mechanism)
+    return found
+
+
+def summary_table(result: dict[str, Any]) -> str:
+    """The three variants of a benchmark result in one Markdown table (rows kept, fidelity to the truth, recovery)."""
+    import pandas as pd
+
+    rows = []
+    for variant in VARIANTS:
+        record = result.get(variant) or {}
+        scores, fidelity = record.get("summary") or {}, record.get("fidelity_to_truth") or {}
+        rows.append(
+            {
+                "variant": variant,
+                "rows kept": record.get("complete_share"),
+                "discrete JSD": fidelity.get("disc_jsd_mean"),
+                "numeric KS": fidelity.get("cont_ks_mean"),
+                "rate gap": scores.get("rate_gap_mean"),
+                "gradient gap": scores.get("gradient_gap_mean"),
+                "rule violations": scores.get("structural_violation_rate"),
+            }
+        )
+    frame = pd.DataFrame(rows).astype(object).where(lambda f: f.notna(), None)  # a rate of 0 cells is shown as "-"
+    return frame.to_markdown(index=False, floatfmt=".3f", missingval="-")

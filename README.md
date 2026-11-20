@@ -49,38 +49,40 @@ Dataset metadata is a [linked-codebook](https://bennokr.github.io/linked-codeboo
    - `--verbose` (emits info logs while querying providers)
 
 2. Minimal report (metadata only) 🧪
-   - Leave `--configs-toml` empty to skip model execution.
+   - Leave `--pipeline-configs` empty to skip model execution.
    - Example: `python -m semsynth report uciml --datasets 45 -v`
    - Optional flags for reports:
      - `--datasets` (one or more dataset identifiers)
      - `--outdir` (defaults to `output/`)
-     - `--configs-toml` (path to a TOML bundle; omit for metadata-only runs)
+     - `--pipeline-configs` (path to a TOML bundle; omit for metadata-only runs)
      - `--verbose` (turn on info logging)
 
-   With the command above you receive dataset metadata, a real-data UMAP projection, and HTML/Markdown reports under `output/<Dataset Name>/`.
+   With the command above you receive dataset metadata, a real-data UMAP projection, and HTML/Markdown reports under `output/<dataset-slug>/` (the slug of the dataset name, such as `heart-disease`).
 
 3. Full report with synthetic models 🤖
     - Pick a configuration bundle from `configs/`:
-      - `configs/simple_config.toml` (MetaSyn + two PyBNesian models)
-      - `configs/advanced_config.toml` (MetaSyn, PyBNesian, and SynthCity models)
-      - `configs/maximal_config.toml` (keeps MetaSyn with aggressive options enabled while remaining runnable without GPU or shared-memory support)
-      - `configs/only_metasyn_config.toml` (MetaSyn baseline only)
-   - Example: `python -m semsynth report openml --datasets adult --configs-toml @configs/advanced_config.toml`
+      - `configs/minimal_config.toml` (a report of the data only, no model)
+      - `configs/simple_config.toml` (MetaSyn and the chain generator; the quick start)
+      - `configs/demo_config.toml` (MetaSyn, the chain and one PyBNesian model, cross-validated; the demo site is built with it)
+      - `configs/full_config.toml` (every generator that shares one NumPy 2 environment, including MOSTLY AI)
+      - `configs/synthcity_config.toml` (SynthCity generators; needs NumPy 1, so its own environment)
+   - Example: `python -m semsynth report openml --datasets adult --pipeline-configs configs/simple_config.toml`
 
    Pipeline toggles (UMAP, privacy, downstream, missingness, etc.) now live in the TOML bundle under `[pipeline]` rather than separate CLI flags.
 
 4. Catalog + app helpers
+   - Break a complete table in known ways and check what the pipeline recovers (injected-truth benchmark, see the documentation): `python -m semsynth benchmark` (a demo table, about 4 seconds) or `python -m semsynth benchmark table.csv --mechanisms mechanisms.toml --backend chain`
    - Build a DCAT catalog (`output/catalog.json`) and an index page from existing outputs: `python -m semsynth build-catalog`
    - Regenerate metadata-only reports for all curated codebooks and refresh the catalog/index: `python -m semsynth mappings --pipeline-configs ""`
    - Re-render reports for all curated mappings using existing outputs (skip mappings and metrics): `python -m semsynth refresh-mapping-reports --pipeline-configs '{pipeline={generate_umap=false,compute_privacy=false,compute_downstream=false,overwrite_umap=false}}'`
    - Launch a minimal Flask UI for search and report actions (needs `.[app,providers]`): `python -m semsynth run-app --port 5000`. It calls the same functions as `search` and `report`, accepts inline TOML only, and binds to 127.0.0.1 unless you pass `--host`
 
 ## 📄 TOML bundles
-- `configs/simple_config.toml` mixes MetaSyn with two PyBNesian baselines.
-- `configs/advanced_config.toml` extends the simple bundle with SynthCity generators (install `.[synthcity]` in its own environment: it needs NumPy 1).
-- `configs/demo_config.toml` is the advanced bundle without SynthCity; the demo site is built with it.
-- `configs/maximal_config.toml` toggles every optional report hook (UMAP, privacy, downstream) but ships with a MetaSyn-only bundle so it continues to execute inside restricted environments.
-- `configs/only_metasyn_config.toml` keeps MetaSyn as the single synthetic data baseline.
+- `configs/minimal_config.toml` reports on the data only: no model is fitted.
+- `configs/simple_config.toml` is the quick start: MetaSyn and the chain generator (which needs no extra), one split of the data.
+- `configs/demo_config.toml` adds one PyBNesian model and the cross-validated evaluation (5 folds, intervals, references); the demo site is built with it.
+- `configs/full_config.toml` has every generator that shares one NumPy 2 environment: MetaSyn, the chain, two PyBNesian networks and MOSTLY AI.
+- `configs/synthcity_config.toml` has the SynthCity generators; install `.[synthcity]` in its own environment (it needs NumPy 1).
 
 Example:
 
@@ -130,14 +132,14 @@ subgroup_min_size = 30
 ```
 
 ## 📦 Outputs
-- Per dataset (e.g., `output/Heart Disease/`):
+- Per dataset (e.g., `output/heart-disease/`):
   - `index.html` and `report.md`
   - `dataset.codebook.jsonld` (DSV JSON-LD written by linked-codebook) and its RDFa rendering `dataset.codebook.html`
   - `umap_real.png` (when `--generate-umap` is enabled and UMAP dependencies are installed)
-- Per model (e.g., `output/Heart Disease/models/<name>/`):
+- Per model (e.g., `output/heart-disease/models/<name>/`):
   - `synthetic.csv`, `metrics.json`, and `umap.png`
   - Optional metrics sidecars: `metrics.privacy.json`, `metrics.downstream.json`, `metrics.joint.json`, `metrics.baselines.json`, `metrics.subgroups.json`; `metrics.json` holds `utility` and `cv` (see the evaluation page of the documentation for what each score means and how to read it)
-  - PyBNesian extras: `structure.png`, `structure.graphml`, `model.pickle`
+  - PyBNesian extras: `structure.png`, `structure.graphml` (and `model.pickle` with the model setting `save_model = true`; it is not written by default, because a pickle can run code when loaded)
   - `synthetic.parquet`, with the codebook JSON-LD in the Parquet schema metadata
 
 ## 🧰 Metadata templates & column mappings
@@ -150,7 +152,7 @@ subgroup_min_size = 30
 1. Fetch the dataset metadata. Any command that touches the UCI provider will populate `uciml-cache/<id>.json`. For example:
 
    ```bash
-   python -m semsynth report uciml --datasets 45 --configs-toml @configs/only_metasyn_config.toml
+   python -m semsynth report uciml --datasets 45 --pipeline-configs configs/simple_config.toml
    ```
 
    This creates `uciml-cache/45.json` alongside the cached CSV/metadata used by the reporting pipeline.
@@ -183,7 +185,7 @@ subgroup_min_size = 30
    The resulting files (e.g., `mappings/uciml-45.sssom.tsv`) can be fed back into the reporting pipeline without extra steps.
 
 ## 📝 Notes
-- Metadata-only reports require no TOML file; pass `--configs-toml` to opt into synthetic runs.
+- Metadata-only reports require no TOML file; pass `--pipeline-configs` to opt into synthetic runs.
 - All models are treated uniformly in the report; UMAPs share the same projection trained on real data.
 - When optional dependencies (e.g., `umap-learn`, PyBNesian, SynthCity) are missing or blocked by runtime sandboxing, SemSynth logs a warning and continues with the available components. The shipped `maximal_config` keeps MetaSyn as the default to guarantee completion under those constraints.
 - Downloads verify TLS certificates. On a network with an intercepting proxy, set `SEMSYNTH_INSECURE_UCI=1` to make `ucimlrepo` skip verification (it logs a warning).

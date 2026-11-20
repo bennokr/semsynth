@@ -1,3 +1,4 @@
+# A report of the data only: no model is fitted, so it needs no extra beyond the core install.
 [pipeline]
 generate_umap = false
 compute_privacy = false

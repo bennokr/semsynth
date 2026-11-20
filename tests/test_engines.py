@@ -28,9 +28,17 @@ def test_pybnesian_draws_a_table_like_the_real_one_and_keeps_the_network() -> No
     assert set(synthetic["sex"].astype(str)) <= {"f", "m"}
     assert synthetic["age"].dtype == "float64"
     assert hasattr(result.learned_model, "logl")
-    assert {"model.pickle", "structure.graphml"} <= set(result.artifacts)
+    assert "structure.graphml" in result.artifacts and "model.pickle" not in result.artifacts, "a pickle only on request"
     assert result.parameters["type"] == "clg"
     assert result.provenance["engine"] == "pybnesian"
+
+
+def test_pybnesian_writes_the_pickle_only_when_asked() -> None:
+    pytest.importorskip("pybnesian")
+
+    result = synthesize(_table(), backend="pybnesian", rows=10, seed=1, type="clg", save_model=True)
+
+    assert result.artifacts["model.pickle"]
 
 
 def test_pybnesian_roots_have_no_parents() -> None:

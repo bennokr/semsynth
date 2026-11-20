@@ -15,6 +15,7 @@ backends
 missingness
 privacy-metrics
 evaluation
+benchmark
 downstream-fidelity
 api
 ```

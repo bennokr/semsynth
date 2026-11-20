@@ -71,9 +71,6 @@ class Iris:
     def distribution(self, name: object, model: object, filename: str) -> str:
         return f"{self.model(name, model)}#distribution-{slug(filename, 'file')}"
 
-    def measurement(self, name: object, model: object, metric: str) -> str:
-        return f"{self.model(name, model)}#measurement-{slug(metric, 'metric')}"
-
     @staticmethod
     def metric(metric_id: str) -> str:
         return f"{SITE}metric/{quote(metric_id)}"

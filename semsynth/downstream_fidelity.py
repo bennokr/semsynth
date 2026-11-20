@@ -23,10 +23,7 @@ LOGGER = logging.getLogger(__name__)
 
 @dataclass
 class DownstreamConfig(Config):
-    m: int = 20
-    burnin: int = 5
     max_interactions: int = 5
-    cv: int = 5
 
 
 # --- metadata helpers ---------------------------------------------------------

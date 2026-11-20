@@ -142,8 +142,8 @@ def save_graphml_structure(model, node_types: dict[str, object], out_graphml: st
     Path(out_graphml).write_text(graphml_text(nodes, [(str(u), str(v)) for u, v in model.arcs()]), encoding="utf-8")
 
 
-def _structure_artifacts(model: Any, title: str) -> tuple[dict[str, bytes | str], list[str]]:
-    """The GraphML, the picture and the pickle of the learned network; what cannot be made is named in the warnings."""
+def _structure_artifacts(model: Any, title: str, save_model: bool) -> tuple[dict[str, bytes | str], list[str]]:
+    """The GraphML and the picture of the learned network, and its pickle if ``save_model``; what cannot be made is named in the warnings."""
 
     artifacts: dict[str, bytes | str] = {}
     warnings: list[str] = []
@@ -153,8 +153,9 @@ def _structure_artifacts(model: Any, title: str) -> tuple[dict[str, bytes | str]
         steps = {
             "structure.graphml": lambda: save_graphml_structure(model, node_types, str(folder / "structure.graphml")),
             "structure.png": lambda: bn_to_graphviz(model, node_types, str(folder / "structure.png"), title=title),
-            "model.pickle": lambda: model.save(str(folder / "model.pickle")),
         }
+        if save_model:
+            steps["model.pickle"] = lambda: model.save(str(folder / "model.pickle"))
         for name, step in steps.items():
             try:
                 step()
@@ -196,11 +197,11 @@ def synthesize(
         rows: Number of rows to draw; the rows of ``df`` when omitted.
         seed: Random seed.
         **options: ``type`` (``clg`` or ``semiparametric``), ``score``, ``operators``, ``max_indegree`` and ``roots``
-            (columns that no other column may cause; default age, sex, race).
+            (columns that no other column may cause; default age, sex, race) and ``save_model`` (also write the network as
+            ``model.pickle``; off by default, because a pickle can run code when it is loaded and a run folder is published).
 
     Returns:
-        The synthetic table, with ``learned_model`` set to the network and its GraphML, picture and pickle as
-        artifacts.
+        The synthetic table, with ``learned_model`` set to the network and its GraphML and picture as artifacts.
     """
 
     bn_type = str(options.get("type", "clg"))
@@ -223,7 +224,7 @@ def synthesize(
     synthetic = learned.model.sample(count, seed=seed).to_pandas().reindex(columns=working.columns)  # type: ignore[attr-defined]
     for column in disc_cols:
         synthetic[column] = synthetic[column].astype("category")
-    artifacts, warnings = _structure_artifacts(learned.model, f"{bn_type} network")
+    artifacts, warnings = _structure_artifacts(learned.model, f"{bn_type} network", bool(options.get("save_model", False)))
     return SynthesisResult(
         synthetic_data=synthetic,
         backend="pybnesian",

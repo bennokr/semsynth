@@ -13,7 +13,7 @@ kernelspec:
 
 # Backends overview
 
-SemSynth ships four interchangeable generation backends—MetaSyn, PrivBayes, PyBNesian, and SynthCity—that follow the common contract `synthesize(df, codebook, *, rows, seed, **options) -> SynthesisResult` (see `semsynth.synthesis.synthesize`) and produce aligned artifacts (synthetic CSVs, per-variable metrics, and manifests) when the report pipeline writes them with `semsynth.synthesis.write_run`. The backends share the same type inference and train/test splitting utilities so synthetic rows and downstream metrics remain comparable across runs. If a backend's optional dependency is missing, the implementation raises an `ImportError` naming the corresponding extra (for example, `pip install semsynth[metasyn]`).
+SemSynth ships seven interchangeable generation backends (`chain`, `metasyn`, `privbayes`, `pybnesian`, `synthcity`, `mostlyai` and `dp_cgans`) that follow the common contract `synthesize(df, codebook, *, rows, seed, **options) -> SynthesisResult` (see `semsynth.synthesis.synthesize`) and produce aligned artifacts (synthetic CSVs, per-variable metrics, and manifests) when the report pipeline writes them with `semsynth.synthesis.write_run`. The backends share the same type inference and train/test splitting utilities so synthetic rows and downstream metrics remain comparable across runs. If a backend's optional dependency is missing, the implementation raises an `ImportError` naming the corresponding extra (for example, `pip install semsynth[metasyn]`).
 
 We keep all backend examples grounded in the cached Heart Disease dataset to keep comparisons consistent.
 
@@ -63,7 +63,7 @@ bundle = load_model_configs(config_data=config)
 [(spec.name, spec.backend) for spec in bundle.specs]
 ```
 
-After you run a report, check `output/Heart Disease/models/<backend>/` to compare manifests, metrics, and synthetic CSVs across engines.
+After you run a report, check `output/heart-disease/models/<model>/` to compare manifests, metrics, and synthetic CSVs across engines.
 
 ## References
 - MetaSyn documentation: <https://metasyn.readthedocs.io/>

@@ -6,29 +6,6 @@ from collections.abc import Mapping
 from pathlib import Path
 from typing import Any
 
-JSONLD_CONTEXT = {
-    "@context": {
-        "dcat": "http://www.w3.org/ns/dcat#",
-        "dct": "http://purl.org/dc/terms/",
-        "xsd": "http://www.w3.org/2001/XMLSchema#",
-        "identifier": "dct:identifier",
-        "title": "dct:title",
-        "description": "dct:description",
-        "publisher": "dct:publisher",
-        "keywords": "dcat:keyword",
-        "issued": {"@id": "dct:issued", "@type": "xsd:date"},
-        "modified": {"@id": "dct:modified", "@type": "xsd:date"},
-        "language": "dct:language",
-        "distributions": {"@id": "dcat:distribution", "@type": "@id"},
-        "Distribution": "dcat:Distribution",
-        "access_url": "dcat:accessURL",
-        "download_url": "dcat:downloadURL",
-        "media_type": "dcat:mediaType",
-    }
-}
-
-
-
 
 def get_uciml_variable_descriptions(dataset_id: int) -> dict[str, str]:
     """Best-effort retrieval of UCI ML variable descriptions.

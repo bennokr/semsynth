@@ -115,7 +115,7 @@ Still to ask for: `Value.missing_reason` (`refused`, `dont_know`, `not_applicabl
   docs and tests. Not done yet.
 
 ## Benchmarks
-1. **Injected truth** (done): any complete table; exact answers.
+1. **Injected truth** (done): any complete table; exact answers. `python -m semsynth benchmark`; see `sphinx/benchmark.md`.
 2. **NHANES 2017 to March 2020**: public files, so synthetic output can be published, but confirm the data use terms
    *(unverified)*. Structural missingness from questionnaire skip logic, a fasting subsample with its own weights and
    nonresponse adjustment, unit/component/item nonresponse with value codes (CDC analytic guidelines), oversampled

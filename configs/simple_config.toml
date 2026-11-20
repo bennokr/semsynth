@@ -1,3 +1,12 @@
+# The quick start: two generators that need little (MetaSyn needs the `metasyn` extra, chain needs none), with the privacy and
+# downstream checks on. One split of the data; see demo_config.toml for the cross-validated evaluation.
+[pipeline]
+generate_umap = true
+max_umap_sample = 256
+compute_privacy = true
+compute_downstream = true
+enable_missingness_wrapping = false
+
 [[models]]
 name = "metasyn"
 backend = "metasyn"
@@ -6,23 +15,3 @@ backend = "metasyn"
 name = "chain"
 backend = "chain"
 seed = 42
-
-[[models]]
-name = "clg_mi2"
-backend = "pybnesian"
-seed = 42
-[models.model]
-type = "clg"
-score = "bic"
-operators = ["arcs"]
-max_indegree = 2
-
-[[models]]
-name = "semi_mi5"
-backend = "pybnesian"
-seed = 42
-[models.model]
-type = "semiparametric"
-score = "bic"
-operators = ["arcs"]
-max_indegree = 5

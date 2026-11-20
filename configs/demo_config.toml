@@ -1,4 +1,4 @@
-# The demo site is built on NumPy 2, where SynthCity (NumPy 1) cannot be installed: advanced_config.toml without its two models.
+# The configuration that the demo site is built with: three generators that share one environment (NumPy 2).
 # One PyBNesian model is enough: on small tables the conditional linear Gaussian and the semiparametric network learn the
 # same (often empty) structure and give the same rows. Every model is cross-validated in 5 folds.
 [pipeline]

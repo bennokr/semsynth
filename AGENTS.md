@@ -1,7 +1,7 @@
 # SemSynth: notes for coding agents
 
-Synthetic-data generation and evaluation (PrivBayes, MetaSyn, PyBNesian, SynthCity), driven by a
-linked-codebook profile; plus the report/catalog site. Target shape: python API + CLI + Pyodide app.
+Synthetic-data generation and evaluation (a chain of trees per column, MetaSyn, PrivBayes, PyBNesian, MOSTLY AI, SynthCity,
+DP-CGANS), driven by a linked-codebook profile; plus the report/catalog site. Target shape: python API + CLI + Pyodide app.
 
 Direction, decisions and status: `SPEC.md`.
 
@@ -13,7 +13,7 @@ Direction, decisions and status: `SPEC.md`.
 
 ## Layout
 - `semsynth/`, by job:
-  - Data and codebook: `codebook.py` (profile + roles), `structure.py` (declared codes, skip rules, subgroup definitions),
+  - Data and codebook: `codebook.py` (linked-codebook profile), `structure.py` (declared codes, skip rules, subgroup definitions),
     `preprocess.py`, `dataproviders/`, `mappings/` (curated codebooks).
   - Generate: `backends/` (chain, metasyn, privbayes, pybnesian, synthcity, mostlyai, dp_cgans; others register through the
     `semsynth.backends` entry point; `CAPABILITIES` in `synthesis.py`; `tests/test_backend_contract.py` fits every installed one), `missingness.py`, `synthesis.py` (`synthesize` +
@@ -21,7 +21,7 @@ Direction, decisions and status: `SPEC.md`.
   - Evaluate (pure functions): `evaluate.py`, `metrics.py`, `privacy_metrics.py`, `distance.py` (Gower with missing-value
     policies), `joint_fidelity.py`, `downstream_fidelity.py`, `subgroups.py`, `baselines.py` (reference tables),
     `uncertainty.py` (bootstrap for row-level statistics, permutation null for distances), `crossval.py` (k folds, corrected
-    intervals), `utility.py` (train on synthetic, test on real), `benchmark.py` (injected truth).
+    intervals), `utility.py` (train on synthetic, test on real), `benchmark.py` (injected truth; `python -m semsynth benchmark`).
   - Run and report: `runner.py` (`process_dataset`, the part that writes files), `workflow.py` (what the CLI and the app
     call), `browser.py` (entry points for Pyodide), `provenance.py` (run PROV-O and DQV), `reporting.py` + `report_tables.py` + `report_scorecard.py`,
     `catalog.py` (DCAT), `iris.py`. makeprov `@rule`s exist only in `__main__.py`.

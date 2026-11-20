@@ -17,6 +17,7 @@ from makeprov.config import ProvenanceConfig
 from .iris import DEFAULT_BASE
 
 __all__ = [
+    "benchmark",
     "build_catalog",
     "create_mapping",
     "main",
@@ -335,6 +336,51 @@ def build_catalog(
 
     ProvenanceConfig.get().prov_dir = str(out_path.parent / "provenance")
     catalog.build_catalog(base_dir, base_iri, out_path, index_path)
+
+
+@rule()
+def benchmark(
+    data: InPath | None = None,
+    *,
+    out: OutPath = OutPath("benchmark.json"),
+    mechanisms: InPath | None = None,
+    backend: str = "metasyn",
+    rows: int | None = None,
+    seed: int = 0,
+) -> None:
+    """Break a complete table in known ways and check what the pipeline recovers (injected-truth benchmark).
+
+    Without ``data`` the demo table and mechanisms of ``semsynth.benchmark`` are used, so the command runs without any download.
+
+    Args:
+        data: A complete table (CSV): no missing values.
+        out: Where the full result is written (JSON); a summary is printed.
+        mechanisms: TOML file with one ``[[mechanisms]]`` table per mechanism (``column``, ``kind`` and the fields of
+            ``semsynth.benchmark.Mechanism``); the demo mechanisms when omitted.
+        backend: The generator that learns from the broken table.
+        rows: Rows to draw; the rows that the generator can learn from when omitted.
+        seed: Seed of the injection and the generator.
+    """
+    import json
+    import tomllib
+
+    import pandas as pd
+
+    from .benchmark import (
+        DEMO_MECHANISMS,
+        demo_table,
+        mechanisms_from,
+        run_injected_benchmark,
+        summary_table,
+    )
+
+    ProvenanceConfig.get().prov_dir = str(out.parent / "provenance")
+    complete = pd.read_csv(data) if data else demo_table(seed=seed)
+    found = mechanisms_from(tomllib.loads(Path(mechanisms).read_text(encoding="utf-8")).get("mechanisms", [])) if mechanisms else list(DEMO_MECHANISMS)
+    result = run_injected_benchmark(complete, found, backend=backend, seed=seed, rows=rows)
+    out.parent.mkdir(parents=True, exist_ok=True)
+    out.write_text(json.dumps(result, indent=2, default=str), encoding="utf-8")
+    print(summary_table(result))
 
 
 @rule(phony=True)

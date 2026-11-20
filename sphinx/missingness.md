@@ -34,11 +34,11 @@ plt.tight_layout()
 
 ## Dataframe-level application
 - `DataFrameMissingnessModel` fits a `ColumnMissingnessModel` for each column in the real dataset and stores them in a mapping. When applied to a synthetic dataframe, it iterates over the learned masks to inject `NaN` values column by column, respecting the fitted conditional patterns.
-- `MissingnessWrappedGenerator` wraps any base generator callable and first fits missingness on the real data. Subsequent calls to `.sample(n)` produce synthetic rows with the learned missingness applied, enabling drop-in realism without modifying the underlying generator implementation.
+- `fit_missingness_model` fits one on the real rows, and `apply_missingness` applies it to the table that a generator drew. The pipeline does this for every model when `enable_missingness_wrapping` is on, so no generator has to know about it.
 
 
 ```{code-cell} python
-# Fit and apply the wrapper to a small sample.
+# Fit a model and apply it to a small sample.
 from semsynth.missingness import DataFrameMissingnessModel
 
 model = DataFrameMissingnessModel(random_state=7).fit(heart)
@@ -53,4 +53,4 @@ sampled.isna().mean()
 ## Declared structure
 The learned mask model above describes item nonresponse only. Skip logic and coded values are declared in the codebook and
 applied by `semsynth.structure` (see the evaluation page): `structure_aware = true` keeps the rows that skip rules would otherwise
-drop from learning, and enforces the rules afterwards. The injected-truth benchmark measures what the wrapper recovers.
+drop from learning, and enforces the rules afterwards. The injected-truth benchmark (see the benchmark page) measures what the pipeline recovers.

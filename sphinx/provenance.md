@@ -13,12 +13,12 @@ kernelspec:
 
 # Provenance
 
-SemSynth writes provenance for every report run using `makeprov`. For each dataset, files land under `output/<dataset>/prov/` and capture inputs, outputs, and processing steps.
+SemSynth records provenance at two levels. makeprov records each command (its inputs, outputs and the environment) in `output/provenance/`. Every model run also has a PROV-O `provenance.json` in `output/<dataset>/models/<model>/`.
 
 ```{code-cell} python
-# Peek at the generated provenance files for Heart Disease
+# Peek at the provenance files of the commands that built the output
 from pathlib import Path
-prov_dir = Path("../output/Heart Disease/prov")
+prov_dir = Path("../output/provenance")
 sorted(p.name for p in prov_dir.glob("*") if p.is_file())[:5]
 ```
 

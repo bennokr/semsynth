@@ -8,33 +8,24 @@ import numpy as np
 import pandas as pd
 import pytest
 
-from semsynth.benchmark import Mechanism, inject, recovery_scores, run_injected_benchmark
+from semsynth.benchmark import (
+    DEMO_MECHANISMS,
+    Mechanism,
+    demo_table,
+    inject,
+    mechanisms_from,
+    recovery_scores,
+    run_injected_benchmark,
+    summary_table,
+)
 from semsynth.structure import recode_declared_missing, structural_violations
 
 
 def _complete(n: int = 1500, seed: int = 0) -> pd.DataFrame:
-    rng = np.random.default_rng(seed)
-    age = rng.normal(55, 12, n)
-    smoker = rng.choice(["yes", "no"], n, p=[0.3, 0.7])
-    return pd.DataFrame(
-        {
-            "age": age,
-            "sex": rng.choice(["f", "m"], n),
-            "bmi": 24 + 0.05 * (age - 55) + rng.normal(0, 3, n),
-            "chol": 180 + 0.8 * age + rng.normal(0, 20, n),
-            "sbp": 110 + 0.5 * age + rng.normal(0, 10, n),
-            "smoker": smoker,
-            "cigs": rng.poisson(12, n).astype(float),
-        }
-    )
+    return demo_table(n, seed)
 
 
-MECHANISMS = [
-    Mechanism("chol", "mar", 0.3, driver="age", strength=2.5),
-    Mechanism("bmi", "mnar", 0.25, strength=2.5),
-    Mechanism("cigs", "structural", rule="[smoker] == 'yes'"),
-    Mechanism("sbp", "coded", 0.05),
-]
+MECHANISMS = list(DEMO_MECHANISMS)
 
 
 def test_each_mechanism_hits_its_rate_and_depends_on_what_it_should() -> None:
@@ -109,3 +100,17 @@ def test_the_pipeline_recovers_mar_but_not_mnar_and_structure_aware_learning_kee
     assert by_column["chol"]["gradient_gap"] < 0.15, "a MAR mechanism on an observed driver is recovered"
     # Known limit, not a goal: nothing observed gives the own-value dependence away, so this stays unrecovered.
     assert by_column["bmi"]["gradient_gap"] > 0.3
+
+
+def test_mechanisms_are_read_from_dictionaries_and_a_bad_one_is_an_error() -> None:
+    found = mechanisms_from([{"column": "chol", "kind": "mar", "rate": 0.2, "driver": "age"}])
+    assert found == [Mechanism("chol", "mar", 0.2, driver="age")]
+    with pytest.raises(ValueError, match="unknown kind"):
+        mechanisms_from([{"column": "chol", "kind": "random"}])
+    with pytest.raises(ValueError, match="not a mechanism"):
+        mechanisms_from([{"column": "chol", "kind": "mcar", "speed": 3}])
+
+
+def test_the_summary_table_has_a_row_for_each_variant() -> None:
+    table = summary_table(run_injected_benchmark(_complete(800), MECHANISMS, seed=2))
+    assert [line.split("|")[1].strip() for line in table.splitlines()[2:]] == ["learned", "learned_with_rules", "structure_aware"]

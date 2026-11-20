@@ -34,7 +34,7 @@ plt.tight_layout()
 ```
 
 ## Formula discovery
-- `auto_formula` builds a Patsy formula from the target of the dataset and the column types of the codebook, coercing dtypes (including categorical levels from codebooks), and generating main effects plus interaction candidates. Cross-validated feature screening enforces strong heredity, keeping parents of any retained interactions to stabilize the model.
+- `auto_formula` builds a Patsy formula from the target of the dataset and the column types of the codebook, coercing dtypes (including categorical levels from codebooks), and generating main effects plus interaction candidates.
 
 ```{code-cell} python
 # Create a target-aware formula straight from the codebook.
@@ -47,7 +47,7 @@ import semsynth.downstream_fidelity as dfid
 dfid = reload(dfid)
 
 meta = json.load(open("../mappings/uciml-45.metadata.json"))
-formula = dfid.auto_formula(heart, meta, dfid.DownstreamConfig())
+formula = dfid.auto_formula(heart, meta, dfid.DownstreamConfig(), "num")
 formula
 ```
 

@@ -13,7 +13,7 @@ kernelspec:
 
 Mapping helpers are easiest to demonstrate on the curated Heart Disease payload.
 
-This quick count shows which codelists appear most often, illustrating how curated mappings guide downstream roles and privacy handling.
+This quick count shows which codelists appear most often, illustrating which terminologies the curated mappings use.
 
 Terminology matching moved to [entailmap](https://github.com/bennokr/entailmap) (`entailmap.match`). `semsynth create-mapping` calls it, and
 `semsynth.sssom_codebook.integrate_sssom` merges the resulting SSSOM rows into a codebook.

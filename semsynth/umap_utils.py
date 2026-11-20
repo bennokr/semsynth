@@ -30,7 +30,6 @@ class UMAPArtifacts:
     umap_model: Any
     sample_idx: np.ndarray
     embedding: np.ndarray
-    label_mapping: dict[Any, int] | None
     color_labels: np.ndarray | None
 
 
@@ -120,7 +119,7 @@ def build_umap(
     )
     embedding = reducer.fit_transform(X)
 
-    labels, mapping = pick_color_labels(
+    labels, _ = pick_color_labels(
         color_series.iloc[sample_idx] if color_series is not None else None
     )
     return UMAPArtifacts(
@@ -128,7 +127,6 @@ def build_umap(
         umap_model=reducer,
         sample_idx=sample_idx,
         embedding=embedding,
-        label_mapping=mapping,
         color_labels=labels,
     )
 

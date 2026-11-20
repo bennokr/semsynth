@@ -1,0 +1,41 @@
+# SynthCity generators. SynthCity needs NumPy 1, so install `.[synthcity]` in its own environment (see pyproject.toml); the chain
+# backend runs there too and is the baseline. Epochs are few so that a run is minutes on a CPU.
+[pipeline]
+generate_umap = true
+compute_privacy = true
+compute_downstream = true
+compute_joint = true
+compute_baselines = true
+compute_utility = true
+cv_folds = 5
+enable_missingness_wrapping = true
+
+[[models]]
+name = "chain"
+backend = "chain"
+seed = 42
+
+[[models]]
+name = "ctgan"
+backend = "synthcity"
+seed = 42
+[models.model]
+type = "ctgan"
+epochs = 30
+batch_size = 512
+
+[[models]]
+name = "tvae"
+backend = "synthcity"
+seed = 42
+[models.model]
+type = "tvae"
+epochs = 30
+batch_size = 512
+
+[[models]]
+name = "pategan"
+backend = "synthcity"
+seed = 42
+[models.model]
+type = "pategan"
