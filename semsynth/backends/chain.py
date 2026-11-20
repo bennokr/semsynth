@@ -1,15 +1,21 @@
 """Sequential generator: each column is predicted from the columns before it.
 
 The first column is drawn from its own values. Every later column is drawn from a model of that column given the columns
-before it, fitted on the real rows and applied to the synthetic rows drawn so far:
+before it, fitted on the real rows and applied to the synthetic rows drawn so far.
+
+The default learner, ``cart``, is the method of synthpop: a regression tree (:class:`sklearn.tree.DecisionTreeClassifier`
+or ``DecisionTreeRegressor``) is fitted on the real rows, and each synthetic row takes the value of a real row drawn at
+random from the leaf that the synthetic row falls in. The values of a column are therefore real values in proportion to
+what the tree can tell apart, so the distribution of each column is kept, and nothing is assumed about its shape.
+
+``mlp`` (a small neural network) and ``hgb`` (gradient boosting) predict instead:
 
 * a categorical column is drawn from the class probabilities that the model predicts;
-* a numeric column is the prediction plus a residual drawn at random from the residuals of the fit, so that the spread is
-  kept.
+* a numeric column is the prediction plus a residual drawn at random from the residuals of the fit.
 
-This is the idea of synthpop (CART per column), with a choice of learner. It uses only scikit-learn and NumPy, which run in
-Pyodide, so it works in a browser. ``mlp`` is a small neural network (:class:`sklearn.neural_network.MLPClassifier` and
-``MLPRegressor``); ``hgb`` is gradient boosting. The order of the columns is the order of the table.
+Both predicting learners fit the real rows closely, so their probabilities are over-confident and the distribution of a
+column drifts from the real one; they are kept for comparison. Only scikit-learn and NumPy are used, which run in Pyodide,
+so the backend works in a browser. The order of the columns is the order of the table.
 """
 
 from __future__ import annotations
@@ -26,7 +32,7 @@ if TYPE_CHECKING:  # pragma: no cover - typing only
     import pandas as pd
 
 LOGGER = logging.getLogger(__name__)
-LEARNERS = ("mlp", "hgb")
+LEARNERS = ("cart", "mlp", "hgb")
 
 
 def _design(frame: pd.DataFrame, plan: dict[str, Any]) -> np.ndarray:
@@ -63,6 +69,27 @@ def _learner(kind: str, categorical: bool, seed: int, hidden: tuple[int, ...], m
     return HistGradientBoostingClassifier(**options) if categorical else HistGradientBoostingRegressor(**options)
 
 
+def _leaf_draw(leaf_real: np.ndarray, leaf_synth: np.ndarray, values: np.ndarray, rng: np.random.Generator) -> np.ndarray:
+    """For each synthetic row, the value of a real row drawn at random from the leaf of the synthetic row."""
+    import numpy as np
+
+    order = np.argsort(leaf_real, kind="stable")
+    ordered = leaf_real[order]
+    start = np.searchsorted(ordered, leaf_synth, side="left")
+    size = np.searchsorted(ordered, leaf_synth, side="right") - start
+    return values[order[start + (rng.random(len(leaf_synth)) * size).astype(int)]]
+
+
+def _draw_cart(
+    x_real: np.ndarray, x_synth: np.ndarray, target: np.ndarray, categorical: bool, seed: int, leaf: int, rng: np.random.Generator
+) -> np.ndarray:
+    from sklearn.tree import DecisionTreeClassifier, DecisionTreeRegressor
+
+    tree = (DecisionTreeClassifier if categorical else DecisionTreeRegressor)(min_samples_leaf=leaf, random_state=seed)
+    tree.fit(x_real, target)
+    return _leaf_draw(tree.apply(x_real), tree.apply(x_synth), target, rng)
+
+
 def _draw_classes(probabilities: np.ndarray, classes: Any, rng: np.random.Generator) -> np.ndarray:
     import numpy as np
 
@@ -77,7 +104,8 @@ def synthesize(
     *,
     rows: int | None = None,
     seed: int = 0,
-    learner: str = "mlp",
+    learner: str = "cart",
+    min_samples_leaf: int = 10,
     hidden: tuple[int, ...] = (64, 32),
     max_iter: int = 200,
     **options: Any,
@@ -89,7 +117,10 @@ def synthesize(
         codebook: Optional :class:`~semsynth.codebook.Codebook`; its levels decide which columns are categorical.
         rows: Number of rows to draw; the rows of ``df`` when omitted.
         seed: Random seed.
-        learner: ``mlp`` (a small neural network) or ``hgb`` (gradient boosting).
+        learner: ``cart`` (a tree per column, values drawn from the leaf), ``mlp`` (a small neural network) or ``hgb``
+            (gradient boosting).
+        min_samples_leaf: Fewest real rows in a leaf of the ``cart`` learner. A larger value smooths the draw and copies
+            fewer real rows; a smaller one keeps more of the relations between columns.
         hidden: Sizes of the hidden layers of the ``mlp`` learner.
         max_iter: Most training iterations of one model (``mlp``).
         **options: Recorded as parameters of the run.
@@ -119,16 +150,22 @@ def synthesize(
             # Integer codes, not labels: scikit-learn 1.6 (the one in Pyodide) fails to score a MLPClassifier on text labels.
             levels = np.asarray(plan["levels"][column], dtype=object)
             codes = real[column].astype(str).map({v: i for i, v in enumerate(levels)}).to_numpy()
-            model = _learner(learner, True, seed, hidden, max_iter).fit(x_real, codes)
-            drawn = levels[_draw_classes(model.predict_proba(x_synth), model.classes_, rng)]
+            if learner == "cart":
+                drawn = levels[_draw_cart(x_real, x_synth, codes, True, seed, min_samples_leaf, rng)]
+            else:
+                model = _learner(learner, True, seed, hidden, max_iter).fit(x_real, codes)
+                drawn = levels[_draw_classes(model.predict_proba(x_synth), model.classes_, rng)]
             synthetic[column] = pd.Series(drawn).astype(real[column].dtype if real[column].dtype != "category" else "object")
         else:
-            model = _learner(learner, False, seed, hidden, max_iter).fit(x_real, real[column].astype(float))
-            residuals = real[column].astype(float).to_numpy() - model.predict(x_real)
-            synthetic[column] = model.predict(x_synth) + rng.choice(residuals, size=count)
+            values = real[column].astype(float).to_numpy()
+            if learner == "cart":
+                synthetic[column] = _draw_cart(x_real, x_synth, values, False, seed, min_samples_leaf, rng)
+            else:
+                model = _learner(learner, False, seed, hidden, max_iter).fit(x_real, values)
+                synthetic[column] = model.predict(x_synth) + rng.choice(values - model.predict(x_real), size=count)
     return SynthesisResult(
         synthetic_data=coerce_continuous_to_float(synthetic.reindex(columns=df.columns), cont_cols),
         backend="chain",
-        parameters={"rows": count, "seed": seed, "learner": learner, "hidden": list(hidden), "params": dict(options)},
+        parameters={"rows": count, "seed": seed, "learner": learner, "min_samples_leaf": min_samples_leaf, "hidden": list(hidden), "params": dict(options)},
         provenance={"engine": "semsynth chain", "engine_version": importlib.metadata.version("scikit-learn")},
     )

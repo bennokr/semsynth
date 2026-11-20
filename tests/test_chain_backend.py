@@ -18,7 +18,7 @@ def table() -> pd.DataFrame:
     return pd.DataFrame({"group": group, "x": x, "y": 2 * x + rng.normal(scale=0.3, size=n), "flag": (x > 0).astype(int)})
 
 
-@pytest.mark.parametrize("learner", ["hgb", "mlp"])
+@pytest.mark.parametrize("learner", ["cart", "hgb", "mlp"])
 def test_the_chain_draws_a_table_of_the_same_shape_and_keeps_a_relation(table: pd.DataFrame, learner: str) -> None:
     result = synthesize(table, None, backend="chain", rows=400, seed=1, learner=learner)
     synthetic = result.synthetic_data
@@ -50,3 +50,10 @@ def test_mostlyai_numbers_back_turns_a_protected_value_into_a_missing_one() -> N
     protected = _numbers_back(pd.Series(["1", "_RARE_", "2"]), "int64")
     assert protected.isna().tolist() == [False, True, False]
     assert _numbers_back(pd.Series(["a", "_RARE_"]), "object").tolist() == ["a", "_RARE_"]
+
+
+def test_cart_draws_real_values_and_keeps_the_distribution_of_a_column(table: pd.DataFrame) -> None:
+    synthetic = synthesize(table, None, backend="chain", rows=2000, seed=3).synthetic_data
+    assert set(synthetic["x"]) <= set(table["x"]), "every value is a real value"
+    assert abs(synthetic["group"].eq("a").mean() - table["group"].eq("a").mean()) < 0.06
+    assert abs(synthetic["x"].mean() - table["x"].mean()) < 0.15

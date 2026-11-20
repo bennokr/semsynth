@@ -111,17 +111,20 @@ Five-fold cross-validation, the scores of the scorecard, CPU only (4 cores). The
 takes at most 20 (`AnyHealthcare` and `NoDocbcCost` were dropped for every model). Heart Disease is binarized to the presence of
 disease. Every cell is a mean over the folds; the intervals are in the evaluation files and are wide for Heart (59 test rows).
 `mostlyai` trained for at most 50 epochs or 10 minutes, `privbayes` with epsilon 1 and k 2, `semi_mi5` is PyBNesian
-(semiparametric, in-degree 5), `chain_hgb` and `chain_mlp` are the sequential generator with gradient boosting or a small
-neural network.
+(semiparametric, in-degree 5), `chain_cart`, `chain_hgb` and `chain_mlp` are the sequential generator with a tree per column
+(values drawn from the leaf, leaves of at least 10 rows), gradient boosting or a small neural network. `chain_cart` was run
+afterwards, with the same folds and seeds, and only on Heart and the 4,000-row CDC table.
 
 | table, rows to train / test | model | fit per fold | utility (ceiling) | real-vs-synthetic AUC (ceiling) | numeric KS (ceiling) | pair distance (ceiling) | exact copies |
 | --- | --- | --- | --- | --- | --- | --- | --- |
 | Heart, 238 / 59 | semi_mi5 | 0.0 s | 0.86 (0.86) | 0.62 (0.48) | 0.15 (0.12) | 0.19 (0.16) | 0 |
+| | chain_cart | 0.2 s | 0.87 | 0.57 | 0.13 | 0.18 | 0 |
 | | chain_hgb | 1 s | 0.88 | 0.65 | 0.16 | 0.20 | 0 |
 | | mostlyai | 7 s | 0.78 | 0.62 | 0.13 | 0.20 | 0 |
 | | metasyn | 0.5 s | 0.60 | 0.71 | 0.17 | 0.22 | 0 |
 | | privbayes | 3 s | 0.59 | 0.94 | 0.35 | 0.42 | 0 |
 | CDC, 4,000 / 1,000 | mostlyai | 37 s | 0.77 (0.78) | 0.57 (0.49) | 0.03 (0.02) | 0.04 (0.03) | 0.7% |
+| | chain_cart | 0.5 s | 0.77 | 0.54 | 0.02 | 0.04 | 3.0% |
 | | chain_hgb | 10 s | 0.77 | 1.00 | 0.26 | 0.11 | 0 |
 | | semi_mi5 | 0.1 s | 0.77 | 1.00 | 0.27 | 0.11 | 0 |
 | | privbayes | 91 s | 0.64 | 0.95 | 0.45 | 0.22 | 0 |
@@ -134,11 +137,14 @@ neural network.
 What to take from it, and what not:
 
 - On tables with signal, prediction utility is no longer the separator: PyBNesian and the chain get within a few hundredths of the
-  ceiling in seconds. Only `mostlyai` produces rows that a classifier barely separates from real ones (AUC 0.55 against 1.00)
-  with numeric distributions at the noise level of the ceiling. The numeric KS ceiling is small because it is the distance between
+  ceiling in seconds. Only `mostlyai` and `chain_cart` produce rows that a classifier barely separates from real ones (AUC 0.54 to 0.57
+  against 1.00 for the other generators on CDC), with numeric distributions at the noise level of the ceiling. `chain_cart` does it
+  in 0.5 s per fit where `mostlyai` takes 37 s. The prediction-based learners (`chain_hgb`, `chain_mlp`) fit the real rows
+  closely, so their class probabilities are over-confident and the marginals drift; the tree draws real values from a leaf instead. The numeric KS ceiling is small because it is the distance between
   two samples of one distribution: about 0.03 for 1,000 against 4,000 rows and 0.12 for 59 against 238, which is what the Heart and
   CDC ceilings show (CDC's numbers take few distinct values, which lowers it a little).
-- `mostlyai` copies some rows: 0.7% and 2.8% of the synthetic rows equal a training row, against 0.1% to 0.3% for independent columns. The
+- `mostlyai` and `chain_cart` copy some rows: 0.7% and 2.8% (`mostlyai`) and 3.0% (`chain_cart`, 1.6% with leaves of 30 rows, which also
+  lowers its utility by 0.01) of the synthetic rows equal a training row, against 0.1% to 0.3% for independent columns. The
   rate at which unseen real rows equal a training row (the chance rate for a table of mostly binary columns) was not computed in
   the cross-validation, so this is a flag and not a finding of leakage.
 - PrivBayes at epsilon 1 is worse than MetaSyn on every fidelity score and takes 91 s for 4,000 rows. That is the price of the

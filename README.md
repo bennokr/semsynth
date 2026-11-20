@@ -20,7 +20,7 @@ them. Everything else is an extra: `python -m pip install -e .[EXTRA]` with `EXT
 | `providers` | `openml`, `ucimlrepo`, `requests`: load and search OpenML and UCI ML datasets (all of `search`, `report`) |
 | `app` | `flask`: `python -m semsynth run-app` |
 | `metasyn`, `privbayes` | the MetaSyn and DataSynthesizer (PrivBayes) backends |
-| (none) | the `chain` backend (a model of each column given the columns before it) needs only scikit-learn, which is a core dependency, and runs in Pyodide |
+| (none) | the `chain` backend (a tree per column given the columns before it, as in synthpop) needs only scikit-learn, which is a core dependency, and runs in Pyodide |
 | `pybnesian` | the PyBNesian backend (NumPy 2) |
 | `mostlyai` | the MOSTLY AI TabularARGN backend (experimental): a neural model; needs PyTorch (a CPU build is enough), NumPy 2, and does not run in Pyodide |
 | `synthcity` | the SynthCity backend; heavy (PyTorch) and the one extra that needs NumPy below 2, so it cannot share an environment with `pybnesian`, `umap`, `language`, `privacy` or `all` (uv enforces this in `[tool.uv] conflicts`) |
