@@ -22,7 +22,8 @@ Direction, decisions and status: `SPEC.md`.
     policies), `joint_fidelity.py`, `downstream_fidelity.py`, `subgroups.py`, `baselines.py` (reference tables),
     `uncertainty.py` (bootstrap for row-level statistics, permutation null for distances), `crossval.py` (k folds, corrected
     intervals), `utility.py` (train on synthetic, test on real), `benchmark.py` (injected truth; `python -m semsynth benchmark`).
-  - Run and report: `runner.py` (`process_dataset`, the part that writes files), `workflow.py` (what the CLI and the app
+  - Run and report: `model_run.py` (fit one model and score what it draws: tables in, metrics out, no files), `runner.py`
+    (`process_dataset`, the part that writes files), `workflow.py` (what the CLI and the app
     call), `browser.py` (entry points for Pyodide), `provenance.py` (run PROV-O and DQV), `reporting.py` + `report_tables.py` + `report_scorecard.py`,
     `catalog.py` (DCAT), `iris.py`. makeprov `@rule`s exist only in `__main__.py`.
 - The SPARQL page is the data-catalog-sparql-playground, run as a step of the Pages workflow over the JSON-LD files of `output/` (the
